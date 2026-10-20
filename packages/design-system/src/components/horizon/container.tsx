@@ -1,6 +1,8 @@
+"use client"
+
 import { useId } from "react"
 
-import { cn } from "../../lib/utils"
+import { cn } from "cn"
 
 /**
  * Layout container with default padding. Accepts standard div props.

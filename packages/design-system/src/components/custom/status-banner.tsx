@@ -1,9 +1,11 @@
+"use client"
+
 import { useId } from "react"
 
-import type { IGRPColorRole, IGRPColorVariants } from "../../lib/colors"
-import { cn } from "../../lib/utils"
-import { IGRPAlert } from "../horizon/alert"
-import { IGRPBadge } from "../horizon/badge"
+import type { IGRPColorRole, IGRPColorVariants } from "../../lib/colors.js"
+import { cn } from "cn"
+import { IGRPAlert } from "../horizon/alert.js"
+import { IGRPBadge } from "../horizon/badge.js"
 
 /**
  * Props for the IGRPStatusBanner component.
@@ -38,10 +40,10 @@ interface IGRPStatusBannerProps {
 function IGRPStatusBanner({
   variant = "soft",
   color = "success",
-  text = "Insert our Text here",
+  text,
   badgeVariant = "outline",
   badgeColor = "primary",
-  badgeText = "Badge Text",
+  badgeText,
   name,
   id,
   className,
@@ -54,15 +56,17 @@ function IGRPStatusBanner({
       variant={variant}
       color={color}
       iconName="Circle"
-      iconClassName={cn("h-3 w-3 fill-current")}
-      className={cn("p-4 rounded-lg items-center", className)}
+      iconClassName="size-3 fill-current"
+      className={cn("items-center rounded-lg p-4", className)}
       alignment="center"
       name={ref}
     >
       <span className={cn("font-medium")}>{text}</span>
-      <IGRPBadge variant={badgeVariant} color={badgeColor} badgeClassName={cn("ml-4 font-normal")}>
-        {badgeText}
-      </IGRPBadge>
+      {badgeText && (
+        <IGRPBadge variant={badgeVariant} color={badgeColor} badgeClassName="ml-4 font-normal">
+          {badgeText}
+        </IGRPBadge>
+      )}
     </IGRPAlert>
   )
 }

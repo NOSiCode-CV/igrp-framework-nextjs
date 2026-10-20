@@ -14,7 +14,7 @@ import {
   CommandList as IGRPCommandList,
   CommandSeparator as IGRPCommandSeparator,
   CommandShortcut as IGRPCommandShortcut,
-} from "../primitives/command"
+} from "../primitives/command.js"
 
 export {
   IGRPCommand,

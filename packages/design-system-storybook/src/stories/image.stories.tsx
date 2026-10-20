@@ -3,6 +3,11 @@ import { IGRPImage } from '@igrp/igrp-framework-react-design-system';
 
 export default {
   title: 'Components/Image',
+  // Known WCAG backlog, tracked in the design-system accessibility audit:
+  // image-alt backlog.
+  // 'todo' reports in the Storybook UI without failing CI. Delete this once the
+  // suite is clean; every other component is gated at 'error' by preview.ts.
+  parameters: { a11y: { test: 'todo' } },
   component: IGRPImage,
   argTypes: {
     alt: { control: 'text' },

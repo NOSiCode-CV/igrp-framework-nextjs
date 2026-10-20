@@ -5,11 +5,19 @@ import Image from "next/image"
 import { useFormContext } from "react-hook-form"
 import { Circle } from "lucide-react"
 
-import { igrpColorText } from "../../../lib/colors"
-import { cn } from "../../../lib/utils"
-import type { IGRPInputProps, IGRPOptionsProps } from "../../../types"
-import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../../primitives/form"
-import { Input } from "../../primitives/input"
+import { igrpColorText } from "../../../lib/colors.js"
+import { cn } from "../cn.js"
+import type { IGRPInputProps, IGRPOptionsProps } from "../../../types.js"
+import {
+  useFormField,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../../primitives/form.js"
+import { Input } from "../../primitives/input.js"
 import {
   Select,
   SelectContent,
@@ -18,10 +26,12 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "../../primitives/select"
-import { IGRPButton } from "../button"
-import { IGRPIcon } from "../icon"
-import { IGRPLabel } from "../label"
+} from "../../primitives/select.js"
+import { IGRPButton } from "../button.js"
+import { IGRPIcon } from "../icon/index.js"
+import { IGRPLabel } from "../label.js"
+import { Field, FieldDescription } from "../../primitives/field.js"
+import { useIGRPi18n } from "../../../i18n/index.js"
 
 type SelectState = {
   selected: string
@@ -95,6 +105,11 @@ function IGRPSelectField({
   showStatus,
   showGroup,
   className,
+  triggerId,
+  triggerAriaLabelledby,
+  triggerAriaInvalid,
+  triggerAriaDescribedBy,
+  triggerRef,
   ...selectProps
 }: {
   value: string
@@ -113,6 +128,11 @@ function IGRPSelectField({
   showStatus: boolean
   showGroup: boolean
   className?: string
+  triggerId?: string
+  triggerAriaLabelledby?: string
+  triggerAriaInvalid?: boolean
+  triggerAriaDescribedBy?: string
+  triggerRef?: React.Ref<HTMLButtonElement>
 } & Omit<React.ComponentProps<typeof Select>, "value" | "onValueChange" | "onOpenChange" | "children">) {
   return (
     <Select value={value} onValueChange={onChange} onOpenChange={onOpenChange} disabled={disabled} {...selectProps}>
@@ -124,13 +144,17 @@ function IGRPSelectField({
         placeholder={placeholder}
         isOpen={isOpen}
         label={label}
+        triggerId={triggerId}
+        triggerAriaLabelledby={triggerAriaLabelledby}
+        triggerAriaInvalid={triggerAriaInvalid}
+        triggerAriaDescribedBy={triggerAriaDescribedBy}
+        triggerRef={triggerRef}
       />
       <IGRPSelectContent
         showSearch={showSearch}
         search={search}
         setSearch={setSearch}
         onResetSearch={onResetSearch}
-        options={options}
         filteredOptions={filteredOptions}
         showStatus={showStatus}
         showGroup={showGroup}
@@ -140,11 +164,27 @@ function IGRPSelectField({
 }
 
 /**
+ * @internal Wrapper rendered inside FormItem that reads the form context to wire
+ * aria-invalid / aria-describedby onto the actual SelectTrigger button.
+ */
+function IGRPSelectFieldWithA11y(props: React.ComponentProps<typeof IGRPSelectField>) {
+  const { error, formItemId, formMessageId } = useFormField()
+  return (
+    <IGRPSelectField
+      {...props}
+      triggerId={formItemId}
+      triggerAriaInvalid={!!error}
+      triggerAriaDescribedBy={error ? formMessageId : undefined}
+    />
+  )
+}
+
+/**
  * Select dropdown with optional search and grouped options. Integrates with react-hook-form.
  */
 function IGRPSelect({
   options,
-  placeholder = "Select an option",
+  placeholder: placeholderProp,
   className,
   showSearch = false,
   name,
@@ -156,11 +196,13 @@ function IGRPSelect({
   showStatus = false,
   value,
   onValueChange,
-  label = "Select an option",
+  label,
   labelClassName,
   showGroup = false,
   ...props
 }: IGRPSelectProps) {
+  const i18nDefaults = useIGRPi18n()
+  const placeholder = placeholderProp ?? i18nDefaults.inputSelect.placeholder
   const _id = useId()
   const fieldName = name ?? id ?? _id
 
@@ -172,35 +214,52 @@ function IGRPSelect({
     isOpen: false,
   })
 
+  // `value` is a controlled prop, so the reducer's copy is only the uncontrolled
+  // fallback. Reading the reducer unconditionally made `value` write-once: it
+  // seeded the initial state and every later change was ignored.
+  const selectedValue = value !== undefined ? value : state.selected
+
   const optionsMap = useMemo(() => new Map(options.map((opt) => [opt.value, opt])), [options])
 
   const normalizedSearch = state.search.trim().toLowerCase()
   const filteredOptions = useMemo(
     () => options.filter(({ label }) => label.toLowerCase().includes(normalizedSearch)),
-    [options, normalizedSearch],
+    [options, normalizedSearch]
   )
 
-  const selectedLabel = useMemo(() => {
-    if (formContext) {
-      const selectedValue = formContext.getValues(fieldName)
-      return selectedValue ? optionsMap.get(selectedValue)?.label || selectedValue : ""
-    } else {
-      return state.selected ? optionsMap.get(state.selected)?.label || state.selected : ""
-    }
-  }, [formContext, fieldName, state.selected, optionsMap])
+  /**
+   * Resolves a value to its option label.
+   *
+   * In form mode the caller passes `field.value` straight from the render prop.
+   * This used to read `formContext.getValues(fieldName)` inside a `useMemo` that
+   * did not depend on the form value — `getValues` is not reactive, so
+   * `setValue()` moved the form on while the trigger kept the old label.
+   */
+  const labelFor = useCallback((val: string) => (val ? optionsMap.get(val)?.label || val : ""), [optionsMap])
+
+  const selectedLabel = labelFor(selectedValue)
 
   const handleChange = useCallback(
     (val: string) => {
       if (val !== state.selected) {
         dispatch({ type: "SET_SELECTED", payload: val })
+      }
+      if (val !== selectedValue) {
         onValueChange?.(val)
       }
     },
-    [state.selected, onValueChange],
+    [state.selected, selectedValue, onValueChange]
   )
 
+  // A caller `onOpenChange` runs after the open-state dispatch, never instead of it.
+  const { onOpenChange: callerOnOpenChange, ...selectRootProps } = props
+  const handleOpenChange = (open: boolean) => {
+    dispatch({ type: "SET_OPEN", payload: open })
+    callerOnOpenChange?.(open)
+  }
+
   const selectFieldProps = {
-    onOpenChange: (open: boolean) => dispatch({ type: "SET_OPEN", payload: open }),
+    onOpenChange: handleOpenChange,
     disabled,
     options,
     placeholder,
@@ -218,30 +277,26 @@ function IGRPSelect({
     showStatus,
     showGroup,
     className,
-    ...props,
+    ...selectRootProps,
   }
 
   if (!formContext) {
     return (
-      <div className={cn("space-y-2", className)}>
+      <Field className={className} data-invalid={error ? true : undefined}>
         <IGRPLabel id={fieldName} className={labelClassName} required={required} label={label} />
 
         <div className={cn("relative")}>
-          <IGRPSelectField {...selectFieldProps} value={state.selected} onChange={handleChange} />
+          <IGRPSelectField {...selectFieldProps} value={selectedValue} onChange={handleChange} triggerId={fieldName} />
         </div>
 
-        {helperText && !error && (
-          <p className={cn("text-muted-foreground text-xs mt-1")} role="note">
-            {helperText}
-          </p>
-        )}
+        {helperText && !error && <FieldDescription>{helperText}</FieldDescription>}
 
         {error && (
-          <p className={cn("text-destructive text-xs mt-1")} role="alert">
+          <p className={cn("mt-1 text-xs text-destructive")} role="alert">
             {error}
           </p>
         )}
-      </div>
+      </Field>
     )
   }
 
@@ -252,18 +307,30 @@ function IGRPSelect({
       render={({ field, fieldState }) => (
         <FormItem className={cn(className)}>
           {label && (
-            <FormLabel className={cn(labelClassName, required && 'after:content-["*"] after:text-destructive')}>
+            <FormLabel
+              id={`${fieldName}-label`}
+              className={cn(labelClassName, required && "after:text-destructive after:content-['*']")}
+            >
               {label}
             </FormLabel>
           )}
           <FormControl>
-            <IGRPSelectField
+            <IGRPSelectFieldWithA11y
               {...selectFieldProps}
               value={field.value ?? ""}
+              label={labelFor(field.value ?? "")}
               onChange={(val) => {
                 field.onChange(val)
                 handleChange(val)
               }}
+              // Closing the dropdown is this control's blur: it marks the field
+              // touched, which `mode: "onBlur"` / `"onTouched"` validate on.
+              onOpenChange={(open) => {
+                handleOpenChange(open)
+                if (!open) field.onBlur()
+              }}
+              triggerRef={field.ref}
+              triggerAriaLabelledby={label ? `${fieldName}-label` : undefined}
             />
           </FormControl>
 
@@ -284,52 +351,75 @@ const IGRPSelectSearch = memo(
     search: string
     setSearch: Dispatch<SetStateAction<string>>
     onResetSearch: () => void
-  }) => (
-    <div className={cn("flex items-center gap-2 pb-3 mb-2 border-b")}>
-      <div className={cn("relative flex-1")}>
-        <IGRPIcon
-          iconName="Search"
-          className={cn("absolute left-2 top-1/2 h-3 w-3 -translate-y-1/2 text-muted-foreground")}
-        />
-        <Input
-          type="text"
-          className={cn("pl-7 h-8 text-sm")}
-          placeholder="Search..."
-          aria-label="Search options"
-          value={search}
-          onChange={(e) => setSearch(e.target.value.trimStart())}
-        />
+  }) => {
+    const i18n = useIGRPi18n()
+
+    /**
+     * Radix Select runs a typeahead on printable keys and pulls focus back to the
+     * matching item, so only the first character ever reached this input — the
+     * rest moved the highlight instead. Swallow the keys that mean "typing" and
+     * let navigation keys (Escape, Tab, Enter, arrows) bubble to Radix.
+     */
+    const stopTypeaheadKeys = (event: React.KeyboardEvent<HTMLInputElement>) => {
+      const isNavigationKey =
+        event.key === "Escape" ||
+        event.key === "Tab" ||
+        event.key === "Enter" ||
+        event.key === "ArrowUp" ||
+        event.key === "ArrowDown"
+
+      if (!isNavigationKey) event.stopPropagation()
+    }
+
+    return (
+      <div className={cn("mb-2 flex items-center gap-2 border-b pb-3")}>
+        <div className={cn("relative flex-1")}>
+          <IGRPIcon
+            iconName="Search"
+            className={cn("absolute top-1/2 left-2 size-3 -translate-y-1/2 text-muted-foreground")}
+          />
+          <Input
+            type="text"
+            className={cn("h-8 pl-7 text-sm")}
+            placeholder={i18n.inputSelect.searchPlaceholder}
+            aria-label={i18n.inputSelect.searchLabel}
+            value={search}
+            onChange={(e) => setSearch(e.target.value.trimStart())}
+            onKeyDown={stopTypeaheadKeys}
+          />
+        </div>
+        {search && (
+          <IGRPButton
+            onClick={onResetSearch}
+            aria-label={i18n.inputSelect.clearSearch}
+            variant="ghost"
+            size="icon"
+            className={cn("size-8 p-0")}
+            iconName="X"
+          />
+        )}
       </div>
-      {search && (
-        <IGRPButton
-          onClick={onResetSearch}
-          aria-label="Clear search"
-          variant="ghost"
-          size="icon"
-          className={cn("h-8 w-8 p-0")}
-          iconName="X"
-        />
-      )}
-    </div>
-  ),
+    )
+  }
 )
 
 const IGRPSelectItem = memo(({ item, showStatus }: { item: IGRPOptionsProps; showStatus: boolean }) => (
   <SelectItem value={String(item.value)} className={cn("flex items-center gap-2 truncate")}>
-    <div className={cn("flex items-center gap-2 w-full")}>
-      {showStatus && <Circle className={cn("h-2 w-2 fill-current", igrpColorText(item.status || "primary"))} />}
+    <div className={cn("flex w-full items-center gap-2")}>
+      {showStatus && <Circle className={cn("size-2 fill-current", igrpColorText(item.status || "primary"))} />}
       {item.image && (
         <Image
-          className={cn("h-5 w-5 rounded")}
+          className={cn("size-5 rounded")}
           src={item.image || "/placeholder.svg"}
-          alt={item.label}
+          // Decorative: item.label is rendered as text immediately after this.
+          alt=""
           width={20}
           height={20}
         />
       )}
       <div className={cn("flex flex-col")}>
         <span>{item.label}</span>
-        {item.description && <span className={cn("text-muted-foreground text-xs")}>{item.description}</span>}
+        {item.description && <span className={cn("text-xs text-muted-foreground")}>{item.description}</span>}
       </div>
     </div>
   </SelectItem>
@@ -341,7 +431,6 @@ const IGRPSelectContent = memo(
     search,
     setSearch,
     onResetSearch,
-    options,
     filteredOptions,
     showStatus,
     showGroup,
@@ -350,12 +439,14 @@ const IGRPSelectContent = memo(
     search: string
     setSearch: Dispatch<SetStateAction<string>>
     onResetSearch: () => void
-    options: IGRPOptionsProps[]
     filteredOptions: IGRPOptionsProps[]
     showStatus: boolean
     showGroup: boolean
   }) => {
-    const groups = useMemo(() => Array.from(new Set(options.map((opt) => opt.group).filter(Boolean))), [options])
+    const groups = useMemo(
+      () => Array.from(new Set(filteredOptions.map((opt) => opt.group).filter(Boolean))),
+      [filteredOptions]
+    )
 
     return (
       <SelectContent className={cn("max-h-[300px] overflow-y-auto")}>
@@ -364,7 +455,7 @@ const IGRPSelectContent = memo(
           ? groups.map((group) => (
               <Fragment key={group}>
                 <SelectGroup>
-                  <SelectLabel className={cn("text-xs text-muted-foreground px-2")}>{group}</SelectLabel>
+                  <SelectLabel className={cn("px-2 text-xs text-muted-foreground")}>{group}</SelectLabel>
                   {filteredOptions
                     .filter((opt) => opt.group === group)
                     .map((opt) => (
@@ -376,7 +467,7 @@ const IGRPSelectContent = memo(
           : filteredOptions.map((opt) => <IGRPSelectItem key={opt.value} item={opt} showStatus={showStatus} />)}
       </SelectContent>
     )
-  },
+  }
 )
 
 const IGRPSelectTrigger = ({
@@ -385,8 +476,12 @@ const IGRPSelectTrigger = ({
   placeholder,
   showStatus,
   label,
-  isOpen,
   className,
+  triggerId,
+  triggerAriaLabelledby,
+  triggerAriaInvalid,
+  triggerAriaDescribedBy,
+  triggerRef,
 }: {
   value: string
   options: IGRPOptionsProps[]
@@ -395,15 +490,27 @@ const IGRPSelectTrigger = ({
   label: string
   isOpen: boolean
   className?: string
+  triggerId?: string
+  triggerAriaLabelledby?: string
+  triggerAriaInvalid?: boolean
+  triggerAriaDescribedBy?: string
+  triggerRef?: React.Ref<HTMLButtonElement>
 }) => (
-  <SelectTrigger className={cn("w-full", className)} aria-expanded={isOpen}>
+  <SelectTrigger
+    ref={triggerRef}
+    id={triggerId}
+    aria-labelledby={triggerAriaLabelledby}
+    aria-invalid={triggerAriaInvalid || undefined}
+    aria-describedby={triggerAriaDescribedBy}
+    className={cn("w-full", className)}
+  >
     <SelectValue placeholder={placeholder} className={cn("w-full")}>
-      <div className={cn("w-full flex items-center gap-2 truncate")}>
+      <div className={cn("flex w-full items-center gap-2 truncate")}>
         {showStatus && (
           <Circle
             className={cn(
-              "h-2 w-2 fill-current",
-              igrpColorText(options.find((o) => o.value === value)?.status || "primary"),
+              "size-2 fill-current",
+              igrpColorText(options.find((o) => o.value === value)?.status || "primary")
             )}
           />
         )}

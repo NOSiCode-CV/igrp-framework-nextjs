@@ -3,11 +3,14 @@
 import { useId } from "react"
 import { useFormContext } from "react-hook-form"
 
-import { cn } from "../../../lib/utils"
-import type { IGRPInputProps } from "../../../types"
-import { Switch } from "../../primitives/switch"
-import { IGRPFormField } from "../form/form-field"
-import { IGRPLabel } from "../label"
+import { cn } from "../cn.js"
+import { igrpOmitNonDomProps } from "../../../lib/dom-props.js"
+import { igrpChainHandlers, igrpMergeRefs } from "../../../lib/form-binding.js"
+import type { IGRPInputProps } from "../../../types.js"
+import { Switch } from "../../primitives/switch.js"
+import { IGRPFormField } from "../form/form-field.js"
+import { IGRPLabel } from "../label.js"
+import { Field, FieldDescription, FieldError } from "../../primitives/field.js"
 
 /**
  * Props for the IGRPSwitch component.
@@ -42,7 +45,7 @@ function IGRPSwitch({
 
   if (!formContext) {
     return (
-      <div className={cn("*:not-first:mt-2")}>
+      <Field>
         <div className={cn("flex items-center gap-2")}>
           <Switch
             id={fielName}
@@ -50,8 +53,8 @@ function IGRPSwitch({
             className={cn(className, error && "border-destructive focus-visible:ring-destructive/20")}
             onCheckedChange={onCheckedChange}
             aria-invalid={!!error}
-            aria-describedby={helperText || error ? `${fielName}-helper` : undefined}
-            {...props}
+            aria-describedby={error ? `${fielName}-error` : helperText ? `${fielName}-helper` : undefined}
+            {...igrpOmitNonDomProps(props)}
           />
 
           {label && (
@@ -64,28 +67,22 @@ function IGRPSwitch({
           )}
         </div>
 
-        {helperText && !error && (
-          <p
-            id={`${fielName}-helper`}
-            className={cn("text-muted-foreground mt-2 text-xs")}
-            role="region"
-            aria-live="polite"
-          >
-            {helperText}
-          </p>
-        )}
+        {helperText && !error && <FieldDescription id={`${fielName}-helper`}>{helperText}</FieldDescription>}
 
-        {error && (
-          <p id={`${fielName}-error`} className={cn("text-destructive mt-2 text-xs")} role="alert">
-            {error}
-          </p>
-        )}
-      </div>
+        {error && <FieldError id={`${fielName}-error`}>{error}</FieldError>}
+      </Field>
     )
   }
 
+  // The field owns checked/onBlur/ref; the caller's copies never replace it
+  // (see lib/form-binding.ts).
+  const { checked: _checked, defaultChecked: _defaultChecked, onBlur, ref, ...callerProps } = igrpOmitNonDomProps(props)
+  void _checked
+  void _defaultChecked
+
   return (
     <IGRPFormField
+      errorText={error}
       name={fielName}
       label={label}
       helperText={helperText}
@@ -95,31 +92,26 @@ function IGRPSwitch({
       isToggle
     >
       {(field, fieldState) => (
-        <div className={cn("*:not-first:mt-2")}>
-          <div className={cn("flex items-center gap-2")}>
-            <Switch
-              id={fielName}
-              name={fielName}
-              required={required}
-              className={cn(
-                "bg-backsground",
-                (fieldState.error || error) && "border-destructive focus-visible:ring-destructive/20",
-                className,
-              )}
-              checked={field.value === true}
-              onCheckedChange={(checked) => {
-                field.onChange(checked)
-                if (onCheckedChange) {
-                  onCheckedChange(checked)
-                }
-              }}
-              onBlur={field.onBlur}
-              aria-invalid={!!fieldState.error || !!error}
-              aria-describedby={helperText || error ? `${id}-helper` : undefined}
-              {...props}
-            />
-          </div>
-        </div>
+        <Switch
+          name={fielName}
+          required={required}
+          className={cn(
+            "bg-backsground",
+            (fieldState.error || error) && "border-destructive focus-visible:ring-destructive/20",
+            className
+          )}
+          ref={igrpMergeRefs(field.ref, ref)}
+          checked={field.value === true}
+          onCheckedChange={(checked) => {
+            field.onChange(checked)
+            if (onCheckedChange) {
+              onCheckedChange(checked)
+            }
+          }}
+          onBlur={igrpChainHandlers(field.onBlur, onBlur)}
+          aria-invalid={!!fieldState.error || !!error}
+          {...callerProps}
+        />
       )}
     </IGRPFormField>
   )

@@ -1,6 +1,12 @@
+"use client"
+
+// The context is module-private API consumed by sibling data-table components;
+// exporting it here avoids a one-symbol file. Fast refresh's "components only" rule doesn't apply.
+/* eslint-disable react-refresh/only-export-components */
+
 import { createContext, type ReactNode } from "react"
 
-import { TooltipProvider } from "../../primitives/tooltip"
+import { TooltipProvider } from "../../primitives/tooltip.js"
 
 /** @internal Context indicating tooltip provider is present. */
 const IGRPDataTableTooltipContext = createContext(false)

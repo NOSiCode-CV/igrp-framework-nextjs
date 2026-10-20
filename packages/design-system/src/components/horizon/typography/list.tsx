@@ -4,10 +4,10 @@
 import { useEffect, useId, useMemo, useReducer, useState } from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 
-import { IGRPColors, type IGRPColorRole, type IGRPColorVariants } from "../../../lib/colors"
-import { cn } from "../../../lib/utils"
-import { IGRPBadge } from "../badge"
-import { IGRPIcon, type IGRPIconName } from "../icon"
+import { IGRPColors, type IGRPColorRole, type IGRPColorVariants } from "../../../lib/colors.js"
+import { cn } from "../cn.js"
+import { IGRPBadge } from "../badge.js"
+import { IGRPIcon, type IGRPIconName } from "../icon/index.js"
 
 const igrpTextlistVariants = cva("", {
   variants: {
@@ -29,14 +29,14 @@ const igrpTextlistVariants = cva("", {
   },
 })
 
-const igrpTextlistItemVariants = cva("flex items-center gap-2 transition-all duration-200", {
+const igrpTextlistItemVariants = cva("flex items-center gap-2 transition-colors duration-200", {
   variants: {
     interactive: {
-      true: "hover:bg-gray-50 dark:hover:bg-gray-800 p-2 rounded-md cursor-pointer",
+      true: "cursor-pointer rounded-md p-2 hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
       false: "",
     },
     completed: {
-      true: "opacity-60 line-through",
+      true: "line-through opacity-60",
       false: "",
     },
   },
@@ -109,16 +109,16 @@ interface IGRPTextListProps extends React.HTMLAttributes<HTMLElement>, VariantPr
 const getDefaultIcon = (type: IGRPTextListType, iconColor?: IGRPColorVariants, index?: number) => {
   switch (type) {
     case "checklist":
-      return <IGRPIcon iconName="Check" className={IGRPColors.solid[iconColor || "success"].text} />
+      return <IGRPIcon iconName="Check" className={IGRPColors.outline[iconColor || "success"].text} />
     case "features":
-      return <IGRPIcon iconName="Star" className={IGRPColors.solid[iconColor || "warning"].text} />
+      return <IGRPIcon iconName="Star" className={IGRPColors.outline[iconColor || "warning"].text} />
     case "steps":
       return (
         <div
           className={cn(
-            "w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium",
+            "flex size-6 items-center justify-center rounded-full text-xs font-medium",
             IGRPColors.solid[iconColor || "info"].alert,
-            IGRPColors.solid[iconColor || "info"].bg,
+            IGRPColors.solid[iconColor || "info"].bg
           )}
         >
           {(index || 0) + 1}
@@ -126,7 +126,7 @@ const getDefaultIcon = (type: IGRPTextListType, iconColor?: IGRPColorVariants, i
       )
     case "ordered":
       return (
-        <span className={cn(IGRPColors.outline[iconColor || "secondary"].badge, "font-medium min-w-6")}>
+        <span className={cn(IGRPColors.outline[iconColor || "secondary"].badge, "min-w-6 font-medium")}>
           {(index || 0) + 1}.
         </span>
       )
@@ -188,12 +188,23 @@ function IGRPTextList({
   useEffect(() => {
     if (!animate) return
 
+    // Every timer has to be tracked and cleared. Without this, changing `items`
+    // mid-reveal leaves the previous list's pending ADDs running, and they land
+    // on the new list's indices; unmounting mid-reveal dispatches after unmount.
+    const timers: ReturnType<typeof setTimeout>[] = []
+
     queueMicrotask(() => dispatchVisibleItems({ type: "RESET" }))
     items.forEach((_, index) => {
-      setTimeout(() => {
-        dispatchVisibleItems({ type: "ADD", index })
-      }, index * 100)
+      timers.push(
+        setTimeout(() => {
+          dispatchVisibleItems({ type: "ADD", index })
+        }, index * 100)
+      )
     })
+
+    return () => {
+      for (const timer of timers) clearTimeout(timer)
+    }
   }, [items, animate])
 
   const toggleCollapse = (itemId: string | number) => {
@@ -248,23 +259,25 @@ function IGRPTextList({
     const isInteractive = interactive || collapsible || !!onItemClick
 
     return (
-      <div
+      <li
         key={item.id || index}
-        className={cn("transition-all duration-300", {
-          "opacity-0 translate-x-4": animate && !isVisible,
-          "opacity-100 translate-x-0": !animate || isVisible,
+        className={cn("list-none", "transition-[opacity,transform] duration-300 motion-reduce:transition-none", {
+          "translate-x-4 opacity-0": animate && !isVisible,
+          "translate-x-0 opacity-100": !animate || isVisible,
         })}
       >
         <div
           role={isInteractive ? "button" : undefined}
-          tabIndex={isInteractive ? 0 : undefined}
+          tabIndex={isInteractive && !item.disabled ? 0 : undefined}
+          aria-disabled={isInteractive && item.disabled ? true : undefined}
+          aria-expanded={collapsible && hasSubItems ? !isCollapsed : undefined}
           className={cn(
             igrpTextlistItemVariants({
               interactive: isInteractive,
               completed: item.completed,
             }),
-            item.disabled && "opacity-50 cursor-not-allowed",
-            depth > 0 && "ml-6",
+            item.disabled && "cursor-not-allowed opacity-50",
+            depth > 0 && "ml-6"
           )}
           {...(isInteractive && {
             onClick: handleItemClick,
@@ -272,12 +285,12 @@ function IGRPTextList({
           })}
         >
           {/* Icon */}
-          <div className={cn("shrink-0 mt-0.5")}>{itemIcon}</div>
+          <div className={cn("mt-0.5 shrink-0")}>{itemIcon}</div>
 
           {/* Content */}
-          <div className={cn("flex-1 min-w-0")}>
+          <div className={cn("min-w-0 flex-1")}>
             <div className={cn("flex items-center gap-2")}>
-              <div className={cn("flex-1", item.variant && IGRPColors.solid[item.variant].text)}>{item.content}</div>
+              <div className={cn("flex-1", item.variant && IGRPColors.outline[item.variant].text)}>{item.content}</div>
 
               {/* Badge */}
               {item.badgeText && (
@@ -293,7 +306,7 @@ function IGRPTextList({
 
               {/* Collapse indicator */}
               {collapsible && hasSubItems && (
-                <div className={cn("transition-transform duration-200 rotate-90", isCollapsed && "rotate-0")}>
+                <div className={cn("rotate-90 transition-transform duration-200", isCollapsed && "rotate-0")}>
                   <IGRPIcon iconName="ArrowRight" className={cn(IGRPColors.outline.secondary.badge)} />
                 </div>
               )}
@@ -303,14 +316,17 @@ function IGRPTextList({
 
         {/* Sub-items */}
         {shouldShowSubItems && (
-          <div>{item.subItems!.map((subItem, subIndex) => renderListItem(subItem, subIndex, depth + 1))}</div>
+          <ul className={cn("list-none")}>
+            {item.subItems!.map((subItem, subIndex) => renderListItem(subItem, subIndex, depth + 1))}
+          </ul>
         )}
-      </div>
+      </li>
     )
   }
 
   const Component = type === "ordered" ? "ol" : "ul"
-  const colorClass = IGRPColors.solid[variant]
+  // outline, not solid: these sit on the page background, not on a filled surface.
+  const colorClass = IGRPColors.outline[variant]
 
   return (
     <Component className={cn(igrpTextlistVariants({ size, spacing }), colorClass.text, className)} id={ref} {...props}>
@@ -321,7 +337,7 @@ function IGRPTextList({
 
 const igrpCreateListItem = (
   content: React.ReactNode,
-  options?: Partial<Omit<IGRPTextListItem, "content">>,
+  options?: Partial<Omit<IGRPTextListItem, "content">>
 ): IGRPTextListItem => ({
   content,
   ...options,
@@ -332,7 +348,7 @@ const igrpListItems = {
     content: React.ReactNode,
     icon: IGRPIconName | string,
     iconColor?: IGRPColorVariants,
-    options?: Partial<IGRPTextListItem>,
+    options?: Partial<IGRPTextListItem>
   ) => igrpCreateListItem(content, { icon, iconColor, ...options }),
 
   withSubItems: (content: React.ReactNode, subItems: IGRPTextListItem[], options?: Partial<IGRPTextListItem>) =>

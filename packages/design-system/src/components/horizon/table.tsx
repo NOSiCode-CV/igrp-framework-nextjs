@@ -2,8 +2,9 @@
 
 import { useId, type ReactNode } from "react"
 
-import { cn } from "../../lib/utils"
-import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "../primitives/table"
+import { cn } from "cn"
+import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "../primitives/table.js"
+import { useIGRPi18n } from "../../i18n/index.js"
 
 /** @internal Renders cell content with optional custom render function. */
 function TableCellContent<T>({ value, render }: { value: T; render?: (value: T) => ReactNode }) {
@@ -77,6 +78,7 @@ function IGRPTable<T>({
   isHeaderSticky = false,
   id,
 }: IGRPTableProps<T>) {
+  const i18n = useIGRPi18n()
   const _id = useId()
   const ref = id ?? _id
 
@@ -94,7 +96,7 @@ function IGRPTable<T>({
             ))}
             {actions && (
               <TableHead>
-                <span className={cn("sr-only")}>Actions</span>
+                <span className={cn("sr-only")}>{i18n.table.actions}</span>
               </TableHead>
             )}
           </TableRow>

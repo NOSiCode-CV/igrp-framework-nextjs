@@ -2,6 +2,7 @@
 
 import { Children, isValidElement } from "react"
 import { cva, type VariantProps } from "class-variance-authority"
+import { XIcon } from "lucide-react"
 import {
   Dialog as IGRPModalDialog,
   DialogClose as IGRPModalDialogClose,
@@ -11,17 +12,19 @@ import {
   DialogHeader,
   DialogTitle,
   DialogDescription,
-} from "../primitives/dialog"
-import { cn } from "../../lib/utils"
+} from "../primitives/dialog.js"
+import { cn } from "cn"
+import { Button } from "../primitives/button.js"
+import { useIGRPi18n } from "../../i18n/index.js"
 
-const igrpModalDialogContentVariants = cva("w-full sm:max-w-lg max-h-[90vh] overflow-auto", {
+const igrpModalDialogContentVariants = cva("max-h-[90vh] w-full overflow-auto", {
   variants: {
     size: {
       sm: "sm:max-w-md",
       md: "sm:max-w-lg",
       lg: "sm:max-w-2xl",
-      xl: "sm:max-w-4xl ",
-      full: "sm:max-w-[95vw] h-[95vh]",
+      xl: "sm:max-w-4xl",
+      full: "h-[95vh] max-h-[95vh] sm:max-w-[95vw]",
     },
   },
   defaultVariants: {
@@ -32,6 +35,11 @@ const igrpModalDialogContentVariants = cva("w-full sm:max-w-lg max-h-[90vh] over
 interface IGRPModalDialogContentProps
   extends React.ComponentProps<typeof DialogContent>, VariantProps<typeof igrpModalDialogContentVariants> {
   contentClassName?: string
+  /**
+   * @deprecated Style the close button through `className` on the content instead
+   * (e.g. `[&_[data-slot=dialog-close]]:…`). Will be removed in the next release.
+   */
+  showCloseButtonClassName?: string
 }
 
 /**
@@ -42,20 +50,28 @@ function IGRPModalDialogContent({
   size,
   children,
   contentClassName,
+  showCloseButton = true,
+  showCloseButtonClassName,
   ...props
 }: IGRPModalDialogContentProps) {
+  const i18n = useIGRPi18n()
+  // A sticky header/footer must sit flush against the dialog edge. `DialogContent`'s
+  // `p-6` would otherwise clamp `sticky top-0`/`bottom-0` to the padded content box
+  // (sticky is constrained by its containing block), so we drop the matching padding
+  // when a sticky section is present. Reference equality is intentional — it survives
+  // minification, unlike a displayName string compare.
   const hasStickyHeader = Children.toArray(children).some(
     (child) =>
       isValidElement(child) &&
       child.type === IGRPModalDialogHeader &&
-      (child.props as IGRPModalDialogHeaderProps).stickyHeader === true,
+      (child.props as IGRPModalDialogHeaderProps).stickyHeader === true
   )
 
   const hasStickyFooter = Children.toArray(children).some(
     (child) =>
       isValidElement(child) &&
       child.type === IGRPModalDialogFooter &&
-      (child.props as IGRPModalDialogFooterProps).stickyFooter === true,
+      (child.props as IGRPModalDialogFooterProps).stickyFooter === true
   )
 
   return (
@@ -64,11 +80,21 @@ function IGRPModalDialogContent({
         igrpModalDialogContentVariants({ size }),
         hasStickyHeader && "pt-0",
         hasStickyFooter && "pb-0",
-        className,
+        className
       )}
       {...props}
+      // The deprecated class needs a close button we render ourselves — the primitive's takes none.
+      showCloseButton={showCloseButton && !showCloseButtonClassName}
     >
       <div className={cn("flex flex-col gap-4", contentClassName)}>{children}</div>
+      {showCloseButton && showCloseButtonClassName && (
+        <IGRPModalDialogClose data-slot="dialog-close" asChild>
+          <Button variant="ghost" className={cn("absolute top-4 right-4", showCloseButtonClassName)} size="icon-sm">
+            <XIcon />
+            <span className="sr-only">{i18n.modalDialog.close}</span>
+          </Button>
+        </IGRPModalDialogClose>
+      )}
     </DialogContent>
   )
 }
@@ -80,13 +106,18 @@ interface IGRPModalDialogHeaderProps extends React.ComponentProps<typeof DialogH
 
 /**
  * Modal dialog header with optional sticky positioning.
+ *
+ * `IGRPModalDialogContent` drops its top padding when this is sticky, so `top-0` pins
+ * flush to the dialog edge. The horizontal `-mx-6 px-6` lets the frosted bar span the
+ * full width while keeping its text aligned with the body.
  */
 function IGRPModalDialogHeader({ className, stickyHeader, ...props }: IGRPModalDialogHeaderProps) {
   return (
     <DialogHeader
+      data-igrp-slot="modal-dialog-header"
       className={cn(
-        stickyHeader && "sticky top-0 z-5 backdrop-blur-2xl bg-background/80 dark:bg-zinc-900/60 border-b py-3",
-        className,
+        stickyHeader && "sticky top-0 z-10 -mx-6 border-b bg-background/80 px-6 py-3 backdrop-blur-2xl",
+        className
       )}
       {...props}
     />
@@ -100,10 +131,11 @@ interface IGRPModalDialogFooterProps extends React.ComponentProps<typeof DialogF
 function IGRPModalDialogFooter({ className, stickyFooter, ...props }: IGRPModalDialogFooterProps) {
   return (
     <DialogFooter
+      data-igrp-slot="modal-dialog-footer"
       className={cn(
-        "flex-col sm:justify-start",
-        stickyFooter && "sticky bottom-0 z-5 backdrop-blur-2xl bg-background/80 dark:bg-zinc-900/60 py-3",
-        className,
+        "flex-col",
+        stickyFooter && "sticky bottom-0 z-10 -mx-6 bg-background/80 px-6 py-3 backdrop-blur-2xl",
+        className
       )}
       {...props}
     />
@@ -114,7 +146,7 @@ function IGRPModalDialogFooter({ className, stickyFooter, ...props }: IGRPModalD
  * Modal dialog title.
  */
 function IGRPModalDialogTitle({ className, ...props }: React.ComponentProps<typeof DialogTitle>) {
-  return <DialogTitle className={cn(className)} {...props}></DialogTitle>
+  return <DialogTitle className={className} {...props} />
 }
 
 /**
@@ -123,11 +155,15 @@ function IGRPModalDialogTitle({ className, ...props }: React.ComponentProps<type
 function IGRPModalDialogDescription({
   className,
   name,
+  children,
   ...props
-}: React.ComponentProps<typeof DialogDescription> & { name?: string }) {
+}: React.ComponentProps<typeof DialogDescription> & {
+  /** @deprecated Pass the text as `children`. Rendered only when there are no children. Will be removed in the next release. */
+  name?: string
+}) {
   return (
-    <DialogDescription className={cn(className)} {...props}>
-      {name}
+    <DialogDescription className={className} {...props}>
+      {children ?? name}
     </DialogDescription>
   )
 }

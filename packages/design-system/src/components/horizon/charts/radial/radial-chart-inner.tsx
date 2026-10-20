@@ -14,8 +14,9 @@ import {
   type LegendType,
 } from "recharts"
 
-import { cn } from "../../../../lib/utils"
-import { ChartContainer, ChartTooltip } from "../../../primitives/chart"
+import { cn } from "../../cn.js"
+import { ChartContainer, ChartTooltip } from "../../../primitives/chart.js"
+import { ChartCustomLegend } from "../custom-legend.js"
 import {
   createChartConfig,
   formatChartValue,
@@ -24,14 +25,16 @@ import {
   getLegendHorizontalAlign,
   getLegendLayout,
   getLegendVerticalAlign,
-} from "../lib"
-import { type IGRPChartProps, type RadialBarConfig } from "../types"
+} from "../lib.js"
+import { type IGRPChartProps, type RadialBarConfig } from "../types.js"
 
 /**
  * Props for the IGRPRadialBarChart component.
  * @see IGRPRadialBarChart
  */
-export interface IGRPRadialBarChartProps extends IGRPChartProps {
+export interface IGRPRadialBarChartProps extends Omit<IGRPChartProps, "categoryKey"> {
+  /** Unused by polar charts; kept optional for call sites that already pass it. */
+  categoryKey?: string
   /** Radial bar series configurations. */
   bars: RadialBarConfig[]
   /** Key in data for bar labels. */
@@ -104,7 +107,7 @@ function RadialChartTooltipContent({
   nameKey,
   formatValue,
 }: {
-  payload: Array<{ payload?: any; value?: unknown }>
+  payload: ReadonlyArray<{ payload?: any; value?: unknown }>
   nameKey: string
   formatValue: (v: number) => string
 }) {
@@ -119,7 +122,7 @@ function RadialChartTooltipContent({
       <div className={cn("flex flex-col gap-1")}>
         <div className={cn("text-sm font-medium")}>{name}</div>
         <div className={cn("flex items-center gap-2")}>
-          <div className={cn("h-3 w-3 rounded-full")} style={{ backgroundColor: fill }} />
+          <div className={cn("size-3 rounded-full")} style={{ backgroundColor: fill }} />
           <span className={cn("text-sm")}>{formatValue(Number(value))}</span>
         </div>
       </div>
@@ -130,7 +133,7 @@ function RadialChartTooltipContent({
 function RadialChartFooter({ description }: { description?: string }) {
   if (!description) return null
   return (
-    <div className={cn("flex-col items-start gap-2 text-sm pt-4")}>
+    <div className={cn("flex-col items-start gap-2 pt-4 text-sm")}>
       <div className={cn("leading-none text-muted-foreground")}>{description}</div>
     </div>
   )
@@ -153,7 +156,7 @@ function IGRPRadialBarChartInner({
   width,
   className,
   valueFormatter,
-  gridColor = "#e5e7eb",
+  gridColor = "var(--border)",
   backgroundColor,
   footer,
   startAngle = 0,
@@ -196,28 +199,21 @@ function IGRPRadialBarChartInner({
   const totalValue = calculateTotal()
   const formattedTotal = centerText.formatter ? centerText.formatter(totalValue) : formatValue(totalValue)
 
-  const computePercent = (entry: any, dataKey: string, data: any[]): string => {
-    const total = data.reduce((sum, item) => sum + Number(item[dataKey] || 0), 0)
-    if (total === 0) return "0%"
-    const percent = ((Number(entry[dataKey] || 0) / total) * 100).toFixed(0)
-    return `${percent}%`
-  }
-
-  const formatLabel = (entry: any, dataKey: string, type: "value" | "name" | "percent" = "value") => {
-    if (!entry) return ""
-
+  // recharts 3: LabelList `formatter` receives the resolved label value (selected by the
+  // LabelList `dataKey`), not the row payload. For "name" the dataKey is `nameKey`, so the
+  // value is already the name; for "value"/"percent" the value is the metric.
+  const formatLabelValue = (value: unknown, dataKey: string, type: "value" | "name" | "percent" = "value") => {
     switch (type) {
       case "name":
-        return entry[nameKey] || ""
-      case "percent":
-        try {
-          return computePercent(entry, dataKey, data)
-        } catch {
-          return "0%"
-        }
+        return value == null ? "" : String(value)
+      case "percent": {
+        const total = data.reduce((sum, item) => sum + Number(item[dataKey] || 0), 0)
+        if (total === 0) return "0%"
+        return `${((Number(value || 0) / total) * 100).toFixed(0)}%`
+      }
       case "value":
       default:
-        return formatValue(Number(entry[dataKey] || 0))
+        return formatValue(Number(value || 0))
     }
   }
 
@@ -249,11 +245,11 @@ function IGRPRadialBarChartInner({
   }, [data, bars])
 
   const tooltipContent = React.useCallback(
-    (props: { active?: boolean; payload?: Array<{ payload?: any; value?: unknown }> }) => {
+    (props: { active?: boolean; payload?: ReadonlyArray<{ payload?: any; value?: unknown }> }) => {
       if (!props.active || !props.payload || !props.payload.length) return null
       return <RadialChartTooltipContent payload={props.payload} nameKey={nameKey} formatValue={formatValue} />
     },
-    [nameKey, formatValue],
+    [nameKey, formatValue]
   )
 
   const centerLabelContent = React.useCallback(
@@ -261,20 +257,18 @@ function IGRPRadialBarChartInner({
       props?.viewBox ? (
         <CenterLabelContent formattedTotal={formattedTotal} label={centerText.label} viewBox={props.viewBox} />
       ) : null,
-    [formattedTotal, centerText.label],
+    [formattedTotal, centerText.label]
   )
 
   return (
-    <div
-      className={`w-full overflow-hidden ${className || ""}`}
-      style={backgroundColor ? { backgroundColor } : undefined}
-    >
+    <div className={cn("w-full overflow-hidden", className)} style={backgroundColor ? { backgroundColor } : undefined}>
       <RadialChartHeader title={title} description={description} />
 
       <div className={cn("overflow-hidden")}>
         <div style={{ height: chartHeight, width: chartWidth }} className={cn("w-full overflow-hidden")}>
           <ChartContainer className={cn("h-full w-full")} config={chartConfig}>
             <RadialBarChart
+              accessibilityLayer
               data={enhancedData}
               startAngle={startAngle}
               endAngle={endAngle}
@@ -325,13 +319,10 @@ function IGRPRadialBarChartInner({
                     <LabelList
                       dataKey={bars[0].labelType === "name" ? nameKey : bars[0].dataKey}
                       position={bars[0].labelPosition || "insideStart"}
-                      className={cn("fill-white capitalize mix-blend-luminosity")}
+                      className={cn("fill-background capitalize mix-blend-luminosity")}
                       fontSize={11}
                       style={bars[0].labelStyle}
-                      formatter={(entry: { payload: any }) => {
-                        if (!entry?.payload) return ""
-                        return formatLabel(entry.payload, bars[0]!.dataKey, bars[0]?.labelType)
-                      }}
+                      formatter={(value: unknown) => formatLabelValue(value, bars[0]!.dataKey, bars[0]?.labelType)}
                     />
                   )}
                 </RadialBar>
@@ -352,13 +343,10 @@ function IGRPRadialBarChartInner({
                     <LabelList
                       dataKey={bar.labelType === "name" ? nameKey : bar.dataKey}
                       position={bar.labelPosition || "insideStart"}
-                      className={cn("fill-white capitalize mix-blend-luminosity")}
+                      className={cn("fill-background capitalize mix-blend-luminosity")}
                       fontSize={11}
                       style={bar.labelStyle}
-                      formatter={(entry: { payload: any }) => {
-                        if (!entry || !entry.payload) return ""
-                        return formatLabel(entry.payload, bar.dataKey, bar.labelType)
-                      }}
+                      formatter={(value: unknown) => formatLabelValue(value, bar.dataKey, bar.labelType)}
                     />
                   )}
                 </RadialBar>
@@ -369,11 +357,8 @@ function IGRPRadialBarChartInner({
                   verticalAlign={getLegendVerticalAlign(legendPosition)}
                   align={getLegendHorizontalAlign(legendPosition)}
                   layout={getLegendLayout(legendPosition)}
-                  payload={legendPayload}
-                  iconSize={10}
-                  iconType="square"
                   wrapperStyle={{ paddingTop: 10 }}
-                  className={cn("text-xs fill-foreground")}
+                  content={() => <ChartCustomLegend payload={legendPayload} />}
                 />
               )}
             </RadialBarChart>

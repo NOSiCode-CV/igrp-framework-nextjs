@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 
 import { useCallback, useEffect, useId, useRef, useState } from "react"
@@ -7,22 +6,31 @@ import { toast } from "sonner"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 
-import { Form } from "../../primitives/form"
-import { FieldSet } from "../../primitives/field"
-import { cn } from "../../../lib/utils"
-import { IGRPFormContext } from "./form-context"
+import { Form } from "../../primitives/form.js"
+import { FieldSet } from "../../primitives/field.js"
+import { cn } from "../cn.js"
+import { useIGRPi18n } from "../../../i18n/index.js"
+import { IGRPFormContext } from "./form-context.js"
 
-type AnyZod = z.ZodType<any, any, any>
+// `useForm`'s `TFieldValues` generic is constrained to react-hook-form's
+// `FieldValues`, which is `Record<string, any>`. To satisfy that constraint
+// without re-importing `FieldValues` (and to keep the type local), we mirror
+// its shape here. The `any`s on this single line are intentional and bounded —
+// they exist to thread through to a third-party generic, not to weaken our
+// public surface. The context generic (middle slot) is `unknown` since IGRPForm
+// doesn't expose a form-context typing surface.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnyZod = z.ZodType<Record<string, any>, any, any>
 type InputOf<T extends AnyZod> = z.input<T>
 type OutputOf<T extends AnyZod> = z.output<T>
 
-type ResetFn<TSchema extends AnyZod> = UseFormReturn<InputOf<TSchema>, any, OutputOf<TSchema>>["reset"]
+type ResetFn<TSchema extends AnyZod> = UseFormReturn<InputOf<TSchema>, unknown, OutputOf<TSchema>>["reset"]
 
 /**
  * Form handle exposed via formRef.
  * Extends react-hook-form's UseFormReturn with submit, reset, and error helpers.
  */
-export type IGRPFormHandle<TSchema extends AnyZod> = UseFormReturn<InputOf<TSchema>, any, OutputOf<TSchema>> & {
+export type IGRPFormHandle<TSchema extends AnyZod> = UseFormReturn<InputOf<TSchema>, unknown, OutputOf<TSchema>> & {
   /** Programmatically submit the form. */
   submit: () => Promise<void>
   /** Reset form to default values. */
@@ -66,7 +74,11 @@ export interface IGRPFormProps<TSchema extends AnyZod> {
   id?: string
   /** Disable all form inputs. */
   disabled?: boolean
-  /** Key to reset form when changed (e.g. record id when loading new data). When provided, form remounts instead of syncing via effect. */
+  /**
+   * Key that resets the form when it changes (e.g. the record id when loading new data): values, dirty and
+   * touched state and the global error all reset to the current `defaultValues`, even if the user had typed.
+   * While set, `defaultValues` no longer re-sync on their own.
+   */
   resetKey?: React.Key
 }
 
@@ -92,24 +104,48 @@ function IGRPForm<TSchema extends AnyZod>({
 }: IGRPFormProps<TSchema>) {
   const _id = useId()
   const ref = id ?? _id
+  const i18n = useIGRPi18n()
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [formError, setFormError] = useState<string | undefined>()
   const internalFormRef = useRef<IGRPFormHandle<TSchema> | null>(null)
 
-  const form = useForm<InputOf<TSchema>, any, OutputOf<TSchema>>({
-    resolver: zodResolver(schema) as Resolver<InputOf<TSchema>, any, OutputOf<TSchema>>,
+  const form = useForm<InputOf<TSchema>, unknown, OutputOf<TSchema>>({
+    resolver: zodResolver(schema) as Resolver<InputOf<TSchema>, unknown, OutputOf<TSchema>>,
     defaultValues,
     mode: validationMode,
   })
 
-  // Sync defaultValues to form when they change (valid prop sync, not event simulation). Use resetKey to reset via remount instead.
+  // Sync defaultValues to form when they change. Three safety rails to avoid clobbering state:
+  //   1. If the consumer opts into `resetKey`, prop sync is disabled (the resetKey effect below owns resets).
+  //   2. Defaults already applied are never re-applied. `useForm` consumes `defaultValues` on the
+  //      first render, so a mount-time `reset()` is redundant — and destructive: it runs *after*
+  //      child effects and wipes rows that a child seeded (e.g. IGRPFormList with allowEmpty={false}),
+  //      leaving an empty list that never re-seeds.
+  //   3. If the form is dirty (user has typed), skip the reset — only refresh untouched defaults.
+  // Consumers that *need* to overwrite dirty state with new defaults should bump `resetKey` or call `formRef.current?.reset()` themselves.
+  // Read during render so react-hook-form registers the `isDirty` subscription; reading it
+  // only inside the effect below would leave it unsubscribed on the runs that return early.
+  const isDirty = form.formState.isDirty
+  const syncedDefaultsRef = useRef(defaultValues)
   useEffect(() => {
     if (resetKey !== undefined) return
-    if (defaultValues) {
-      form.reset(defaultValues)
-    }
-  }, [form, defaultValues, resetKey])
+    if (!defaultValues) return
+    if (syncedDefaultsRef.current === defaultValues) return
+    if (isDirty) return
+    syncedDefaultsRef.current = defaultValues
+    form.reset(defaultValues)
+  }, [form, defaultValues, resetKey, isDirty])
+
+  // A changed `resetKey` overwrites everything, dirty or not — that's its whole point.
+  const appliedResetKeyRef = useRef(resetKey)
+  useEffect(() => {
+    if (appliedResetKeyRef.current === resetKey) return
+    appliedResetKeyRef.current = resetKey
+    syncedDefaultsRef.current = defaultValues
+    form.reset(defaultValues)
+    setFormError(undefined)
+  }, [form, resetKey, defaultValues])
 
   const clearGlobalError = useCallback(() => setFormError(undefined), [])
   const setGlobalError = useCallback((message: string) => setFormError(message), [])
@@ -127,19 +163,19 @@ function IGRPForm<TSchema extends AnyZod>({
         }
       } catch (err) {
         console.error("Form submission failed:", err)
-        const errorMessage = err instanceof Error ? err.message : "An unexpected error occurred"
+        const errorMessage = err instanceof Error ? err.message : i18n.form.submissionErrorFallback
 
         setGlobalError(errorMessage)
 
         if (showToastOnError) {
-          toast.error("Form Submission Error", { description: errorMessage })
+          toast.error(i18n.form.submissionErrorTitle, { description: errorMessage })
         }
 
         onError?.(err)
       }
       setIsSubmitting(false)
     },
-    [clearGlobalError, onSubmit, resetAfterSubmit, form, defaultValues, setGlobalError, showToastOnError, onError],
+    [clearGlobalError, onSubmit, resetAfterSubmit, form, defaultValues, setGlobalError, showToastOnError, onError, i18n]
   )
 
   const submitForm = useCallback(async () => form.handleSubmit(handleSubmit)(), [form, handleSubmit])
@@ -168,7 +204,7 @@ function IGRPForm<TSchema extends AnyZod>({
       }
       form.handleSubmit(handleSubmit)(e)
     },
-    [disabled, form, handleSubmit],
+    [disabled, form, handleSubmit]
   )
 
   return (
@@ -177,12 +213,12 @@ function IGRPForm<TSchema extends AnyZod>({
         <form className={className} onSubmit={handleFormSubmit} noValidate id={ref}>
           {formError && (
             <div
-              className={cn("mb-4 p-3 border border-destructive bg-destructive/10 rounded-md text-destructive text-sm")}
+              className={cn("mb-4 rounded-md border border-destructive bg-destructive/10 p-3 text-sm text-destructive")}
             >
               {formError}
             </div>
           )}
-          <FieldSet disabled={disabled} className={cn("border-0 p-0 m-0 gap-0")}>
+          <FieldSet disabled={disabled} className={cn("m-0 gap-0 border-0 p-0")}>
             <div className={cn("grid gap-4", gridClassName)}>{children}</div>
           </FieldSet>
         </form>

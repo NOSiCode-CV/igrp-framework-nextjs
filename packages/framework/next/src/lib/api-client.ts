@@ -1,29 +1,71 @@
+import 'server-only';
+
 import { AccessManagementClient } from '@igrp/platform-access-management-client-ts';
-import { igrpGetAccessClientConfig, igrpResetAccessClientConfig } from './api-config';
+import { igrpGetAccessClientConfig, igrpResetAccessClientConfig } from './api-config.js';
 
-let clientInstance: AccessManagementClient | null = null;
-
-export function igrpResetAccessClient() {
-  clientInstance = null;
-  igrpResetAccessClientConfig();
-}
-
-export async function igrpGetAccessClient(): Promise<AccessManagementClient> {
-  const { baseUrl, token, timeout = 10000 } = igrpGetAccessClientConfig();
-
-  if (!baseUrl) {
+export function igrpGetAccessClient(): AccessManagementClient {
+  const { baseUrl, token, timeout, locale } = igrpGetAccessClientConfig();
+  if (!baseUrl || !token) {
     throw new Error(
-      'igrpGetAccessClient: baseUrl is not configured. Call igrpSetAccessClientConfig() before making API requests.',
+      'Access Management client is not configured. Call igrpSetAccessClientConfig() first.',
     );
   }
-
-  clientInstance = AccessManagementClient.create({
+  const client = AccessManagementClient.create({
     baseUrl,
-    timeout,
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+    timeout: timeout ?? 10_000,
+    headers: { Authorization: `Bearer ${token}`, ...(locale ? { 'Accept-Language': locale } : {}) },
   });
+  guardSessionClient(client.sessions);
+  return client;
+}
 
-  return clientInstance;
+/**
+ * `sessions.rotateSession()` and `sessions.closeSession()` look like session
+ * lifecycle helpers but are traps in an IGRP app, so each warns the first time
+ * it is called in this process. They still run — nothing that calls them today
+ * breaks.
+ *
+ * - `rotateSession` (`POST /api/session/rotate`) closes the CALLER's session and
+ *   opens a replacement no token is bound to. The app's access token still
+ *   carries the old, now closed `sid`: its next Access Management call gets
+ *   `401 session_revoked` and its next refresh fails. Calling it logs the app
+ *   out, and the orphan row counts toward the user's session cap.
+ * - `closeSession` (`POST /api/session/close`) ends the session server-side but
+ *   is NOT a logout: it clears no cookie, does not end the SSO session and
+ *   revokes no token. Log out through the template's /logout flow
+ *   (`end_session` with `id_token_hint`).
+ */
+const SESSION_CLIENT_TRAPS = {
+  rotateSession:
+    'sessions.rotateSession() logs the calling app out: Access Management opens a replacement ' +
+    'session no token is bound to, while the app keeps a token for the closed one. Do not use it.',
+  closeSession:
+    'sessions.closeSession() is not a logout: it clears no cookie, keeps the SSO session and ' +
+    'revokes no token. Sign out through the /logout flow (end_session with id_token_hint).',
+} as const;
+
+const warnedSessionTraps = new Set<string>();
+
+function guardSessionClient(sessions: AccessManagementClient['sessions'] | undefined): void {
+  if (!sessions) return;
+  for (const [method, message] of Object.entries(SESSION_CLIENT_TRAPS)) {
+    const original = (sessions as unknown as Record<string, unknown>)[method];
+    if (typeof original !== 'function') continue;
+    (sessions as unknown as Record<string, unknown>)[method] = (...args: unknown[]) => {
+      if (!warnedSessionTraps.has(method)) {
+        warnedSessionTraps.add(method);
+        console.warn(`[igrpGetAccessClient] ${message}`);
+      }
+      return (original as (...a: unknown[]) => unknown).apply(sessions, args);
+    };
+  }
+}
+
+/**
+ * @deprecated Misnamed: there is no client cache to reset — `igrpGetAccessClient`
+ * builds a fresh client per call. This only clears the per-request *config*.
+ * Call {@link igrpResetAccessClientConfig} directly, which says what it does.
+ */
+export function igrpResetAccessClient(): void {
+  igrpResetAccessClientConfig();
 }

@@ -1,0 +1,61 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`Components/Typography/DynamicText Animated smoke-test 1`] = `
+<div class="container my-12 mx-auto">
+  <p class="transition-[font-size,line-height] duration-300 ease-in-out text-base leading-6 font-normal text-left mb-2 animate-[igrp-text-fade-in_0.3s_ease-in-out_0.1s_both] motion-reduce:animate-none"
+     id="_r_ID_"
+  >
+    This is a dynamic paragraph component that supports various styling options, animations, text highlighting, and responsive design. It's built with flexibility in mind to handle different use cases in your application.
+  </p>
+</div>
+`;
+
+exports[`Components/Typography/DynamicText CustomTag smoke-test 1`] = `
+<div class="container my-12 mx-auto">
+  <p class="transition-[font-size,line-height] duration-300 ease-in-out text-lg leading-7 font-semibold text-left mb-2"
+     id="_r_ID_"
+  >
+    This text is rendered as a &lt;div&gt; instead of a &lt;p&gt;.
+  </p>
+</div>
+`;
+
+exports[`Components/Typography/DynamicText Default smoke-test 1`] = `
+<div class="container my-12 mx-auto">
+  <div class="transition-[font-size,line-height] duration-300 ease-in-out text-base leading-6 font-normal text-left mb-2"
+       id="_r_ID_"
+  >
+    This is a dynamic text component with support for style variants, animation, truncation, and highlighting.
+  </div>
+</div>
+`;
+
+exports[`Components/Typography/DynamicText Highlighted smoke-test 1`] = `
+<div class="container my-12 mx-auto">
+  <div class="transition-[font-size,line-height] duration-300 ease-in-out text-xl leading-8 font-medium text-left mb-2"
+       id="_r_ID_"
+  >
+    This is a
+    <mark class="bg-highlight text-highlight-foreground px-1 rounded">
+      dynamic
+    </mark>
+    text component with support for style variants, animation, truncation, and
+    <mark class="bg-highlight text-highlight-foreground px-1 rounded">
+      highlighting
+    </mark>
+    .
+  </div>
+</div>
+`;
+
+exports[`Components/Typography/DynamicText Truncated smoke-test 1`] = `
+<div class="container my-12 mx-auto">
+  <div class="transition-[font-size,line-height] duration-300 ease-in-out text-sm leading-5 font-normal text-left mb-2"
+       id="_r_ID_"
+       variant="warning"
+       style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;"
+  >
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum at viverra nulla. Proin eleifend libero nec malesuada volutpat. Donec feugiat, lorem nec laoreet elementum, metus urna tempor est, a iaculis turpis sem et sapien.
+  </div>
+</div>
+`;

@@ -2,12 +2,12 @@
 
 import { useId, useState } from "react"
 
-import { DEFAULT_HIDE_TIME_INDICATOR } from "../../../lib/constants"
-import type { IGRPCalendarTimeProps } from "../../../types"
-import { Input } from "../../primitives/input"
-import { Label } from "../../primitives/label"
-import { IGRPCalendarSingle, type IGRPCalendarSingleProps } from "./single"
-import { cn } from "../../../lib/utils"
+import { DEFAULT_HIDE_TIME_INDICATOR } from "../../../lib/utilities.js"
+import type { IGRPCalendarTimeProps } from "../../../types.js"
+import { Input } from "../../primitives/input.js"
+import { Label } from "../../primitives/label.js"
+import { IGRPCalendarSingle, type IGRPCalendarSingleProps } from "./single.js"
+import { cn } from "../cn.js"
 
 /**
  * Props for the IGRPCalendarSingleTime component.
@@ -54,11 +54,11 @@ function IGRPCalendarSingleTime({
 
   return (
     <div id={ref}>
-      <div className={cn("space-y-4")}>
+      <div className={cn("flex flex-col gap-4")}>
         <IGRPCalendarSingle {...props} />
 
-        <div className={cn("space-y-4 pt-4 border-t")}>
-          <div className={cn("space-y-2")}>
+        <div className={cn("flex flex-col gap-4 border-t pt-4")}>
+          <div className={cn("flex flex-col gap-2")}>
             <Label htmlFor={`${ref}-start-time`}>{startTimeLabel}</Label>
             <Input
               id={`${ref}-start-time`}
@@ -72,7 +72,7 @@ function IGRPCalendarSingleTime({
           </div>
 
           {!hideEndTimePicker && (
-            <div className={cn("space-y-2")}>
+            <div className={cn("flex flex-col gap-2")}>
               <Label htmlFor={`${ref}-end-time`}>{endTimeLabel}</Label>
               <Input
                 id={`${ref}-end-time`}

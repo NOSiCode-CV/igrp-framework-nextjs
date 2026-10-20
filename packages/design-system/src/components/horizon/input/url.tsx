@@ -3,11 +3,15 @@
 import { useId, useState, useCallback } from "react"
 import { useFormContext, Controller } from "react-hook-form"
 
-import { cn } from "../../../lib/utils"
-import type { IGRPInputProps, IGRPOptionsProps } from "../../../types"
-import { Input } from "../../primitives/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../primitives/select"
-import { IGRPLabel } from "../label"
+import { cn } from "../cn.js"
+import type { IGRPInputProps, IGRPOptionsProps } from "../../../types.js"
+import { InputGroup, InputGroupAddon, InputGroupInput } from "../../primitives/input-group.js"
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../../primitives/select.js"
+import { igrpOmitNonDomProps } from "../../../lib/dom-props.js"
+import { igrpChainHandlers, igrpMergeRefs } from "../../../lib/form-binding.js"
+import { IGRPLabel } from "../label.js"
+import { Field, FieldDescription, FieldError } from "../../primitives/field.js"
+import { useIGRPi18n } from "../../../i18n/index.js"
 
 /**
  * Props for the IGRPInputUrl component.
@@ -52,8 +56,10 @@ function IGRPInputUrl({
   name,
   id,
   label,
+  labelClassName,
   helperText,
   className,
+  inputClassName,
   required = false,
   error,
   value,
@@ -63,8 +69,12 @@ function IGRPInputUrl({
   defaultProtocol = "https://",
   ...props
 }: IGRPInputUrlProps) {
+  const i18n = useIGRPi18n()
   const _id = useId()
   const fieldName = name ?? id ?? _id
+  // Whatever is left belongs to the native element; the IGRP-only keys would
+  // otherwise be rendered as invalid DOM attributes.
+  const domProps = igrpOmitNonDomProps(props)
 
   const formContext = useFormContext()
 
@@ -82,7 +92,7 @@ function IGRPInputUrl({
         address: url,
       }
     },
-    [defaultProtocol, protocols],
+    [defaultProtocol, protocols]
   )
 
   const initialUrl = value ?? defaultValue ?? ""
@@ -110,62 +120,56 @@ function IGRPInputUrl({
 
   if (!formContext) {
     return (
-      <div className={cn("*:not-first:mt-2")}>
-        {label && <IGRPLabel label={label} className={className} required={required} id={fieldName} />}
+      <Field className={className} data-invalid={error ? true : undefined}>
+        {label && <IGRPLabel label={label} className={labelClassName} required={required} id={fieldName} />}
 
-        <div className={cn("flex rounded-md shadow-xs")}>
-          <Select value={displayProtocol} onValueChange={handleStandaloneProtocolChange} disabled={props.disabled}>
-            <SelectTrigger
-              className={cn("border-0 shadow-none border-l border-b border-t rounded-l-2xl rounded-none min-w-[100px]")}
-            >
-              <SelectValue placeholder={defaultProtocol} />
-            </SelectTrigger>
-            <SelectContent>
-              {protocols.map((option) => (
-                <SelectItem key={option.value} value={String(option.value)}>
-                  {option.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+        <InputGroup>
+          <InputGroupAddon align="inline-start" className={cn("p-0")}>
+            <Select value={displayProtocol} onValueChange={handleStandaloneProtocolChange} disabled={props.disabled}>
+              <SelectTrigger
+                aria-label={i18n.inputUrl.protocolLabel}
+                className={cn("h-auto min-w-[100px] border-0 bg-transparent shadow-none focus-visible:ring-0")}
+              >
+                <SelectValue placeholder={defaultProtocol} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  {protocols.map((option) => (
+                    <SelectItem key={option.value} value={String(option.value)}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </InputGroupAddon>
 
-          <Input
+          <InputGroupInput
+            className={inputClassName}
             id={fieldName}
             name={fieldName}
+            type="url"
+            inputMode="url"
             value={displayAddress}
             onChange={handleStandaloneAddressChange}
             required={required}
             aria-required={required}
             aria-invalid={!!error || !!props["aria-invalid"]}
-            aria-describedby={helperText || error ? `${id}-helper` : undefined}
-            className={cn(
-              "rounded-s-none shadow-none focus-visible:z-10",
-              error && "border-destructive focus-visible:ring-destructive/20",
-              className,
-            )}
-            {...props}
+            aria-describedby={error ? `${fieldName}-error` : helperText ? `${fieldName}-helper` : undefined}
+            {...domProps}
           />
-        </div>
+        </InputGroup>
 
-        {helperText && !error && (
-          <p
-            id={`${fieldName}-helper`}
-            className={cn("text-muted-foreground mt-2 text-xs")}
-            role="region"
-            aria-live="polite"
-          >
-            {helperText}
-          </p>
-        )}
+        {helperText && !error && <FieldDescription id={`${fieldName}-helper`}>{helperText}</FieldDescription>}
 
-        {error && (
-          <p id={`${fieldName}-error`} className={cn("text-destructive mt-2 text-xs")} role="alert">
-            {error}
-          </p>
-        )}
-      </div>
+        {error && <FieldError id={`${fieldName}-error`}>{error}</FieldError>}
+      </Field>
     )
   }
+
+  // The field owns onBlur/ref; the caller's copies run after it and never replace
+  // it (see lib/form-binding.ts).
+  const { onBlur, ref, ...callerProps } = domProps
 
   return (
     <Controller
@@ -189,68 +193,63 @@ function IGRPInputUrl({
         }
 
         return (
-          <div className={cn("*:not-first:mt-2")}>
-            {label && <IGRPLabel label={label} className={className} required={required} id={fieldName} />}
+          <Field className={className} data-invalid={fieldState.error || error ? true : undefined}>
+            {label && <IGRPLabel label={label} className={labelClassName} required={required} id={fieldName} />}
 
-            <div className={cn("flex rounded-md shadow-xs")}>
-              <Select
-                value={String(fieldProtocol)}
-                onValueChange={handleProtocolChange}
-                disabled={props.disabled}
-                onOpenChange={() => field.onBlur()}
-              >
-                <SelectTrigger
-                  className={cn(
-                    "border-0 shadow-none border-l border-b border-t rounded-l-2xl rounded-none min-w-[100px]",
-                  )}
+            <InputGroup>
+              <InputGroupAddon align="inline-start" className={cn("p-0")}>
+                <Select
+                  value={String(fieldProtocol)}
+                  onValueChange={handleProtocolChange}
+                  disabled={props.disabled}
+                  onOpenChange={() => field.onBlur()}
                 >
-                  <SelectValue placeholder={defaultProtocol} />
-                </SelectTrigger>
-                <SelectContent>
-                  {protocols.map((option) => (
-                    <SelectItem key={option.value} value={String(option.value)}>
-                      {option.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                  <SelectTrigger
+                    aria-label={i18n.inputUrl.protocolLabel}
+                    className={cn("h-auto min-w-[100px] border-0 bg-transparent shadow-none focus-visible:ring-0")}
+                  >
+                    <SelectValue placeholder={defaultProtocol} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {protocols.map((option) => (
+                        <SelectItem key={option.value} value={String(option.value)}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </InputGroupAddon>
 
-              <Input
+              <InputGroupInput
+                className={inputClassName}
                 id={fieldName}
                 name={fieldName}
+                type="url"
+                inputMode="url"
+                ref={igrpMergeRefs(field.ref, ref)}
                 value={fieldAddress}
                 onChange={handleAddressChange}
-                onBlur={field.onBlur}
+                onBlur={igrpChainHandlers(field.onBlur, onBlur)}
                 required={required}
                 aria-required={required}
                 aria-invalid={!!fieldState.error || !!error || !!props["aria-invalid"]}
-                aria-describedby={helperText || error || fieldState.error ? `${id}-helper` : undefined}
-                className={cn(
-                  "rounded-s-none shadow-none focus-visible:z-10",
-                  (fieldState.error || error) && "border-destructive focus-visible:ring-destructive/20",
-                  className,
-                )}
-                {...props}
+                aria-describedby={
+                  error || fieldState.error ? `${fieldName}-error` : helperText ? `${fieldName}-helper` : undefined
+                }
+                {...callerProps}
               />
-            </div>
+            </InputGroup>
 
             {helperText && !error && !fieldState.error && (
-              <p
-                id={`${fieldName}-helper`}
-                className={cn("text-muted-foreground mt-2 text-xs")}
-                role="region"
-                aria-live="polite"
-              >
-                {helperText}
-              </p>
+              <FieldDescription id={`${fieldName}-helper`}>{helperText}</FieldDescription>
             )}
 
             {(error || fieldState.error) && (
-              <p id={`${fieldName}-error`} className={cn("text-destructive mt-2 text-xs")} role="alert">
-                {error || fieldState.error?.message}
-              </p>
+              <FieldError id={`${fieldName}-error`}>{error || fieldState.error?.message}</FieldError>
             )}
-          </div>
+          </Field>
         )
       }}
     />

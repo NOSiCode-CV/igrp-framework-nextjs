@@ -4,11 +4,19 @@ import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react"
 import type React from "react"
 import { CheckIcon, ChevronLeft, ChevronRight } from "lucide-react"
 
-import { cn } from "../../../lib/utils"
-import { ScrollArea } from "../../primitives/scroll-area"
-import { Stepper, StepperItem, StepperTitle, StepperTrigger } from "../../primitives/stepper"
-import { Button } from "../../primitives/button"
-import { Tooltip, TooltipTrigger, TooltipContent } from "../../primitives/tooltip"
+import { cn } from "../cn.js"
+import { ScrollArea } from "../../primitives/scroll-area.js"
+import { Stepper, StepperItem, StepperTitle, StepperTrigger } from "../../primitives/stepper.js"
+import { Button } from "../../primitives/button.js"
+import { Tooltip, TooltipTrigger, TooltipContent } from "../../primitives/tooltip.js"
+import { useIGRPi18n } from "../../../i18n/index.js"
+
+function getScrollBehavior(): ScrollBehavior {
+  if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    return "auto"
+  }
+  return "smooth"
+}
 
 /**
  * Props for a single step in the process stepper.
@@ -52,42 +60,50 @@ interface IGRPStepperProcessProps {
   stepperItemsClassName?: string
 }
 
+/** Chevron depth in px — how far a step's arrow reaches into its neighbour's notch. */
+const STEP_NOTCH = 10
+/** Visible sliver of page background left between two steps, in px. */
+const STEP_GAP = 3
+
 function getStepperItemClassName(): string {
   return cn(
-    "group/step relative flex-1 text-center overflow-visible ml-1.5 mr-1.75 items-center justify-center max-md:items-start",
-    // First child styles
-    "first:ml-0 first:rounded-tl-2xl first:rounded-bl-2xl first:pl-2.5",
-    // Last child styles
-    "last:mr-0 last:rounded-tr-2xl last:rounded-br-2xl last:pr-2.5",
-    //'last:mr-0 last:rounded-tr-2xl last:rounded-br-2xl last:pr-2.5 last:overflow-hidden',
-    "bg-muted text-gray-600",
-    // Completed state background
-    "data-[state=completed]:bg-process-completed data-[state=completed]:text-background hover:data-[state=active]:text-background",
-    // Active state background
-    "data-[state=active]:bg-process-active data-[state=active]:text-background hover:data-[state=active]:text-background",
-    // Incomplete/inactive state background
-    "data-[state=inactive]:bg-muted data-[state=inactive]:text-gray-600",
-    // Pseudo-elements base styles
-    'before:content-[""] before:absolute before:-left-1 before:-right-1.25 before:cursor-pointer',
-    'after:content-[""] after:absolute after:-left-1 after:-right-1.25 after:cursor-pointer',
-    // Before pseudo-element
-    "before:top-0 before:h-4.25 before:skew-x-28 before:translate-z-0",
-    // After pseudo-element
-    "after:bottom-0 after:h-4 after:-skew-x-30 after:translate-z-0",
-    // First child pseudo-element positioning
-    "first:before:left-4.5 first:after:left-4.5",
-    // Last child - clip pseudo-elements at right edge
-    "last:before:right-4.5 last:after:right-4.5",
-    // Inactive state backgrounds for pseudo-elements
-    "data-[state=inactive]:before:bg-muted",
-    "data-[state=inactive]:after:bg-muted",
-    // Completed state backgrounds for pseudo-elements
-    "data-[state=completed]:before:bg-process-completed",
-    "data-[state=completed]:after:bg-process-completed",
-    // Active state backgrounds for pseudo-elements
-    "data-[state=active]:before:bg-process-active",
-    "data-[state=active]:after:bg-process-active",
+    "group/step relative flex-1 items-center justify-center overflow-visible text-center max-md:items-start",
+    // Only text colour lives on the item; the arrow shape and its fill are painted by the
+    // background layer below, so a focus ring on the trigger is never clipped by the chevron.
+    "text-muted-foreground",
+    "hover:data-[state=active]:text-background data-[state=completed]:text-background",
+    "data-[state=active]:text-background",
+    "data-[state=inactive]:text-muted-foreground"
   )
+}
+
+/**
+ * Single-apex chevron. Points run clockwise from the top-left corner:
+ * top-left → right shoulder → apex at 50% → right shoulder → bottom-left → left notch.
+ *
+ * A `clip-path` is used rather than two skewed pseudo-elements because the apex must sit at
+ * the row's true vertical middle at *any* row height. The previous approach skewed two
+ * fixed-height (17px) halves about their own centres, which on a 24px row put the widest
+ * points at y=7 and y=17 with a dip at y=12 — a blunt, asymmetric arrow — and left a bald
+ * band across the middle of any row taller than 34px.
+ */
+function getStepShapeStyle(isFirst: boolean, isLast: boolean): React.CSSProperties {
+  const notch = `${STEP_NOTCH}px`
+  const shoulder = `calc(100% - ${notch})`
+  const rightEdge = isLast ? ["100% 0", "100% 100%"] : [`${shoulder} 0`, "100% 50%", `${shoulder} 100%`]
+  const leftNotch = isFirst ? [] : [`${notch} 50%`]
+
+  return { clipPath: `polygon(${["0 0", ...rightEdge, "0 100%", ...leftNotch].join(", ")})` }
+}
+
+function getStepOffsetStyle(isFirst: boolean, isLast: boolean): React.CSSProperties {
+  return {
+    // Pull each step back over its predecessor's apex, leaving STEP_GAP of background showing.
+    marginLeft: isFirst ? undefined : `${STEP_GAP - STEP_NOTCH}px`,
+    // Keep the label clear of the clipped notch and apex.
+    paddingLeft: isFirst ? undefined : `${STEP_NOTCH}px`,
+    paddingRight: isLast ? undefined : `${STEP_NOTCH}px`,
+  }
 }
 
 /**
@@ -104,6 +120,7 @@ function IGRPStepperProcess({
   stepperClassName,
   stepperItemsClassName,
 }: IGRPStepperProcessProps) {
+  const i18n = useIGRPi18n()
   const _id = useId()
   const ref = id ?? _id
   const scrollAreaRef = useRef<HTMLDivElement>(null)
@@ -134,7 +151,7 @@ function IGRPStepperProcess({
         onStepChange?.(step, stepData)
       }
     },
-    [steps, onStepChange],
+    [steps, onStepChange]
   )
 
   const checkScrollPosition = useCallback(() => {
@@ -155,7 +172,7 @@ function IGRPStepperProcess({
     if (!viewport) return
 
     const scrollAmount = viewport.clientWidth * 0.8
-    viewport.scrollBy({ left: -scrollAmount, behavior: "smooth" })
+    viewport.scrollBy({ left: -scrollAmount, behavior: getScrollBehavior() })
   }, [])
 
   const scrollRight = useCallback(() => {
@@ -163,7 +180,7 @@ function IGRPStepperProcess({
     if (!viewport) return
 
     const scrollAmount = viewport.clientWidth * 0.8
-    viewport.scrollBy({ left: scrollAmount, behavior: "smooth" })
+    viewport.scrollBy({ left: scrollAmount, behavior: getScrollBehavior() })
   }, [])
 
   useEffect(() => {
@@ -190,67 +207,82 @@ function IGRPStepperProcess({
   }
 
   return (
-    <div className={cn("space-y-8 w-full")} id={ref}>
-      <div className={cn("flex items-center justify-center gap-4 relative")}>
+    <div className={cn("flex w-full flex-col gap-8")} id={ref}>
+      <div className={cn("relative flex items-center justify-center gap-4")}>
         <div ref={scrollAreaRef} className={cn("w-[90vw]")}>
           <ScrollArea className={cn("w-full")}>
             <Stepper
               value={validCurrentStep}
               onValueChange={handleStepChange}
-              className={cn("gap-0.5", stepperClassName)}
+              className={cn(stepperClassName)}
               role="navigation"
-              aria-label="Process steps"
-              aria-valuenow={validCurrentStep + 1}
-              aria-valuemin={1}
-              aria-valuemax={steps.length}
+              aria-label={i18n.stepper.processSteps}
             >
-              {steps.map(({ step, stepKey, title, isCompleted, isActive }) => (
-                <StepperItem
-                  key={stepKey ?? step}
-                  step={step}
-                  completed={isCompleted}
-                  disabled={!isActive}
-                  aria-current={isActive ? "step" : undefined}
-                  className={cn(getStepperItemClassName(), stepperItemsClassName)}
-                  loading={isLoading && validCurrentStep === step}
-                >
-                  <StepperTrigger asChild className={cn("gap-1 rounded max-md:flex-col z-10 cursor-pointer")}>
-                    <Button
-                      variant="ghost"
+              {steps.map(({ step, stepKey, title, isCompleted, isActive }, index) => {
+                const isFirst = index === 0
+                const isLast = index === steps.length - 1
+
+                return (
+                  <StepperItem
+                    key={stepKey ?? step}
+                    step={step}
+                    completed={isCompleted}
+                    disabled={!isActive}
+                    aria-current={isActive ? "step" : undefined}
+                    className={cn(getStepperItemClassName(), stepperItemsClassName)}
+                    loading={isLoading && validCurrentStep === step}
+                    style={getStepOffsetStyle(isFirst, isLast)}
+                  >
+                    <span
+                      aria-hidden="true"
                       className={cn(
-                        "bg-transparent hover:bg-transparent text-center flex items-center justify-center",
-                        "shadow-none text-[10px] w-34",
-                        (isActive || isCompleted) && "text-background hover:text-background",
+                        "pointer-events-none absolute inset-0 bg-muted",
+                        "group-data-[state=completed]/step:bg-process-completed",
+                        "group-data-[state=active]/step:bg-process-active",
+                        "group-data-[state=inactive]/step:bg-muted",
+                        isFirst && "rounded-l-2xl",
+                        isLast && "rounded-r-2xl"
                       )}
-                      size="xs"
-                    >
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <span className={cn("flex items-center justify-center gap-2 w-full min-w-0")}>
-                            <CheckIcon
-                              className={cn(
-                                "hidden",
-                                isCompleted && "stroke-[2.5] block group-hover/step:hidden shrink-0",
-                              )}
-                              aria-hidden="true"
-                            />
-                            <StepperTitle
-                              className={cn(
-                                isCompleted
-                                  ? "hidden group-hover/step:block truncate min-w-0"
-                                  : "truncate w-full min-w-0",
-                              )}
-                            >
-                              {title}
-                            </StepperTitle>
-                          </span>
-                        </TooltipTrigger>
-                        <TooltipContent side="bottom">{title}</TooltipContent>
-                      </Tooltip>
-                    </Button>
-                  </StepperTrigger>
-                </StepperItem>
-              ))}
+                      style={getStepShapeStyle(isFirst, isLast)}
+                    />
+                    <StepperTrigger asChild className={cn("z-10 cursor-pointer gap-1 rounded max-md:flex-col")}>
+                      <Button
+                        variant="ghost"
+                        className={cn(
+                          "flex items-center justify-center bg-transparent text-center hover:bg-transparent",
+                          "w-34 text-[10px] shadow-none",
+                          (isActive || isCompleted) && "text-background hover:text-background"
+                        )}
+                        size="xs"
+                      >
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <span className={cn("flex w-full min-w-0 items-center justify-center gap-2")}>
+                              <CheckIcon
+                                className={cn(
+                                  "hidden",
+                                  isCompleted && "block shrink-0 stroke-[2.5] opacity-70 group-hover/step:hidden"
+                                )}
+                                aria-hidden="true"
+                              />
+                              <StepperTitle
+                                className={cn(
+                                  isCompleted
+                                    ? "hidden min-w-0 truncate group-hover/step:block"
+                                    : "w-full min-w-0 truncate"
+                                )}
+                              >
+                                {title}
+                              </StepperTitle>
+                            </span>
+                          </TooltipTrigger>
+                          <TooltipContent side="bottom">{title}</TooltipContent>
+                        </Tooltip>
+                      </Button>
+                    </StepperTrigger>
+                  </StepperItem>
+                )
+              })}
             </Stepper>
           </ScrollArea>
         </div>
@@ -259,9 +291,9 @@ function IGRPStepperProcess({
           <Button
             variant="outline"
             size="icon-sm"
-            className={cn("size-6 shrink-0 mb-3")}
+            className={cn("mb-3 size-6 shrink-0")}
             onClick={scrollLeft}
-            aria-label="Scroll to previous steps"
+            aria-label={i18n.stepper.scrollPrevious}
             type="button"
             disabled={!canScrollLeft}
           >
@@ -271,9 +303,9 @@ function IGRPStepperProcess({
           <Button
             variant="outline"
             size="icon-sm"
-            className={cn("size-6 shrink-0 mb-3")}
+            className={cn("mb-3 size-6 shrink-0")}
             onClick={scrollRight}
-            aria-label="Scroll to next steps"
+            aria-label={i18n.stepper.scrollNext}
             type="button"
             disabled={!canScrollRight}
           >

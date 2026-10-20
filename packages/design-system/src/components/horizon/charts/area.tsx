@@ -2,14 +2,14 @@
 
 import { Area, AreaChart, CartesianGrid, Legend, XAxis, YAxis, ReferenceLine } from "recharts"
 
-import { cn } from "../../../lib/utils"
+import { cn } from "../cn.js"
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
   ChartLegend,
   ChartLegendContent,
-} from "../../primitives/chart"
+} from "../../primitives/chart.js"
 import {
   createChartConfig,
   formatChartValue,
@@ -19,8 +19,8 @@ import {
   getLegendLayout,
   getLegendVerticalAlign,
   hasNegativeValues,
-} from "./lib"
-import type { IGRPAreaConfig, IGRPChartProps } from "./types"
+} from "./lib.js"
+import type { IGRPAreaConfig, IGRPChartProps } from "./types.js"
 
 const defaultLabelFormatter = (value: unknown) => (typeof value === "string" ? value : String(value))
 
@@ -61,10 +61,10 @@ function IGRPAreaChart({
   className,
   valueFormatter,
   labelFormatter = defaultLabelFormatter,
-  gridColor = "#e5e7eb",
+  gridColor = "var(--border)",
   backgroundColor,
-  referenceLineColor = "#e5e7eb",
-  axisColor = "#d1d5db",
+  referenceLineColor = "var(--border)",
+  axisColor = "var(--muted-foreground)",
   tooltipIndicator = "line",
   footer,
 }: IGRPAreaChartProps) {
@@ -73,7 +73,7 @@ function IGRPAreaChart({
   const formatValue = (value: number) => formatChartValue(value, valueFormatter)
   const hasNegativeDataValues = hasNegativeValues(
     data,
-    areas.map((a) => a.dataKey),
+    areas.map((a) => a.dataKey)
   )
   const chartConfig = createChartConfig(areas)
 
@@ -132,7 +132,10 @@ function IGRPAreaChart({
               {showReferenceZero && hasNegativeDataValues && <ReferenceLine y={0} stroke={referenceLineColor} />}
 
               {showTooltip && (
-                <ChartTooltip cursor={false} content={<ChartTooltipContent indicator={tooltipIndicator} />} />
+                <ChartTooltip
+                  cursor={false}
+                  content={<ChartTooltipContent indicator={tooltipIndicator} valueFormatter={valueFormatter} />}
+                />
               )}
 
               {legendPosition !== "none" && customLegend && (
@@ -170,7 +173,7 @@ function IGRPAreaChart({
                     key: area.dataKey,
                     dataKey: area.dataKey,
                     name: area.name || area.dataKey,
-                    stackId: stacked || expanded ? "stack1" : undefined,
+                    stackId: stacked || expanded ? (area.stackId ?? "stack1") : undefined,
                     fill: area.gradient === true ? `url(#fill${area.dataKey})` : `var(--color-${area.dataKey})`,
                     fillOpacity: area.fillOpacity || 0.6,
                     stroke: `var(--color-${area.dataKey})`,
@@ -181,13 +184,13 @@ function IGRPAreaChart({
                     key={area.dataKey}
                     dataKey={area.dataKey}
                     name={area.name || area.dataKey}
-                    stackId={stacked || expanded ? "stack1" : undefined}
+                    stackId={stacked || expanded ? (area.stackId ?? "stack1") : undefined}
                     fill={area.gradient === true ? `url(#fill${area.dataKey})` : `var(--color-${area.dataKey})`}
                     fillOpacity={area.fillOpacity || 0.4}
                     stroke={`var(--color-${area.dataKey})`}
                     type={area.type || "monotone"}
                   />
-                ),
+                )
               )}
             </AreaChart>
           </ChartContainer>
@@ -195,7 +198,7 @@ function IGRPAreaChart({
       </div>
 
       {footer && (
-        <div className={cn("flex-col items-start gap-2 text-sm pt-4")}>
+        <div className={cn("flex-col items-start gap-2 pt-4 text-sm")}>
           {footer.description && <div className={cn("leading-none text-muted-foreground")}>{footer.description}</div>}
         </div>
       )}

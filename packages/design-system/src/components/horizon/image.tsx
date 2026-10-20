@@ -3,9 +3,9 @@
 import { useId } from "react"
 import Image, { type ImageProps } from "next/image"
 
-import { igrpRounded } from "../../lib/rounded-classes"
-import { cn } from "../../lib/utils"
-import { AspectRatio } from "../primitives/aspect-ratio"
+import { igrpRounded } from "../../lib/utilities.js"
+import { cn } from "cn"
+import { AspectRatio } from "../primitives/aspect-ratio.js"
 import type { VariantProps } from "class-variance-authority"
 
 /** Aspect ratio options for IGRPImage. */

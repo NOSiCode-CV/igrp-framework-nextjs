@@ -1,15 +1,15 @@
 "use client"
 
 import { Line, LineChart, CartesianGrid, Legend, XAxis, YAxis, ReferenceLine, LabelList } from "recharts"
-import { cn } from "../../../lib/utils"
+import { cn } from "../cn.js"
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
   ChartLegend,
   ChartLegendContent,
-} from "../../primitives/chart"
-import type { IGRPChartProps, IGRPSeriesConfig } from "./types"
+} from "../../primitives/chart.js"
+import type { IGRPChartProps, IGRPSeriesConfig } from "./types.js"
 import {
   createChartConfig,
   formatChartValue,
@@ -19,7 +19,7 @@ import {
   getLegendLayout,
   getLegendVerticalAlign,
   hasNegativeValues,
-} from "./lib"
+} from "./lib.js"
 
 function defaultLabelFormatter(value: unknown): string {
   return String(value ?? "")
@@ -73,10 +73,10 @@ function IGRPLineChartInner({
   className,
   valueFormatter,
   labelFormatter = defaultLabelFormatter,
-  gridColor = "#e5e7eb",
+  gridColor = "var(--border)",
   backgroundColor,
-  referenceLineColor = "#e5e7eb",
-  axisColor = "#d1d5db",
+  referenceLineColor = "var(--border)",
+  axisColor = "var(--muted-foreground)",
   tooltipIndicator = "line",
   footer,
 }: IGRPLineChartProps) {
@@ -85,15 +85,12 @@ function IGRPLineChartInner({
   const formatValue = (value: number) => formatChartValue(value, valueFormatter)
   const hasNegativeDataValues = hasNegativeValues(
     data,
-    lines.map((l) => l.dataKey),
+    lines.map((l) => l.dataKey)
   )
   const chartConfig = createChartConfig(lines)
 
   return (
-    <div
-      className={`w-full overflow-hidden ${className || ""}`}
-      style={backgroundColor ? { backgroundColor } : undefined}
-    >
+    <div className={cn("w-full overflow-hidden", className)} style={backgroundColor ? { backgroundColor } : undefined}>
       {(title || description) && (
         <div className={cn("pb-3")}>
           {title && <div className={cn("text-xl font-semibold")}>{title}</div>}
@@ -143,7 +140,10 @@ function IGRPLineChartInner({
               {showReferenceZero && hasNegativeDataValues && <ReferenceLine y={0} stroke={referenceLineColor} />}
 
               {showTooltip && (
-                <ChartTooltip cursor={false} content={<ChartTooltipContent indicator={tooltipIndicator} />} />
+                <ChartTooltip
+                  cursor={false}
+                  content={<ChartTooltipContent indicator={tooltipIndicator} valueFormatter={valueFormatter} />}
+                />
               )}
 
               {legendPosition !== "none" && customLegend && (
@@ -209,7 +209,7 @@ function IGRPLineChartInner({
                       />
                     )}
                   </Line>
-                ),
+                )
               )}
             </LineChart>
           </ChartContainer>
@@ -217,7 +217,7 @@ function IGRPLineChartInner({
       </div>
 
       {footer && (
-        <div className={cn("flex-col items-start gap-2 text-sm pt-4")}>
+        <div className={cn("flex-col items-start gap-2 pt-4 text-sm")}>
           {footer.description && <div className={cn("leading-none text-muted-foreground")}>{footer.description}</div>}
         </div>
       )}

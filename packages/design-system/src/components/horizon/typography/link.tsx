@@ -1,18 +1,22 @@
 "use client"
 
+// IGRPLinkVariants is the component's CVA object and part of the public API.
+/* eslint-disable react-refresh/only-export-components */
+
 import { useId, type ReactNode } from "react"
 import Link, { type LinkProps } from "next/link"
 import { cva, type VariantProps } from "class-variance-authority"
 
-import { IGRPIcon, type IGRPIconName } from "../icon"
-import { IGRPColors, type IGRPColorRole, type IGRPColorVariants } from "../../../lib/colors"
-import { igrpColorText } from "../../../lib/colors"
-import { igrpIsExternalUrl } from "../../../lib/url"
-import { cn } from "../../../lib/utils"
-import type { IGRPBaseAttributes, IGRPPlacementProps } from "../../../types"
+import { IGRPIcon, type IGRPIconName } from "../icon/index.js"
+import { IGRPColors, type IGRPColorRole, type IGRPColorVariants } from "../../../lib/colors.js"
+import { igrpColorText } from "../../../lib/colors.js"
+import { igrpIsExternalUrl } from "../../../lib/utilities.js"
+import { cn } from "../cn.js"
+import { igrpOmitNonDomProps } from "../../../lib/dom-props.js"
+import type { IGRPBaseAttributes, IGRPPlacementProps } from "../../../types.js"
 
 const IGRPLinkVariants = cva(
-  "transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+  "transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none",
   {
     variants: {
       size: {
@@ -22,7 +26,7 @@ const IGRPLinkVariants = cva(
       },
       underline: {
         none: "no-underline",
-        hover: "no-underline hover:underline underline-offset-3",
+        hover: "no-underline underline-offset-3 hover:underline",
         always: "underline underline-offset-3 hover:no-underline",
       },
     },
@@ -30,7 +34,7 @@ const IGRPLinkVariants = cva(
       size: "default",
       underline: "hover",
     },
-  },
+  }
 )
 
 type AnchorProps = Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, "href">
@@ -39,7 +43,7 @@ type NextLinkProps = Omit<LinkProps, "href" | "as">
 function IGRPLinkRender({ showIcon, iconName, iconClassName, iconPlacement, sizeIcon, children }: IGRPLinkIconProps) {
   return (
     <span
-      className={cn("group flex gap-1 items-center whitespace-nowrap", iconPlacement === "end" && "flex-row-reverse")}
+      className={cn("group flex items-center gap-1 whitespace-nowrap", iconPlacement === "end" && "flex-row-reverse")}
     >
       {showIcon && iconName && (
         <IGRPIcon
@@ -123,7 +127,7 @@ function IGRPLink({
         rel="noopener noreferrer"
         onClick={onClick}
         id={ref}
-        {...props}
+        {...igrpOmitNonDomProps(props)}
       >
         <IGRPLinkRender
           iconName={iconName}
@@ -139,7 +143,14 @@ function IGRPLink({
   }
 
   return (
-    <Link href={href || "#"} {...props} className={linkClass} onClick={onClick} target={target} id={ref}>
+    <Link
+      href={href || "#"}
+      {...igrpOmitNonDomProps(props)}
+      className={linkClass}
+      onClick={onClick}
+      target={target}
+      id={ref}
+    >
       <IGRPLinkRender
         iconName={iconName}
         iconClassName={iconClassName}

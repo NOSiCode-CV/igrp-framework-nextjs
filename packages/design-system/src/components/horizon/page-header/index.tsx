@@ -3,11 +3,11 @@
 import { type VariantProps } from "class-variance-authority"
 import { useId } from "react"
 
-import { IGRPPageHeaderBackButton } from "./back-button"
-import type { IGRPIconName } from "../icon"
-import { IGRPHeadline, igrpHeadlineVariants } from "../typography/headline"
-import { cn } from "../../../lib/utils"
-import { type IGRPBaseAttributes } from "../../../types"
+import { IGRPPageHeaderBackButton } from "./back-button.js"
+import type { IGRPIconName } from "../icon/index.js"
+import { IGRPHeadline, igrpHeadlineVariants } from "../typography/headline.js"
+import { cn } from "../cn.js"
+import { type IGRPBaseAttributes } from "../../../types.js"
 
 /**
  * Props for the IGRPPageHeader component.
@@ -139,9 +139,9 @@ function IGRPPageHeader({
   return (
     <div
       className={cn(
-        "flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4",
+        "flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center",
         isSticky && "sticky top-0 z-10 bg-background pt-6 pb-4",
-        className,
+        className
       )}
       id={ref}
     >
@@ -165,7 +165,7 @@ function IGRPPageHeader({
           description={description}
           className={headlineClassName}
           variant={variant}
-          name={`h-${name}`}
+          name={`h-${ref}`}
           headlineContentClassName={headlineContentClassName}
         />
       </div>

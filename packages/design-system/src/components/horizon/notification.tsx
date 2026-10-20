@@ -1,20 +1,24 @@
 "use client"
 
+// IGRPNotificationVariants is the component's CVA object and part of the public API.
+/* eslint-disable react-refresh/only-export-components */
+
 import { cva, type VariantProps } from "class-variance-authority"
-import { useId } from "react"
+import { useId, useState } from "react"
 
-import { cn } from "../../lib/utils"
-import { IGRPButton } from "./button"
-import { IGRPIcon, type IGRPIconName } from "./icon"
+import { cn } from "cn"
+import { IGRPButton } from "./button.js"
+import { IGRPIcon, type IGRPIconName } from "./icon/index.js"
+import { useIGRPi18n } from "../../i18n/index.js"
 
-const IGRPNotificationVariants = cva("bg-background z-50 rounded-md p-4 shadow-lg", {
+const IGRPNotificationVariants = cva("z-50 rounded-md bg-background p-4 shadow-lg", {
   variants: {
     variant: {
       default: "text-foreground",
-      error: "text-red-600 border-red-500/50",
-      info: "text-blue-600 border-blue-500/50",
-      success: "text-emerald-600 border-emerald-500/50",
-      warning: "text-amber-600 border-amber-500/50",
+      error: "border-destructive/50 text-destructive",
+      info: "border-info/50 text-info",
+      success: "border-success/50 text-success",
+      warning: "border-warning/50 text-warning",
     },
     border: {
       default: "border-0",
@@ -58,6 +62,8 @@ type IGRPNotificationProps = {
   actionLink?: string
   /** Custom action elements. */
   customActions?: React.ReactNode
+  /** Called after the close button hides the notification. */
+  onClose?: () => void
   /** HTML id attribute. */
   id?: string
 } & VariantProps<typeof IGRPNotificationVariants>
@@ -68,7 +74,7 @@ type IGRPNotificationProps = {
 function IGRPNotification({
   className,
   showIcon = true,
-  content = "We use cookies to improve your experience, and show personalized content.",
+  content,
   showClose = false,
   iconName,
   showLink = false,
@@ -77,19 +83,28 @@ function IGRPNotification({
   border = "default",
   variant = "default",
   customActions,
+  onClose,
   id,
 }: IGRPNotificationProps) {
+  const i18n = useIGRPi18n()
+  const [dismissed, setDismissed] = useState(false)
   const _id = useId()
   const ref = id ?? _id
 
   const icon = iconName ?? typeIconMap[variant ?? "default"]
 
+  const isAssertive = variant === "error" || variant === "warning"
+
+  if (dismissed) return null
+
   return (
     <div
+      role={isAssertive ? "alert" : "status"}
+      aria-live={isAssertive ? "assertive" : "polite"}
       className={cn(
         IGRPNotificationVariants(),
         border === "colored" && IGRPNotificationVariants({ variant, border }),
-        className,
+        className
       )}
       id={ref}
     >
@@ -100,7 +115,7 @@ function IGRPNotification({
               iconName={icon}
               className={cn(
                 IGRPNotificationVariants({ variant, border: "default" }),
-                "me-3 inline-flex shadow-none p-0 mt-0.5",
+                "me-3 mt-0.5 inline-flex p-0 shadow-none"
               )}
             />
           )}
@@ -108,7 +123,7 @@ function IGRPNotification({
         </div>
         <div className={cn("flex items-center gap-3")}>
           {showLink && (
-            <a href={actionLink} className={cn("group text-sm font-medium whitespace-nowrap cursor-pointer")}>
+            <a href={actionLink} className={cn("group cursor-pointer text-sm font-medium whitespace-nowrap")}>
               {lableLink}
               <IGRPIcon
                 iconName="ArrowRight"
@@ -123,12 +138,15 @@ function IGRPNotification({
             <IGRPButton
               variant="ghost"
               className={cn("group -my-1.5 -me-2 size-8 shrink-0 p-0 hover:bg-transparent")}
-              aria-label="Close notification"
+              aria-label={i18n.notification.close}
+              onClick={() => {
+                setDismissed(true)
+                onClose?.()
+              }}
               iconName="X"
               showIcon={true}
               size="icon"
               iconClassName={cn("opacity-60 transition-opacity group-hover:opacity-100")}
-              aria-hidden="true"
             />
           )}
         </div>

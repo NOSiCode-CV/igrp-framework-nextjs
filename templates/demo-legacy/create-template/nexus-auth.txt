@@ -1,2 +1,0 @@
-username=fidel.luz
-password=admin1234

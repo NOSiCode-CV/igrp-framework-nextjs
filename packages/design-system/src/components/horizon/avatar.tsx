@@ -3,12 +3,14 @@
 import { cva, type VariantProps } from "class-variance-authority"
 import { useId } from "react"
 
-import { IGRPColors, type IGRPColorVariants } from "../../lib/colors"
-import { cn } from "../../lib/utils"
-import type { IGRPBaseAttributes } from "../../types"
-import { Avatar, AvatarImage, AvatarFallback } from "../primitives/avatar"
-import { IGRPBadge } from "./badge"
-import { IGRPIcon, type IGRPIconName } from "./icon"
+import { useIGRPi18n } from "../../i18n/index.js"
+import { IGRPColors, type IGRPColorVariants } from "../../lib/colors.js"
+import { cn } from "cn"
+import { igrpOmitNonDomProps } from "../../lib/dom-props.js"
+import type { IGRPBaseAttributes } from "../../types.js"
+import { Avatar, AvatarImage, AvatarFallback } from "../primitives/avatar.js"
+import { IGRPBadge } from "./badge.js"
+import { IGRPIcon, type IGRPIconName } from "./icon/index.js"
 
 function convertFallback(fallback?: string) {
   return fallback
@@ -23,7 +25,7 @@ function convertFallback(fallback?: string) {
 
 const avatarVariants = cva("", {
   variants: {
-    size: {
+    scale: {
       sm: "size-8 text-xs",
       md: "size-12 text-sm",
       lg: "size-16 text-base",
@@ -42,7 +44,7 @@ const avatarVariants = cva("", {
     },
   },
   defaultVariants: {
-    size: "md",
+    scale: "md",
     rounded: "full",
   },
 })
@@ -51,22 +53,22 @@ const iconVariants = cva(
   "absolute flex items-center justify-center rounded-full border-2 border-background bg-background",
   {
     variants: {
-      size: {
-        sm: "size-4 -bottom-0.5 -right-0.5",
-        md: "size-5 -bottom-1 -right-1",
-        lg: "size-6 -bottom-1 -right-1",
-        xl: "size-7 -bottom-1 -right-1",
+      scale: {
+        sm: "-right-0.5 -bottom-0.5 size-4",
+        md: "-right-1 -bottom-1 size-5",
+        lg: "-right-1 -bottom-1 size-6",
+        xl: "-right-1 -bottom-1 size-7",
       },
     },
     defaultVariants: {
-      size: "md",
+      scale: "md",
     },
-  },
+  }
 )
 
-const statusVariants = cva("absolute bottom-0 right-0 rounded-full border-2 border-background", {
+const statusVariants = cva("absolute right-0 bottom-0 rounded-full border-2 border-background", {
   variants: {
-    size: {
+    scale: {
       sm: "size-2",
       md: "size-3",
       lg: "size-4",
@@ -74,21 +76,21 @@ const statusVariants = cva("absolute bottom-0 right-0 rounded-full border-2 bord
     },
   },
   defaultVariants: {
-    size: "md",
+    scale: "md",
   },
 })
 
-const badgeVariants = cva("absolute flex items-center justify-center rounded-full border-2 text-xs px-0", {
+const badgeVariants = cva("absolute flex items-center justify-center rounded-full border-2 px-0 text-xs", {
   variants: {
-    size: {
-      sm: "size-4 -top-1 -right-1",
-      md: "size-5 -top-1.5 -right-1.5",
-      lg: "size-6 -top-2 -right-2",
-      xl: "size-7 -top-2 -right-2",
+    scale: {
+      sm: "-top-1 -right-1 size-4",
+      md: "-top-1.5 -right-1.5 size-5",
+      lg: "-top-2 -right-2 size-6",
+      xl: "-top-2 -right-2 size-7",
     },
   },
   defaultVariants: {
-    size: "md",
+    scale: "md",
   },
 })
 
@@ -97,7 +99,12 @@ const badgeVariants = cva("absolute flex items-center justify-center rounded-ful
  * @see IGRPAvatar
  */
 interface IGRPAvatarProps
-  extends React.ComponentProps<typeof Avatar>, IGRPBaseAttributes, VariantProps<typeof avatarVariants> {
+  extends Omit<React.ComponentProps<typeof Avatar>, "size">, IGRPBaseAttributes, VariantProps<typeof avatarVariants> {
+  /**
+   * @deprecated Use `scale`. Used as `scale` when `scale` is unset (`"default"` reads as `"md"`).
+   * Will be removed in the next release.
+   */
+  size?: "sm" | "md" | "lg" | "xl" | "default" | null
   /** Image URL for the avatar. */
   src?: string
   /** Alt text for the image. */
@@ -143,7 +150,8 @@ interface IGRPAvatarProps
 function IGRPAvatar({
   src,
   alt = "avatar",
-  size = "md",
+  scale: scaleProp,
+  size,
   rounded = "full",
   fallback,
   fallbackIcon = "User",
@@ -165,15 +173,17 @@ function IGRPAvatar({
   id,
   ...avatarProps
 }: IGRPAvatarProps) {
+  const i18n = useIGRPi18n()
   const _id = useId()
   const ref = name ?? id ?? _id
+  const scale = scaleProp ?? (size === "default" ? "md" : size) ?? "md"
 
   const colorClasses = IGRPColors["solid"][status]
   const upperFallBack = convertFallback(fallback)
 
   return (
-    <div className={cn("relative", avatarVariants({ size, rounded }), className)} id={ref}>
-      <Avatar className={cn("size-full")} {...avatarProps}>
+    <div className={cn("relative", avatarVariants({ scale, rounded }), className)} id={ref}>
+      <Avatar className="size-full" {...igrpOmitNonDomProps(avatarProps)}>
         <AvatarImage src={src} alt={alt} />
         <AvatarFallback className={cn("text-sm font-medium", fallbackClassName)}>
           {hasFallbackIcon ? <IGRPIcon iconName={fallbackIcon} /> : upperFallBack}
@@ -181,18 +191,18 @@ function IGRPAvatar({
       </Avatar>
 
       {hasStatus && status && (
-        <span className={cn(statusVariants({ size }), colorClasses.bgForeground)} aria-label={`Status: ${status}`} />
+        <span className={cn(statusVariants({ scale }), colorClasses.bgForeground)} aria-label={`Status: ${status}`} />
       )}
 
       {showIcon && iconName && (
-        <span className={cn(iconVariants({ size }), iconClassName)} aria-label="Icon indicator">
+        <span className={cn(iconVariants({ scale }), iconClassName)} aria-label={i18n.avatar.iconIndicator}>
           <IGRPIcon iconName={iconName} color={iconColor} />
         </span>
       )}
 
       {showBadge && badgeColor && (
         <IGRPBadge
-          badgeClassName={cn(badgeVariants({ size }))}
+          badgeClassName={cn(badgeVariants({ scale }))}
           color={badgeColor}
           variant="solid"
           showIcon={badgeShowIcon}

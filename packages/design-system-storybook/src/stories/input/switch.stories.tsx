@@ -5,7 +5,6 @@ import {
   IGRPSwitch,
   type IGRPSwitchProps,
   Button,
-  type IGRPGridSize,
 } from '@igrp/igrp-framework-react-design-system';
 
 const meta: Meta<typeof IGRPSwitch> = {
@@ -19,11 +18,7 @@ const meta: Meta<typeof IGRPSwitch> = {
     label: { control: 'text' },
     helperText: { control: 'text' },
     required: { control: 'boolean' },
-    error: { control: 'text' },
-    gridSize: {
-      control: 'select',
-      options: ['full', '1/2', '1/3', '2/3', '1/4', '3/4'] satisfies IGRPGridSize[],
-    },
+    error: { control: 'text' },    
     checked: {
       control: 'boolean',
     },
@@ -33,7 +28,6 @@ const meta: Meta<typeof IGRPSwitch> = {
     label: 'Enable Notifications',
     helperText: 'Toggle to enable email alerts',
     required: false,
-    gridSize: 'full',
   },
 };
 export default meta;

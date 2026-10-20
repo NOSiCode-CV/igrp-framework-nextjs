@@ -1,17 +1,20 @@
 "use client"
 
-import { useId, useState, useCallback } from "react"
+import { useCallback, useEffect, useId, useRef, useState, type ReactNode } from "react"
 import { useFormContext } from "react-hook-form"
 import type { VariantProps } from "class-variance-authority"
 
-import { cn } from "../../../lib/utils"
-import { type IGRPInputProps } from "../../../types"
-import { Input } from "../../primitives/input"
-import { IGRPButton } from "../button"
-import { IGRPFieldDescription } from "../field-description"
-import { IGRPFormField } from "../form/form-field"
-import { IGRPIcon, type IGRPIconName } from "../icon"
-import { IGRPLabel } from "../label"
+import { cn } from "../cn.js"
+import { igrpOmitNonDomProps } from "../../../lib/dom-props.js"
+import { igrpChainHandlers, igrpMergeRefs } from "../../../lib/form-binding.js"
+import { type IGRPInputProps } from "../../../types.js"
+import { InputGroup, InputGroupAddon, InputGroupInput } from "../../primitives/input-group.js"
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../../primitives/form.js"
+import { IGRPButton } from "../button.js"
+import { IGRPFieldDescription } from "../field-description.js"
+import { IGRPIcon, type IGRPIconName } from "../icon/index.js"
+import { IGRPLabel } from "../label.js"
+import { Field, FieldError } from "../../primitives/field.js"
 
 /**
  * Props for the IGRPInputSearch component.
@@ -48,121 +51,110 @@ interface IGRPInputSearchProps extends Omit<IGRPInputProps, "value" | "defaultVa
   loading?: boolean
 }
 
-/** @internal Search input field with icon and submit button. */
-function SearchInputField({
-  value,
-  onChange,
-  onKeyDown,
-  fieldName,
-  required,
-  error,
-  helperText,
-  helperId,
-  className,
+/**
+ * @internal Wraps the supplied input element with the start-icon and submit-button decorations.
+ * The caller owns the input element so it can optionally be wrapped in `<FormControl>` for proper
+ * label↔input id forwarding under form context.
+ */
+function SearchInputDecoration({
+  inputNode,
   showStartIcon,
   startIcon,
   showSubmitButton,
   submitButtonClassName,
   submitButtonLabel,
-  onSearch,
   submitIcon,
-  iconSize,
   submitVariant,
   loading,
+  onSearch,
+  value,
   iconPlacement,
   showIcon,
   disabled,
-  ...inputProps
 }: {
-  value: string
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void
-  fieldName: string
-  required: boolean
-  error?: string
-  helperText?: string
-  helperId?: string
-  className?: string
+  inputNode: ReactNode
   showStartIcon: boolean
   startIcon: IGRPIconName | string
   showSubmitButton: boolean
   submitButtonClassName?: string
   submitButtonLabel?: string
-  onSearch?: (value: string) => void
   submitIcon: IGRPIconName | string
-  iconSize?: number | string
   submitVariant: VariantProps<typeof IGRPButton>["variant"]
   loading?: boolean
+  onSearch?: (value: string) => void
+  value: string
   iconPlacement?: IGRPInputProps["iconPlacement"]
   showIcon?: boolean
   disabled?: boolean
-} & Omit<IGRPInputProps, "value" | "defaultValue">) {
+}) {
   return (
-    <div className={cn("relative py-2")}>
-      <Input
-        id={fieldName}
-        name={fieldName}
-        type="search"
-        required={required}
-        aria-required={required}
-        aria-invalid={!!error || !!inputProps["aria-invalid"]}
-        aria-describedby={helperText || error ? helperId : undefined}
-        className={cn(
-          "peer py-3 text-sm outline-hidden flex w-full items-center",
-          showStartIcon && "ps-6.5",
-          showSubmitButton && "pe-9",
-          error && "border-destructive focus-visible:ring-destructive/20",
-          className,
-        )}
-        value={value}
-        onChange={onChange}
-        onKeyDown={onKeyDown}
-        disabled={disabled}
-        {...inputProps}
-      />
-
+    <InputGroup>
       {showStartIcon && (
-        <div
-          className={cn(
-            "text-muted-foreground/80 pointer-events-none absolute inset-y-0 inset-s-0 flex items-center justify-center ps-1.5 peer-disabled:opacity-50",
-          )}
-        >
-          <IGRPIcon iconName={startIcon} aria-hidden="true" size={14} />
-        </div>
+        <InputGroupAddon align="inline-start">
+          <IGRPIcon iconName={startIcon} aria-hidden="true" />
+        </InputGroupAddon>
       )}
+
+      {inputNode}
 
       {showSubmitButton && (
-        <IGRPButton
-          className={cn(
-            "absolute top-1/2 -translate-y-1/2 inset-e-0 flex items-center justify-center rounded-md transition-[color,box-shadow] outline-none z-10 focus-visible:ring-[3px] gap-0",
-            submitButtonClassName,
-          )}
-          aria-label={submitButtonLabel}
-          type="button"
-          onClick={() => onSearch?.(value)}
-          disabled={disabled}
-          showIcon={showIcon}
-          iconName={submitIcon}
-          iconSize={iconSize}
-          variant={submitVariant}
-          loading={loading}
-          iconPlacement={iconPlacement}
-        >
-          {submitButtonLabel}
-        </IGRPButton>
+        <InputGroupAddon align="inline-end">
+          <IGRPButton
+            className={cn(submitButtonClassName)}
+            aria-label={submitButtonLabel}
+            type="button"
+            onClick={() => onSearch?.(value)}
+            disabled={disabled}
+            showIcon={showIcon}
+            iconName={submitIcon}
+            variant={submitVariant}
+            loading={loading}
+            iconPlacement={iconPlacement}
+          >
+            {submitButtonLabel}
+          </IGRPButton>
+        </InputGroupAddon>
       )}
-    </div>
+    </InputGroup>
   )
 }
 
-const isDebouncedCallback = (callback?: (val: string) => void, delay = 2000) => {
-  if (!callback) return null
+/**
+ * Trailing-edge debounce whose pending timer survives re-renders.
+ *
+ * The timer lives in a ref and the callback in another, so neither a re-render
+ * nor a changing `onSearch` identity restarts the debounce or strands a timer.
+ * A previous version built the debouncer during render, which gave every render
+ * a fresh `timeout` binding — nothing was ever cancelled and `onSearch` fired
+ * once per keystroke.
+ */
+function useDebouncedCallback(callback: ((value: string) => void) | undefined, delay: number) {
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const callbackRef = useRef(callback)
 
-  let timeout: ReturnType<typeof setTimeout>
-  return (value: string) => {
-    clearTimeout(timeout)
-    timeout = setTimeout(() => callback(value), delay)
-  }
+  // Synced in an effect rather than during render: the pending timer fires well
+  // after commit, so it always sees the latest callback either way.
+  useEffect(() => {
+    callbackRef.current = callback
+  }, [callback])
+
+  useEffect(
+    () => () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current)
+    },
+    []
+  )
+
+  return useCallback(
+    (value: string) => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current)
+      timeoutRef.current = setTimeout(() => {
+        timeoutRef.current = null
+        callbackRef.current?.(value)
+      }, delay)
+    },
+    [delay]
+  )
 }
 
 /**
@@ -189,7 +181,6 @@ function IGRPInputSearch({
   debounceMs = 2000,
   isDebounce = false,
   showIcon = true,
-  iconSize = 14,
   iconPlacement,
   submitVariant = "ghost",
   loading,
@@ -200,89 +191,132 @@ function IGRPInputSearch({
 
   const formContext = useFormContext()
   const [localValue, setLocalValue] = useState(controlledValue ?? defaultValue)
-  const debouncedSearch = isDebouncedCallback(onSearch, debounceMs)
+  const debouncedSearch = useDebouncedCallback(onSearch, debounceMs)
   const displayValue = controlledValue !== undefined ? controlledValue : localValue
 
   const handleInputChange = useCallback(
     (value: string) => {
       if (controlledValue === undefined) setLocalValue(value)
       setValueChange?.(value)
-      if (isDebounce) debouncedSearch?.(value)
+      if (isDebounce) debouncedSearch(value)
     },
-    [controlledValue, debouncedSearch, isDebounce, setValueChange],
+    [controlledValue, debouncedSearch, isDebounce, setValueChange]
   )
 
-  const inputFieldProps = {
-    fieldName,
-    required,
-    error,
-    helperText,
-    helperId: `${fieldName}-helper`,
-    className,
+  // InputGroup owns the border, focus ring, addon padding and aria-invalid
+  // styling, so the control only carries caller overrides.
+  const inputClassName = cn(className)
+
+  const decorationProps = {
     showStartIcon,
     startIcon,
     showSubmitButton,
     submitButtonClassName,
     submitButtonLabel,
-    onSearch,
     submitIcon,
-    iconSize,
     submitVariant,
     loading,
+    onSearch,
     iconPlacement,
     showIcon,
     disabled: props.disabled,
-    ...props,
   }
 
   if (formContext) {
+    // The field owns value/onChange/onBlur/ref; the caller's copies run after it
+    // and never replace it (see lib/form-binding.ts).
+    const {
+      onChange: callerOnChange,
+      onBlur: callerOnBlur,
+      onKeyDown: callerOnKeyDown,
+      ref,
+      ...callerProps
+    } = igrpOmitNonDomProps(props)
+
     return (
-      <IGRPFormField
-        name={fieldName}
-        label={label}
-        helperText={helperText}
-        className={className}
-        required={required}
+      <FormField
         control={formContext.control}
-      >
-        {(field) => (
-          <SearchInputField
-            {...inputFieldProps}
-            value={field.value ?? ""}
-            onChange={(e) => {
-              field.onChange(e.target.value)
-              handleInputChange(e.target.value)
-            }}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                e.preventDefault()
-                onSearch?.(field.value)
+        name={fieldName}
+        render={({ field, fieldState }) => (
+          <FormItem className={className}>
+            {label && (
+              <FormLabel className={cn("gap-0.5", required && "after:text-destructive after:content-['*']")}>
+                {label}
+              </FormLabel>
+            )}
+            <SearchInputDecoration
+              {...decorationProps}
+              value={field.value ?? ""}
+              inputNode={
+                <FormControl>
+                  <InputGroupInput
+                    name={fieldName}
+                    type="search"
+                    required={required}
+                    aria-required={required}
+                    className={inputClassName}
+                    ref={igrpMergeRefs(field.ref, ref)}
+                    value={field.value ?? ""}
+                    onChange={(e) => {
+                      field.onChange(e.target.value)
+                      handleInputChange(e.target.value)
+                      callerOnChange?.(e)
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault()
+                        onSearch?.(field.value ?? "")
+                      }
+                      callerOnKeyDown?.(e)
+                    }}
+                    onBlur={igrpChainHandlers(field.onBlur, callerOnBlur)}
+                    disabled={props.disabled}
+                    {...callerProps}
+                  />
+                </FormControl>
               }
-            }}
-          />
+            />
+            {helperText && !fieldState.error && !error && <FormDescription>{helperText}</FormDescription>}
+            {error ? <FieldError>{error}</FieldError> : <FormMessage className={cn("text-xs")} />}
+          </FormItem>
         )}
-      </IGRPFormField>
+      />
     )
   }
 
   return (
-    <div className={cn("*:not-first:mt-2", className)}>
+    <Field className={className}>
       {label && <IGRPLabel label={label} required={required} id={fieldName} />}
 
-      <SearchInputField
-        {...inputFieldProps}
+      <SearchInputDecoration
+        {...decorationProps}
         value={displayValue}
-        onChange={(e) => handleInputChange(e.target.value)}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") {
-            e.preventDefault()
-            onSearch?.(displayValue)
-          }
-        }}
+        inputNode={
+          <InputGroupInput
+            id={fieldName}
+            name={fieldName}
+            type="search"
+            required={required}
+            aria-required={required}
+            aria-invalid={!!error || !!props["aria-invalid"]}
+            aria-describedby={helperText || error ? `${fieldName}-helper` : undefined}
+            className={inputClassName}
+            value={displayValue}
+            onChange={(e) => handleInputChange(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault()
+                onSearch?.(displayValue)
+              }
+            }}
+            disabled={props.disabled}
+            {...igrpOmitNonDomProps(props)}
+          />
+        }
       />
 
       <IGRPFieldDescription error={error} helperText={helperText} />
-    </div>
+    </Field>
   )
 }
 

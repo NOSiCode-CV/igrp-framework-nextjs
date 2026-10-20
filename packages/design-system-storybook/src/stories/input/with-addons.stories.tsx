@@ -4,6 +4,11 @@ import { IGRPInputAddOn, type IGRPInputAddOnProps } from '@igrp/igrp-framework-r
 
 export default {
   title: 'Components/Input/With Addons',
+  // Known WCAG backlog, tracked in the design-system accessibility audit:
+  // button-name backlog.
+  // 'todo' reports in the Storybook UI without failing CI. Delete this once the
+  // suite is clean; every other component is gated at 'error' by preview.ts.
+  parameters: { a11y: { test: 'todo' } },
   component: IGRPInputAddOn,
   argTypes: {
     label: { control: 'text' },

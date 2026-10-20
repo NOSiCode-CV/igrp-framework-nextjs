@@ -1,7 +1,7 @@
 "use client"
 
 import { useId } from "react"
-import { Separator } from "../primitives/separator"
+import { Separator } from "../primitives/separator.js"
 
 /**
  * Props for the IGRPSeparator component.

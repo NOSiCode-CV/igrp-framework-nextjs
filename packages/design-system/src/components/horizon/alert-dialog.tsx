@@ -1,12 +1,12 @@
 "use client"
 
 import { useId } from "react"
-import { Slot } from "@radix-ui/react-slot"
+import { Slot } from "radix-ui"
 
-import { IGRPColors, type IGRPColorVariants } from "../../lib/colors"
-import { igrpAlertIconMappings } from "../../lib/constants"
-import { cn } from "../../lib/utils"
-import { type IGRPBaseAttributes, type IGRPPlacementProps } from "../../types"
+import { IGRPColors, type IGRPColorVariants } from "../../lib/colors.js"
+import { igrpAlertIconMappings } from "../../lib/utilities.js"
+import { cn } from "cn"
+import { type IGRPBaseAttributes, type IGRPPlacementProps } from "../../types.js"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -16,8 +16,9 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "../primitives/alert-dialog"
-import { IGRPIcon, type IGRPIconName } from "./icon"
+} from "../primitives/alert-dialog.js"
+import { IGRPIcon, type IGRPIconName } from "./icon/index.js"
+import { useIGRPi18n } from "../../i18n/index.js"
 
 /**
  * Props for the IGRPAlertDialog component.
@@ -72,7 +73,7 @@ function IGRPAlertDialog({
   variant = "primary",
   className,
   showIcon = true,
-  iconName = "AirVent",
+  iconName,
   iconPlacement = "start",
   title,
   titleClassName,
@@ -80,8 +81,8 @@ function IGRPAlertDialog({
   descriptionClassName,
   children,
   footerClassName,
-  actionLabel = "Continue",
-  cancelLabel = "Cancel",
+  actionLabel,
+  cancelLabel,
   onAction,
   onCancel,
   showCancel = true,
@@ -90,6 +91,7 @@ function IGRPAlertDialog({
   name,
   id,
 }: IGRPAlertDialogProps) {
+  const i18n = useIGRPi18n()
   const _id = useId()
   const ref = name ?? id ?? _id
 
@@ -109,11 +111,11 @@ function IGRPAlertDialog({
   }
 
   return (
-    <Slot id={ref}>
+    <Slot.Root id={ref}>
       <AlertDialog open={open} onOpenChange={onOpenChange}>
         <AlertDialogContent className={className}>
           {showIcon && iconPlacement === "center" && (
-            <div className="flex justify-center -mt-2">
+            <div className="-mt-2 flex justify-center">
               <AlertIcon
                 iconName={iconName || iconDefault}
                 bgClass={softColors.bg}
@@ -122,7 +124,7 @@ function IGRPAlertDialog({
               />
             </div>
           )}
-          <div className={cn("flex", iconPlacement === "start" && showIcon ? "gap-2 items-start" : "flex-col")}>
+          <div className={cn("flex", iconPlacement === "start" && showIcon ? "items-start gap-2" : "flex-col")}>
             {showIcon && iconPlacement === "start" && (
               <AlertIcon
                 iconName={iconName || iconDefault}
@@ -145,18 +147,18 @@ function IGRPAlertDialog({
               >
                 {showCancel && (
                   <AlertDialogCancel onClick={handleCancel} {...cancelProps}>
-                    {cancelLabel}
+                    {cancelLabel ?? i18n.alertDialog.cancel}
                   </AlertDialogCancel>
                 )}
                 <AlertDialogAction onClick={handleAction} className={actionClassName} {...actionProps}>
-                  {actionLabel}
+                  {actionLabel ?? i18n.alertDialog.action}
                 </AlertDialogAction>
               </AlertDialogFooter>
             </div>
           </div>
         </AlertDialogContent>
       </AlertDialog>
-    </Slot>
+    </Slot.Root>
   )
 }
 
@@ -171,9 +173,9 @@ function AlertIcon({ bgClass, iconPlacement, iconName, textClass }: AlertIconPro
   return (
     <div
       className={cn(
-        "flex items-center justify-center rounded-full p-1 size-10",
+        "flex size-10 items-center justify-center rounded-full p-1",
         bgClass,
-        iconPlacement === "center" && "mx-auto",
+        iconPlacement === "center" && "mx-auto"
       )}
     >
       <IGRPIcon iconName={iconName} className={cn("size-6", textClass)} />

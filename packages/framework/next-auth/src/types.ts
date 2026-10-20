@@ -1,5 +1,5 @@
 import type { DefaultSession, User as NextAuthUser } from 'next-auth';
-import type { AuthProviderId } from './providers';
+import type { SessionAuthProviderId } from './providers';
 
 /**
  * Module augmentation for next-auth.
@@ -14,18 +14,46 @@ import type { AuthProviderId } from './providers';
  *   ]
  * }
  * ```
+ *
+ * ## Why this restates the shapes instead of deriving them
+ *
+ * Deriving these from the exported `Session` / `JWT` interfaces
+ * (`interface Session extends Pick<IGRPSession, …>`) looks like the obvious way
+ * to stop the two declarations drifting, and it is wrong twice over:
+ *
+ * 1. Inside a merged interface group, an OWN member beats an inherited one.
+ *    next-auth's `Session` already declares `user?: { name; email; image }`, so
+ *    a `Pick<…, 'user'>` arriving through `extends` is silently discarded and
+ *    `session.user.id` disappears from the augmented type — with no runtime
+ *    symptom at all.
+ * 2. `./session` aliases next-auth's `Session` as `DefaultSession` and extends
+ *    it, so referring back to it from the augmentation is circular
+ *    (TS2502).
+ *
+ * `DefaultSession` below is next-auth's own *un-augmented* base type, which is
+ * what makes the `{ id?: string } & DefaultSession['user']` intersection safe.
+ *
+ * The drift these restatements risk is guarded by
+ * `__tests__/types-augmentation.type-check.ts` — a compile-time test, because
+ * no runtime test can observe a missing property on a type.
  */
 declare module 'next-auth' {
   interface Session extends DefaultSession {
     accessToken?: string;
     idToken?: string;
-    authProviderId?: AuthProviderId;
+    authProviderId?: SessionAuthProviderId;
     error?: string;
     expiresAt?: number;
     forceLogout?: boolean;
     user?: {
       id?: string;
+      locale?: string;
     } & DefaultSession['user'];
+  }
+
+  /** Lets a provider `profile()` mapper return the OIDC `locale` claim. */
+  interface User {
+    locale?: string;
   }
 }
 
@@ -34,15 +62,17 @@ declare module 'next-auth/jwt' {
     accessToken?: string;
     refreshToken?: string;
     idToken?: string;
-    authProviderId?: AuthProviderId;
+    authProviderId?: SessionAuthProviderId;
     expiresAt?: number;
-    error?: 'RefreshAccessTokenError' | string;
+    error?: 'RefreshAccessTokenError' | (string & {});
     forceLogout?: boolean;
+    locale?: string;
     user?: {
       id?: string;
       name?: string | null;
       email?: string | null;
       image?: string | null;
+      locale?: string;
     } & NextAuthUser;
   }
 }

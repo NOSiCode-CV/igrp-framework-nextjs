@@ -1,8 +1,11 @@
-/* eslint-disable perfectionist/sort-exports */
-'use client';
-
-// IMPORTANT: this file cannot use any wildcard exports because it is wrapped in a `use client` boundary
-// IMPORTANT: do not alias any of the exports in this file, this will cause a mismatch between the unbundled exports
+// IMPORTANT: this barrel must NOT carry 'use client'. With it, the whole barrel is
+// ONE client module: any server component importing anything from this package
+// (framework-next's layouts, a template page) registered all of next-ui as its
+// client reference, so every page of every app shipped every template component.
+// The directive lives on each leaf module instead; a leaf without it is evaluated
+// on the server when this barrel is imported there, so it must be server-safe.
+// `src/__tests__/client-boundaries.test.ts` enforces both.
+// IMPORTANT: keep exports explicit (no wildcards) and do not alias them.
 
 // Auth components
 
@@ -10,75 +13,146 @@ export {
   IGRPAuthCarousel,
   type IGRPAuthCarouselProps,
   type IGRPCarousel,
-} from './components/auths/carousel';
+} from './auths/carousel.js';
 
 export {
   IGRPAuthForm,
   type IGRPAuthFormProps,
   type IGRPLoginTexts,
   type IGRPSiteLogo,
-} from './components/auths/form';
+} from './auths/form.js';
 
 // erros components
 
-export { IGRPGlobalError, type IGRPGlobalErrorProps } from './components/errors/global';
-export { IGRPSegmentError, type IGRPSegmentErrorProps } from './components/errors/segment';
-export { IGRPLayoutErrorBoundary } from './components/templates/layout-error-boundary';
-export { IGRPHeaderSkeleton } from './components/templates/header-skeleton';
-export { IGRPSidebarSkeleton } from './components/templates/sidebar-skeleton';
-export { IGRPHeaderError } from './components/templates/header-error';
-export { IGRPSidebarError } from './components/templates/sidebar-error';
+export { IGRPGlobalError, type IGRPGlobalErrorProps } from './errors/global.js';
+export { IGRPSegmentError, type IGRPSegmentErrorProps } from './errors/segment.js';
+export {
+  IGRPLayoutErrorBoundary,
+  useIGRPLayoutErrorReset,
+} from './templates/layout-error-boundary.js';
+export { useIGRPLayoutRetry } from './hooks/use-igrp-layout-retry.js';
+export { IGRPHeaderSkeleton } from './templates/header-skeleton.js';
+export { IGRPSidebarSkeleton } from './templates/sidebar-skeleton.js';
+export { IGRPHeaderError } from './templates/header-error.js';
+export { IGRPSidebarError } from './templates/sidebar-error.js';
 
 // templates
 
 export {
   IGRPTemplateAppSwitcher,
   type IGRPTemplateAppSwitcherProps,
-} from './components/templates/app-switcher';
+} from './templates/app-switcher.js';
 
 export {
   IGRPTemplateBreadcrumbs,
   type IGRPTemplateBreadcrumbsProps,
   type BreadcrumbItem,
-} from './components/templates/breadcrumbs';
+} from './templates/breadcrumbs.js';
 
-export { IGRPTemplateCommandSearch } from './components/templates/command-search';
+export {
+  IGRPTemplateCommandSearch,
+  IGRP_COMMAND_SEARCH_LABELS_PT_PT,
+  type IGRPTemplateCommandSearchProps,
+  type IGRPCommandItem,
+  type IGRPCommandSearchLabels,
+} from './templates/command-search.js';
 
-export { IGRPTemplateHeader } from './components/templates/header';
+export { IGRPTemplateHeader, type IGRPHeaderSlots } from './templates/header.js';
 
-export { IGRPTemplateSidebar, type IGRPTemplateSidebarProps } from './components/templates/sidebar';
+export { IGRPTemplateImage, type IGRPTemplateImageProps } from './templates/template-image.js';
 
-export { IGRPTemplateLoading, type IGRPTemplateLoadingProps } from './components/templates/loading';
+export { IGRPTemplateSidebar, type IGRPTemplateSidebarProps } from './templates/sidebar.js';
 
-export { IGRPTemplateMenus, type IGRPTemplateMenuArgs } from './components/templates/menus';
+export { IGRPTemplateLoading, type IGRPTemplateLoadingProps } from './templates/loading.js';
 
-export { IGRPTemplateModeSwitcher } from './components/templates/mode-switcher';
+export { IGRPTemplateMenus, type IGRPTemplateMenuArgs } from './templates/menus.js';
+
+export {
+  IGRP_MENU_LABELS_PT_PT,
+  resolveMenuLabels,
+  type IGRPMenuLabels,
+} from './templates/menus.js';
+
+export {
+  IGRPTemplateModeSwitcher,
+  IGRP_MODE_SWITCHER_LABELS_PT_PT,
+  type IGRPTemplateModeSwitcherProps,
+  type IGRPModeSwitcherLabels,
+} from './templates/mode-switcher.js';
 
 export {
   IGRPTemplateNavUser,
+  IGRP_NAV_USER_LABELS_PT_PT,
   type IGRPTemplateNavUserProps,
-} from './components/templates/nav-user';
+  type IGRPNavUserLabels,
+} from './templates/nav-user.js';
+
+export { IGRPTemplateNotFound, type IGRPTemplateNotFoundProps } from './templates/not-found.js';
 
 export {
-  IGRPTemplateNotFound,
-  type IGRPTemplateNotFoundProps,
-} from './components/templates/not-found';
+  IGRPTemplateNotifications,
+  IGRP_NOTIFICATIONS_LABELS_PT_PT,
+  type IGRPTemplateNotificationsProps,
+  type IGRPNotificationsLabels,
+} from './templates/notifications.js';
 
-export { IGRPTemplateNotifications } from './components/templates/notifications';
+export { IGRPSessionWatcher } from './templates/session-watcher.js';
 
-export { IGRPSessionWatcher } from './components/templates/session-watcher';
+// i18n (chrome catalog)
 
-export { IGRPTemplateThemeSelector } from './components/templates/theme-selector';
+export { IGRPChromeI18nProvider, useIGRPChromeI18n } from './i18n/context.js';
+export { igrpChromeStringsFor } from './i18n/catalogs.js';
+export { IGRP_LOCALE_COOKIE } from './i18n/cookie.js';
+export { igrpResolveErrorCopy, type IGRPErrorCopyResolver } from './i18n/error-copy.js';
+export {
+  IGRP_CHROME_STRINGS_PT,
+  type IGRPChromeStrings,
+  type IGRPChromeErrorCode,
+  type IGRPErrorCopy,
+} from './i18n/strings.js';
+export { IGRP_CHROME_STRINGS_EN } from './i18n/strings.en.js';
+export { IGRP_CHROME_STRINGS_FR } from './i18n/strings.fr.js';
 
 // providers
 
+export { IGRPThemeProvider } from './providers/theme.js';
+
+export { IGRPNestedProviders, type IGRPNestedProvidersArgs } from './providers/nested.js';
+
+export { IGRPRootProvidersFull, type IGRPRootProvidersFullProps } from './providers/root-full.js';
+
 export {
-  IGRPActiveThemeProvider,
-  type IGRPActiveThemeProviderArgs,
-} from './components/providers/active-theme';
+  IGRPRootProvidersBlank,
+  type IGRPRootProvidersBlankProps,
+} from './providers/root-blank.js';
 
-export { IGRPNestedProviders, type IGRPNestedProvidersArgs } from './components/providers/nested';
+/**
+ * @deprecated Use {@link IGRPRootProvidersFull}. A `//` comment gave editors
+ * nothing to strike through, so the deprecation was invisible at the call site.
+ */
+export { IGRPRootProviders, type IGRPRootProvidersArgs } from './providers/root.js';
 
-export { IGRPRootProviders } from './components/providers/root';
+export { IGRPSessionProvider } from './providers/session.js';
 
-export { IGRPSessionProvider } from './components/providers/session';
+// permissions
+export { IGRPSectionPermissions } from './permissions/section-permissions.js';
+export { usePermissions } from './permissions/use-permissions.js';
+export { IGRPForbidden, type IGRPForbiddenProps } from './permissions/forbidden.js';
+export {
+  IGRPAuthorization,
+  igrpIsAllowedBy,
+  type IGRPAuthorizationProps,
+} from './permissions/authorization.js';
+export { IGRPGuardPage, type IGRPGuardPageProps } from './permissions/guard-page.js';
+
+export {
+  IGRP_BRANDING_CORE_TOKENS,
+  igrpBrandingToCss,
+  igrpParseBranding,
+  BRANDING_MAX_BYTES,
+  isSafeCssValue,
+  isSafeLogoUrl,
+  isTokenName,
+} from './branding/index.js';
+export { IGRPBrandingStyle } from './branding/style.js';
+export { IGRPBrandingProvider, useIGRPBranding } from './branding/provider.js';

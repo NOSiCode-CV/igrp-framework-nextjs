@@ -1,0 +1,17 @@
+{
+  "//": "Type-check only. Extends the real build config so the gate always checks under the same strictness that ships; overrides only what must differ (no emit, not composite, and the contract/ dir added to the inputs).",
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "composite": false,
+    "declaration": false,
+    "declarationMap": false,
+    "emitDeclarationOnly": false,
+    // Type-check only: nothing is emitted, so the rule has nothing to
+    // guarantee, and TS rejects it alongside declaration/composite false.
+    "isolatedDeclarations": false,
+    "rootDir": "."
+  },
+  "include": ["src/**/*", "contract/**/*"],
+  "exclude": ["node_modules", "dist"]
+}

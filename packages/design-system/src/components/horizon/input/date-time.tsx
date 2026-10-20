@@ -3,12 +3,15 @@
 import { useId, useState } from "react"
 import { useFormContext, Controller } from "react-hook-form"
 
-import { DD_MM_YYYY } from "../../../lib/constants"
-import { cn } from "../../../lib/utils"
-import type { IGRPInputProps } from "../../../types"
+import { DD_MM_YYYY } from "../../../lib/utilities.js"
+import { cn } from "../cn.js"
+import { igrpOmitNonDomProps } from "../../../lib/dom-props.js"
+import { igrpMergeRefs } from "../../../lib/form-binding.js"
+import type { IGRPInputProps } from "../../../types.js"
 
-import { Input } from "../../primitives/input"
-import { IGRPLabel } from "../label"
+import { Input } from "../../primitives/input.js"
+import { IGRPLabel } from "../label.js"
+import { Field, FieldDescription, FieldError } from "../../primitives/field.js"
 
 const DEFAULT_PLACEHOLDER = `${DD_MM_YYYY}, --:--`
 
@@ -42,6 +45,7 @@ function IGRPDateTimeInput({
   defaultValue = "",
   placeholder = DEFAULT_PLACEHOLDER,
   className,
+  labelClassName,
   inputClassName,
   onChange,
   onBlur,
@@ -99,8 +103,8 @@ function IGRPDateTimeInput({
 
   if (!formContext) {
     return (
-      <div className={cn("*:not-first:mt-2")}>
-        {label && <IGRPLabel label={label} className={className} required={required} id={fieldName} />}
+      <Field className={className}>
+        {label && <IGRPLabel label={label} className={labelClassName} required={required} id={fieldName} />}
 
         <Input
           id={fieldName}
@@ -113,30 +117,20 @@ function IGRPDateTimeInput({
           required={required}
           aria-required={required}
           aria-invalid={!!error || !!props["aria-invalid"]}
-          aria-describedby={helperText || error ? `${fieldName}-helper` : undefined}
+          aria-describedby={error ? `${fieldName}-error` : helperText ? `${fieldName}-helper` : undefined}
           className={cn(error && "border-destructive focus-visible:ring-destructive/20", inputClassName)}
-          {...props}
+          {...igrpOmitNonDomProps(props)}
         />
 
-        {helperText && !error && (
-          <p
-            id={`${fieldName}-helper`}
-            className={cn("text-muted-foreground mt-2 text-xs")}
-            role="region"
-            aria-live="polite"
-          >
-            {helperText}
-          </p>
-        )}
+        {helperText && !error && <FieldDescription id={`${fieldName}-helper`}>{helperText}</FieldDescription>}
 
-        {error && (
-          <p id={`${fieldName}-helper`} className={cn("text-destructive mt-2 text-xs")} role="alert">
-            {error}
-          </p>
-        )}
-      </div>
+        {error && <FieldError id={`${fieldName}-error`}>{error}</FieldError>}
+      </Field>
     )
   }
+
+  // The field owns the ref; a caller ref is merged with it (see lib/form-binding.ts).
+  const { ref, ...callerProps } = igrpOmitNonDomProps(props)
 
   return (
     <Controller
@@ -166,11 +160,12 @@ function IGRPDateTimeInput({
         }
 
         return (
-          <div className={cn("*:not-first:mt-2")}>
-            {label && <IGRPLabel label={label} className={className} required={required} id={fieldName} />}
+          <Field className={className}>
+            {label && <IGRPLabel label={label} className={labelClassName} required={required} id={fieldName} />}
 
             <Input
               id={fieldName}
+              ref={igrpMergeRefs(field.ref, ref)}
               value={field.value || ""}
               onChange={handleFormInputChange}
               onBlur={handleFormInputBlur}
@@ -179,31 +174,24 @@ function IGRPDateTimeInput({
               required={required}
               aria-required={required}
               aria-invalid={!!fieldState.error || !!error || !!props["aria-invalid"]}
-              aria-describedby={helperText || error || fieldState.error ? `${fieldName}-helper` : undefined}
+              aria-describedby={
+                error || fieldState.error ? `${fieldName}-error` : helperText ? `${fieldName}-helper` : undefined
+              }
               className={cn(
                 (fieldState.error || error) && "border-destructive focus-visible:ring-destructive/20",
-                inputClassName,
+                inputClassName
               )}
-              {...props}
+              {...callerProps}
             />
 
             {helperText && !error && !fieldState.error && (
-              <p
-                id={`${fieldName}-helper`}
-                className={cn("text-muted-foreground mt-2 text-xs")}
-                role="region"
-                aria-live="polite"
-              >
-                {helperText}
-              </p>
+              <FieldDescription id={`${fieldName}-helper`}>{helperText}</FieldDescription>
             )}
 
             {(error || fieldState.error) && (
-              <p id={`${fieldName}-error`} className={cn("text-destructive mt-2 text-xs")} role="alert">
-                {error || fieldState.error?.message}
-              </p>
+              <FieldError id={`${fieldName}-error`}>{error || fieldState.error?.message}</FieldError>
             )}
-          </div>
+          </Field>
         )
       }}
     />

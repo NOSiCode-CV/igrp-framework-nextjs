@@ -2,14 +2,14 @@
 
 import { Bar, BarChart, CartesianGrid, Legend, XAxis, YAxis, ReferenceLine } from "recharts"
 
-import { cn } from "../../../../lib/utils"
+import { cn } from "../../cn.js"
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
   ChartLegend,
   ChartLegendContent,
-} from "../../../primitives/chart"
+} from "../../../primitives/chart.js"
 import {
   formatChartValue,
   getChartHeight,
@@ -19,8 +19,8 @@ import {
   getLegendHorizontalAlign,
   hasNegativeValues,
   createChartConfig,
-} from "../lib"
-import type { IGRPBarConfig, IGRPChartProps } from "../types"
+} from "../lib.js"
+import type { IGRPBarConfig, IGRPChartProps } from "../types.js"
 
 function defaultLabelFormatter(value: unknown): string {
   return typeof value === "string" ? value : String(value)
@@ -73,10 +73,10 @@ function IGRPHorizontalBarChartInner({
   barRadius = 5,
   barGap = 8,
   barCategoryGap = "30%",
-  gridColor = "#e5e7eb",
+  gridColor = "var(--border)",
   backgroundColor,
-  referenceLineColor = "#e5e7eb",
-  axisColor = "#d1d5db",
+  referenceLineColor = "var(--border)",
+  axisColor = "var(--muted-foreground)",
   tooltipIndicator = "line",
   footer,
 }: IGRPHorizontalBarChartProps) {
@@ -85,7 +85,7 @@ function IGRPHorizontalBarChartInner({
   const formatValue = (value: number) => formatChartValue(value, valueFormatter)
   const hasNegativeDataValues = hasNegativeValues(
     data,
-    bars.map((b) => b.dataKey),
+    bars.map((b) => b.dataKey)
   )
   const chartConfig = createChartConfig(bars)
 
@@ -94,17 +94,14 @@ function IGRPHorizontalBarChartInner({
       ...data.map((item) => {
         const label = String(item[categoryKey])
         return label.length
-      }),
+      })
     )
 
     return Math.max(maxLabelLength * 7, 80)
   }
 
   return (
-    <div
-      className={`w-full overflow-hidden ${className || ""}`}
-      style={backgroundColor ? { backgroundColor } : undefined}
-    >
+    <div className={cn("w-full overflow-hidden", className)} style={backgroundColor ? { backgroundColor } : undefined}>
       {(title || description) && (
         <div className={cn("pb-3")}>
           {title && <div className={cn("text-xl font-semibold")}>{title}</div>}
@@ -153,7 +150,10 @@ function IGRPHorizontalBarChartInner({
               {showReferenceZero && hasNegativeDataValues && <ReferenceLine x={0} stroke={referenceLineColor} />}
 
               {showTooltip && (
-                <ChartTooltip cursor={false} content={<ChartTooltipContent indicator={tooltipIndicator} />} />
+                <ChartTooltip
+                  cursor={false}
+                  content={<ChartTooltipContent indicator={tooltipIndicator} valueFormatter={valueFormatter} />}
+                />
               )}
 
               {legendPosition !== "none" && customLegend && (
@@ -180,20 +180,20 @@ function IGRPHorizontalBarChartInner({
                     key: bar.dataKey,
                     dataKey: bar.dataKey,
                     name: bar.name || bar.dataKey,
-                    stackId: stacked ? "stack1" : undefined,
+                    stackId: stacked ? (bar.stackId ?? "stack1") : undefined,
                     fill: `var(--color-${bar.dataKey})`,
-                    radius: barRadius,
+                    radius: bar.radius ?? barRadius,
                   })
                 ) : (
                   <Bar
                     key={bar.dataKey}
                     dataKey={bar.dataKey}
                     name={bar.name || bar.dataKey}
-                    stackId={stacked ? "stack1" : undefined}
+                    stackId={stacked ? (bar.stackId ?? "stack1") : undefined}
                     fill={`var(--color-${bar.dataKey})`}
-                    radius={barRadius}
+                    radius={bar.radius ?? barRadius}
                   />
-                ),
+                )
               )}
             </BarChart>
           </ChartContainer>
@@ -201,7 +201,7 @@ function IGRPHorizontalBarChartInner({
       </div>
 
       {footer && (
-        <div className={cn("flex-col items-start gap-2 text-sm pt-4")}>
+        <div className={cn("flex-col items-start gap-2 pt-4 text-sm")}>
           {footer.description && <div className={cn("leading-none text-muted-foreground")}>{footer.description}</div>}
         </div>
       )}

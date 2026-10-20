@@ -2,7 +2,8 @@
 
 import { useId } from "react"
 import { cva, type VariantProps } from "class-variance-authority"
-import { cn } from "../../lib/utils"
+import { cn } from "cn"
+import { useIGRPi18n } from "../../i18n/index.js"
 
 type IGRPVideoEmbedAllowFeature =
   | "autoplay"
@@ -81,6 +82,7 @@ function IGRPVideoEmbed({
   start = 0,
   aspectRatio = "16/9",
 }: IGRPVideoEmbedProps) {
+  const i18n = useIGRPi18n()
   const _id = useId()
   const ref = name ?? id ?? _id
 
@@ -92,13 +94,13 @@ function IGRPVideoEmbed({
     return (
       <div
         className={cn(
-          "w-full overflow-hidden bg-muted flex items-center justify-center p-8",
+          "flex w-full items-center justify-center overflow-hidden bg-muted p-8",
           videoVariants({ aspectRatio }),
-          className,
+          className
         )}
         id={ref}
       >
-        <p className={cn("text-muted-foreground text-sm")}>Invalid video URL</p>
+        <p className={cn("text-sm text-muted-foreground")}>{i18n.videoEmbed.invalidUrl}</p>
       </div>
     )
   }
@@ -119,7 +121,7 @@ function IGRPVideoEmbed({
       <iframe
         key={src}
         src={videoUrl.toString()}
-        className={cn("w-full h-full border-0", videoVariants({ aspectRatio }))}
+        className={cn("h-full w-full border-0", videoVariants({ aspectRatio }))}
         title={title}
         loading={loading}
         allowFullScreen={allowFullScreen}

@@ -1,6 +1,9 @@
-import { Cropper as CropperPrimitive } from "@origin-space/image-cropper"
+/* shadcn: 2026-09-15 */
 
-import { cn } from "../../lib/utils"
+"use client"
+
+import { Cropper as CropperPrimitive } from "@origin-space/image-cropper"
+import { cn } from "cn"
 
 function Cropper({ className, ...props }: React.ComponentProps<typeof CropperPrimitive.Root>) {
   return (
@@ -8,7 +11,7 @@ function Cropper({ className, ...props }: React.ComponentProps<typeof CropperPri
       data-slot="cropper"
       className={cn(
         "relative flex w-full cursor-move touch-none items-center justify-center overflow-hidden focus:outline-none",
-        className,
+        className
       )}
       {...props}
     />
@@ -37,7 +40,7 @@ function CropperCropArea({ className, ...props }: React.ComponentProps<typeof Cr
       data-slot="cropper-crop-area"
       className={cn(
         "pointer-events-none absolute border-3 border-white shadow-[0_0_0_9999px_rgba(0,0,0,0.3)] in-[[data-slot=cropper]:focus-visible]:ring-[3px] in-[[data-slot=cropper]:focus-visible]:ring-white/50",
-        className,
+        className
       )}
       {...props}
     />

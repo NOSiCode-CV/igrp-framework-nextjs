@@ -1,7 +1,9 @@
+"use client"
+
 import { useId } from "react"
 
-import { Avatar, AvatarImage, AvatarFallback } from "../primitives/avatar"
-import { cn } from "../../lib/utils"
+import { Avatar, AvatarImage, AvatarFallback } from "../primitives/avatar.js"
+import { cn } from "cn"
 
 /**
  * Props for the IGRPUserAvatar component.

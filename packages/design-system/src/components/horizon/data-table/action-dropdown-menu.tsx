@@ -1,10 +1,10 @@
 "use client"
 
-import { useState } from "react"
+import { isValidElement, useCallback, useState, type ReactNode } from "react"
 import Link from "next/link"
 
-import { cn } from "../../../lib/utils"
-import { type IGRPPlacementProps } from "../../../types"
+import { cn } from "../cn.js"
+import { type IGRPPlacementProps } from "../../../types.js"
 
 import {
   AlertDialog,
@@ -16,17 +16,20 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "../../primitives/alert-dialog"
+} from "../../primitives/alert-dialog.js"
 
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "../../primitives/dropdown-menu"
-import { buttonVariants } from "../../primitives/button"
-import { IGRPIcon, type IGRPIconName } from "../icon"
-import { type IGRPDataTableDialogProps, type IGRPDataTableLinkProps } from "./row-actions"
+} from "../../primitives/dropdown-menu.js"
+import { buttonVariants } from "../../primitives/button.js"
+import { Dialog, DialogTrigger } from "../../primitives/dialog.js"
+import { IGRPDataTableModalContent } from "./action-button-icon.js"
+import { IGRPIcon, type IGRPIconName } from "../icon/index.js"
+import { type IGRPDataTableDialogProps, type IGRPDataTableLinkProps } from "./row-actions.js"
+import { useIGRPi18n } from "../../../i18n/index.js"
 
 /**
  * Base props for dropdown menu items.
@@ -56,14 +59,14 @@ function IGRPDataTableDropdownMenuAlert({
   className,
   icon = "AlertCircle",
   iconClassName,
-  children = "Insert your content here...",
-  modalTitle = "This is an Alert Dialog, Insert a Title...",
+  children,
+  modalTitle,
   showCancel = true,
-  labelCancel = "Cancel",
+  labelCancel,
   classNameCancel,
   variantCancel = "outline",
   showConfirm = true,
-  labelConfirm = "Confirm",
+  labelConfirm,
   classNameConfirm,
   variantConfirm = "default",
   onClickConfirm,
@@ -71,6 +74,7 @@ function IGRPDataTableDropdownMenuAlert({
   iconPlacement = "start",
   classNameItem,
 }: IGRPDataTableDropdownMenuDialogProps) {
+  const i18n = useIGRPi18n()
   const [open, setOpen] = useState(false)
 
   const handleConfirm = () => {
@@ -99,7 +103,7 @@ function IGRPDataTableDropdownMenuAlert({
       <AlertDialogContent className={cn("max-w-md", className)}>
         <AlertDialogHeader>
           <AlertDialogTitle>{modalTitle}</AlertDialogTitle>
-          <AlertDialogDescription>{children}</AlertDialogDescription>
+          {children && <AlertDialogDescription>{children}</AlertDialogDescription>}
         </AlertDialogHeader>
 
         {(showCancel || showConfirm) && (
@@ -109,7 +113,7 @@ function IGRPDataTableDropdownMenuAlert({
                 onClick={handleCancel}
                 className={cn(buttonVariants({ variant: variantCancel }), classNameCancel)}
               >
-                {labelCancel}
+                {labelCancel ?? i18n.alertDialog.cancel}
               </AlertDialogCancel>
             )}
             {showConfirm && (
@@ -117,7 +121,7 @@ function IGRPDataTableDropdownMenuAlert({
                 onClick={handleConfirm}
                 className={cn(buttonVariants({ variant: variantConfirm }), classNameConfirm)}
               >
-                {labelConfirm}
+                {labelConfirm ?? i18n.alertDialog.action}
               </AlertDialogAction>
             )}
           </AlertDialogFooter>
@@ -140,7 +144,7 @@ function IGRPDataTableDropdownMenuLink({
   variant = "default",
 }: IGRPDataTableDropdownMenuLinkProps) {
   const iconClass = iconPlacement === "end" ? "flex-row-reverse" : ""
-  const customClss = cn("flex items-center gap-2 w-full", iconClass, classNameItem)
+  const customClss = cn("flex w-full items-center gap-2", iconClass, classNameItem)
 
   const RenderContent = (
     <>
@@ -197,7 +201,7 @@ function IGRPDataTableDropdownMenuCustom({
 
   return (
     <DropdownMenuItem
-      className={cn("flex items-center gap-2 w-full", iconClass, classNameItem)}
+      className={cn("flex w-full items-center gap-2", iconClass, classNameItem)}
       onSelect={handlerAction}
       variant={variant}
     >
@@ -230,7 +234,7 @@ function IGRPDataTableDropdownMenuItem({
   return (
     <DropdownMenuItem
       onClick={onClick}
-      className={cn("flex items-center w-full gap-2", iconClass, classNameItem)}
+      className={cn("flex w-full items-center gap-2", iconClass, classNameItem)}
       onSelect={(e) => {
         e.preventDefault()
       }}
@@ -240,6 +244,50 @@ function IGRPDataTableDropdownMenuItem({
       <span>{labelTrigger}</span>
     </DropdownMenuItem>
   )
+}
+
+/** Dropdown menu item that opens a modal dialog; `render` receives the dialog's real `close`. */
+function IGRPDataTableDropdownMenuModal({
+  labelTrigger,
+  icon = "Edit",
+  iconClassName,
+  showIcon = true,
+  iconPlacement = "start",
+  classNameItem,
+  children,
+  ...dialogProps
+}: IGRPDataTableDropdownMenuDialogProps) {
+  const [open, setOpen] = useState(false)
+  const close = useCallback(() => setOpen(false), [])
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <IGRPDataTableDropdownMenuItem
+          showIcon={showIcon}
+          iconPlacement={iconPlacement}
+          iconClassName={iconClassName}
+          icon={icon}
+          labelTrigger={labelTrigger}
+          classNameItem={classNameItem}
+        />
+      </DialogTrigger>
+      <IGRPDataTableModalContent {...dialogProps} close={close}>
+        {children}
+      </IGRPDataTableModalContent>
+    </Dialog>
+  )
+}
+
+/**
+ * Dropdown menu item for a `custom` row action: the node itself becomes the menu item
+ * (its own `onClick` runs on select). Text or fragments are wrapped in a plain item.
+ */
+function IGRPDataTableDropdownMenuNode({ node }: { node?: ReactNode; labelTrigger?: string }) {
+  if (isValidElement(node)) {
+    return <DropdownMenuItem asChild>{node}</DropdownMenuItem>
+  }
+  return <DropdownMenuItem>{node}</DropdownMenuItem>
 }
 
 type IGRPDataTableActionDropdown =
@@ -259,6 +307,16 @@ type IGRPDataTableActionDropdown =
       component: typeof IGRPDataTableDropdownMenuCustom
       props: IGRPDataTableDropdownMenuDialogProps
     }
+  | {
+      id?: string
+      component: typeof IGRPDataTableDropdownMenuModal
+      props: IGRPDataTableDropdownMenuDialogProps
+    }
+  | {
+      id?: string
+      component: typeof IGRPDataTableDropdownMenuNode
+      props: { node?: ReactNode; labelTrigger?: string }
+    }
 
 type IGRPDataTableDropdownMenuProps = {
   items: IGRPDataTableActionDropdown[]
@@ -266,9 +324,10 @@ type IGRPDataTableDropdownMenuProps = {
 }
 
 function IGRPDataTableDropdownMenu({ items, iconName = "Ellipsis" }: IGRPDataTableDropdownMenuProps) {
+  const i18n = useIGRPi18n()
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className={cn("flex items-center justify-center")} aria-label="Open actions">
+      <DropdownMenuTrigger className={cn("flex items-center justify-center")} aria-label={i18n.dataTable.openActions}>
         <IGRPIcon iconName={iconName} className={cn("shadow-none")} />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
@@ -297,5 +356,7 @@ export {
   IGRPDataTableDropdownMenuAlert,
   IGRPDataTableDropdownMenuCustom,
   IGRPDataTableDropdownMenuLink,
+  IGRPDataTableDropdownMenuModal,
+  IGRPDataTableDropdownMenuNode,
   IGRPDataTableDropdownMenu,
 }

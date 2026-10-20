@@ -2,10 +2,11 @@
 
 import { Suspense, lazy } from "react"
 
-import { cn } from "../../../../lib/utils"
-import type { IGRPVerticalBarChartProps } from "./vertical-chart-inner"
+import { cn } from "../../cn.js"
+import { Skeleton } from "../../../primitives/skeleton.js"
+import type { IGRPVerticalBarChartProps } from "./vertical-chart-inner.js"
 
-const IGRPVerticalBarChartLazy = lazy(() => import("./vertical-chart-inner").then((m) => ({ default: m.default })))
+const IGRPVerticalBarChartLazy = lazy(() => import("./vertical-chart-inner.js").then((m) => ({ default: m.default })))
 
 /**
  * Vertical bar chart with optional stacking and grid.
@@ -13,11 +14,7 @@ const IGRPVerticalBarChartLazy = lazy(() => import("./vertical-chart-inner").the
  */
 function IGRPVerticalBarChart(props: IGRPVerticalBarChartProps) {
   return (
-    <Suspense
-      fallback={
-        <div className={cn("w-full overflow-hidden animate-pulse rounded-lg bg-muted min-h-[200px] aspect-video")} />
-      }
-    >
+    <Suspense fallback={<Skeleton className={cn("aspect-video min-h-[200px] w-full rounded-lg", props.className)} />}>
       <IGRPVerticalBarChartLazy {...props} />
     </Suspense>
   )

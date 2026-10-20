@@ -1,11 +1,13 @@
+"use client"
+
 import { useId } from "react"
 
-import { IGRPColors, type IGRPColorRole, type IGRPColorVariants } from "../../lib/colors"
-import { igrpAlertIconMappings } from "../../lib/constants"
-import { cn } from "../../lib/utils"
-import type { IGRPBaseAttributes, IGRPPlacementProps } from "../../types"
-import { IGRPIcon, type IGRPIconName } from "./icon"
-import { IGRPLink } from "./typography/link"
+import { IGRPColors, type IGRPColorRole, type IGRPColorVariants } from "../../lib/colors.js"
+import { igrpAlertIconMappings } from "../../lib/utilities.js"
+import { cn } from "cn"
+import type { IGRPBaseAttributes, IGRPPlacementProps } from "../../types.js"
+import { IGRPIcon, type IGRPIconName } from "./icon/index.js"
+import { IGRPLink } from "./typography/link.js"
 
 /**
  * Props for the IGRPAlert component.
@@ -76,15 +78,20 @@ function IGRPAlert({
   const alignmentClass =
     alignment === "start" ? "items-baseline" : alignment === "center" ? "items-center" : "items-end"
 
+  const isAssertive = color === "destructive"
+
   return (
     <div
+      role={isAssertive ? "alert" : "status"}
+      aria-live={isAssertive ? "assertive" : "polite"}
       className={cn(
         "rounded-md border px-4 py-3",
+        // colors.alert already pairs each solid fill with its own *-foreground token;
+        // overriding it with the page background breaks contrast on light fills.
         colors.alert,
-        !textColored && variant === "solid" && "text-background",
         !borderColored && "border-transparent",
         !bgColored && "bg-transparent",
-        className,
+        className
       )}
       id={ref}
     >
@@ -92,12 +99,12 @@ function IGRPAlert({
         {showIcon && (
           <IGRPIcon
             iconName={alertIcon}
-            className={cn("shrink-0 size-5", textColored ? colors.text : undefined, iconClassName)}
+            className={cn("size-5 shrink-0", textColored ? colors.text : undefined, iconClassName)}
           />
         )}
 
         <div className="flex grow justify-between gap-3">
-          <div className="grow space-y-1">{children}</div>
+          <div className="flex grow flex-col gap-1">{children}</div>
 
           {showLink && (
             <IGRPLink

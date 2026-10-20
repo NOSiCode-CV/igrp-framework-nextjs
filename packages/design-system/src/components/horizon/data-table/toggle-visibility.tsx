@@ -1,3 +1,4 @@
+"use client"
 "use no memo"
 
 import { type Table } from "@tanstack/react-table"
@@ -8,9 +9,10 @@ import {
   DropdownMenuContent,
   DropdownMenuLabel,
   DropdownMenuTrigger,
-} from "../../primitives/dropdown-menu"
-import { cn } from "../../../lib/utils"
-import { IGRPButton } from "../button"
+} from "../../primitives/dropdown-menu.js"
+import { cn } from "../cn.js"
+import { IGRPButton } from "../button.js"
+import { useIGRPi18n } from "../../../i18n/index.js"
 
 /**
  * Props for the IGRPDataTableToggleVisibility component.
@@ -29,20 +31,20 @@ type IGRPDataTableVisibilityProps<TData> = {
  * Dropdown to toggle column visibility in a data table.
  * Renders a button that opens a list of hideable columns.
  */
-function IGRPDataTableToggleVisibility<TData>({
-  table,
-  label = "View",
-  optionsLabel = "Toggle columns",
-}: IGRPDataTableVisibilityProps<TData>) {
+function IGRPDataTableToggleVisibility<TData>({ table, label, optionsLabel }: IGRPDataTableVisibilityProps<TData>) {
+  const i18n = useIGRPi18n()
+  const resolvedOptionsLabel = optionsLabel ?? i18n.dataTable.toggleColumns
+  const resolvedLabel = label ?? i18n.dataTable.view
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <IGRPButton variant="outline" showIcon={true} iconName="Columns3">
-          {label}
+          {resolvedLabel}
         </IGRPButton>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start">
-        <DropdownMenuLabel>{optionsLabel}</DropdownMenuLabel>
+        <DropdownMenuLabel>{resolvedOptionsLabel}</DropdownMenuLabel>
         {table
           .getAllColumns()
           .filter((column) => column.getCanHide())

@@ -2,11 +2,19 @@
 
 import { useRef, useState, useCallback, createContext, useContext, useId } from "react"
 
-import type { IGRPColorRole, IGRPColorVariants } from "../../lib/colors"
-import { cn } from "../../lib/utils"
-import { Card, CardContent, CardHeader, CardTitle } from "../primitives/card"
-import { IGRPBadge } from "./badge"
-import { IGRPIcon } from "./icon"
+import type { IGRPColorRole, IGRPColorVariants } from "../../lib/colors.js"
+import { cn } from "cn"
+import { Card, CardContent, CardHeader, CardTitle } from "../primitives/card.js"
+import { IGRPBadge } from "./badge.js"
+import { IGRPIcon } from "./icon/index.js"
+import { useIGRPi18n } from "../../i18n/index.js"
+
+function getScrollBehavior(): ScrollBehavior {
+  if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    return "auto"
+  }
+  return "smooth"
+}
 
 /**
  * Single menu navigation item.
@@ -70,7 +78,7 @@ function IGRPMenuNavigationProvider({ children }: { children: React.ReactNode })
     const sectionRef = sectionRefs.current[sectionId]
     if (sectionRef) {
       sectionRef.scrollIntoView({
-        behavior: "smooth",
+        behavior: getScrollBehavior(),
         block: "start",
         inline: "nearest",
       })
@@ -81,7 +89,7 @@ function IGRPMenuNavigationProvider({ children }: { children: React.ReactNode })
     (sectionId: string) => (el: HTMLDivElement | null) => {
       sectionRefs.current[sectionId] = el
     },
-    [],
+    []
   )
 
   return (
@@ -99,7 +107,7 @@ function IGRPMenuNavigation({
   sections,
   activeSection: controlledActiveSection,
   onSectionChange,
-  title = "Navigation",
+  title: titleProp,
   badgeContent,
   badgeVariant,
   badgeColor,
@@ -109,6 +117,8 @@ function IGRPMenuNavigation({
   isStickyTop = false,
   id,
 }: IGRPMenuNavigationProps) {
+  const i18n = useIGRPi18n()
+  const title = titleProp ?? i18n.menuNavigation.title
   const [internalActiveSection, setInternalActiveSection] = useState(sections[0]?.id || "")
   const navigationContext = useContext(NavigationContext)
 
@@ -139,14 +149,14 @@ function IGRPMenuNavigation({
         const element = document.querySelector(`[data-section-id='${sectionId}']`)
         if (element) {
           element.scrollIntoView({
-            behavior: "smooth",
+            behavior: getScrollBehavior(),
             block: "start",
             inline: "nearest",
           })
         }
       }
     },
-    [controlledActiveSection, onSectionChange, sections, navigationContext],
+    [controlledActiveSection, onSectionChange, sections, navigationContext]
   )
 
   if (sections.length === 0) {
@@ -155,10 +165,10 @@ function IGRPMenuNavigation({
 
   return (
     <nav className={cn(isStickyTop && "sticky top-20", className)} id={ref} aria-label={title}>
-      <Card className={cn("shadow-sm gap-0")}>
-        <CardHeader className={cn("border-b py-3 px-4 gap-0")}>
+      <Card className={cn("gap-0 shadow-sm")}>
+        <CardHeader className={cn("gap-0 border-b px-4 py-3")}>
           <div className={cn("flex items-center justify-between")}>
-            <CardTitle className={cn("font-medium text-sm")}>{title}</CardTitle>
+            <CardTitle className={cn("text-sm font-medium")}>{title}</CardTitle>
             {badgeContent && (
               <IGRPBadge variant={badgeVariant} color={badgeColor} badgeClassName={cn(badgeClassName)}>
                 {badgeContent}
@@ -169,36 +179,40 @@ function IGRPMenuNavigation({
         <CardContent className={cn("p-0")}>
           <div className={cn("divide-y")} role="list">
             {sections.map((section) => (
-              <button
-                key={section.id}
-                type="button"
-                onClick={() => handleSectionClick(section.id)}
-                disabled={section.disabled}
-                aria-current={activeSection === section.id ? "page" : undefined}
-                className={cn(
-                  "flex items-center justify-between w-full text-left transition-colors",
-                  "py-2.5 px-4 text-sm",
-                  section.disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer",
-                  activeSection === section.id
-                    ? "bg-primary/5 text-primary font-medium"
-                    : "hover:bg-muted/30 text-muted-foreground",
-                )}
-              >
-                <div className={cn("flex items-center gap-2")}>
-                  <IGRPIcon iconName={section.icon} className={cn("size-4 shrink-0")} aria-hidden="true" />
-                  <span className={cn("truncate")}>{section.label}</span>
-                </div>
-                {showChevron && (
-                  <IGRPIcon
-                    iconName="ChevronRight"
-                    className={cn(
-                      "size-4 transition-colors shrink-0",
-                      activeSection === section.id ? "text-primary" : "text-muted-foreground",
-                    )}
-                    aria-hidden="true"
-                  />
-                )}
-              </button>
+              // The listitem role belongs to the row, not the control: putting it on the
+              // button would replace the button role and the item stops announcing as
+              // clickable.
+              <div key={section.id} role="listitem">
+                <button
+                  type="button"
+                  onClick={() => handleSectionClick(section.id)}
+                  disabled={section.disabled}
+                  aria-current={activeSection === section.id ? "page" : undefined}
+                  className={cn(
+                    "flex w-full items-center justify-between text-left transition-colors",
+                    "px-4 py-2.5 text-sm",
+                    section.disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer",
+                    activeSection === section.id
+                      ? "bg-primary/5 font-medium text-primary"
+                      : "text-muted-foreground hover:bg-muted/30"
+                  )}
+                >
+                  <div className={cn("flex items-center gap-2")}>
+                    <IGRPIcon iconName={section.icon} className={cn("size-4 shrink-0")} aria-hidden="true" />
+                    <span className={cn("truncate")}>{section.label}</span>
+                  </div>
+                  {showChevron && (
+                    <IGRPIcon
+                      iconName="ChevronRight"
+                      className={cn(
+                        "size-4 shrink-0 transition-colors",
+                        activeSection === section.id ? "text-primary" : "text-muted-foreground"
+                      )}
+                      aria-hidden="true"
+                    />
+                  )}
+                </button>
+              </div>
             ))}
           </div>
         </CardContent>
@@ -216,7 +230,7 @@ function useIGRPMenuNavigation() {
         navigationContext.getSectionRef(sectionId)(el)
       }
     },
-    [navigationContext],
+    [navigationContext]
   )
 
   const scrollToSection = useCallback(
@@ -225,7 +239,7 @@ function useIGRPMenuNavigation() {
         navigationContext.scrollToSection(sectionId)
       }
     },
-    [navigationContext],
+    [navigationContext]
   )
 
   return { getSectionRef, scrollToSection }

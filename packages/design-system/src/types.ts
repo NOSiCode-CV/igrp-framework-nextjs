@@ -1,7 +1,6 @@
-import { type IGRPIconName } from "./components/horizon/icon"
-import { igrpGridSizeClasses } from "./lib/constants"
-import type { IGRPColorVariants } from "./lib/colors"
-import { Calendar } from "./components/primitives/calendar"
+import { type IGRPIconName } from "./components/horizon/icon/index.js"
+import type { IGRPColorVariants } from "./lib/colors.js"
+import { Calendar } from "./components/primitives/calendar.js"
 
 /** Placement options for labels, icons, and alignment. */
 export type IGRPPlacementProps = "start" | "end" | "center"
@@ -53,9 +52,11 @@ export type IGRPOptionsProps = {
   description?: string
   image?: string
   flag?: string
+  /** The option is shown but cannot be picked or unpicked. */
+  disabled?: boolean
+  /** Short tag next to the label. Rendered only by option cards (`IGRPRadioGroup variant="card"`). */
+  badge?: string
 }
-
-export type IGRPGridSize = keyof typeof igrpGridSizeClasses
 
 export type IGRPCalendarProps = Omit<React.ComponentProps<typeof Calendar>, "mode"> & {
   name?: string

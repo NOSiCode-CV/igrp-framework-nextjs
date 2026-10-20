@@ -1,3 +1,5 @@
+"use client"
+
 import { useId } from "react"
 
 import {
@@ -8,8 +10,8 @@ import {
   CardFooter as IGRPCardFooter,
   CardHeader as IGRPCardHeader,
   CardTitle as IGRPCardTitle,
-} from "../primitives/card"
-import { cn } from "../../lib/utils"
+} from "../primitives/card.js"
+import { cn } from "cn"
 
 /**
  * Props for the IGRPCard component.

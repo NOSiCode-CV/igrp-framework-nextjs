@@ -33,11 +33,7 @@ export default {
     helperText: { control: 'text' },
     required: { control: 'boolean' },
     disabled: { control: 'boolean' },
-    defaultChecked: { control: 'boolean' },
-    IGRPGridSize: {
-      control: 'select',
-      options: ['full', '1/2', '1/3', '2/3', '1/4', '3/4'],
-    },
+    defaultChecked: { control: 'boolean' },    
     error: { control: 'text' },
   },
 } as Meta;
@@ -223,7 +219,6 @@ export const WithValidation: StoryObj<IGRPCheckboxProps> = {
 //                 <IGRPCheckbox
 //                   name="checkbox1"
 //                   label="Check"
-//                   gridSize='1/2'
 //                 />
 //                 <IGRPCombobox
 //                   name="combobox5"

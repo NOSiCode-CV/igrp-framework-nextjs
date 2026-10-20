@@ -6,15 +6,18 @@ import { useFormContext } from "react-hook-form"
 import { type DateRange } from "react-day-picker"
 import { CalendarIcon } from "lucide-react"
 
-import { cn } from "../../../../lib/utils"
-import type { IGRPDatePickerBaseProps } from "../../../../types"
-import { Button } from "../../../primitives/button"
-import { Calendar } from "../../../primitives/calendar"
-import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../../../primitives/form"
-import { Popover, PopoverContent, PopoverTrigger } from "../../../primitives/popover"
-import { IGRPLabel } from "../../label"
-import { type IGRPCalendarRangeProps } from "../../calendar/range"
-import { DD_MM_YYYY } from "../../../../lib/constants"
+import { toLocalDateRange } from "../../../../lib/calendar-utils.js"
+import { cn } from "../../cn.js"
+import type { IGRPDatePickerBaseProps } from "../../../../types.js"
+import { Button } from "../../../primitives/button.js"
+import { Calendar } from "../../../primitives/calendar.js"
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../../../primitives/form.js"
+import { Popover, PopoverContent, PopoverTrigger } from "../../../primitives/popover.js"
+import { IGRPLabel } from "../../label.js"
+import { type IGRPCalendarRangeProps } from "../../calendar/range.js"
+import { DD_MM_YYYY } from "../../../../lib/utilities.js"
+import { Field } from "../../../primitives/field.js"
+import { useIGRPi18n } from "../../../../i18n/index.js"
 
 /** @internal Popover + calendar + clear button for date range. */
 function DatePickerRangeField({
@@ -26,6 +29,8 @@ function DatePickerRangeField({
   dateFormat,
   disabled,
   disabledPicker,
+  triggerRef,
+  onClose,
 }: {
   value: DateRange | undefined
   onChange: (date: DateRange | undefined) => void
@@ -35,6 +40,10 @@ function DatePickerRangeField({
   dateFormat: string
   disabled?: IGRPCalendarRangeProps["disabled"]
   disabledPicker?: boolean
+  /** react-hook-form's `field.ref`, so the trigger is focused when the field is invalid. */
+  triggerRef?: React.Ref<HTMLButtonElement>
+  /** Called when the popover closes — form-bound fields mark themselves touched here. */
+  onClose?: () => void
 }) {
   const selectionCompleteRef = React.useRef(false)
   const displayText = value?.from
@@ -44,27 +53,28 @@ function DatePickerRangeField({
     : placeholder
 
   return (
-    <Popover>
+    <Popover
+      onOpenChange={(open) => {
+        if (!open) onClose?.()
+      }}
+    >
       <PopoverTrigger asChild>
         <Button
+          ref={triggerRef}
           id={fieldName}
           variant="outline"
           disabled={disabledPicker}
-          className={cn(
-            "group w-full shadow-xs justify-start",
-            "bg-background hover:bg-accent border-input dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
-            !value?.from && "text-muted-foreground",
-          )}
+          className={cn("group w-full justify-start border-input shadow-xs", !value?.from && "text-muted-foreground")}
         >
           <CalendarIcon
-            className="text-muted-foreground/80 group-hover:text-foreground shrink-0 transition-colors"
+            className="shrink-0 text-muted-foreground/80 transition-colors group-hover:text-foreground"
             aria-hidden="true"
           />
 
           <span className={cn("truncate", !value?.from && "text-muted-foreground")}>{displayText}</span>
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="p-0 w-auto" align="start">
+      <PopoverContent className="w-auto p-0" align="start">
         <Calendar
           {...calendarProps}
           id={fieldName}
@@ -106,9 +116,11 @@ function IGRPDatePickerRange({
   disabledPicker = false,
   disabled,
   dateFormat = DD_MM_YYYY,
-  placeholder = "Pick a date",
+  placeholder: placeholderProp,
   ...props
 }: IGRPDatePickerRangeProps) {
+  const i18n = useIGRPi18n()
+  const placeholder = placeholderProp ?? i18n.datePicker.placeholder
   const _id = React.useId()
   const fieldName = name ?? id ?? _id
 
@@ -139,18 +151,20 @@ function IGRPDatePickerRange({
         render={({ field, fieldState }) => (
           <FormItem className={className}>
             {label && (
-              <FormLabel className={cn(labelClassName, required && 'after:content-["*"] after:text-destructive')}>
+              <FormLabel className={cn(labelClassName, required && "after:text-destructive after:content-['*']")}>
                 {label}
               </FormLabel>
             )}
             <FormControl>
               <DatePickerRangeField
                 {...fieldProps}
-                value={field.value}
+                value={toLocalDateRange(field.value)}
                 onChange={(val) => {
                   field.onChange(val)
                   onDateChange?.(val)
                 }}
+                triggerRef={field.ref}
+                onClose={field.onBlur}
               />
             </FormControl>
 
@@ -163,7 +177,7 @@ function IGRPDatePickerRange({
   }
 
   return (
-    <div className={cn("*:not-first:mt-2", className)}>
+    <Field className={className}>
       {label && <IGRPLabel label={label} required={required} id={name} className={labelClassName} />}
 
       <DatePickerRangeField
@@ -175,8 +189,8 @@ function IGRPDatePickerRange({
         }}
       />
 
-      {helperText && <p className={cn("text-sm text-muted-foreground mt-1")}>{helperText}</p>}
-    </div>
+      {helperText && <p className={cn("mt-1 text-sm text-muted-foreground")}>{helperText}</p>}
+    </Field>
   )
 }
 

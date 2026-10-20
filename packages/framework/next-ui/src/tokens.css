@@ -1,7 +1,7 @@
 /*
   Reuse design-system tokens to avoid duplicate/competing variable definitions.
 */
-@import '@igrp/igrp-framework-react-design-system/styles';
+@import '@igrp/igrp-framework-react-design-system/tokens';
 
 /*
   If next-ui ever needs additional tokens that are NOT in design-system,

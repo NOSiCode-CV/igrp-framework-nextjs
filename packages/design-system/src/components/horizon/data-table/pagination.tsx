@@ -5,12 +5,13 @@ import { useId } from "react"
 import { type Table } from "@tanstack/react-table"
 import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight } from "lucide-react"
 
-import { Label } from "../../primitives/label"
-import { Button } from "../../primitives/button"
-import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem } from "../../primitives/pagination"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../primitives/select"
-import { usePagination } from "./hooks/use-pagination"
-import { cn } from "../../../lib/utils"
+import { Label } from "../../primitives/label.js"
+import { Button } from "../../primitives/button.js"
+import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem } from "../../primitives/pagination.js"
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../../primitives/select.js"
+import { usePagination } from "./hooks/use-pagination.js"
+import { cn } from "../cn.js"
+import { useIGRPi18n } from "../../../i18n/index.js"
 
 /**
  * Props for the IGRPDataTablePagination components.
@@ -34,6 +35,7 @@ function IGRPDataTablePagination<TData>({
   pageSize = [50, 100, 150, 200],
   className,
 }: IGRPDataTablePaginationProps<TData>) {
+  const i18n = useIGRPi18n()
   const id = useId()
 
   const start = table.getState().pagination.pageIndex * table.getState().pagination.pageSize + 1
@@ -43,7 +45,7 @@ function IGRPDataTablePagination<TData>({
     : table.getRowCount()
   return (
     <div className={cn("flex items-center gap-6 px-2", className)}>
-      <div className={cn("flex items-center gap-3 grow justify-end")}>
+      <div className={cn("flex grow items-center justify-end gap-3")}>
         <Label htmlFor={id} className={cn("max-sm:sr-only")}>
           Registo por página
         </Label>
@@ -58,20 +60,22 @@ function IGRPDataTablePagination<TData>({
           </SelectTrigger>
           <SelectContent
             className={cn(
-              "[&_*[role=option]]:ps-2 [&_*[role=option]]:pe-8 [&_*[role=option]>span]:start-auto [&_*[role=option]>span]:end-2",
+              "[&_*[role=option]]:ps-2 [&_*[role=option]]:pe-8 [&_*[role=option]>span]:start-auto [&_*[role=option]>span]:end-2"
             )}
           >
-            {pageSize.map((p) => (
-              <SelectItem key={p} value={p.toString()}>
-                {p}
-              </SelectItem>
-            ))}
+            <SelectGroup>
+              {pageSize.map((p) => (
+                <SelectItem key={p} value={p.toString()}>
+                  {p}
+                </SelectItem>
+              ))}
+            </SelectGroup>
           </SelectContent>
         </Select>
       </div>
 
       <div className={cn("text-sm whitespace-nowrap text-muted-foreground")}>
-        <p className={cn("whitespace-nowrap text-sm text-muted-foreground")} aria-live="polite">
+        <p className={cn("text-sm whitespace-nowrap text-muted-foreground")} aria-live="polite">
           <span className={cn("text-foreground")}>
             {start}-{end}
           </span>{" "}
@@ -89,7 +93,7 @@ function IGRPDataTablePagination<TData>({
                 className={cn("disabled:pointer-events-none disabled:opacity-50")}
                 onClick={() => table.setPageIndex(0)}
                 disabled={!table.getCanPreviousPage()}
-                aria-label="Go to first page"
+                aria-label={i18n.dataTable.firstPage}
               >
                 <ChevronFirst size={16} aria-hidden="true" />
               </Button>
@@ -102,7 +106,7 @@ function IGRPDataTablePagination<TData>({
                 className={cn("disabled:pointer-events-none disabled:opacity-50")}
                 onClick={() => table.previousPage()}
                 disabled={!table.getCanPreviousPage()}
-                aria-label="Go to previous page"
+                aria-label={i18n.dataTable.previousPage}
               >
                 <ChevronLeft size={16} aria-hidden="true" />
               </Button>
@@ -115,7 +119,7 @@ function IGRPDataTablePagination<TData>({
                 className={cn("disabled:pointer-events-none disabled:opacity-50")}
                 onClick={() => table.nextPage()}
                 disabled={!table.getCanNextPage()}
-                aria-label="Go to next page"
+                aria-label={i18n.dataTable.nextPage}
               >
                 <ChevronRight size={16} aria-hidden="true" />
               </Button>
@@ -128,7 +132,7 @@ function IGRPDataTablePagination<TData>({
                 className={cn("disabled:pointer-events-none disabled:opacity-50")}
                 onClick={() => table.setPageIndex(table.getPageCount() - 1)}
                 disabled={!table.getCanNextPage()}
-                aria-label="Go to last page"
+                aria-label={i18n.dataTable.lastPage}
               >
                 <ChevronLast size={16} aria-hidden="true" />
               </Button>
@@ -148,6 +152,7 @@ function IGRPDataTablePaginationNumeric<TData>({
   pageSize = [50, 100, 150, 200],
   className,
 }: IGRPDataTablePaginationProps<TData>) {
+  const i18n = useIGRPi18n()
   const id = useId()
   const { pages, showLeftEllipsis, showRightEllipsis } = usePagination({
     currentPage: table.getState().pagination.pageIndex + 1,
@@ -157,7 +162,7 @@ function IGRPDataTablePaginationNumeric<TData>({
 
   return (
     <div id={id} className={cn("flex items-center justify-between gap-3 max-sm:flex-col", className)}>
-      <p className={cn("flex-1 whitespace-nowrap text-sm text-muted-foreground")} aria-live="polite">
+      <p className={cn("flex-1 text-sm whitespace-nowrap text-muted-foreground")} aria-live="polite">
         Page <span className={cn("text-foreground")}>{table.getState().pagination.pageIndex + 1}</span> of{" "}
         <span className={cn("text-foreground")}>{table.getPageCount()}</span>
       </p>
@@ -172,7 +177,7 @@ function IGRPDataTablePaginationNumeric<TData>({
                 className={cn("disabled:pointer-events-none disabled:opacity-50")}
                 onClick={() => table.previousPage()}
                 disabled={!table.getCanPreviousPage()}
-                aria-label="Go to previous page"
+                aria-label={i18n.dataTable.previousPage}
               >
                 <ChevronLeft size={16} strokeWidth={2} aria-hidden="true" />
               </Button>
@@ -213,7 +218,7 @@ function IGRPDataTablePaginationNumeric<TData>({
                 className={cn("disabled:pointer-events-none disabled:opacity-50")}
                 onClick={() => table.nextPage()}
                 disabled={!table.getCanNextPage()}
-                aria-label="Go to next page"
+                aria-label={i18n.dataTable.nextPage}
               >
                 <ChevronRight size={16} strokeWidth={2} aria-hidden="true" />
               </Button>
@@ -228,17 +233,19 @@ function IGRPDataTablePaginationNumeric<TData>({
           onValueChange={(value) => {
             table.setPageSize(Number(value))
           }}
-          aria-label="Results per page"
+          aria-label={i18n.dataTable.resultsPerPage}
         >
           <SelectTrigger id="results-per-page" className={cn("w-fit whitespace-nowrap")}>
-            <SelectValue placeholder="Select number of results" />
+            <SelectValue placeholder={i18n.dataTable.resultsPerPagePlaceholder} />
           </SelectTrigger>
           <SelectContent>
-            {pageSize.map((p) => (
-              <SelectItem key={p} value={p.toString()}>
-                {p} / page
-              </SelectItem>
-            ))}
+            <SelectGroup>
+              {pageSize.map((p) => (
+                <SelectItem key={p} value={p.toString()}>
+                  {p} {i18n.dataTable.perPageSuffix}
+                </SelectItem>
+              ))}
+            </SelectGroup>
           </SelectContent>
         </Select>
       </div>

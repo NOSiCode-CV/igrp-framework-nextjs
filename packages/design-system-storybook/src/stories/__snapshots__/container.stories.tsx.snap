@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`Components/Container CustomSpacing smoke-test 1`] = `
+<div class="p-6">
+  <div class="mx-auto max-w-md rounded-lg border bg-card p-8"
+       id="_r_ID_"
+  >
+    <h3 class="text-lg font-semibold text-foreground">
+      Section title
+    </h3>
+    <p class="mt-2 text-sm text-muted-foreground">
+      Override the default padding and constrain the width by passing Tailwind utilities through className.
+    </p>
+  </div>
+</div>
+`;
+
+exports[`Components/Container Default smoke-test 1`] = `
+<div class="p-6">
+  <div class="p-3 rounded-lg border bg-muted"
+       id="_r_ID_"
+  >
+    <p class="text-sm text-foreground">
+      IGRPContainer wraps content with default padding. The dashed area is the container; the muted background shows its bounds.
+    </p>
+  </div>
+</div>
+`;

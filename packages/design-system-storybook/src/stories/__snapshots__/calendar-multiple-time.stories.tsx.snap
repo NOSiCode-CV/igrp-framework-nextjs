@@ -1,0 +1,1394 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`Components/Calendar/MultipleTime Basic smoke-test 1`] = `
+<div class="flex flex-col gap-4">
+  <div id="_r_ID_">
+    <div class="flex flex-col gap-4">
+      <div data-slot="calendar"
+           class="w-fit rdp-root group/calendar bg-background p-3 [--cell-radius:var(--radius-md)] [--cell-size:--spacing(8)] in-data-[slot=card-content]:bg-transparent in-data-[slot=popover-content]:bg-transparent rtl:**:[.rdp-button\\_next&gt;svg]:rotate-180 rtl:**:[.rdp-button\\_previous&gt;svg]:rotate-180 rounded-lg border shadow-sm"
+           id="_r_ID_"
+           data-mode="multiple"
+           data-multiple-months="true"
+      >
+        <div class="relative flex flex-col gap-4 md:flex-row rdp-months">
+          <nav class="absolute inset-x-0 top-0 flex w-full items-center justify-between gap-1 rdp-nav"
+               aria-label
+          >
+            <button type="button"
+                    class="group/button inline-flex shrink-0 items-center justify-center rounded-md border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 gap-1.5 in-data-[slot=button-group]:rounded-md has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 size-(--cell-size) p-0 select-none aria-disabled:opacity-50 rdp-button_previous"
+                    aria-label="Go to the Previous Month"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="24"
+                   height="24"
+                   viewbox="0 0 24 24"
+                   fill="none"
+                   stroke="currentColor"
+                   stroke-width="2"
+                   stroke-linecap="round"
+                   stroke-linejoin="round"
+                   class="lucide lucide-chevron-left size-4 rdp-chevron"
+                   aria-hidden="true"
+              >
+                <path d="m15 18-6-6 6-6">
+                </path>
+              </svg>
+            </button>
+            <button type="button"
+                    class="group/button inline-flex shrink-0 items-center justify-center rounded-md border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 gap-1.5 in-data-[slot=button-group]:rounded-md has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 size-(--cell-size) p-0 select-none aria-disabled:opacity-50 rdp-button_next"
+                    aria-label="Go to the Next Month"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="24"
+                   height="24"
+                   viewbox="0 0 24 24"
+                   fill="none"
+                   stroke="currentColor"
+                   stroke-width="2"
+                   stroke-linecap="round"
+                   stroke-linejoin="round"
+                   class="lucide lucide-chevron-right size-4 rdp-chevron"
+                   aria-hidden="true"
+              >
+                <path d="m9 18 6-6-6-6">
+                </path>
+              </svg>
+            </button>
+          </nav>
+          <div class="flex w-full flex-col gap-4 rdp-month">
+            <div class="flex h-(--cell-size) w-full items-center justify-center px-(--cell-size) rdp-month_caption">
+              <span class="font-medium select-none text-sm rdp-caption_label"
+                    role="status"
+                    aria-live="polite"
+              >
+                outubro 2026
+              </span>
+            </div>
+            <table role="grid"
+                   aria-multiselectable="true"
+                   aria-label="outubro 2026"
+                   class="w-full border-collapse rdp-month_grid"
+            >
+              <thead aria-hidden="true">
+                <tr class="flex rdp-weekdays">
+                  <th aria-label="domingo"
+                      class="flex-1 rounded-(--cell-radius) text-[0.8rem] font-normal text-muted-foreground select-none rdp-weekday"
+                      scope="col"
+                  >
+                    dom
+                  </th>
+                  <th aria-label="segunda-feira"
+                      class="flex-1 rounded-(--cell-radius) text-[0.8rem] font-normal text-muted-foreground select-none rdp-weekday"
+                      scope="col"
+                  >
+                    seg
+                  </th>
+                  <th aria-label="terça-feira"
+                      class="flex-1 rounded-(--cell-radius) text-[0.8rem] font-normal text-muted-foreground select-none rdp-weekday"
+                      scope="col"
+                  >
+                    ter
+                  </th>
+                  <th aria-label="quarta-feira"
+                      class="flex-1 rounded-(--cell-radius) text-[0.8rem] font-normal text-muted-foreground select-none rdp-weekday"
+                      scope="col"
+                  >
+                    qua
+                  </th>
+                  <th aria-label="quinta-feira"
+                      class="flex-1 rounded-(--cell-radius) text-[0.8rem] font-normal text-muted-foreground select-none rdp-weekday"
+                      scope="col"
+                  >
+                    qui
+                  </th>
+                  <th aria-label="sexta-feira"
+                      class="flex-1 rounded-(--cell-radius) text-[0.8rem] font-normal text-muted-foreground select-none rdp-weekday"
+                      scope="col"
+                  >
+                    sex
+                  </th>
+                  <th aria-label="sábado"
+                      class="flex-1 rounded-(--cell-radius) text-[0.8rem] font-normal text-muted-foreground select-none rdp-weekday"
+                      scope="col"
+                  >
+                    sáb
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="rdp-weeks">
+                <tr class="mt-2 flex w-full rdp-week">
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day text-muted-foreground aria-selected:text-muted-foreground rdp-outside"
+                      role="gridcell"
+                      data-day="2026-09-27"
+                      data-month="2026-09"
+                      data-outside="true"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="27/09/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="domingo, 27 de setembro de 2026"
+                    >
+                      27
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day text-muted-foreground aria-selected:text-muted-foreground rdp-outside"
+                      role="gridcell"
+                      data-day="2026-09-28"
+                      data-month="2026-09"
+                      data-outside="true"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="28/09/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="segunda-feira, 28 de setembro de 2026"
+                    >
+                      28
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day text-muted-foreground aria-selected:text-muted-foreground rdp-outside"
+                      role="gridcell"
+                      data-day="2026-09-29"
+                      data-month="2026-09"
+                      data-outside="true"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="29/09/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="terça-feira, 29 de setembro de 2026"
+                    >
+                      29
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day text-muted-foreground aria-selected:text-muted-foreground rdp-outside"
+                      role="gridcell"
+                      data-day="2026-09-30"
+                      data-month="2026-09"
+                      data-outside="true"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="30/09/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="quarta-feira, 30 de setembro de 2026"
+                    >
+                      30
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-10-01"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="01/10/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="quinta-feira, 1 de outubro de 2026"
+                    >
+                      1
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-10-02"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="02/10/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="sexta-feira, 2 de outubro de 2026"
+                    >
+                      2
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-10-03"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="03/10/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="sábado, 3 de outubro de 2026"
+                    >
+                      3
+                    </button>
+                  </td>
+                </tr>
+                <tr class="mt-2 flex w-full rdp-week">
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-10-04"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="04/10/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="domingo, 4 de outubro de 2026"
+                    >
+                      4
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-10-05"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="05/10/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="segunda-feira, 5 de outubro de 2026"
+                    >
+                      5
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-10-06"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="06/10/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="terça-feira, 6 de outubro de 2026"
+                    >
+                      6
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-10-07"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="07/10/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="quarta-feira, 7 de outubro de 2026"
+                    >
+                      7
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-10-08"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="08/10/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="quinta-feira, 8 de outubro de 2026"
+                    >
+                      8
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-10-09"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="09/10/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="sexta-feira, 9 de outubro de 2026"
+                    >
+                      9
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-10-10"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="10/10/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="sábado, 10 de outubro de 2026"
+                    >
+                      10
+                    </button>
+                  </td>
+                </tr>
+                <tr class="mt-2 flex w-full rdp-week">
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-10-11"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="11/10/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="domingo, 11 de outubro de 2026"
+                    >
+                      11
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-10-12"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="12/10/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="segunda-feira, 12 de outubro de 2026"
+                    >
+                      12
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-10-13"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="13/10/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="terça-feira, 13 de outubro de 2026"
+                    >
+                      13
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day rounded-(--cell-radius) bg-muted text-foreground data-[selected=true]:rounded-none rdp-today rdp-selected"
+                      role="gridcell"
+                      aria-selected="true"
+                      data-day="2026-10-14"
+                      data-selected="true"
+                      data-today="true"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="14/10/2026"
+                            data-selected-single="true"
+                            type="button"
+                            tabindex="0"
+                            aria-label="Today, quarta-feira, 14 de outubro de 2026, selected"
+                    >
+                      14
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-10-15"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="15/10/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="quinta-feira, 15 de outubro de 2026"
+                    >
+                      15
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-10-16"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="16/10/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="sexta-feira, 16 de outubro de 2026"
+                    >
+                      16
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-10-17"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="17/10/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="sábado, 17 de outubro de 2026"
+                    >
+                      17
+                    </button>
+                  </td>
+                </tr>
+                <tr class="mt-2 flex w-full rdp-week">
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-10-18"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="18/10/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="domingo, 18 de outubro de 2026"
+                    >
+                      18
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-10-19"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="19/10/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="segunda-feira, 19 de outubro de 2026"
+                    >
+                      19
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-10-20"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="20/10/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="terça-feira, 20 de outubro de 2026"
+                    >
+                      20
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-10-21"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="21/10/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="quarta-feira, 21 de outubro de 2026"
+                    >
+                      21
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-10-22"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="22/10/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="quinta-feira, 22 de outubro de 2026"
+                    >
+                      22
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-10-23"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="23/10/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="sexta-feira, 23 de outubro de 2026"
+                    >
+                      23
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-10-24"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="24/10/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="sábado, 24 de outubro de 2026"
+                    >
+                      24
+                    </button>
+                  </td>
+                </tr>
+                <tr class="mt-2 flex w-full rdp-week">
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-10-25"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="25/10/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="domingo, 25 de outubro de 2026"
+                    >
+                      25
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-10-26"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="26/10/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="segunda-feira, 26 de outubro de 2026"
+                    >
+                      26
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-10-27"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="27/10/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="terça-feira, 27 de outubro de 2026"
+                    >
+                      27
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-10-28"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="28/10/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="quarta-feira, 28 de outubro de 2026"
+                    >
+                      28
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-10-29"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="29/10/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="quinta-feira, 29 de outubro de 2026"
+                    >
+                      29
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-10-30"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="30/10/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="sexta-feira, 30 de outubro de 2026"
+                    >
+                      30
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-10-31"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="31/10/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="sábado, 31 de outubro de 2026"
+                    >
+                      31
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="flex w-full flex-col gap-4 rdp-month">
+            <div class="flex h-(--cell-size) w-full items-center justify-center px-(--cell-size) rdp-month_caption">
+              <span class="font-medium select-none text-sm rdp-caption_label"
+                    role="status"
+                    aria-live="polite"
+              >
+                novembro 2026
+              </span>
+            </div>
+            <table role="grid"
+                   aria-multiselectable="true"
+                   aria-label="novembro 2026"
+                   class="w-full border-collapse rdp-month_grid"
+            >
+              <thead aria-hidden="true">
+                <tr class="flex rdp-weekdays">
+                  <th aria-label="domingo"
+                      class="flex-1 rounded-(--cell-radius) text-[0.8rem] font-normal text-muted-foreground select-none rdp-weekday"
+                      scope="col"
+                  >
+                    dom
+                  </th>
+                  <th aria-label="segunda-feira"
+                      class="flex-1 rounded-(--cell-radius) text-[0.8rem] font-normal text-muted-foreground select-none rdp-weekday"
+                      scope="col"
+                  >
+                    seg
+                  </th>
+                  <th aria-label="terça-feira"
+                      class="flex-1 rounded-(--cell-radius) text-[0.8rem] font-normal text-muted-foreground select-none rdp-weekday"
+                      scope="col"
+                  >
+                    ter
+                  </th>
+                  <th aria-label="quarta-feira"
+                      class="flex-1 rounded-(--cell-radius) text-[0.8rem] font-normal text-muted-foreground select-none rdp-weekday"
+                      scope="col"
+                  >
+                    qua
+                  </th>
+                  <th aria-label="quinta-feira"
+                      class="flex-1 rounded-(--cell-radius) text-[0.8rem] font-normal text-muted-foreground select-none rdp-weekday"
+                      scope="col"
+                  >
+                    qui
+                  </th>
+                  <th aria-label="sexta-feira"
+                      class="flex-1 rounded-(--cell-radius) text-[0.8rem] font-normal text-muted-foreground select-none rdp-weekday"
+                      scope="col"
+                  >
+                    sex
+                  </th>
+                  <th aria-label="sábado"
+                      class="flex-1 rounded-(--cell-radius) text-[0.8rem] font-normal text-muted-foreground select-none rdp-weekday"
+                      scope="col"
+                  >
+                    sáb
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="rdp-weeks">
+                <tr class="mt-2 flex w-full rdp-week">
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-11-01"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="01/11/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="domingo, 1 de novembro de 2026"
+                    >
+                      1
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-11-02"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="02/11/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="segunda-feira, 2 de novembro de 2026"
+                    >
+                      2
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-11-03"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="03/11/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="terça-feira, 3 de novembro de 2026"
+                    >
+                      3
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-11-04"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="04/11/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="quarta-feira, 4 de novembro de 2026"
+                    >
+                      4
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-11-05"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="05/11/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="quinta-feira, 5 de novembro de 2026"
+                    >
+                      5
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-11-06"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="06/11/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="sexta-feira, 6 de novembro de 2026"
+                    >
+                      6
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-11-07"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="07/11/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="sábado, 7 de novembro de 2026"
+                    >
+                      7
+                    </button>
+                  </td>
+                </tr>
+                <tr class="mt-2 flex w-full rdp-week">
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-11-08"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="08/11/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="domingo, 8 de novembro de 2026"
+                    >
+                      8
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-11-09"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="09/11/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="segunda-feira, 9 de novembro de 2026"
+                    >
+                      9
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-11-10"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="10/11/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="terça-feira, 10 de novembro de 2026"
+                    >
+                      10
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-11-11"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="11/11/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="quarta-feira, 11 de novembro de 2026"
+                    >
+                      11
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-11-12"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="12/11/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="quinta-feira, 12 de novembro de 2026"
+                    >
+                      12
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-11-13"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="13/11/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="sexta-feira, 13 de novembro de 2026"
+                    >
+                      13
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-11-14"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="14/11/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="sábado, 14 de novembro de 2026"
+                    >
+                      14
+                    </button>
+                  </td>
+                </tr>
+                <tr class="mt-2 flex w-full rdp-week">
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-11-15"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="15/11/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="domingo, 15 de novembro de 2026"
+                    >
+                      15
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-11-16"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="16/11/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="segunda-feira, 16 de novembro de 2026"
+                    >
+                      16
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-11-17"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="17/11/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="terça-feira, 17 de novembro de 2026"
+                    >
+                      17
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-11-18"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="18/11/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="quarta-feira, 18 de novembro de 2026"
+                    >
+                      18
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-11-19"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="19/11/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="quinta-feira, 19 de novembro de 2026"
+                    >
+                      19
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-11-20"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="20/11/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="sexta-feira, 20 de novembro de 2026"
+                    >
+                      20
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-11-21"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="21/11/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="sábado, 21 de novembro de 2026"
+                    >
+                      21
+                    </button>
+                  </td>
+                </tr>
+                <tr class="mt-2 flex w-full rdp-week">
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-11-22"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="22/11/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="domingo, 22 de novembro de 2026"
+                    >
+                      22
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-11-23"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="23/11/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="segunda-feira, 23 de novembro de 2026"
+                    >
+                      23
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-11-24"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="24/11/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="terça-feira, 24 de novembro de 2026"
+                    >
+                      24
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-11-25"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="25/11/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="quarta-feira, 25 de novembro de 2026"
+                    >
+                      25
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-11-26"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="26/11/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="quinta-feira, 26 de novembro de 2026"
+                    >
+                      26
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-11-27"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="27/11/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="sexta-feira, 27 de novembro de 2026"
+                    >
+                      27
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-11-28"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="28/11/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="sábado, 28 de novembro de 2026"
+                    >
+                      28
+                    </button>
+                  </td>
+                </tr>
+                <tr class="mt-2 flex w-full rdp-week">
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-11-29"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="29/11/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="domingo, 29 de novembro de 2026"
+                    >
+                      29
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
+                      role="gridcell"
+                      data-day="2026-11-30"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="30/11/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="segunda-feira, 30 de novembro de 2026"
+                    >
+                      30
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day text-muted-foreground aria-selected:text-muted-foreground rdp-outside"
+                      role="gridcell"
+                      data-day="2026-12-01"
+                      data-month="2026-12"
+                      data-outside="true"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="01/12/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="terça-feira, 1 de dezembro de 2026"
+                    >
+                      1
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day text-muted-foreground aria-selected:text-muted-foreground rdp-outside"
+                      role="gridcell"
+                      data-day="2026-12-02"
+                      data-month="2026-12"
+                      data-outside="true"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="02/12/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="quarta-feira, 2 de dezembro de 2026"
+                    >
+                      2
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day text-muted-foreground aria-selected:text-muted-foreground rdp-outside"
+                      role="gridcell"
+                      data-day="2026-12-03"
+                      data-month="2026-12"
+                      data-outside="true"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="03/12/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="quinta-feira, 3 de dezembro de 2026"
+                    >
+                      3
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day text-muted-foreground aria-selected:text-muted-foreground rdp-outside"
+                      role="gridcell"
+                      data-day="2026-12-04"
+                      data-month="2026-12"
+                      data-outside="true"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="04/12/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="sexta-feira, 4 de dezembro de 2026"
+                    >
+                      4
+                    </button>
+                  </td>
+                  <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day text-muted-foreground aria-selected:text-muted-foreground rdp-outside"
+                      role="gridcell"
+                      data-day="2026-12-05"
+                      data-month="2026-12"
+                      data-outside="true"
+                  >
+                    <button data-slot="button"
+                            data-variant="ghost"
+                            data-size="icon"
+                            class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
+                            data-day="05/12/2026"
+                            type="button"
+                            tabindex="-1"
+                            aria-label="sábado, 5 de dezembro de 2026"
+                    >
+                      5
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="flex flex-col gap-4 border-t pt-4">
+        <div class="flex flex-col gap-2">
+          <label data-slot="label"
+                 class="flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+                 for="_r_ID_-start-time"
+          >
+            Data Início
+          </label>
+          <input data-slot="input"
+                 class="h-9 w-full min-w-0 border-input selection:bg-primary selection:text-primary-foreground file:text-foreground placeholder:text-muted-foreground dark:bg-input/30 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:border-ring focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:ring-2 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40"
+                 id="_r_ID_-start-time"
+                 step="1"
+                 type="time"
+                 value
+          >
+        </div>
+        <div class="flex flex-col gap-2">
+          <label data-slot="label"
+                 class="flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+                 for="_r_ID_-end-time"
+          >
+            Data Fim
+          </label>
+          <input data-slot="input"
+                 class="h-9 w-full min-w-0 border-input selection:bg-primary selection:text-primary-foreground file:text-foreground placeholder:text-muted-foreground dark:bg-input/30 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:border-ring focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:ring-2 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40"
+                 id="_r_ID_-end-time"
+                 step="1"
+                 type="time"
+                 value
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="text-xs text-center">
+    Debug | Selected Date: Wed Oct 14 2026 - Sat Nov 01 2025
+    <p>
+      Debug | Start Time:
+    </p>
+    <p>
+      Debug | End Time:
+    </p>
+  </div>
+</div>
+`;

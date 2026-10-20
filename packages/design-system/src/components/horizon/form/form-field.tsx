@@ -1,8 +1,18 @@
+"use client"
+
 import type { Control, ControllerFieldState, ControllerRenderProps, FieldValues } from "react-hook-form"
 
-import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../../primitives/form"
-import { cn } from "../../../lib/utils"
-import { type IGRPPlacementProps } from "../../../types"
+import {
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  useFormField,
+} from "../../primitives/form.js"
+import { cn } from "../cn.js"
+import { type IGRPPlacementProps } from "../../../types.js"
 
 /**
  * Props for the IGRPFormField component.
@@ -16,6 +26,11 @@ interface IGRPFormFieldProps {
   label?: string
   /** Helper text shown below the field. */
   helperText?: string
+  /**
+   * Error message that replaces the form's own message for this field. When set it
+   * is always shown — the caller owns when the field is in error.
+   */
+  errorText?: string
   /** Additional CSS classes for the wrapper. */
   className?: string
   /**
@@ -34,6 +49,16 @@ interface IGRPFormFieldProps {
   isToggle?: boolean
 }
 
+/** @internal Caller-supplied error message, wired to the same id `FormControl` points `aria-describedby` at. */
+function IGRPFormFieldErrorText({ message }: { message: string }) {
+  const { formMessageId } = useFormField()
+  return (
+    <p data-slot="form-message" id={formMessageId} role="alert" className={cn("text-xs text-destructive")}>
+      {message}
+    </p>
+  )
+}
+
 /**
  * Form field wrapper integrating with react-hook-form.
  * Must be used inside IGRPFormContext. Renders label, control, helper text, and validation errors.
@@ -42,6 +67,7 @@ function IGRPFormField({
   name,
   label,
   helperText,
+  errorText,
   className,
   children,
   required,
@@ -54,7 +80,7 @@ function IGRPFormField({
       control={control}
       name={name}
       render={({ field, fieldState }) => (
-        <div className={cn("*:not-first:mt-2", className)}>
+        <div className={className}>
           <FormItem>
             <div className={cn("flex flex-col gap-2", isToggle && "flex-row items-center")}>
               {label && (
@@ -62,7 +88,7 @@ function IGRPFormField({
                   className={cn(
                     labelPlacement === "end" && "order-last",
                     "gap-0.5",
-                    required && 'after:content-["*"] after:text-destructive',
+                    required && "after:text-destructive after:content-['*']"
                   )}
                 >
                   {label}
@@ -72,9 +98,9 @@ function IGRPFormField({
               <FormControl>{typeof children === "function" ? children(field, fieldState) : children}</FormControl>
             </div>
 
-            {helperText && !fieldState.error && <FormDescription>{helperText}</FormDescription>}
+            {helperText && !fieldState.error && !errorText && <FormDescription>{helperText}</FormDescription>}
 
-            <FormMessage className={cn("text-xs")} />
+            {errorText ? <IGRPFormFieldErrorText message={errorText} /> : <FormMessage className={cn("text-xs")} />}
           </FormItem>
         </div>
       )}

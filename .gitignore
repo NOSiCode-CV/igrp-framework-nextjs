@@ -14,7 +14,6 @@ coverage/
 
 # production
 dist/
-dist_optimized
 dist_types
 build/
 
@@ -114,6 +113,16 @@ igrp-next-template.zip
 *storybook.log
 
 .npmrc.example
-.cursor
+# Template ships a committed Cursor rules dir so consumers of the template
+# inherit IGRP design-system guidance the moment they open the project.
+!templates/demo-v1/.cursor/
+!templates/demo-v1/.cursor/**
 .idea
 .claude/settings.local.json
+.superpowers
+.claude/launch.json
+
+# Generated bridge: `.agents/skills/` is canonical (pinned by skills-lock.json).
+# Regenerate with `pnpm skills:sync`; never edit or commit this copy.
+.claude/skills/
+.cohost-test

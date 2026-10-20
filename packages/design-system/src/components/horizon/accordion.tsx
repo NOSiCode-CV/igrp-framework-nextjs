@@ -2,15 +2,15 @@
 
 import { useId } from "react"
 
-import { igrpCleanString } from "../../lib/strings"
-import { cn } from "../../lib/utils"
+import { igrpCleanString } from "../../lib/utilities.js"
+import { cn } from "cn"
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
   type AccordionTriggerArgs,
-} from "../primitives/accordion"
+} from "../primitives/accordion.js"
 
 /**
  * Single accordion item with title and content.

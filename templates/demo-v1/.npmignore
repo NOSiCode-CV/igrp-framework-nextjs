@@ -1,0 +1,25 @@
+# This package is `private: true` and is never published to a registry. It ships
+# as a zip built by `create-template/create-zip-template.ps1`, and that script
+# decides what is included — not this file.
+#
+# The previous contents were copied from a library package and excluded `/src`,
+# `/dist/*-*.js`, `webpack.config.js` and Storybook output. None of those apply:
+# `src` IS the deliverable here, and the other paths do not exist. Had anyone
+# ever flipped `private` to false, it would have published an empty package.
+#
+# Kept as a backstop only for things that must never leave this directory.
+
+# Registry credentials read by create-template/create-zip-template.ps1
+/create-template/nexus-auth.txt
+
+# Local secrets
+.env
+.env.*
+!.env.example
+
+# Build output and dependencies
+/.next
+/node_modules
+
+# The generated artifact itself
+igrp-next-template.zip

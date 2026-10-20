@@ -1,0 +1,926 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`Components/Card-Details Default smoke-test 1`] = `
+<div data-slot="card"
+     class="bg-card text-card-foreground flex flex-col rounded-xl border py-6 shadow-sm overflow-hidden gap-3 animate-fade-in motion-reduce:animate-none transition-[box-shadow,border-color] duration-200 hover:shadow-lg hover:border-primary/20"
+     id="_r_ID_"
+>
+  <div data-slot="card-header"
+       class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6 pb-4"
+  >
+    <div data-slot="card-title"
+         class="leading-none font-semibold"
+    >
+      User Information
+    </div>
+    <div data-slot="card-description"
+         class="text-muted-foreground text-sm"
+    >
+      Basic details about the user account
+    </div>
+    <div data-orientation="horizontal"
+         role="none"
+         data-slot="separator"
+         class="bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px mt-4"
+    >
+    </div>
+  </div>
+  <div data-slot="card-content"
+       class="px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-sm"
+  >
+    <div class="flex items-center gap-4">
+      <div>
+        <h3 class="font-normal text-muted-foreground">
+          Full Name
+        </h3>
+        <span class="font-medium">
+          John Doe
+        </span>
+      </div>
+    </div>
+    <div class="flex items-center gap-4">
+      <div>
+        <h3 class="font-normal text-muted-foreground">
+          Email
+        </h3>
+        <span class="font-medium">
+          john.doe@example.com
+        </span>
+      </div>
+    </div>
+    <div class="flex items-center gap-4">
+      <div>
+        <h3 class="font-normal text-muted-foreground">
+          Phone
+        </h3>
+        <span class="font-medium">
+          +1 (555) 123-4567
+        </span>
+      </div>
+    </div>
+    <div class="flex items-center gap-4">
+      <div>
+        <h3 class="font-normal text-muted-foreground">
+          Location
+        </h3>
+        <span class="font-medium">
+          San Francisco, CA
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Card-Details EmptyState smoke-test 1`] = `""`;
+
+exports[`Components/Card-Details LongContent smoke-test 1`] = `
+<div data-slot="card"
+     class="bg-card text-card-foreground flex flex-col rounded-xl border py-6 shadow-sm overflow-hidden gap-3 animate-fade-in motion-reduce:animate-none transition-[box-shadow,border-color] duration-200 hover:shadow-lg hover:border-primary/20"
+     id="_r_ID_"
+>
+  <div data-slot="card-header"
+       class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6 pb-4"
+  >
+    <div data-slot="card-title"
+         class="leading-none font-semibold"
+    >
+      Detailed Information
+    </div>
+    <div data-slot="card-description"
+         class="text-muted-foreground text-sm"
+    >
+      Example with longer text content
+    </div>
+    <div data-orientation="horizontal"
+         role="none"
+         data-slot="separator"
+         class="bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px mt-4"
+    >
+    </div>
+  </div>
+  <div data-slot="card-content"
+       class="px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-sm"
+  >
+    <div class="flex items-center gap-4">
+      <div>
+        <h3 class="font-normal text-muted-foreground">
+          Description
+        </h3>
+        <span class="font-medium">
+          This is a very long description that demonstrates how the component handles text wrapping and longer content. It should wrap nicely within the available space.
+        </span>
+      </div>
+    </div>
+    <div class="flex items-center gap-4">
+      <div>
+        <h3 class="font-normal text-muted-foreground">
+          Notes
+        </h3>
+        <span class="font-medium">
+          Additional notes can be quite lengthy as well. The component uses a flexible layout that adapts to the content size while maintaining readability.
+        </span>
+      </div>
+    </div>
+    <div class="flex items-center gap-4">
+      <div>
+        <h3 class="font-normal text-muted-foreground">
+          Short Field
+        </h3>
+        <span class="font-medium">
+          Brief
+        </span>
+      </div>
+    </div>
+    <div class="flex items-center gap-4">
+      <div>
+        <h3 class="font-normal text-muted-foreground">
+          Another Field
+        </h3>
+        <span class="font-medium">
+          Value
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Card-Details ManyItems smoke-test 1`] = `
+<div data-slot="card"
+     class="bg-card text-card-foreground flex flex-col rounded-xl border py-6 shadow-sm overflow-hidden gap-3 animate-fade-in motion-reduce:animate-none transition-[box-shadow,border-color] duration-200 hover:shadow-lg hover:border-primary/20"
+     id="_r_ID_"
+>
+  <div data-slot="card-header"
+       class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6 pb-4"
+  >
+    <div data-slot="card-title"
+         class="leading-none font-semibold"
+    >
+      Complete Profile
+    </div>
+    <div data-slot="card-description"
+         class="text-muted-foreground text-sm"
+    >
+      All available user information
+    </div>
+    <div data-orientation="horizontal"
+         role="none"
+         data-slot="separator"
+         class="bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px mt-4"
+    >
+    </div>
+  </div>
+  <div data-slot="card-content"
+       class="px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-sm"
+  >
+    <div class="flex items-center gap-4">
+      <div>
+        <h3 class="font-normal text-muted-foreground">
+          First Name
+        </h3>
+        <span class="font-medium">
+          John
+        </span>
+      </div>
+    </div>
+    <div class="flex items-center gap-4">
+      <div>
+        <h3 class="font-normal text-muted-foreground">
+          Last Name
+        </h3>
+        <span class="font-medium">
+          Doe
+        </span>
+      </div>
+    </div>
+    <div class="flex items-center gap-4">
+      <div>
+        <h3 class="font-normal text-muted-foreground">
+          Email
+        </h3>
+        <span class="font-medium">
+          john.doe@example.com
+        </span>
+      </div>
+      <button data-slot="tooltip-trigger"
+              class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground disabled:opacity-100 size-7"
+              aria-label="Clique para copiar"
+              data-state="closed"
+      >
+        <div class="transition-[transform,opacity] motion-reduce:transition-none scale-0 opacity-0">
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-check stroke-primary"
+               aria-hidden="true"
+               id="Check"
+          >
+            <path d="M20 6 9 17l-5-5">
+            </path>
+          </svg>
+        </div>
+        <div class="absolute transition-[transform,opacity] motion-reduce:transition-none scale-100 opacity-100">
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-copy size-3"
+               aria-hidden="true"
+               id="Copy"
+          >
+            <rect width="14"
+                  height="14"
+                  x="8"
+                  y="8"
+                  rx="2"
+                  ry="2"
+            >
+            </rect>
+            <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2">
+            </path>
+          </svg>
+        </div>
+      </button>
+    </div>
+    <div class="flex items-center gap-4">
+      <div>
+        <h3 class="font-normal text-muted-foreground">
+          Phone
+        </h3>
+        <span class="font-medium">
+          +1 (555) 123-4567
+        </span>
+      </div>
+    </div>
+    <div class="flex items-center gap-4">
+      <div>
+        <h3 class="font-normal text-muted-foreground">
+          Date of Birth
+        </h3>
+        <span class="font-medium">
+          January 15, 1990
+        </span>
+      </div>
+    </div>
+    <div class="flex items-center gap-4">
+      <div>
+        <h3 class="font-normal text-muted-foreground">
+          Gender
+        </h3>
+        <span class="font-medium">
+          Male
+        </span>
+      </div>
+    </div>
+    <div class="flex items-center gap-4">
+      <div>
+        <h3 class="font-normal text-muted-foreground">
+          Address
+        </h3>
+        <span class="font-medium">
+          123 Main Street
+        </span>
+      </div>
+    </div>
+    <div class="flex items-center gap-4">
+      <div>
+        <h3 class="font-normal text-muted-foreground">
+          City
+        </h3>
+        <span class="font-medium">
+          San Francisco
+        </span>
+      </div>
+    </div>
+    <div class="flex items-center gap-4">
+      <div>
+        <h3 class="font-normal text-muted-foreground">
+          State
+        </h3>
+        <span class="font-medium">
+          California
+        </span>
+      </div>
+    </div>
+    <div class="flex items-center gap-4">
+      <div>
+        <h3 class="font-normal text-muted-foreground">
+          ZIP Code
+        </h3>
+        <span class="font-medium">
+          94102
+        </span>
+      </div>
+    </div>
+    <div class="flex items-center gap-4">
+      <div>
+        <h3 class="font-normal text-muted-foreground">
+          Country
+        </h3>
+        <span class="font-medium">
+          United States
+        </span>
+      </div>
+    </div>
+    <div class="flex items-center gap-4">
+      <div>
+        <h3 class="font-normal text-muted-foreground">
+          Occupation
+        </h3>
+        <span class="font-medium">
+          Software Engineer
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Card-Details MixedContentTypes smoke-test 1`] = `
+<div data-slot="card"
+     class="bg-card text-card-foreground flex flex-col rounded-xl border py-6 shadow-sm overflow-hidden gap-3 animate-fade-in motion-reduce:animate-none transition-[box-shadow,border-color] duration-200 hover:shadow-lg hover:border-primary/20"
+     id="_r_ID_"
+>
+  <div data-slot="card-header"
+       class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6 pb-4"
+  >
+    <div data-slot="card-title"
+         class="leading-none font-semibold"
+    >
+      Dashboard Overview
+    </div>
+    <div data-slot="card-description"
+         class="text-muted-foreground text-sm"
+    >
+      Various types of content in one card
+    </div>
+    <div data-orientation="horizontal"
+         role="none"
+         data-slot="separator"
+         class="bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px mt-4"
+    >
+    </div>
+  </div>
+  <div data-slot="card-content"
+       class="px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-sm"
+  >
+    <div class="flex items-center gap-4">
+      <div>
+        <h3 class="font-normal text-muted-foreground">
+          Active Users
+        </h3>
+        <span class="text-2xl font-bold text-green-600">
+          1,234
+        </span>
+      </div>
+    </div>
+    <div class="flex items-center gap-4">
+      <div>
+        <h3 class="font-normal text-muted-foreground">
+          Status
+        </h3>
+        <div class="flex gap-2">
+          <span data-slot="badge"
+                class="inline-flex items-center justify-center rounded-full border px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 [&amp;&gt;svg]:size-3 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden border-transparent bg-primary text-primary-foreground [a&amp;]:hover:bg-primary/90"
+          >
+            Active
+          </span>
+          <span data-slot="badge"
+                class="inline-flex items-center justify-center rounded-full border px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 [&amp;&gt;svg]:size-3 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-foreground [a&amp;]:hover:bg-accent [a&amp;]:hover:text-accent-foreground"
+          >
+            Verified
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="flex items-center gap-4">
+      <div>
+        <h3 class="font-normal text-muted-foreground">
+          API Key
+        </h3>
+        <span class="font-medium">
+          pk_live_abc123xyz
+        </span>
+      </div>
+      <button data-slot="tooltip-trigger"
+              class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground disabled:opacity-100 size-7"
+              aria-label="Clique para copiar"
+              data-state="closed"
+      >
+        <div class="transition-[transform,opacity] motion-reduce:transition-none scale-0 opacity-0">
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-check stroke-primary"
+               aria-hidden="true"
+               id="Check"
+          >
+            <path d="M20 6 9 17l-5-5">
+            </path>
+          </svg>
+        </div>
+        <div class="absolute transition-[transform,opacity] motion-reduce:transition-none scale-100 opacity-100">
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-copy size-3"
+               aria-hidden="true"
+               id="Copy"
+          >
+            <rect width="14"
+                  height="14"
+                  x="8"
+                  y="8"
+                  rx="2"
+                  ry="2"
+            >
+            </rect>
+            <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2">
+            </path>
+          </svg>
+        </div>
+      </button>
+    </div>
+    <div class="flex items-center gap-4">
+      <div>
+        <h3 class="font-normal text-muted-foreground">
+          Actions
+        </h3>
+        <button data-slot="button"
+                class="inline-flex items-center justify-center whitespace-nowrap font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground h-7 gap-1 rounded-[min(var(--radius-md),12px)] px-2.5 text-[0.8rem] in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&amp;_svg:not([class*='size-'])]:size-3.5"
+        >
+          View Details
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Card-Details NoHeaderContent smoke-test 1`] = `
+<div data-slot="card"
+     class="bg-card text-card-foreground flex flex-col rounded-xl border py-6 shadow-sm overflow-hidden gap-3 animate-fade-in motion-reduce:animate-none transition-[box-shadow,border-color] duration-200 hover:shadow-lg hover:border-primary/20"
+     id="_r_ID_"
+>
+  <div data-slot="card-content"
+       class="px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-sm"
+  >
+    <div class="flex items-center gap-4">
+      <div>
+        <h3 class="font-normal text-muted-foreground">
+          Username
+        </h3>
+        <span class="font-medium">
+          johndoe
+        </span>
+      </div>
+    </div>
+    <div class="flex items-center gap-4">
+      <div>
+        <h3 class="font-normal text-muted-foreground">
+          Member Since
+        </h3>
+        <span class="font-medium">
+          January 2024
+        </span>
+      </div>
+    </div>
+    <div class="flex items-center gap-4">
+      <div>
+        <h3 class="font-normal text-muted-foreground">
+          Last Login
+        </h3>
+        <span class="font-medium">
+          2 hours ago
+        </span>
+      </div>
+    </div>
+    <div class="flex items-center gap-4">
+      <div>
+        <h3 class="font-normal text-muted-foreground">
+          Account Type
+        </h3>
+        <span class="font-medium">
+          Premium
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Card-Details SingleColumn smoke-test 1`] = `
+<div data-slot="card"
+     class="bg-card text-card-foreground flex flex-col rounded-xl border py-6 shadow-sm overflow-hidden gap-3 animate-fade-in motion-reduce:animate-none transition-[box-shadow,border-color] duration-200 hover:shadow-lg hover:border-primary/20"
+     id="_r_ID_"
+>
+  <div data-slot="card-header"
+       class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6 pb-4"
+  >
+    <div data-slot="card-title"
+         class="leading-none font-semibold"
+    >
+      System Information
+    </div>
+    <div data-slot="card-description"
+         class="text-muted-foreground text-sm"
+    >
+      Current system status and configuration
+    </div>
+    <div data-orientation="horizontal"
+         role="none"
+         data-slot="separator"
+         class="bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px mt-4"
+    >
+    </div>
+  </div>
+  <div data-slot="card-content"
+       class="px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-sm md:grid-cols-1"
+  >
+    <div class="flex items-center gap-4">
+      <div>
+        <h3 class="font-normal text-muted-foreground">
+          Server Status
+        </h3>
+        <span data-slot="badge"
+              class="inline-flex items-center justify-center rounded-full border px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 [&amp;&gt;svg]:size-3 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden border-transparent bg-primary text-primary-foreground [a&amp;]:hover:bg-primary/90"
+        >
+          Online
+        </span>
+      </div>
+    </div>
+    <div class="flex items-center gap-4">
+      <div>
+        <h3 class="font-normal text-muted-foreground">
+          Uptime
+        </h3>
+        <span class="font-medium">
+          99.9%
+        </span>
+      </div>
+    </div>
+    <div class="flex items-center gap-4">
+      <div>
+        <h3 class="font-normal text-muted-foreground">
+          Last Backup
+        </h3>
+        <span class="font-medium">
+          2024-03-10 14:30:00 UTC
+        </span>
+      </div>
+    </div>
+    <div class="flex items-center gap-4">
+      <div>
+        <h3 class="font-normal text-muted-foreground">
+          Database Size
+        </h3>
+        <span class="font-medium">
+          2.4 GB
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Card-Details WithCopyButtons smoke-test 1`] = `
+<div data-slot="card"
+     class="bg-card text-card-foreground flex flex-col rounded-xl border py-6 shadow-sm overflow-hidden gap-3 animate-fade-in motion-reduce:animate-none transition-[box-shadow,border-color] duration-200 hover:shadow-lg hover:border-primary/20"
+     id="_r_ID_"
+>
+  <div data-slot="card-header"
+       class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6 pb-4"
+  >
+    <div data-slot="card-title"
+         class="leading-none font-semibold"
+    >
+      API Credentials
+    </div>
+    <div data-slot="card-description"
+         class="text-muted-foreground text-sm"
+    >
+      Your API keys and authentication details
+    </div>
+    <div data-orientation="horizontal"
+         role="none"
+         data-slot="separator"
+         class="bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px mt-4"
+    >
+    </div>
+  </div>
+  <div data-slot="card-content"
+       class="px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-sm"
+  >
+    <div class="flex items-center gap-4">
+      <div>
+        <h3 class="font-normal text-muted-foreground">
+          API Key
+        </h3>
+        <span class="font-medium">
+          sk_live_1234567890abcdef
+        </span>
+      </div>
+      <button data-slot="tooltip-trigger"
+              class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground disabled:opacity-100 size-7"
+              aria-label="Clique para copiar"
+              data-state="closed"
+      >
+        <div class="transition-[transform,opacity] motion-reduce:transition-none scale-0 opacity-0">
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-check stroke-primary"
+               aria-hidden="true"
+               id="Check"
+          >
+            <path d="M20 6 9 17l-5-5">
+            </path>
+          </svg>
+        </div>
+        <div class="absolute transition-[transform,opacity] motion-reduce:transition-none scale-100 opacity-100">
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-copy size-3"
+               aria-hidden="true"
+               id="Copy"
+          >
+            <rect width="14"
+                  height="14"
+                  x="8"
+                  y="8"
+                  rx="2"
+                  ry="2"
+            >
+            </rect>
+            <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2">
+            </path>
+          </svg>
+        </div>
+      </button>
+    </div>
+    <div class="flex items-center gap-4">
+      <div>
+        <h3 class="font-normal text-muted-foreground">
+          Secret Key
+        </h3>
+        <span class="font-medium">
+          sk_secret_abcdef1234567890
+        </span>
+      </div>
+      <button data-slot="tooltip-trigger"
+              class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground disabled:opacity-100 size-7"
+              aria-label="Clique para copiar"
+              data-state="closed"
+      >
+        <div class="transition-[transform,opacity] motion-reduce:transition-none scale-0 opacity-0">
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-check stroke-primary"
+               aria-hidden="true"
+               id="Check"
+          >
+            <path d="M20 6 9 17l-5-5">
+            </path>
+          </svg>
+        </div>
+        <div class="absolute transition-[transform,opacity] motion-reduce:transition-none scale-100 opacity-100">
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-copy size-3"
+               aria-hidden="true"
+               id="Copy"
+          >
+            <rect width="14"
+                  height="14"
+                  x="8"
+                  y="8"
+                  rx="2"
+                  ry="2"
+            >
+            </rect>
+            <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2">
+            </path>
+          </svg>
+        </div>
+      </button>
+    </div>
+    <div class="flex items-center gap-4">
+      <div>
+        <h3 class="font-normal text-muted-foreground">
+          Webhook URL
+        </h3>
+        <span class="font-medium">
+          https://api.example.com/webhook
+        </span>
+      </div>
+      <button data-slot="tooltip-trigger"
+              class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground disabled:opacity-100 size-7"
+              aria-label="Clique para copiar"
+              data-state="closed"
+      >
+        <div class="transition-[transform,opacity] motion-reduce:transition-none scale-0 opacity-0">
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-check stroke-primary"
+               aria-hidden="true"
+               id="Check"
+          >
+            <path d="M20 6 9 17l-5-5">
+            </path>
+          </svg>
+        </div>
+        <div class="absolute transition-[transform,opacity] motion-reduce:transition-none scale-100 opacity-100">
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-copy size-3"
+               aria-hidden="true"
+               id="Copy"
+          >
+            <rect width="14"
+                  height="14"
+                  x="8"
+                  y="8"
+                  rx="2"
+                  ry="2"
+            >
+            </rect>
+            <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2">
+            </path>
+          </svg>
+        </div>
+      </button>
+    </div>
+    <div class="flex items-center gap-4">
+      <div>
+        <h3 class="font-normal text-muted-foreground">
+          Environment
+        </h3>
+        <span class="font-medium">
+          Production
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Card-Details WithCustomContent smoke-test 1`] = `
+<div data-slot="card"
+     class="bg-card text-card-foreground flex flex-col rounded-xl border py-6 shadow-sm overflow-hidden gap-3 animate-fade-in motion-reduce:animate-none transition-[box-shadow,border-color] duration-200 hover:shadow-lg hover:border-primary/20"
+     id="_r_ID_"
+>
+  <div data-slot="card-header"
+       class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6 pb-4"
+  >
+    <div data-slot="card-title"
+         class="leading-none font-semibold"
+    >
+      Order Details
+    </div>
+    <div data-slot="card-description"
+         class="text-muted-foreground text-sm"
+    >
+      Information about your recent order
+    </div>
+    <div data-orientation="horizontal"
+         role="none"
+         data-slot="separator"
+         class="bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px mt-4"
+    >
+    </div>
+  </div>
+  <div data-slot="card-content"
+       class="px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-sm"
+  >
+    <div class="flex items-center gap-4">
+      <div>
+        <h3 class="font-normal text-muted-foreground">
+          Order ID
+        </h3>
+        <span class="font-medium">
+          #ORD-2024-001
+        </span>
+      </div>
+    </div>
+    <div class="flex items-center gap-4">
+      <div>
+        <h3 class="font-normal text-muted-foreground">
+          Status
+        </h3>
+        <span data-slot="badge"
+              class="inline-flex items-center justify-center rounded-full border px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 [&amp;&gt;svg]:size-3 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden border-transparent bg-primary text-primary-foreground [a&amp;]:hover:bg-primary/90"
+        >
+          Shipped
+        </span>
+      </div>
+    </div>
+    <div class="flex items-center gap-4">
+      <div>
+        <h3 class="font-normal text-muted-foreground">
+          Total Amount
+        </h3>
+        <span class="font-medium">
+          $299.99
+        </span>
+      </div>
+    </div>
+    <div class="flex items-center gap-4">
+      <div>
+        <h3 class="font-normal text-muted-foreground">
+          Shipping Address
+        </h3>
+        <span class="font-medium">
+          123 Main St, Apt 4B, New York, NY 10001
+        </span>
+      </div>
+    </div>
+    <div class="flex items-center gap-4">
+      <div>
+        <h3 class="font-normal text-muted-foreground">
+          Estimated Delivery
+        </h3>
+        <span class="font-medium">
+          March 15, 2024
+        </span>
+      </div>
+    </div>
+    <div class="flex items-center gap-4">
+      <div>
+        <h3 class="font-normal text-muted-foreground">
+          Tracking
+        </h3>
+        <span data-slot="badge"
+              class="inline-flex items-center justify-center rounded-full border px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 [&amp;&gt;svg]:size-3 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-foreground [a&amp;]:hover:bg-accent [a&amp;]:hover:text-accent-foreground"
+        >
+          1Z999AA10123456784
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+`;

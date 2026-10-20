@@ -2,14 +2,14 @@
 "use client"
 
 import { RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Legend } from "recharts"
-import { cn } from "../../../lib/utils"
+import { cn } from "../cn.js"
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
   ChartLegend,
   ChartLegendContent,
-} from "../../primitives/chart"
+} from "../../primitives/chart.js"
 import {
   createChartConfig,
   formatChartValue,
@@ -18,14 +18,16 @@ import {
   getLegendHorizontalAlign,
   getLegendLayout,
   getLegendVerticalAlign,
-} from "./lib"
-import { type IGRPChartProps, type IGRPRadarConfig } from "./types"
+} from "./lib.js"
+import { type IGRPChartProps, type IGRPRadarConfig } from "./types.js"
 
 /**
  * Props for the IGRPRadarChart component.
  * @see IGRPRadarChart
  */
-export interface IGRPRadarChartProps extends IGRPChartProps {
+export interface IGRPRadarChartProps extends Omit<IGRPChartProps, "categoryKey"> {
+  /** Unused by polar charts; kept optional for call sites that already pass it. */
+  categoryKey?: string
   /** Radar series configurations. */
   radars: IGRPRadarConfig[]
   /** Key for angle axis labels. */
@@ -70,7 +72,7 @@ function IGRPRadarChartInner({
   width,
   className,
   valueFormatter,
-  gridColor = "#e5e7eb",
+  gridColor = "var(--border)",
   backgroundColor,
   tooltipIndicator = "line",
   footer,
@@ -90,10 +92,7 @@ function IGRPRadarChartInner({
   const chartConfig = createChartConfig(radars)
 
   return (
-    <div
-      className={`w-full overflow-hidden ${className || ""}`}
-      style={backgroundColor ? { backgroundColor } : undefined}
-    >
+    <div className={cn("w-full overflow-hidden", className)} style={backgroundColor ? { backgroundColor } : undefined}>
       {(title || description) && (
         <div className={cn("pb-3")}>
           {title && <div className={cn("text-xl font-semibold")}>{title}</div>}
@@ -114,7 +113,10 @@ function IGRPRadarChartInner({
               }}
             >
               {showTooltip && (
-                <ChartTooltip cursor={false} content={<ChartTooltipContent indicator={tooltipIndicator} />} />
+                <ChartTooltip
+                  cursor={false}
+                  content={<ChartTooltipContent indicator={tooltipIndicator} valueFormatter={valueFormatter} />}
+                />
               )}
 
               {showPolarGrid && (
@@ -125,7 +127,8 @@ function IGRPRadarChartInner({
                   }
                   stroke={gridColor}
                   radialLines={showRadiusLines}
-                  fill={gridFilled ? `var(--chart-1-20)` : undefined}
+                  fill={gridFilled ? "var(--chart-1)" : undefined}
+                  fillOpacity={gridFilled ? 0.2 : undefined}
                 />
               )}
 
@@ -178,7 +181,7 @@ function IGRPRadarChartInner({
       </div>
 
       {footer && (
-        <div className={cn("flex-col items-start gap-2 text-sm pt-4")}>
+        <div className={cn("flex-col items-start gap-2 pt-4 text-sm")}>
           {footer.description && <div className={cn("leading-none text-muted-foreground")}>{footer.description}</div>}
         </div>
       )}

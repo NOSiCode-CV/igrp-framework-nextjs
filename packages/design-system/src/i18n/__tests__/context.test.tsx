@@ -1,0 +1,73 @@
+import { describe, expect, it } from "vitest"
+import { render, screen } from "@testing-library/react"
+
+import { IGRPI18nProvider, useIGRPi18n, IGRP_I18N_DEFAULTS_PT } from "../index.js"
+
+function StringsProbe({ keyPath }: { keyPath: keyof typeof IGRP_I18N_DEFAULTS_PT.dataTable }) {
+  const strings = useIGRPi18n()
+  return <span data-testid="probe">{strings.dataTable[keyPath]}</span>
+}
+
+describe("IGRPI18nProvider / useIGRPi18n", () => {
+  it("returns pt-PT defaults when no provider is mounted", () => {
+    render(<StringsProbe keyPath="notFound" />)
+    expect(screen.getByTestId("probe")).toHaveTextContent(IGRP_I18N_DEFAULTS_PT.dataTable.notFound)
+  })
+
+  it("merges partial overrides with defaults (deep merge per group)", () => {
+    render(
+      <IGRPI18nProvider strings={{ dataTable: { notFound: "Nothing here." } }}>
+        <StringsProbe keyPath="notFound" />
+        <StringsProbe keyPath="clearFilters" />
+      </IGRPI18nProvider>
+    )
+
+    const probes = screen.getAllByTestId("probe")
+    expect(probes[0]).toHaveTextContent("Nothing here.")
+    // Sibling key in the same group should fall back to the pt-PT default.
+    expect(probes[1]).toHaveTextContent(IGRP_I18N_DEFAULTS_PT.dataTable.clearFilters)
+  })
+
+  it("does not leak strings across sibling groups", () => {
+    function Probe() {
+      const s = useIGRPi18n()
+      return (
+        <>
+          <span data-testid="phone-placeholder">{s.inputPhone.placeholder}</span>
+          <span data-testid="number-increment">{s.inputNumber.incrementLabel}</span>
+        </>
+      )
+    }
+    render(
+      <IGRPI18nProvider strings={{ inputPhone: { placeholder: "Tel #" } }}>
+        <Probe />
+      </IGRPI18nProvider>
+    )
+
+    expect(screen.getByTestId("phone-placeholder")).toHaveTextContent("Tel #")
+    expect(screen.getByTestId("number-increment")).toHaveTextContent(IGRP_I18N_DEFAULTS_PT.inputNumber.incrementLabel)
+  })
+
+  it("accepts a full catalog as `strings`", async () => {
+    const { IGRP_I18N_DEFAULTS_EN } = await import("../strings.en.js")
+    render(
+      <IGRPI18nProvider strings={IGRP_I18N_DEFAULTS_EN}>
+        <StringsProbe keyPath="notFound" />
+      </IGRPI18nProvider>
+    )
+    expect(screen.getByTestId("probe")).toHaveTextContent("No records found.")
+  })
+
+  it("merges overrides over an explicit `base` catalog", async () => {
+    const { IGRP_I18N_DEFAULTS_FR } = await import("../strings.fr.js")
+    render(
+      <IGRPI18nProvider base={IGRP_I18N_DEFAULTS_FR} strings={{ dataTable: { notFound: "Rien." } }}>
+        <StringsProbe keyPath="notFound" />
+        <StringsProbe keyPath="clearFilters" />
+      </IGRPI18nProvider>
+    )
+    const probes = screen.getAllByTestId("probe")
+    expect(probes[0]).toHaveTextContent("Rien.")
+    expect(probes[1]).toHaveTextContent("Effacer")
+  })
+})

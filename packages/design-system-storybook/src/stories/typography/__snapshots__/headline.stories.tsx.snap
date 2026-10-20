@@ -1,0 +1,54 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`Components/Typography/Headline CustomClass smoke-test 1`] = `
+<div class="container mx-auto m-12">
+  <div id="_r_ID_"
+       class="flex gap-2 items-start text-primary"
+       rolecolor="solid"
+       color="destructive"
+  >
+    <div class="flex flex-col gap-1">
+      <h3 class="scroll-m-20 font-bold tracking-tight text-balance text-2xl lg:text-3xl">
+        Styled Headline
+      </h3>
+      <p class="text-sm">
+        This is a description text.
+      </p>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Typography/Headline H2Variant smoke-test 1`] = `
+<div class="container mx-auto m-12">
+  <div id="_r_ID_"
+       class="flex gap-2 items-start text-primary"
+  >
+    <div class="flex flex-col gap-1">
+      <h2 class="scroll-m-20 font-bold tracking-tight text-balance text-3xl lg:text-4xl">
+        H2 Headline
+      </h2>
+      <p class="text-sm">
+        This is a description text.
+      </p>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Typography/Headline WithoutDescription smoke-test 1`] = `
+<div class="container mx-auto m-12">
+  <div id="_r_ID_"
+       class="flex gap-2 items-start text-primary"
+  >
+    <div class="flex flex-col gap-1">
+      <h1 class="scroll-m-20 tracking-tight text-balance text-4xl font-extrabold lg:text-5xl">
+        Default Headline
+      </h1>
+      <p class="text-sm">
+        This is a description text.
+      </p>
+    </div>
+  </div>
+</div>
+`;

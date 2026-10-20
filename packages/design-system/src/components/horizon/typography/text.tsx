@@ -4,8 +4,8 @@
 import { useId } from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 
-import { IGRPColors, type IGRPColorVariants } from "../../../lib/colors"
-import { cn } from "../../../lib/utils"
+import { type IGRPColorVariants } from "../../../lib/colors.js"
+import { cn } from "../cn.js"
 
 const EMPTY_HIGHLIGHT: string[] = []
 
@@ -29,9 +29,9 @@ function TextWithHighlight({ text, highlight }: { text: string; highlight: strin
   while ((match = regex.exec(remaining)) !== null) {
     parts.push(remaining.slice(lastIndex, match.index))
     parts.push(
-      <mark key={`h-${matchIndex}`} className={cn("bg-yellow-200 dark:bg-yellow-800 px-1 rounded")}>
+      <mark key={`h-${matchIndex}`} className={cn("rounded bg-highlight px-1 text-highlight-foreground")}>
         {match[0]}
-      </mark>,
+      </mark>
     )
     lastIndex = match.index + match[0].length
     matchIndex += 1
@@ -41,7 +41,7 @@ function TextWithHighlight({ text, highlight }: { text: string; highlight: strin
   return <>{parts}</>
 }
 
-const igrpTextVariants = cva("transition-all duration-300 ease-in-out", {
+const igrpTextVariants = cva("transition-[font-size,line-height] duration-300 ease-in-out", {
   variants: {
     size: {
       sm: "text-sm leading-5",
@@ -84,7 +84,7 @@ const igrpTextVariants = cva("transition-all duration-300 ease-in-out", {
 interface IGRPTextProps extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof igrpTextVariants> {
   /** Text content. */
   children: React.ReactNode
-  /** Color variant. */
+  /** Color variant. @deprecated Use `className` instead. */
   variant?: IGRPColorVariants
   /** Animate on scroll into view. */
   animate?: boolean
@@ -105,7 +105,6 @@ interface IGRPTextProps extends React.HTMLAttributes<HTMLDivElement>, VariantPro
  */
 function IGRPText({
   children,
-  variant = "primary",
   size,
   weight,
   align,
@@ -118,8 +117,10 @@ function IGRPText({
   className,
   name,
   id,
+  variant: _deprecatedVariant,
   ...props
 }: IGRPTextProps) {
+  void _deprecatedVariant // deprecated and unused; destructured only to keep it off the DOM
   const _id = useId()
   const ref = name ?? id ?? _id
 
@@ -138,15 +139,12 @@ function IGRPText({
         }
     : {}
 
-  const colorClass = IGRPColors["solid"][variant]
-
   return (
     <Component
       className={cn(
         igrpTextVariants({ size, weight, align, spacing }),
-        colorClass.text,
-        animate && "animate-[igrp-text-fade-in_0.3s_ease-in-out_0.1s_both]",
-        className,
+        animate && "animate-[igrp-text-fade-in_0.3s_ease-in-out_0.1s_both] motion-reduce:animate-none",
+        className
       )}
       style={truncateStyles}
       id={ref}

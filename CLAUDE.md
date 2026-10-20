@@ -8,63 +8,18 @@ Read `.claude/shared/hard-rules.md` before doing anything — including when the
 
 For release/publish tasks specifically: always query the registry to verify actual published state before drawing conclusions. Use per-package `release` scripts (not `changeset publish`) to ensure `--tag latest` is always respected.
 
+## Open items
+
+Open known issues: `packages/design-system/KNOWN-ISSUES.md`. To hand over a defect that is
+diagnosed but deliberately not yet fixed, create a `KNOWN-ISSUES.md` in the
+package's directory (for one that spans packages, the package where the fix
+starts, naming the others). Before reviewing or making non-trivial changes to a
+package, read that file if present; delete the entry when its fix lands, and
+the file when it is empty.
+
 ## Release workflow — when the user says "bump and release"
 
-> **Use the `/release-framework` command.** Type `/release-framework` in Claude Code — it automates the full workflow below (detect changed packages, create changeset, version, build, publish, verify) with no manual steps.
-
-When the user asks to bump a version and/or release a package, execute these steps in order. No deviations.
-
-**1. Verify registry state first**
-```powershell
-pnpm view <pkg> version --registry=https://sonatype.nosi.cv/repository/igrp/
-```
-Confirm the current published version before doing anything else.
-
-**2. Apply versions from changesets**
-```powershell
-pnpm version:changesets
-```
-This consumes pending `.changeset/*.md` files, bumps `package.json` versions, and regenerates `CHANGELOG.md`. Commit the result.
-
-**3. Build (respect dependency order)**
-Build only the affected package(s). Order: `next-auth → next-types → design-system → next-ui → next`.
-- Single package: use its specific build script (e.g. `pnpm build:next-ui`)
-- All framework packages: `pnpm build:framework`
-
-**4. Release via per-package script**
-```powershell
-# from the repo root — example for next-ui:
-pnpm --filter @igrp/framework-next-ui release
-```
-Each package's `release` script runs `pnpm publish --registry=... --tag latest`. **Never** use `changeset publish` or `pnpm release:publish` — they use `--tag beta` in pre-release mode.
-
-**5. Verify the publish landed**
-```powershell
-pnpm view <pkg> version --registry=https://sonatype.nosi.cv/repository/igrp/
-```
-Confirm the new version is live before reporting success.
-
-## Repository Overview
-
-`igrp-framework-nextjs` is a pnpm workspace monorepo that publishes the IGRP Framework — a set of React/Next.js packages used to build IGRP applications — plus reference templates. Published artifacts go to the internal NOSi Sonatype registry.
-
-Requires **Node ≥ 22** and **pnpm**. Workspaces: `packages/**`, `templates/**`, `apps/**`.
-
-## Workspace Layout
-
-```
-packages/
-  design-system/              → @igrp/igrp-framework-react-design-system  (client UI library)
-  design-system-storybook/    → Storybook + visual/regression tests for the DS
-  framework/
-    next-auth/                → @igrp/framework-next-auth   (NextAuth wrappers, OIDC, session, middleware)
-    next-types/               → @igrp/framework-next-types  (shared TS types; depends on next-auth types)
-    next-ui/                  → @igrp/framework-next-ui     (client template chrome)
-    next/                     → @igrp/framework-next        (server entry: IGRPLayout, IGRPRootLayout, igrpBuildConfig, API client)
-templates/
-  demo-legacy/                → older reference template
-scripts/                      → repo utilities (e.g. migrate-primitive-names.mjs)
-```
+Run the `/release-framework` command. It automates the full workflow (verify registry state → detect changed packages → create changeset → version → build in dependency order → publish per-package → verify) with no manual steps. The non-negotiable constraints it enforces live in `.claude/shared/hard-rules.md`.
 
 Each package/template has its own `CLAUDE.md` with package-specific expertise. Claude Code auto-loads the nearest one when you edit files inside that directory.
 
@@ -80,9 +35,7 @@ Each package/template has its own `CLAUDE.md` with package-specific expertise. C
 
 ### Three-layer UI model (design system)
 
-@.claude/shared/three-layer-ui.md
-
-The distinction is load-bearing — mixing layers incorrectly produces inconsistent UI and breaks form wiring.
+The design system has three layers — **Horizon** (`IGRP*`), **Primitives** (unprefixed, shadcn-style Radix + CVA wrappers), and **Custom** (`IGRP*`, built on Horizon). The distinction is load-bearing: mixing them incorrectly produces inconsistent UI and breaks form wiring. Which layer to reach for is a _consumer_ rule and lives with the consumer — `templates/demo-v1/.agents/rules/ui.md`. Authoring rules for the layers themselves are in `packages/design-system/CLAUDE.md`.
 
 ### Framework runtime layering
 
@@ -91,15 +44,15 @@ The distinction is load-bearing — mixing layers incorrectly produces inconsist
 - **`@igrp/framework-next-auth`** — NextAuth.js wrappers with multiple entry points (`./server`, `./client`, `./session`, `./jwt`, `./middleware`, `./config`, `./sanitize`, `./oidc`, `./providers`, `./types`). Respect these entry points instead of reaching into `dist/`.
 - **`@igrp/framework-next-types`** — shared TS types. Depends on `@igrp/framework-next-auth` for session/JWT types.
 
-### Template architecture (templates/demo)
+Each package's public surface is its `exports` map in `package.json` plus `src/` — read those rather than trusting a copy here.
 
-Demo is the canonical example of how to consume the framework:
+### Template architecture (`templates/demo-v1` — the only template)
 
-1. **Middleware** (`src/middleware.ts`) validates the NextAuth session, bypasses public/login/logout/API routes, honors `IGRP_PREVIEW_MODE`.
-2. **Root layout** (`src/app/layout.tsx`) wraps the app in `IGRPRootLayout` + providers.
-3. **IGRP layout** (`src/app/(igrp)/layout.tsx`) runs auth checks, loads session, renders `IGRPLayout` with header/sidebar around the route group.
-4. **Config builder** (`src/igrp.template.config.ts`) uses `igrpBuildConfig` to assemble layout + API + toaster + session config, and swaps in mock data when `IGRP_PREVIEW_MODE=true`.
-5. **Server actions** (`src/actions/igrp/`) fetch layout + session server-side; `api/auth/*` holds NextAuth routes.
+`demo-v1` is the canonical example of how to consume the framework. Its layer-by-layer
+walkthrough lives in `templates/demo-v1/CLAUDE.md`, which loads when you work in
+that directory.
+
+Critical env constraint: when `NEXT_PUBLIC_BASE_PATH` is set, `NEXTAUTH_URL` must include both the basePath **and** `/api/auth` (e.g. `http://localhost:3000/apps/template/api/auth`). NextAuth treats `NEXTAUTH_URL` as the API root, not the app root — getting this wrong produces a login loop with a growing nested `callbackUrl` chain.
 
 @.claude/shared/preview-mode.md
 
@@ -107,92 +60,31 @@ Demo is the canonical example of how to consume the framework:
 
 @.claude/shared/tailwind-v4.md
 
-### UI rules (design system consumers + templates)
+Inside `templates/demo-v1/**/*.{ts,tsx}`, the template's agent rules are canonical in `templates/demo-v1/.agents/` — `rules/ui.md` (design-system hard rules) and `rules/permissions.md` (permission gating). `AGENTS.md` is a thin bridge that points there; rule content belongs in `.agents/rules/`, never in a bridge.
 
-@.claude/shared/ui-rules.md
+The full component reference is the skill at `templates/demo-v1/.agents/skills/igrp-design-system/SKILL.md`. That subtree is **not committed** — the zip script injects it from `plugins/igrp/skills/design-system/`, which is the copy to edit in this repo. Treat it as authoritative and load only the sub-files you need.
 
-Inside `templates/demo/**/*.{ts,tsx}`, the authoritative component reference is `templates/demo/skills/igrp-design-system/SKILL.md` — load only the sub-files you need.
+## Build tooling
 
-## Package API Quick Reference
+Each package's build pipeline is its `scripts` block in `package.json`. Two things that aren't obvious from reading them:
 
-### `@igrp/framework-next-auth` — entry points
-| Entry point | Key exports |
-|---|---|
-| `./server` | `getServerSession`, `getServerSessionStrict` (throws on missing session), `NextAuth` factory |
-| `./client` | `useSession`, `useSafeSession`, `signIn`, `signOut`, `SessionProvider` |
-| `./config` | `IGRPAuthConfigError`, `withIGRPAuth()`, edge-safe config builder |
-| `./oidc` | `refreshOidcAccessToken`, `revokeOidcSession` |
-| `./providers` | `createAuthProviderFromEnv`, `IGRP_AUTH_PROVIDER_ID` |
-| `./middleware` | `withAuth` |
-| `./jwt` | JWT helpers/types |
-| `./session` | Session shape (includes `accessToken`) |
-| `./sanitize` | Redirect URL sanitization |
-| `./types` | `AuthProviderId` enum |
+- The React packages (`design-system`, `framework-next-ui`, `framework-next`) run `build:js` (Babel: strip TS, transform JSX, React Compiler — one pass over `src/`) → `build:types` (`tsc --emitDeclarationOnly`). Babel emits untouched ESM at esnext, file-per-module, directives preserved; there is deliberately no `@babel/preset-env` and no bundler, because `templates/demo-v1` consumes `dist/` directly (`use client` boundaries, `optimizePackageImports`, Tailwind `@source` scanning). Shared config: `scripts/react-compiler-babel-config.cjs`.
+- Escape hatch when the React Compiler misbehaves: `build:without_reactcompiler`.
 
-Source: `packages/framework/next-auth/src/` — server.ts, client.ts, config.ts, middleware.ts, oidc.ts, providers.ts, etc.
+### Vendored agent skills
 
-### `@igrp/framework-next-types` — key types
-`IGRPConfigArgs`, `IGRPLayoutConfigArgs`, `IGRPConfigClient`, `IGRPMenuType`, `IGRPApplicationType`, `IGRPResourceType`, `IGRPHeaderDataArgs`, `IGRPNotificationArgs`, `IGRPSidebarDataArgs`, `IGRPMockDataAsync`, `IGRPToasterPosition`, `IGRPPackageJson`
+Third-party skills live in `.agents/skills/`, pinned to their upstream source and content hash by `skills-lock.json`. `.claude/skills/` is a **generated, gitignored bridge** over that directory — run `pnpm skills:sync` after a fresh clone (or after editing `.agents/skills/` or `skills-lock.json`), or Claude Code won't load any of them. Never edit `.claude/skills/` directly; the next sync overwrites it.
 
-Source: `packages/framework/next-types/src/types/` — igrp.ts, access-management.ts, header.ts, sidebar.ts, globals.ts
+Real file copies rather than symlinks, deliberately: this repo is developed on Windows clones with `core.symlinks=false`, where a committed symlink is materialised as a regular file and the bridge silently becomes a second committed copy that drifts past the lockfile's hash check. `pnpm skills:sync:check` verifies the local bridge; CI runs `--verify-lock` instead, since a clean checkout has no bridge to compare.
 
-### `@igrp/framework-next` — entry points
-| Entry point | Key exports |
-|---|---|
-| `.` (root) | `IGRPRootLayout`, `IGRPLayout`, `IGRPGlobalLoading`, `igrpBuildConfig`, `igrpGetAccessClient`, `igrpGetAccessClientConfig` |
-| `./errors` | `IgrpError`, `IgrpConfigError`, `IgrpAuthConfigError`, `IgrpLayoutDataError` |
-| `./app-error` | App-level error boundary |
-| `./logger` | Logger utility |
-| `./actions` | Server actions (`fetchMenusAction`, `fetchCurrentUserAction`, …) + `ActionResult<T>` |
-| `./client` | `useLayoutData` hook |
+## Tests
 
-Source: `packages/framework/next/src/` — igrp-layout.tsx, igrp-root-layout.tsx, lib/build.ts, lib/api-client.ts, lib/api-config.ts, errors.ts
+There is **no root `test` script** — each package runs **Vitest** on its own:
 
-### `@igrp/framework-next-ui` — key components
-**Providers:** `IGRPRootProviders`, `IGRPSessionProvider`, `IGRPActiveThemeProvider`, `IGRPNestedProviders`
-**Header:** `IGRPTemplateHeader`, `IGRPHeaderSkeleton`, `IGRPHeaderError`
-**Sidebar:** `IGRPTemplateSidebar`, `IGRPSidebarSkeleton`, `IGRPSidebarError`
-**Nav:** `IGRPTemplateMenus`, `IGRPTemplateNavUser`, `IGRPTemplateAppSwitcher`, `IGRPTemplateBreadcrumbs`
-**Search/settings:** `IGRPTemplateCommandSearch`, `IGRPTemplateThemeSelector`, `IGRPTemplateModeSwitcher`
-**Auth:** `IGRPAuthCarousel`, `IGRPAuthForm`
-**Error:** `IGRPGlobalError`, `IGRPSegmentError`, `IGRPLayoutErrorBoundary`, `IGRPTemplateNotFound`
-**Misc:** `IGRPSessionWatcher`, `IGRPTemplateNotifications`, `IGRPTemplateLoading`
+- `test` (`vitest run`) in `design-system`, `framework-next-auth`, `framework-next-ui`, `framework-next` and `framework-next-i18n`; each one's `release` runs it (with `lint` and `typecheck`) before publishing. `framework-next-types` has no tests — its gates are `check:barrel` and `check:contract` in `build`.
+- `pnpm --filter @igrp/template-migrator test` — runs `vitest run` (migration logic). Its `release` script gates the publish on `typecheck` → `test` → `check:drift` (`tsx scripts/check-drift.ts`), the last of which fails if `templates/demo-v1` has drifted from the shipped migrations. The same three run per-MR as the `check_template_drift` job in `.gitlab-ci.yml`.
+- `packages/design-system-storybook` — `test:vitest` (component) and `test-storybook` (Playwright snapshots; Storybook must be running).
 
-Source: `packages/framework/next-ui/src/` — providers/, components/templates/, components/auth/, components/errors/
+Run a **single test**: `pnpm --filter <package> exec vitest run path/to/file.test.ts -t "test name"` (drop `run` for watch mode). The `-t` flag filters by test/describe name.
 
-### `@igrp/igrp-framework-react-design-system` — component layers
-**Horizon (IGRP\* — always first choice):**
-Forms: `IGRPForm`, `IGRPInput`, `IGRPSelect`, `IGRPCheckbox`, `IGRPSwitch`, `IGRPTextarea`
-Data: `IGRPDataTable` (pagination, filter, sort, row actions)
-Charts: `IGRPAreaChart`, `IGRPBarChart`, `IGRPLineChart`, `IGRPPieChart`, `IGRPRadarChart`, `IGRPRadialBarChart`
-Cards: `IGRPCard`, `IGRPCardDetails`, `IGRPStatsCard`
-Calendar: `IGRPCalendarSingle`, `IGRPCalendarRange`, `IGRPCalendarMultiple`
-Dialogs: `IGRPModalDialog`, `IGRPAlertDialog`
-Other: `IGRPMenuNavigation`, `IGRPChat`, `IGRPAccordion`, `IGRPTabs`, `IGRPAvatar`, `IGRPBadge`, `IGRPButton`, `IGRPAlert`, `IGRPCommand`
-
-**Primitives (Radix + CVA — only when Horizon is too opinionated):**
-`Button`, `Card`, `Input`, `Textarea`, `Badge`, `Avatar`, `Separator`, `Dialog`, `AlertDialog`, `Drawer`, `Popover`, `Sheet`, `Breadcrumb`, `NavigationMenu`, `Pagination`, `Tabs`, `Sidebar`, `Form`, `Field`, `Label`, `Checkbox`, `RadioGroup`, `Select`, `InputOTP`, `Slider`, `Switch`, `Toggle`, `Accordion`, `Collapsible`, `CommandDialog`, `DropdownMenu`, `Table`, `Progress`, `Skeleton`, `Spinner`, `HoverCard`, `Tooltip`, `ContextMenu`, `Carousel`, `ScrollArea`, `Chart*`
-
-**Custom (domain-specific):** `IGRPUserAvatar`, `IGRPStatsCardMini`, `IGRPStatsCardTopBorderColored`, `IGRPStatusBanner`
-
-**Utilities:** `cn()`, `formatChartValue`, `getChartHeight`, `IGRP_CHART_COLORS`
-
-Source: `packages/design-system/src/components/` — horizon/, primitives/, custom/
-
----
-
-## Build tooling by package
-
-| Package | Build | React Compiler | Tailwind prebuild |
-| --- | --- | --- | --- |
-| `framework-next-auth` | tsup | no | no |
-| `framework-next-types` | `tsc -b` | n/a (types only) | no |
-| `design-system` | SWC + Babel | yes | yes |
-| `framework-next-ui` | SWC + Babel | yes | yes |
-| `framework-next` | SWC + Babel | yes | no |
-
-SWC+Babel pipeline: `build:swc` → `build:babel` (React Compiler pass) → `build:types` (emit `.d.ts`). Escape hatch when the React Compiler misbehaves: `build:without_reactcompiler`.
-
-## Claude Desktop coworker knowledge
-
-`.claude/coworker/` contains files designed to be uploaded to a Claude Desktop Project (claude.ai) as project knowledge. `INSTRUCTIONS.xml` is the custom-instructions system prompt; see `.claude/coworker/README.xml` for setup. Claude Code in the IDE uses this `CLAUDE.md` tree and `.claude/agents/` instead.
+@.claude/shared/skills.md

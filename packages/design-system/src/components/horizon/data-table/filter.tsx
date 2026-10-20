@@ -2,10 +2,10 @@
 
 import { useCallback, useId, useMemo, useRef, useState } from "react"
 import { type Column, type Table } from "@tanstack/react-table"
-import { cn } from "../../../lib/utils"
-import type { IGRPOptionsProps } from "../../../types"
-import { Button } from "../../primitives/button"
-import { Checkbox } from "../../primitives/checkbox"
+import { cn } from "../cn.js"
+import type { IGRPOptionsProps } from "../../../types.js"
+import { Button } from "../../primitives/button.js"
+import { Checkbox } from "../../primitives/checkbox.js"
 import {
   Command,
   CommandEmpty,
@@ -14,15 +14,16 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from "../../primitives/command"
-import { Input } from "../../primitives/input"
-import { Popover, PopoverContent, PopoverTrigger } from "../../primitives/popover"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../primitives/select"
-import { Separator } from "../../primitives/separator"
-import { IGRPBadge } from "../badge"
-import { IGRPButton } from "../button"
-import { IGRPIcon, type IGRPIconName } from "../icon"
-// import { IGRPDatePickerRange } from '../input/date-picker/date-picker-range';
+} from "../../primitives/command.js"
+import { Input } from "../../primitives/input.js"
+import { Calendar } from "../../primitives/calendar.js"
+import { Popover, PopoverContent, PopoverTrigger } from "../../primitives/popover.js"
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../../primitives/select.js"
+import { Separator } from "../../primitives/separator.js"
+import { IGRPBadge } from "../badge.js"
+import { IGRPButton } from "../button.js"
+import { IGRPIcon, type IGRPIconName } from "../icon/index.js"
+import { useIGRPi18n, useIGRPLocale } from "../../../i18n/index.js"
 
 /**
  * Base props for data table filter components.
@@ -49,22 +50,56 @@ interface IGRPDataTableFilterProps<TData> {
   iconName?: IGRPIconName | string
 }
 
-/** @internal Date range filter content; keyed by clearDates to reset when parent requests clear. */
-function IGRPDataTableFilterDateContent<TData>({ column }: { column?: Column<TData, unknown> }) {
-  // Compute during render: placeholder has no date picker UI yet, filter value is undefined
-  const currentFilter = column?.getFilterValue()
-  if (currentFilter !== undefined) {
-    column?.setFilterValue(undefined)
-  }
-  return null
+function formatDate(date: Date, locale: string): string {
+  return new Intl.DateTimeFormat(locale, {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  }).format(date)
 }
 
-/** Date range filter (placeholder). */
+/** Date range filter. Opens a popover with a range calendar. */
 function IGRPDataTableFilterDate<TData>({
   column,
   clearDates,
+  placeholder,
 }: Omit<IGRPDataTableFilterProps<TData>, "options" | "placeholderMax">) {
-  return <IGRPDataTableFilterDateContent key={clearDates ? "cleared" : "active"} column={column} />
+  const i18n = useIGRPi18n()
+  const locale = useIGRPLocale()
+  const resolvedPlaceholder = placeholder ?? i18n.dataTable.filterDatePlaceholder
+  const value = column?.getFilterValue() as { from?: Date; to?: Date } | undefined
+
+  // Controlled rather than remounted. `key={clearDates ? … : …}` tore down the
+  // whole popover (and its portal, focus trap and animation state) just to close
+  // it; closing it is all that was ever wanted.
+  const [open, setOpen] = useState(false)
+  const [lastClearDates, setLastClearDates] = useState(clearDates)
+  if (lastClearDates !== clearDates) {
+    setLastClearDates(clearDates)
+    if (clearDates) setOpen(false)
+  }
+
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <IGRPButton variant="outline" size="sm" className="justify-start">
+          <IGRPIcon iconName="CalendarDays" />
+          {value?.from
+            ? value.to
+              ? `${formatDate(value.from, locale)} – ${formatDate(value.to, locale)}`
+              : formatDate(value.from, locale)
+            : resolvedPlaceholder}
+        </IGRPButton>
+      </PopoverTrigger>
+      <PopoverContent align="start" className="w-auto p-0">
+        <Calendar
+          mode="range"
+          selected={{ from: value?.from, to: value?.to }}
+          onSelect={(range) => column?.setFilterValue(range?.from ? range : undefined)}
+        />
+      </PopoverContent>
+    </Popover>
+  )
 }
 
 /**
@@ -86,15 +121,16 @@ function IGRPDataTableFilterDropdown<TData>({
   className,
   disabled,
   showFilter = false,
-  notFoundText = "No Item found.",
+  notFoundText,
 }: IGRPDataTableFilterDropdownProps<TData>) {
+  const i18n = useIGRPi18n()
   const id = useId()
   const listId = useId()
   const [open, setOpen] = useState(false)
   const selectedValue = column?.getFilterValue() as string | undefined
   const selectedLabel = useMemo(
     () => options?.find((opt) => opt.value === selectedValue)?.label || placeholder,
-    [selectedValue, options, placeholder],
+    [selectedValue, options, placeholder]
   )
 
   const handleSelect = useCallback(
@@ -102,7 +138,7 @@ function IGRPDataTableFilterDropdown<TData>({
       column?.setFilterValue(value)
       setOpen(false)
     },
-    [column],
+    [column]
   )
 
   return (
@@ -115,11 +151,8 @@ function IGRPDataTableFilterDropdown<TData>({
             aria-expanded={open}
             aria-controls={listId}
             size="sm"
-            className={cn(
-              "w-full justify-between",
-              className,
-              disabled && "cursor-not-allowed pointer-events-none opacity-50",
-            )}
+            disabled={disabled}
+            className={cn("w-full justify-between", className)}
           >
             <span>{selectedLabel}</span>
             <IGRPIcon iconName="ChevronsUpDown" />
@@ -129,7 +162,7 @@ function IGRPDataTableFilterDropdown<TData>({
           <Command>
             {showFilter && <CommandInput placeholder={placeholder} className={cn("h-8")} />}
             <CommandList id={listId}>
-              <CommandEmpty>{notFoundText}</CommandEmpty>
+              <CommandEmpty>{notFoundText ?? i18n.combobox.notFound}</CommandEmpty>
               <CommandGroup>
                 {options?.map((opt) => (
                   <CommandItem
@@ -140,7 +173,7 @@ function IGRPDataTableFilterDropdown<TData>({
                     <span className={opt.color}>{opt.label}</span>
                     <IGRPIcon
                       iconName="Check"
-                      className={cn("ml-auto w-4 h-4", selectedValue === opt.value ? "opacity-100" : "opacity-0")}
+                      className={cn("ml-auto size-4", selectedValue === opt.value ? "opacity-100" : "opacity-0")}
                     />
                   </CommandItem>
                 ))}
@@ -166,20 +199,23 @@ interface IGRPDataTableFilterFacetedProps<TData> extends Omit<
 /** Multi-select faceted filter with search. */
 function IGRPDataTableFilterFaceted<TData>({
   column,
-  placeholder = "Selecionar...",
+  placeholder,
   options,
   className,
-  labelFilter = "Limpar Filtro",
-  labelSearchField = "Nenhum resultado encontrado.",
+  labelFilter,
+  labelSearchField,
   showFilter = false,
   iconName = "BadgePlus",
 }: IGRPDataTableFilterFacetedProps<TData>) {
+  const i18n = useIGRPi18n()
+  const resolvedPlaceholder = placeholder ?? i18n.dataTable.filterSelectPlaceholder
+  const resolvedLabelFilter = labelFilter ?? i18n.dataTable.clearFilter
+  const resolvedLabelSearchField = labelSearchField ?? i18n.dataTable.filterNoResults
   const id = useId()
 
   const facets = column?.getFacetedUniqueValues()
-  const [selectedValues, setSelectedValues] = useState<Set<string | number>>(
-    () => new Set((column?.getFilterValue() as string[]) ?? []),
-  )
+  const filterValue = column?.getFilterValue() as (string | number)[] | undefined
+  const selectedValues = useMemo(() => new Set<string | number>(filterValue ?? []), [filterValue])
 
   const handleSelect = useCallback(
     (value: string | number) => {
@@ -189,16 +225,14 @@ function IGRPDataTableFilterFaceted<TData>({
       } else {
         next.add(value)
       }
-      setSelectedValues(next)
       const filterValues = Array.from(next)
       column?.setFilterValue(filterValues.length ? filterValues : undefined)
     },
-    [column, selectedValues],
+    [column, selectedValues]
   )
 
   const handleClear = useCallback(() => {
     column?.setFilterValue(undefined)
-    setSelectedValues(new Set())
   }, [column])
 
   return (
@@ -207,7 +241,7 @@ function IGRPDataTableFilterFaceted<TData>({
         <PopoverTrigger asChild>
           <Button variant="outline">
             <IGRPIcon iconName={iconName} />
-            {placeholder}
+            {resolvedPlaceholder}
             {selectedValues?.size > 0 && (
               <>
                 <Separator orientation="vertical" className={cn("h-2")} />
@@ -220,29 +254,29 @@ function IGRPDataTableFilterFaceted<TData>({
         </PopoverTrigger>
         <PopoverContent className={cn("w-auto min-w-36 p-1")} align="start">
           <Command>
-            {showFilter && <CommandInput placeholder={placeholder} className={cn("h-8")} />}
-            <CommandEmpty>{labelSearchField}</CommandEmpty>
+            {showFilter && <CommandInput placeholder={resolvedPlaceholder} className={cn("h-8")} />}
+            <CommandEmpty>{resolvedLabelSearchField}</CommandEmpty>
             <CommandGroup>
-              {options?.map((option, i) => {
-                return (
-                  <CommandItem className={cn("justify-between", className)} key={option.value}>
-                    <div className={cn("flex items-center gap-2")}>
-                      <Checkbox
-                        id={`${id}-${i}`}
-                        checked={selectedValues.has(option.value)}
-                        onCheckedChange={() => handleSelect(option.value)}
-                        className={cn("border-foreground")}
-                      />
-                    </div>
-
-                    <span>{option.label}</span>
-
-                    <span className={cn("ml-auto flex h-4 w-4 items-center justify-center font-mono text-xs")}>
-                      {facets?.get(option.value) || 0}
-                    </span>
-                  </CommandItem>
-                )
-              })}
+              {options?.map((option, i) => (
+                <CommandItem
+                  key={String(option.value)}
+                  value={String(option.value)}
+                  onSelect={() => handleSelect(option.value)}
+                  className={cn("gap-2", className)}
+                >
+                  <Checkbox
+                    id={`${id}-${i}`}
+                    checked={selectedValues.has(option.value)}
+                    onCheckedChange={() => handleSelect(option.value)}
+                    aria-label={option.label}
+                    className={cn("border-foreground data-[state=checked]:**:[svg]:!text-primary-foreground")}
+                  />
+                  <label htmlFor={`${id}-${i}`} className="flex-1 cursor-pointer">
+                    {option.label}
+                  </label>
+                  <span className="ml-auto font-mono text-xs">{facets?.get(option.value) ?? 0}</span>
+                </CommandItem>
+              ))}
             </CommandGroup>
             {selectedValues.size > 0 && (
               <>
@@ -250,7 +284,7 @@ function IGRPDataTableFilterFaceted<TData>({
                 <CommandGroup>
                   <CommandItem onSelect={handleClear}>
                     <IGRPIcon iconName="X" />
-                    {labelFilter}
+                    {resolvedLabelFilter}
                   </CommandItem>
                 </CommandGroup>
               </>
@@ -265,33 +299,40 @@ function IGRPDataTableFilterFaceted<TData>({
 type IGRPDataTableFilterInputProps<TData> = Pick<
   IGRPDataTableFilterProps<TData>,
   "column" | "placeholder" | "className" | "iconName"
->
+> & {
+  /** Accessible label for the filter input. */
+  ariaLabel?: string
+}
 
 /** Text input filter. */
 function IGRPDataTableFilterInput<TData>({
   column,
-  placeholder = "Pesquisar...",
+  placeholder,
   className,
   iconName = "ListFilter",
+  ariaLabel,
 }: IGRPDataTableFilterInputProps<TData>) {
+  const i18n = useIGRPi18n()
+  const resolvedPlaceholder = placeholder ?? i18n.dataTable.filterSearchPlaceholder
   const id = useId()
   const inputRef = useRef<HTMLInputElement>(null)
+  const resolvedAriaLabel = ariaLabel ?? i18n.dataTable.filterLabel
 
   return (
     <div className={cn("relative")}>
       <Input
-        placeholder={placeholder}
+        placeholder={resolvedPlaceholder}
         value={(column?.getFilterValue() ?? "") as string}
         onChange={(e) => column?.setFilterValue(e.target.value)}
         className={cn("peer min-w-60 ps-9", Boolean(column?.getFilterValue()) && "pe-9", className)}
         name={`text-${id}`}
         ref={inputRef}
         type="text"
-        aria-label="Filtar"
+        aria-label={resolvedAriaLabel}
       />
       <div
         className={cn(
-          "pointer-events-none absolute inset-y-0 inset-s-0 flex items-center justify-center ps-3 text-muted-foreground/80 peer-disabled:opacity-50",
+          "pointer-events-none absolute inset-y-0 inset-s-0 flex items-center justify-center ps-3 text-muted-foreground/80 peer-disabled:opacity-50"
         )}
       >
         <IGRPIcon iconName={iconName} className={cn("size-3")} />
@@ -299,9 +340,9 @@ function IGRPDataTableFilterInput<TData>({
       {Boolean(column?.getFilterValue()) && (
         <button
           className={cn(
-            "absolute inset-y-0 inset-e-0 flex h-full w-9 items-center justify-center rounded-e-md text-muted-foreground/80 transition-[color,box-shadow] outline-none hover:text-foreground focus:z-10 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
+            "absolute inset-y-0 inset-e-0 flex h-full w-9 items-center justify-center rounded-e-md text-muted-foreground/80 transition-[color,box-shadow] outline-none hover:text-foreground focus:z-10 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
           )}
-          aria-label="Limpar Filtro"
+          aria-label={i18n.dataTable.clearFilter}
           onClick={() => {
             column?.setFilterValue("")
             if (inputRef.current) {
@@ -331,7 +372,7 @@ function IGRPDataTableFilterMinMax<TData>({
       <Input
         id={`${id}-min`}
         className={cn(
-          "flex-1 rounded-e-none [-moz-appearance:textfield] focus:z-10 [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none",
+          "flex-1 rounded-e-none [-moz-appearance:textfield] focus:z-10 [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
         )}
         value={columnFilterValue?.[0] ?? ""}
         onChange={(e) =>
@@ -347,7 +388,7 @@ function IGRPDataTableFilterMinMax<TData>({
       <Input
         id={`${id}-range-2`}
         className={cn(
-          "-ms-px flex-1 rounded-s-none [-moz-appearance:textfield] focus:z-10 [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none",
+          "-ms-px flex-1 rounded-s-none [-moz-appearance:textfield] focus:z-10 [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
         )}
         value={(columnFilterValue as [number, number])?.[1] ?? ""}
         onChange={(e) =>
@@ -367,29 +408,33 @@ function IGRPDataTableFilterMinMax<TData>({
 function IGRPDataTableFilterSelect<TData>({
   column,
   options,
-  placeholder = "Selecionar...",
+  placeholder,
   className,
 }: Omit<IGRPDataTableFilterProps<TData>, "clearDates" | "placeholderMax" | "target">) {
+  const i18n = useIGRPi18n()
+  const resolvedPlaceholder = placeholder ?? i18n.dataTable.filterSelectPlaceholder
   const id = useId()
   const columnFilterValue = column?.getFilterValue()
 
   return (
     <Select
-      value={columnFilterValue?.toString() ?? placeholder}
+      value={columnFilterValue?.toString() ?? resolvedPlaceholder}
       onValueChange={(value) => {
         column?.setFilterValue(value === "all" ? undefined : value)
       }}
     >
       <SelectTrigger id={`${id}-select`} className={cn(className)}>
-        <SelectValue placeholder={placeholder} />
+        <SelectValue placeholder={resolvedPlaceholder} />
       </SelectTrigger>
       <SelectContent className={cn(className)}>
-        <SelectItem value="all">{placeholder}</SelectItem>
-        {options?.map((value) => (
-          <SelectItem key={String(value)} value={String(value)}>
-            {String(value)}
-          </SelectItem>
-        ))}
+        <SelectGroup>
+          <SelectItem value="all">{resolvedPlaceholder}</SelectItem>
+          {options?.map((opt) => (
+            <SelectItem key={String(opt.value)} value={String(opt.value)}>
+              {opt.label}
+            </SelectItem>
+          ))}
+        </SelectGroup>
       </SelectContent>
     </Select>
   )

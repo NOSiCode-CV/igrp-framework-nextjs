@@ -3,11 +3,11 @@
 import { type ReactNode } from "react"
 import { type VariantProps } from "class-variance-authority"
 
-import { buttonVariants } from "../../primitives/button"
-import { type IGRPIconName } from "../icon"
-import type { igrpModalDialogContentVariants } from "../modal-dialog"
-import { cn } from "../../../lib/utils"
-import { IGRPDataTableTooltipProvider } from "./tooltip-provider"
+import { buttonVariants } from "../../primitives/button.js"
+import { type IGRPIconName } from "../icon/index.js"
+import type { igrpModalDialogContentVariants } from "../modal-dialog.js"
+import { cn } from "../cn.js"
+import { IGRPDataTableTooltipProvider } from "./tooltip-provider.js"
 
 /**
  * Base props for data table row actions (buttons, links, dialogs).
@@ -31,6 +31,8 @@ interface IGRPDataTableActionProps {
   variant?: VariantProps<typeof buttonVariants>["variant"]
   /** CSS classes for dropdown item. */
   classNameItem?: string
+  /** Whether the trigger button is disabled. */
+  disabled?: boolean
   /** Tooltip side. */
   tooltipSide?: "top" | "right" | "bottom" | "left"
   /** Tooltip alignment. */
@@ -61,6 +63,8 @@ interface IGRPDataTableDialogProps
   variantConfirm?: VariantProps<typeof buttonVariants>["variant"]
   onClickConfirm?: () => void
   showStickyFooter?: boolean
+  /** Render prop for modal content — receives the real `close` callback. Takes precedence over `children`. */
+  render?: (close: () => void) => ReactNode
 }
 
 /**

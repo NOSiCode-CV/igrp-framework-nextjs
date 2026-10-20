@@ -1,0 +1,5 @@
+---
+'@igrp/framework-next': patch
+---
+
+i18n: the format helpers take the platform time zone — `igrpFormatDate` / `igrpFormatDateTime` gain a `timeZone` parameter and `useIGRPFormat()` applies `i18n.timeZone` (carried by `IGRPIntlProvider` and `useIGRPLocaleInfo().timeZone`; `IGRPIntlTestProvider` takes `timeZone`), so server and client render the same markup. New `igrpFormatRelativeTime(value, now, formatLocale)` and `useIGRPFormat().formatRelativeTime` (Intl.RelativeTimeFormat, largest fitting unit) replace next-intl's banned `useFormatter`. `igrpSetLocale` rethrows Next control flow (`redirect()`, `forbidden()`) thrown by `persistLocale` instead of answering 500, and `persistLocale` may resolve `false` to report that nothing was saved (no session), which surfaces as `persisted: false`. `IGRPLocaleSwitcher`'s `onChanged` receives `(locale, persisted)` so an app calls next-auth `update({ locale })` only when the profile was written. `IGRPIntlTestProvider` merges messages over a `defaultLocale` (default `pt`), giving tests the production fallback.

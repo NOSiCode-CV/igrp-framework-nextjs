@@ -3,10 +3,11 @@
 import { useId } from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 
-import { IGRPIcon } from "../icon"
-import { type IGRPColorRole, type IGRPColorVariants, IGRPColors } from "../../../lib/colors"
-import { cn } from "../../../lib/utils"
-import type { IGRPBaseAttributes } from "../../../types"
+import { IGRPIcon } from "../icon/index.js"
+import { type IGRPColorRole, type IGRPColorVariants } from "../../../lib/colors.js"
+import { cn } from "../cn.js"
+import { igrpOmitNonDomProps } from "../../../lib/dom-props.js"
+import type { IGRPBaseAttributes } from "../../../types.js"
 
 const igrpHeadlineVariants = cva("scroll-m-20 font-bold tracking-tight text-balance", {
   variants: {
@@ -14,7 +15,7 @@ const igrpHeadlineVariants = cva("scroll-m-20 font-bold tracking-tight text-bala
       h1: "text-4xl font-extrabold lg:text-5xl",
       h2: "text-3xl lg:text-4xl",
       h3: "text-2xl lg:text-3xl",
-      h4: "text-xl lg:text-2xl ",
+      h4: "text-xl lg:text-2xl",
       h5: "text-lg lg:text-xl",
       h6: "text-base lg:text-lg",
     },
@@ -38,8 +39,10 @@ interface IGRPHeadlineProps
   /** Optional description below the title. */
   description?: string
   /** Color role (solid, soft, outline). */
+  /** @deprecated Use className or headlineContentClassName instead.  */
   roleColor?: IGRPColorRole
   /** Color theme. */
+  /** @deprecated Use className or headlineContentClassName instead.  */
   color?: IGRPColorVariants
   /** HTML id attribute. */
   id?: string
@@ -56,8 +59,6 @@ function IGRPHeadline({
   className,
   name,
   id,
-  roleColor = "solid",
-  color = "primary",
   iconName = "Info",
   showIcon = false,
   iconClassName,
@@ -71,23 +72,20 @@ function IGRPHeadline({
 
   const Tag = variant as keyof React.JSX.IntrinsicElements
 
-  const colorClass = IGRPColors[roleColor][color]
-
   return (
     <div
       id={ref}
       className={cn(
-        "flex gap-2 items-start",
-        colorClass.text,
+        "flex items-start gap-2 text-primary",
         iconPlacement === "end" && "flex-row-reverse justify-between",
-        className,
+        className
       )}
-      {...props}
+      {...igrpOmitNonDomProps(props)}
     >
       {showIcon && <IGRPIcon iconName={iconName} size={iconSize} className={cn("mt-1", iconClassName)} />}
       <div className={cn("flex flex-col gap-1", headlineContentClassName)}>
         <Tag className={cn(igrpHeadlineVariants({ variant }))}>{title}</Tag>
-        <p className={cn("text-sm")}>{description}</p>
+        <p className="text-sm">{description}</p>
       </div>
     </div>
   )

@@ -1,52 +1,40 @@
-import { IGRPPackageJson } from '@igrp/framework-next-types';
+import 'server-only';
+
+import type { IGRPPackageJson } from '@igrp/framework-next-types';
 import {
-  AccessManagementClient,
-  ApplicationDTO,
-  ApplicationType,
-  Status,
-  ApiClientConfig,
-  M2MClientConfig,
+  type AccessManagementClient,
+  type ApplicationDTO,
+  type ApplicationType,
+  type Status,
 } from '@igrp/platform-access-management-client-ts';
 
-import { toUpperCaseIdentifier } from './utils';
-
 export type IGRPSyncApplicationArgs = {
+  client: AccessManagementClient;
   appInformation: IGRPPackageJson;
-  baseUrl: string;
   appCode: string;
-  m2mServiceId: string;
-  m2mToken: string;
 };
 
 export async function igrpSyncApplication({
+  client,
   appInformation,
-  baseUrl,
   appCode,
-  m2mServiceId,
-  m2mToken,
 }: IGRPSyncApplicationArgs) {
   const payload: ApplicationDTO = {
     id: 0,
-    code: appCode || `APP_${toUpperCaseIdentifier(appInformation.name)}`,
+    // `appCode` is non-blank by construction — `planAccessManagementSync`
+    // proves it before building the plan this executor receives — so the old
+    // "appCode or APP_<name>" fallback was unreachable, and hid the fact that
+    // the two could ever disagree.
+    code: appCode,
     type: 'INTERNAL' as ApplicationType,
     name: appInformation.displayName ?? appInformation.name,
     status: 'ACTIVE' as Status,
     description: appInformation.description ?? '',
+    slug: appInformation.slug,
     departments: [],
   };
 
-  const config: ApiClientConfig = {
-    baseUrl: baseUrl,
-  };
-
-  const m2mConfig: M2MClientConfig = {
-    serviceId: m2mServiceId,
-    token: m2mToken,
-  };
-
-  const accessManagementClient = AccessManagementClient.create(config, m2mConfig);
-
-  await accessManagementClient.m2m.syncApplications(payload);
+  await client.m2m.syncApplications(payload);
 
   console.info('Application', appCode, 'metadata synced successfully.');
 }

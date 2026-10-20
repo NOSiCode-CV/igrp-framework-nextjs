@@ -4,14 +4,17 @@ import { useId, useState, useEffect } from "react"
 import { format } from "date-fns"
 import { useFormContext } from "react-hook-form"
 
-import { cn } from "../../../../lib/utils"
-import type { IGRPDatePickerBaseProps } from "../../../../types"
-import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../../../primitives/form"
-import { Popover, PopoverContent, PopoverTrigger } from "../../../primitives/popover"
-import { IGRPButton } from "../../button"
-import { IGRPLabel } from "../../label"
-import { IGRPCalendarMultiple, type IGRPCalendarMultipleProps } from "../../calendar/multiple"
-import { DD_MM_YYYY } from "../../../../lib/constants"
+import { toLocalDates } from "../../../../lib/calendar-utils.js"
+import { cn } from "../../cn.js"
+import type { IGRPDatePickerBaseProps } from "../../../../types.js"
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../../../primitives/form.js"
+import { Popover, PopoverContent, PopoverTrigger } from "../../../primitives/popover.js"
+import { IGRPButton } from "../../button.js"
+import { IGRPLabel } from "../../label.js"
+import { IGRPCalendarMultiple, type IGRPCalendarMultipleProps } from "../../calendar/multiple.js"
+import { DD_MM_YYYY } from "../../../../lib/utilities.js"
+import { Field } from "../../../primitives/field.js"
+import { useIGRPi18n } from "../../../../i18n/index.js"
 
 /** @internal Trigger button showing the selected date(s). */
 function DatePickerMultipleTrigger({
@@ -20,13 +23,17 @@ function DatePickerMultipleTrigger({
   placeholder,
   dateFormat,
   disabledPicker,
+  // `PopoverTrigger asChild` hands its handlers, aria state and ref to this
+  // component; they must reach the button. Dropping them left the popover
+  // impossible to open and the trigger unreachable for `field.ref`.
+  ...triggerProps
 }: {
   value: Date[] | undefined
   fieldName: string
   placeholder: string
   dateFormat: string
   disabledPicker?: boolean
-}) {
+} & Omit<React.ComponentProps<"button">, "value">) {
   const displayText = !value?.length
     ? placeholder
     : value.length === 1
@@ -38,13 +45,14 @@ function DatePickerMultipleTrigger({
   return (
     <div
       className={cn(
-        "flex gap-2 items-center relative",
-        "group bg-background hover:bg-background border border-input w-full justify-between px-3 font-normal outline-offset-0 outline-none focus-visible:outline-[3px] h-10 rounded-md",
+        "relative flex items-center gap-2",
+        "group h-10 w-full justify-between rounded-md border border-input bg-background px-3 font-normal outline-offset-0 outline-none hover:bg-background focus-visible:outline-[3px]",
         !value?.length && "text-muted-foreground",
-        disabledPicker && "opacity-50 cursor-not-allowed",
+        disabledPicker && "cursor-not-allowed opacity-50"
       )}
     >
       <IGRPButton
+        {...triggerProps}
         id={fieldName}
         variant="link"
         className={cn("underline-offset-0 hover:no-underline")}
@@ -70,6 +78,8 @@ function DatePickerMultipleField({
   dateFormat,
   disabled,
   disabledPicker,
+  triggerRef,
+  onClose,
 }: {
   value: Date[] | undefined
   onChange: (date: Date[] | undefined) => void
@@ -79,12 +89,22 @@ function DatePickerMultipleField({
   dateFormat: string
   disabled?: IGRPCalendarMultipleProps["disabled"]
   disabledPicker?: boolean
+  /** react-hook-form's `field.ref`, so the trigger is focused when the field is invalid. */
+  triggerRef?: React.Ref<HTMLButtonElement>
+  /** Called when the popover closes — form-bound fields mark themselves touched here. */
+  onClose?: () => void
 }) {
+  const i18n = useIGRPi18n()
   return (
     <div className={cn("relative")}>
-      <Popover>
+      <Popover
+        onOpenChange={(open) => {
+          if (!open) onClose?.()
+        }}
+      >
         <PopoverTrigger asChild>
           <DatePickerMultipleTrigger
+            ref={triggerRef}
             value={value}
             fieldName={fieldName}
             placeholder={placeholder}
@@ -92,7 +112,7 @@ function DatePickerMultipleField({
             disabledPicker={disabledPicker}
           />
         </PopoverTrigger>
-        <PopoverContent className={cn("p-0 w-auto shadow-none")} align="start">
+        <PopoverContent className={cn("w-auto p-0 shadow-none")} align="start">
           <IGRPCalendarMultiple
             {...calendarProps}
             id={fieldName}
@@ -106,10 +126,10 @@ function DatePickerMultipleField({
         <IGRPButton
           onClick={() => onChange(undefined)}
           variant="link"
-          className={cn("size-2 absolute right-2 top-1/2 h-3 w-3 -translate-y-1/2 text-muted-foreground z-100")}
+          className={cn("absolute top-1/2 right-2 size-3 -translate-y-1/2 text-muted-foreground")}
           size="icon"
           iconName="X"
-          iconSize={10}
+          aria-label={i18n.datePicker.clear}
           disabled={disabledPicker}
           showIcon
         />
@@ -140,9 +160,11 @@ function IGRPDatePickerMultiple({
   disabledPicker = false,
   disabled,
   dateFormat = DD_MM_YYYY,
-  placeholder = "Pick a date",
+  placeholder: placeholderProp,
   ...props
 }: IGRPDatePickerMultipleProps) {
+  const i18n = useIGRPi18n()
+  const placeholder = placeholderProp ?? i18n.datePicker.placeholder
   const _id = useId()
   const fieldName = name ?? id ?? _id
 
@@ -173,18 +195,20 @@ function IGRPDatePickerMultiple({
         render={({ field, fieldState }) => (
           <FormItem className={className}>
             {label && (
-              <FormLabel className={cn(labelClassName, required && 'after:content-["*"] after:text-destructive')}>
+              <FormLabel className={cn(labelClassName, required && "after:text-destructive after:content-['*']")}>
                 {label}
               </FormLabel>
             )}
             <FormControl>
               <DatePickerMultipleField
                 {...fieldProps}
-                value={field.value}
+                value={toLocalDates(field.value)}
                 onChange={(val) => {
                   field.onChange(val)
                   onDateChange?.(val)
                 }}
+                triggerRef={field.ref}
+                onClose={field.onBlur}
               />
             </FormControl>
 
@@ -197,7 +221,7 @@ function IGRPDatePickerMultiple({
   }
 
   return (
-    <div className={cn("*:not-first:mt-2", className)}>
+    <Field className={className}>
       {label && <IGRPLabel label={label} required={required} id={name} className={labelClassName} />}
 
       <DatePickerMultipleField
@@ -209,8 +233,8 @@ function IGRPDatePickerMultiple({
         }}
       />
 
-      {helperText && <p className={cn("text-sm text-muted-foreground mt-1")}>{helperText}</p>}
-    </div>
+      {helperText && <p className={cn("mt-1 text-sm text-muted-foreground")}>{helperText}</p>}
+    </Field>
   )
 }
 

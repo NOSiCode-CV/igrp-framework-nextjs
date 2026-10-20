@@ -1,9 +1,11 @@
 /* eslint-disable react-refresh/only-export-components */
+/* shadcn: 2026-09-15 */
+"use client"
 
-// IGRP CUSTOM: THIS COMPONENT IS CHANGED FROM THE ORIGINAL
+/* IGRP CUSTOM: THIS COMPONENT IS CHANGED FROM THE ORIGINAL */
 
-import { createContext, useContext, useId } from "react"
-import { Slot } from "@radix-ui/react-slot"
+import * as React from "react"
+import { Slot } from "radix-ui"
 import {
   Controller,
   FormProvider,
@@ -13,9 +15,9 @@ import {
   type FieldPath,
   type FieldValues,
 } from "react-hook-form"
+import { cn } from "cn"
 
-import { Label } from "./label"
-import { cn } from "../../lib/utils"
+import { Label } from "./label.js"
 
 // Explicit annotation avoids non-portable inferred type referencing local @types/react path
 const Form: typeof FormProvider = FormProvider
@@ -27,7 +29,7 @@ type FormFieldContextValue<
   name: TName
 }
 
-const FormFieldContext = createContext<FormFieldContextValue>({} as FormFieldContextValue)
+const FormFieldContext = React.createContext<FormFieldContextValue>({} as FormFieldContextValue)
 
 const FormField = <
   TFieldValues extends FieldValues = FieldValues,
@@ -43,8 +45,8 @@ const FormField = <
 }
 
 const useFormField = () => {
-  const fieldContext = useContext(FormFieldContext)
-  const itemContext = useContext(FormItemContext)
+  const fieldContext = React.useContext(FormFieldContext)
+  const itemContext = React.useContext(FormItemContext)
   const { getFieldState } = useFormContext()
   const formState = useFormState({ name: fieldContext.name })
   const fieldState = getFieldState(fieldContext.name, formState)
@@ -69,14 +71,14 @@ type FormItemContextValue = {
   id: string
 }
 
-const FormItemContext = createContext<FormItemContextValue>({} as FormItemContextValue)
+const FormItemContext = React.createContext<FormItemContextValue>({} as FormItemContextValue)
 
 /*
  * Warning: This component is changed from the original.
  * Was removed the 'grid gap-2' class from the original component.
  */
 function FormItem({ className, ...props }: React.ComponentProps<"div">) {
-  const id = useId()
+  const id = React.useId()
 
   return (
     <FormItemContext.Provider value={{ id }}>
@@ -99,11 +101,11 @@ function FormLabel({ className, ...props }: React.ComponentProps<typeof Label>) 
   )
 }
 
-function FormControl({ ...props }: React.ComponentProps<typeof Slot>) {
+function FormControl({ ...props }: React.ComponentProps<typeof Slot.Root>) {
   const { error, formItemId, formDescriptionId, formMessageId } = useFormField()
 
   return (
-    <Slot
+    <Slot.Root
       data-slot="form-control"
       id={formItemId}
       aria-describedby={!error ? `${formDescriptionId}` : `${formDescriptionId} ${formMessageId}`}
@@ -120,7 +122,7 @@ function FormDescription({ className, ...props }: React.ComponentProps<"p">) {
     <p
       data-slot="form-description"
       id={formDescriptionId}
-      className={cn("text-muted-foreground text-sm", className)}
+      className={cn("text-sm text-muted-foreground", className)}
       {...props}
     />
   )
@@ -135,7 +137,13 @@ function FormMessage({ className, ...props }: React.ComponentProps<"p">) {
   }
 
   return (
-    <p data-slot="form-message" id={formMessageId} className={cn("text-destructive text-sm", className)} {...props}>
+    <p
+      data-slot="form-message"
+      id={formMessageId}
+      role="alert"
+      className={cn("text-sm text-destructive", className)}
+      {...props}
+    >
       {body}
     </p>
   )

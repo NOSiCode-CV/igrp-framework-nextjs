@@ -1,0 +1,28 @@
+# Normalize line endings across the monorepo.
+#
+# Without this, a Windows clone with core.autocrlf=true commits CRLF into
+# individual files while the rest of the tree is LF. That is not cosmetic here:
+# `templates/demo-v1` runs `biome check --write` as part of `pnpm build`, so a
+# CRLF file is rewritten on every build and dirties the working tree; and the
+# template-migrator normalizes payloads to LF on the way into `dist/`, so a CRLF
+# source file makes the zip channel and the migrate channel disagree byte-for-byte.
+* text=auto eol=lf
+
+# Binary assets — never touched.
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.webp binary
+*.ico  binary
+*.woff binary
+*.woff2 binary
+*.ttf  binary
+*.otf  binary
+*.zip  binary
+*.pdf  binary
+
+# Windows-only tooling must keep CRLF to stay executable.
+*.ps1  text eol=crlf
+*.cmd  text eol=crlf
+*.bat  text eol=crlf

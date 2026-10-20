@@ -2,7 +2,9 @@
 
 import { toast, type ExternalToast } from "sonner"
 import { useCallback, useMemo } from "react"
-import { Toaster } from "../primitives/sonner"
+import { Toaster } from "../primitives/sonner.js"
+import { useIGRPi18n } from "../../i18n/index.js"
+import type { IGRPI18nStrings } from "../../i18n/strings.js"
 
 /** Default duration (ms) for success toasts. */
 const DEFAULT_SUCCESS_DURATION = 4000
@@ -72,15 +74,17 @@ type PlainToastProps = IGRPCommonToastProps & {
 
 type ToastProps<T> = IGRPPromiseToastProps<T> | PlainToastProps
 
-function createToast<T>(props: IGRPPromiseToastProps<T>): string | number
-function createToast(props: PlainToastProps): string | number
-function createToast<T>(props: ToastProps<T>): string | number {
+type ToastStrings = IGRPI18nStrings["toast"]
+
+function createToast<T>(props: IGRPPromiseToastProps<T>, strings: ToastStrings): string | number
+function createToast(props: PlainToastProps, strings: ToastStrings): string | number
+function createToast<T>(props: ToastProps<T>, strings: ToastStrings): string | number {
   if ("promise" in props && props.promise) {
     const { promise, loading, success, error, ...rest } = props
     const id = toast.promise(promise, {
-      loading: loading ?? "Processing...",
-      success: success ?? ((data: T) => (typeof data === "string" ? data : "Operation successful!")),
-      error: error ?? ((err: unknown) => (err instanceof Error ? err.message : "Something went wrong!")),
+      loading: loading ?? strings.loading,
+      success: success ?? ((data: T) => (typeof data === "string" ? data : strings.success)),
+      error: error ?? ((err: unknown) => (err instanceof Error ? err.message : strings.error)),
       duration: rest.duration ?? DEFAULT_SUCCESS_DURATION,
       ...rest,
     })
@@ -96,16 +100,17 @@ function createToast<T>(props: ToastProps<T>): string | number {
     (type === "error" ? DEFAULT_ERROR_DURATION : type === "success" ? DEFAULT_SUCCESS_DURATION : undefined)
 
   const fn = TOAST_TYPE_MAP[type] ?? toast
-  return fn(title ?? "Notification", { description, duration, ...rest })
+  return fn(title ?? strings.title, { description, duration, ...rest })
 }
 
 function useIGRPToast<T = unknown>() {
+  const strings = useIGRPi18n().toast
   const igrpToast = useCallback(
     (props: ToastProps<T>) =>
       "promise" in props && props.promise
-        ? createToast(props as IGRPPromiseToastProps<T>)
-        : createToast(props as PlainToastProps),
-    [],
+        ? createToast(props as IGRPPromiseToastProps<T>, strings)
+        : createToast(props as PlainToastProps, strings),
+    [strings]
   )
 
   const helpers = useMemo(
@@ -119,7 +124,7 @@ function useIGRPToast<T = unknown>() {
       loading: (msg: React.ReactNode, opts?: ExternalToast) => toast.loading(msg, opts),
       dismiss: toast.dismiss,
     }),
-    [],
+    []
   )
 
   return useMemo(() => ({ igrpToast, ...helpers }), [igrpToast, helpers])

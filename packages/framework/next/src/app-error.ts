@@ -24,7 +24,7 @@
 //   const { message } = parsePublicDigest(error.digest);
 // ─────────────────────────────────────────────────────────────────────────────
 
-import { logger } from './logger';
+import { logger } from './logger.js';
 
 /**
  * Delimiter used in digest to pass user-friendly messages through production
@@ -33,13 +33,20 @@ import { logger } from './logger';
  */
 export const PUBLIC_ERROR_DELIMITER = '|';
 
-export type PublicErrorId = `${number}-${string}`;
+/**
+ * Correlation id shape: `<base36 timestamp>-<base36 random>`.
+ *
+ * Previously `${number}-${string}`, which `Date.now().toString(36)` does not
+ * produce — base 36 is mostly letters — so the declared type was only true by
+ * virtue of the `as` cast that silenced it.
+ */
+export type PublicErrorId = `${string}-${string}`;
 export type PublicErrorMessage = `${PublicErrorId}${typeof PUBLIC_ERROR_DELIMITER}${string}`;
 
 function generateErrorId(): PublicErrorId {
   const timestamp = Date.now().toString(36);
   const random = Math.random().toString(36).slice(2, 8);
-  return `${timestamp}-${random}` as PublicErrorId;
+  return `${timestamp}-${random}`;
 }
 
 /**

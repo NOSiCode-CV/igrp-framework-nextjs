@@ -2,11 +2,11 @@
 
 import { useId } from "react"
 
-import { cn } from "../../lib/utils"
-import { igrpCleanString } from "../../lib/strings"
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "../primitives/card"
-import { Separator } from "../primitives/separator"
-import { IGRPCopyTo } from "./copy-to"
+import { cn } from "cn"
+import { igrpCleanString } from "../../lib/utilities.js"
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "../primitives/card.js"
+import { Separator } from "../primitives/separator.js"
+import { IGRPCopyTo } from "./copy-to.js"
 
 /**
  * Single detail item (label + content).
@@ -59,9 +59,9 @@ function IGRPCardDetails({
     <Card
       id={ref}
       className={cn(
-        "overflow-hidden gap-3 animate-fade-in motion-reduce:animate-none",
-        "transition-all duration-200 hover:shadow-lg hover:border-primary/20",
-        className,
+        "animate-fade-in gap-3 overflow-hidden motion-reduce:animate-none",
+        "transition-[box-shadow,border-color] duration-200 hover:border-primary/20 hover:shadow-lg",
+        className
       )}
       {...props}
     >
@@ -72,7 +72,7 @@ function IGRPCardDetails({
           <Separator className={cn("mt-4")} />
         </CardHeader>
       )}
-      <CardContent className={cn("grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-sm", contentClassName)}>
+      <CardContent className={cn("grid grid-cols-1 gap-4 text-sm sm:grid-cols-2 lg:grid-cols-3", contentClassName)}>
         {items.map((item) => {
           const key = igrpCleanString(item.label)
 

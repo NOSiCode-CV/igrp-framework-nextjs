@@ -3,11 +3,14 @@
 import { useId, useState } from "react"
 import { useFormContext, Controller } from "react-hook-form"
 
-import { cn } from "../../../lib/utils"
-import type { IGRPGridSize, IGRPInputProps } from "../../../types"
-import { Input } from "../../primitives/input"
-import { IGRPButton } from "../button"
-import { IGRPLabel } from "../label"
+import { useIGRPi18n } from "../../../i18n/index.js"
+import { igrpOmitNonDomProps } from "../../../lib/dom-props.js"
+import { igrpChainHandlers, igrpMergeRefs } from "../../../lib/form-binding.js"
+import type { IGRPInputProps } from "../../../types.js"
+import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "../../primitives/input-group.js"
+import { IGRPIcon } from "../icon/index.js"
+import { IGRPLabel } from "../label.js"
+import { Field, FieldDescription, FieldError } from "../../primitives/field.js"
 
 /**
  * Props for the IGRPInputPassword component.
@@ -25,7 +28,7 @@ interface IGRPInputPasswordProps extends Omit<IGRPInputProps, "onChange"> {
   /**
    * @deprecated This props will be deprecated in the next release.
    */
-  IGRPGridSize?: IGRPGridSize
+  IGRPGridSize?: string
 }
 
 /**
@@ -35,8 +38,10 @@ function IGRPInputPassword({
   name,
   id,
   label,
+  labelClassName,
   helperText,
   className,
+  inputClassName,
   required = false,
   error,
   value,
@@ -47,9 +52,14 @@ function IGRPInputPassword({
 }: IGRPInputPasswordProps) {
   const _id = useId()
   const fieldName = name ?? id ?? _id
+  // Whatever is left belongs to the native element; the IGRP-only keys would
+  // otherwise be rendered as invalid DOM attributes.
+  const domProps = igrpOmitNonDomProps(props)
 
   const [showPassword, setShowPassword] = useState(false)
   const formContext = useFormContext()
+  const i18n = useIGRPi18n()
+  const toggleLabel = showPassword ? i18n.inputPassword.hidePasswordLabel : i18n.inputPassword.showPasswordLabel
   const [localValue, setLocalValue] = useState(value ?? defaultValue ?? "")
 
   const handleStandaloneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,65 +74,51 @@ function IGRPInputPassword({
 
   if (!formContext) {
     return (
-      <div className={cn("*:not-first:mt-2")}>
-        {label && <IGRPLabel label={label} className={className} required={required} id={fieldName} />}
+      <Field className={className} data-invalid={error ? true : undefined}>
+        {label && <IGRPLabel label={label} className={labelClassName} required={required} id={fieldName} />}
 
-        <div className={cn("relative")}>
-          <Input
+        <InputGroup>
+          <InputGroupInput
+            className={inputClassName}
             id={fieldName}
             name={fieldName}
             type={showPassword ? "text" : "password"}
+            spellCheck={false}
+            autoComplete="current-password"
             required={required}
             aria-required={required}
             aria-invalid={!!error || !!props["aria-invalid"]}
-            aria-describedby={helperText || error ? `${id}-helper` : undefined}
-            className={cn(
-              "peer bg-background py-3 text-sm outline-hidden",
-              showPasswordToggle && "pr-10",
-              error && "border-destructive focus-visible:ring-destructive/20",
-              className,
-            )}
+            aria-describedby={error ? `${fieldName}-error` : helperText ? `${fieldName}-helper` : undefined}
             value={value !== undefined ? value : localValue}
             defaultValue={defaultValue}
             onChange={handleStandaloneChange}
-            {...props}
+            {...domProps}
           />
 
           {showPasswordToggle && (
-            <IGRPButton
-              type="button"
-              variant="ghost"
-              size="sm"
-              className={cn("absolute right-0 top-0 h-full px-3 py-2 text-muted-foreground hover:text-foreground")}
-              onClick={togglePasswordVisibility}
-              tabIndex={-1}
-              aria-label={showPassword ? "Hide password" : "Show password"}
-              showIcon
-              iconName={showPassword ? "EyeOff" : "Eye"}
-              name="toggle-password-visibility"
-            />
+            <InputGroupAddon align="inline-end">
+              <InputGroupButton
+                size="icon-xs"
+                onClick={togglePasswordVisibility}
+                aria-label={toggleLabel}
+                name="toggle-password-visibility"
+              >
+                <IGRPIcon iconName={showPassword ? "EyeOff" : "Eye"} aria-hidden="true" />
+              </InputGroupButton>
+            </InputGroupAddon>
           )}
-        </div>
+        </InputGroup>
 
-        {helperText && !error && (
-          <p
-            id={`${fieldName}-helper`}
-            className={cn("text-muted-foreground mt-2 text-xs")}
-            role="region"
-            aria-live="polite"
-          >
-            {helperText}
-          </p>
-        )}
+        {helperText && !error && <FieldDescription id={`${fieldName}-helper`}>{helperText}</FieldDescription>}
 
-        {error && (
-          <p id={`${fieldName}-errror`} className={cn("text-destructive mt-2 text-xs")} role="alert">
-            {error}
-          </p>
-        )}
-      </div>
+        {error && <FieldError id={`${fieldName}-error`}>{error}</FieldError>}
+      </Field>
     )
   }
+
+  // The field owns onBlur/ref; the caller's copies run after it and never replace
+  // it (see lib/form-binding.ts).
+  const { onBlur, ref, ...callerProps } = domProps
 
   return (
     <Controller
@@ -130,64 +126,49 @@ function IGRPInputPassword({
       control={formContext.control}
       defaultValue={defaultValue || ""}
       render={({ field, fieldState }) => (
-        <div className={cn("*:not-first:mt-2")}>
-          {label && <IGRPLabel label={label} className={className} required={required} id={fieldName} />}
+        <Field className={className} data-invalid={fieldState.error || error ? true : undefined}>
+          {label && <IGRPLabel label={label} className={labelClassName} required={required} id={fieldName} />}
 
-          <div className={cn("relative")}>
-            <Input
+          <InputGroup>
+            <InputGroupInput
+              className={inputClassName}
               id={fieldName}
               type={showPassword ? "text" : "password"}
+              spellCheck={false}
+              autoComplete="current-password"
               required={required}
               aria-required={required}
               aria-invalid={!!fieldState.error || !!error || !!props["aria-invalid"]}
-              aria-describedby={helperText || error || fieldState.error ? `${id}-helper` : undefined}
-              className={cn(
-                "peer bg-background py-3 text-sm outline-hidden",
-                showPasswordToggle && "pr-10",
-                (fieldState.error || error) && "border-destructive focus-visible:ring-destructive/20",
-                className,
-              )}
+              aria-describedby={
+                error || fieldState.error ? `${fieldName}-error` : helperText ? `${fieldName}-helper` : undefined
+              }
+              ref={igrpMergeRefs(field.ref, ref)}
               value={field.value}
               onChange={(e) => {
                 field.onChange(e)
                 onChange?.(e.target.value)
               }}
-              onBlur={field.onBlur}
-              {...props}
+              onBlur={igrpChainHandlers(field.onBlur, onBlur)}
+              {...callerProps}
             />
 
             {showPasswordToggle && (
-              <IGRPButton
-                type="button"
-                variant="ghost"
-                size="sm"
-                className={cn("absolute right-0 top-0 h-full px-3 py-2 text-muted-foreground hover:text-foreground")}
-                onClick={togglePasswordVisibility}
-                tabIndex={-1}
-                aria-label={showPassword ? "Hide password" : "Show password"}
-                showIcon
-                iconName={showPassword ? "EyeOff" : "Eye"}
-              />
+              <InputGroupAddon align="inline-end">
+                <InputGroupButton size="icon-xs" onClick={togglePasswordVisibility} aria-label={toggleLabel}>
+                  <IGRPIcon iconName={showPassword ? "EyeOff" : "Eye"} aria-hidden="true" />
+                </InputGroupButton>
+              </InputGroupAddon>
             )}
-          </div>
+          </InputGroup>
 
           {helperText && !error && !fieldState.error && (
-            <p
-              id={`${fieldName}-helper`}
-              className={cn("text-muted-foreground mt-2 text-xs")}
-              role="region"
-              aria-live="polite"
-            >
-              {helperText}
-            </p>
+            <FieldDescription id={`${fieldName}-helper`}>{helperText}</FieldDescription>
           )}
 
           {(error || fieldState.error) && (
-            <p id={`${fieldName}-helper`} className={cn("text-destructive mt-2 text-xs")} role="alert">
-              {error || fieldState.error?.message}
-            </p>
+            <FieldError id={`${fieldName}-error`}>{error || fieldState.error?.message}</FieldError>
           )}
-        </div>
+        </Field>
       )}
     />
   )

@@ -1,20 +1,18 @@
-// IGRP CUSTOM: THIS COMPONENT IS CHANGED FROM THE ORIGINAL
+/* shadcn: 2026-09-15 */
+/* IGRP CUSTOM: THIS COMPONENT IS CHANGED FROM THE ORIGINAL */
 
-import * as AccordionPrimitive from "@radix-ui/react-accordion"
-import { cn } from "../../lib/utils"
-import { IGRPIcon, type IGRPIconName } from "../horizon/icon"
+import * as React from "react"
+import { cn } from "cn"
+import { Accordion as AccordionPrimitive } from "radix-ui"
+import { IGRPIcon, type IGRPIconName } from "../horizon/icon/index.js"
 
-function Accordion({ ...props }: React.ComponentProps<typeof AccordionPrimitive.Root>) {
-  return <AccordionPrimitive.Root data-slot="accordion" {...props} />
+function Accordion({ className, ...props }: React.ComponentProps<typeof AccordionPrimitive.Root>) {
+  return <AccordionPrimitive.Root data-slot="accordion" className={cn("flex w-full flex-col", className)} {...props} />
 }
 
 function AccordionItem({ className, ...props }: React.ComponentProps<typeof AccordionPrimitive.Item>) {
   return (
-    <AccordionPrimitive.Item
-      data-slot="accordion-item"
-      className={cn("border-b last:border-b-0", className)}
-      {...props}
-    />
+    <AccordionPrimitive.Item data-slot="accordion-item" className={cn("not-last:border-b", className)} {...props} />
   )
 }
 
@@ -35,13 +33,13 @@ function AccordionTrigger({
   ...props
 }: AccordionTriggerProps) {
   return (
-    <AccordionPrimitive.Header className={cn("flex")}>
+    <AccordionPrimitive.Header className="flex">
       <AccordionPrimitive.Trigger
         data-slot="accordion-trigger"
         className={cn(
-          "focus-visible:border-ring focus-visible:ring-ring/50 flex flex-1 items-start gap-4 rounded-md py-4 text-left text-sm font-medium transition-all outline-none focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 [&[data-state=open]>svg]:rotate-180",
+          "group/accordion-trigger relative flex flex-1 items-start gap-4 rounded-md border border-transparent py-4 text-left text-sm font-medium transition-all outline-none hover:underline focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:after:border-ring disabled:pointer-events-none disabled:opacity-50 **:data-[slot=accordion-trigger-icon]:ml-auto **:data-[slot=accordion-trigger-icon]:size-4 **:data-[slot=accordion-trigger-icon]:text-muted-foreground [&[data-state=open]>svg]:rotate-180",
           iconPlacement === "end" && "justify-between",
-          className,
+          className
         )}
         {...props}
       >
@@ -49,8 +47,8 @@ function AccordionTrigger({
           <IGRPIcon
             iconName={iconName}
             className={cn(
-              "text-muted-foreground pointer-events-none size-4 shrink-0 translate-y-0.5 transition-transform duration-200",
-              iconPlacement === "end" && "order-last",
+              "pointer-events-none size-4 shrink-0 translate-y-0.5 text-muted-foreground transition-transform duration-200",
+              iconPlacement === "end" && "order-last"
             )}
           />
         )}
@@ -64,12 +62,17 @@ function AccordionContent({ className, children, ...props }: React.ComponentProp
   return (
     <AccordionPrimitive.Content
       data-slot="accordion-content"
-      className={cn(
-        "data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down overflow-hidden text-sm",
-      )}
+      className="overflow-hidden text-sm data-closed:animate-accordion-up data-open:animate-accordion-down"
       {...props}
     >
-      <div className={cn("pt-0 pb-4", className)}>{children}</div>
+      <div
+        className={cn(
+          "h-(--radix-accordion-content-height) pt-0 pb-4 [&_a]:underline [&_a]:underline-offset-3 [&_a]:hover:text-foreground [&_p:not(:last-child)]:mb-4",
+          className
+        )}
+      >
+        {children}
+      </div>
     </AccordionPrimitive.Content>
   )
 }

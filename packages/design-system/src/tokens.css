@@ -1,10 +1,21 @@
 @custom-variant dark (&:is(.dark *));
+/* Radix emits data-state, not data-checked/data-unchecked like the shadcn primitives expect (ADR 0002). */
+@custom-variant data-checked (&[data-checked], &[data-state="checked"]);
+@custom-variant data-unchecked (&[data-unchecked], &[data-state="unchecked"]);
+/* Radix emits data-orientation, not data-vertical/data-horizontal like the shadcn primitives expect (ADR 0004). */
+@custom-variant data-vertical (&[data-vertical], &[data-orientation="vertical"]);
+@custom-variant data-horizontal (&[data-horizontal], &[data-orientation="horizontal"]);
+/* Radix Tabs emits data-state="active", not data-active like the shadcn primitives expect (ADR 0005). */
+@custom-variant data-active (&[data-active], &[data-state="active"]);
 
 @theme inline {
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -20,20 +31,37 @@
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  --color-indigo: var(--indigo);
+  --color-indigo-foreground: var(--indigo-foreground);
+  --color-highlight: var(--highlight);
+  --color-highlight-foreground: var(--highlight-foreground);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-ring-invalid: var(--ring-invalid);
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
+  --color-chart-6: var(--chart-6);
+  --color-chart-7: var(--chart-7);
+  --color-chart-8: var(--chart-8);
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
   --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
   --color-sidebar-accent: var(--sidebar-accent);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-active: var(--sidebar-active);
+  --color-sidebar-active-foreground: var(--sidebar-active-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-process-completed: var(--process-completed);
@@ -53,26 +81,47 @@
   --secondary: oklch(0.968 0.007 247.896);
   --secondary-foreground: oklch(0.208 0.042 265.755);
   --muted: oklch(0.968 0.007 247.896);
-  --muted-foreground: oklch(0.554 0.046 257.417);
+  --muted-foreground: oklch(0.544 0.046 257.417);
   --accent: oklch(0.968 0.007 247.896);
   --accent-foreground: oklch(0.208 0.042 265.755);
-  --destructive: oklch(0.577 0.245 27.325);
+  --destructive: oklch(0.562 0.245 27.325);
+  --destructive-foreground: oklch(0.984 0.003 247.858);
+  --success: oklch(0.527 0.154 150.069);
+  --success-foreground: oklch(0.985 0.002 150);
+  --warning: oklch(0.554 0.188 70.08);
+  --warning-foreground: oklch(0.985 0.002 70);
+  --info: oklch(0.488 0.243 264.376);
+  --info-foreground: oklch(0.984 0.003 247.858);
+  --indigo: oklch(0.576 0.25 292.717);
+  --indigo-foreground: oklch(0.984 0.003 247.858);
+  --highlight: oklch(0.905 0.182 98.111);
+  --highlight-foreground: oklch(0.279 0.041 260.031);
+  /* --border is decorative (separators, cards, table rules) and stays light.
+     --input / --ring outline controls and keep 0.64 for WCAG 1.4.11 (3:1). */
   --border: oklch(0.929 0.013 255.508);
-  --input: oklch(0.929 0.013 255.508);
-  --ring: oklch(0.704 0.04 256.788);
+  --input: oklch(0.64 0.013 255.508);
+  --ring: oklch(0.64 0.04 256.788);
+  --ring-invalid: color-mix(in oklch, var(--destructive) 20%, transparent);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
+  --chart-6: oklch(0.606 0.25 292.717);
+  --chart-7: oklch(0.637 0.237 25.331);
+  --chart-8: oklch(0.768 0.233 130.85);
   --sidebar: oklch(0.984 0.003 247.858);
   --sidebar-foreground: oklch(0.129 0.042 264.695);
   --sidebar-primary: oklch(0.208 0.042 265.755);
   --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
   --sidebar-accent: oklch(0.968 0.007 247.896);
   --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
+  /* Selected menu item. Defaults to a 10% tint of the brand (--sidebar-primary)
+     so it tracks the active theme; override --sidebar-active for independent control. */
+  --sidebar-active: color-mix(in oklab, var(--sidebar-primary) 10%, transparent);
+  --sidebar-active-foreground: var(--sidebar-accent-foreground);
   --sidebar-border: oklch(0.929 0.013 255.508);
-  --sidebar-ring: oklch(0.704 0.04 256.788);
+  --sidebar-ring: oklch(0.64 0.04 256.788);
   --process-completed: oklch(0.6471 0.1544 148.24);
   --process-active: oklch(0.3908 0.1256 254.49);
 }
@@ -93,22 +142,54 @@
   --accent: oklch(0.279 0.041 260.031);
   --accent-foreground: oklch(0.984 0.003 247.858);
   --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
+  --destructive-foreground: oklch(0.28 0.048 22.216);
+  --success: oklch(0.627 0.194 150.069);
+  --success-foreground: oklch(0.26 0.049 150.069);
+  --warning: oklch(0.828 0.189 84.429);
+  --warning-foreground: oklch(0.28 0.07 84);
+  --info: oklch(0.666 0.2 264.376);
+  --info-foreground: oklch(0.24 0.05 264.376);
+  --indigo: oklch(0.702 0.183 293.541);
+  --indigo-foreground: oklch(0.28 0.046 293.541);
+  --highlight: oklch(0.476 0.114 95.62);
+  --highlight-foreground: oklch(0.984 0.003 247.858);
+  --border: oklch(1 0 0 / 20%);
+  --input: oklch(1 0 0 / 20%);
   --ring: oklch(0.551 0.027 264.364);
+  --ring-invalid: color-mix(in oklch, var(--destructive) 40%, transparent);
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
   --chart-3: oklch(0.769 0.188 70.08);
   --chart-4: oklch(0.627 0.265 303.9);
   --chart-5: oklch(0.645 0.246 16.439);
+  --chart-6: oklch(0.702 0.183 293.541);
+  --chart-7: oklch(0.704 0.191 22.216);
+  --chart-8: oklch(0.841 0.238 128.85);
   --sidebar: oklch(0.208 0.042 265.755);
   --sidebar-foreground: oklch(0.984 0.003 247.858);
   --sidebar-primary: oklch(0.488 0.243 264.376);
   --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
   --sidebar-accent: oklch(0.279 0.041 260.031);
   --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-border: oklch(1 0 0 / 10%);
+  /* Dark sidebars need more saturation to read; 18% vs 10% in light. */
+  --sidebar-active: color-mix(in oklab, var(--sidebar-primary) 18%, transparent);
+  --sidebar-active-foreground: var(--sidebar-accent-foreground);
+  --sidebar-border: oklch(1 0 0 / 20%);
   --sidebar-ring: oklch(0.551 0.027 264.364);
   --process-completed: oklch(0.85 0.1544 148.24);
   --process-active: oklch(0.75 0.1256 254.49);
+}
+
+/* Keyframes referenced by DS components via arbitrary animate-[...] utilities.
+   They must ship here, not in index.css (Storybook-only): consumers import only
+   /tokens, and Tailwind emits the utility but never the keyframes it names. */
+@keyframes igrp-text-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(1rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

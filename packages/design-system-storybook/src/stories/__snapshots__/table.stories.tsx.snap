@@ -1,0 +1,136 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`Components/Table Default smoke-test 1`] = `
+<div class="container mx-auto my-10 p-4 min-h-screen">
+  <div class="w-full overflow-auto"
+       id="_r_ID_"
+  >
+    <div data-slot="table-container"
+         class="relative w-full overflow-x-auto"
+    >
+      <table data-slot="table"
+             class="w-full caption-bottom text-sm"
+      >
+        <thead data-slot="table-header"
+               class="[&amp;_tr]:border-b"
+        >
+          <tr data-slot="table-row"
+              class="hover:bg-muted/50 data-[state=selected]:bg-muted border-b transition-colors bg-muted/50"
+          >
+            <th data-slot="table-head"
+                class="text-foreground h-10 px-2 text-left align-middle font-medium whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 *:[[role=checkbox]]:translate-y-[2px]"
+            >
+              ID
+            </th>
+            <th data-slot="table-head"
+                class="text-foreground h-10 px-2 text-left align-middle font-medium whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 *:[[role=checkbox]]:translate-y-[2px]"
+            >
+              Name
+            </th>
+            <th data-slot="table-head"
+                class="text-foreground h-10 px-2 text-left align-middle font-medium whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 *:[[role=checkbox]]:translate-y-[2px]"
+            >
+              Age
+            </th>
+            <th data-slot="table-head"
+                class="text-foreground h-10 px-2 text-left align-middle font-medium whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 *:[[role=checkbox]]:translate-y-[2px]"
+            >
+              <span class="sr-only">
+                Actions
+              </span>
+            </th>
+          </tr>
+        </thead>
+        <tbody data-slot="table-body"
+               class="[&amp;_tr:last-child]:border-0"
+        >
+          <tr data-slot="table-row"
+              class="hover:bg-muted/50 data-[state=selected]:bg-muted border-b transition-colors"
+          >
+            <td data-slot="table-cell"
+                class="p-2 align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 *:[[role=checkbox]]:translate-y-[2px]"
+            >
+              1
+            </td>
+            <td data-slot="table-cell"
+                class="p-2 align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 *:[[role=checkbox]]:translate-y-[2px]"
+            >
+              John Doe
+            </td>
+            <td data-slot="table-cell"
+                class="p-2 align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 *:[[role=checkbox]]:translate-y-[2px]"
+            >
+              28
+            </td>
+            <td data-slot="table-cell"
+                class="p-2 align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 *:[[role=checkbox]]:translate-y-[2px] text-right"
+            >
+              <button data-slot="button"
+                      class="inline-flex items-center justify-center whitespace-nowrap font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground h-7 gap-1 rounded-[min(var(--radius-md),12px)] px-2.5 text-[0.8rem] in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&amp;_svg:not([class*='size-'])]:size-3.5"
+              >
+                Edit John Doe
+              </button>
+            </td>
+          </tr>
+          <tr data-slot="table-row"
+              class="hover:bg-muted/50 data-[state=selected]:bg-muted border-b transition-colors"
+          >
+            <td data-slot="table-cell"
+                class="p-2 align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 *:[[role=checkbox]]:translate-y-[2px]"
+            >
+              2
+            </td>
+            <td data-slot="table-cell"
+                class="p-2 align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 *:[[role=checkbox]]:translate-y-[2px]"
+            >
+              Jane Smith
+            </td>
+            <td data-slot="table-cell"
+                class="p-2 align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 *:[[role=checkbox]]:translate-y-[2px]"
+            >
+              34
+            </td>
+            <td data-slot="table-cell"
+                class="p-2 align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 *:[[role=checkbox]]:translate-y-[2px] text-right"
+            >
+              <button data-slot="button"
+                      class="inline-flex items-center justify-center whitespace-nowrap font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground h-7 gap-1 rounded-[min(var(--radius-md),12px)] px-2.5 text-[0.8rem] in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&amp;_svg:not([class*='size-'])]:size-3.5"
+              >
+                Edit Jane Smith
+              </button>
+            </td>
+          </tr>
+          <tr data-slot="table-row"
+              class="hover:bg-muted/50 data-[state=selected]:bg-muted border-b transition-colors"
+          >
+            <td data-slot="table-cell"
+                class="p-2 align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 *:[[role=checkbox]]:translate-y-[2px]"
+            >
+              3
+            </td>
+            <td data-slot="table-cell"
+                class="p-2 align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 *:[[role=checkbox]]:translate-y-[2px]"
+            >
+              Sam Johnson
+            </td>
+            <td data-slot="table-cell"
+                class="p-2 align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 *:[[role=checkbox]]:translate-y-[2px]"
+            >
+              22
+            </td>
+            <td data-slot="table-cell"
+                class="p-2 align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 *:[[role=checkbox]]:translate-y-[2px] text-right"
+            >
+              <button data-slot="button"
+                      class="inline-flex items-center justify-center whitespace-nowrap font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground h-7 gap-1 rounded-[min(var(--radius-md),12px)] px-2.5 text-[0.8rem] in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&amp;_svg:not([class*='size-'])]:size-3.5"
+              >
+                Edit Sam Johnson
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+`;

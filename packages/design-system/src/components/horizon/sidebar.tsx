@@ -1,3 +1,5 @@
+"use client"
+
 /**
  * Re-exports of sidebar primitives for collapsible app navigation.
  * @module
@@ -27,7 +29,7 @@ import {
   SidebarSeparator as IGRPSidebarSeparator,
   SidebarTrigger as IGRPSidebarTrigger,
   useSidebar as useIGRPSidebar,
-} from "../primitives/sidebar"
+} from "../primitives/sidebar.js"
 
 export {
   IGRPSidebarProvider,

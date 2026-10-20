@@ -13,11 +13,7 @@ export default {
     multiple: { control: 'boolean' },
     placeholder: { control: 'text' },
     className: { control: 'text' },
-    error: { control: 'text' },
-    IGRPGridSize: {
-      control: 'select',
-      options: ['full', '1/2', '1/3', '2/3', '1/4', '3/4'],
-    },
+    error: { control: 'text' },   
   },
 } as Meta;
 
@@ -96,7 +92,6 @@ export const HalfWidth: StoryObj<IGRPInputFileProps> = {
   args: {
     label: 'Half Width File Input',
     helperText: 'This file input takes half of the available width',
-    gridSize: '1/2',
     accept: '.pdf,.doc,.docx',
   },
 };

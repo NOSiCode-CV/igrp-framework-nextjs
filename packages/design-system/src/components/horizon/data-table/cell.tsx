@@ -3,15 +3,15 @@
 import { type Row } from "@tanstack/react-table"
 import { format } from "date-fns"
 
-import { DD_MM_YYYY } from "../../../lib/constants"
-import { cn } from "../../../lib/utils"
-import { Button } from "../../primitives/button"
-import { Checkbox } from "../../primitives/checkbox"
-import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "../../primitives/tooltip"
-import { Switch } from "../../primitives/switch"
-import { IGRPBadge, type IGRPBadgeProps } from "../badge"
-import { IGRPIcon } from "../icon"
-import { IGRPLink, type IGRPLinkProps } from "../typography/link"
+import { cn } from "../cn.js"
+import { Button } from "../../primitives/button.js"
+import { Checkbox } from "../../primitives/checkbox.js"
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "../../primitives/tooltip.js"
+import { Switch } from "../../primitives/switch.js"
+import { IGRPBadge, type IGRPBadgeProps } from "../badge.js"
+import { IGRPIcon } from "../icon/index.js"
+import { IGRPLink, type IGRPLinkProps } from "../typography/link.js"
+import { useIGRPi18n, useIGRPLocale } from "../../../i18n/index.js"
 
 /**
  * Props for the IGRPDataTableCellCheckbox component.
@@ -24,12 +24,14 @@ interface IGRPDataTableCellCheckboxProps<TData> extends React.ComponentProps<typ
 
 /** Checkbox for row selection. */
 function IGRPDataTableCellCheckbox<TData>({ row, className, ...props }: IGRPDataTableCellCheckboxProps<TData>) {
+  const i18n = useIGRPi18n()
+
   return (
     <Checkbox
       checked={row.getIsSelected()}
       disabled={!row.getCanSelect()}
       onCheckedChange={(value) => row.toggleSelected(!!value)}
-      aria-label="Select row"
+      aria-label={i18n.dataTable.selectRow}
       className={className}
       {...props}
     />
@@ -46,12 +48,14 @@ interface IGRPDataTableCellSwitchProps<TData> extends React.ComponentProps<typeo
 
 /** Switch for row selection. */
 function IGRPDataTableCellSwitch<TData>({ row, className, ...props }: IGRPDataTableCellSwitchProps<TData>) {
+  const i18n = useIGRPi18n()
+
   return (
     <Switch
       checked={row.getIsSelected()}
       disabled={!row.getCanSelect()}
       onCheckedChange={(value) => row.toggleSelected(!!value)}
-      aria-label="Toggle row"
+      aria-label={i18n.dataTable.toggleRow}
       className={className}
       {...props}
     />
@@ -73,20 +77,22 @@ interface IGRPDataTableCellExpanderProps<TData> extends React.ComponentProps<typ
 
 /** Button to expand/collapse row details. */
 function IGRPDataTableCellExpander<TData>({ row, label }: IGRPDataTableCellExpanderProps<TData>) {
+  const i18n = useIGRPi18n()
   if (!row.getCanExpand()) return null
-  ;<Button
-    {...{
-      className: "shadow-none ",
-      onClick: row.getToggleExpandedHandler(),
-      "aria-expanded": row.getIsExpanded(),
-      "aria-label": row.getIsExpanded() ? `Collapse details` : `Expand for details`,
-      size: "sm",
-      variant: "ghost",
-    }}
-  >
-    <span>{label}</span>
-    {row.getIsExpanded() ? <IGRPIcon iconName="ChevronDown" /> : <IGRPIcon iconName="ChevronRight" />}
-  </Button>
+
+  return (
+    <Button
+      className="shadow-none"
+      onClick={row.getToggleExpandedHandler()}
+      aria-expanded={row.getIsExpanded()}
+      aria-label={row.getIsExpanded() ? i18n.dataTable.collapseRow : i18n.dataTable.expandRow}
+      size="sm"
+      variant="ghost"
+    >
+      <span>{label}</span>
+      {row.getIsExpanded() ? <IGRPIcon iconName="ChevronDown" /> : <IGRPIcon iconName="ChevronRight" />}
+    </Button>
+  )
 }
 
 /**
@@ -98,7 +104,7 @@ interface IGRPDataTableCellAmountProps {
   field: string
   /** Currency code. */
   currency?: string
-  /** Locale for formatting. */
+  /** Locale for formatting. Defaults to the `IGRPI18nProvider` locale (`pt-PT`). */
   language?: string
   /** Intl.format style. */
   formatStyle?: "currency" | "decimal" | "percent" | "unit"
@@ -108,11 +114,12 @@ interface IGRPDataTableCellAmountProps {
 function IGRPDataTableCellAmount({
   field,
   currency = "USD",
-  language = "en-US",
+  language,
   formatStyle = "currency",
 }: IGRPDataTableCellAmountProps) {
+  const locale = useIGRPLocale()
   const amount = Number.parseFloat(field)
-  const formatted = new Intl.NumberFormat(language, {
+  const formatted = new Intl.NumberFormat(language ?? locale, {
     style: formatStyle,
     currency: currency,
   }).format(amount)
@@ -146,14 +153,24 @@ function IGRPDataTableCellBadge({
 
 interface IGRPDataTableCellDateProps {
   date: string | Date
+  /** Locale for formatting. Defaults to the `IGRPI18nProvider` locale (`pt-PT`). */
+  language?: string
+  /** Intl.DateTimeFormat options. */
+  dateOptions?: Intl.DateTimeFormatOptions
+  /**
+   * @deprecated Use `language` / `dateOptions`. A date-fns pattern (e.g. `"dd/MM/yyyy"`); when set it
+   * takes precedence and formats with date-fns as before. Will be removed in the next release.
+   */
   dateFormat?: string
 }
 
-function IGRPDataTableCellDate({ date, dateFormat = DD_MM_YYYY }: IGRPDataTableCellDateProps) {
+function IGRPDataTableCellDate({ date, language, dateOptions, dateFormat }: IGRPDataTableCellDateProps) {
+  const locale = useIGRPLocale()
   if (!date) return null
   const d = date instanceof Date ? date : new Date(date)
   if (Number.isNaN(d.getTime())) return null
-  return <span>{format(d, dateFormat)}</span>
+  if (dateFormat) return <span>{format(d, dateFormat)}</span>
+  return <span>{new Intl.DateTimeFormat(language ?? locale, dateOptions).format(d)}</span>
 }
 
 function IGRPDataTableCellLink({
@@ -204,7 +221,7 @@ function IGRPDataTableCellTooltip({ text, side = "top", align = "start" }: IGRPD
     <TooltipProvider delayDuration={200}>
       <Tooltip>
         <TooltipTrigger asChild>
-          <div className={cn("cursor-help whitespace-nowrap truncate")}>
+          <div className={cn("cursor-help truncate whitespace-nowrap")}>
             <span>{text}</span>
           </div>
         </TooltipTrigger>

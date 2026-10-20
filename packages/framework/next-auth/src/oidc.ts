@@ -1,10 +1,19 @@
 import type { JWT } from './jwt';
 import {
   assertAuthProviderEnv,
+  buildScopeString,
   getAuthProviderDiscoveryUrl,
   getAuthProviderIdFromEnv,
+  isOidcManagedProviderId,
   type AuthProviderId,
+  type SessionAuthProviderId,
 } from './providers';
+import { createInMemoryTokenRecoveryStore, type IGRPTokenRecoveryStore } from './token-store';
+import { sanitizeRedirectUrl, stripAuthApiSuffix, stripBasePath } from './sanitize';
+import { accessTokenExpiresAt } from './claims';
+import { globalSlot, warnOnce } from './_global-state';
+
+export * from './token-store';
 
 type AuthEnvironment = Record<string, string | undefined>;
 
@@ -15,20 +24,131 @@ type OpenIdConfiguration = {
   introspection_endpoint?: string;
 };
 
-const openIdConfigurationCache = new Map<string, Promise<OpenIdConfiguration>>();
+const DISCOVERY_CACHE_TTL_MS = 5 * 60 * 1000;
+
+// Hard ceiling for IdP round-trips that sit on a user-blocking critical path
+// (notably `events.signOut` → discovery + `revokeOidcSession`, which delays the
+// /api/auth/signout response — and therefore the session-cookie clear — until
+// it resolves). `fetch` has no default timeout, so a slow or unreachable IdP
+// would otherwise hang sign-out indefinitely, leaving the user "logged out" in
+// the UI but still holding a valid cookie. Time-boxing converts the hang into a
+// prompt, recoverable failure: local sign-out still completes and the caller
+// falls back to /login.
+const IDP_FETCH_TIMEOUT_MS = 4000;
+
+// Bounded retry for the refresh-token grant — ONLY for failures where the
+// request provably never reached the IdP (see `failedBeforeSending`) or the
+// IdP said so itself (503).
+//
+// WHY so narrow: the IdP rotates refresh tokens and remembers every rotated-out
+// one (a persisted tombstone keyed on the token hash, not a time window).
+// Presenting a spent refresh token, at ANY later time, reads as token theft and
+// revokes the session. A timeout, a reset after sending, or a 502/504 from a
+// gateway are AMBIGUOUS: the IdP may already have rotated the token and only
+// the reply was lost. Retrying those replays the spent token and turns a lost
+// reply into a revoked session — the retry used to do exactly that.
+const REFRESH_MAX_ATTEMPTS = 2;
+const REFRESH_RETRY_DELAY_MS = 300;
+
+/**
+ * Timeout for the refresh-token call itself, longer than other IdP calls: an
+ * abort is an ambiguous outcome (above), so a slow-but-successful refresh is
+ * worth waiting for. Keep `REFRESH_LOCK_TTL_MS` in ./session-store above
+ * introspection + refresh + one retry.
+ */
+const REFRESH_FETCH_TIMEOUT_MS = 8000;
+
+/**
+ * Connection-level errors raised BEFORE the request was sent: the IdP cannot
+ * have processed it, so retrying cannot replay a spent token. Node's fetch
+ * (undici) reports them as `TypeError: fetch failed` with the code on `cause`.
+ */
+const PRE_SEND_ERROR_CODES = new Set([
+  'ECONNREFUSED',
+  'ENOTFOUND',
+  'EAI_AGAIN',
+  'UND_ERR_CONNECT_TIMEOUT',
+]);
+
+function failedBeforeSending(error: unknown): boolean {
+  const failure = error as { code?: unknown; cause?: { code?: unknown } } | null;
+  const code = failure?.cause?.code ?? failure?.code;
+  return typeof code === 'string' && PRE_SEND_ERROR_CODES.has(code);
+}
+
+/**
+ * Access-token lifetime assumed only when the IdP's token response carried no
+ * usable `expires_in` AND the token itself carries no `exp`. Deliberately
+ * short: a one-hour guess meant a token that really died in ~3 minutes was
+ * treated as healthy for the rest of the hour — middleware never bounced, the
+ * jwt callback never refreshed, and every access-management call 401'd with
+ * nothing in the session explaining why. A short value is self-correcting:
+ * the next jwt callback refreshes and the IdP's real `expires_in` takes over.
+ *
+ * Shared by sign-in (`./config`) and refresh so the two paths can never guess
+ * differently — the refresh path kept the hour for a while after sign-in was
+ * fixed, which re-opened the exact same window on every refresh.
+ */
+export const UNKNOWN_EXPIRY_FALLBACK_MS = 5 * 60_000;
+
+/**
+ * Expiry (ms since epoch) of an access token from a token response, most to
+ * least authoritative: the response's `expires_in`, the token's own `exp`,
+ * then {@link UNKNOWN_EXPIRY_FALLBACK_MS}. `onFallback` fires only in the last
+ * case so callers can log it at the cadence that suits them.
+ */
+export function resolveTokenResponseExpiry(
+  expiresIn: unknown,
+  accessToken: unknown,
+  options: { now?: number; onFallback?: () => void } = {},
+): number {
+  const now = options.now ?? Date.now();
+  const expiresInSec = Number(expiresIn);
+  if (Number.isFinite(expiresInSec) && expiresInSec > 0) return now + expiresInSec * 1000;
+  const fromToken = accessTokenExpiresAt(accessToken);
+  if (fromToken !== undefined) return fromToken;
+  options.onFallback?.();
+  return now + UNKNOWN_EXPIRY_FALLBACK_MS;
+}
+
+/**
+ * `fetch` with an AbortController-backed timeout. On timeout the returned
+ * promise rejects with the AbortError, which existing call sites already treat
+ * as a network failure (cache eviction + retry for discovery, `network_error`
+ * for revocation).
+ */
+function fetchWithTimeout(input: string, init: RequestInit, timeoutMs: number): Promise<Response> {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  return fetch(input, { ...init, signal: controller.signal }).finally(() => clearTimeout(timer));
+}
+
+type DiscoveryCacheEntry = { promise: Promise<OpenIdConfiguration>; expiresAt: number };
+
+// Process-wide (see ./_global-state). Per-chunk copies meant the `/oidc` entry
+// re-fetched the discovery document that the `/config` entry had already
+// cached — an extra IdP round-trip on the user-blocking logout path.
+function openIdConfigurationCache(): Map<string, DiscoveryCacheEntry> {
+  return globalSlot('oidc.discoveryCache', () => new Map<string, DiscoveryCacheEntry>());
+}
 
 function getOpenIdConfiguration(discoveryUrl: string) {
-  const cachedConfiguration = openIdConfigurationCache.get(discoveryUrl);
+  const cache = openIdConfigurationCache();
+  const cached = cache.get(discoveryUrl);
 
-  if (cachedConfiguration) {
-    return cachedConfiguration;
+  if (cached && cached.expiresAt > Date.now()) {
+    return cached.promise;
   }
 
-  const configurationPromise = fetch(discoveryUrl, {
-    headers: {
-      Accept: 'application/json',
+  const promise = fetchWithTimeout(
+    discoveryUrl,
+    {
+      headers: {
+        Accept: 'application/json',
+      },
     },
-  }).then(async (response) => {
+    IDP_FETCH_TIMEOUT_MS,
+  ).then(async (response) => {
     if (!response.ok) {
       throw new Error(`Failed to fetch OpenID configuration from ${discoveryUrl}`);
     }
@@ -36,13 +156,39 @@ function getOpenIdConfiguration(discoveryUrl: string) {
     return (await response.json()) as OpenIdConfiguration;
   });
 
-  openIdConfigurationCache.set(discoveryUrl, configurationPromise);
+  cache.set(discoveryUrl, {
+    promise,
+    expiresAt: Date.now() + DISCOVERY_CACHE_TTL_MS,
+  });
 
-  return configurationPromise;
+  // Remove the poisoned entry so the next call retries — but only if it is
+  // still OURS. A fetch that hangs past the TTL is superseded by a fresh entry
+  // before it settles; deleting by URL alone then evicted that healthy entry
+  // and forced yet another discovery round-trip.
+  promise.catch(() => {
+    if (cache.get(discoveryUrl)?.promise === promise) cache.delete(discoveryUrl);
+  });
+
+  return promise;
 }
 
-function getProviderIdFromTokenOrEnv(token: JWT, env: AuthEnvironment): AuthProviderId {
-  return (token.authProviderId as AuthProviderId | undefined) ?? getAuthProviderIdFromEnv(env);
+function getProviderIdFromTokenOrEnv(token: JWT, env: AuthEnvironment): SessionAuthProviderId {
+  return token.authProviderId ?? getAuthProviderIdFromEnv(env);
+}
+
+/**
+ * Warns once that an OIDC operation was skipped because the session belongs to
+ * a provider this package does not manage (a custom provider object passed to
+ * `withIGRPAuth`). Silence here reads as "refresh mysteriously stopped".
+ */
+function warnUnmanagedProvider(operation: string, providerId: SessionAuthProviderId): void {
+  warnOnce(`oidc.unmanagedProvider.${operation}`, () =>
+    console.warn(
+      `[oidc.${operation}] skipped — "${providerId}" is not an IGRP-managed provider, so this ` +
+        'package has no issuer, discovery document or client credentials for it. Token lifecycle ' +
+        "for a custom provider is the application's responsibility.",
+    ),
+  );
 }
 
 function getClientCredentials(env: AuthEnvironment) {
@@ -52,89 +198,658 @@ function getClientCredentials(env: AuthEnvironment) {
   };
 }
 
-export async function refreshOidcAccessToken(token: JWT, env: AuthEnvironment) {
-  const providerId = getProviderIdFromTokenOrEnv(token, env);
+/**
+ * HTTP Basic client authentication per RFC 6749 §2.3.1 — used for EVERY call
+ * this module makes with client credentials (refresh, revocation,
+ * introspection). §2.3.1 says a server MUST support Basic for clients with a
+ * secret and only MAY accept the secret in the body (`client_secret_post`), so
+ * Basic is the one method a conforming authorization server cannot refuse.
+ * Mixing the two — Basic here, body there — meant a server registered for a
+ * single method broke one side: refresh failed closed into a logout, while
+ * introspection failed open and merely warned.
+ *
+ * Two details a plain `btoa(`${id}:${secret}`)` gets wrong:
+ *
+ * 1. The spec requires both parts to be form-urlencoded *before* base64. Real
+ *    client secrets are usually base64-ish and contain `+` `/` `=`, which a
+ *    spec-compliant server (Keycloak, Spring Authorization Server) URL-decodes
+ *    on receipt — sending them raw can mismatch.
+ * 2. `btoa` is Latin-1 only and THROWS on any non-ASCII character. In
+ *    `introspectOidcToken` that throw is swallowed by the outer catch and
+ *    turned into a fail-open `true`, silently disabling the revocation gate
+ *    for the whole process. Encoding to UTF-8 bytes first removes the throw.
+ */
+function buildBasicAuthHeader(clientId: string, clientSecret: string): string {
+  const encoded = `${encodeURIComponent(clientId)}:${encodeURIComponent(clientSecret)}`;
+  const bytes = new TextEncoder().encode(encoded);
+  let binary = '';
+  for (const byte of bytes) binary += String.fromCharCode(byte);
+  return `Basic ${btoa(binary)}`;
+}
 
-  assertAuthProviderEnv(env, providerId);
+// In-flight refresh deduplication. NextAuth invokes the jwt callback once per
+// session read; near token expiry, multiple concurrent requests (a server
+// component RSC tree + a `useSession` poll + a server action) decode the
+// SAME cookie token and each call `refreshOidcAccessToken` with the same
+// refresh_token. With refresh-token rotation, the IdP accepts the FIRST call
+// and rejects every subsequent one with `invalid_grant` — the last cookie
+// write wins, so the user can be logged out even though one refresh
+// succeeded. Sharing the in-flight promise collapses N concurrent calls into
+// one network round-trip and one cookie write.
+//
+// In-memory only; multi-instance deployments can still race across pods.
+// Single-process dev is fully covered; sticky routing covers most prod.
+//
+// Process-wide (see ./_global-state): a per-chunk copy would silently split the
+// dedup the moment anything refreshed through a second entry point, and the
+// whole purpose of this map is that a split produces `invalid_grant` and logs
+// the user out of a healthy session.
+function inflightRefreshes(): Map<string, Promise<RefreshOutcome>> {
+  return globalSlot('oidc.inflightRefreshes', () => new Map<string, Promise<RefreshOutcome>>());
+}
 
-  if (!token.refreshToken) {
-    return {
-      ...token,
-      error: 'RefreshAccessTokenError',
-      forceLogout: true,
-    };
+// Rotation-result recovery cache. NextAuth runs the jwt callback on every
+// session read, including RSC renders where `cookies()` is read-only. When the
+// IdP ROTATES refresh tokens, a refresh that runs inside an RSC render rotates
+// the token but cannot persist it; the next read replays the consumed token and
+// the IdP rejects it with `invalid_grant`, logging the user out of a healthy
+// session. Keyed by the CONSUMED refresh token, this remembers the rotated
+// result for a short window so the next persist-capable read (the client
+// session poll or a server action) can recover and persist it.
+//
+// Where `inflightRefreshes` collapses CONCURRENT refreshes, this bridges
+// SEQUENTIAL ones (an RSC render, then a later poll) — the gap the dedup misses.
+//
+// TTL: the entry must outlive the gap between an RSC rotation and the next
+// PERSIST-CAPABLE read, which is whichever of these comes first:
+//   - `IGRPSessionWatcher`'s adaptive refresh, ~15s after the rotation in the
+//     common case (it fires at `expiresAt - 45s`, the RSC refresh at `- 60s`);
+//   - the focus refetch, when the tab comes back to the foreground;
+//   - the fixed `refetchInterval` backstop — 600s in the template.
+// The first two need a live, foregrounded tab. A backgrounded tab (timers
+// throttled) or a tab closed right after the rotation gets only the backstop,
+// so the TTL is sized to the backstop with margin, not to the watcher: an
+// earlier 180s figure, derived from a 150s poll that no longer exists, let the
+// entry expire first — the cookie then replayed the consumed refresh token,
+// introspection reported it inactive, and a healthy session was force-logged-
+// out. Holding the rotated token a few minutes longer costs nothing the cookie
+// is not already paying for 30 days.
+const RECOVERY_TTL_MS = 15 * 60_000;
+
+// Defaults to per-process memory (single instance / sticky routing). Replace
+// via configureOidcTokenRecoveryStore with a store backed by shared
+// infrastructure for multi-replica deployments without sticky sessions — that
+// closes the cross-pod rotation race the in-memory store can't.
+//
+// Process-wide (see ./_global-state), and a HOLDER object rather than the store
+// itself because configureOidcTokenRecoveryStore replaces it — every copy has
+// to read through the same reference or the jwt callback keeps using a store
+// the caller thinks it swapped out.
+type RecoveryStoreSlot = { store: IGRPTokenRecoveryStore };
+
+function recoveryStoreSlot(): RecoveryStoreSlot {
+  return globalSlot('oidc.tokenRecoveryStore', () => ({
+    store: createInMemoryTokenRecoveryStore(),
+  }));
+}
+
+/**
+ * Replaces the rotation-recovery store. Call once at startup — `withIGRPAuth`
+ * does this automatically when its `tokenRecoveryStore` option is set.
+ */
+export function configureOidcTokenRecoveryStore(store: IGRPTokenRecoveryStore): void {
+  recoveryStoreSlot().store = store;
+}
+
+/**
+ * Store failures must never break a session read, but a silent catch hides a
+ * store outage behind sporadic forced logouts. Warn once per process so the
+ * operator can tell "store down" apart from "IdP rejected the grant" without
+ * flooding logs on every session read during an outage.
+ */
+function warnRecoveryStoreFailure(operation: 'get' | 'set' | 'delete', error: unknown): void {
+  warnOnce('oidc.tokenRecoveryStore', () =>
+    console.warn(
+      `[oidc.tokenRecoveryStore] ${operation} failed — recovery degraded to cache miss; ` +
+        'rotated-token recovery is disabled until the store recovers:',
+      error instanceof Error ? `${error.name}: ${error.message}` : error,
+    ),
+  );
+}
+
+/**
+ * Returns a rotated token previously cached by {@link refreshOidcAccessToken}
+ * for the given (now-consumed) refresh token, or null if absent/expired. Pure
+ * peek — no deletion-on-read (both an RSC read and the persisting poll may
+ * need the same entry before one persists; it self-evicts by TTL). A store
+ * failure degrades to a cache miss: the recovery path must never take a
+ * session read down with it.
+ */
+export async function getRecoveredToken(refreshToken: string | undefined): Promise<JWT | null> {
+  if (!refreshToken) return null;
+  try {
+    return await recoveryStoreSlot().store.get(refreshToken);
+  } catch (error) {
+    warnRecoveryStoreFailure('get', error);
+    return null;
   }
+}
 
-  const discoveryUrl = getAuthProviderDiscoveryUrl(env, providerId);
-  const openIdConfiguration = await getOpenIdConfiguration(discoveryUrl);
-  const { clientId, clientSecret } = getClientCredentials(env);
-
-  const response = await fetch(openIdConfiguration.token_endpoint, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    body: new URLSearchParams({
-      client_id: clientId,
-      client_secret: clientSecret,
-      grant_type: 'refresh_token',
-      refresh_token: token.refreshToken,
-    }),
-  });
-
-  if (!response.ok) {
-    return {
-      ...token,
-      error: 'RefreshAccessTokenError',
-      forceLogout: true,
-    };
+/**
+ * Drops a recovery entry, e.g. once its session has been signed out. Best
+ * effort: a store without `delete`, or one that throws, simply leaves the entry
+ * to expire by TTL.
+ */
+export async function forgetRecoveredToken(refreshToken: string | undefined): Promise<void> {
+  if (!refreshToken) return;
+  const { store } = recoveryStoreSlot();
+  if (!store.delete) return;
+  try {
+    await store.delete(refreshToken);
+  } catch (error) {
+    warnRecoveryStoreFailure('delete', error);
   }
+}
 
-  const refreshedToken = await response.json();
+/**
+ * Whether a token read back from the recovery store carries usable auth
+ * material. Shape only — freshness is deliberately NOT checked here.
+ *
+ * A recovered token can legitimately be past its own `expires_at`: the entry
+ * lives for RECOVERY_TTL_MS, which can outlast the access token it holds. That
+ * entry is still worth adopting, because it carries the ROTATED refresh token —
+ * the only one the IdP will still accept. The caller adopts it and then, if the
+ * access token is spent, refreshes with that live refresh token. Rejecting it
+ * for staleness would send the caller back to replaying the consumed token,
+ * which is exactly the `invalid_grant` logout this cache exists to prevent.
+ */
+export function isUsableRecoveredToken(token: JWT | null | undefined): token is JWT {
+  return (
+    !!token && typeof token.accessToken === 'string' && token.accessToken.length > 0 && !token.error
+  );
+}
 
+/**
+ * The auth material a refresh produces. Deliberately NOT a whole JWT: the
+ * in-flight dedup below shares one network round-trip between every concurrent
+ * caller, and those callers do not necessarily hold the same token — a
+ * `callbacks.jwt` extension may have put different custom fields on each. When
+ * the shared promise resolved to a fully-merged JWT built from whichever
+ * caller happened to arrive first, those fields leaked across sessions. Each
+ * caller now applies this delta to its OWN token.
+ */
+type RefreshDelta = {
+  accessToken: string;
+  idToken?: string;
+  expiresAt: number;
+  refreshToken: string;
+  authProviderId: SessionAuthProviderId;
+};
+
+type RefreshOutcome =
+  | { status: 'refreshed'; delta: RefreshDelta }
+  | { status: 'recovered'; token: JWT }
+  | { status: 'failed' };
+
+/** Auth-material fields, i.e. everything a refresh is allowed to overwrite. */
+export function applyRefreshDelta(token: JWT, delta: RefreshDelta): JWT {
   return {
     ...token,
-    accessToken: refreshedToken.access_token,
-    idToken: refreshedToken.id_token ?? token.idToken,
-    expiresAt: Date.now() + (refreshedToken.expires_in ?? 3600) * 1000,
-    refreshToken: refreshedToken.refresh_token ?? token.refreshToken,
-    authProviderId: providerId,
+    accessToken: delta.accessToken,
+    idToken: delta.idToken || token.idToken,
+    expiresAt: delta.expiresAt,
+    refreshToken: delta.refreshToken,
+    authProviderId: delta.authProviderId,
     error: undefined,
     forceLogout: false,
   };
 }
 
-export async function revokeOidcSession(token: JWT, env: AuthEnvironment) {
+/**
+ * Copies only the auth material out of a token recovered from the rotation
+ * store onto the caller's current token. The stored token was built by whoever
+ * performed the rotation, so adopting it wholesale would import that caller's
+ * custom claims — the same cross-contamination {@link RefreshDelta} avoids.
+ */
+export function applyRecoveredToken(current: JWT, recovered: JWT): JWT {
+  return {
+    ...current,
+    accessToken: recovered.accessToken,
+    idToken: recovered.idToken || current.idToken,
+    expiresAt: recovered.expiresAt,
+    refreshToken: recovered.refreshToken,
+    authProviderId: recovered.authProviderId ?? current.authProviderId,
+    error: undefined,
+    forceLogout: false,
+  };
+}
+
+function failedRefresh(token: JWT): JWT {
+  return { ...token, error: 'RefreshAccessTokenError', forceLogout: true };
+}
+
+export async function refreshOidcAccessToken(token: JWT, env: AuthEnvironment): Promise<JWT> {
+  // A provider this package does not manage has no token endpoint we could
+  // call. Returning the token untouched leaves the session to live out its
+  // NextAuth cookie, which is what a plain NextAuth app does; the previous
+  // behaviour walked into `getAuthProviderDiscoveryUrl` → `''` → `fetch('')`
+  // and force-logged the user out at the first refresh.
   const providerId = getProviderIdFromTokenOrEnv(token, env);
-
-  assertAuthProviderEnv(env, providerId);
-
-  if (!token.refreshToken) {
-    return;
+  if (!isOidcManagedProviderId(providerId)) {
+    warnUnmanagedProvider('refreshOidcAccessToken', providerId);
+    return token;
   }
+
+  if (!token.refreshToken) return failedRefresh(token);
+
+  const refreshKey = token.refreshToken;
+  const inflightMap = inflightRefreshes();
+  let inflight = inflightMap.get(refreshKey);
+  if (!inflight) {
+    const tokenWithRefresh = token as JWT & { refreshToken: string };
+    inflight = performRefresh(tokenWithRefresh, env, providerId).finally(() => {
+      inflightMap.delete(refreshKey);
+    });
+    inflightMap.set(refreshKey, inflight);
+  }
+
+  const outcome = await inflight;
+  if (outcome.status === 'refreshed') return applyRefreshDelta(token, outcome.delta);
+  if (outcome.status === 'recovered') return applyRecoveredToken(token, outcome.token);
+  return failedRefresh(token);
+}
+
+async function performRefresh(
+  token: JWT & { refreshToken: string },
+  env: AuthEnvironment,
+  providerId: AuthProviderId,
+): Promise<RefreshOutcome> {
+  assertAuthProviderEnv(env, providerId);
 
   const discoveryUrl = getAuthProviderDiscoveryUrl(env, providerId);
   const openIdConfiguration = await getOpenIdConfiguration(discoveryUrl);
+  const { clientId, clientSecret } = getClientCredentials(env);
+
+  // Include the original auth scopes on refresh so the IdP re-issues an
+  // id_token with `sid` matching the *current* servlet session. Spring
+  // Authorization Server (and other OIDC v1 servers) gate id_token issuance
+  // on `openid` being present in the refresh request — without it, refresh
+  // returns access_token + refresh_token only, leaving the original id_token
+  // in the JWT pointing at a stale session id. That stale `sid` then causes
+  // /connect/logout to no-op: Spring compares `id_token_hint.sid` to the
+  // current JSESSIONID's hashed session id, sees mismatch, and redirects
+  // without invalidating the session. `buildScopeString` is the same function
+  // the authorization request uses, so `openid` is guaranteed either way.
+  const body = new URLSearchParams({
+    grant_type: 'refresh_token',
+    refresh_token: token.refreshToken,
+    scope: buildScopeString(env.IGRP_AUTH_SCOPES),
+  });
+  const authorization = buildBasicAuthHeader(clientId, clientSecret);
+
+  // Retry ONLY when the IdP cannot have consumed the refresh token: the request
+  // never left (`failedBeforeSending`), or the IdP answered 503 (unavailable —
+  // it did not process the grant). A 4xx is a permanent decision
+  // (`invalid_grant`, `invalid_client`, …). A timeout, a reset after sending or
+  // any other 5xx is ambiguous — see REFRESH_MAX_ATTEMPTS — and is never
+  // retried: the token may already be spent, and replaying it revokes the
+  // session.
+  let response: Response | undefined;
+  for (let attempt = 1; attempt <= REFRESH_MAX_ATTEMPTS; attempt++) {
+    let retryable = false;
+    try {
+      response = await fetchWithTimeout(
+        openIdConfiguration.token_endpoint,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            Authorization: authorization,
+          },
+          body,
+        },
+        REFRESH_FETCH_TIMEOUT_MS,
+      );
+    } catch (error) {
+      response = undefined;
+      retryable = failedBeforeSending(error);
+    }
+
+    if (response) {
+      if (response.ok) break;
+      retryable = response.status === 503;
+    }
+
+    if (!retryable) break;
+    if (attempt < REFRESH_MAX_ATTEMPTS) {
+      await new Promise((resolve) => setTimeout(resolve, REFRESH_RETRY_DELAY_MS));
+    }
+  }
+
+  // A 200 whose body is not JSON — a proxy serving its own error page with the
+  // wrong status — is a failed refresh like any other, not an exception: a
+  // rejection here propagated to every caller sharing the in-flight promise
+  // and was logged as "threw unexpectedly" instead of taking the recovery path.
+  const refreshedToken: Record<string, unknown> | null =
+    response && response.ok ? await response.json().catch(() => null) : null;
+
+  if (
+    !refreshedToken ||
+    typeof refreshedToken.access_token !== 'string' ||
+    !refreshedToken.access_token
+  ) {
+    // With a SHARED recovery store, a permanent rejection (invalid_grant) or an
+    // exhausted retry often means another replica already rotated this refresh
+    // token — its result may have landed in the store after our caller's
+    // pre-flight recovery check. Peek once more before declaring the session
+    // dead. With the default in-memory store this is a cheap no-op re-check.
+    const recovered = await getRecoveredToken(token.refreshToken);
+    if (isUsableRecoveredToken(recovered)) {
+      return { status: 'recovered', token: recovered };
+    }
+
+    return { status: 'failed' };
+  }
+  const accessToken = refreshedToken.access_token;
+
+  // Verify the IdP honored the `scope=openid` request and returned a fresh
+  // id_token. If `gotFreshIdToken` is false here, OIDC logout will fail
+  // silently because our cached id_token's `sid` no longer matches the current
+  // servlet session. This warns in production too — a misconfigured IdP breaks
+  // RP-initiated logout in deployed environments, where operators most need the
+  // signal, not just in dev.
+  const gotFreshIdToken =
+    typeof refreshedToken.id_token === 'string' && refreshedToken.id_token.length > 0;
+  if (!gotFreshIdToken) {
+    console.warn(
+      '[oidc.refreshOidcAccessToken] IdP did not return a new id_token on refresh — ' +
+        'OIDC end-session may fail because the stored id_token references a stale session id. ' +
+        "Check the IdP's OIDC refresh-token grant configuration (Spring AS requires the " +
+        'refresh-token grant authentication-converter to include the openid scope).',
+    );
+  }
+
+  const oldRefreshToken = token.refreshToken;
+  // An empty-string `refresh_token` is "no rotation", not a new token: `??`
+  // alone would have adopted it and the next refresh would fail on it.
+  const newRefreshToken: string =
+    typeof refreshedToken.refresh_token === 'string' && refreshedToken.refresh_token
+      ? refreshedToken.refresh_token
+      : token.refreshToken;
+  const expiresAt = resolveTokenResponseExpiry(refreshedToken.expires_in, accessToken, {
+    onFallback: () =>
+      warnOnce('oidc.refreshUnknownExpiry', () =>
+        console.warn(
+          '[oidc.refreshOidcAccessToken] the IdP returned no usable expires_in and the new access ' +
+            `token carries no exp claim — assuming ${UNKNOWN_EXPIRY_FALLBACK_MS / 1000}s per refresh.`,
+        ),
+      ),
+  });
+  const delta: RefreshDelta = {
+    accessToken,
+    idToken:
+      typeof refreshedToken.id_token === 'string' && refreshedToken.id_token
+        ? refreshedToken.id_token
+        : token.idToken,
+    expiresAt,
+    refreshToken: newRefreshToken,
+    authProviderId: providerId,
+  };
+  const refreshed: JWT = applyRefreshDelta(token, delta);
+
+  // The IdP rotated the refresh token. If this refresh ran where the cookie
+  // can't be persisted (an RSC render), the rotated token would be lost and the
+  // next read would replay the consumed one → invalid_grant → logout. Remember
+  // the outcome keyed by the CONSUMED token so the next persist-capable read —
+  // possibly on another replica when the store is shared — can recover it.
+  // Skip when the token was reused (the cookie's token still works). Awaited so
+  // a shared store is consistent before the rotated cookie is written; a store
+  // outage must not fail a successful refresh.
+  if (newRefreshToken !== oldRefreshToken) {
+    try {
+      await recoveryStoreSlot().store.set(oldRefreshToken, refreshed, RECOVERY_TTL_MS);
+    } catch (error) {
+      // Best-effort: losing the recovery entry re-opens only the RSC race window.
+      warnRecoveryStoreFailure('set', error);
+    }
+  }
+
+  return { status: 'refreshed', delta };
+}
+
+/**
+ * Outcome of {@link revokeOidcSession}. The caller (typically NextAuth
+ * `events.signOut`) can log or surface this; callers that need a "fire and
+ * forget" call can simply ignore the returned value.
+ *
+ * Why a tagged result instead of throwing?
+ * - Revocation is best-effort and must never block local sign-out.
+ * - Callers in the signout path can't reasonably `try`/`catch` and still
+ *   know *why* it skipped (no token, no endpoint, network error, 4xx).
+ */
+export type RevokeOidcSessionResult =
+  | { ok: true; status: number }
+  | {
+      ok: false;
+      reason:
+        | 'no_refresh_token'
+        | 'no_revocation_endpoint'
+        // The session belongs to a custom provider this package does not
+        // manage, so there is no endpoint (and no credentials) to revoke with.
+        | 'provider_not_managed'
+        // `IGRP_AUTH_*` is incomplete, so there are no credentials to revoke
+        // with. Tagged rather than thrown, like every other outcome here.
+        | 'not_configured'
+        | 'http_error'
+        // Also covers a discovery document that could not be fetched.
+        | 'network_error'
+        // Caller-side deadline: revocation did not settle within the
+        // budget the sign-out path allows it (see SIGNOUT_REVOCATION_BUDGET_MS).
+        | 'timeout';
+      status?: number;
+      body?: string;
+      error?: unknown;
+    };
+
+/**
+ * Revokes the session at the IdP (RFC 7009).
+ *
+ * SECURITY ASSUMPTION: only the **refresh** token is submitted. This relies on
+ * the IdP treating a refresh-token revocation as revoking the whole grant —
+ * which Keycloak and Spring Authorization Server both do. Against an IdP that
+ * revokes only the presented token, the already-issued access token stays
+ * usable at resource servers until its own `exp` (~3 min for the IGRP IdP)
+ * even though the user has signed out locally. If this package ever targets
+ * such an IdP, revoke the access token in a second call.
+ */
+export async function revokeOidcSession(
+  token: JWT,
+  env: AuthEnvironment,
+): Promise<RevokeOidcSessionResult> {
+  const providerId = getProviderIdFromTokenOrEnv(token, env);
+  if (!isOidcManagedProviderId(providerId)) {
+    warnUnmanagedProvider('revokeOidcSession', providerId);
+    return { ok: false, reason: 'provider_not_managed' };
+  }
+
+  try {
+    assertAuthProviderEnv(env, providerId);
+  } catch (error) {
+    return { ok: false, reason: 'not_configured', error };
+  }
+
+  if (!token.refreshToken) {
+    return { ok: false, reason: 'no_refresh_token' };
+  }
+
+  let openIdConfiguration: OpenIdConfiguration;
+  try {
+    openIdConfiguration = await getOpenIdConfiguration(
+      getAuthProviderDiscoveryUrl(env, providerId),
+    );
+  } catch (error) {
+    return { ok: false, reason: 'network_error', error };
+  }
   const revocationEndpoint = openIdConfiguration.revocation_endpoint;
 
   if (!revocationEndpoint) {
-    return;
+    return { ok: false, reason: 'no_revocation_endpoint' };
   }
 
   const { clientId, clientSecret } = getClientCredentials(env);
 
-  await fetch(revocationEndpoint, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    body: new URLSearchParams({
-      client_id: clientId,
-      client_secret: clientSecret,
-      token: token.refreshToken,
-      token_type_hint: 'refresh_token',
-    }),
-  });
+  let response: Response;
+  try {
+    // Time-boxed: this runs inside `events.signOut`, which blocks the
+    // /api/auth/signout response (and the session-cookie clear) until it
+    // settles. A timeout here aborts the wait so local sign-out completes
+    // promptly even when the IdP revocation endpoint is unreachable.
+    response = await fetchWithTimeout(
+      revocationEndpoint,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          Authorization: buildBasicAuthHeader(clientId, clientSecret),
+        },
+        body: new URLSearchParams({
+          token: token.refreshToken,
+          token_type_hint: 'refresh_token',
+        }),
+      },
+      IDP_FETCH_TIMEOUT_MS,
+    );
+  } catch (error) {
+    return { ok: false, reason: 'network_error', error };
+  }
+
+  if (!response.ok) {
+    // Capture body for diagnostics — IdP error messages here are typically small.
+    const body = await response.text().catch(() => '');
+    return { ok: false, reason: 'http_error', status: response.status, body };
+  }
+
+  return { ok: true, status: response.status };
+}
+
+/**
+ * Origins a post-logout redirect may target, beyond the app's own.
+ *
+ * `IGRP_AUTH_POST_LOGOUT_ALLOWED_ORIGINS` is a comma-separated allowlist for
+ * the deliberate case (logging out to a portal on another host). Empty by
+ * default — same-origin only.
+ */
+function allowedPostLogoutOrigins(env: AuthEnvironment): string[] {
+  const appOrigin = (() => {
+    try {
+      return new URL(stripAuthApiSuffix(env.NEXTAUTH_URL ?? '')).origin;
+    } catch {
+      return '';
+    }
+  })();
+  const extra = (env.IGRP_AUTH_POST_LOGOUT_ALLOWED_ORIGINS ?? '')
+    .split(',')
+    .map((value) => value.trim())
+    .filter(Boolean)
+    .map((value) => {
+      try {
+        return new URL(value).origin;
+      } catch {
+        return '';
+      }
+    })
+    .filter(Boolean);
+  return [appOrigin, ...extra].filter(Boolean);
+}
+
+/**
+ * Browser-reachable app base — origin plus basePath, no trailing slash — the
+ * same derivation `withIGRPAuth` uses for post-login redirects: the path of
+ * `NEXTAUTH_URL` minus `/api/auth`, else `NEXT_PUBLIC_BASE_PATH`. `''` when
+ * `NEXTAUTH_URL` is unset or malformed.
+ */
+function appBaseUrl(env: AuthEnvironment): string {
+  let parsed: URL;
+  try {
+    parsed = new URL(stripAuthApiSuffix(env.NEXTAUTH_URL ?? ''));
+  } catch {
+    return '';
+  }
+  const origin = parsed.origin;
+  let path = parsed.pathname.replace(/\/+$/, '');
+  if (!path) {
+    const fromEnv = (env.NEXT_PUBLIC_BASE_PATH ?? process.env.NEXT_PUBLIC_BASE_PATH ?? '')
+      .trim()
+      .replace(/\/+$/, '');
+    path = fromEnv && !fromEnv.startsWith('/') ? `/${fromEnv}` : fromEnv;
+  }
+  return `${origin}${path}`;
+}
+
+/**
+ * Validates the caller's `post_logout_redirect_uri` before it is handed to the
+ * IdP. Returns a safe value, or `null` when nothing usable remains.
+ *
+ * This parameter reaches the framework from application code that typically
+ * derives it from `window.location.origin` and passes it through a Server
+ * Action — a publicly callable HTTP endpoint, so the value is attacker
+ * controlled. Unvalidated, it is an open redirect wearing the IdP's domain,
+ * gated only by whether that IdP happens to enforce byte-for-byte
+ * registration. Every other redirect surface in this package is guarded; this
+ * is the one that actually leaves the origin.
+ */
+function sanitizePostLogoutRedirectUri(value: string, env: AuthEnvironment): string | null {
+  const allowed = allowedPostLogoutOrigins(env);
+  const fallback = allowed[0] ?? null;
+
+  if (typeof value !== 'string' || value.trim().length === 0) return fallback;
+  const trimmed = value.trim();
+
+  // Relative path — resolve against the app BASE (origin + basePath) through
+  // the shared sanitizer. Resolving against the bare origin sent `/login` for
+  // an app at `/apps/t` to `https://host/login`, a route this app does not
+  // serve. As in the post-login redirect, a path may or may not already carry
+  // the basePath, so it is stripped on a segment boundary and re-prefixed once.
+  if (trimmed.startsWith('/')) {
+    if (!fallback) return null;
+    const safePath = sanitizeRedirectUrl(trimmed, fallback, '');
+    if (!safePath) return fallback;
+    const base = appBaseUrl(env) || fallback;
+    const basePathname = base.slice(fallback.length);
+    const relative = stripBasePath(safePath, basePathname) ?? safePath;
+    return `${base}${relative}`;
+  }
+
+  let parsed: URL;
+  try {
+    parsed = new URL(trimmed);
+  } catch {
+    return fallback;
+  }
+  if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') return fallback;
+
+  // No allowlist could be derived (NEXTAUTH_URL unset or malformed, no explicit
+  // origins). We have no basis to judge the value, and dropping it would break
+  // the redirect back from the IdP for an app that is merely under-configured —
+  // so accept it and say so. The IdP's own registration check remains the
+  // control in that case.
+  if (allowed.length === 0) {
+    console.warn(
+      '[oidc.buildEndSessionUrl] cannot validate post_logout_redirect_uri — NEXTAUTH_URL is ' +
+        'unset or malformed, so the app origin is unknown. Set NEXTAUTH_URL (or ' +
+        'IGRP_AUTH_POST_LOGOUT_ALLOWED_ORIGINS) to enable the origin check.',
+    );
+    return parsed.toString();
+  }
+
+  if (!allowed.includes(parsed.origin)) {
+    console.warn(
+      `[oidc.buildEndSessionUrl] post_logout_redirect_uri origin ${parsed.origin} is not allowed — ` +
+        'falling back to the app origin. Add it to IGRP_AUTH_POST_LOGOUT_ALLOWED_ORIGINS if this is intentional.',
+    );
+    return fallback;
+  }
+  return parsed.toString();
 }
 
 export async function buildEndSessionUrl(
@@ -142,54 +857,133 @@ export async function buildEndSessionUrl(
   env: AuthEnvironment,
   postLogoutRedirectUri: string,
 ): Promise<string | null> {
+  // `env` is the documented source, but NODE_ENV is rarely part of a validated
+  // env map — fall back to the process like `withIGRPAuth` does, or a custom
+  // map is always "development" and these warnings fire in production.
+  const isDev = (env.NODE_ENV ?? process.env.NODE_ENV) !== 'production';
+
   const providerId = getProviderIdFromTokenOrEnv(token, env);
-  if (providerId === 'none') return null;
-  if (!token.idToken) return null;
+  if (!isOidcManagedProviderId(providerId)) {
+    if (providerId === 'none') {
+      if (isDev) {
+        console.warn(
+          '[oidc.buildEndSessionUrl] returning null — provider is "none" (AUTH_PROVIDER=none)',
+        );
+      }
+    } else {
+      warnUnmanagedProvider('buildEndSessionUrl', providerId);
+    }
+    return null;
+  }
 
   const discoveryUrl = getAuthProviderDiscoveryUrl(env, providerId);
   const openIdConfiguration = await getOpenIdConfiguration(discoveryUrl);
-  if (!openIdConfiguration.end_session_endpoint) return null;
+  if (!openIdConfiguration.end_session_endpoint) {
+    if (isDev) {
+      console.warn(
+        `[oidc.buildEndSessionUrl] returning null — discovery doc at ${discoveryUrl} has no end_session_endpoint`,
+      );
+    }
+    return null;
+  }
 
   const { clientId } = getClientCredentials(env);
   const url = new URL(openIdConfiguration.end_session_endpoint);
-  url.searchParams.set('id_token_hint', token.idToken);
-  url.searchParams.set('post_logout_redirect_uri', postLogoutRedirectUri);
   url.searchParams.set('client_id', clientId);
+
+  const safeRedirectUri = sanitizePostLogoutRedirectUri(postLogoutRedirectUri, env);
+  if (safeRedirectUri) {
+    url.searchParams.set('post_logout_redirect_uri', safeRedirectUri);
+  } else if (isDev) {
+    console.warn(
+      '[oidc.buildEndSessionUrl] no usable post_logout_redirect_uri (none supplied and NEXTAUTH_URL ' +
+        'is unset/malformed) — the IdP will apply its own default after logout.',
+    );
+  }
+  const hasIdToken = typeof token.idToken === 'string' && token.idToken.length > 0;
+  if (hasIdToken) {
+    url.searchParams.set('id_token_hint', token.idToken as string);
+  }
 
   return url.toString();
 }
 
+/**
+ * Introspection deliberately fails OPEN — a flaky or misconfigured
+ * introspection endpoint must never block a refresh. But failing open in
+ * silence means an operator cannot tell "the IdP says this token is live" from
+ * "introspection has been returning 401 for a month", and the gate that is
+ * supposed to catch server-side revocation is simply gone. Warn once per
+ * reason, per process.
+ */
+function warnIntrospectionDisabled(reason: string, detail?: unknown): void {
+  warnOnce(`oidc.introspection.${reason}`, () =>
+    console.warn(
+      `[oidc.introspectOidcToken] failing open (${reason}) — server-side revocation is NOT being ` +
+        'detected until this is resolved; refresh will proceed regardless.',
+      detail instanceof Error ? `${detail.name}: ${detail.message}` : (detail ?? ''),
+    ),
+  );
+}
+
 export async function introspectOidcToken(token: JWT, env: AuthEnvironment): Promise<boolean> {
-  if (!token.accessToken) return true;
+  // Introspect the REFRESH token, not the access token. This gate only runs
+  // once the access token has expired (or is inside its refresh buffer), at
+  // which point an access-token introspection always returns `active: false`
+  // per RFC 7662 — so gating on it would block every refresh exactly when one
+  // is needed. The refresh token's liveness is what actually determines
+  // whether the upcoming `grant_type=refresh_token` call can succeed, and lets
+  // us detect a server-side revocation before attempting the grant.
+  if (!token.refreshToken) return true;
 
   const providerId = getProviderIdFromTokenOrEnv(token, env);
-  if (providerId === 'none') return true;
+  // Not managed here (AUTH_PROVIDER=none, or a custom provider) — nothing to
+  // introspect against, and the gate fails open by design.
+  if (!isOidcManagedProviderId(providerId)) {
+    if (providerId !== 'none') warnUnmanagedProvider('introspectOidcToken', providerId);
+    return true;
+  }
 
   try {
     const discoveryUrl = getAuthProviderDiscoveryUrl(env, providerId);
     const openIdConfiguration = await getOpenIdConfiguration(discoveryUrl);
-    if (!openIdConfiguration.introspection_endpoint) return true;
+    if (!openIdConfiguration.introspection_endpoint) {
+      warnIntrospectionDisabled('no introspection_endpoint in the IdP discovery document');
+      return true;
+    }
 
     const { clientId, clientSecret } = getClientCredentials(env);
-    const credentials = btoa(`${clientId}:${clientSecret}`);
 
-    const response = await fetch(openIdConfiguration.introspection_endpoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        Authorization: `Basic ${credentials}`,
+    const response = await fetchWithTimeout(
+      openIdConfiguration.introspection_endpoint,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          Authorization: buildBasicAuthHeader(clientId, clientSecret),
+        },
+        body: new URLSearchParams({
+          token: token.refreshToken,
+          token_type_hint: 'refresh_token',
+        }),
       },
-      body: new URLSearchParams({
-        token: token.accessToken,
-        token_type_hint: 'access_token',
-      }),
-    });
+      IDP_FETCH_TIMEOUT_MS,
+    );
 
-    if (!response.ok) return true;
+    if (!response.ok) {
+      warnIntrospectionDisabled(
+        `introspection endpoint returned HTTP ${response.status}`,
+        response.status === 401 || response.status === 403
+          ? 'check IGRP_AUTH_CLIENT_ID / IGRP_AUTH_CLIENT_SECRET'
+          : undefined,
+      );
+      return true;
+    }
 
     const result = (await response.json()) as { active?: boolean };
     return result.active !== false;
-  } catch {
+  } catch (error) {
+    warnIntrospectionDisabled('introspection request threw', error);
     return true;
   }
 }

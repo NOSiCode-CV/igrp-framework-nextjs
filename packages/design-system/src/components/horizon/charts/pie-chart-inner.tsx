@@ -5,9 +5,10 @@ import { Pie, PieChart, Sector, Cell, Label, Legend, type LegendType } from "rec
 import type { PieSectorDataItem } from "recharts/types/polar/Pie"
 import React, { useState, type SVGAttributes } from "react"
 
-import { cn } from "../../../lib/utils"
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "../../primitives/chart"
-import type { IGRPChartProps, PieConfig } from "./types"
+import { cn } from "../cn.js"
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "../../primitives/chart.js"
+import { ChartCustomLegend } from "./custom-legend.js"
+import type { IGRPChartProps, PieConfig } from "./types.js"
 import {
   createChartConfig,
   formatChartValue,
@@ -16,13 +17,15 @@ import {
   getLegendHorizontalAlign,
   getLegendLayout,
   getLegendVerticalAlign,
-} from "./lib"
+} from "./lib.js"
 
 /**
  * Props for the IGRPPieChart component.
  * @see IGRPPieChart
  */
-export interface IGRPPieChartProps extends IGRPChartProps {
+export interface IGRPPieChartProps extends Omit<IGRPChartProps, "categoryKey"> {
+  /** Unused by polar charts; kept optional for call sites that already pass it. */
+  categoryKey?: string
   pies: PieConfig[]
   nameKey: string
   centerLabel?: {
@@ -127,20 +130,22 @@ function IGRPPieChartInner({
 
     const RADIAN = Math.PI / 180
 
-    let radius = 0
-    let textAnchor: SVGAttributes<SVGTextElement>["textAnchor"] = "middle"
-
-    if (labelPosition === "outside") {
-      radius = (outerRadius || 0) + 30
-      textAnchor = midAngle > 270 || midAngle < 90 ? "start" : "end"
-    } else {
-      radius = innerRadius && outerRadius ? innerRadius + (outerRadius - innerRadius) / 2 : (outerRadius || 0) * 0.7
-    }
+    const isOutside = labelPosition === "outside"
+    const radius = isOutside
+      ? (outerRadius || 0) + 30
+      : innerRadius && outerRadius
+        ? innerRadius + (outerRadius - innerRadius) / 2
+        : (outerRadius || 0) * 0.7
+    const textAnchor: SVGAttributes<SVGTextElement>["textAnchor"] = isOutside
+      ? midAngle > 270 || midAngle < 90
+        ? "start"
+        : "end"
+      : "middle"
 
     const x = cx + radius * Math.cos(-midAngle * RADIAN)
     const y = cy + radius * Math.sin(-midAngle * RADIAN)
 
-    let content = ""
+    let content: string
     switch (labelType) {
       case "name":
         content = name || ""
@@ -169,7 +174,7 @@ function IGRPPieChartInner({
           {formatValue(
             interactive && activeIndex >= 0 && activeIndex < data.length && pies[0]?.dataKey
               ? Number(data[activeIndex]?.[pies[0].dataKey] ?? 0)
-              : totalValue,
+              : totalValue
           )}
         </tspan>
         {centerLabel.text && (
@@ -182,10 +187,7 @@ function IGRPPieChartInner({
   }
 
   return (
-    <div
-      className={`w-full overflow-hidden ${className || ""}`}
-      style={backgroundColor ? { backgroundColor } : undefined}
-    >
+    <div className={cn("w-full overflow-hidden", className)} style={backgroundColor ? { backgroundColor } : undefined}>
       {(title || description) && (
         <div className={cn("pb-3")}>
           {title && <div className={cn("text-xl font-semibold")}>{title}</div>}
@@ -197,6 +199,7 @@ function IGRPPieChartInner({
         <div style={{ height: chartHeight, width: chartWidth }} className={cn("w-full overflow-hidden")}>
           <ChartContainer className={cn("h-full w-full")} config={chartConfig}>
             <PieChart
+              accessibilityLayer
               margin={{
                 top: 20,
                 right: 12,
@@ -205,7 +208,10 @@ function IGRPPieChartInner({
               }}
             >
               {showTooltip && (
-                <ChartTooltip cursor={false} content={<ChartTooltipContent indicator={tooltipIndicator} />} />
+                <ChartTooltip
+                  cursor={false}
+                  content={<ChartTooltipContent indicator={tooltipIndicator} valueFormatter={valueFormatter} />}
+                />
               )}
 
               {legendPosition !== "none" && (
@@ -213,11 +219,8 @@ function IGRPPieChartInner({
                   verticalAlign={getLegendVerticalAlign(legendPosition)}
                   align={getLegendHorizontalAlign(legendPosition)}
                   layout={getLegendLayout(legendPosition)}
-                  payload={legendPayload}
-                  iconSize={10}
-                  iconType="square"
                   wrapperStyle={{ paddingTop: 10 }}
-                  className={cn("text-xs fill-foreground")}
+                  content={() => <ChartCustomLegend payload={legendPayload} />}
                 />
               )}
 
@@ -235,7 +238,6 @@ function IGRPPieChartInner({
                   cornerRadius={pie.cornerRadius || 0}
                   startAngle={pie.startAngle || 0}
                   endAngle={pie.endAngle || 360}
-                  activeIndex={interactive ? activeIndex : pie.activeIndex}
                   activeShape={pie.activeShape ? renderActiveShape : undefined}
                   onMouseEnter={interactive ? (_, index) => setActiveIndex(index) : undefined}
                   onMouseLeave={interactive ? () => setActiveIndex(-1) : undefined}
@@ -268,7 +270,7 @@ function IGRPPieChartInner({
       </div>
 
       {footer && (
-        <div className={cn("flex-col items-start gap-2 text-sm pt-4")}>
+        <div className={cn("flex-col items-start gap-2 pt-4 text-sm")}>
           {footer.description && <div className={cn("leading-none text-muted-foreground")}>{footer.description}</div>}
         </div>
       )}

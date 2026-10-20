@@ -1,10 +1,10 @@
 "use client"
 
 import { useId } from "react"
+import { cn } from "cn"
 
-import { IGRPColors, type IGRPColorVariants } from "../../lib/colors"
-import { cn } from "../../lib/utils"
-import { IGRPStatsCard, type IGRPStatsCardProps } from "../horizon/stats-card"
+import { IGRPColors, type IGRPColorVariants } from "../../lib/colors.js"
+import { IGRPStatsCard, type IGRPStatsCardProps } from "../horizon/stats-card.js"
 
 /**
  * Props for the StatsCardMini component.

@@ -17,11 +17,7 @@ export default {
     required: { control: 'boolean' },
     disabled: { control: 'boolean' },
     defaultValue: { control: 'color' },
-    showHexValue: { control: 'boolean' },
-    IGRPGridSize: {
-      control: 'select',
-      options: ['full', '1/2', '1/3', '2/3', '1/4', '3/4'],
-    },
+    showFormatValue: { control: 'boolean' },
     error: { control: 'text' },
   },
 } as Meta;
@@ -97,7 +93,7 @@ export const WithoutHexValue: StoryObj<IGRPInputColorProps> = {
     name: 'accentColor',
     label: 'Accent Color',
     defaultValue: '#10B981',
-    showHexValue: false,
+    showFormatValue: false,
   },
 };
 

@@ -13,8 +13,17 @@ You are working inside `packages/framework/next-auth/` — `@igrp/framework-next
 
 ## Rules unique to this package
 
-- Public entry points: `./server`, `./client`, `./session`, `./jwt`, `./middleware`, `./config`, `./sanitize`, `./oidc`, `./providers`, `./types`. **Don't collapse them** — they keep server code out of client bundles. New symbols go behind the right entry, not the root barrel.
-- Builds with **tsup**, not SWC+Babel. **No React Compiler step.**
+- Public entry points: `./server`, `./client`, `./session`, `./jwt`, `./middleware`, `./config`, `./sanitize`, `./oidc`, `./providers`, `./claims`, `./cookies`, `./runtime`, `./session-store`, `./types`. **Don't collapse them** — they keep server code out of client bundles. New symbols go behind the right entry, not the root barrel.
+- The **root barrel** (`./`) is restricted to the pure modules (`session`, `providers`, `sanitize`) plus type-only re-exports. Never add a symbol there that pulls in `next-auth/*` or the OIDC client — a single root import from a page drags it into that page's bundle.
+- `./client` is a real client boundary, and the `'use client'` directive comes **only** from the `onSuccess` hook in `tsup.config.ts` — `src/client.ts` deliberately does not declare one, because esbuild strips it anyway and declaring it produced a misleading "was ignored" warning on every build. Add any new browser-only entry to `CLIENT_ENTRIES` there. `dist-contract.test.ts` asserts the directive on the real output; that test is the only thing standing between a broken hook and a silently server-first entry.
+- `./cookies` and `./runtime` are the **shared-with-downstream** entries: pure, dependency-free helpers that `@igrp/framework-next` imports instead of keeping its own copy. Cookie naming and Next control-flow detection live there and nowhere else — a second copy is how they drift.
+- `./client` also owns **`useOptionalSession`** (and the raw `SessionContext` it reads). `useSession()` *throws* without a provider and `useSafeSession` delegates straight to it, so neither can serve a component that must also render standalone — `IGRPSectionPermissions` in `@igrp/framework-next-ui` does. It returns `null` for "no provider mounted", which means **cannot tell**, not "unauthenticated"; a permission gate must keep its server-seeded answer in that case rather than denying. It lives here so downstream packages stop importing `next-auth/react` directly, for the same reason `./cookies` exists.
+- `./session-store` owns the session-cookie codec. `withIGRPAuth` always installs it as `jwt.encode`/`jwt.decode`; with no store it is NextAuth's own codec. Anything that decodes the session cookie outside the instance must pass `decode: decodeIGRPSessionToken`, or a store-backed cookie decodes without `accessToken`. The store is registered from Node-only code (`instrumentation.ts`), never from a module middleware imports.
+- Auth cookie names are scoped by `NEXT_PUBLIC_BASE_PATH` (see `src/cookies.ts`). Anything that reads the session cookie must go through `sessionCookieName()` / `resolveSecureCookie()`, never a hardcoded `next-auth.session-token`.
+- **Any change that renames auth cookies or changes their path must extend `staleAuthCookies` with the names it retires.** Otherwise every user keeps an orphaned 2–4 KB cookie that nothing expires, which is what pushed co-hosted apps into `431` header limits.
+- `src/__tests__/dist-contract.test.ts` asserts properties that exist only in the BUILD: the `"use client"` directive, the root barrel's purity, the Edge-safety contract (what `dist/config.js` _statically_ imports), and one `Symbol.for` namespace across chunks. Source review cannot see any of them — two regressions reached a green build before it existed. It skips when `dist/` is absent, and `release` runs `build && typecheck && test && publish` so it gates every publish.
+- `typecheck` is in `release` because `src/__tests__/types-augmentation.type-check.ts` — the only guard against the `next-auth` module augmentation drifting — is run by **nothing else**: vitest's include matches `.test.ts`, and it is not a tsup dts entry. The package also sets `noUnusedLocals` / `noUnusedParameters`, and `release` runs `lint` (ESLint, `eslint.config.js`) first.
+- Builds with **tsup**, not Babel. **No React Compiler step.**
 - `@igrp/framework-next-types` re-exports types from here — run `pnpm build:framework` after type changes.
 - `pnpm build:auth` from repo root.
 
@@ -27,3 +36,5 @@ Treat every change as a potential security boundary. For session/JWT changes, me
 @../../../.claude/shared/hard-rules.md
 
 @../../../.claude/shared/dependency-order.md
+
+@../../../.claude/shared/skills.md

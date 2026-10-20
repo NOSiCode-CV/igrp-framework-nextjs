@@ -18,11 +18,7 @@ export default {
     required: { control: 'boolean' },
     disabled: { control: 'boolean' },
     defaultValue: { control: 'text' },
-    defaultProtocol: { control: 'text' },
-    IGRPGridSize: {
-      control: 'select',
-      options: ['full', '1/2', '1/3', '2/3', '1/4', '3/4'],
-    },
+    defaultProtocol: { control: 'text' },    
     error: { control: 'text' },
   },
 } as Meta;
@@ -169,7 +165,6 @@ export const HalfWidth: StoryObj<IGRPInputUrlProps> = {
     name: 'website',
     label: 'Website URL',
     placeholder: 'Insira a URL do site',
-    gridSize: '1/2',
   },
 };
 

@@ -1,0 +1,238 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`Components/Command Default smoke-test 1`] = `
+<div class="p-6">
+  <div tabindex="-1"
+       data-slot="command"
+       class="bg-popover text-popover-foreground flex h-full w-full flex-col overflow-hidden max-w-md rounded-lg border shadow-md"
+       cmdk-root
+  >
+    <label cmdk-label
+           for="radix-ID"
+           id="radix-ID"
+           style="position: absolute; width: 1px; height: 1px; padding: 0px; margin: -1px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; border-width: 0px;"
+    >
+    </label>
+    <div data-slot="command-input-wrapper"
+         class="flex h-9 items-center gap-2 border-b px-3"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg"
+           width="24"
+           height="24"
+           viewbox="0 0 24 24"
+           fill="none"
+           stroke="currentColor"
+           stroke-width="2"
+           stroke-linecap="round"
+           stroke-linejoin="round"
+           class="lucide lucide-search size-4 shrink-0 opacity-50"
+           aria-hidden="true"
+      >
+        <path d="m21 21-4.34-4.34">
+        </path>
+        <circle cx="11"
+                cy="11"
+                r="8"
+        >
+        </circle>
+      </svg>
+      <input data-slot="command-input"
+             class="placeholder:text-muted-foreground flex h-10 w-full rounded-md bg-transparent py-3 text-sm outline-hidden disabled:cursor-not-allowed disabled:opacity-50"
+             placeholder="Type a command or search…"
+             cmdk-input
+             autocomplete="off"
+             autocorrect="off"
+             spellcheck="false"
+             aria-autocomplete="list"
+             role="combobox"
+             aria-expanded="true"
+             aria-controls="radix-ID"
+             aria-labelledby="radix-ID"
+             id="radix-ID"
+             type="text"
+             value
+      >
+    </div>
+    <div data-slot="command-list"
+         class="max-h-[300px] scroll-py-1 overflow-x-hidden overflow-y-auto"
+         cmdk-list
+         role="listbox"
+         tabindex="-1"
+         aria-label="Suggestions"
+         id="radix-ID"
+         style="--cmdk-list-height: 265.0px;"
+    >
+      <div cmdk-list-sizer>
+        <div data-slot="command-group"
+             class="text-foreground **:[[cmdk-group-heading]]:text-muted-foreground overflow-hidden p-1 **:[[cmdk-group-heading]]:px-2 **:[[cmdk-group-heading]]:py-1.5 **:[[cmdk-group-heading]]:text-xs **:[[cmdk-group-heading]]:font-medium"
+             cmdk-group
+             role="presentation"
+             data-value="Suggestions"
+        >
+          <div cmdk-group-heading
+               aria-hidden="true"
+               id="radix-ID"
+          >
+            Suggestions
+          </div>
+          <div cmdk-group-items
+               role="group"
+               aria-labelledby="radix-ID"
+          >
+            <div data-slot="command-item"
+                 class="data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground [&amp;_svg:not([class*='text-'])]:text-muted-foreground relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4"
+                 id="radix-ID"
+                 cmdk-item
+                 role="option"
+                 aria-disabled="false"
+                 aria-selected="true"
+                 data-disabled="false"
+                 data-selected="true"
+                 data-value="Calendar"
+            >
+              Calendar
+            </div>
+            <div data-slot="command-item"
+                 class="data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground [&amp;_svg:not([class*='text-'])]:text-muted-foreground relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4"
+                 id="radix-ID"
+                 cmdk-item
+                 role="option"
+                 aria-disabled="false"
+                 aria-selected="false"
+                 data-disabled="false"
+                 data-selected="false"
+                 data-value="Search Emoji"
+            >
+              Search Emoji
+            </div>
+            <div data-slot="command-item"
+                 class="data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground [&amp;_svg:not([class*='text-'])]:text-muted-foreground relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4"
+                 id="radix-ID"
+                 cmdk-item
+                 role="option"
+                 aria-disabled="false"
+                 aria-selected="false"
+                 data-disabled="false"
+                 data-selected="false"
+                 data-value="Calculator"
+            >
+              Calculator
+            </div>
+          </div>
+        </div>
+        <div data-slot="command-separator"
+             class="bg-border -mx-1 h-px"
+             cmdk-separator
+             role="separator"
+        >
+        </div>
+        <div data-slot="command-group"
+             class="text-foreground **:[[cmdk-group-heading]]:text-muted-foreground overflow-hidden p-1 **:[[cmdk-group-heading]]:px-2 **:[[cmdk-group-heading]]:py-1.5 **:[[cmdk-group-heading]]:text-xs **:[[cmdk-group-heading]]:font-medium"
+             cmdk-group
+             role="presentation"
+             data-value="Settings"
+        >
+          <div cmdk-group-heading
+               aria-hidden="true"
+               id="radix-ID"
+          >
+            Settings
+          </div>
+          <div cmdk-group-items
+               role="group"
+               aria-labelledby="radix-ID"
+          >
+            <div data-slot="command-item"
+                 class="data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground [&amp;_svg:not([class*='text-'])]:text-muted-foreground relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4"
+                 id="radix-ID"
+                 cmdk-item
+                 role="option"
+                 aria-disabled="false"
+                 aria-selected="false"
+                 data-disabled="false"
+                 data-selected="false"
+                 data-value="Profile⌘P"
+            >
+              Profile
+              <span data-slot="command-shortcut"
+                    class="text-muted-foreground ml-auto text-xs tracking-widest"
+              >
+                ⌘P
+              </span>
+            </div>
+            <div data-slot="command-item"
+                 class="data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground [&amp;_svg:not([class*='text-'])]:text-muted-foreground relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4"
+                 id="radix-ID"
+                 cmdk-item
+                 role="option"
+                 aria-disabled="false"
+                 aria-selected="false"
+                 data-disabled="false"
+                 data-selected="false"
+                 data-value="Billing⌘B"
+            >
+              Billing
+              <span data-slot="command-shortcut"
+                    class="text-muted-foreground ml-auto text-xs tracking-widest"
+              >
+                ⌘B
+              </span>
+            </div>
+            <div data-slot="command-item"
+                 class="data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground [&amp;_svg:not([class*='text-'])]:text-muted-foreground relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4"
+                 id="radix-ID"
+                 cmdk-item
+                 role="option"
+                 aria-disabled="false"
+                 aria-selected="false"
+                 data-disabled="false"
+                 data-selected="false"
+                 data-value="Settings⌘S"
+            >
+              Settings
+              <span data-slot="command-shortcut"
+                    class="text-muted-foreground ml-auto text-xs tracking-widest"
+              >
+                ⌘S
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Command InDialog smoke-test 1`] = `
+<div class="p-6">
+  <button data-slot="button"
+          class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 relative"
+          type="button"
+          id="_r_ID_"
+  >
+    Open command palette
+    <span data-slot="command-shortcut"
+          class="text-muted-foreground ml-auto text-xs tracking-widest"
+    >
+      ⌘K
+    </span>
+  </button>
+  <div data-slot="dialog-header"
+       class="flex flex-col gap-2 text-center sm:text-left sr-only"
+  >
+    <h2 id="radix-ID"
+        data-slot="dialog-title"
+        class="text-lg leading-none font-semibold"
+    >
+      Command Palette
+    </h2>
+    <p id="radix-ID"
+       data-slot="dialog-description"
+       class="text-muted-foreground text-sm"
+    >
+      Search for a command to run…
+    </p>
+  </div>
+</div>
+`;

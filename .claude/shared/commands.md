@@ -12,13 +12,12 @@
 - `pnpm build` — everything with a build script
 - `pnpm lint` | `pnpm format` | `pnpm clean` | `pnpm clean-all` (also removes `node_modules`)
 
-## Templates
+## Template (`templates/demo-v1` — the only template, package name `@igrp/framework-next-template`)
 
 - `pnpm dev:demo` — Next.js 15 + Turbopack
-- `pnpm build:demo` — `next build` (runs biome format)
+- `pnpm build:demo` — `next build` (runs Biome format)
 - `pnpm start:demo` — `next start`
 - `pnpm release:demo` — create the publishable zip template
-- `pnpm dev:app-center` — if `apps/` is present
 
 ## Storybook & visual tests
 
@@ -35,3 +34,11 @@
 
 - `pnpm migrate:primitives` — dry-run
 - `pnpm migrate:primitives:apply` — rewrite files
+
+## Template migrator (`packages/framework/template-migrator` — `@igrp/template-migrator`, CLI `igrp-migrate`)
+
+- `pnpm template-migrations` — build the migrator (`pnpm --filter @igrp/template-migrator build`)
+- `pnpm --filter @igrp/template-migrator test` — Vitest
+- `pnpm --filter @igrp/template-migrator typecheck` — `tsc --noEmit` over `src/` **and** `scripts/`
+- `pnpm --filter @igrp/template-migrator check:drift` — fail if `templates/demo-v1` drifted from shipped migrations. Runs in `release` (after `typecheck` and `test`), and per-MR via the `check_template_drift` job in `.gitlab-ci.yml`
+- `pnpm --filter @igrp/template-migrator sync:template-lock` — regenerate `templates/demo-v1/.igrp-migrations-lock.json` so the zip marks every migration applied. **Run after adding a migration** — `check:drift` fails until you do. Add `--check` for a dry run.

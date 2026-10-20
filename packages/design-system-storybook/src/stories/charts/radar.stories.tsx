@@ -146,12 +146,10 @@ export const RadarChartCustomLabel: StoryObj<IGRPRadarChartProps> = {
     customAngleAxisTick: ({
       x,
       y,
-      textAnchor,
       index,
     }: {
       x: number;
       y: number;
-      textAnchor: string;
       index: number;
     }) => {
       const data = dadosVisitantes[index];

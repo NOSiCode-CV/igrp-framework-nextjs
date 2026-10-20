@@ -3,11 +3,14 @@
 import { useId } from "react"
 import { useFormContext } from "react-hook-form"
 
-import { cn } from "../../../lib/utils"
-import type { IGRPInputProps } from "../../../types"
-import { Checkbox } from "../../primitives/checkbox"
-import { IGRPFormField } from "../form/form-field"
-import { IGRPLabel } from "../label"
+import { cn } from "../cn.js"
+import { igrpOmitNonDomProps } from "../../../lib/dom-props.js"
+import { igrpChainHandlers, igrpMergeRefs } from "../../../lib/form-binding.js"
+import type { IGRPInputProps } from "../../../types.js"
+import { Checkbox } from "../../primitives/checkbox.js"
+import { IGRPFormField } from "../form/form-field.js"
+import { IGRPLabel } from "../label.js"
+import { Field, FieldDescription, FieldError } from "../../primitives/field.js"
 
 /**
  * Props for the IGRPCheckbox component.
@@ -43,7 +46,7 @@ function IGRPCheckbox({
 
   if (!formContext) {
     return (
-      <div className={cn("*:not-first:mt-2")}>
+      <Field>
         <div className={cn("flex items-center gap-2")}>
           <Checkbox
             id={fieldName}
@@ -51,8 +54,8 @@ function IGRPCheckbox({
             className={cn(className, error && "border-destructive focus-visible:ring-destructive/20")}
             onCheckedChange={onCheckedChange}
             aria-invalid={!!error}
-            aria-describedby={helperText || error ? `${fieldName}-helper` : undefined}
-            {...props}
+            aria-describedby={error ? `${fieldName}-error` : helperText ? `${fieldName}-helper` : undefined}
+            {...igrpOmitNonDomProps(props)}
           />
 
           {label && (
@@ -65,28 +68,22 @@ function IGRPCheckbox({
           )}
         </div>
 
-        {helperText && !error && (
-          <p
-            id={`${fieldName}-helper`}
-            className={cn("text-muted-foreground mt-2 text-xs")}
-            role="region"
-            aria-live="polite"
-          >
-            {helperText}
-          </p>
-        )}
+        {helperText && !error && <FieldDescription id={`${fieldName}-helper`}>{helperText}</FieldDescription>}
 
-        {error && (
-          <p id={`${fieldName}-error`} className={cn("text-destructive mt-2 text-xs")} role="alert">
-            {error}
-          </p>
-        )}
-      </div>
+        {error && <FieldError id={`${fieldName}-error`}>{error}</FieldError>}
+      </Field>
     )
   }
 
+  // The field owns checked/onBlur/ref; the caller's copies never replace it
+  // (see lib/form-binding.ts).
+  const { checked: _checked, defaultChecked: _defaultChecked, onBlur, ref, ...callerProps } = igrpOmitNonDomProps(props)
+  void _checked
+  void _defaultChecked
+
   return (
     <IGRPFormField
+      errorText={error}
       name={fieldName}
       label={label}
       helperText={helperText}
@@ -101,8 +98,9 @@ function IGRPCheckbox({
           className={cn(
             "bg-backsground",
             (fieldState.error || error) && "border-destructive focus-visible:ring-destructive/20",
-            className,
+            className
           )}
+          ref={igrpMergeRefs(field.ref, ref)}
           checked={field.value === true}
           onCheckedChange={(checked) => {
             field.onChange(checked)
@@ -110,10 +108,9 @@ function IGRPCheckbox({
               onCheckedChange(checked)
             }
           }}
-          onBlur={field.onBlur}
+          onBlur={igrpChainHandlers(field.onBlur, onBlur)}
           aria-invalid={!!fieldState.error || !!error}
-          aria-describedby={helperText || error ? `${id}-helper` : undefined}
-          {...props}
+          {...callerProps}
         />
       )}
     </IGRPFormField>

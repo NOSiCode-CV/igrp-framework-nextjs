@@ -1,0 +1,65 @@
+{
+  "name": "@igrp/template-migrator",
+  "version": "0.2.0-beta.7",
+  "description": "CLI to apply IGRP template migrations to consumer apps",
+  "author": "IGRP Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+http://git.nosi.cv/igrp-3_0/igrp-framework-frontend/igrp-framework-nextjs.git",
+    "directory": "packages/framework/template-migrator"
+  },
+  "homepage": "https://igrp.cv",
+  "bugs": {
+    "url": "http://git.nosi.cv/igrp-3_0/igrp-framework-frontend/igrp-framework-nextjs/-/issues"
+  },
+  "type": "module",
+  "bin": {
+    "igrp-migrate": "dist/cli.js"
+  },
+  "main": "dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "prebuild": "tsx scripts/pack.ts",
+    "build:js": "tsup",
+    "build:types": "tsc -p tsconfig.build.json --emitDeclarationOnly",
+    "build": "pnpm prebuild && pnpm build:js && pnpm build:types",
+    "typecheck": "tsc -p scripts/tsconfig.json --noEmit",
+    "check:drift": "tsx scripts/check-drift.ts",
+    "check:drift:update-baseline": "tsx scripts/check-drift.ts --update-baseline",
+    "sync:template-lock": "tsx scripts/sync-template-lock.ts",
+    "test": "vitest run",
+    "release": "pnpm typecheck && pnpm test && pnpm check:drift && pnpm build && pnpm publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest --no-git-checks",
+    "clean": "rimraf dist"
+  },
+  "dependencies": {
+    "yaml": "2.9.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24",
+    "rimraf": "^6.1.3",
+    "tsx": "4.23.15",
+    "tsup": "^8.5.1",
+    "typescript": "~6.0.3",
+    "vitest": "^5.0.1"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "publishConfig": {
+    "registry": "https://sonatype.nosi.cv/repository/igrp/",
+    "tag": "latest",
+    "access": "public"
+  },
+  "files": [
+    "dist"
+  ]
+}

@@ -17,7 +17,10 @@ function hexToRgbComponents(hex: string): [number, number, number] {
 }
 
 function rgbComponentsToHex(r: number, g: number, b: number): string {
-  const ch = (c: number) => Math.round(clamp(c * 255, 0, 255)).toString(16).padStart(2, "0")
+  const ch = (c: number) =>
+    Math.round(clamp(c * 255, 0, 255))
+      .toString(16)
+      .padStart(2, "0")
   return `#${ch(r)}${ch(g)}${ch(b)}`
 }
 
@@ -30,9 +33,14 @@ function rgbToHsl(r: number, g: number, b: number): [number, number, number] {
   const s = l > 0.5 ? d / (2 - max - min) : d / (max + min)
   let h: number
   switch (max) {
-    case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break
-    case g: h = ((b - r) / d + 2) / 6; break
-    default: h = ((r - g) / d + 4) / 6
+    case r:
+      h = ((g - b) / d + (g < b ? 6 : 0)) / 6
+      break
+    case g:
+      h = ((b - r) / d + 2) / 6
+      break
+    default:
+      h = ((r - g) / d + 4) / 6
   }
   return [h * 360, s, l]
 }
@@ -66,63 +74,123 @@ function delinearize(c: number): number {
 function hexToOklch(hex: string): [number, number, number] {
   const [r, g, b] = hexToRgbComponents(hex).map(linearize) as [number, number, number]
   const x = 0.4124564 * r + 0.3575761 * g + 0.1804375 * b
-  const y = 0.2126729 * r + 0.7151522 * g + 0.0721750 * b
-  const z = 0.0193339 * r + 0.1191920 * g + 0.9503041 * b
+  const y = 0.2126729 * r + 0.7151522 * g + 0.072175 * b
+  const z = 0.0193339 * r + 0.119192 * g + 0.9503041 * b
   const l_ = Math.cbrt(0.8189330101 * x + 0.3618667424 * y - 0.1288597137 * z)
   const m_ = Math.cbrt(0.0329845436 * x + 0.9293118715 * y + 0.0361456387 * z)
-  const s_ = Math.cbrt(0.0482003018 * x + 0.2643662691 * y + 0.6338517070 * z)
-  const L  = 0.2104542553 * l_ + 0.7936177850 * m_ - 0.0040720468 * s_
-  const a  = 1.9779984951 * l_ - 2.4285922050 * m_ + 0.4505937099 * s_
-  const bv = 0.0259040371 * l_ + 0.7827717662 * m_ - 0.8086757660 * s_
-  const C  = Math.sqrt(a * a + bv * bv)
-  let   H  = Math.atan2(bv, a) * (180 / Math.PI)
+  const s_ = Math.cbrt(0.0482003018 * x + 0.2643662691 * y + 0.633851707 * z)
+  const L = 0.2104542553 * l_ + 0.793617785 * m_ - 0.0040720468 * s_
+  const a = 1.9779984951 * l_ - 2.428592205 * m_ + 0.4505937099 * s_
+  const bv = 0.0259040371 * l_ + 0.7827717662 * m_ - 0.808675766 * s_
+  const C = Math.sqrt(a * a + bv * bv)
+  let H = Math.atan2(bv, a) * (180 / Math.PI)
   if (H < 0) H += 360
   return [L, C, H]
 }
 
 // OKLCH → sRGB via OKLab → XYZ-D65 → linear sRGB → sRGB
 function oklchToHex(L: number, C: number, H: number): string {
-  const a  = C * Math.cos(H * (Math.PI / 180))
-  const b  = C * Math.sin(H * (Math.PI / 180))
+  const a = C * Math.cos(H * (Math.PI / 180))
+  const b = C * Math.sin(H * (Math.PI / 180))
   const l_ = L + 0.3963377774 * a + 0.2158037573 * b
   const m_ = L - 0.1055613458 * a - 0.0638541728 * b
-  const s_ = L - 0.0894841775 * a - 1.2914855480 * b
-  const l  = l_ * l_ * l_
-  const m  = m_ * m_ * m_
-  const s  = s_ * s_ * s_
+  const s_ = L - 0.0894841775 * a - 1.291485548 * b
+  const l = l_ * l_ * l_
+  const m = m_ * m_ * m_
+  const s = s_ * s_ * s_
   return rgbComponentsToHex(
     clamp(delinearize(+4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s), 0, 1),
     clamp(delinearize(-1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s), 0, 1),
-    clamp(delinearize(-0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s), 0, 1),
+    clamp(delinearize(-0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s), 0, 1)
   )
 }
 
 // ─── String parsers ──────────────────────────────────────────────────────────
 
+/** A single numeric token, optionally suffixed with `%` or an angle unit. */
+const TOKEN = /^([-+]?(?:\d+\.?\d*|\.\d+))(%|deg)?$/i
+
+/**
+ * Split a CSS colour function into its first three component tokens.
+ * Accepts both the legacy comma syntax (`rgb(0, 0, 0)`) and the modern space
+ * syntax (`rgb(0 0 0 / 50%)`). Any alpha component is discarded — this module
+ * models opaque colours only.
+ */
+function parseFunctional(value: string, names: readonly string[]): string[] | null {
+  const m = value.trim().match(/^([a-zA-Z]+)\(([^()]*)\)$/)
+  if (!m || !names.includes(m[1]!.toLowerCase())) return null
+  const tokens = m[2]!
+    .split("/")[0]!
+    .trim()
+    .split(/[\s,]+/)
+    .filter(Boolean)
+  return tokens.length >= 3 ? tokens.slice(0, 3) : null
+}
+
+/** Parse a token as a 0–1 ratio: `%` is relative to 100, a bare number to `scale`. */
+function ratio(token: string | undefined, scale: number): number | null {
+  const m = token?.match(TOKEN)
+  if (!m || (m[2] && m[2] !== "%")) return null
+  const n = Number(m[1])
+  if (!Number.isFinite(n)) return null
+  return clamp(m[2] === "%" ? n / 100 : n / scale, 0, 1)
+}
+
+/** Parse a token as a hue in degrees, normalised to [0, 360). */
+function angle(token: string | undefined): number | null {
+  const m = token?.match(TOKEN)
+  if (!m || m[2] === "%") return null
+  const n = Number(m[1])
+  if (!Number.isFinite(n)) return null
+  return ((n % 360) + 360) % 360
+}
+
+/** Parse `#rgb`, `#rgba`, `#rrggbb` or `#rrggbbaa`. Alpha is discarded. */
 function parseHex(value: string): string | null {
-  const m = value.trim().match(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/)
+  const m = value.trim().match(/^#([0-9a-fA-F]{3,4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/)
   if (!m) return null
   const h = m[1]!
-  const full = h.length === 3 ? h.charAt(0) + h.charAt(0) + h.charAt(1) + h.charAt(1) + h.charAt(2) + h.charAt(2) : h
+  const full =
+    h.length <= 4
+      ? h
+          .slice(0, 3)
+          .split("")
+          .map((c) => c + c)
+          .join("")
+      : h.slice(0, 6)
   return `#${full.toLowerCase()}`
 }
 
 function parseRgb(value: string): [number, number, number] | null {
-  const m = value.trim().match(/^rgb\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)\s*\)$/)
-  if (!m) return null
-  return [Number(m[1]) / 255, Number(m[2]) / 255, Number(m[3]) / 255]
+  const tokens = parseFunctional(value, ["rgb", "rgba"])
+  if (!tokens) return null
+  const r = ratio(tokens[0], 255)
+  const g = ratio(tokens[1], 255)
+  const b = ratio(tokens[2], 255)
+  return r === null || g === null || b === null ? null : [r, g, b]
 }
 
 function parseHsl(value: string): [number, number, number] | null {
-  const m = value.trim().match(/^hsl\(\s*([\d.]+)\s*,\s*([\d.]+)%\s*,\s*([\d.]+)%\s*\)$/)
-  if (!m) return null
-  return [Number(m[1]), Number(m[2]) / 100, Number(m[3]) / 100]
+  const tokens = parseFunctional(value, ["hsl", "hsla"])
+  if (!tokens) return null
+  // Bare saturation/lightness numbers are percentages, per the modern CSS syntax.
+  const h = angle(tokens[0])
+  const s = ratio(tokens[1], 100)
+  const l = ratio(tokens[2], 100)
+  return h === null || s === null || l === null ? null : [h, s, l]
 }
 
 function parseOklch(value: string): [number, number, number] | null {
-  const m = value.trim().match(/^oklch\(\s*([\d.]+)\s+([\d.]+)\s+([\d.]+)\s*\)$/)
-  if (!m) return null
-  return [Number(m[1]), Number(m[2]), Number(m[3])]
+  const tokens = parseFunctional(value, ["oklch"])
+  if (!tokens) return null
+  const L = ratio(tokens[0], 1)
+  const H = angle(tokens[2])
+  const cm = tokens[1]?.match(TOKEN)
+  if (L === null || H === null || !cm || (cm[2] && cm[2] !== "%")) return null
+  const c = Number(cm[1])
+  if (!Number.isFinite(c)) return null
+  // CSS defines 100% chroma as 0.4 for oklch().
+  return [L, clamp(cm[2] === "%" ? (c / 100) * 0.4 : c, 0, 1), H]
 }
 
 // ─── Public API ──────────────────────────────────────────────────────────────
@@ -130,10 +198,11 @@ function parseOklch(value: string): [number, number, number] | null {
 /** Detect the format of a color string. Returns null if unrecognised. */
 export function detectFormat(value: string): ColorFormat | null {
   const v = value.trim()
-  if (/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(v)) return "hex"
-  if (/^rgb\(/.test(v)) return "rgb"
-  if (/^hsl\(/.test(v)) return "hsl"
-  if (/^oklch\(/.test(v)) return "oklch"
+  if (v.startsWith("#")) return parseHex(v) ? "hex" : null
+  const fn = v.match(/^([a-zA-Z]+)\(/)?.[1]?.toLowerCase()
+  if (fn === "rgb" || fn === "rgba") return "rgb"
+  if (fn === "hsl" || fn === "hsla") return "hsl"
+  if (fn === "oklch") return "oklch"
   return null
 }
 

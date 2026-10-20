@@ -22,12 +22,12 @@ interface IGRPRepetitiveComponentProps<T> {
 /**
  * Renders a list of items using a render prop.
  */
-function IGRPRepetitiveComponent<T>({ items, children, keyExtractor, name, id }: IGRPRepetitiveComponentProps<T>) {
+function IGRPRepetitiveComponent<T>({ items, children, keyExtractor, id }: IGRPRepetitiveComponentProps<T>) {
   const _id = useId()
-  const ref = name ?? id ?? _id
+  const elementId = id ?? _id
 
   return (
-    <div id={ref}>
+    <div id={elementId}>
       {items.map((item) => (
         <Fragment key={keyExtractor(item)}>{children(item)}</Fragment>
       ))}

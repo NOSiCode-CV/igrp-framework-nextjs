@@ -1,4 +1,6 @@
-import { cn } from "../../lib/utils"
+"use client"
+
+import { FieldDescription, FieldError } from "../primitives/field.js"
 
 /**
  * Props for the IGRPFieldDescription component.
@@ -17,17 +19,9 @@ interface IGRPFieldDescriptionProps {
 function IGRPFieldDescription({ helperText, error }: IGRPFieldDescriptionProps) {
   return (
     <>
-      {helperText && !error && (
-        <p className={cn("text-muted-foreground text-xs mt-1")} role="note">
-          {helperText}
-        </p>
-      )}
+      {helperText && !error && <FieldDescription>{helperText}</FieldDescription>}
 
-      {error && (
-        <p className={cn("text-destructive text-xs mt-1")} role="alert">
-          {error}
-        </p>
-      )}
+      {error && <FieldError>{error}</FieldError>}
     </>
   )
 }

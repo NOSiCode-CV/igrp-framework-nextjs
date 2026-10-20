@@ -3,10 +3,13 @@
 import { useId } from "react"
 import { useFormContext, Controller } from "react-hook-form"
 
-import { cn } from "../../../lib/utils"
-import type { IGRPInputProps } from "../../../types"
-import { Input } from "../../primitives/input"
-import { IGRPLabel } from "../label"
+import { cn } from "../cn.js"
+import { igrpOmitNonDomProps } from "../../../lib/dom-props.js"
+import { igrpChainHandlers, igrpMergeRefs } from "../../../lib/form-binding.js"
+import type { IGRPInputProps } from "../../../types.js"
+import { Input } from "../../primitives/input.js"
+import { IGRPLabel } from "../label.js"
+import { Field, FieldDescription, FieldError } from "../../primitives/field.js"
 
 /**
  * Props for the IGRPInputTime component.
@@ -28,8 +31,10 @@ function IGRPInputTime({
   name,
   id,
   label,
+  labelClassName,
   helperText = "",
   className,
+  inputClassName,
   required = false,
   error,
   value,
@@ -39,6 +44,9 @@ function IGRPInputTime({
 }: IGRPInputTimeProps) {
   const _id = useId()
   const fieldName = name ?? id ?? _id
+  // Whatever is left belongs to the native element; the IGRP-only keys would
+  // otherwise be rendered as invalid DOM attributes.
+  const domProps = igrpOmitNonDomProps(props)
 
   const formContext = useFormContext()
 
@@ -49,8 +57,8 @@ function IGRPInputTime({
 
   if (!formContext) {
     return (
-      <div className={cn("*:not-first:mt-2")}>
-        {label && <IGRPLabel label={label} className={className} required={required} id={fieldName} />}
+      <Field>
+        {label && <IGRPLabel label={label} className={labelClassName} required={required} id={fieldName} />}
 
         <div className={cn("relative")}>
           <Input
@@ -60,38 +68,30 @@ function IGRPInputTime({
             required={required}
             aria-required={required}
             aria-invalid={!!error || !!props["aria-invalid"]}
-            aria-describedby={helperText || error ? `${id}-helper` : undefined}
+            aria-describedby={error ? `${fieldName}-error` : helperText ? `${fieldName}-helper` : undefined}
             className={cn(
               "peer bg-background py-3 text-sm outline-hidden",
               error && "border-destructive focus-visible:ring-destructive/20",
               className,
+              inputClassName
             )}
             value={value}
             defaultValue={defaultValue}
             onChange={handleChange}
-            {...props}
+            {...domProps}
           />
         </div>
 
-        {helperText && !error && (
-          <p
-            id={`${fieldName}-helper`}
-            className={cn("text-muted-foreground mt-2 text-xs")}
-            role="region"
-            aria-live="polite"
-          >
-            {helperText}
-          </p>
-        )}
+        {helperText && !error && <FieldDescription id={`${fieldName}-helper`}>{helperText}</FieldDescription>}
 
-        {error && (
-          <p id={`${fieldName}-error`} className={cn("text-destructive mt-2 text-xs")} role="alert">
-            {error}
-          </p>
-        )}
-      </div>
+        {error && <FieldError id={`${fieldName}-error`}>{error}</FieldError>}
+      </Field>
     )
   }
+
+  // The field owns onBlur/ref; the caller's copies run after it and never replace
+  // it (see lib/form-binding.ts).
+  const { onBlur, ref, ...callerProps } = domProps
 
   return (
     <Controller
@@ -99,8 +99,8 @@ function IGRPInputTime({
       control={formContext.control}
       defaultValue={defaultValue || ""}
       render={({ field, fieldState }) => (
-        <div className={cn("*:not-first:mt-2")}>
-          {label && <IGRPLabel label={label} className={className} required={required} id={fieldName} />}
+        <Field>
+          {label && <IGRPLabel label={label} className={labelClassName} required={required} id={fieldName} />}
 
           <div className={cn("relative")}>
             <Input
@@ -110,39 +110,34 @@ function IGRPInputTime({
               required={required}
               aria-required={required}
               aria-invalid={!!fieldState.error || !!error || !!props["aria-invalid"]}
-              aria-describedby={helperText || error ? `${id}-helper` : undefined}
+              aria-describedby={
+                error || fieldState.error ? `${fieldName}-error` : helperText ? `${fieldName}-helper` : undefined
+              }
               className={cn(
                 "peer bg-background py-3 text-sm outline-hidden",
                 (fieldState.error || error) && "border-destructive focus-visible:ring-destructive/20",
                 className,
+                inputClassName
               )}
+              ref={igrpMergeRefs(field.ref, ref)}
               value={field.value}
               onChange={(e) => {
                 field.onChange(e)
                 handleChange(e)
               }}
-              onBlur={field.onBlur}
-              {...props}
+              onBlur={igrpChainHandlers(field.onBlur, onBlur)}
+              {...callerProps}
             />
           </div>
 
           {helperText && !error && !fieldState.error && (
-            <p
-              id={`${fieldName}-helper`}
-              className={cn("text-muted-foreground mt-2 text-xs")}
-              role="region"
-              aria-live="polite"
-            >
-              {helperText}
-            </p>
+            <FieldDescription id={`${fieldName}-helper`}>{helperText}</FieldDescription>
           )}
 
           {(error || fieldState.error) && (
-            <p id={`${fieldName}-error`} className={cn("text-destructive mt-2 text-xs")} role="alert">
-              {error || fieldState.error?.message}
-            </p>
+            <FieldError id={`${fieldName}-error`}>{error || fieldState.error?.message}</FieldError>
           )}
-        </div>
+        </Field>
       )}
     />
   )

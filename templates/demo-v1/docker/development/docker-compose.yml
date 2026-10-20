@@ -1,0 +1,12 @@
+# Builds the Dockerfile beside this file. Run it from an app scaffolded from
+# the template, NOT from the monorepo checkout — see the Dockerfile header and
+# docs/DOCKER-RUN.md ("Who this is for") for why the monorepo build cannot work.
+services:
+  igrp-template-development:
+    build:
+      context: ../../
+      dockerfile: docker/development/Dockerfile
+
+    image: igrp-template-development
+    ports:
+      - '3001:3000'

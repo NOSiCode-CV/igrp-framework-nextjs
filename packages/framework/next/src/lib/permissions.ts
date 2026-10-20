@@ -1,0 +1,271 @@
+import 'server-only';
+
+import { cache } from 'react';
+import { forbidden } from 'next/navigation';
+import {
+  decodeIgrpClaims,
+  claimsAllow,
+  claimsExpired,
+  type IGRPAccessClaims,
+  type IGRPClaimsState,
+} from '@igrp/framework-next-auth/claims';
+import {
+  resolveSecureCookie,
+  resolveSecureCookiesFlag,
+  sessionCookieName,
+} from '@igrp/framework-next-auth/cookies';
+import { isNextControlFlowError } from '@igrp/framework-next-auth/runtime';
+
+import {
+  igrpGetAccessClientConfig,
+  igrpSetAccessClientConfig,
+  type IGRPClientRuntimeConfig,
+} from './api-config.js';
+
+const SUPER_ADMIN_MOCK: IGRPAccessClaims = { permissions: [], roles: [], isSuperAdmin: true };
+
+// `resolveSecureCookie` and `isNextControlFlowError` are imported from
+// @igrp/framework-next-auth rather than redefined. They used to be copied here
+// to avoid changing the root of the build chain for a few lines — but two
+// hand-synced copies of security-relevant cookie logic is the worse trade, and
+// the originals now ship behind the `/cookies` and `/runtime` entry points.
+
+/**
+ * Recover the access token straight from the session cookie.
+ *
+ * Needed because the per-request token lives in an `AsyncLocalStorage` store
+ * that only the layout/DAL path establishes. A Server Action or Route Handler
+ * is a *fresh* async context: the store is empty, so without this the token is
+ * unreachable and every permission check denies — super admins included.
+ *
+ * Deliberately NOT `getServerSession()`: that needs the app's `NextAuthOptions`
+ * (unavailable here), and the `accessToken` is only copied onto the session by
+ * the app's own `callbacks.session` — so it would return a session with no
+ * token and "fix" nothing. `getToken` needs only the cookies and
+ * `NEXTAUTH_SECRET`.
+ *
+ * `next/headers` and `/jwt` are dynamically imported to keep this module's
+ * static graph unchanged for every existing importer of the package root.
+ * Returns '' on a genuine failure — the caller maps that to the error state —
+ * but re-throws Next's control-flow signals (see `isNextControlFlowError`).
+ */
+/**
+ * The `cookieName` option `getToken` needs, or `{}` to leave it to `getToken`'s
+ * own derivation.
+ *
+ * **Decided from the cookie jar, not from configuration.** `withIGRPAuth`
+ * suffixes every auth cookie name with the basePath only when `cookieIsolation`
+ * is `'basePath'` (its default) — under `cookieIsolation: 'none'` it writes the
+ * STOCK names even with a basePath set. It also reads the basePath from a
+ * caller-supplied `env` map before falling back to `process.env`, and recovers
+ * it from `NEXTAUTH_URL` when `NEXT_PUBLIC_BASE_PATH` is unset.
+ *
+ * This package can see none of that: the `withIGRPAuth` instance lives in the
+ * app. Gating purely on `NEXT_PUBLIC_BASE_PATH` — as an earlier version of this
+ * did — therefore fixed the default configuration and broke
+ * `cookieIsolation: 'none'`, sending `getToken` after a suffixed name for a
+ * cookie written with the stock one.
+ *
+ * Probing the jar sidesteps the whole question. `startsWith` is the right test
+ * rather than equality because NextAuth chunks an oversized token into
+ * `<name>.0` / `<name>.1`, and `SessionStore` reassembles by prefix.
+ */
+function scopedCookieNameOption(
+  cookieNames: string[],
+  secureCookie: boolean | undefined,
+): { cookieName?: string } {
+  // No early return for an empty basePath: a root-path app's scoped name is
+  // `next-auth.session-token~`, and the stock name getToken would otherwise
+  // derive is a prefix of every co-hosted app's cookie.
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
+  const scoped = sessionCookieName(basePath, secureCookie ?? resolveSecureCookiesFlag(process.env));
+  return cookieNames.some((name) => name.startsWith(scoped)) ? { cookieName: scoped } : {};
+}
+
+async function recoverAccessTokenFromCookies(): Promise<string> {
+  try {
+    const [{ cookies }, { getToken }, { decodeIGRPSessionToken }] = await Promise.all([
+      import('next/headers'),
+      import('@igrp/framework-next-auth/jwt'),
+      import('@igrp/framework-next-auth/session-store'),
+    ]);
+    const all = (await cookies()).getAll();
+    const names = all.map((c) => c.name);
+    const secureCookie = resolveSecureCookie(names);
+    const token = await getToken({
+      req: {
+        cookies: Object.fromEntries(all.map((c) => [c.name, c.value])),
+      } as Parameters<typeof getToken>[0]['req'],
+      secret: process.env.NEXTAUTH_SECRET,
+      // With a session store registered the cookie holds only a session id;
+      // plain decode would return a token with no `accessToken`. Without one
+      // this IS plain decode.
+      decode: decodeIGRPSessionToken,
+      ...(secureCookie !== undefined ? { secureCookie } : {}),
+      ...scopedCookieNameOption(names, secureCookie),
+    });
+    return (token as { accessToken?: string } | null)?.accessToken ?? '';
+  } catch (error) {
+    if (isNextControlFlowError(error)) throw error;
+    return '';
+  }
+}
+
+/**
+ * Dev-only diagnostic: a token with no active department (`org`) denies every
+ * *bare* permission name (`claimsAllow` qualifies bare names with `org` and
+ * fail-closes without it), which is indistinguishable from a genuine denial.
+ * Warns once per request — this is a property of the claims, not of one check,
+ * which is why it lives here and not in the (deliberately pure) `claimsAllow`.
+ */
+function warnOnMissingOrg(claims: IGRPAccessClaims): void {
+  if (process.env.NODE_ENV === 'production') return;
+  if (claims.isSuperAdmin || claims.org) return;
+  console.warn(
+    '[igrpGetClaims] access token carries no `org` (active department) claim — ' +
+      'every bare-name permission check will DENY (fail-closed). Pass a ' +
+      'fully-qualified "DEPT.permission" name, or check why the token lacks `org`.',
+  );
+}
+
+/** True when auth is bypassed (preview mode or AUTH_PROVIDER=none). */
+export function isIgrpAuthBypass(env: Record<string, string | undefined> = process.env): boolean {
+  const preview =
+    String(env.IGRP_PREVIEW_MODE ?? '')
+      .trim()
+      .replace(/^["']|["']$/g, '')
+      .toLowerCase() === 'true';
+  const noneProvider =
+    String(env.AUTH_PROVIDER ?? '')
+      .trim()
+      .toLowerCase() === 'none';
+  return preview || noneProvider;
+}
+
+/**
+ * Guarantee that the per-request access-client store holds a token, recovering
+ * it from the session cookie when no `AsyncLocalStorage` store was established
+ * — i.e. in a Server Action or Route Handler, where the layout/DAL path that
+ * normally seeds it never ran.
+ *
+ * Returns the resulting config; `token === ''` means no session could be
+ * recovered and every downstream Access Management call will fail. Callers
+ * should treat that as unauthenticated and stop, rather than issuing a request
+ * with an empty bearer token against an empty base URL.
+ *
+ * Idempotent and cheap once seeded: a store that already carries a token is
+ * returned untouched.
+ */
+export async function igrpEnsureAccessClientConfig(): Promise<IGRPClientRuntimeConfig> {
+  const current = igrpGetAccessClientConfig();
+  if (current.token) return current;
+
+  // No ALS store established (Server Action / Route Handler), or a store seeded
+  // with an empty token. Either way the current code path is guaranteed to
+  // fail, so recovering here cannot regress a working caller.
+  //
+  // Establish the store SYNCHRONOUSLY, before the first await, so the object
+  // lives in the CALLER's async context; the write after the await then mutates
+  // that same object in place. Seeding only after the await relies on
+  // `enterWith` propagating out of a nested async frame, which did not hold in
+  // practice (see the T3 case in __tests__/permissions-action-context.test.ts).
+  // This is also why the synchronous prologue must stay ahead of the first
+  // `await` in THIS function — an async function body runs synchronously up to
+  // its first await, in its caller's context.
+  const baseUrl = current.baseUrl || process.env.IGRP_ACCESS_MANAGEMENT_API || '';
+  igrpSetAccessClientConfig({ token: '', baseUrl });
+
+  const token = await recoverAccessTokenFromCookies();
+  if (token) {
+    // Seed the token too: a caller that needs claims almost always needs the
+    // Access Management client next, and that fails in exactly the same
+    // contexts for the same reason.
+    igrpSetAccessClientConfig({ token, baseUrl });
+  }
+
+  return igrpGetAccessClientConfig();
+}
+
+/**
+ * Resolve the current request's permission claims. Bypass → super-admin mock
+ * (does NOT attempt to decode the non-JWT preview token). Otherwise decode the
+ * per-request access token; a decode failure becomes a distinguishable error
+ * state (never silently "no permissions"). Deduped per render via React.cache.
+ *
+ * Works in Server Actions and Route Handlers as well as renders: when no
+ * `AsyncLocalStorage` store was established, the token is recovered from the
+ * session cookie and the store is seeded — see
+ * `recoverAccessTokenFromCookies`.
+ */
+// Deduped per request — Next.js resets React's cache() boundary each request,
+// so reading process.env (via isIgrpAuthBypass) inside is per-request, not stale.
+export const igrpGetClaims = cache(async function igrpGetClaims(): Promise<IGRPClaimsState> {
+  if (isIgrpAuthBypass()) {
+    return { status: 'ok', claims: { ...SUPER_ADMIN_MOCK } };
+  }
+  try {
+    const { token } = await igrpEnsureAccessClientConfig();
+    const claims = decodeIgrpClaims(token);
+
+    // An access token recovered straight from the session cookie has NOT been
+    // through the `jwt` callback — `getToken` decrypts, it does not refresh —
+    // so it can easily be past `exp`. Honouring its permissions would mean a
+    // revoked role keeps working until the COOKIE expires rather than the
+    // token. Fail closed, distinguishably: `status: 'error'` already denies
+    // everywhere, and the client session watcher is what recovers the user.
+    if (claimsExpired(claims)) {
+      return {
+        status: 'error',
+        error:
+          'access token expired — claims refused. IGRPSessionWatcher schedules a ' +
+          'silent refresh from `session.expiresAt`; if this persists, check that ' +
+          'the watcher is mounted and that the IdP is still issuing refresh tokens.',
+      };
+    }
+
+    warnOnMissingOrg(claims);
+    return { status: 'ok', claims };
+  } catch (error) {
+    // Control flow, not a failure: re-throw so Next can mark the route dynamic
+    // (or perform the redirect). Before the cookie-recovery path existed,
+    // nothing inside this try could raise one of these — `decodeIgrpClaims` is
+    // pure and reading the ALS config is synchronous — so this guard arrived
+    // with that path.
+    if (isNextControlFlowError(error)) throw error;
+    return {
+      status: 'error',
+      error: error instanceof Error ? error.message : 'claims decode failed',
+    };
+  }
+});
+
+/**
+ * Boolean permission check (token claims). Fail-closed on error.
+ * This is the check to use in **Server Actions** — see `igrpAssertAuthorize`
+ * for why the asserting variant is page-only.
+ */
+export async function igrpAuthorize(name: string): Promise<boolean> {
+  const state = await igrpGetClaims();
+  return state.status === 'ok' && claimsAllow(state.claims, name);
+}
+
+/**
+ * Page/render guard — **pages only, not Server Actions.**
+ *
+ * Missing permission → forbidden() (403 → forbidden.tsx). A claims decode
+ * error is NOT "forbidden" — it throws so the nearest error.tsx renders a 5xx
+ * instead of mislabeling an outage as 403.
+ *
+ * In a Server Action there is no `forbidden.tsx` boundary, so both the deny and
+ * the error path surface as an unhandled action error. Use `igrpAuthorize` and
+ * return a typed result (e.g. `{ ok: false, code: 'forbidden' }`) instead.
+ */
+export async function igrpAssertAuthorize(name: string): Promise<void> {
+  const state = await igrpGetClaims();
+  if (state.status === 'error') {
+    throw new Error(`igrpAssertAuthorize: cannot determine permissions: ${state.error}`);
+  }
+  if (!claimsAllow(state.claims, name)) {
+    forbidden();
+  }
+}

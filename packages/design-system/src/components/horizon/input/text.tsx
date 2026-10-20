@@ -3,12 +3,14 @@
 import { useId } from "react"
 import { useFormContext } from "react-hook-form"
 
-import { cn } from "../../../lib/utils"
-import type { IGRPInputProps } from "../../../types"
-import { Input } from "../../primitives/input"
-import { IGRPFormField } from "../form/form-field"
-import { IGRPIcon } from "../icon"
-import { IGRPLabel } from "../label"
+import { cn } from "../cn.js"
+import { igrpChainHandlers, igrpMergeRefs } from "../../../lib/form-binding.js"
+import type { IGRPInputProps } from "../../../types.js"
+import { Input } from "../../primitives/input.js"
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../../primitives/form.js"
+import { Field, FieldDescription, FieldError } from "../../primitives/field.js"
+import { IGRPIcon } from "../icon/index.js"
+import { IGRPLabel } from "../label.js"
 
 /**
  * Props for the IGRPInputText component.
@@ -53,48 +55,68 @@ function IGRPInputText({
   const positionParentIcon = iconPlacement === "start" ? "ps-9" : "pe-9"
 
   if (formContext) {
+    // The field owns value/onChange/onBlur/ref; a caller's copy must never replace
+    // the binding (see lib/form-binding.ts). Value props are dropped — the form is
+    // the source of truth — and handlers/refs run after the field's.
+    const { value: _value, defaultValue: _defaultValue, onChange, onBlur, ref, ...callerProps } = props
+    void _value
+    void _defaultValue
+
     return (
-      <IGRPFormField
-        name={fieldName}
-        label={label}
-        helperText={helperText}
-        className={className}
-        required={required}
+      <FormField
         control={formContext.control}
-      >
-        {(field, fieldState) => (
-          <div className={cn("relative")}>
-            <Input
-              id={fieldName}
-              name={fieldName}
-              type={type}
-              required={required}
-              aria-required={required}
-              aria-describedby={helperText || error ? `${fieldName}-helper` : undefined}
-              className={cn(
-                "peer bg-background py-3 text-sm outline-hidden",
-                showIcon && positionParentIcon,
-                (fieldState.error || error) && "border-destructive focus-visible:ring-destructive/20",
-                inputClassName,
-              )}
-              value={field.value || ""}
-              onChange={field.onChange}
-              onBlur={field.onBlur}
-              {...props}
-            />
-            {showIcon && (
-              <div className={cn("absolute inset-y-0 flex items-center", positionIcon)}>
-                <IGRPIcon iconName={iconName} size={iconSize} className={iconClassName} />
-              </div>
+        name={fieldName}
+        render={({ field, fieldState }) => (
+          <FormItem className={className}>
+            {label && (
+              <FormLabel
+                className={cn("gap-0.5", required && "after:text-destructive after:content-['*']", labelClassName)}
+              >
+                {label}
+              </FormLabel>
             )}
-          </div>
+            <div className={cn("relative")}>
+              <FormControl>
+                <Input
+                  name={fieldName}
+                  type={type}
+                  required={required}
+                  aria-required={required}
+                  className={cn(
+                    "peer bg-background py-3 text-sm outline-hidden",
+                    showIcon && positionParentIcon,
+                    (fieldState.error || error) && "border-destructive focus-visible:ring-destructive/20",
+                    inputClassName
+                  )}
+                  ref={igrpMergeRefs(field.ref, ref)}
+                  value={field.value ?? ""}
+                  onChange={igrpChainHandlers(field.onChange, onChange)}
+                  onBlur={igrpChainHandlers(field.onBlur, onBlur)}
+                  {...callerProps}
+                />
+              </FormControl>
+              {showIcon && (
+                <div className={cn("pointer-events-none absolute inset-y-0 flex items-center", positionIcon)}>
+                  <IGRPIcon iconName={iconName} size={iconSize} className={iconClassName} />
+                </div>
+              )}
+            </div>
+            {helperText && !fieldState.error && !error && <FormDescription>{helperText}</FormDescription>}
+            {error ? (
+              <p className={cn("text-xs text-destructive")} role="alert">
+                {error}
+              </p>
+            ) : (
+              <FormMessage className={cn("text-xs")} />
+            )}
+          </FormItem>
         )}
-      </IGRPFormField>
+      />
     )
   }
 
   return (
-    <div className={cn("*:not-first:mt-2", className)}>
+    <Field className={className} data-invalid={error ? true : undefined}>
       {label && <IGRPLabel label={label} className={labelClassName} required={required} id={fieldName} />}
 
       <div className={cn("relative")}>
@@ -105,39 +127,26 @@ function IGRPInputText({
           required={required}
           aria-required={required}
           aria-invalid={!!error || !!props["aria-invalid"]}
-          aria-describedby={helperText || error ? `${fieldName}-helper` : undefined}
+          aria-describedby={error ? `${fieldName}-error` : helperText ? `${fieldName}-helper` : undefined}
           className={cn(
             "peer bg-background py-3 text-sm outline-hidden",
             showIcon && positionParentIcon,
             error && "border-destructive focus-visible:ring-destructive/20",
-            inputClassName,
+            inputClassName
           )}
           {...props}
         />
         {showIcon && (
-          <div className={cn("absolute inset-y-0 flex items-center", positionIcon)}>
+          <div className={cn("pointer-events-none absolute inset-y-0 flex items-center", positionIcon)}>
             <IGRPIcon iconName={iconName} size={iconSize} className={iconClassName} />
           </div>
         )}
       </div>
 
-      {helperText && !error && (
-        <p
-          id={`${fieldName}-helper`}
-          className={cn("text-muted-foreground mt-2 text-xs")}
-          role="region"
-          aria-live="polite"
-        >
-          {helperText}
-        </p>
-      )}
+      {helperText && !error && <FieldDescription id={`${fieldName}-helper`}>{helperText}</FieldDescription>}
 
-      {error && (
-        <p id={`${fieldName}-error`} className={cn("text-destructive mt-2 text-xs")} role="alert">
-          {error}
-        </p>
-      )}
-    </div>
+      {error && <FieldError id={`${fieldName}-error`}>{error}</FieldError>}
+    </Field>
   )
 }
 

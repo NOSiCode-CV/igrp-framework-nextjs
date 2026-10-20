@@ -1,9 +1,9 @@
 "use client"
 
-import { useContext, type ReactElement } from "react"
+import { useCallback, useContext, useState, type ReactElement } from "react"
 import Link from "next/link"
 
-import { cn } from "../../../lib/utils"
+import { cn } from "../cn.js"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -14,8 +14,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "../../primitives/alert-dialog"
-import { Button, buttonVariants } from "../../primitives/button"
+} from "../../primitives/alert-dialog.js"
+import { Button, buttonVariants } from "../../primitives/button.js"
 import {
   Dialog,
   DialogClose,
@@ -25,13 +25,14 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../../primitives/dialog"
-import { Tooltip, TooltipContent, TooltipTrigger } from "../../primitives/tooltip"
-import { IGRPButton } from "../button"
-import { IGRPIcon } from "../icon"
-import { igrpModalDialogContentVariants } from "../modal-dialog"
-import { type IGRPDataTableDialogProps, type IGRPDataTableLinkProps } from "./row-actions"
-import { IGRPDataTableTooltipContext, IGRPDataTableTooltipProvider } from "./tooltip-provider"
+} from "../../primitives/dialog.js"
+import { Tooltip, TooltipContent, TooltipTrigger } from "../../primitives/tooltip.js"
+import { IGRPButton } from "../button.js"
+import { IGRPIcon } from "../icon/index.js"
+import { igrpModalDialogContentVariants } from "../modal-dialog.js"
+import { type IGRPDataTableDialogProps, type IGRPDataTableLinkProps } from "./row-actions.js"
+import { IGRPDataTableTooltipContext, IGRPDataTableTooltipProvider } from "./tooltip-provider.js"
+import { useIGRPi18n } from "../../../i18n/index.js"
 
 /** @internal Wraps action button with tooltip when label is provided. */
 function IGRPDataTableActionTooltip({
@@ -83,13 +84,14 @@ function IGRPDataTableButtonAlert({
   iconClassName,
   children,
   variant = "default",
+  disabled,
   modalTitle,
   showCancel = true,
-  labelCancel = "Cancel",
+  labelCancel,
   classNameCancel,
   variantCancel,
   showConfirm = true,
-  labelConfirm = "Confirm",
+  labelConfirm,
   classNameConfirm,
   variantConfirm,
   onClickConfirm,
@@ -99,6 +101,7 @@ function IGRPDataTableButtonAlert({
   tooltipSideOffset,
   tooltipDelayDuration,
 }: IGRPDataTableDialogProps) {
+  const i18n = useIGRPi18n()
   const tooltipProps = {
     label: labelTrigger,
     tooltipSide,
@@ -115,17 +118,18 @@ function IGRPDataTableButtonAlert({
           <IGRPButton
             variant={variant}
             size="icon-sm"
-            className={cn("size-7 flex justify-center items-center", classNameTrigger)}
+            className={cn("size-7", classNameTrigger)}
             iconName={icon}
             iconClassName={iconClassName}
             aria-label={labelTrigger}
+            disabled={disabled}
           />
         </AlertDialogTrigger>
       </IGRPDataTableActionTooltip>
       <AlertDialogContent className={className}>
         <AlertDialogHeader>
           <AlertDialogTitle>{modalTitle}</AlertDialogTitle>
-          <AlertDialogDescription>{children}</AlertDialogDescription>
+          {children && <AlertDialogDescription>{children}</AlertDialogDescription>}
         </AlertDialogHeader>
 
         {(showCancel || showConfirm) && (
@@ -134,7 +138,7 @@ function IGRPDataTableButtonAlert({
               <AlertDialogCancel
                 className={cn(buttonVariants({ variant: variantCancel }), "cursor-pointer", classNameCancel)}
               >
-                {labelCancel}
+                {labelCancel ?? i18n.alertDialog.cancel}
               </AlertDialogCancel>
             )}
             {showConfirm && (
@@ -142,7 +146,7 @@ function IGRPDataTableButtonAlert({
                 onClick={onClickConfirm}
                 className={cn(buttonVariants({ variant: variantConfirm }), "cursor-pointer", classNameConfirm)}
               >
-                {labelConfirm}
+                {labelConfirm ?? i18n.alertDialog.action}
               </AlertDialogAction>
             )}
           </AlertDialogFooter>
@@ -160,6 +164,7 @@ function IGRPDataTableButtonLink({
   variant = "default",
   href,
   className,
+  disabled,
   tooltipSide,
   tooltipAlign,
   tooltipClassName,
@@ -179,7 +184,7 @@ function IGRPDataTableButtonLink({
 
   return href ? (
     <IGRPDataTableActionTooltip {...tooltipProps}>
-      <Button variant={variant} size="icon-sm" className={cn("h-8 w-8", className)} asChild>
+      <Button variant={variant} size="icon-sm" className={cn("size-8", className)} asChild disabled={disabled}>
         <Link href={href} className={cn("flex items-center")} aria-label={labelTrigger}>
           <IGRPIcon iconName={icon} />
           <span className={cn("sr-only")}>{labelTrigger}</span>
@@ -196,6 +201,7 @@ function IGRPDataTableButtonLink({
         iconName={icon}
         iconClassName="size-4"
         aria-label={labelTrigger}
+        disabled={disabled}
       />
     </IGRPDataTableActionTooltip>
   )
@@ -208,14 +214,16 @@ function IGRPDataTableButtonModal({
   classNameTrigger,
   icon = "ArrowRight",
   children,
+  render,
   variant = "default",
+  disabled,
   modalTitle = "",
   showCancel = true,
-  labelCancel = "Cancel",
+  labelCancel,
   classNameCancel,
   variantCancel,
   showConfirm = true,
-  labelConfirm = "Confirm",
+  labelConfirm,
   classNameConfirm,
   variantConfirm,
   onClickConfirm,
@@ -226,6 +234,9 @@ function IGRPDataTableButtonModal({
   tooltipSideOffset,
   tooltipDelayDuration,
 }: IGRPDataTableDialogProps) {
+  const [open, setOpen] = useState(false)
+  const close = useCallback(() => setOpen(false), [])
+
   const tooltipProps = {
     label: labelTrigger,
     tooltipSide,
@@ -236,49 +247,103 @@ function IGRPDataTableButtonModal({
   }
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <IGRPDataTableActionTooltip {...tooltipProps}>
         <DialogTrigger asChild>
           <IGRPButton
             variant={variant}
             size="icon-sm"
-            className={cn("size-7 flex justify-center items-center", classNameTrigger)}
+            className={cn("size-7", classNameTrigger)}
             iconName={icon}
             aria-label={labelTrigger}
+            disabled={disabled}
           />
         </DialogTrigger>
       </IGRPDataTableActionTooltip>
-      <DialogContent
-        className={cn(
-          "flex flex-col gap-0 p-0 sm:max-h-[min(640px,90vh)] [&>button:last-child]:top-3.5",
-          igrpModalDialogContentVariants({ size }),
-          className,
-        )}
+      <IGRPDataTableModalContent
+        modalTitle={modalTitle}
+        size={size}
+        className={className}
+        close={close}
+        render={render}
+        showCancel={showCancel}
+        labelCancel={labelCancel}
+        classNameCancel={classNameCancel}
+        variantCancel={variantCancel}
+        showConfirm={showConfirm}
+        labelConfirm={labelConfirm}
+        classNameConfirm={classNameConfirm}
+        variantConfirm={variantConfirm}
+        onClickConfirm={onClickConfirm}
       >
-        <DialogHeader className={cn("contents space-y-0 text-left")}>
-          <DialogTitle className={cn(modalTitle && "border-b px-6 py-4 text-base")}>{modalTitle}</DialogTitle>
-
-          <div className={cn("overflow-y-auto", !modalTitle && "mt-4")}>
-            <DialogDescription asChild>{children}</DialogDescription>
-
-            {(showCancel || showConfirm) && (
-              <DialogFooter className={cn("px-6 pb-6 sm:justify-start mt-4")}>
-                <DialogClose
-                  className={cn(buttonVariants({ variant: variantCancel }), "cursor-pointer", classNameCancel)}
-                >
-                  {labelCancel}
-                </DialogClose>
-
-                <IGRPButton variant={variantConfirm} className={classNameConfirm} onClick={onClickConfirm}>
-                  {labelConfirm}
-                </IGRPButton>
-              </DialogFooter>
-            )}
-          </div>
-        </DialogHeader>
-      </DialogContent>
+        {children}
+      </IGRPDataTableModalContent>
     </Dialog>
   )
 }
 
-export { IGRPDataTableButtonAlert, IGRPDataTableButtonLink, IGRPDataTableButtonModal }
+/**
+ * @internal Dialog body shared by the inline modal button and the dropdown modal item.
+ * Must sit inside a `<Dialog>`; `close` is that dialog's real close callback.
+ */
+function IGRPDataTableModalContent({
+  modalTitle = "",
+  size = "lg",
+  className,
+  close,
+  render,
+  children,
+  showCancel = true,
+  labelCancel,
+  classNameCancel,
+  variantCancel,
+  showConfirm = true,
+  labelConfirm,
+  classNameConfirm,
+  variantConfirm,
+  onClickConfirm,
+}: Omit<IGRPDataTableDialogProps, "labelTrigger" | "icon" | "variant" | "disabled"> & { close: () => void }) {
+  const i18n = useIGRPi18n()
+  return (
+    <DialogContent
+      className={cn(
+        "flex flex-col gap-0 p-0 sm:max-h-[min(640px,90vh)] [&>button:last-child]:top-3.5",
+        igrpModalDialogContentVariants({ size }),
+        className
+      )}
+    >
+      <DialogHeader className={cn("contents space-y-0 text-left")}>
+        <DialogTitle className={cn(modalTitle && "border-b px-6 py-4 text-base")}>{modalTitle}</DialogTitle>
+
+        {/*
+        Short, visually-hidden description satisfies Radix's aria-describedby
+        contract WITHOUT announcing the whole body subtree. The body below is
+        a plain <div>, not <DialogDescription asChild> — asChild cloned via
+        Slot.React.Children.only, which (a) announced the entire form as the
+        dialog description and (b) threw for any multi-root render().
+      */}
+        <DialogDescription className={cn("sr-only")}>{modalTitle || "Conteúdo do diálogo"}</DialogDescription>
+
+        <div data-slot="dialog-body" className={cn("overflow-y-auto", !modalTitle && "mt-4")}>
+          {render ? render(close) : children}
+
+          {(showCancel || showConfirm) && (
+            <DialogFooter className={cn("mt-4 px-6 pb-6 sm:justify-start")}>
+              <DialogClose
+                className={cn(buttonVariants({ variant: variantCancel }), "cursor-pointer", classNameCancel)}
+              >
+                {labelCancel ?? i18n.alertDialog.cancel}
+              </DialogClose>
+
+              <IGRPButton variant={variantConfirm} className={classNameConfirm} onClick={onClickConfirm}>
+                {labelConfirm ?? i18n.alertDialog.action}
+              </IGRPButton>
+            </DialogFooter>
+          )}
+        </div>
+      </DialogHeader>
+    </DialogContent>
+  )
+}
+
+export { IGRPDataTableButtonAlert, IGRPDataTableButtonLink, IGRPDataTableButtonModal, IGRPDataTableModalContent }

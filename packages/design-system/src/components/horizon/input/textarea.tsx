@@ -3,10 +3,13 @@
 import { useId } from "react"
 import { useFormContext, Controller } from "react-hook-form"
 
-import { cn } from "../../../lib/utils"
-import type { IGRPInputProps } from "../../../types"
-import { Textarea } from "../../primitives/textarea"
-import { IGRPLabel } from "../label"
+import { cn } from "../cn.js"
+import { igrpOmitNonDomProps } from "../../../lib/dom-props.js"
+import { igrpChainHandlers, igrpMergeRefs } from "../../../lib/form-binding.js"
+import type { IGRPInputProps } from "../../../types.js"
+import { Textarea } from "../../primitives/textarea.js"
+import { IGRPLabel } from "../label.js"
+import { Field, FieldDescription, FieldError } from "../../primitives/field.js"
 
 /**
  * Props for the IGRPTextarea component.
@@ -15,7 +18,10 @@ import { IGRPLabel } from "../label"
 interface IGRPTextareaProps
   extends
     React.ComponentProps<typeof Textarea>,
-    Pick<IGRPInputProps, "label" | "helperText" | "className" | "required" | "error"> {}
+    Pick<
+      IGRPInputProps,
+      "label" | "labelClassName" | "helperText" | "className" | "inputClassName" | "required" | "error"
+    > {}
 
 /**
  * Textarea with label, helper text, and form integration.
@@ -24,13 +30,18 @@ function IGRPTextarea({
   name,
   id,
   label,
+  labelClassName,
   helperText,
   className,
+  inputClassName,
   required = false,
   error,
   rows = 3,
   ...props
 }: IGRPTextareaProps) {
+  // Whatever is left belongs to the native element; the IGRP-only keys would
+  // otherwise be rendered as invalid DOM attributes.
+  const domProps = igrpOmitNonDomProps(props)
   const _id = useId()
   const fieldName = name ?? id ?? _id
 
@@ -38,8 +49,8 @@ function IGRPTextarea({
 
   if (!formContext) {
     return (
-      <div className={cn("*:not-first:mt-2")}>
-        {label && <IGRPLabel label={label} className={className} required={required} id={fieldName} />}
+      <Field>
+        {label && <IGRPLabel label={label} className={labelClassName} required={required} id={fieldName} />}
 
         <div className={cn("relative")}>
           <Textarea
@@ -48,36 +59,30 @@ function IGRPTextarea({
             required={required}
             aria-required={required}
             aria-invalid={!!error}
-            aria-describedby={helperText || error ? `${fieldName}-helper` : undefined}
+            aria-describedby={error ? `${fieldName}-error` : helperText ? `${fieldName}-helper` : undefined}
             className={cn(
               "peer bg-background py-3 text-sm outline-hidden",
               error && "border-destructive focus-visible:ring-destructive/20",
               className,
+              inputClassName
             )}
             rows={rows}
-            {...props}
+            {...domProps}
           />
         </div>
 
-        {helperText && !error && (
-          <p
-            id={`${fieldName}-helper`}
-            className={cn("text-muted-foreground mt-2 text-xs")}
-            role="region"
-            aria-live="polite"
-          >
-            {helperText}
-          </p>
-        )}
+        {helperText && !error && <FieldDescription id={`${fieldName}-helper`}>{helperText}</FieldDescription>}
 
-        {error && (
-          <p id={`${fieldName}-error`} className={cn("text-destructive mt-2 text-xs")} role="alert">
-            {error}
-          </p>
-        )}
-      </div>
+        {error && <FieldError id={`${fieldName}-error`}>{error}</FieldError>}
+      </Field>
     )
   }
+
+  // The field owns value/onChange/onBlur/ref; the caller's copies run after it
+  // and never replace it (see lib/form-binding.ts).
+  const { value: _value, defaultValue: _defaultValue, onChange, onBlur, ref, ...callerProps } = domProps
+  void _value
+  void _defaultValue
 
   const fieldError = formContext.formState.errors[fieldName]
   const errorMessage = error || (fieldError?.message as string)
@@ -87,8 +92,8 @@ function IGRPTextarea({
       name={fieldName}
       control={formContext.control}
       render={({ field, fieldState }) => (
-        <div className={cn("*:not-first:mt-2")}>
-          {label && <IGRPLabel label={label} className={className} required={required} id={fieldName} />}
+        <Field>
+          {label && <IGRPLabel label={label} className={labelClassName} required={required} id={fieldName} />}
 
           <div className={cn("relative")}>
             <Textarea
@@ -97,37 +102,32 @@ function IGRPTextarea({
               required={required}
               aria-required={required}
               aria-invalid={!!fieldState.error || !!error}
-              aria-describedby={helperText || errorMessage ? `${id}-helper` : undefined}
+              aria-describedby={
+                errorMessage || fieldState.error ? `${fieldName}-error` : helperText ? `${fieldName}-helper` : undefined
+              }
               className={cn(
                 "peer bg-background py-3 text-sm outline-hidden",
                 (fieldState.error || error) && "border-destructive focus-visible:ring-destructive/20",
                 className,
+                inputClassName
               )}
               rows={rows}
+              ref={igrpMergeRefs(field.ref, ref)}
               value={field.value || ""}
-              onChange={field.onChange}
-              onBlur={field.onBlur}
-              {...props}
+              onChange={igrpChainHandlers(field.onChange, onChange)}
+              onBlur={igrpChainHandlers(field.onBlur, onBlur)}
+              {...callerProps}
             />
           </div>
 
           {helperText && !errorMessage && !fieldState.error && (
-            <p
-              id={`${fieldName}-helper`}
-              className={cn("text-muted-foreground mt-2 text-xs")}
-              role="region"
-              aria-live="polite"
-            >
-              {helperText}
-            </p>
+            <FieldDescription id={`${fieldName}-helper`}>{helperText}</FieldDescription>
           )}
 
           {(errorMessage || fieldState.error) && (
-            <p id={`${fieldName}-error`} className={cn("text-destructive mt-2 text-xs")} role="alert">
-              {errorMessage || fieldState.error?.message}
-            </p>
+            <FieldError id={`${fieldName}-error`}>{errorMessage || fieldState.error?.message}</FieldError>
           )}
-        </div>
+        </Field>
       )}
     />
   )

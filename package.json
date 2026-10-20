@@ -21,6 +21,7 @@
     "format": "pnpm -r run format",
     "build:next": "pnpm --filter @igrp/framework-next build",
     "build:i18n-tools": "pnpm --filter @igrp/framework-next-i18n build",
+    "lint:i18n:framework": "node packages/framework/next-i18n/dist/cli.js check-literals packages/design-system/src/components packages/framework/next-ui/src packages/framework/next/src",
     "build:auth": "pnpm --filter @igrp/framework-next-auth build",
     "build:next-types": "pnpm --filter @igrp/framework-next-types build",
     "build:next-ui": "pnpm --filter @igrp/framework-next-ui build",

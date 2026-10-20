@@ -10,6 +10,7 @@
 - `pnpm build:framework` — full ordered build
 - `pnpm build:auth` | `pnpm build:next-types` | `pnpm build:ds` | `pnpm build:next-ui` | `pnpm build:next`
 - `pnpm build` — everything with a build script
+- `pnpm lint:i18n:framework` — no hardcoded UI strings in the design system, next-ui and next (needs `pnpm build:i18n-tools`); mark non-language literals with an `igrp-i18n-ignore` comment
 - `pnpm lint` | `pnpm format` | `pnpm clean` | `pnpm clean-all` (also removes `node_modules`)
 
 ## Template (`templates/demo-v1` — the only template, package name `@igrp/framework-next-template`)

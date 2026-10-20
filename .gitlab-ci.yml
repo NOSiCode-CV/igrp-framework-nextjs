@@ -65,6 +65,9 @@ check_i18n:
         - templates/demo-v1/src/**/*
         - templates/demo-v1/package.json
         - packages/framework/next-i18n/**/*
+        - packages/design-system/src/**/*
+        - packages/framework/next-ui/src/**/*
+        - packages/framework/next/src/**/*
         # The CLI's own deps (typescript, the ICU parser) move in the lockfile alone.
         - pnpm-lock.yaml
         - package.json
@@ -78,6 +81,8 @@ check_i18n:
     # Re-link: the `igrp-i18n` bin target (dist/cli.js) didn't exist at the first install, so pnpm skipped the template's shim.
     - pnpm install --frozen-lockfile --ignore-scripts --prefer-offline --filter @igrp/framework-next-i18n --filter @igrp/framework-next-template
     - pnpm --filter @igrp/framework-next-template lint:i18n
+    # No hardcoded UI strings in the framework packages either; allowlist non-language literals with `igrp-i18n-ignore`.
+    - pnpm lint:i18n:framework
 
 # The Storybook visual suite is the design system's only UI regression gate — there
 # is no root-level unit test suite. It silently died on 2026-06-25 when Storybook

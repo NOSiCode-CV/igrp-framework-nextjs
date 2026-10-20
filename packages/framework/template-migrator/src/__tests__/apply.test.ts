@@ -292,7 +292,7 @@ describe("executeStep: deps.remove / deps.restore", () => {
       JSON.stringify(
         {
           name: "consumer",
-          dependencies: { cn: "^0.3.0", next: "15.5.25" },
+          dependencies: { cn: "^0.3.0", next: "15.5.28" },
           devDependencies: { typescript: "5.9.3" },
         },
         null,
@@ -310,7 +310,7 @@ describe("executeStep: deps.remove / deps.restore", () => {
     expect(pkg.dependencies.cn).toBeUndefined();
     expect(pkg.devDependencies.typescript).toBeUndefined();
     // Untouched neighbours survive.
-    expect(pkg.dependencies.next).toBe("15.5.25");
+    expect(pkg.dependencies.next).toBe("15.5.28");
     // The undo has to remember WHICH field each dep came from — restoring a
     // devDependency into `dependencies` would change what a production install
     // pulls down.
@@ -329,7 +329,7 @@ describe("executeStep: deps.remove / deps.restore", () => {
       JSON.stringify(
         {
           name: "consumer",
-          dependencies: { cn: "0.3.0", next: "15.5.25" },
+          dependencies: { cn: "0.3.0", next: "15.5.28" },
           devDependencies: { typescript: "5.9.3" },
         },
         null,
@@ -354,7 +354,7 @@ describe("executeStep: deps.remove / deps.restore", () => {
     // same in the output either.
     writeAppFile(
       "package.json",
-      JSON.stringify({ name: "consumer", dependencies: { next: "15.5.25" } }, null, 2) + "\n",
+      JSON.stringify({ name: "consumer", dependencies: { next: "15.5.28" } }, null, 2) + "\n",
     );
     const warnings: string[] = [];
     const spy = vi.spyOn(console, "warn").mockImplementation((m: unknown) => {

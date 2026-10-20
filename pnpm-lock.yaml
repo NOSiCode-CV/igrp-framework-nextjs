@@ -286,7 +286,7 @@ importers:
         version: 0.577.0(react@19.2.8)
       next:
         specifier: ^15.5.25
-        version: 15.5.25(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@24.19.2)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        version: 15.5.28(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@24.19.2)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       postcss:
         specifier: ^8.5.30
         version: 8.5.30
@@ -339,8 +339,8 @@ importers:
         specifier: 4.3.3
         version: 4.3.3(vite@8.3.0(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
       next:
-        specifier: 15.5.25
-        version: 15.5.25(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@24.19.2)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        specifier: 15.5.28
+        version: 15.5.28(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@24.19.2)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       react:
         specifier: 19.2.8
         version: 19.2.8
@@ -386,7 +386,7 @@ importers:
         version: 10.6.0(@vitest/browser-playwright@5.0.1)(@vitest/browser@5.0.1)(react@19.2.8)(storybook@10.6.0(patch_hash=359f180a8ae12d5d8dcf3921b11f43ae7d8566baf6967d15b156da90f2e541c8)(@types/react@19.2.18)(prettier@3.9.10)(react@19.2.8))(vitest@5.0.1)
       '@storybook/nextjs-vite':
         specifier: 10.6.0
-        version: 10.6.0(@babel/core@7.29.7(supports-color@8.1.1))(@types/react-dom@19.2.7(@types/react@19.2.18))(@types/react@19.2.18)(next@15.5.25(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@24.19.2)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(rollup@4.64.6)(storybook@10.6.0(patch_hash=359f180a8ae12d5d8dcf3921b11f43ae7d8566baf6967d15b156da90f2e541c8)(@types/react@19.2.18)(prettier@3.9.10)(react@19.2.8))(supports-color@8.1.1)(typescript@6.0.3)(vite@8.3.0(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
+        version: 10.6.0(@babel/core@7.29.7(supports-color@8.1.1))(@types/react-dom@19.2.7(@types/react@19.2.18))(@types/react@19.2.18)(next@15.5.28(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@24.19.2)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(rollup@4.64.6)(storybook@10.6.0(patch_hash=359f180a8ae12d5d8dcf3921b11f43ae7d8566baf6967d15b156da90f2e541c8)(@types/react@19.2.18)(prettier@3.9.10)(react@19.2.8))(supports-color@8.1.1)(typescript@6.0.3)(vite@8.3.0(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
       '@storybook/test-runner':
         specifier: 0.24.5
         version: 0.24.5(@types/node@24.19.2)(debug@4.4.3(supports-color@8.1.1))(storybook@10.6.0(patch_hash=359f180a8ae12d5d8dcf3921b11f43ae7d8566baf6967d15b156da90f2e541c8)(@types/react@19.2.18)(prettier@3.9.10)(react@19.2.8))(supports-color@8.1.1)
@@ -485,7 +485,7 @@ importers:
         version: 0.2.0-beta.18
       next-intl:
         specifier: ^4.14.0
-        version: 4.14.9(@types/react@19.2.18)(next@15.5.25(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@24.19.2)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)
+        version: 4.14.9(@types/react@19.2.18)(next@15.5.28(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@24.19.2)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)
       server-only:
         specifier: ^0.0.1
         version: 0.0.1
@@ -527,8 +527,8 @@ importers:
         specifier: 17.13.0
         version: 17.13.0
       next:
-        specifier: 15.5.25
-        version: 15.5.25(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@24.19.2)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        specifier: 15.5.28
+        version: 15.5.28(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@24.19.2)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       prettier:
         specifier: ^3.9.9
         version: 3.9.10
@@ -576,10 +576,10 @@ importers:
         version: 17.13.0
       next:
         specifier: ^15.5.25
-        version: 15.5.25(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@24.19.2)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        version: 15.5.28(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@24.19.2)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       next-auth:
         specifier: 4.24.15
-        version: 4.24.15(next@15.5.25(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@24.19.2)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        version: 4.24.15(next@15.5.28(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@24.19.2)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       prettier:
         specifier: ^3.9.9
         version: 3.9.10
@@ -665,7 +665,7 @@ importers:
         version: 17.13.0
       next-auth:
         specifier: 4.24.15
-        version: 4.24.15(next@15.5.25(@types/node@24.19.2)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        version: 4.24.15(next@15.5.28(@types/node@24.19.2)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       prettier:
         specifier: ^3.9.9
         version: 3.9.10
@@ -752,11 +752,11 @@ importers:
         specifier: ^30.1.2
         version: 30.1.2
       next:
-        specifier: 15.5.25
-        version: 15.5.25(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@24.19.2)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        specifier: 15.5.28
+        version: 15.5.28(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@24.19.2)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       next-auth:
         specifier: ^4.24.15
-        version: 4.24.15(next@15.5.25(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@24.19.2)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        version: 4.24.15(next@15.5.28(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@24.19.2)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       postcss:
         specifier: ^8.5.30
         version: 8.5.30
@@ -837,14 +837,14 @@ importers:
         specifier: 0.7.1
         version: 0.7.1
       next:
-        specifier: 15.5.25
-        version: 15.5.25(@types/node@25.9.1)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        specifier: 15.5.28
+        version: 15.5.28(@types/node@25.9.1)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       next-auth:
         specifier: 4.24.15
-        version: 4.24.15(next@15.5.25(@types/node@25.9.1)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        version: 4.24.15(next@15.5.28(@types/node@25.9.1)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       next-intl:
         specifier: ^4.14.0
-        version: 4.14.9(@types/react@19.2.18)(next@15.5.25(@types/node@25.9.1)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)
+        version: 4.14.9(@types/react@19.2.18)(next@15.5.28(@types/node@25.9.1)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)
       react:
         specifier: 19.2.8
         version: 19.2.8
@@ -2240,60 +2240,60 @@ packages:
   '@neoconfetti/react@1.0.0':
     resolution: {integrity: sha512-klcSooChXXOzIm+SE5IISIAn3bYzYfPjbX7D7HoqZL84oAfgREeSg5vSIaSFH+DaGzzvImTyWe1OyrJ67vik4A==}
 
-  '@next/env@15.5.25':
-    resolution: {integrity: sha512-42h1lLr07vl4gawALP1hsgRZjHB1xYa58JfUfHwr0f7jG/zhPakh5GHkADHXOC9ZxUvlQFOPIrp7s6qX4DezPQ==}
+  '@next/env@15.5.28':
+    resolution: {integrity: sha512-xxW5EBI8fMPuVTPBW7LL980IRbuDXlbkUAwp9DDhtb4Lnich3nJ13uYpvrX4VE74hWPf6AvHHAMmGCidcHjbfg==}
 
   '@next/env@16.4.0':
     resolution: {integrity: sha512-pyLlT5oafGlX8X7xjgGNXz5dNIDSxREm+qD6i9VLSZiZFopA/XWl8NM/KPmLx/8EG/++c49iid3gNWSQW1+2dQ==}
 
-  '@next/swc-darwin-arm64@15.5.25':
-    resolution: {integrity: sha512-w+RR0v/QuApnWEjRGm1z6gcObKwGMb5YPA7V3bzBEVSBpMFUXprer0tS27UxjUcEnqbhL7Zuzohej79B6rYmBg==}
+  '@next/swc-darwin-arm64@15.5.28':
+    resolution: {integrity: sha512-dPoQYXcfSIqx5o+TOXVXO7kONK5qbtNRDeiTfII0bT3puGIT6VF5e0QwmxNZfEZ5Zety5f3m9P/p4xqwfiLlPg==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [darwin]
 
-  '@next/swc-darwin-x64@15.5.25':
-    resolution: {integrity: sha512-QiGGBUSakt8S1H4Lt9Ehsh6Ja87axiBnQQgysOObvCbI7iUfJnRGntF1P64S4/ijuHFnSB8KLsEddkY3nN26uw==}
+  '@next/swc-darwin-x64@15.5.28':
+    resolution: {integrity: sha512-RgCJ7buBivTH+6sddqaVm+/v8kwMHlFkobvdt3DfETutws5HrxnToMIWSN9X3MZ3aAi7BbKrGZZWUDQLEycXqw==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [darwin]
 
-  '@next/swc-linux-arm64-gnu@15.5.25':
-    resolution: {integrity: sha512-ehLos/66zo0d/mJCU5u96a/VDcr01aaUrX0o/i16UdInxz8qPTCDSxGtjk/Lps1sIr1RJFdiX3hxc0fxJo+cPA==}
+  '@next/swc-linux-arm64-gnu@15.5.28':
+    resolution: {integrity: sha512-OHXQe13olE59aKe++zHavGcJPh5SLHXi6Anret3BBeq1+qhSuOJDNAli/EDDfxs6UTqA4Qddo4uyYry2slyjiQ==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
     libc: [glibc]
 
-  '@next/swc-linux-arm64-musl@15.5.25':
-    resolution: {integrity: sha512-ZVMrqLiJ7DiChgmbkQwFtdhAnUkSH/4p7tB29QY+giATb0Q/XGHNRSKAb/B8XGDHRUaA67NepOW5W8u3ZRJBAA==}
+  '@next/swc-linux-arm64-musl@15.5.28':
+    resolution: {integrity: sha512-nTB7bB6vfn4ezCJNYP43ukt2o8L3+WxKF/sTcTxepdXsJh3SM9RhlU7wrZYbH7L4HO5M87dqDTwm8587vAkCiw==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
     libc: [musl]
 
-  '@next/swc-linux-x64-gnu@15.5.25':
-    resolution: {integrity: sha512-UOewtDGkTMJTiODrEdeLZ50yGb59xCZSriNpXkfPMxRRgwDkGc7i8mLWqV5076wEdb+Ca/XN7MhJyM3CupyNyQ==}
+  '@next/swc-linux-x64-gnu@15.5.28':
+    resolution: {integrity: sha512-WXCfVI32rW3xCusoUX1RpZKtyChWU2Zwe27JUDmM3KrXwcDNc9vV4zEq0GKFAURnuQ/Ouo/XqPvB0yh445XZCg==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
     libc: [glibc]
 
-  '@next/swc-linux-x64-musl@15.5.25':
-    resolution: {integrity: sha512-UBHwA8AhkCZgtRfU1aJpunuAJe/6gZv6jDESQe4p5MjTb5V0YEeJBWCdNqx15Vj3x+5jmauRfeMJSjfQj9HGFQ==}
+  '@next/swc-linux-x64-musl@15.5.28':
+    resolution: {integrity: sha512-Miq+NDb/HWsXuxseYxMM6fuEOQXgTziarkKIRpVKCn8W69cEfhQaQr+90pO+u4q2CbJR2wzXmUuCFyZaJs/Nng==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
     libc: [musl]
 
-  '@next/swc-win32-arm64-msvc@15.5.25':
-    resolution: {integrity: sha512-QcFcPRr16djk5IqK5+e8O80eZfgWzIvVBXfitIq0tQ/uc+eyfdoZ0NmKc0cnbIJyfVwREapKuG97YcxWA9gcpA==}
+  '@next/swc-win32-arm64-msvc@15.5.28':
+    resolution: {integrity: sha512-5LR79lemgDlgxvG7MQJ+zHCkVcrUoQuO7CiIvq3I58vNW4goSOE2b+19Z6FujRWMouvni4gvudYFuFuNxolGWA==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [win32]
 
-  '@next/swc-win32-x64-msvc@15.5.25':
-    resolution: {integrity: sha512-zREeykps3ndWr9egJgvJKqVkkDuaw6Zrrg23cYBos0ygydFkAWYU4+PaPVwXzP1eAYQJe53ShSK45iDM529BOg==}
+  '@next/swc-win32-x64-msvc@15.5.28':
+    resolution: {integrity: sha512-GNipvXUYROSTf4PXEyH95FrWImIB5zdaK6uEOg0RP1/X2drnvoMwiBkJ0VWdzX7w3iiBm3y5g2TxkKDGVTOQcg==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [win32]
@@ -7098,8 +7098,8 @@ packages:
       react: ^16.8 || ^17 || ^18 || ^19 || ^19.0.0-rc
       react-dom: ^16.8 || ^17 || ^18 || ^19 || ^19.0.0-rc
 
-  next@15.5.25:
-    resolution: {integrity: sha512-OMWNulIIqKM2ykvC2qMjIt0IoavB4UB2SCs4iXJ6z6847FvyH8jBmBWcvrF5iuhTu8Przh20Fo/aoszIdqx4PA==}
+  next@15.5.28:
+    resolution: {integrity: sha512-JjhLBBY1PNnuwPtcZ7t8yxVeJVYvD2Jyp633J+gRCNbzSt7N0E+xqCf6uQiff3+3qmUkwcF/ksfSsK1xsZ76Tw==}
     engines: {node: ^18.18.0 || ^19.8.0 || >= 20.0.0}
     hasBin: true
     peerDependencies:
@@ -10267,32 +10267,32 @@ snapshots:
 
   '@neoconfetti/react@1.0.0': {}
 
-  '@next/env@15.5.25': {}
+  '@next/env@15.5.28': {}
 
   '@next/env@16.4.0': {}
 
-  '@next/swc-darwin-arm64@15.5.25':
+  '@next/swc-darwin-arm64@15.5.28':
     optional: true
 
-  '@next/swc-darwin-x64@15.5.25':
+  '@next/swc-darwin-x64@15.5.28':
     optional: true
 
-  '@next/swc-linux-arm64-gnu@15.5.25':
+  '@next/swc-linux-arm64-gnu@15.5.28':
     optional: true
 
-  '@next/swc-linux-arm64-musl@15.5.25':
+  '@next/swc-linux-arm64-musl@15.5.28':
     optional: true
 
-  '@next/swc-linux-x64-gnu@15.5.25':
+  '@next/swc-linux-x64-gnu@15.5.28':
     optional: true
 
-  '@next/swc-linux-x64-musl@15.5.25':
+  '@next/swc-linux-x64-musl@15.5.28':
     optional: true
 
-  '@next/swc-win32-arm64-msvc@15.5.25':
+  '@next/swc-win32-arm64-msvc@15.5.28':
     optional: true
 
-  '@next/swc-win32-x64-msvc@15.5.25':
+  '@next/swc-win32-x64-msvc@15.5.28':
     optional: true
 
   '@nicolo-ribaudo/chokidar-2@2.1.8-no-fsevents.3':
@@ -11530,18 +11530,18 @@ snapshots:
     dependencies:
       react: 19.2.8
 
-  '@storybook/nextjs-vite@10.6.0(@babel/core@7.29.7(supports-color@8.1.1))(@types/react-dom@19.2.7(@types/react@19.2.18))(@types/react@19.2.18)(next@15.5.25(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@24.19.2)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(rollup@4.64.6)(storybook@10.6.0(patch_hash=359f180a8ae12d5d8dcf3921b11f43ae7d8566baf6967d15b156da90f2e541c8)(@types/react@19.2.18)(prettier@3.9.10)(react@19.2.8))(supports-color@8.1.1)(typescript@6.0.3)(vite@8.3.0(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))':
+  '@storybook/nextjs-vite@10.6.0(@babel/core@7.29.7(supports-color@8.1.1))(@types/react-dom@19.2.7(@types/react@19.2.18))(@types/react@19.2.18)(next@15.5.28(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@24.19.2)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(rollup@4.64.6)(storybook@10.6.0(patch_hash=359f180a8ae12d5d8dcf3921b11f43ae7d8566baf6967d15b156da90f2e541c8)(@types/react@19.2.18)(prettier@3.9.10)(react@19.2.8))(supports-color@8.1.1)(typescript@6.0.3)(vite@8.3.0(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))':
     dependencies:
       '@storybook/builder-vite': 10.6.0(storybook@10.6.0(patch_hash=359f180a8ae12d5d8dcf3921b11f43ae7d8566baf6967d15b156da90f2e541c8)(@types/react@19.2.18)(prettier@3.9.10)(react@19.2.8))(vite@8.3.0(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
       '@storybook/react': 10.6.0(@types/react-dom@19.2.7(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(storybook@10.6.0(patch_hash=359f180a8ae12d5d8dcf3921b11f43ae7d8566baf6967d15b156da90f2e541c8)(@types/react@19.2.18)(prettier@3.9.10)(react@19.2.8))(supports-color@8.1.1)(typescript@6.0.3)
       '@storybook/react-vite': 10.6.0(@types/react-dom@19.2.7(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(rollup@4.64.6)(storybook@10.6.0(patch_hash=359f180a8ae12d5d8dcf3921b11f43ae7d8566baf6967d15b156da90f2e541c8)(@types/react@19.2.18)(prettier@3.9.10)(react@19.2.8))(supports-color@8.1.1)(typescript@6.0.3)(vite@8.3.0(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
-      next: 15.5.25(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@24.19.2)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      next: 15.5.28(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@24.19.2)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       react: 19.2.8
       react-dom: 19.2.8(react@19.2.8)
       storybook: 10.6.0(patch_hash=359f180a8ae12d5d8dcf3921b11f43ae7d8566baf6967d15b156da90f2e541c8)(@types/react@19.2.18)(prettier@3.9.10)(react@19.2.8)
       styled-jsx: 5.1.6(@babel/core@7.29.7(supports-color@8.1.1))(react@19.2.8)
       vite: 8.3.0(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1)
-      vite-plugin-storybook-nextjs: 10.6.0(next@15.5.25(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@24.19.2)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(rollup@4.64.6)(storybook@10.6.0(patch_hash=359f180a8ae12d5d8dcf3921b11f43ae7d8566baf6967d15b156da90f2e541c8)(@types/react@19.2.18)(prettier@3.9.10)(react@19.2.8))(supports-color@8.1.1)(typescript@6.0.3)(vite@8.3.0(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
+      vite-plugin-storybook-nextjs: 10.6.0(next@15.5.28(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@24.19.2)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(rollup@4.64.6)(storybook@10.6.0(patch_hash=359f180a8ae12d5d8dcf3921b11f43ae7d8566baf6967d15b156da90f2e541c8)(@types/react@19.2.18)(prettier@3.9.10)(react@19.2.8))(supports-color@8.1.1)(typescript@6.0.3)(vite@8.3.0(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
     optionalDependencies:
       '@types/react': 19.2.18
       '@types/react-dom': 19.2.7(@types/react@19.2.18)
@@ -15160,13 +15160,13 @@ snapshots:
     dependencies:
       content-type: 2.1.0
 
-  next-auth@4.24.15(next@15.5.25(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@24.19.2)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
+  next-auth@4.24.15(next@15.5.28(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@24.19.2)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
     dependencies:
       '@babel/runtime': 7.29.10
       '@panva/hkdf': 1.2.1
       cookie: 0.7.2
       jose: 4.15.9
-      next: 15.5.25(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@24.19.2)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      next: 15.5.28(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@24.19.2)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       oauth: 0.9.15
       openid-client: 5.7.1
       preact: 10.29.8(preact-render-to-string@5.2.6)
@@ -15175,13 +15175,13 @@ snapshots:
       react-dom: 19.2.8(react@19.2.8)
       uuid: 11.1.1
 
-  next-auth@4.24.15(next@15.5.25(@types/node@24.19.2)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
+  next-auth@4.24.15(next@15.5.28(@types/node@24.19.2)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
     dependencies:
       '@babel/runtime': 7.29.10
       '@panva/hkdf': 1.2.1
       cookie: 0.7.2
       jose: 4.15.9
-      next: 15.5.25(@types/node@24.19.2)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      next: 15.5.28(@types/node@24.19.2)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       oauth: 0.9.15
       openid-client: 5.7.1
       preact: 10.29.8(preact-render-to-string@5.2.6)
@@ -15190,13 +15190,13 @@ snapshots:
       react-dom: 19.2.8(react@19.2.8)
       uuid: 11.1.1
 
-  next-auth@4.24.15(next@15.5.25(@types/node@25.9.1)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
+  next-auth@4.24.15(next@15.5.28(@types/node@25.9.1)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
     dependencies:
       '@babel/runtime': 7.29.10
       '@panva/hkdf': 1.2.1
       cookie: 0.7.2
       jose: 4.15.9
-      next: 15.5.25(@types/node@25.9.1)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      next: 15.5.28(@types/node@25.9.1)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       oauth: 0.9.15
       openid-client: 5.7.1
       preact: 10.29.8(preact-render-to-string@5.2.6)
@@ -15207,7 +15207,7 @@ snapshots:
 
   next-intl-swc-plugin-extractor@4.14.9: {}
 
-  next-intl@4.14.9(@types/react@19.2.18)(next@15.5.25(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@24.19.2)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8):
+  next-intl@4.14.9(@types/react@19.2.18)(next@15.5.28(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@24.19.2)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8):
     dependencies:
       '@eloqnt/config': 0.1.1
       '@eloqnt/format-json': 0.1.0
@@ -15217,7 +15217,7 @@ snapshots:
       '@swc/core': 1.16.18
       icu-minify: 4.14.9
       negotiator: 1.1.0
-      next: 15.5.25(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@24.19.2)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      next: 15.5.28(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@24.19.2)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       next-intl-swc-plugin-extractor: 4.14.9
       react: 19.2.8
       use-intl: 4.14.9(@types/react@19.2.18)(react@19.2.8)
@@ -15226,7 +15226,7 @@ snapshots:
     transitivePeerDependencies:
       - '@swc/helpers'
 
-  next-intl@4.14.9(@types/react@19.2.18)(next@15.5.25(@types/node@25.9.1)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8):
+  next-intl@4.14.9(@types/react@19.2.18)(next@15.5.28(@types/node@25.9.1)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8):
     dependencies:
       '@eloqnt/config': 0.1.1
       '@eloqnt/format-json': 0.1.0
@@ -15236,7 +15236,7 @@ snapshots:
       '@swc/core': 1.16.18
       icu-minify: 4.14.9
       negotiator: 1.1.0
-      next: 15.5.25(@types/node@25.9.1)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      next: 15.5.28(@types/node@25.9.1)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       next-intl-swc-plugin-extractor: 4.14.9
       react: 19.2.8
       use-intl: 4.14.9(@types/react@19.2.18)(react@19.2.8)
@@ -15250,9 +15250,9 @@ snapshots:
       react: 19.2.8
       react-dom: 19.2.8(react@19.2.8)
 
-  next@15.5.25(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@24.19.2)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
+  next@15.5.28(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@24.19.2)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
     dependencies:
-      '@next/env': 15.5.25
+      '@next/env': 15.5.28
       '@swc/helpers': 0.5.15
       caniuse-lite: 1.0.30001816
       postcss: 8.4.31
@@ -15260,14 +15260,14 @@ snapshots:
       react-dom: 19.2.8(react@19.2.8)
       styled-jsx: 5.1.6(@babel/core@7.29.7(supports-color@8.1.1))(react@19.2.8)
     optionalDependencies:
-      '@next/swc-darwin-arm64': 15.5.25
-      '@next/swc-darwin-x64': 15.5.25
-      '@next/swc-linux-arm64-gnu': 15.5.25
-      '@next/swc-linux-arm64-musl': 15.5.25
-      '@next/swc-linux-x64-gnu': 15.5.25
-      '@next/swc-linux-x64-musl': 15.5.25
-      '@next/swc-win32-arm64-msvc': 15.5.25
-      '@next/swc-win32-x64-msvc': 15.5.25
+      '@next/swc-darwin-arm64': 15.5.28
+      '@next/swc-darwin-x64': 15.5.28
+      '@next/swc-linux-arm64-gnu': 15.5.28
+      '@next/swc-linux-arm64-musl': 15.5.28
+      '@next/swc-linux-x64-gnu': 15.5.28
+      '@next/swc-linux-x64-musl': 15.5.28
+      '@next/swc-win32-arm64-msvc': 15.5.28
+      '@next/swc-win32-x64-msvc': 15.5.28
       babel-plugin-react-compiler: 1.0.0
       sharp: 0.35.5(@types/node@24.19.2)
     transitivePeerDependencies:
@@ -15275,9 +15275,9 @@ snapshots:
       - '@types/node'
       - babel-plugin-macros
 
-  next@15.5.25(@types/node@24.19.2)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
+  next@15.5.28(@types/node@24.19.2)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
     dependencies:
-      '@next/env': 15.5.25
+      '@next/env': 15.5.28
       '@swc/helpers': 0.5.15
       caniuse-lite: 1.0.30001816
       postcss: 8.4.31
@@ -15285,14 +15285,14 @@ snapshots:
       react-dom: 19.2.8(react@19.2.8)
       styled-jsx: 5.1.6(@babel/core@7.29.7(supports-color@8.1.1))(react@19.2.8)
     optionalDependencies:
-      '@next/swc-darwin-arm64': 15.5.25
-      '@next/swc-darwin-x64': 15.5.25
-      '@next/swc-linux-arm64-gnu': 15.5.25
-      '@next/swc-linux-arm64-musl': 15.5.25
-      '@next/swc-linux-x64-gnu': 15.5.25
-      '@next/swc-linux-x64-musl': 15.5.25
-      '@next/swc-win32-arm64-msvc': 15.5.25
-      '@next/swc-win32-x64-msvc': 15.5.25
+      '@next/swc-darwin-arm64': 15.5.28
+      '@next/swc-darwin-x64': 15.5.28
+      '@next/swc-linux-arm64-gnu': 15.5.28
+      '@next/swc-linux-arm64-musl': 15.5.28
+      '@next/swc-linux-x64-gnu': 15.5.28
+      '@next/swc-linux-x64-musl': 15.5.28
+      '@next/swc-win32-arm64-msvc': 15.5.28
+      '@next/swc-win32-x64-msvc': 15.5.28
       babel-plugin-react-compiler: 1.0.0
       sharp: 0.35.5(@types/node@24.19.2)
     transitivePeerDependencies:
@@ -15300,9 +15300,9 @@ snapshots:
       - '@types/node'
       - babel-plugin-macros
 
-  next@15.5.25(@types/node@25.9.1)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
+  next@15.5.28(@types/node@25.9.1)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
     dependencies:
-      '@next/env': 15.5.25
+      '@next/env': 15.5.28
       '@swc/helpers': 0.5.15
       caniuse-lite: 1.0.30001816
       postcss: 8.4.31
@@ -15310,14 +15310,14 @@ snapshots:
       react-dom: 19.2.8(react@19.2.8)
       styled-jsx: 5.1.6(@babel/core@7.29.7(supports-color@8.1.1))(react@19.2.8)
     optionalDependencies:
-      '@next/swc-darwin-arm64': 15.5.25
-      '@next/swc-darwin-x64': 15.5.25
-      '@next/swc-linux-arm64-gnu': 15.5.25
-      '@next/swc-linux-arm64-musl': 15.5.25
-      '@next/swc-linux-x64-gnu': 15.5.25
-      '@next/swc-linux-x64-musl': 15.5.25
-      '@next/swc-win32-arm64-msvc': 15.5.25
-      '@next/swc-win32-x64-msvc': 15.5.25
+      '@next/swc-darwin-arm64': 15.5.28
+      '@next/swc-darwin-x64': 15.5.28
+      '@next/swc-linux-arm64-gnu': 15.5.28
+      '@next/swc-linux-arm64-musl': 15.5.28
+      '@next/swc-linux-x64-gnu': 15.5.28
+      '@next/swc-linux-x64-musl': 15.5.28
+      '@next/swc-win32-arm64-msvc': 15.5.28
+      '@next/swc-win32-x64-msvc': 15.5.28
       babel-plugin-react-compiler: 1.0.0
       sharp: 0.35.5(@types/node@25.9.1)
     transitivePeerDependencies:
@@ -17092,13 +17092,13 @@ snapshots:
       d3-time: 3.1.0
       d3-timer: 3.0.1
 
-  vite-plugin-storybook-nextjs@10.6.0(next@15.5.25(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@24.19.2)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(rollup@4.64.6)(storybook@10.6.0(patch_hash=359f180a8ae12d5d8dcf3921b11f43ae7d8566baf6967d15b156da90f2e541c8)(@types/react@19.2.18)(prettier@3.9.10)(react@19.2.8))(supports-color@8.1.1)(typescript@6.0.3)(vite@8.3.0(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1)):
+  vite-plugin-storybook-nextjs@10.6.0(next@15.5.28(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@24.19.2)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(rollup@4.64.6)(storybook@10.6.0(patch_hash=359f180a8ae12d5d8dcf3921b11f43ae7d8566baf6967d15b156da90f2e541c8)(@types/react@19.2.18)(prettier@3.9.10)(react@19.2.8))(supports-color@8.1.1)(typescript@6.0.3)(vite@8.3.0(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1)):
     dependencies:
       '@next/env': 16.4.0
       '@rollup/pluginutils': 5.4.0(rollup@4.64.6)
       magic-string: 0.30.21
       module-alias: 2.3.4
-      next: 15.5.25(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@24.19.2)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      next: 15.5.28(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@24.19.2)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       pathe: 2.0.3
       probe-image-size: 7.4.0(supports-color@8.1.1)
       semver: 7.8.5

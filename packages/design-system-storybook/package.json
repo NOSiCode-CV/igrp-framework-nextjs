@@ -36,7 +36,7 @@
     "@hookform/resolvers": "5.9.1",
     "@igrp/igrp-framework-react-design-system": "workspace:*",
     "@tailwindcss/vite": "4.3.3",
-    "next": "15.5.25",
+    "next": "15.5.28",
     "react": "19.2.8",
     "react-day-picker": "9.13.2",
     "react-dom": "19.2.8",

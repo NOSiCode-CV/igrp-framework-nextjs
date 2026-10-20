@@ -32,7 +32,7 @@
     "@igrp/igrp-framework-react-design-system": "workspace:*",
     "@tanstack/react-query": "5.104.2",
     "class-variance-authority": "0.7.1",
-    "next": "15.5.25",
+    "next": "15.5.28",
     "next-auth": "4.24.15",
     "next-intl": "^4.14.0",
     "react": "19.2.8",

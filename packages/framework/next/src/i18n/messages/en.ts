@@ -36,6 +36,13 @@ export const IGRP_MESSAGES_EN: IGRPFrameworkMessages = {
       description:
         'Check the authentication provider configuration and the environment variables. If the problem persists, contact support.',
     },
+    actions: {
+      SESSION_INVALID: 'Your session is invalid or has expired.',
+      MENUS_LOAD_FAILED: 'Could not load the menus.',
+      USER_LOAD_FAILED: 'Could not load the user details.',
+      APPS_LOAD_FAILED: 'Could not load the applications.',
+      APP_LOAD_FAILED: 'Could not load the application details.',
+    },
     status: {
       '401': 'Sign-in required',
       '403': 'Access denied',

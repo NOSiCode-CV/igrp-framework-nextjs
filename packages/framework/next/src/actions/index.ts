@@ -8,7 +8,20 @@ import { fetchCurrentUser } from '../hooks/use-user.js';
 import { igrpEnsureAccessClientConfig, isIgrpAuthBypass } from '../lib/permissions.js';
 import { logger } from '../logger.js';
 
-export type ActionResult<T> = { ok: true; data: T } | { ok: false; error: string };
+/**
+ * Machine-stable failure codes. Show users the translation, not `error` (pt-PT,
+ * kept for logs and backwards compatibility): next-intl `errors.actions.<code>`
+ * in the framework messages.
+ */
+export type IGRPActionErrorCode =
+  | 'SESSION_INVALID'
+  | 'MENUS_LOAD_FAILED'
+  | 'USER_LOAD_FAILED'
+  | 'APPS_LOAD_FAILED'
+  | 'APP_LOAD_FAILED';
+
+export type ActionResult<T> =
+  { ok: true; data: T } | { ok: false; error: string; code: IGRPActionErrorCode };
 
 /**
  * Every export of this module is a Server Action, i.e. a POST endpoint
@@ -38,7 +51,7 @@ export type ActionResult<T> = { ok: true; data: T } | { ok: false; error: string
 // than once per request — a rejected POST must not be able to flood the log.
 let warnedNoSession = false;
 
-async function requireSession(): Promise<{ ok: false; error: string } | null> {
+async function requireSession(): Promise<Extract<ActionResult<never>, { ok: false }> | null> {
   if (isIgrpAuthBypass()) return null;
   const { token } = await igrpEnsureAccessClientConfig();
   if (token) return null;
@@ -49,7 +62,7 @@ async function requireSession(): Promise<{ ok: false; error: string } | null> {
         '(aviso emitido uma vez por processo)',
     );
   }
-  return { ok: false, error: 'Sessão inválida ou expirada.' };
+  return { ok: false, error: 'Sessão inválida ou expirada.', code: 'SESSION_INVALID' };
 }
 
 export async function fetchMenusAction(
@@ -67,7 +80,7 @@ export async function fetchMenusAction(
     // into a generic ActionResult failure below.
     unstable_rethrow(error);
     logger.error('[fetchMenusAction] Falha ao carregar os menus:', error);
-    return { ok: false, error: 'Falha ao carregar os menus.' };
+    return { ok: false, error: 'Falha ao carregar os menus.', code: 'MENUS_LOAD_FAILED' };
   }
 }
 
@@ -82,7 +95,11 @@ export async function fetchCurrentUserAction(): Promise<
   } catch (error) {
     unstable_rethrow(error);
     logger.error('[fetchCurrentUserAction] Falha ao carregar os dados do utilizador:', error);
-    return { ok: false, error: 'Falha ao carregar os dados do utilizador.' };
+    return {
+      ok: false,
+      error: 'Falha ao carregar os dados do utilizador.',
+      code: 'USER_LOAD_FAILED',
+    };
   }
 }
 
@@ -97,7 +114,7 @@ export async function fetchAppsByUserAction(): Promise<
   } catch (error) {
     unstable_rethrow(error);
     logger.error('[fetchAppsByUserAction] Falha ao carregar as aplicações:', error);
-    return { ok: false, error: 'Falha ao carregar as aplicações.' };
+    return { ok: false, error: 'Falha ao carregar as aplicações.', code: 'APPS_LOAD_FAILED' };
   }
 }
 
@@ -112,7 +129,11 @@ export async function fetchAppByCodeAction(
   } catch (error) {
     unstable_rethrow(error);
     logger.error('[fetchAppByCodeAction] Falha ao carregar os dados da aplicação:', error);
-    return { ok: false, error: 'Falha ao carregar os dados da aplicação.' };
+    return {
+      ok: false,
+      error: 'Falha ao carregar os dados da aplicação.',
+      code: 'APP_LOAD_FAILED',
+    };
   }
 }
 

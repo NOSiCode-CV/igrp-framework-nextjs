@@ -36,6 +36,13 @@ export const IGRP_MESSAGES_FR: IGRPFrameworkMessages = {
       description:
         "Vérifiez la configuration du fournisseur d'authentification et les variables d'environnement. Si le problème persiste, contactez l'assistance.",
     },
+    actions: {
+      SESSION_INVALID: 'Votre session est invalide ou a expiré.',
+      MENUS_LOAD_FAILED: 'Impossible de charger les menus.',
+      USER_LOAD_FAILED: "Impossible de charger les données de l'utilisateur.",
+      APPS_LOAD_FAILED: 'Impossible de charger les applications.',
+      APP_LOAD_FAILED: "Impossible de charger les données de l'application.",
+    },
     status: {
       '401': 'Connexion requise',
       '403': 'Accès refusé',

@@ -37,7 +37,11 @@ describe('server actions refuse before contacting Access Management', () => {
 
     const result = await actions.fetchMenusAction('SOME_OTHER_APP');
 
-    expect(result).toEqual({ ok: false, error: 'Sessão inválida ou expirada.' });
+    expect(result).toEqual({
+      ok: false,
+      error: 'Sessão inválida ou expirada.',
+      code: 'SESSION_INVALID',
+    });
     expect(fetchMenus).not.toHaveBeenCalled();
   });
 

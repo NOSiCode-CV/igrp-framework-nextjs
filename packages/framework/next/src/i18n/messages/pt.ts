@@ -35,6 +35,13 @@ export const IGRP_MESSAGES_PT = {
       description:
         'Verifique a configuração do provedor de autenticação e as variáveis de ambiente. Se o problema persistir, contacte o suporte.',
     },
+    actions: {
+      SESSION_INVALID: 'Sessão inválida ou expirada.',
+      MENUS_LOAD_FAILED: 'Não foi possível carregar os menus.',
+      USER_LOAD_FAILED: 'Não foi possível carregar os dados do utilizador.',
+      APPS_LOAD_FAILED: 'Não foi possível carregar as aplicações.',
+      APP_LOAD_FAILED: 'Não foi possível carregar os dados da aplicação.',
+    },
     status: {
       '401': 'Sessão necessária',
       '403': 'Acesso negado',

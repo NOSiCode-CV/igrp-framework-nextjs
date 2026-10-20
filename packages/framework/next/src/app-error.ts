@@ -74,9 +74,12 @@ export function parsePublicDigest(digest: string | undefined): {
  * Priority order:
  *   1. If `error.digest` was set by `AppError`, returns the encoded message.
  *   2. In development, returns `error.message` verbatim (not sanitized).
- *   3. Falls back to a generic Portuguese string.
+ *   3. Falls back to `fallback` (pt-PT by default; pass the translated generic copy).
  */
-export function getDisplayableErrorMessage(error: Error & { digest?: string }): {
+export function getDisplayableErrorMessage(
+  error: Error & { digest?: string },
+  fallback = 'Ocorreu um erro. Por favor, tente novamente.',
+): {
   message: string;
   errorId: string | null;
 } {
@@ -91,10 +94,7 @@ export function getDisplayableErrorMessage(error: Error & { digest?: string }): 
   if (!isSanitized && rawMessage) {
     return { message: rawMessage, errorId: error.digest ?? null };
   }
-  return {
-    message: 'Ocorreu um erro. Por favor, tente novamente.',
-    errorId: error.digest ?? null,
-  };
+  return { message: fallback, errorId: error.digest ?? null };
 }
 
 /**
@@ -127,7 +127,8 @@ export class AppError extends Error {
     publicMessage?: string;
   }) {
     const publicErrorId = generateErrorId();
-    const publicMessageOrDefault = publicMessage ?? 'Ocorreu um erro. Por favor, tente novamente.';
+    // No message travels without one: the boundary then shows its own translated generic copy.
+    const publicMessageOrDefault = publicMessage ?? '';
 
     const digestValue: PublicErrorMessage = `${publicErrorId}${PUBLIC_ERROR_DELIMITER}${publicMessageOrDefault}`;
 

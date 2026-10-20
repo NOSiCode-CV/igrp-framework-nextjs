@@ -19,6 +19,10 @@ function toDate(value: IGRPDateInput): Date | undefined {
   return Number.isNaN(date.getTime()) ? undefined : date;
 }
 
+function isDateOnly(value: IGRPDateInput): value is string {
+  return typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value);
+}
+
 /**
  * `dd/mm/yyyy` in every platform region; `''` for missing or invalid input.
  * `timeZone` is the platform zone (`i18n.timeZone`): without it the server
@@ -33,7 +37,12 @@ export function igrpFormatDate(
 ): string {
   const date = toDate(value);
   if (!date) return '';
-  const resolved = timeZone && !options.timeZone ? { ...options, timeZone } : options;
+  // `new Date('YYYY-MM-DD')` is UTC midnight: format in UTC to keep that calendar day.
+  const resolved = isDateOnly(value)
+    ? { ...options, timeZone: 'UTC' }
+    : timeZone && !options.timeZone
+      ? { ...options, timeZone }
+      : options;
   return new Intl.DateTimeFormat(formatLocale, resolved).format(date);
 }
 
@@ -44,7 +53,10 @@ export function igrpFormatDateTime(
   options: Intl.DateTimeFormatOptions = DATE_TIME_OPTIONS,
   timeZone?: string,
 ): string {
-  return igrpFormatDate(value, formatLocale, { ...DATE_TIME_OPTIONS, ...options }, timeZone);
+  // dateStyle/timeStyle throw when mixed with the field options.
+  const resolved =
+    options.dateStyle || options.timeStyle ? options : { ...DATE_TIME_OPTIONS, ...options };
+  return igrpFormatDate(value, formatLocale, resolved, timeZone);
 }
 
 const RELATIVE_UNITS: readonly [Intl.RelativeTimeFormatUnit, number][] = [
@@ -74,11 +86,17 @@ export function igrpFormatRelativeTime(
   if (!date || !reference) return '';
   const diff = date.getTime() - reference.getTime();
   const abs = Math.abs(diff);
-  let [unit, size] = RELATIVE_UNITS[0]!;
-  for (let i = 1; i < RELATIVE_UNITS.length; i += 1) {
-    if (abs < RELATIVE_UNITS[i]![1]) break;
-    [unit, size] = RELATIVE_UNITS[i]!;
+  let i = 0;
+  while (i + 1 < RELATIVE_UNITS.length && abs >= RELATIVE_UNITS[i + 1]![1]) i += 1;
+  // 59.6 s rounds to 60 s: say "1 minute" instead.
+  if (
+    i + 1 < RELATIVE_UNITS.length &&
+    Math.abs(Math.round(diff / RELATIVE_UNITS[i]![1])) * RELATIVE_UNITS[i]![1] >=
+      RELATIVE_UNITS[i + 1]![1]
+  ) {
+    i += 1;
   }
+  const [unit, size] = RELATIVE_UNITS[i]!;
   return new Intl.RelativeTimeFormat(formatLocale, options).format(Math.round(diff / size), unit);
 }
 

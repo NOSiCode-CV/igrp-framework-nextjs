@@ -68,4 +68,25 @@ describe('format helpers', () => {
     expect(igrpCompare('item2', 'item10', 'en-GB')).toBeLessThan(0);
     expect(igrpCompare(undefined, 'a', 'en-GB')).toBeLessThan(0);
   });
+  it('formats a date-only string as that calendar day in any zone', () => {
+    expect(igrpFormatDate('2026-10-20', 'pt-CV', undefined, 'Atlantic/Cape_Verde')).toBe(
+      '20/10/2026',
+    );
+    expect(igrpFormatDate('2026-10-20', 'pt-CV', undefined, 'America/New_York')).toBe('20/10/2026');
+    expect(igrpFormatDate('2026-10-20', 'pt-CV', undefined, 'Asia/Tokyo')).toBe('20/10/2026');
+  });
+  it('accepts dateStyle/timeStyle in igrpFormatDateTime', () => {
+    expect(() =>
+      igrpFormatDateTime(new Date(), 'en-GB', { dateStyle: 'short', timeStyle: 'short' }),
+    ).not.toThrow();
+  });
+  it('promotes a rounded value that fills the next unit', () => {
+    const now = new Date('2026-10-20T12:00:00Z');
+    expect(igrpFormatRelativeTime(new Date(now.getTime() + 59_600), now, 'en-GB')).toBe(
+      'in 1 minute',
+    );
+    expect(igrpFormatRelativeTime(new Date(now.getTime() + 30_000), now, 'en-GB')).toBe(
+      'in 30 seconds',
+    );
+  });
 });

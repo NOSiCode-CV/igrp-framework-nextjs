@@ -78,3 +78,11 @@ describe('fallback handlers', () => {
     expect(warn).toHaveBeenCalledTimes(1);
   });
 });
+
+describe('igrpMergeMessages cache', () => {
+  it('does not reuse a merge across defaultLocales for the same catalogs object', () => {
+    const app = { pt: { x: { a: 'pt' } }, en: { x: { a: 'en' } } };
+    expect(igrpMergeMessages({ defaultLocale: 'pt' }, 'fr', app).x).toEqual({ a: 'pt' });
+    expect(igrpMergeMessages({ defaultLocale: 'en' }, 'fr', app).x).toEqual({ a: 'en' });
+  });
+});

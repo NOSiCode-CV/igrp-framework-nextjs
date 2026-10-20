@@ -53,8 +53,11 @@ export async function igrpSetLocale(
 
   const headerStore = await headers();
   const proto = headerStore.get('x-forwarded-proto')?.split(',')[0]?.trim();
+  const secure = proto
+    ? proto === 'https'
+    : headerStore.get('origin')?.startsWith('https:') === true;
   const cookieStore = await cookies();
-  cookieStore.set(IGRP_LOCALE_COOKIE, locale, igrpLocaleCookieOptions(proto === 'https'));
+  cookieStore.set(IGRP_LOCALE_COOKIE, locale, igrpLocaleCookieOptions(secure));
 
   return { success: true, data: { locale, persisted } };
 }

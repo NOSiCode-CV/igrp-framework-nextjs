@@ -31,14 +31,14 @@ export function igrpDeepMergeMessages(
 
 export type IGRPAppCatalogs = Partial<Record<IGRPLocale, AbstractIntlMessages>>;
 
-const cache = new WeakMap<IGRPAppCatalogs, Map<IGRPLocale, AbstractIntlMessages>>();
+const cache = new WeakMap<IGRPAppCatalogs, Map<string, AbstractIntlMessages>>();
 
 /**
  * Messages for `locale`: framework[locale] ⊕ (app[defaultLocale] ⊕ app[locale]).
  * The framework catalogs are complete in all three languages, so they need
  * no fallback of their own; the app's default catalog is the per-key
  * fallback for its other languages, and app keys shadow framework keys.
- * Cached per catalogs object and locale.
+ * Cached per catalogs object, default locale and locale.
  */
 export function igrpMergeMessages(
   i18n: Pick<IGRPI18nConfig, 'defaultLocale'>,
@@ -50,7 +50,8 @@ export function igrpMergeMessages(
     perLocale = new Map();
     cache.set(appCatalogs, perLocale);
   }
-  const hit = perLocale.get(locale);
+  const key = `${i18n.defaultLocale}:${locale}`;
+  const hit = perLocale.get(key);
   if (hit) return hit;
 
   const appDefault = appCatalogs[i18n.defaultLocale] ?? {};
@@ -58,6 +59,6 @@ export function igrpMergeMessages(
   const app =
     locale === i18n.defaultLocale ? appDefault : igrpDeepMergeMessages(appDefault, appLocale);
   const merged = igrpDeepMergeMessages(FRAMEWORK[locale], app);
-  perLocale.set(locale, merged);
+  perLocale.set(key, merged);
   return merged;
 }

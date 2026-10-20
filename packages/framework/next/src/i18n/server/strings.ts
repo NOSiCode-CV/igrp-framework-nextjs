@@ -54,7 +54,12 @@ function mergeChrome(
   const result = { ...base } as Record<string, object>;
   for (const group of Object.keys(base) as (keyof IGRPChromeStrings)[]) {
     const patch = override[group];
-    if (patch) result[group] = { ...base[group], ...patch };
+    if (!patch) continue;
+    const merged = { ...base[group] } as Record<string, string>;
+    for (const [key, value] of Object.entries(patch)) {
+      if (typeof value === 'string') merged[key] = value;
+    }
+    result[group] = merged;
   }
   return result as unknown as IGRPChromeStrings;
 }

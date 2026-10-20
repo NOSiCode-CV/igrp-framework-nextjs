@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { IGRP_CHROME_STRINGS_EN } from '@igrp/framework-next-ui';
+import { IGRP_CHROME_STRINGS_EN, IGRP_CHROME_STRINGS_PT } from '@igrp/framework-next-ui';
 import { IGRP_I18N_DEFAULTS_FR } from '@igrp/igrp-framework-react-design-system';
 
 import { igrpDefineI18n } from '../config.js';
@@ -26,5 +26,17 @@ describe('catalog selection with overrides', () => {
     expect(en.navUser.logout).toBe('Log out');
     expect(en.navUser.profile).toBe(IGRP_CHROME_STRINGS_EN.navUser.profile);
     expect(igrpGetChromeStrings(i18n, 'pt')).toBe(igrpGetChromeStrings(i18n, 'pt'));
+  });
+});
+
+describe('chrome overrides', () => {
+  it('ignores undefined chrome overrides', () => {
+    const i18n = igrpDefineI18n({
+      defaultLocale: 'pt',
+      overrides: { pt: { chrome: { navUser: { logout: undefined } } } },
+    });
+    expect(igrpGetChromeStrings(i18n, 'pt').navUser.logout).toBe(
+      IGRP_CHROME_STRINGS_PT.navUser.logout,
+    );
   });
 });

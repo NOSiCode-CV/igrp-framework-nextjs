@@ -95,3 +95,15 @@ describe('igrpSetLocale', () => {
     expect(cookieSet).toHaveBeenCalledWith('IGRP_LOCALE', 'en', { ...OPTIONS, secure: true });
   });
 });
+
+describe('igrpSetLocale Secure detection', () => {
+  it('marks the cookie Secure when the origin is https and there is no proxy header', async () => {
+    headerGet.mockImplementation((name: string) => (name === 'origin' ? 'https://app.cv' : null));
+    await igrpSetLocale(igrpDefineI18n({ defaultLocale: 'pt' }), 'en');
+    expect(cookieSet).toHaveBeenCalledWith(
+      'IGRP_LOCALE',
+      'en',
+      expect.objectContaining({ secure: true }),
+    );
+  });
+});

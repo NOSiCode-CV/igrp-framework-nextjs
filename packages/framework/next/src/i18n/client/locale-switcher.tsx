@@ -68,48 +68,53 @@ export function IGRPLocaleSwitcher({ action, onChanged, className }: IGRPLocaleS
   const label = failed ? t('changeError') : t('label');
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant="ghost"
-          size="icon"
-          className={cn('relative size-6', className)}
-          disabled={isPending}
-          aria-label={label}
-          title={label}
-        >
-          {isPending ? (
-            <IGRPIcon
-              iconName="LoaderCircle"
-              strokeWidth={2}
-              className="size-4 animate-spin motion-reduce:animate-none"
-            />
-          ) : (
-            <span aria-hidden="true" className="text-xs font-semibold">
-              {locale.toUpperCase()}
-            </span>
-          )}
-          {failed && (
-            <span
-              aria-hidden="true"
-              className="bg-destructive absolute top-0 right-0 size-1.5 rounded-full"
-            />
-          )}
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="min-w-40">
-        <DropdownMenuLabel className="text-muted-foreground text-xs font-normal">
-          {label}
-        </DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuRadioGroup value={locale} onValueChange={handleChange}>
-          {locales.map((code) => (
-            <DropdownMenuRadioItem key={code} value={code} lang={code}>
-              {IGRP_LOCALE_NATIVE_NAMES[code]}
-            </DropdownMenuRadioItem>
-          ))}
-        </DropdownMenuRadioGroup>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant="ghost"
+            size="icon"
+            className={cn('relative size-6', className)}
+            disabled={isPending}
+            aria-label={label}
+            title={label}
+          >
+            {isPending ? (
+              <IGRPIcon
+                iconName="LoaderCircle"
+                strokeWidth={2}
+                className="size-4 animate-spin motion-reduce:animate-none"
+              />
+            ) : (
+              <span aria-hidden="true" className="text-xs font-semibold">
+                {locale.toUpperCase()}
+              </span>
+            )}
+            {failed && (
+              <span
+                aria-hidden="true"
+                className="bg-destructive absolute top-0 right-0 size-1.5 rounded-full"
+              />
+            )}
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="min-w-40">
+          <DropdownMenuLabel className="text-muted-foreground text-xs font-normal">
+            {label}
+          </DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuRadioGroup value={locale} onValueChange={handleChange}>
+            {locales.map((code) => (
+              <DropdownMenuRadioItem key={code} value={code} lang={code}>
+                {IGRP_LOCALE_NATIVE_NAMES[code]}
+              </DropdownMenuRadioItem>
+            ))}
+          </DropdownMenuRadioGroup>
+        </DropdownMenuContent>
+      </DropdownMenu>
+      <span role="status" className="sr-only">
+        {failed ? t('changeError') : ''}
+      </span>
+    </>
   );
 }

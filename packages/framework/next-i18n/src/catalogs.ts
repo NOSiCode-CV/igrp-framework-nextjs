@@ -72,6 +72,33 @@ function icuArguments(message: string): string[] | undefined {
   return [...names].sort();
 }
 
+/** Plural options (other than `=N`) the locale's CLDR rules never select. */
+function unselectedPluralCategories(locale: string, message: string): string[] {
+  let categories: Set<string>;
+  try {
+    categories = new Set(
+      new Intl.PluralRules(locale).resolvedOptions().pluralCategories,
+    );
+  } catch {
+    return []; // locale tag Intl rejects; nothing to compare against
+  }
+  const bad = new Set<string>();
+  const visit = (elements: MessageFormatElement[]) => {
+    for (const el of elements) {
+      if (el.type === TYPE.plural) {
+        for (const key of Object.keys(el.options)) {
+          if (!key.startsWith("=") && !categories.has(key)) bad.add(key);
+        }
+      }
+      if (el.type === TYPE.plural || el.type === TYPE.select) {
+        for (const option of Object.values(el.options)) visit(option.value);
+      } else if (el.type === TYPE.tag) visit(el.children);
+    }
+  };
+  visit(parse(message));
+  return [...bad];
+}
+
 export function checkCatalogs(options: CheckCatalogsOptions): CatalogReport {
   const errors: string[] = [];
   const info: string[] = [];
@@ -92,14 +119,17 @@ export function checkCatalogs(options: CheckCatalogsOptions): CatalogReport {
   const catalogs = new Map<string, Map<string, unknown>>();
   for (const file of files) {
     const locale = basename(file, ".json");
-    catalogs.set(
-      locale,
-      flatten(
-        JSON.parse(readFileSync(join(options.dir, file), "utf8")) as Tree,
-      ),
-    );
+    try {
+      const tree = JSON.parse(
+        readFileSync(join(options.dir, file), "utf8"),
+      ) as Tree;
+      catalogs.set(locale, flatten(tree));
+    } catch (e) {
+      errors.push(`${locale}: invalid JSON (${(e as Error).message})`);
+    }
   }
-  const base = catalogs.get(options.defaultLocale)!;
+  const base = catalogs.get(options.defaultLocale);
+  if (!base) return { errors, info, coverage };
   const baseArgs = new Map<string, string[] | undefined>();
 
   for (const [locale, flat] of catalogs) {
@@ -113,6 +143,9 @@ export function checkCatalogs(options: CheckCatalogsOptions): CatalogReport {
         errors.push(`${locale}: "${key}" is not a string`);
         continue;
       }
+      if (value === "" && locale !== options.defaultLocale) {
+        errors.push(`${locale}: "${key}" is empty`);
+      }
       for (const segment of key.split(".")) {
         if (!CAMEL.test(segment)) {
           errors.push(
@@ -124,6 +157,11 @@ export function checkCatalogs(options: CheckCatalogsOptions): CatalogReport {
       if (!args) {
         errors.push(`${locale}: invalid ICU in "${key}"`);
         continue;
+      }
+      for (const category of unselectedPluralCategories(locale, value)) {
+        errors.push(
+          `${locale}: "${key}" uses plural category "${category}" that ${locale} never selects`,
+        );
       }
       if (locale === options.defaultLocale) {
         baseArgs.set(key, args);

@@ -76,3 +76,33 @@ describe("checkCatalogs", () => {
     expect(report.errors[0]).toMatch(/default catalog pt.json not found/);
   });
 });
+
+describe("checkCatalogs: robustness", () => {
+  it("reports invalid JSON instead of throwing", () => {
+    const d = dir({ "pt.json": { a: "x" } });
+    writeFileSync(join(d, "fr.json"), "{");
+    const { errors } = checkCatalogs({ dir: d, defaultLocale: "pt" });
+    expect(errors.some((e) => e.startsWith("fr: invalid JSON"))).toBe(true);
+  });
+
+  it("reports empty translations in non-default catalogs", () => {
+    const { errors } = checkCatalogs({
+      dir: dir({ "pt.json": { a: "x" }, "en.json": { a: "" } }),
+      defaultLocale: "pt",
+    });
+    expect(errors).toContain('en: "a" is empty');
+  });
+
+  it("reports plural categories the locale never selects", () => {
+    const { errors } = checkCatalogs({
+      dir: dir({
+        "pt.json": { n: "{n, plural, one {x} other {y}}" },
+        "fr.json": { n: "{n, plural, =0 {z} few {x} other {y}}" },
+      }),
+      defaultLocale: "pt",
+    });
+    expect(errors).toEqual([
+      'fr: "n" uses plural category "few" that fr never selects',
+    ]);
+  });
+});

@@ -14,6 +14,14 @@ const USER_FACING_PROPS = new Set([
   "errorText",
   "searchText",
   "selectLabel",
+  "text",
+  "message",
+  "emptyText",
+]);
+const LOCALE_METHODS = new Set([
+  "toLocaleString",
+  "toLocaleDateString",
+  "toLocaleTimeString",
 ]);
 const HAS_LETTER = /\p{L}/u;
 // `&mdash;`, `&nbsp;`, `&#8594;`: entity names carry letters but render as symbols.
@@ -22,18 +30,55 @@ const hasLetter = (text: string) =>
   HAS_LETTER.test(text.replace(HTML_ENTITY, ""));
 const FORMATTER_IMPORTS = new Set(["useFormatter", "getFormatter"]);
 
-function literalText(node: ts.Node | undefined): string | undefined {
-  if (!node) return undefined;
+/** Every string a node can render: through ternaries, `&&` (right side only) and `||`/`??`. */
+function literalTexts(node: ts.Node | undefined): string[] {
+  if (!node) return [];
   if (ts.isStringLiteral(node) || ts.isNoSubstitutionTemplateLiteral(node))
-    return node.text;
+    return [node.text];
   if (ts.isTemplateExpression(node)) {
     return [
-      node.head.text,
-      ...node.templateSpans.map((s) => s.literal.text),
-    ].join(" ");
+      [node.head.text, ...node.templateSpans.map((s) => s.literal.text)].join(
+        " ",
+      ),
+    ];
   }
-  if (ts.isParenthesizedExpression(node)) return literalText(node.expression);
-  return undefined;
+  if (ts.isParenthesizedExpression(node)) return literalTexts(node.expression);
+  if (ts.isConditionalExpression(node))
+    return [...literalTexts(node.whenTrue), ...literalTexts(node.whenFalse)];
+  if (ts.isBinaryExpression(node)) {
+    const op = node.operatorToken.kind;
+    if (op === ts.SyntaxKind.AmpersandAmpersandToken)
+      return literalTexts(node.right);
+    if (
+      op === ts.SyntaxKind.BarBarToken ||
+      op === ts.SyntaxKind.QuestionQuestionToken
+    )
+      return [...literalTexts(node.left), ...literalTexts(node.right)];
+  }
+  return [];
+}
+
+/** The locale tag of `new Intl.X("tag")` or `.toLocale*String("tag")`, if hardcoded. */
+function hardcodedLocale(node: ts.Node): string | undefined {
+  let arg: ts.Expression | undefined;
+  if (
+    ts.isNewExpression(node) &&
+    ts.isPropertyAccessExpression(node.expression) &&
+    ts.isIdentifier(node.expression.expression) &&
+    node.expression.expression.text === "Intl"
+  ) {
+    arg = node.arguments?.[0];
+  } else if (
+    ts.isCallExpression(node) &&
+    ts.isPropertyAccessExpression(node.expression) &&
+    LOCALE_METHODS.has(node.expression.name.text)
+  ) {
+    arg = node.arguments[0];
+  }
+  return arg &&
+    (ts.isStringLiteral(arg) || ts.isNoSubstitutionTemplateLiteral(arg))
+    ? arg.text
+    : undefined;
 }
 
 /** `line: finding` for every hardcoded user-facing string or formatter import in `source`. */
@@ -46,7 +91,7 @@ export function findLiteralStrings(
     source,
     ts.ScriptTarget.Latest,
     true,
-    ts.ScriptKind.TSX,
+    fileName.endsWith(".tsx") ? ts.ScriptKind.TSX : ts.ScriptKind.TS,
   );
   const findings: string[] = [];
   const line = (node: ts.Node) =>
@@ -82,40 +127,46 @@ export function findLiteralStrings(
       node.parent &&
       (ts.isJsxElement(node.parent) || ts.isJsxFragment(node.parent))
     ) {
-      const text = literalText(node.expression);
-      if (text !== undefined && HAS_LETTER.test(text))
-        report(node, `literal child "${text}"`);
+      for (const text of literalTexts(node.expression)) {
+        if (HAS_LETTER.test(text)) report(node, `literal child "${text}"`);
+      }
     }
     if (
       ts.isJsxAttribute(node) &&
       USER_FACING_PROPS.has(node.name.getText(sf))
     ) {
       const init = node.initializer;
-      const text =
-        init && ts.isJsxExpression(init)
-          ? literalText(init.expression)
-          : literalText(init);
-      if (text !== undefined && HAS_LETTER.test(text)) {
-        report(node, `literal prop ${node.name.getText(sf)}="${text}"`);
+      const texts = literalTexts(
+        init && ts.isJsxExpression(init) ? init.expression : init,
+      );
+      for (const text of texts) {
+        if (HAS_LETTER.test(text)) {
+          report(node, `literal prop ${node.name.getText(sf)}="${text}"`);
+        }
       }
     }
+    const locale = hardcodedLocale(node);
+    if (locale !== undefined)
+      report(node, `hardcoded locale "${locale}": use useIGRPFormat`);
     ts.forEachChild(node, visit);
   };
   visit(sf);
   return findings;
 }
 
-function listTsxFiles(path: string): string[] {
+function listSourceFiles(path: string): string[] {
   const stat = statSync(path);
   if (stat.isFile())
-    return path.endsWith(".tsx") && !/\.test\.tsx$/.test(path) ? [path] : [];
-  return readdirSync(path).flatMap((name) => listTsxFiles(join(path, name)));
+    return /\.tsx?$/.test(path) && !/\.(test|d)\.tsx?$/.test(path)
+      ? [path]
+      : [];
+  return readdirSync(path).flatMap((name) => listSourceFiles(join(path, name)));
 }
 
-/** Findings as `relative/path.tsx:line: what`, for every non-test `.tsx` under `paths`. */
+/** Findings as `relative/path:line: what`, for every non-test, non-declaration `.ts`/`.tsx` under `paths`. */
 export function checkLiterals(paths: string[], cwd = process.cwd()): string[] {
   return paths.flatMap((p) =>
-    listTsxFiles(p).flatMap((file) =>
+    listSourceFiles(p).flatMap((file) =>
       findLiteralStrings(readFileSync(file, "utf8"), file).map(
         (f) => `${relative(cwd, file).replaceAll("\\", "/")}:${f}`,
       ),

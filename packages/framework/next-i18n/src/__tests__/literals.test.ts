@@ -71,3 +71,43 @@ describe("checkLiterals", () => {
     expect(findings[0]).toMatch(/a\.tsx:1: JSX text "Olá"/);
   });
 });
+
+describe("findLiteralStrings: conditionals and locales", () => {
+  it.each([
+    ['<p>{ok ? "Guardado" : "Erro"}</p>', 2],
+    ['<p>{err && "Falhou"}</p>', 1],
+    ['<p>{"Falhou" && err}</p>', 0],
+    ['<p>{a || "Vazio"}</p>', 1],
+    ['<p>{a ?? "Vazio"}</p>', 1],
+    ['<X placeholder={ok ? "Nome" : "Apelido"} />', 2],
+    ['<Spinner text="Aguarde..." />', 1],
+    ['<X message="Erro" emptyText="Nada" />', 2],
+  ])("flags %s", (src, n) => {
+    expect(findLiteralStrings(src, "a.tsx")).toHaveLength(n);
+  });
+
+  it("flags hardcoded Intl locales in .ts", () => {
+    const src =
+      'new Intl.DateTimeFormat("pt").format(d); d.toLocaleDateString("pt-BR")';
+    const found = findLiteralStrings(src, "a.ts");
+    expect(found).toHaveLength(2);
+    expect(found[0]).toContain('hardcoded locale "pt": use useIGRPFormat');
+  });
+
+  it("does not flag {cond && <Foo/>} or className ternaries", () => {
+    expect(
+      findLiteralStrings(
+        '<p className={a ? "x" : "y"}>{a && <b/>}</p>',
+        "a.tsx",
+      ),
+    ).toHaveLength(0);
+  });
+
+  it("scans .ts files but not tests or declarations", () => {
+    const d = mkdtempSync(join(tmpdir(), "igrp-lit-"));
+    for (const n of ["a.ts", "a.test.ts", "a.d.ts"]) {
+      writeFileSync(join(d, n), 'x.toLocaleString("pt");');
+    }
+    expect(checkLiterals([d], d)).toHaveLength(1);
+  });
+});

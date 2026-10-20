@@ -1,8 +1,11 @@
 /* shadcn: 2026-09-15 */
 
+"use client"
+
 import * as React from "react"
 import { cn } from "cn"
 import { Slot } from "radix-ui"
+import { useIGRPi18n } from "../../i18n/context.js"
 import { ChevronRightIcon, MoreHorizontalIcon } from "lucide-react"
 
 function Breadcrumb({ className, ...props }: React.ComponentProps<"nav">) {
@@ -68,6 +71,7 @@ function BreadcrumbSeparator({ children, className, ...props }: React.ComponentP
 }
 
 function BreadcrumbEllipsis({ className, ...props }: React.ComponentProps<"span">) {
+  const i18n = useIGRPi18n()
   return (
     <span
       data-slot="breadcrumb-ellipsis"
@@ -77,7 +81,7 @@ function BreadcrumbEllipsis({ className, ...props }: React.ComponentProps<"span"
       {...props}
     >
       <MoreHorizontalIcon />
-      <span className="sr-only">More</span>
+      <span className="sr-only">{i18n.breadcrumb.more}</span>
     </span>
   )
 }

@@ -5,8 +5,9 @@ import { IGRPI18nProvider } from "../../../i18n/context.js"
 import { IGRP_I18N_DEFAULTS_EN } from "../../../i18n/strings.en.js"
 import { IGRP_I18N_DEFAULTS_FR } from "../../../i18n/strings.fr.js"
 import { IGRP_I18N_DEFAULTS_PT } from "../../../i18n/strings.js"
+import { BreadcrumbEllipsis } from "../breadcrumb.js"
 import { Dialog, DialogContent, DialogTitle } from "../dialog.js"
-import { Pagination, PaginationNext, PaginationPrevious } from "../pagination.js"
+import { Pagination, PaginationEllipsis, PaginationNext, PaginationPrevious } from "../pagination.js"
 import { Sheet, SheetContent, SheetTitle } from "../sheet.js"
 import { SidebarProvider, SidebarTrigger } from "../sidebar.js"
 
@@ -49,6 +50,17 @@ describe.each([
     )
     expect(screen.getByLabelText(strings.pagination.goToPrevious)).toHaveTextContent(strings.pagination.previous)
     expect(screen.getByLabelText(strings.pagination.goToNext)).toHaveTextContent(strings.pagination.next)
+  })
+
+  it("ellipsis sr-only texts", () => {
+    render(
+      <IGRPI18nProvider strings={strings}>
+        <PaginationEllipsis />
+        <BreadcrumbEllipsis />
+      </IGRPI18nProvider>
+    )
+    expect(screen.getByText(strings.pagination.morePages)).toBeInTheDocument()
+    expect(screen.getByText(strings.breadcrumb.more)).toBeInTheDocument()
   })
 
   it("pagination nav label", () => {

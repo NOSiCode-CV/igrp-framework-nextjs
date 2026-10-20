@@ -46,13 +46,13 @@ function oklchToRgb(l: number, c: number, hDeg: number): Rgb {
 const luminance = ([r, g, b]: Rgb) => 0.2126 * r + 0.7152 * g + 0.0722 * b
 
 function contrast(fg: Rgb, bg: Rgb) {
-  const [hi, lo] = [luminance(fg), luminance(bg)].sort((x, y) => y - x)
+  const [hi, lo] = [luminance(fg), luminance(bg)].sort((x, y) => y - x) as [number, number]
   return (hi + 0.05) / (lo + 0.05)
 }
 
 /** Composite a partially transparent colour over an opaque surface. */
 const flatten = (token: Token, surface: Rgb): Rgb =>
-  token.rgb.map((v, i) => v * token.alpha + surface[i] * (1 - token.alpha)) as unknown as Rgb
+  token.rgb.map((v, i) => v * token.alpha + (surface[i] ?? 0) * (1 - token.alpha)) as unknown as Rgb
 
 const OKLCH = /oklch\(\s*([\d.]+)\s+([\d.]+)\s+([\d.]+)(?:\s*\/\s*([\d.]+)%)?\s*\)/
 
@@ -64,8 +64,8 @@ function parseBlock(css: string, selector: string): Record<string, Token> {
 
   const out: Record<string, Token> = {}
   for (const [, name, value] of body.matchAll(/--([a-z0-9-]+):\s*([^;]+);/g)) {
-    const m = OKLCH.exec(value)
-    if (!m) continue // color-mix()/var() indirections are not gated here
+    const m = value === undefined ? null : OKLCH.exec(value)
+    if (!m || name === undefined) continue // color-mix()/var() indirections are not gated here
     out[name] = {
       rgb: oklchToRgb(Number(m[1]), Number(m[2]), Number(m[3])),
       alpha: m[4] === undefined ? 1 : Number(m[4]) / 100,
@@ -95,11 +95,17 @@ function softTint(color: (typeof SEMANTIC)[number]): number | null {
 
 describe.each(["light", "dark"] as const)("tokens.css — %s", (mode) => {
   const T = MODES[mode]
+  // Missing tokens fail loudly here instead of surfacing as `undefined` deep in a ratio calculation.
+  const tok = (name: string): Token => {
+    const token = T[name]
+    if (!token) throw new Error(`--${name} missing in ${mode}`)
+    return token
+  }
   const surface = (name: string): Rgb => {
     const token = T[name]
     if (!token) throw new Error(`--${name} missing in ${mode}`)
     // A translucent surface token (e.g. dark --border) is judged over the page.
-    return token.alpha === 1 ? token.rgb : flatten(token, T.background.rgb)
+    return token.alpha === 1 ? token.rgb : flatten(token, tok("background").rgb)
   }
 
   const expectRatio = (fg: Rgb, bg: Rgb, min: number, label: string) => {
@@ -123,28 +129,28 @@ describe.each(["light", "dark"] as const)("tokens.css — %s", (mode) => {
       ["sidebar-primary-foreground", "sidebar-primary"],
       ["sidebar-accent-foreground", "sidebar-accent"],
     ])("--%s on --%s", (fg, bg) => {
-      expectRatio(T[fg].rgb, surface(bg), AA_TEXT, `--${fg} on --${bg}`)
+      expectRatio(tok(fg).rgb, surface(bg), AA_TEXT, `--${fg} on --${bg}`)
     })
   })
 
   describe.each(SEMANTIC)("%s", (color) => {
     it(`solid: --${color}-foreground on --${color}`, () => {
-      expectRatio(T[`${color}-foreground`].rgb, T[color].rgb, AA_TEXT, `solid ${color}`)
+      expectRatio(tok(`${color}-foreground`).rgb, tok(color).rgb, AA_TEXT, `solid ${color}`)
     })
 
     it.each(SURFACES)(`outline: text-${color} on --%s`, (bg) => {
-      expectRatio(T[color].rgb, surface(bg), AA_TEXT, `text-${color} on --${bg}`)
+      expectRatio(tok(color).rgb, surface(bg), AA_TEXT, `text-${color} on --${bg}`)
     })
 
     it.each(SURFACES)(`soft: text-${color} on its own tint over --%s`, (bg) => {
       const tint = softTint(color)
       expect(tint, `IGRPColors.soft.${color}.bg must be a bg-<color>/<alpha> class`).not.toBeNull()
-      const tinted = flatten({ rgb: T[color].rgb, alpha: tint as number }, surface(bg))
-      expectRatio(T[color].rgb, tinted, AA_TEXT, `soft ${color} over --${bg}`)
+      const tinted = flatten({ rgb: tok(color).rgb, alpha: tint as number }, surface(bg))
+      expectRatio(tok(color).rgb, tinted, AA_TEXT, `soft ${color} over --${bg}`)
     })
 
     it(`is distinguishable as a graphic on --background (${AA_NON_TEXT}:1)`, () => {
-      expectRatio(T[color].rgb, surface("background"), AA_NON_TEXT, `${color} swatch`)
+      expectRatio(tok(color).rgb, surface("background"), AA_NON_TEXT, `${color} swatch`)
     })
   })
 
@@ -167,7 +173,7 @@ describe.each(["light", "dark"] as const)("tokens.css — %s", (mode) => {
       ["sidebar-ring", "sidebar"],
     ])("--%s against --%s", (token, bg) => {
       const against = surface(bg)
-      const resolved = T[token].alpha === 1 ? T[token].rgb : flatten(T[token], against)
+      const resolved = tok(token).alpha === 1 ? tok(token).rgb : flatten(tok(token), against)
       expectRatio(resolved, against, AA_NON_TEXT, `--${token} on --${bg}`)
     })
   })

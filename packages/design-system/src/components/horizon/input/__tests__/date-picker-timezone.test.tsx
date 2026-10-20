@@ -48,7 +48,7 @@ describe("toLocalDate", () => {
   })
 
   it("maps both ends of a range and every entry of a list", () => {
-    expect(toLocalDateRange({ from: "2026-08-26", to: "2026-08-28" })!.from.getDate()).toBe(26)
+    expect(toLocalDateRange({ from: "2026-08-26", to: "2026-08-28" })!.from!.getDate()).toBe(26)
     expect(toLocalDateRange({ from: "2026-08-26", to: "2026-08-28" })!.to!.getDate()).toBe(28)
     expect(toLocalDates(["2026-08-26", "2026-08-28"])!.map((d) => d.getDate())).toEqual([26, 28])
   })
@@ -58,7 +58,9 @@ const singleSchema = z.object({ d: z.any() })
 const rangeSchema = z.object({ r: z.any() })
 const multipleSchema = z.object({ m: z.any() })
 
-function Wrapper<S extends z.ZodType>({
+// Mirrors the form's own schema constraint (`AnyZod`).
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function Wrapper<S extends z.ZodType<Record<string, any>, any, any>>({
   schema,
   defaultValues,
   children,

@@ -1,6 +1,6 @@
 "use client"
 
-import { useId, useMemo, useState } from "react"
+import { useId, useMemo, useState, useSyncExternalStore } from "react"
 import { useFormContext, Controller } from "react-hook-form"
 import * as RPNInput from "react-phone-number-input"
 import flags from "react-phone-number-input/flags"
@@ -39,6 +39,8 @@ interface IGRPInputPhoneProps extends Omit<IGRPInputProps, "onChange" | "ref"> {
   /** Text direction. */
   dir?: "ltr" | "rtl"
 }
+
+const noopSubscribe = () => () => {}
 
 /** @internal Country names in `locale`, in the shape react-phone-number-input expects for `labels`. */
 function useCountryLabels(locale: string) {
@@ -151,7 +153,10 @@ function IGRPInputPhone({
   const domProps = igrpOmitNonDomProps(props)
   const formContext = useFormContext()
   const i18n = useIGRPi18n()
-  const labels = useCountryLabels(useIGRPLocale())
+  const localized = useCountryLabels(useIGRPLocale())
+  // Server ICU and browser ICU can name (and so sort) countries differently; localize only after hydration.
+  const hydrated = useSyncExternalStore(noopSubscribe, () => true, () => false)
+  const labels = hydrated ? localized : undefined
   const resolvedPlaceholder = placeholder ?? i18n.inputPhone.placeholder
   const [localValue, setLocalValue] = useState(value ?? defaultValue ?? "")
 

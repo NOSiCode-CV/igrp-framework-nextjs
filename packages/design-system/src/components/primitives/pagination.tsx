@@ -77,6 +77,7 @@ function PaginationNext({
 }
 
 function PaginationEllipsis({ className, ...props }: React.ComponentProps<"span">) {
+  const i18n = useIGRPi18n()
   return (
     <span
       aria-hidden
@@ -85,7 +86,7 @@ function PaginationEllipsis({ className, ...props }: React.ComponentProps<"span"
       {...props}
     >
       <MoreHorizontalIcon />
-      <span className="sr-only">More pages</span>
+      <span className="sr-only">{i18n.pagination.morePages}</span>
     </span>
   )
 }

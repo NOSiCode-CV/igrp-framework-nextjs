@@ -4,7 +4,8 @@ import userEvent from "@testing-library/user-event"
 
 import { IGRPTabs, type IGRPTabItem } from "../tabs.js"
 
-const items: IGRPTabItem[] = [
+// Tuple, so `items[0]` is an IGRPTabItem rather than `IGRPTabItem | undefined`.
+const items: [IGRPTabItem, IGRPTabItem, IGRPTabItem] = [
   { value: "a", label: "Alpha", content: <p>alpha panel</p> },
   { value: "b", label: "Beta", content: <p>beta panel</p> },
   { value: "c", label: "Gamma", content: <p>gamma panel</p> },

@@ -59,7 +59,9 @@ const IGRP_ONLY_ATTRS = [
   "inputclassname",
 ]
 
-const BAG = {
+// Typed loosely on purpose: the bag is spread into components whose other required props are not the subject here.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const BAG: any = {
   labelClassName: "lc",
   inputClassName: "ic",
   helperText: "H",

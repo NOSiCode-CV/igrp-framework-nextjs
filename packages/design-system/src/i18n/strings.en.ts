@@ -253,10 +253,14 @@ export const IGRP_I18N_DEFAULTS_EN: IGRPI18nStrings = {
   },
   pagination: {
     label: "Pagination",
+    morePages: "More pages",
     previous: "Previous",
     next: "Next",
     goToPrevious: "Go to previous page",
     goToNext: "Go to next page",
+  },
+  breadcrumb: {
+    more: "More",
   },
   inputAddons: {
     selectOption: "Select option",

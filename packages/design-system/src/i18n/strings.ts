@@ -398,6 +398,8 @@ export interface IGRPI18nStrings {
   pagination: {
     /** aria-label of the pagination nav. */
     label: string
+    /** Screen-reader text of the pagination ellipsis. */
+    morePages: string
     /** Label for the previous control. */
     previous: string
     /** Label for the next control. */
@@ -406,6 +408,10 @@ export interface IGRPI18nStrings {
     goToPrevious: string
     /** aria-label for the next-page link. */
     goToNext: string
+  }
+  breadcrumb: {
+    /** Screen-reader text of the breadcrumb ellipsis. */
+    more: string
   }
   inputAddons: {
     /** aria-label for the addon select with no `optionLabel`. */
@@ -671,10 +677,14 @@ export const IGRP_I18N_DEFAULTS_PT: IGRPI18nStrings = {
   },
   pagination: {
     label: "Paginação",
+    morePages: "Mais páginas",
     previous: "Anterior",
     next: "Seguinte",
     goToPrevious: "Ir para a página anterior",
     goToNext: "Ir para a página seguinte",
+  },
+  breadcrumb: {
+    more: "Mais",
   },
   inputAddons: {
     selectOption: "Selecionar opção",

@@ -19,7 +19,7 @@ function Wrapper({ defaultValues, children }: { defaultValues: unknown; children
       schema={schema}
       formRef={formRef}
       onSubmit={() => {}}
-      defaultValues={defaultValues as Record<string, unknown>}
+      defaultValues={defaultValues as z.input<typeof schema>}
     >
       {children}
     </IGRPForm>

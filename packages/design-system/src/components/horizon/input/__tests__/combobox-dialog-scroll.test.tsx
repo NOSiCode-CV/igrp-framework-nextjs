@@ -46,7 +46,7 @@ describe("IGRPCombobox scrolling inside a modal dialog", () => {
     })
     expect(backgroundWheel.defaultPrevented).toBe(true)
     expect(document.body).toHaveAttribute("data-scroll-locked")
-    await user.click(screen.getByRole("option", { name: "2090", exact: true }))
+    await user.click(screen.getByRole("option", { name: "2090" }))
     expect(screen.getByRole("combobox")).toHaveTextContent("2090")
     expect(screen.getByRole("dialog", { name: "Add DUC" })).toBeInTheDocument()
   })

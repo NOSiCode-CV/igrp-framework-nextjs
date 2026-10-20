@@ -18,9 +18,11 @@ import { readFileSync, readdirSync } from "node:fs"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
 
+// @ts-expect-error -- @babel/core ships no types and @types/babel__core is not a dependency
 import { transformSync } from "@babel/core"
 import { describe, expect, it } from "vitest"
 
+// @ts-expect-error -- plain CommonJS config, no declaration file
 import { createBabelConfig, createReactCompilerConfig } from "../../../scripts/react-compiler-babel-config.cjs"
 
 const packageRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
@@ -74,7 +76,7 @@ describe("babel build pipeline", () => {
 
   // One pass over the package, shared by the assertions below — compiling ~120
   // modules takes well past the default 5s per-test budget.
-  let compiled: ReturnType<typeof compile>[] | undefined
+  let compiled: ({ file: string } & ReturnType<typeof compile>)[] | undefined
   const compileAll = () => (compiled ??= clientModules.map((file) => ({ file, ...compile(file) })))
 
   it("has client modules to compile", () => {

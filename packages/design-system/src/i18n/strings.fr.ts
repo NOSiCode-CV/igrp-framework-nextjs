@@ -260,6 +260,7 @@ export const IGRP_I18N_DEFAULTS_FR: IGRPI18nStrings = {
     goToNext: "Aller à la page suivante",
   },
   breadcrumb: {
+    label: "Fil d'Ariane",
     more: "Plus",
   },
   inputAddons: {

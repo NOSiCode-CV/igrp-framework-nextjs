@@ -5,7 +5,7 @@ import { IGRPI18nProvider } from "../../../i18n/context.js"
 import { IGRP_I18N_DEFAULTS_EN } from "../../../i18n/strings.en.js"
 import { IGRP_I18N_DEFAULTS_FR } from "../../../i18n/strings.fr.js"
 import { IGRP_I18N_DEFAULTS_PT } from "../../../i18n/strings.js"
-import { BreadcrumbEllipsis } from "../breadcrumb.js"
+import { Breadcrumb, BreadcrumbEllipsis } from "../breadcrumb.js"
 import { Dialog, DialogContent, DialogTitle } from "../dialog.js"
 import { Pagination, PaginationEllipsis, PaginationNext, PaginationPrevious } from "../pagination.js"
 import { Sheet, SheetContent, SheetTitle } from "../sheet.js"
@@ -61,6 +61,15 @@ describe.each([
     )
     expect(screen.getByText(strings.pagination.morePages)).toBeInTheDocument()
     expect(screen.getByText(strings.breadcrumb.more)).toBeInTheDocument()
+  })
+
+  it("breadcrumb nav label", () => {
+    render(
+      <IGRPI18nProvider strings={strings}>
+        <Breadcrumb />
+      </IGRPI18nProvider>
+    )
+    expect(screen.getByRole("navigation", { name: strings.breadcrumb.label })).toBeInTheDocument()
   })
 
   it("pagination nav label", () => {

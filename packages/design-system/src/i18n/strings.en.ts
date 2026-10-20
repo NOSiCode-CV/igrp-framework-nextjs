@@ -260,6 +260,7 @@ export const IGRP_I18N_DEFAULTS_EN: IGRPI18nStrings = {
     goToNext: "Go to next page",
   },
   breadcrumb: {
+    label: "Breadcrumb",
     more: "More",
   },
   inputAddons: {

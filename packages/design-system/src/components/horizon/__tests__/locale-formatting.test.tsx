@@ -113,4 +113,19 @@ describe("locale-aware formatting", () => {
     act(() => root?.unmount())
     container.remove()
   })
+
+  it("phone country names follow a locale change after mount", () => {
+    const { container, rerender } = render(
+      <IGRPI18nProvider locale="en-GB">
+        <IGRPInputPhone name="p" />
+      </IGRPI18nProvider>
+    )
+    expect(container.querySelector("select")?.textContent).toContain("Cape Verde")
+    rerender(
+      <IGRPI18nProvider locale="fr-FR">
+        <IGRPInputPhone name="p" />
+      </IGRPI18nProvider>
+    )
+    expect(container.querySelector("select")?.textContent).toContain("Cap-Vert")
+  })
 })

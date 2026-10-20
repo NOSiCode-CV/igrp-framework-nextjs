@@ -410,6 +410,8 @@ export interface IGRPI18nStrings {
     goToNext: string
   }
   breadcrumb: {
+    /** Accessible name of the breadcrumb `<nav>`. */
+    label: string
     /** Screen-reader text of the breadcrumb ellipsis. */
     more: string
   }
@@ -684,6 +686,7 @@ export const IGRP_I18N_DEFAULTS_PT: IGRPI18nStrings = {
     goToNext: "Ir para a página seguinte",
   },
   breadcrumb: {
+    label: "Trilho de navegação",
     more: "Mais",
   },
   inputAddons: {

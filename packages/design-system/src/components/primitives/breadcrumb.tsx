@@ -9,7 +9,8 @@ import { useIGRPi18n } from "../../i18n/context.js"
 import { ChevronRightIcon, MoreHorizontalIcon } from "lucide-react"
 
 function Breadcrumb({ className, ...props }: React.ComponentProps<"nav">) {
-  return <nav aria-label="breadcrumb" data-slot="breadcrumb" className={cn(className)} {...props} />
+  const i18n = useIGRPi18n()
+  return <nav aria-label={i18n.breadcrumb.label} data-slot="breadcrumb" className={cn(className)} {...props} />
 }
 
 function BreadcrumbList({ className, ...props }: React.ComponentProps<"ol">) {

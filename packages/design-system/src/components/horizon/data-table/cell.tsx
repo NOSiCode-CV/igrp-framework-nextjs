@@ -170,14 +170,15 @@ function IGRPDataTableCellDate({ date, language, dateOptions, dateFormat }: IGRP
   const tz = useIGRPTimeZone()
   if (!date) return null
   const dateOnly = igrpIsDateOnly(date)
-  const d = date instanceof Date ? date : dateOnly ? parseLocalDate(date) : new Date(date)
-  if (Number.isNaN(d.getTime())) return null
-  // shortcut: date-fns formats timestamps in the runtime zone, upgrade to @date-fns/tz if a dateFormat cell must show times across zones
-  if (dateFormat) return <span>{format(d, dateFormat)}</span>
   // A date-only string is a calendar day: parse it as UTC midnight and format in UTC so no zone shifts it.
-  const value = dateOnly ? new Date(`${date}T00:00:00Z`) : d
+  const d = date instanceof Date ? date : dateOnly ? new Date(`${date}T00:00:00Z`) : new Date(date)
+  if (Number.isNaN(d.getTime())) return null
+  // V8 rolls "2026-02-31" over to March instead of rejecting it.
+  if (dateOnly && d.toISOString().slice(0, 10) !== date) return null
+  // shortcut: date-fns formats timestamps in the runtime zone, upgrade to @date-fns/tz if a dateFormat cell must show times across zones
+  if (dateFormat) return <span>{format(dateOnly ? parseLocalDate(date) : d, dateFormat)}</span>
   const timeZone = dateOnly ? "UTC" : (dateOptions?.timeZone ?? tz)
-  return <span>{new Intl.DateTimeFormat(language ?? locale, { ...dateOptions, timeZone }).format(value)}</span>
+  return <span>{new Intl.DateTimeFormat(language ?? locale, { ...dateOptions, timeZone }).format(d)}</span>
 }
 
 function IGRPDataTableCellLink({

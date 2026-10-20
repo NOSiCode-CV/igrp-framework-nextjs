@@ -83,6 +83,11 @@ export const IGRP_I18N_DEFAULTS_EN: IGRPI18nStrings = {
     placeholder: "Select…",
     notFound: "No item found.",
     searchPlaceholder: "Search...",
+    otherGroup: "Other",
+  },
+  commandDialog: {
+    title: "Command palette",
+    description: "Search for a command to run.",
   },
   multiSelect: {
     placeholder: "Select options",

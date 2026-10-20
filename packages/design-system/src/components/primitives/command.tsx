@@ -1,8 +1,12 @@
 /* shadcn: 2026-09-15 */
 
+"use client"
+
 import * as React from "react"
 import { Command as CommandPrimitive } from "cmdk"
 import { cn } from "cn"
+
+import { useIGRPi18n } from "../../i18n/context.js"
 
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "./dialog.js"
 import { InputGroup, InputGroupAddon } from "./input-group.js"
@@ -22,8 +26,8 @@ function Command({ className, ...props }: React.ComponentProps<typeof CommandPri
 }
 
 function CommandDialog({
-  title = "Command Palette",
-  description = "Search for a command to run...",
+  title,
+  description,
   children,
   className,
   showCloseButton = false,
@@ -34,11 +38,12 @@ function CommandDialog({
   className?: string
   showCloseButton?: boolean
 }) {
+  const i18n = useIGRPi18n()
   return (
     <Dialog {...props}>
       <DialogHeader className="sr-only">
-        <DialogTitle>{title}</DialogTitle>
-        <DialogDescription>{description}</DialogDescription>
+        <DialogTitle>{title ?? i18n.commandDialog.title}</DialogTitle>
+        <DialogDescription>{description ?? i18n.commandDialog.description}</DialogDescription>
       </DialogHeader>
       <DialogContent
         className={cn("top-1/3 translate-y-0 overflow-hidden rounded-xl! p-0", className)}

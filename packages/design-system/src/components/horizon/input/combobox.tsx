@@ -375,14 +375,14 @@ function IGRPCombobox({
     if (!showGroup) return { Options: options }
 
     return options.reduce<Record<string, IGRPOptionsProps[]>>((acc, option) => {
-      const groupName = option.group || "Other"
+      const groupName = option.group || i18n.combobox.otherGroup
       if (!acc[groupName]) {
         acc[groupName] = []
       }
       acc[groupName].push(option)
       return acc
     }, {})
-  }, [showGroup, options])
+  }, [showGroup, options, i18n.combobox.otherGroup])
 
   const onOptionsChangeHandler = (
     selectedValue: string,

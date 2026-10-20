@@ -6,6 +6,7 @@ import { IGRP_I18N_DEFAULTS_EN } from "../../../i18n/strings.en.js"
 import { IGRP_I18N_DEFAULTS_FR } from "../../../i18n/strings.fr.js"
 import { IGRP_I18N_DEFAULTS_PT } from "../../../i18n/strings.js"
 import { Breadcrumb, BreadcrumbEllipsis } from "../breadcrumb.js"
+import { CommandDialog } from "../command.js"
 import { Dialog, DialogContent, DialogTitle } from "../dialog.js"
 import { Pagination, PaginationEllipsis, PaginationNext, PaginationPrevious } from "../pagination.js"
 import { Sheet, SheetContent, SheetTitle } from "../sheet.js"
@@ -79,6 +80,21 @@ describe.each([
       </IGRPI18nProvider>
     )
     expect(screen.getByRole("navigation")).toHaveAttribute("aria-label", strings.pagination.label)
+  })
+})
+
+describe.each([
+  ["en", IGRP_I18N_DEFAULTS_EN],
+  ["fr", IGRP_I18N_DEFAULTS_FR],
+] as const)("CommandDialog defaults (%s)", (_l, strings) => {
+  it("titles and describes the dialog from the catalog", () => {
+    render(
+      <IGRPI18nProvider strings={strings}>
+        <CommandDialog open />
+      </IGRPI18nProvider>
+    )
+    expect(screen.getByText(strings.commandDialog.title)).toBeInTheDocument()
+    expect(screen.getByText(strings.commandDialog.description)).toBeInTheDocument()
   })
 })
 

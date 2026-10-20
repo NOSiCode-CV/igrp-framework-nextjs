@@ -151,6 +151,14 @@ export interface IGRPI18nStrings {
     notFound: string
     /** Placeholder for the combobox search box. */
     searchPlaceholder: string
+    /** Group heading for options without a `group`, when `showGroup` is on. */
+    otherGroup: string
+  }
+  commandDialog: {
+    /** Screen-reader title of `CommandDialog` without a `title` prop. */
+    title: string
+    /** Screen-reader description of `CommandDialog` without a `description` prop. */
+    description: string
   }
   multiSelect: {
     /** Trigger text while the selection is empty. */
@@ -539,6 +547,11 @@ export const IGRP_I18N_DEFAULTS_PT: IGRPI18nStrings = {
     placeholder: "Selecionar…",
     notFound: "Nenhum item encontrado.",
     searchPlaceholder: "Pesquisar...",
+    otherGroup: "Outros",
+  },
+  commandDialog: {
+    title: "Paleta de comandos",
+    description: "Pesquise e execute um comando.",
   },
   multiSelect: {
     placeholder: "Selecione as opções",

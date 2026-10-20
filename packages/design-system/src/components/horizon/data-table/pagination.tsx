@@ -11,7 +11,7 @@ import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem } fro
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../../primitives/select.js"
 import { usePagination } from "./hooks/use-pagination.js"
 import { cn } from "../cn.js"
-import { useIGRPi18n } from "../../../i18n/index.js"
+import { igrpFormatMessage, useIGRPi18n } from "../../../i18n/index.js"
 
 /**
  * Props for the IGRPDataTablePagination components.
@@ -47,7 +47,7 @@ function IGRPDataTablePagination<TData>({
     <div className={cn("flex items-center gap-6 px-2", className)}>
       <div className={cn("flex grow items-center justify-end gap-3")}>
         <Label htmlFor={id} className={cn("max-sm:sr-only")}>
-          Registo por página
+          {i18n.dataTable.rowsPerPage}
         </Label>
         <Select
           value={table.getState().pagination.pageSize.toString()}
@@ -79,7 +79,7 @@ function IGRPDataTablePagination<TData>({
           <span className={cn("text-foreground")}>
             {start}-{end}
           </span>{" "}
-          de <span className={cn("text-foreground")}>{table.getRowCount().toString()}</span>
+          {i18n.dataTable.rangeOf} <span className={cn("text-foreground")}>{table.getRowCount().toString()}</span>
         </p>
       </div>
 
@@ -163,8 +163,10 @@ function IGRPDataTablePaginationNumeric<TData>({
   return (
     <div id={id} className={cn("flex items-center justify-between gap-3 max-sm:flex-col", className)}>
       <p className={cn("flex-1 text-sm whitespace-nowrap text-muted-foreground")} aria-live="polite">
-        Page <span className={cn("text-foreground")}>{table.getState().pagination.pageIndex + 1}</span> of{" "}
-        <span className={cn("text-foreground")}>{table.getPageCount()}</span>
+        {igrpFormatMessage(i18n.dataTable.pageOf, {
+          page: table.getState().pagination.pageIndex + 1,
+          total: table.getPageCount(),
+        })}
       </p>
 
       <div className={cn("grow")}>

@@ -21,7 +21,7 @@ The plugin is distributed via the in-repo Claude Code marketplace (`.claude-plug
 
 ## Rules unique to this package
 
-- **Never hardcode a user-visible string in a component.** Add the key to `src/i18n/strings.ts` with a pt-PT default and read it with `useIGRPi18n()`. A component prop may still override it — the catalog supplies the fallback, not the final value.
+- **Never hardcode a user-visible string in a component.** Add the key to `src/i18n/strings.ts` with a pt-PT default and read it with `useIGRPi18n()`. A component prop may still override it — the catalog supplies the fallback, not the final value. `pnpm lint:i18n:framework` (root, also in CI) enforces it; mark a non-language literal (brand name, shortcut) with an `igrp-i18n-ignore` comment.
 - **Never spread rest props straight onto a DOM element.** `IGRPInputProps` unions `IGRPBaseAttributes` with `React.ComponentProps<"input">`, so the leftovers contain `iconName`, `inputClassName` and friends. JSX spread skips excess-property checks, so TypeScript will not catch it — pass the remainder through `igrpOmitNonDomProps` (`src/lib/dom-props.ts`). `src/components/horizon/__tests__/input-dom-props.test.tsx` asserts it.
 - **Never build a debouncer, formatter or any other stateful helper during render.** A fresh closure per render has a fresh timer binding, which is how `IGRPInputSearch`'s debounce silently became "call once per keystroke". Hold it in a ref or a `useMemo`, and clean it up on unmount.
 - **Never format with `Intl` at the runtime default locale.** `new Intl.NumberFormat(undefined, …)` resolves to the server's locale under SSR and the browser's on the client, which hydrates mismatched. Take the locale from `useIGRPLocale()` (default `pt-PT`, set via `IGRPI18nProvider`).

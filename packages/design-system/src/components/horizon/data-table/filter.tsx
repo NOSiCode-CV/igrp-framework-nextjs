@@ -23,7 +23,7 @@ import { Separator } from "../../primitives/separator.js"
 import { IGRPBadge } from "../badge.js"
 import { IGRPButton } from "../button.js"
 import { IGRPIcon, type IGRPIconName } from "../icon/index.js"
-import { useIGRPi18n, useIGRPLocale } from "../../../i18n/index.js"
+import { igrpFormatMessage, useIGRPi18n, useIGRPLocale } from "../../../i18n/index.js"
 
 /**
  * Base props for data table filter components.
@@ -361,9 +361,10 @@ function IGRPDataTableFilterInput<TData>({
 /** Min/max number range filter. */
 function IGRPDataTableFilterMinMax<TData>({
   column,
-  placeholder: placeholderMin = "Min",
-  placeholderMax = "Max",
+  placeholder: placeholderMin,
+  placeholderMax,
 }: Omit<IGRPDataTableFilterProps<TData>, "options" | "clearDates" | "target">) {
+  const i18n = useIGRPi18n()
   const id = useId()
   const columnFilterValue = column?.getFilterValue() as [number, number]
   const columnHeader = typeof column?.columnDef.header === "string" ? column.columnDef.header : ""
@@ -382,9 +383,9 @@ function IGRPDataTableFilterMinMax<TData>({
             old?.[1],
           ])
         }
-        placeholder={placeholderMin}
+        placeholder={placeholderMin ?? i18n.dataTable.minPlaceholder}
         type="number"
-        aria-label={`${columnHeader} min`}
+        aria-label={igrpFormatMessage(i18n.dataTable.minLabel, { label: columnHeader })}
       />
       <Input
         id={`${id}-range-2`}
@@ -398,9 +399,9 @@ function IGRPDataTableFilterMinMax<TData>({
             e.target.value ? Number(e.target.value) : undefined,
           ])
         }
-        placeholder={placeholderMax}
+        placeholder={placeholderMax ?? i18n.dataTable.maxPlaceholder}
         type="number"
-        aria-label={`${columnHeader} max`}
+        aria-label={igrpFormatMessage(i18n.dataTable.maxLabel, { label: columnHeader })}
       />
     </div>
   )

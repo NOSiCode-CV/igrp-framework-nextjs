@@ -85,6 +85,7 @@ function DialogFooter({
 }: React.ComponentProps<"div"> & {
   showCloseButton?: boolean
 }) {
+  const i18n = useIGRPi18n()
   return (
     <div
       data-slot="dialog-footer"
@@ -94,7 +95,7 @@ function DialogFooter({
       {children}
       {showCloseButton && (
         <DialogPrimitive.Close asChild>
-          <Button variant="outline">Close</Button>
+          <Button variant="outline">{i18n.dialog.close}</Button>
         </DialogPrimitive.Close>
       )}
     </div>

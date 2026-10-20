@@ -65,6 +65,22 @@ export interface IGRPI18nStrings {
     filterSearchPlaceholder: string
     /** Empty-state message inside a faceted filter's option list. */
     filterNoResults: string
+    /** Label of the page-size selector in the paginations. */
+    rowsPerPage: string
+    /** Word between the visible range and the total, as in "1-50 de 200". */
+    rangeOf: string
+    /** Numeric pagination summary; tokens: {page}, {total}. */
+    pageOf: string
+    /** Text of the not-available row sub-component. */
+    notAvailable: string
+    /** aria-label of the range filter minimum input; token: {label}. */
+    /** Placeholder of the min input in a min/max filter. */
+    minPlaceholder: string
+    /** Placeholder of the max input in a min/max filter. */
+    maxPlaceholder: string
+    minLabel: string
+    /** aria-label of the range filter maximum input; token: {label}. */
+    maxLabel: string
   }
   inputPhone: {
     /** Default placeholder for the phone input. */
@@ -189,6 +205,10 @@ export interface IGRPI18nStrings {
   avatar: {
     /** aria-label for the decorative status indicator. */
     iconIndicator: string
+    /** Fallback alt text of the user avatar image. */
+    currentUser: string
+    /** aria-label of the status dot; token: {status}. */
+    status: string
   }
   chat: {
     /** Heading text above the transcript (`labelDescription` default). */
@@ -201,12 +221,18 @@ export interface IGRPI18nStrings {
     sendMessage: string
     /** System message shown in the transcript when a request to the endpoint fails. */
     errorMessage: string
+    /** Alt text of an image sent in the transcript. */
+    sentContent: string
   }
   imageCropper: {
     /** aria-label for the zoom slider. */
     zoomSlider: string
     /** Default crop-button label. */
     crop: string
+    /** Alt text of the cropped preview image. */
+    croppedResult: string
+    /** Placeholder shown before a crop exists. */
+    previewPlaceholder: string
   }
   stepper: {
     /** aria-label for the steps navigation region. */
@@ -237,6 +263,10 @@ export interface IGRPI18nStrings {
     loadError: string
     /** Message shown when no file is supplied. */
     notFound: string
+    /** Title of the embedded PDF frame; token: {name}. */
+    viewerTitle: string
+    /** aria-label of the embedded PDF frame; token: {name}. */
+    viewerLabel: string
   }
   loadingSpinner: {
     /** Default accessible label. */
@@ -457,6 +487,14 @@ export const IGRP_I18N_DEFAULTS_PT: IGRPI18nStrings = {
     filterSelectPlaceholder: "Selecionar…",
     filterSearchPlaceholder: "Pesquisar…",
     filterNoResults: "Nenhum resultado encontrado.",
+    rowsPerPage: "Registos por página",
+    rangeOf: "de",
+    pageOf: "Página {page} de {total}",
+    notAvailable: "N/D",
+    minPlaceholder: "Mín.",
+    maxPlaceholder: "Máx.",
+    minLabel: "{label} mín.",
+    maxLabel: "{label} máx.",
   },
   inputPhone: {
     placeholder: "Introduza o número de telefone",
@@ -535,6 +573,8 @@ export const IGRP_I18N_DEFAULTS_PT: IGRPI18nStrings = {
   },
   avatar: {
     iconIndicator: "Indicador",
+    currentUser: "Utilizador atual",
+    status: "Estado: {status}",
   },
   chat: {
     description: "Pergunte-me o que quiser!",
@@ -542,10 +582,13 @@ export const IGRP_I18N_DEFAULTS_PT: IGRPI18nStrings = {
     messagePlaceholder: "Escreva a sua mensagem…",
     sendMessage: "Enviar mensagem",
     errorMessage: "Ocorreu um erro. Por favor tente novamente.",
+    sentContent: "Conteúdo enviado",
   },
   imageCropper: {
     zoomSlider: "Ampliação",
     crop: "Recortar",
+    croppedResult: "Resultado recortado",
+    previewPlaceholder: "Pré-visualização da imagem",
   },
   stepper: {
     processSteps: "Etapas do processo",
@@ -565,6 +608,8 @@ export const IGRP_I18N_DEFAULTS_PT: IGRPI18nStrings = {
     openInNewTab: "Abrir num novo separador",
     loadError: "Não foi possível carregar o PDF",
     notFound: "Nenhum ficheiro encontrado",
+    viewerTitle: "Visualizador de PDF - {name}",
+    viewerLabel: "Visualizador de PDF para {name}",
   },
   loadingSpinner: {
     label: "A carregar…",

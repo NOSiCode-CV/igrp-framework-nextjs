@@ -31,6 +31,14 @@ export const IGRP_I18N_DEFAULTS_EN: IGRPI18nStrings = {
     filterSelectPlaceholder: "Select…",
     filterSearchPlaceholder: "Search…",
     filterNoResults: "No results found.",
+    rowsPerPage: "Rows per page",
+    rangeOf: "of",
+    pageOf: "Page {page} of {total}",
+    notAvailable: "N/A",
+    minPlaceholder: "Min",
+    maxPlaceholder: "Max",
+    minLabel: "{label} min",
+    maxLabel: "{label} max",
   },
   inputPhone: {
     placeholder: "Enter the phone number",
@@ -109,6 +117,8 @@ export const IGRP_I18N_DEFAULTS_EN: IGRPI18nStrings = {
   },
   avatar: {
     iconIndicator: "Indicator",
+    currentUser: "Current user",
+    status: "Status: {status}",
   },
   chat: {
     description: "Ask me anything!",
@@ -116,10 +126,13 @@ export const IGRP_I18N_DEFAULTS_EN: IGRPI18nStrings = {
     messagePlaceholder: "Write your message…",
     sendMessage: "Send message",
     errorMessage: "Something went wrong. Please try again.",
+    sentContent: "Sent content",
   },
   imageCropper: {
     zoomSlider: "Zoom",
     crop: "Crop",
+    croppedResult: "Cropped result",
+    previewPlaceholder: "Image preview",
   },
   stepper: {
     processSteps: "Process steps",
@@ -139,6 +152,8 @@ export const IGRP_I18N_DEFAULTS_EN: IGRPI18nStrings = {
     openInNewTab: "Open in new tab",
     loadError: "The PDF could not be loaded",
     notFound: "No file found",
+    viewerTitle: "PDF viewer - {name}",
+    viewerLabel: "PDF viewer for {name}",
   },
   loadingSpinner: {
     label: "Loading…",

@@ -12,6 +12,7 @@ export const IGRP_MESSAGES_FR: IGRPFrameworkMessages = {
       close: 'Fermer',
       search: 'Rechercher',
       loading: 'Chargement...',
+      loadingApp: 'Chargement de {name}...',
     },
     notAvailable: 'N/D',
     yes: 'Oui',

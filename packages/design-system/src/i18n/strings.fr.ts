@@ -31,6 +31,14 @@ export const IGRP_I18N_DEFAULTS_FR: IGRPI18nStrings = {
     filterSelectPlaceholder: "Sélectionner…",
     filterSearchPlaceholder: "Rechercher…",
     filterNoResults: "Aucun résultat trouvé.",
+    rowsPerPage: "Lignes par page",
+    rangeOf: "sur",
+    pageOf: "Page {page} sur {total}",
+    notAvailable: "N/D",
+    minPlaceholder: "Min",
+    maxPlaceholder: "Max",
+    minLabel: "{label} min",
+    maxLabel: "{label} max",
   },
   inputPhone: {
     placeholder: "Saisissez le numéro de téléphone",
@@ -109,6 +117,8 @@ export const IGRP_I18N_DEFAULTS_FR: IGRPI18nStrings = {
   },
   avatar: {
     iconIndicator: "Indicateur",
+    currentUser: "Utilisateur actuel",
+    status: "Statut : {status}",
   },
   chat: {
     description: "Demandez-moi ce que vous voulez !",
@@ -116,10 +126,13 @@ export const IGRP_I18N_DEFAULTS_FR: IGRPI18nStrings = {
     messagePlaceholder: "Écrivez votre message…",
     sendMessage: "Envoyer le message",
     errorMessage: "Une erreur s'est produite. Veuillez réessayer.",
+    sentContent: "Contenu envoyé",
   },
   imageCropper: {
     zoomSlider: "Zoom",
     crop: "Rogner",
+    croppedResult: "Résultat recadré",
+    previewPlaceholder: "Aperçu de l'image",
   },
   stepper: {
     processSteps: "Étapes du processus",
@@ -139,6 +152,8 @@ export const IGRP_I18N_DEFAULTS_FR: IGRPI18nStrings = {
     openInNewTab: "Ouvrir dans un nouvel onglet",
     loadError: "Impossible de charger le PDF",
     notFound: "Aucun fichier trouvé",
+    viewerTitle: "Visionneuse PDF - {name}",
+    viewerLabel: "Visionneuse PDF pour {name}",
   },
   loadingSpinner: {
     label: "Chargement…",

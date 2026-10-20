@@ -33,6 +33,7 @@ function IGRPTemplateLoading({ text, appCode, className }: IGRPTemplateLoadingPr
             aria-hidden="true"
           />
           <p className={cn('text-lg font-medium text-foreground')}>{text ?? chrome.loading.text}</p>
+          {/* igrp-i18n-ignore: brand name */}
           {appCode && <span className={cn('sr-only')}>iGRP {appCode}</span>}
         </div>
       </div>

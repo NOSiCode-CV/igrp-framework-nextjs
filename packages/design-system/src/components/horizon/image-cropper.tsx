@@ -148,7 +148,8 @@ export function IGRPImageCropper({
                 aria-label={i18n.imageCropper.zoomSlider}
               />
               <output className={cn("block w-10 shrink-0 text-right text-sm font-medium text-foreground tabular-nums")}>
-                {parseFloat(zoom.toFixed(1))}x
+                {parseFloat(zoom.toFixed(1))}
+                {/* igrp-i18n-ignore */}x
               </output>
             </div>
           )}
@@ -166,7 +167,7 @@ export function IGRPImageCropper({
               {croppedImageUrl ? (
                 <NextImage
                   src={croppedImageUrl}
-                  alt="Cropped result"
+                  alt={i18n.imageCropper.croppedResult}
                   fill
                   sizes="160px"
                   className={cn("object-cover")}
@@ -178,7 +179,7 @@ export function IGRPImageCropper({
                     "flex size-full items-center justify-center p-2 text-center text-xs text-muted-foreground"
                   )}
                 >
-                  Image preview
+                  {i18n.imageCropper.previewPlaceholder}
                 </div>
               )}
             </div>

@@ -4,6 +4,7 @@ import { useId } from "react"
 
 import { Avatar, AvatarImage, AvatarFallback } from "../primitives/avatar.js"
 import { cn } from "cn"
+import { useIGRPi18n } from "../../i18n/index.js"
 
 /**
  * Props for the IGRPUserAvatar component.
@@ -31,12 +32,13 @@ interface IGRPUserAvatarProps {
  * Renders an image when available, otherwise shows fallbackContent.
  */
 function IGRPUserAvatar({ image, alt, fallbackContent, className, fallbackClass, name, id }: IGRPUserAvatarProps) {
+  const i18n = useIGRPi18n()
   const _id = useId()
   const ref = name ?? id ?? _id
 
   return (
     <Avatar className={cn(className)} id={ref}>
-      <AvatarImage src={image || undefined} alt={alt || "Current User"} />
+      <AvatarImage src={image || undefined} alt={alt || i18n.avatar.currentUser} />
       <AvatarFallback className={cn(fallbackClass)}>{fallbackContent}</AvatarFallback>
     </Avatar>
   )

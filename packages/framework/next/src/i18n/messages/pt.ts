@@ -11,6 +11,7 @@ export const IGRP_MESSAGES_PT = {
       close: 'Fechar',
       search: 'Pesquisar',
       loading: 'A carregar...',
+      loadingApp: 'A carregar {name}...',
     },
     notAvailable: 'N/D',
     yes: 'Sim',

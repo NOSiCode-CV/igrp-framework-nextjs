@@ -157,7 +157,7 @@ function IGRPChat({ apiEndpoint, labelDescription: labelDescriptionProp, name, i
                   <div className={cn("relative aspect-video min-h-[120px] w-full max-w-full")}>
                     <Image
                       src={message.content}
-                      alt="Sent content"
+                      alt={i18n.chat.sentContent}
                       fill
                       sizes="(max-width: 768px) 80vw, 400px"
                       className={cn("rounded object-contain")}

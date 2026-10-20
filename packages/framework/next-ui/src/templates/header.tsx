@@ -131,6 +131,7 @@ function HeaderLogoImage({
   return (
     <IGRPTemplateImage
       src={src}
+      // igrp-i18n-ignore: brand name
       alt="IGRP"
       width={40}
       height={40}
@@ -139,6 +140,7 @@ function HeaderLogoImage({
       fallback={
         <Image
           src={fallbackSrc}
+          // igrp-i18n-ignore: brand name
           alt="IGRP"
           width={40}
           height={40}
@@ -256,7 +258,10 @@ function IGRPTemplateHeader({
                 )}
               </div>
             )}
-            {showIGRPHeaderTitle && <span className="text-base font-semibold">iGRP</span>}
+            {showIGRPHeaderTitle && (
+              // igrp-i18n-ignore: brand name
+              <span className="text-base font-semibold">iGRP</span>
+            )}
           </div>
         )}
 

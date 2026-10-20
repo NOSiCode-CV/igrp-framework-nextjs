@@ -3,7 +3,7 @@
 import { cva, type VariantProps } from "class-variance-authority"
 import { useId } from "react"
 
-import { useIGRPi18n } from "../../i18n/index.js"
+import { igrpFormatMessage, useIGRPi18n } from "../../i18n/index.js"
 import { IGRPColors, type IGRPColorVariants } from "../../lib/colors.js"
 import { cn } from "cn"
 import { igrpOmitNonDomProps } from "../../lib/dom-props.js"
@@ -191,7 +191,10 @@ function IGRPAvatar({
       </Avatar>
 
       {hasStatus && status && (
-        <span className={cn(statusVariants({ scale }), colorClasses.bgForeground)} aria-label={`Status: ${status}`} />
+        <span
+          className={cn(statusVariants({ scale }), colorClasses.bgForeground)}
+          aria-label={igrpFormatMessage(i18n.avatar.status, { status })}
+        />
       )}
 
       {showIcon && iconName && (

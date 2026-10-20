@@ -205,6 +205,7 @@ function LinkPopover({
           <Input
             id={inputId}
             type="url"
+            // igrp-i18n-ignore
             placeholder="https://"
             value={url}
             onChange={(e) => setUrl(e.target.value)}

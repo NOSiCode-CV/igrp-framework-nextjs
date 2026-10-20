@@ -108,6 +108,7 @@ function IGRPTemplateCommandSearch({
           <span>{labels.trigger}</span>
         </span>
         <kbd className="pointer-events-none select-none flex items-center gap-1 rounded border px-1 py-1 font-mono text-[10px] font-medium">
+          {/* igrp-i18n-ignore: keyboard shortcut */}
           <span className="text-xs">{isMac ? '⌘' : 'Ctrl'}</span>K
         </kbd>
       </Button>

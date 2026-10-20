@@ -377,7 +377,7 @@ function IGRPDataTable<TData, TValue>({
   const NotFoundRowSubComponent = (
     <div className={cn("flex items-center gap-2 p-3")}>
       <IGRPIcon iconName="OctagonAlert" />
-      <span>N/A</span>
+      <span>{i18n.dataTable.notAvailable}</span>
     </div>
   )
 

@@ -12,6 +12,7 @@ export const IGRP_MESSAGES_EN: IGRPFrameworkMessages = {
       close: 'Close',
       search: 'Search',
       loading: 'Loading...',
+      loadingApp: 'Loading {name}...',
     },
     notAvailable: 'N/A',
     yes: 'Yes',

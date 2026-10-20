@@ -20,7 +20,7 @@ import { IGRPIcon } from "./icon/index.js"
 import { IGRPLoadingSpinner } from "./loading-spinner.js"
 import { IGRPHeadline } from "./typography/headline.js"
 import { IGRPText } from "./typography/text.js"
-import { useIGRPi18n, useIGRPLocale, useIGRPTimeZone } from "../../i18n/index.js"
+import { igrpFormatMessage, useIGRPi18n, useIGRPLocale, useIGRPTimeZone } from "../../i18n/index.js"
 import { igrpIsDateOnly } from "../../lib/utilities.js"
 
 /**
@@ -259,6 +259,7 @@ function IGRPPdfViewerCard({ document: pdfDocument, onView, clickable = true }: 
             <CardTitle className={cn("text-sm leading-tight font-medium")}>{pdfDocument.title}</CardTitle>
           </div>
           <IGRPBadge variant="soft" color="destructive" badgeClassName={cn("px-3")}>
+            {/* igrp-i18n-ignore */}
             PDF
           </IGRPBadge>
         </div>
@@ -382,8 +383,8 @@ function IGRPPdfViewerInline({
         <iframe
           src={iframeSrc}
           className={cn("h-full w-full border-0", frameStatus === "error" ? "hidden" : "block")}
-          title={`PDF Viewer - ${title}`}
-          aria-label={`PDF Viewer for ${title}`}
+          title={igrpFormatMessage(i18n.pdfViewer.viewerTitle, { name: title })}
+          aria-label={igrpFormatMessage(i18n.pdfViewer.viewerLabel, { name: title })}
           loading="lazy"
           onLoad={handleFrameLoad}
           onError={handleFrameError}
@@ -511,8 +512,8 @@ function IGRPPdfViewerModal({
             <iframe
               src={iframeSrc}
               className={cn("h-full w-full border-0", frameStatus === "error" ? "hidden" : "block")}
-              title={`PDF Viewer - ${title}`}
-              aria-label={`PDF Viewer for ${title}`}
+              title={igrpFormatMessage(i18n.pdfViewer.viewerTitle, { name: title })}
+              aria-label={igrpFormatMessage(i18n.pdfViewer.viewerLabel, { name: title })}
               loading="lazy"
               onLoad={handleFrameLoad}
               onError={handleFrameError}

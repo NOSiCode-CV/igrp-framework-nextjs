@@ -169,7 +169,8 @@ function ComboboxField({
                 <CommandEmpty>{selectLabel ?? i18n.combobox.notFound}</CommandEmpty>
               </div>
             )}
-            <CommandList id={listId}>
+            {/* Keep native wheel scrolling in this portaled list from reaching a parent dialog's document scroll lock. */}
+            <CommandList id={listId} onWheel={(event) => event.stopPropagation()}>
               <ComboboxOptionsList
                 groupedOptions={groupedOptions}
                 showGroup={showGroup}

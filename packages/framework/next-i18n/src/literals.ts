@@ -28,6 +28,7 @@ const HAS_LETTER = /\p{L}/u;
 const HTML_ENTITY = /&(?:[a-zA-Z][a-zA-Z0-9]*|#\d+|#x[0-9a-fA-F]+);/g;
 const hasLetter = (text: string) =>
   HAS_LETTER.test(text.replace(HTML_ENTITY, ""));
+const IGNORE_MARKER = "igrp-i18n-ignore";
 const FORMATTER_IMPORTS = new Set(["useFormatter", "getFormatter"]);
 
 /** Every string a node can render: through ternaries, `&&` (right side only) and `||`/`??`. */
@@ -94,10 +95,17 @@ export function findLiteralStrings(
     fileName.endsWith(".tsx") ? ts.ScriptKind.TSX : ts.ScriptKind.TS,
   );
   const findings: string[] = [];
+  const lines = source.split(/\r?\n/);
   const line = (node: ts.Node) =>
     sf.getLineAndCharacterOfPosition(node.getStart(sf)).line + 1;
-  const report = (node: ts.Node, what: string) =>
-    findings.push(`${line(node)}: ${what}`);
+  // `igrp-i18n-ignore` on the same line or the line above allowlists a literal
+  // that is not language (brand names, keyboard shortcuts, units).
+  const ignored = (n: number) =>
+    [lines[n - 1], lines[n - 2]].some((l) => l?.includes(IGNORE_MARKER));
+  const report = (node: ts.Node, what: string) => {
+    const n = line(node);
+    if (!ignored(n)) findings.push(`${n}: ${what}`);
+  };
 
   const visit = (node: ts.Node) => {
     if (

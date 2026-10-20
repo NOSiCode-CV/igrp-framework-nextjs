@@ -111,3 +111,21 @@ describe("findLiteralStrings: conditionals and locales", () => {
     expect(checkLiterals([d], d)).toHaveLength(1);
   });
 });
+
+describe("igrp-i18n-ignore", () => {
+  it("skips a literal marked on the same line or the line above", () => {
+    const src = [
+      "const a = (",
+      "  <div>",
+      '    <img alt="IGRP" /> {/* igrp-i18n-ignore */}',
+      "    {/* igrp-i18n-ignore */}",
+      "    <kbd>Ctrl</kbd>",
+      '    <p title="Olá" />',
+      "  </div>",
+      ");",
+    ].join("\n");
+    expect(findLiteralStrings(src, "a.tsx")).toEqual([
+      '6: literal prop title="Olá"',
+    ]);
+  });
+});

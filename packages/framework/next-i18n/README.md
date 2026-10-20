@@ -21,7 +21,7 @@ igrp-i18n <command>
       Hardcoded user-facing strings in non-test .tsx files; next-intl formatter imports.
 ```
 
-Run from an app as `pnpm igrp-i18n check-catalogs src/i18n/messages --default pt && pnpm igrp-i18n check-literals src/components src/i18n` (`templates/demo-v1`'s `lint:i18n` also checks `src/app/(igrp)/page.tsx`); add folders as they are migrated. Framework catalogs are TypeScript modules in `@igrp/framework-next/i18n/messages` and are not checked here.
+Run from an app as `pnpm igrp-i18n check-catalogs src/i18n/messages --default pt && pnpm igrp-i18n check-literals src/components src/i18n` (`templates/demo-v1`'s `lint:i18n` also checks `src/app/(igrp)/page.tsx`); add folders as they are migrated. A literal that is not language (a brand name, a keyboard shortcut, a unit) is allowlisted by a comment containing `igrp-i18n-ignore` on its line or the line above. Framework catalogs are TypeScript modules in `@igrp/framework-next/i18n/messages` and are not checked here.
 
 `<dir>` holds one `<locale>.json` per locale; `<locale>.json` for `--default` is the complete catalog the others are checked against. Keys under `--framework-namespaces` (default `common,i18n,errors`) are reported as info, not errors.
 

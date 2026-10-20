@@ -21,14 +21,6 @@ export const IGRP_CHROME_STRINGS_EN: IGRPChromeStrings = {
     switchToLight: 'Switch to the light theme',
     switchToDark: 'Switch to the dark theme',
   },
-  themeSelector: {
-    srLabel: 'Theme',
-    triggerPrefix: 'Select theme:',
-    triggerShort: 'Theme',
-    placeholder: 'Select theme',
-    defaultGroup: 'Default',
-    scaledGroup: 'Scaled',
-  },
   commandSearch: {
     trigger: 'Search...',
     placeholder: 'Type a command or search...',

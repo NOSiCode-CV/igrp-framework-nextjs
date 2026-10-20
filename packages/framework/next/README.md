@@ -152,7 +152,7 @@ Five subpath entries, each a file-per-module leaf:
 - `./i18n/messages` — the generic `common`, `i18n` and `errors` namespaces in pt, en and fr, and `igrpMergeMessages`.
 - `./i18n/testing` — `IGRPIntlTestProvider`, the same client context for tests.
 
-Wire it with `igrpBuildConfig({ i18n: igrpDefineI18n({ defaultLocale: 'pt', … }) })`, a `src/i18n/request.ts` that passes `igrpCreateRequestConfig(i18n, catalogs)` to next-intl, and `createNextIntlPlugin` in `next.config.ts`. Apps without `i18n` are unchanged.
+Wire it with `igrpBuildConfig({ i18n: igrpDefineI18n({ defaultLocale: 'pt', … }) })`, a `src/i18n/request.ts` that passes `igrpCreateRequestConfig(i18n, catalogs)` to next-intl, and `createNextIntlPlugin` in `next.config.ts`. Apps without `i18n` are unchanged. Without `config.i18n`, chrome follows the `IGRP_LOCALE` cookie but design-system strings stay pt; set `config.i18n` to localise both.
 
 ### IGRP layout
 

@@ -179,12 +179,15 @@ function IGRPTemplateHeader({
     console.info(
       '[header-template] Cabeçalho do IGRP não tem dados, define os dados no src/igrp.template.config.',
     );
-    igrpToast({
-      type: 'info',
-      description:
-        '[header-template] Cabeçalho do IGRP não tem dados, define os dados no src/igrp.template.config.',
-      duration: 10000,
-    });
+    // Developer message, untranslated: keep it out of production UI.
+    if (process.env.NODE_ENV !== 'production') {
+      igrpToast({
+        type: 'info',
+        description:
+          '[header-template] Cabeçalho do IGRP não tem dados, define os dados no src/igrp.template.config.',
+        duration: 10000,
+      });
+    }
   }, [data, igrpToast]);
 
   if (!data) return null;

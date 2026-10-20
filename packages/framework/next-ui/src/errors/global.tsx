@@ -90,7 +90,7 @@ function IGRPGlobalError({
         <div className={cn('text-center')}>
           <Image
             src={withBasePath('/error-img.webp')}
-            alt="Error Image"
+            alt=""
             width={300}
             height={200}
             className={cn('mx-auto mb-2')}

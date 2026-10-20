@@ -48,15 +48,6 @@ export interface IGRPModeSwitcherLabels {
   switchToDark: string;
 }
 
-export interface IGRPThemeSelectorLabels {
-  srLabel: string;
-  triggerPrefix: string;
-  triggerShort: string;
-  placeholder: string;
-  defaultGroup: string;
-  scaledGroup: string;
-}
-
 export interface IGRPCommandSearchLabels {
   trigger: string;
   placeholder: string;
@@ -93,7 +84,6 @@ export interface IGRPChromeStrings {
   navUser: IGRPNavUserLabels;
   notifications: IGRPNotificationsLabels;
   modeSwitcher: IGRPModeSwitcherLabels;
-  themeSelector: IGRPThemeSelectorLabels;
   commandSearch: IGRPCommandSearchLabels;
   breadcrumbs: {
     home: string;
@@ -175,14 +165,6 @@ export const IGRP_CHROME_STRINGS_PT: IGRPChromeStrings = {
     toggle: 'Alternar tema',
     switchToLight: 'Mudar para o tema claro',
     switchToDark: 'Mudar para o tema escuro',
-  },
-  themeSelector: {
-    srLabel: 'Tema',
-    triggerPrefix: 'Selecionar tema:',
-    triggerShort: 'Tema',
-    placeholder: 'Selecionar tema',
-    defaultGroup: 'Padrão',
-    scaledGroup: 'Escalado',
   },
   commandSearch: {
     trigger: 'Pesquisar...',

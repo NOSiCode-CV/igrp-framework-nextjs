@@ -87,9 +87,7 @@ function IGRPAuthForm({
       await signIn(providerId, { callbackUrl });
     } catch (error) {
       console.error('Authentication error:', error);
-      setAuthError(
-        error instanceof Error ? error.message : (texts.signInError ?? chrome.authForm.signInError),
-      );
+      setAuthError(texts.signInError ?? chrome.authForm.signInError);
       setIsLoading(false);
     }
   }

@@ -229,6 +229,7 @@ git commit -m "feat(template): refuse auth bypass in production builds without o
 **Files:**
 - Create: `packages/framework/template-migrator/migrations/demo-v1/71.MIGRATIONS-<DDMMYYYY>.md` (date of authoring, same pattern as 70)
 - Create: `packages/framework/template-migrator/migrations/demo-v1/payload/71/src/instrumentation.ts` (byte copy of the template file after Task 3)
+- Create: `packages/framework/template-migrator/migrations/demo-v1/payload/71/.env.example` (byte copy of the template file after Task 3)
 - Modify: `templates/demo-v1/.igrp-migrations-lock.json` (generated)
 - Create: `.changeset/template-migration-71.md`
 
@@ -241,13 +242,18 @@ Front matter, modelled on `56.MIGRATIONS-14102026.md` and `70.MIGRATIONS-2110202
 - `id: 71-auth-bypass-production-guard`, `requires: ["70-resync-framework-beta12"]`, `targetFrameworkVersion` = the `@igrp/framework-next` version from the gate.
 - `deps.bump` on `package.json` for `@igrp/framework-next` to that version. Include any other `@igrp/*` package whose local version moved in the same versioning run.
 - `file.write`, `mode: replace`, `path: src/instrumentation.ts`, `from: payload/71/src/instrumentation.ts`.
+- `file.write`, `mode: replace`, `path: .env.example`, `from: payload/71/.env.example`.
 - `env.add` on `docker/development/.env.development` with key `IGRP_ALLOW_AUTH_BYPASS_IN_PRODUCTION: { default: "true", doc: "This image is a production build that runs in preview mode on purpose." }`.
 
-Body: "What changed" table (files and dependency), "Why" (one paragraph: a production deploy with preview mode left on now stops at startup instead of serving every visitor as super-admin), "After migrating": run `pnpm install`; if your real deploys set `IGRP_PREVIEW_MODE` or `AUTH_PROVIDER=none` on purpose, add `IGRP_ALLOW_AUTH_BYPASS_IN_PRODUCTION=true` there; note that `env.add` creates `docker/development/.env.development` if the app had deleted that folder.
+Body: "What changed" table (files and dependency), "Why" (one paragraph: a production deploy with preview mode left on now logs the error and answers every request with 500 instead of serving every visitor as super-admin), "After migrating": run `pnpm install`; if your real deploys set `IGRP_PREVIEW_MODE` or `AUTH_PROVIDER=none` on purpose, add `IGRP_ALLOW_AUTH_BYPASS_IN_PRODUCTION=true` there; note that `env.add` creates `docker/development/.env.development` if the app had deleted that folder. Apps that edited `instrumentation.ts` must hand-merge: the replace overwrites it, so re-apply their edits around the two-line dynamic import and call of the guard, which sits first inside the `NEXT_RUNTIME === "nodejs"` block.
+
+Changelog note for the body: apps with a literally quoted `AUTH_PROVIDER="none"` now get the super-admin mock for permission checks, because `isIgrpAuthBypass()` strips the quotes.
+
+The `deps.bump` is mandatory in the same migration: without the new `@igrp/framework-next`, `register()` throws (500) even in `next dev`, since the import of the guard fails.
 
 - [ ] **Step 2: Copy the payload**
 
-Copy `templates/demo-v1/src/instrumentation.ts` to `payload/71/src/instrumentation.ts` unchanged.
+Copy `templates/demo-v1/src/instrumentation.ts` to `payload/71/src/instrumentation.ts` unchanged, and `templates/demo-v1/.env.example` to `payload/71/.env.example` unchanged (byte copies).
 
 - [ ] **Step 3: Regenerate the lock and run the migrator gates**
 

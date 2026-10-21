@@ -403,6 +403,12 @@
       "appliedAt": "2026-10-20T00:00:00.000Z",
       "cliVersion": "0.2.0-beta.7",
       "manifestHash": "4635e099a04f3031"
+    },
+    {
+      "id": "67-resync-framework-beta10",
+      "appliedAt": "2026-10-20T00:00:00.000Z",
+      "cliVersion": "0.2.0-beta.8",
+      "manifestHash": "f04d19b6b18f29ce"
     }
   ]
 }

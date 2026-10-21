@@ -8,6 +8,7 @@
 - c5a6bdf: Migration 64: `global-error.tsx` sets `<html lang>` from `igrpLastFormatLocale()`, so the global error page carries the deployment's region instead of the default one.
 - accf831: Migration 65: pins the template's framework dependencies to the published 0.2.0-beta.9 line (`@igrp/framework-next`, `-ui` beta.9; `-auth`, `-types` beta.8; design system beta.6) and `@igrp/framework-next-i18n` 0.2.0-beta.1, so `check:drift` passes again.
 - a8351fa: Migration 66: bumps the template's `next` to 15.5.28, matching the framework packages, so `check:drift` passes.
+- Migration 67: pins the framework release 0.2.0-beta.10 (`@igrp/framework-next`, `-ui` beta.10; design system beta.7; `@igrp/framework-next-i18n` beta.2), the runtime that migrations 63 and 64 rely on.
 
 ## 0.2.0-beta.7
 

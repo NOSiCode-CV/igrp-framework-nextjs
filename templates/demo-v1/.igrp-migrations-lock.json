@@ -427,6 +427,12 @@
       "appliedAt": "2026-10-21T00:00:00.000Z",
       "cliVersion": "0.2.0-beta.10",
       "manifestHash": "e783d26eb0368374"
+    },
+    {
+      "id": "71-auth-bypass-production-guard",
+      "appliedAt": "2026-10-21T00:00:00.000Z",
+      "cliVersion": "0.2.0-beta.11",
+      "manifestHash": "4257b517249b5a3b"
     }
   ]
 }

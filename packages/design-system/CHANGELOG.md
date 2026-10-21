@@ -1,5 +1,11 @@
 # @igrp/igrp-framework-react-design-system
 
+## 0.2.0-beta.8
+
+### Patch Changes
+
+- 654da38: Build: copy `src/*.css` into `dist/` with `--flat`. On Linux, `cpy` kept the `src/` folder (`dist/src/tokens.css`), so the `./tokens` export resolved to nothing and Tailwind failed to load it; Windows builds were unaffected.
+
 ## 0.2.0-beta.7
 
 ### Patch Changes

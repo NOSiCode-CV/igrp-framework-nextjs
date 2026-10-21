@@ -1,5 +1,13 @@
 # @igrp/framework-next-ui
 
+## 0.2.0-beta.12
+
+### Patch Changes
+
+- 654da38: Build: copy `src/*.css` into `dist/` with `--flat`. On Linux, `cpy` kept the `src/` folder (`dist/src/tokens.css`), so the `./tokens` export resolved to nothing and Tailwind failed to load it; Windows builds were unaffected.
+- Updated dependencies [654da38]
+  - @igrp/igrp-framework-react-design-system@0.2.0-beta.8
+
 ## 0.2.0-beta.11
 
 ### Patch Changes

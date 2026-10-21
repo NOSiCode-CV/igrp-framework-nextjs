@@ -42,7 +42,7 @@ Preview mode skips OIDC and uses mock layout data. With `IGRP_PREVIEW_MODE=true`
    docker compose -f docker/development/docker-compose.yml up --build
    ```
 
-   Runtime `environment` / `-e` values override the baked ones, for example `IGRP_PREVIEW_MODE=false` plus real IdP settings to run with auth.
+   Runtime `environment` / `-e` values override the baked ones, for example `IGRP_PREVIEW_MODE=false` and `AUTH_PROVIDER=igrp-auth` plus real IdP settings to run with auth (override both: the image also bakes `AUTH_PROVIDER=none`, which keeps bypass on by itself).
 
 3. Open [http://localhost:3001](http://localhost:3001).
 

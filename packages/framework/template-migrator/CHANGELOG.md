@@ -1,5 +1,11 @@
 # @igrp/template-migrator
 
+## 0.2.0-beta.13
+
+### Patch Changes
+
+- cd911ed: Migration 72: smaller app name heading on the home page (`home-overview.tsx`).
+
 ## 0.2.0-beta.12
 
 ### Patch Changes

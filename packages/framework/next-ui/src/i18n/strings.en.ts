@@ -119,5 +119,10 @@ export const IGRP_CHROME_STRINGS_EN: IGRPChromeStrings = {
       description:
         'The menus or user data could not be loaded. Try again; if it persists, contact support.',
     },
+    IGRP_I18N_CONFIG_INVALID: {
+      title: 'Invalid language configuration',
+      description:
+        "The application's language settings (IGRP_FORMAT_LOCALES or i18n) have missing or invalid values. Fix the configuration and restart the server.",
+    },
   },
 };

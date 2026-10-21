@@ -16,7 +16,8 @@ export type IGRPChromeErrorCode =
   | 'IGRP_APP_CODE_MISSING'
   | 'IGRP_APP_HOME_SLUG_INVALID'
   | 'IGRP_AUTH_CONFIG_INVALID'
-  | 'IGRP_LAYOUT_DATA_FAILED';
+  | 'IGRP_LAYOUT_DATA_FAILED'
+  | 'IGRP_I18N_CONFIG_INVALID';
 
 export interface IGRPErrorCopy {
   title: string;
@@ -264,6 +265,11 @@ export const IGRP_CHROME_STRINGS_PT: IGRPChromeStrings = {
       title: 'Falha ao carregar os dados de layout',
       description:
         'Não foi possível carregar os menus ou dados do utilizador. Tente novamente; se persistir, contacte o suporte.',
+    },
+    IGRP_I18N_CONFIG_INVALID: {
+      title: 'Configuração de idiomas inválida',
+      description:
+        'A configuração de idiomas da aplicação (IGRP_FORMAT_LOCALES ou i18n) contém valores em falta ou inválidos. Corrija a configuração e reinicie o servidor.',
     },
   },
 };

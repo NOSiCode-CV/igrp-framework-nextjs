@@ -120,5 +120,10 @@ export const IGRP_CHROME_STRINGS_FR: IGRPChromeStrings = {
       description:
         "Impossible de charger les menus ou les données de l'utilisateur. Réessayez ; si le problème persiste, contactez l'assistance.",
     },
+    IGRP_I18N_CONFIG_INVALID: {
+      title: 'Configuration des langues invalide',
+      description:
+        "Les paramètres de langue de l'application (IGRP_FORMAT_LOCALES ou i18n) contiennent des valeurs manquantes ou invalides. Corrigez la configuration et redémarrez le serveur.",
+    },
   },
 };

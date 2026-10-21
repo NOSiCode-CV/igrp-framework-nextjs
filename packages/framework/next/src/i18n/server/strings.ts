@@ -2,6 +2,7 @@ import {
   IGRP_CHROME_STRINGS_EN,
   IGRP_CHROME_STRINGS_FR,
   IGRP_CHROME_STRINGS_PT,
+  type IGRPChromeErrorCode,
   type IGRPChromeStrings,
 } from '@igrp/framework-next-ui';
 import {
@@ -12,6 +13,7 @@ import {
   type IGRPI18nStrings,
 } from '@igrp/igrp-framework-react-design-system';
 
+import type { IgrpErrorCode } from '../../errors.js';
 import type { IGRPChromeStringsOverride, IGRPI18nConfig, IGRPLocale } from '../config.js';
 
 /** Built-in catalogs per locale, before app overrides. */
@@ -81,3 +83,8 @@ export function igrpGetChromeStrings(i18n: IGRPI18nConfig, locale: IGRPLocale): 
     mergeChrome(CHROME[locale], i18n.overrides?.[locale]?.chrome),
   );
 }
+
+// Compile-time guard: chrome copy must cover exactly the framework error codes. Type-only, emits no JS.
+type Exact<A, B> = [A] extends [B] ? ([B] extends [A] ? true : false) : false;
+type AssertTrue<T extends true> = T;
+type _ChromeCodesMatch = AssertTrue<Exact<IgrpErrorCode, IGRPChromeErrorCode>>;

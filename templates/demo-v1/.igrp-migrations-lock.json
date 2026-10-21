@@ -433,6 +433,12 @@
       "appliedAt": "2026-10-21T00:00:00.000Z",
       "cliVersion": "0.2.0-beta.11",
       "manifestHash": "4257b517249b5a3b"
+    },
+    {
+      "id": "72-home-overview-title-size",
+      "appliedAt": "2026-10-21T00:00:00.000Z",
+      "cliVersion": "0.2.0-beta.12",
+      "manifestHash": "3d1e1951c54c4b9b"
     }
   ]
 }

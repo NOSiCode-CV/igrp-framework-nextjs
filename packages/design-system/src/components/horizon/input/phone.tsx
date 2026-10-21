@@ -155,7 +155,11 @@ function IGRPInputPhone({
   const i18n = useIGRPi18n()
   const localized = useCountryLabels(useIGRPLocale())
   // Server ICU and browser ICU can name (and so sort) countries differently; localize only after hydration.
-  const hydrated = useSyncExternalStore(noopSubscribe, () => true, () => false)
+  const hydrated = useSyncExternalStore(
+    noopSubscribe,
+    () => true,
+    () => false
+  )
   const labels = hydrated ? localized : undefined
   const resolvedPlaceholder = placeholder ?? i18n.inputPhone.placeholder
   const [localValue, setLocalValue] = useState(value ?? defaultValue ?? "")

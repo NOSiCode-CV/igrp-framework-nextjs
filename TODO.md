@@ -88,10 +88,5 @@ Add the following components to the design system:
 
 igrp-hidden is a hidden input but still show in the html
 
-Configuracao de cliente na app center...
-
-Auditoria com reports
-https://git.nosi.cv/igrp-3_0/igrp-auth/backend/igrp-platform-access-management/-/blob/version/0.2.0-beta/docs/AUDIT_REPORTS_INTEGRATION_GUIDE.md
-
-Client and Service Accounts Management
-https://git.nosi.cv/igrp-3_0/igrp-auth/backend/igrp-platform-access-management/-/blob/deploy/pre-release/docs/OAUTH_CLIENT_SERVICE_ACCOUNT_UI_GUIDE.md?
+- hide the i18n
+- template e migration is no inclued all the package.json changes

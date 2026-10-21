@@ -27,6 +27,7 @@ import {
   igrpSetAccessClientConfig,
   type IGRPClientRuntimeConfig,
 } from './api-config.js';
+import { IgrpConfigError } from '../errors.js';
 
 const SUPER_ADMIN_MOCK: IGRPAccessClaims = { permissions: [], roles: [], isSuperAdmin: true };
 
@@ -152,20 +153,40 @@ function warnOnMissingOrg(claims: IGRPAccessClaims): void {
   );
 }
 
+/** Parses an env flag the way `.env` loaders leave it: trimmed, unquoted, case-insensitive. */
+function envFlag(value: string | undefined, expected: string): boolean {
+  return (
+    String(value ?? '')
+      .trim()
+      .replace(/^["']|["']$/g, '')
+      .trim()
+      .toLowerCase() === expected
+  );
+}
+
 /** True when auth is bypassed (preview mode or AUTH_PROVIDER=none). */
 export function isIgrpAuthBypass(env: Record<string, string | undefined> = process.env): boolean {
-  const preview =
-    String(env.IGRP_PREVIEW_MODE ?? '')
-      .trim()
-      .replace(/^["']|["']$/g, '')
-      .toLowerCase() === 'true';
-  const noneProvider =
-    String(env.AUTH_PROVIDER ?? '')
-      .trim()
-      .replace(/^["']|["']$/g, '')
-      .trim()
-      .toLowerCase() === 'none';
-  return preview || noneProvider;
+  return envFlag(env.IGRP_PREVIEW_MODE, 'true') || envFlag(env.AUTH_PROVIDER, 'none');
+}
+
+/**
+ * Refuses a production start while auth is bypassed, unless
+ * `IGRP_ALLOW_AUTH_BYPASS_IN_PRODUCTION=true`. Runs once at startup, from the
+ * template's `instrumentation.ts`.
+ */
+export function igrpAssertAuthBypassAllowed(
+  env: Record<string, string | undefined> = process.env,
+): void {
+  if (!isIgrpAuthBypass(env) || env.NODE_ENV !== 'production') return;
+  if (envFlag(env.IGRP_ALLOW_AUTH_BYPASS_IN_PRODUCTION, 'true')) return;
+  const variable = envFlag(env.IGRP_PREVIEW_MODE, 'true') ? 'IGRP_PREVIEW_MODE' : 'AUTH_PROVIDER';
+  throw new IgrpConfigError(
+    'IGRP_CONFIG_INVALID',
+    `[igrp-auth-bypass]: ${variable} desliga a autenticação num build de produção. ` +
+      'Remova a variável deste deploy, ou defina IGRP_ALLOW_AUTH_BYPASS_IN_PRODUCTION=true ' +
+      'se este ambiente é intencionalmente uma demo sem login.',
+    { variable },
+  );
 }
 
 /**

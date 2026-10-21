@@ -33,6 +33,7 @@ export {
 
 export {
   isIgrpAuthBypass,
+  igrpAssertAuthBypassAllowed,
   igrpEnsureAccessClientConfig,
   igrpGetClaims,
   igrpAuthorize,

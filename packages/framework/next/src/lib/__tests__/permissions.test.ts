@@ -13,7 +13,9 @@ import {
   igrpGetClaims,
   igrpAuthorize,
   igrpAssertAuthorize,
+  igrpAssertAuthBypassAllowed,
 } from '../permissions.js';
+import { IgrpConfigError } from '../../errors.js';
 
 function makeJwt(payload: Record<string, unknown>): string {
   const b64 = (o: unknown) =>
@@ -62,6 +64,60 @@ describe('isIgrpAuthBypass', () => {
     expect(isIgrpAuthBypass({ AUTH_PROVIDER: "'none'" })).toBe(true);
     expect(isIgrpAuthBypass({ AUTH_PROVIDER: ' "None" ' })).toBe(true);
     expect(isIgrpAuthBypass({ AUTH_PROVIDER: '"igrp-auth"' })).toBe(false);
+  });
+});
+
+describe('igrpAssertAuthBypassAllowed', () => {
+  const prod = { NODE_ENV: 'production' };
+
+  it('allows bypass outside production', () => {
+    expect(() =>
+      igrpAssertAuthBypassAllowed({ NODE_ENV: 'development', IGRP_PREVIEW_MODE: 'true' }),
+    ).not.toThrow();
+    expect(() =>
+      igrpAssertAuthBypassAllowed({ NODE_ENV: 'test', AUTH_PROVIDER: 'none' }),
+    ).not.toThrow();
+  });
+
+  it('allows production without bypass', () => {
+    expect(() =>
+      igrpAssertAuthBypassAllowed({ ...prod, AUTH_PROVIDER: 'igrp-auth' }),
+    ).not.toThrow();
+    expect(() => igrpAssertAuthBypassAllowed(prod)).not.toThrow();
+  });
+
+  it('throws in production when preview mode is on without the opt-in', () => {
+    expect(() => igrpAssertAuthBypassAllowed({ ...prod, IGRP_PREVIEW_MODE: 'true' })).toThrow(
+      IgrpConfigError,
+    );
+    expect(() => igrpAssertAuthBypassAllowed({ ...prod, IGRP_PREVIEW_MODE: 'true' })).toThrow(
+      /IGRP_PREVIEW_MODE/,
+    );
+  });
+
+  it('throws in production when AUTH_PROVIDER=none without the opt-in', () => {
+    expect(() => igrpAssertAuthBypassAllowed({ ...prod, AUTH_PROVIDER: 'none' })).toThrow(
+      /AUTH_PROVIDER/,
+    );
+  });
+
+  it('accepts only a parsed true as the opt-in', () => {
+    const on = { ...prod, IGRP_PREVIEW_MODE: 'true' };
+    expect(() =>
+      igrpAssertAuthBypassAllowed({ ...on, IGRP_ALLOW_AUTH_BYPASS_IN_PRODUCTION: 'true' }),
+    ).not.toThrow();
+    expect(() =>
+      igrpAssertAuthBypassAllowed({ ...on, IGRP_ALLOW_AUTH_BYPASS_IN_PRODUCTION: ' "TRUE" ' }),
+    ).not.toThrow();
+    expect(() =>
+      igrpAssertAuthBypassAllowed({ ...on, IGRP_ALLOW_AUTH_BYPASS_IN_PRODUCTION: 'false' }),
+    ).toThrow();
+    expect(() =>
+      igrpAssertAuthBypassAllowed({ ...on, IGRP_ALLOW_AUTH_BYPASS_IN_PRODUCTION: '' }),
+    ).toThrow();
+    expect(() =>
+      igrpAssertAuthBypassAllowed({ ...on, IGRP_ALLOW_AUTH_BYPASS_IN_PRODUCTION: '1' }),
+    ).toThrow();
   });
 });
 

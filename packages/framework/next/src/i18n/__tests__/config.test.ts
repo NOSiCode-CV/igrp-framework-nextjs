@@ -4,6 +4,7 @@ import {
   IGRP_DEFAULT_FORMAT_LOCALES,
   IGRP_LOCALE_COOKIE,
   igrpDefineI18n,
+  igrpIsSecureRequest,
   igrpLocaleCookieOptions,
   igrpNormalizeLocale,
   igrpParseAcceptLanguage,
@@ -139,5 +140,19 @@ describe('cookie', () => {
       httpOnly: false,
     });
     expect(igrpLocaleCookieOptions(true).secure).toBe(true);
+  });
+});
+
+describe('igrpIsSecureRequest', () => {
+  it('trusts the first x-forwarded-proto value', () => {
+    expect(igrpIsSecureRequest(new Headers({ 'x-forwarded-proto': 'https' }))).toBe(true);
+    expect(igrpIsSecureRequest(new Headers({ 'x-forwarded-proto': 'https,http' }))).toBe(true);
+    expect(igrpIsSecureRequest(new Headers({ 'x-forwarded-proto': 'http' }), 'https:')).toBe(false);
+  });
+
+  it('falls back to the given protocol, then to origin', () => {
+    expect(igrpIsSecureRequest(new Headers(), 'https:')).toBe(true);
+    expect(igrpIsSecureRequest(new Headers({ origin: 'https://a.b' }))).toBe(true);
+    expect(igrpIsSecureRequest(new Headers())).toBe(false);
   });
 });

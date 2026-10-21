@@ -46,4 +46,12 @@ describe('igrpSyncLocaleCookie', () => {
       ),
     ).toBeUndefined();
   });
+
+  it('marks the cookie Secure behind a TLS proxy', () => {
+    const req = new NextRequest('http://app.internal/x', {
+      headers: { 'x-forwarded-proto': 'https' },
+    });
+    const res = igrpSyncLocaleCookie(req, NextResponse.next(), 'en', sessionFirst);
+    expect(res.cookies.get('IGRP_LOCALE')?.secure).toBe(true);
+  });
 });

@@ -7,6 +7,7 @@ export {
   IGRP_DEFAULT_FORMAT_LOCALES,
   igrpLocaleCookieOptions,
   igrpIsLocale,
+  igrpIsSecureRequest,
   igrpNormalizeLocale,
   igrpParseAcceptLanguage,
   igrpParseFormatLocales,

@@ -5,6 +5,7 @@ import {
   IGRP_LOCALE_COOKIE,
   type IGRPI18nConfig,
   type IGRPLocale,
+  igrpIsSecureRequest,
   igrpLocaleCookieOptions,
   igrpNormalizeLocale,
 } from '../config.js';
@@ -51,11 +52,7 @@ export async function igrpSetLocale(
     }
   }
 
-  const headerStore = await headers();
-  const proto = headerStore.get('x-forwarded-proto')?.split(',')[0]?.trim();
-  const secure = proto
-    ? proto === 'https'
-    : headerStore.get('origin')?.startsWith('https:') === true;
+  const secure = igrpIsSecureRequest(await headers());
   const cookieStore = await cookies();
   cookieStore.set(IGRP_LOCALE_COOKIE, locale, igrpLocaleCookieOptions(secure));
 

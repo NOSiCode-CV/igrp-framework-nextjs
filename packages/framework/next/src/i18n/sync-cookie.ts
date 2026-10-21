@@ -2,6 +2,7 @@ import type { NextRequest, NextResponse } from 'next/server';
 
 import {
   IGRP_LOCALE_COOKIE,
+  igrpIsSecureRequest,
   igrpLocaleCookieOptions,
   igrpNormalizeLocale,
   type IGRPI18nConfig,
@@ -24,7 +25,7 @@ export function igrpSyncLocaleCookie(
   const locale = igrpNormalizeLocale(tokenLocale);
   if (!locale || !i18n.locales.includes(locale)) return response;
   if (request.cookies.get(IGRP_LOCALE_COOKIE)?.value === locale) return response;
-  const secure = request.nextUrl.protocol === 'https:';
+  const secure = igrpIsSecureRequest(request.headers, request.nextUrl.protocol);
   response.cookies.set(IGRP_LOCALE_COOKIE, locale, igrpLocaleCookieOptions(secure));
   return response;
 }

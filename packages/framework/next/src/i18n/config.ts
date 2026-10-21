@@ -41,6 +41,21 @@ export function igrpLocaleCookieOptions(secure: boolean) {
   };
 }
 
+/**
+ * Whether the browser reached us over TLS. Behind the gateway's proxy the app
+ * sees `http:`, so the first `x-forwarded-proto` value wins; then the caller's
+ * own protocol (middleware), then `origin` (server actions).
+ */
+export function igrpIsSecureRequest(
+  headers: Pick<Headers, 'get'>,
+  fallbackProtocol?: string,
+): boolean {
+  const proto = headers.get('x-forwarded-proto')?.split(',')[0]?.trim();
+  if (proto) return proto === 'https';
+  if (fallbackProtocol) return fallbackProtocol === 'https:';
+  return headers.get('origin')?.startsWith('https:') === true;
+}
+
 export function igrpIsLocale(value: unknown): value is IGRPLocale {
   return typeof value === 'string' && (IGRP_LOCALES as readonly string[]).includes(value);
 }

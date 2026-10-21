@@ -148,6 +148,7 @@ describe('igrpIsSecureRequest', () => {
     expect(igrpIsSecureRequest(new Headers({ 'x-forwarded-proto': 'https' }))).toBe(true);
     expect(igrpIsSecureRequest(new Headers({ 'x-forwarded-proto': 'https,http' }))).toBe(true);
     expect(igrpIsSecureRequest(new Headers({ 'x-forwarded-proto': 'http' }), 'https:')).toBe(false);
+    expect(igrpIsSecureRequest(new Headers({ 'x-forwarded-proto': 'HTTPS' }))).toBe(true);
   });
 
   it('falls back to the given protocol, then to origin', () => {

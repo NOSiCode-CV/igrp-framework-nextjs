@@ -50,7 +50,7 @@ export function igrpIsSecureRequest(
   headers: Pick<Headers, 'get'>,
   fallbackProtocol?: string,
 ): boolean {
-  const proto = headers.get('x-forwarded-proto')?.split(',')[0]?.trim();
+  const proto = headers.get('x-forwarded-proto')?.split(',')[0]?.trim().toLowerCase();
   if (proto) return proto === 'https';
   if (fallbackProtocol) return fallbackProtocol === 'https:';
   return headers.get('origin')?.startsWith('https:') === true;

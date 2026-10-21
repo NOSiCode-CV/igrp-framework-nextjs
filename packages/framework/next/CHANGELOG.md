@@ -4,8 +4,8 @@
 
 ### Patch Changes
 
-- 993b7aa: igrpSyncLocaleCookie honours x-forwarded-proto, like igrpSetLocale (new igrpIsSecureRequest).
-- 2f1d497: Chrome copy for IGRP_I18N_CONFIG_INVALID; a type test keeps the chrome codes equal to IgrpErrorCode.
+- 993b7aa: igrpSyncLocaleCookie honours x-forwarded-proto, like igrpSetLocale (new igrpIsSecureRequest; the x-forwarded-proto check is case-insensitive).
+- 2f1d497: Chrome copy for IGRP_I18N_CONFIG_INVALID; a compile-time check keeps the chrome codes equal to IgrpErrorCode.
 - Updated dependencies [2f1d497]
   - @igrp/framework-next-ui@0.2.0-beta.11
 

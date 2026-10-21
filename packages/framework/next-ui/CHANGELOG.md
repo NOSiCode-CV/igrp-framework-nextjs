@@ -4,7 +4,7 @@
 
 ### Patch Changes
 
-- 2f1d497: Chrome copy for IGRP_I18N_CONFIG_INVALID; a type test keeps the chrome codes equal to IgrpErrorCode.
+- 2f1d497: Chrome copy for IGRP_I18N_CONFIG_INVALID; a compile-time check keeps the chrome codes equal to IgrpErrorCode.
 
 ## 0.2.0-beta.10
 

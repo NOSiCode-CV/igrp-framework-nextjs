@@ -31,6 +31,7 @@ All variables are documented inline in [`.env.example`](../.env.example). Requir
 | `IGRP_APP_CODE` | Unique application identifier | — |
 | `IGRP_ACCESS_MANAGEMENT_API` | Base URL of the IGRP Access Management API | — |
 | `IGRP_PREVIEW_MODE` | Bypass auth + use mock data (case-insensitive, quote-tolerant) | `false` |
+| `IGRP_ALLOW_AUTH_BYPASS_IN_PRODUCTION` | Allows `IGRP_PREVIEW_MODE=true` or `AUTH_PROVIDER=none` in a production build (`next start`, Docker). Without it the server logs an `[igrp-auth-bypass]` error and answers every request with 500. Set it only for demo deploys without login | `false` |
 | `IGRP_SYNC_ACCESS` | Sync application/resources/menus to Access Management at startup | `false` |
 | `IGRP_BRANDING_ENABLED` | Load the organization Brand (colours and logos) from Access Management at render time | `false` |
 | `IGRP_SYNC_ON_CODE_MENUS` | Push `src/temp/menus/menus.ts` to AM (overwrites AM menus). Requires sync on + preview off | `false` |

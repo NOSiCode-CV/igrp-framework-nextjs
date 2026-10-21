@@ -27,7 +27,7 @@ Building from the **monorepo checkout** of `templates/demo-v1` will not work as-
 
 ## Quick start (preview, no IdP)
 
-Preview mode skips OIDC and uses mock layout data. With `IGRP_PREVIEW_MODE=true`, layouts use a stub session and do not call `serverSession()`, so `NEXTAUTH_SECRET` is not required.
+Preview mode skips OIDC and uses mock layout data. With `IGRP_PREVIEW_MODE=true`, layouts use a stub session and do not call `serverSession()`, so `NEXTAUTH_SECRET` is not required. The image's `.env.development` already sets `IGRP_ALLOW_AUTH_BYPASS_IN_PRODUCTION=true`, which a production build needs to accept preview mode.
 
 1. `docker/development/.env.development` already sets an empty base path (the usual local default):
 
@@ -163,6 +163,7 @@ docker run -e HEALTHCHECK_PATH=/my-base/api/health ...
 | `workspace:*` cannot be resolved | You are building the monorepo template folder. Use a generated app, or develop with `pnpm dev:demo`. |
 | Login loop, nested `callbackUrl` | `NEXTAUTH_URL` missing `/api/auth`, or it uses container port `3000` while the browser uses `3001`. See [ENVIRONMENT.md](ENVIRONMENT.md). |
 | `NEXTAUTH_SECRET must be set in production` | Image is `NODE_ENV=production`. Set `NEXTAUTH_SECRET` at runtime, or use `IGRP_PREVIEW_MODE=true` so layouts never call `serverSession()`. |
+| `[igrp-auth-bypass]` error in the log, every request returns 500 | `IGRP_PREVIEW_MODE=true` or `AUTH_PROVIDER=none` in a production build without `IGRP_ALLOW_AUTH_BYPASS_IN_PRODUCTION=true`. Set that variable only for demo deploys without login; otherwise turn bypass off. |
 | `IgrpConfigError` on first request | Required AM/auth env is missing and preview mode is off. See [ENVIRONMENT.md](ENVIRONMENT.md). |
 | Changing `NEXT_PUBLIC_BASE_PATH` does nothing | Public env is baked at **build**. Rebuild after editing `docker/development/.env.development`. |
 | Port already allocated | Compose binds **3001**. Change the left-hand side of `'3001:3000'` and update `NEXTAUTH_URL` + IdP URIs to match. |

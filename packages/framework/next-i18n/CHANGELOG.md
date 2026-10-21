@@ -1,5 +1,11 @@
 # @igrp/framework-next-i18n
 
+## 0.2.0-beta.3
+
+### Minor Changes
+
+- 1c9b4a1: check-catalogs fails on keys missing from a non-default locale; pass --allow-missing to keep the old coverage-only behaviour.
+
 ## 0.2.0-beta.2
 
 ### Patch Changes

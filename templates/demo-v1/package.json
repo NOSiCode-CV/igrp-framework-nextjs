@@ -20,7 +20,7 @@
     "build": "pnpm lint && pnpm lint:i18n && next build --turbopack",
     "start": "next start",
     "lint": "biome check --write",
-    "lint:i18n": "igrp-i18n check-catalogs src/i18n/messages --default pt && igrp-i18n check-literals src/components src/i18n \"src/app/(igrp)/page.tsx\" src/config \"src/app/(auth)\" src/app/not-found.tsx src/app/layout.tsx",
+    "lint:i18n": "igrp-i18n check-catalogs src/i18n/messages --default pt && igrp-i18n check-literals src/components src/i18n \"src/app/(igrp)/page.tsx\" src/config \"src/app/(auth)\" src/app/not-found.tsx src/app/layout.tsx src/app/global-error.tsx src/app/error.tsx \"src/app/(igrp)/error.tsx\" \"src/app/(igrp)/layout.tsx\"",
     "format": "biome format --write",
     "publish:template": "pwsh -ExecutionPolicy Bypass -File ./create-template/create-zip-template.ps1"
   },

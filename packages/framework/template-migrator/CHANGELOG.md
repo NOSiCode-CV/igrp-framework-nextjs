@@ -1,5 +1,11 @@
 # @igrp/template-migrator
 
+## 0.2.0-beta.12
+
+### Patch Changes
+
+- f1705e9: Migration 71: `instrumentation.ts` refuses auth bypass in production builds without `IGRP_ALLOW_AUTH_BYPASS_IN_PRODUCTION=true`; the development Docker image opts in.
+
 ## 0.2.0-beta.11
 
 ### Patch Changes

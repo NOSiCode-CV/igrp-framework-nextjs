@@ -15,8 +15,9 @@ pnpm add -D @igrp/framework-next-i18n
 ```
 igrp-i18n <command>
 
-  check-catalogs <dir> --default <locale> [--framework-namespaces common,i18n,errors]
-      Orphan keys, non-string values, invalid ICU, argument mismatches, camelCase segments.
+  check-catalogs <dir> --default <locale> [--framework-namespaces common,i18n,errors] [--allow-missing]
+      Orphan keys, keys missing from a non-default locale, non-string values, invalid ICU, argument mismatches, camelCase segments.
+      --allow-missing  report missing keys as coverage only
   check-literals <path...>
       Hardcoded user-facing strings in non-test .tsx files; next-intl formatter imports.
 ```
@@ -35,7 +36,7 @@ Both commands are also exported for programmatic use in Vitest:
 
 | Function                                                  | Returns                                                                       |
 | --------------------------------------------------------- | ----------------------------------------------------------------------------- |
-| `checkCatalogs({ dir, defaultLocale, frameworkNamespaces? })` | `CatalogReport` — `{ errors, info, coverage }`; `coverage` is the % of default-catalog keys present per locale |
+| `checkCatalogs({ dir, defaultLocale, frameworkNamespaces?, allowMissing? })` | `CatalogReport` — `{ errors, info, coverage }`; `coverage` is the % of default-catalog keys present per locale |
 | `checkLiterals(paths, cwd?)`                              | One `file:line: finding` string per hardcoded string                          |
 | `findLiteralStrings(source, fileName?)`                   | The same findings for a single source string                                  |
 

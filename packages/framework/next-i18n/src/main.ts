@@ -3,15 +3,17 @@ import { checkLiterals } from "./literals.js";
 
 const USAGE = `igrp-i18n <command>
 
-  check-catalogs <dir> --default <locale> [--framework-namespaces common,i18n,errors]
-      Orphan keys, non-string values, empty translations, invalid ICU, argument mismatches,
+  check-catalogs <dir> --default <locale> [--framework-namespaces common,i18n,errors] [--allow-missing]
+      Orphan keys, keys missing from a non-default locale, non-string values, empty translations, invalid ICU, argument mismatches,
       unused plural categories, camelCase segments.
+      --allow-missing  report missing keys as coverage only
   check-literals <path...>
       Hardcoded user-facing strings and Intl/toLocale* locales in non-test .ts/.tsx files;
       next-intl formatter imports.
 `;
 
 const VALUE_FLAGS = new Set(["--default", "--framework-namespaces"]);
+const BOOLEAN_FLAGS = new Set(["--allow-missing"]);
 
 /** `--name value` or `--name=value`. */
 function option(args: string[], name: string): string | undefined {
@@ -22,7 +24,10 @@ function option(args: string[], name: string): string | undefined {
 }
 
 const hasUnknownFlag = (args: string[]) =>
-  args.some((a) => a.startsWith("--") && !VALUE_FLAGS.has(a.split("=")[0]!));
+  args.some((a) => {
+    const name = a.split("=")[0]!;
+    return a.startsWith("--") && !VALUE_FLAGS.has(name) && !BOOLEAN_FLAGS.has(name);
+  });
 
 /** Positional arguments: everything that is neither an option nor an option's value. */
 function positionals(args: string[]): string[] {
@@ -57,6 +62,7 @@ function run(argv: string[]): number {
       dir,
       defaultLocale,
       frameworkNamespaces: namespaces.split(",").filter(Boolean),
+      allowMissing: rest.includes("--allow-missing"),
     });
     for (const line of report.info) console.log(`info  ${line}`);
     console.log(

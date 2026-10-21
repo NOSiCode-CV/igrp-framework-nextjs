@@ -26,9 +26,38 @@ describe("checkCatalogs", () => {
         "en.json": { users: { title: "Hi {name}" } },
       }),
       defaultLocale: "pt",
+      allowMissing: true,
     });
     expect(report.errors).toEqual([]);
     expect(report.coverage).toEqual({ pt: 100, en: 50 });
+  });
+
+  const partial = () =>
+    dir({
+      "pt.json": {
+        users: {
+          title: "Olá {name}",
+          count: "{n, plural, one {# item} other {# itens}}",
+        },
+      },
+      "en.json": { users: { title: "Hi {name}" } },
+    });
+
+  it("fails on keys missing from a non-default locale", () => {
+    const report = checkCatalogs({ dir: partial(), defaultLocale: "pt" });
+    expect(report.errors).toContain(
+      'en: missing key "users.count" (present in pt)',
+    );
+    expect(report.coverage).toEqual({ pt: 100, en: 50 });
+  });
+
+  it("allowMissing reports coverage without failing", () => {
+    const report = checkCatalogs({
+      dir: partial(),
+      defaultLocale: "pt",
+      allowMissing: true,
+    });
+    expect(report.errors).toEqual([]);
   });
 
   it("fails on orphan keys, non-string values, invalid ICU, argument mismatch and bad key names", () => {

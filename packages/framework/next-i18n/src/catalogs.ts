@@ -13,6 +13,8 @@ export interface CheckCatalogsOptions {
   defaultLocale: string;
   /** Top-level namespaces the framework ships; keys under them are reported as info. */
   frameworkNamespaces?: string[];
+  /** Report keys missing from a non-default locale as coverage only, not errors. Default `false`. */
+  allowMissing?: boolean;
 }
 
 export interface CatalogReport {
@@ -183,6 +185,15 @@ export function checkCatalogs(options: CheckCatalogsOptions): CatalogReport {
         if (expected && JSON.stringify(expected) !== JSON.stringify(args)) {
           errors.push(
             `${locale}: arguments of "${key}" differ from ${options.defaultLocale} (${expected.join(", ")} vs ${args.join(", ")})`,
+          );
+        }
+      }
+    }
+    if (locale !== options.defaultLocale && !options.allowMissing) {
+      for (const key of base.keys()) {
+        if (!flat.has(key)) {
+          errors.push(
+            `${locale}: missing key "${key}" (present in ${options.defaultLocale})`,
           );
         }
       }

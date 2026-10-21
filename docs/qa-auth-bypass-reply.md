@@ -80,7 +80,7 @@ A verificação fica no arranque e não dentro do predicado por três razões: c
 ### 4.3 Entrega
 
 - `@igrp/framework-next` `0.2.0-beta.13`: `igrpAssertAuthBypassAllowed()` (4.1) e a correção das aspas (4.2).
-- `@igrp/template-migrator` `0.2.0-beta.12`, migração 71 (`71-auth-bypass-production-guard`): atualiza `instrumentation.ts` e `.env.example`, acrescenta o opt-in à imagem `docker/development` e sobe `@igrp/framework-next` para `0.2.0-beta.13`. As aplicações existentes recebem-na com `igrp-migrate`.
+- `@igrp/template-migrator` `0.2.0-beta.13`, migração 71 (`71-auth-bypass-production-guard`): atualiza `instrumentation.ts` e `.env.example`, acrescenta o opt-in à imagem `docker/development` e sobe `@igrp/framework-next` para `0.2.0-beta.13`. As aplicações existentes recebem-na com `igrp-migrate`.
 - Documentação da nova variável em `templates/demo-v1/docs/ENVIRONMENT.md`, `DOCKER-RUN.md` e `.env.example`.
 
 ## 5. Aplicações já geradas a partir do template

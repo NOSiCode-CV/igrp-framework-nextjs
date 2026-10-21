@@ -27,7 +27,7 @@ Building from the **monorepo checkout** of `templates/demo-v1` will not work as-
 
 ## Quick start (preview, no IdP)
 
-Preview mode skips OIDC and uses mock layout data. With `IGRP_PREVIEW_MODE=true`, layouts use a stub session and do not call `serverSession()`, so `NEXTAUTH_SECRET` is not required. The image's `.env.development` already sets `IGRP_ALLOW_AUTH_BYPASS_IN_PRODUCTION=true`, which a production build needs to accept preview mode.
+Preview mode skips OIDC and uses mock layout data. With `IGRP_PREVIEW_MODE=true`, layouts use a stub session and do not call `serverSession()`, so `NEXTAUTH_SECRET` is not required. A production build needs `IGRP_ALLOW_AUTH_BYPASS_IN_PRODUCTION=true` alongside `IGRP_PREVIEW_MODE=true` to accept preview mode; set both at runtime as shown below.
 
 1. `docker/development/.env.development` already sets an empty base path (the usual local default):
 
@@ -42,13 +42,14 @@ Preview mode skips OIDC and uses mock layout data. With `IGRP_PREVIEW_MODE=true`
    # docker/development/docker-compose.yml — under igrp-template-development:
    environment:
      IGRP_PREVIEW_MODE: "true"
+     IGRP_ALLOW_AUTH_BYPASS_IN_PRODUCTION: "true"
    ```
 
    ```bash
    docker compose -f docker/development/docker-compose.yml up --build
    ```
 
-   To leave the Compose file untouched, build with Compose (or the CLI below) and run the image with `-e IGRP_PREVIEW_MODE=true`.
+   To leave the Compose file untouched, build with Compose (or the CLI below) and run the image with `-e IGRP_PREVIEW_MODE=true -e IGRP_ALLOW_AUTH_BYPASS_IN_PRODUCTION=true`.
 
 3. Open [http://localhost:3001](http://localhost:3001).
 
@@ -63,6 +64,7 @@ docker build -f docker/development/Dockerfile -t igrp-template-development .
 
 docker run --rm -it -p 3001:3000 --name igrp-template \
   -e IGRP_PREVIEW_MODE=true \
+  -e IGRP_ALLOW_AUTH_BYPASS_IN_PRODUCTION=true \
   igrp-template-development
 ```
 
@@ -75,7 +77,7 @@ Full variable reference: [ENVIRONMENT.md](ENVIRONMENT.md). Two timings matter in
 | When | What | How |
 | --- | --- | --- |
 | **Build** | `NEXT_PUBLIC_*` (base path, image domains, public app code, …) | Edit `docker/development/.env.development` **before** `docker build` / `compose up --build`. Next inlines these into the client bundle. Changing them later with `-e` has **no** effect until you rebuild. |
-| **Run** | Secrets and server config (`NEXTAUTH_*`, `IGRP_AUTH_*`, `IGRP_PREVIEW_MODE`, `AUTH_PROVIDER`, AM/M2M, …) | `docker run -e` / `--env-file`, or Compose `environment` / `env_file`. Do not bake secrets into the image. |
+| **Run** | Secrets and server config (`NEXTAUTH_*`, `IGRP_AUTH_*`, `IGRP_PREVIEW_MODE`, `IGRP_ALLOW_AUTH_BYPASS_IN_PRODUCTION`, `AUTH_PROVIDER`, AM/M2M, …) | `docker run -e` / `--env-file`, or Compose `environment` / `env_file`. Do not bake secrets into the image. |
 
 `.dockerignore` excludes root `.env*` files so local secrets never enter the image. `!docker/development/.env.development` is allow-listed because the Dockerfile copies that file to `.env.production` during the build.
 

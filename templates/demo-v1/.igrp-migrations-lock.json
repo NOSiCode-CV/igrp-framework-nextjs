@@ -409,6 +409,12 @@
       "appliedAt": "2026-10-20T00:00:00.000Z",
       "cliVersion": "0.2.0-beta.8",
       "manifestHash": "f04d19b6b18f29ce"
+    },
+    {
+      "id": "68-dev-lucide-icon-map",
+      "appliedAt": "2026-10-20T00:00:00.000Z",
+      "cliVersion": "0.2.0-beta.8",
+      "manifestHash": "a6496021154f0413"
     }
   ]
 }

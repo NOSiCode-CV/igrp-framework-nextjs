@@ -11,7 +11,7 @@ Obrigado pelo achado. A descrição técnica está correta: `isAuthBypass()` nã
 - **Não é uma vulnerabilidade.** O modo preview funciona como foi desenhado: sem login, sem Access Management (AM) e com um utilizador de dados mock com acesso total. Serve para desenvolvimento e demos sem backend.
 - **Reclassificamos a severidade para Baixo.** O risco real é de configuração: alguém ativar o modo por engano num deploy real.
 - **Não vamos aplicar a correção proposta** (`NODE_ENV === 'production'` em `isAuthBypass()`). Os motivos estão na secção 3.
-- **Vamos implementar um endurecimento diferente**, descrito na secção 4: a aplicação recusa arrancar em produção com o bypass ligado, a não ser que alguém o confirme de forma explícita.
+- **Implementámos um endurecimento diferente**, descrito na secção 4: em produção com o bypass ligado, a aplicação responde 500 a todos os pedidos e regista o erro no log, a não ser que alguém confirme o bypass de forma explícita.
 
 ## 2. O que o modo preview faz
 
@@ -53,23 +53,25 @@ Este resultado é pior do que a situação atual, em que um deploy mal configura
 
 ### 4.1 Verificação ao arranque
 
-Em `templates/demo-v1/src/instrumentation.ts` (`register()`, que corre uma vez antes do primeiro pedido), a aplicação **recusa arrancar** quando estas três condições se verificam ao mesmo tempo:
+A verificação é a função `igrpAssertAuthBypassAllowed()` do `@igrp/framework-next`, chamada em `register()` de `templates/demo-v1/src/instrumentation.ts` (corre uma vez, antes do primeiro pedido). A função lança um erro quando estas três condições se verificam ao mesmo tempo:
 
 - o bypass está ligado (`IGRP_PREVIEW_MODE=true` ou `AUTH_PROVIDER=none`);
-- `NODE_ENV=production`;
+- o `NODE_ENV` não é `development` nem `test` (qualquer outro valor, incluindo `staging` ou ausente, conta como produção);
 - `IGRP_ALLOW_AUTH_BYPASS_IN_PRODUCTION` não vale `true`.
 
-O erro aparece no log do pod e diz que variável está a ativar o bypass. A imagem `docker/development` passa a definir `IGRP_ALLOW_AUTH_BYPASS_IN_PRODUCTION=true` em `.env.development` e continua a funcionar.
+Com o erro, o Next escreve no log `[igrp-auth-bypass]: <variável> desliga a autenticação num build de produção...`, com o nome de todas as variáveis que estão a ativar o bypass, e **responde 500 a todos os pedidos**. O processo não termina, mas ninguém entra na aplicação.
 
 O efeito é este:
 
 | Situação | Hoje | Depois |
 |---|---|---|
 | `pnpm dev` com preview | funciona | funciona (não é produção) |
-| Imagem `docker/development` | funciona | funciona (confirmação explícita) |
-| Deploy real com preview esquecido | aberto a todos, sem aviso | **não arranca**, com erro claro no log |
+| Imagem `docker/development` | funciona | funciona (o opt-in vem definido em `.env.development`) |
+| Deploy real com preview esquecido | aberto a todos, sem aviso | **500 em todos os pedidos**, com erro claro no log |
 
-A verificação fica no arranque e não dentro do predicado por três razões: corre uma única vez, fica num só sítio em vez de quatro, e não muda o comportamento a meio de um pedido. Recusar arrancar, em vez de desligar o bypass, evita o estado intermédio descrito em 3.2.
+A imagem `docker/development` traz o opt-in definido de propósito, para continuar a servir de demo sem IdP. Isso também quer dizer que a verificação não atua nessa imagem: não deve ser usada num deploy real sem sobrepor `IGRP_PREVIEW_MODE=false` e `AUTH_PROVIDER=igrp-auth` (está documentado em `DOCKER-RUN.md`).
+
+A verificação fica no arranque e não dentro do predicado por três razões: corre uma única vez, fica num só sítio em vez de quatro, e não muda o comportamento a meio de um pedido. Falhar todos os pedidos, em vez de desligar o bypass, evita o estado intermédio descrito em 3.2.
 
 ### 4.2 Alinhamento dos predicados
 
@@ -77,9 +79,9 @@ A verificação fica no arranque e não dentro do predicado por três razões: c
 
 ### 4.3 Entrega
 
-- Changeset `patch` para `@igrp/framework-next` (4.2).
-- Migração do `@igrp/template-migrator` para as alterações ao template (4.1), para que as aplicações existentes as recebam com `igrp-migrate`.
-- Documentação da nova variável em `templates/demo-v1/docs/ENVIRONMENT.md` e `DOCKER-RUN.md`.
+- `@igrp/framework-next` `0.2.0-beta.13`: `igrpAssertAuthBypassAllowed()` (4.1) e a correção das aspas (4.2).
+- `@igrp/template-migrator` `0.2.0-beta.12`, migração 71 (`71-auth-bypass-production-guard`): atualiza `instrumentation.ts` e `.env.example`, acrescenta o opt-in à imagem `docker/development` e sobe `@igrp/framework-next` para `0.2.0-beta.13`. As aplicações existentes recebem-na com `igrp-migrate`.
+- Documentação da nova variável em `templates/demo-v1/docs/ENVIRONMENT.md`, `DOCKER-RUN.md` e `.env.example`.
 
 ## 5. Aplicações já geradas a partir do template
 

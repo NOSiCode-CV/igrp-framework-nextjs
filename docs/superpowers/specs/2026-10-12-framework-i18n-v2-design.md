@@ -1,7 +1,7 @@
 # Framework i18n v2: `@igrp/framework-next/i18n`
 
 Date: 2026-10-12
-Status: approved 2026-10-12 (decisions D-1 to D-5 resolved below), Implemented in 0.2.0-beta.8 to beta.10; follow-ups in `2026-10-21-i18n-app-center-readiness.md`. Supersedes `2026-09-30-framework-i18n-design.md` (approved, never implemented).
+Status: approved 2026-10-12 (decisions D-1 to D-5 resolved below); implemented in 0.2.0-beta.8 to beta.10; follow-ups in `2026-10-21-i18n-app-center-readiness.md`. Supersedes `2026-09-30-framework-i18n-design.md` (approved, never implemented).
 Vocabulary: `packages/framework/CONTEXT.md`. Decision record: `packages/framework/docs/adr/0001-cookie-first-locale-resolution.md` (amended by D-1 below).
 
 ## Why a v2
@@ -237,7 +237,7 @@ Missing keys render `namespace.key` and warn in development only. Keys an app sh
 - `src/config/error-messages.ts`: deleted. `global-error.tsx` and `error.tsx` drop `resolveCopy` and the `lang="pt-PT"` literal; `global-error.tsx` reads `useIGRPChromeI18n()` for the document language.
 - Preview mode: mock users carry no `locale`; resolution is cookie → `Accept-Language` → default.
 - `.env.example`: `IGRP_FORMAT_LOCALES`. `docs/I18N.md` adapted from the application center's guide. `CLAUDE.md` gains the i18n pointers and fixes the stale claim that `app/layout.tsx` mounts `IGRPRootProviders`.
-- Template-migrator: one migration (`56-i18n`) with `deps.bump`, `file.create` for every new file, `file.write` for the edited ones, `file.delete` for `config/error-messages.ts`, and the `.env.example` key; then `sync:template-lock` so `check:drift` passes.
+- Template-migrator: one migration (`58-i18n`) with `deps.bump`, `file.create` for every new file, `file.write` for the edited ones, `file.delete` for `config/error-messages.ts`, and the `.env.example` key; then `sync:template-lock` so `check:drift` passes.
 
 ## Testing
 

@@ -36,7 +36,7 @@ describe("checkCatalogs", () => {
     dir({
       "pt.json": {
         users: {
-          title: "Ol· {name}",
+          title: "Ol√° {name}",
           count: "{n, plural, one {# item} other {# itens}}",
         },
       },

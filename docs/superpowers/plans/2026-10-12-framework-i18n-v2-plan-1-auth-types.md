@@ -45,7 +45,7 @@ Inputs the spec implies but which only these tests pin:
 **Interfaces:**
 - Produces: `JWT.locale?: string`, `Session.user.locale?: string`, next-auth `User.locale?: string` (augmentation). Plan 4's `getSessionLocale` reads `session.user.locale`.
 
-- [ ] **Step 1: Extend the type-check guard first (it is the failing "test")**
+- [x] **Step 1: Extend the type-check guard first (it is the failing "test")**
 
 In `packages/framework/next-auth/src/__tests__/types-augmentation.type-check.ts`, add one field to each exported constant:
 
@@ -95,12 +95,12 @@ export const _jwt: {
 };
 ```
 
-- [ ] **Step 2: Run the type-check to see it fail**
+- [x] **Step 2: Run the type-check to see it fail**
 
 Run: `pnpm --filter @igrp/framework-next-auth typecheck`
 Expected: FAIL with `Property 'locale' does not exist on type ...` for both `s.user?.locale` and `j.locale`.
 
-- [ ] **Step 3: Add the fields to the exported interfaces**
+- [x] **Step 3: Add the fields to the exported interfaces**
 
 `packages/framework/next-auth/src/jwt.ts`:
 
@@ -182,12 +182,12 @@ declare module 'next-auth/jwt' {
 
 Keep the existing JSDoc block above `declare module 'next-auth'` untouched.
 
-- [ ] **Step 4: Run the type-check to see it pass**
+- [x] **Step 4: Run the type-check to see it pass**
 
 Run: `pnpm --filter @igrp/framework-next-auth typecheck`
 Expected: exit 0.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add packages/framework/next-auth/src/jwt.ts packages/framework/next-auth/src/session.ts packages/framework/next-auth/src/types.ts packages/framework/next-auth/src/__tests__/types-augmentation.type-check.ts
@@ -207,7 +207,7 @@ git commit -m "feat(next-auth): declare the OIDC locale claim on JWT, Session an
 - Consumes: `JWT.locale`, `Session.user.locale` from Task 1.
 - Produces: runtime behaviour: `token.locale` after sign-in and after `update({ locale })`; `session.user.locale` present only when the token has one.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 `packages/framework/next-auth/src/__tests__/locale-claim.test.ts`:
 
@@ -355,12 +355,12 @@ describe('session callback — locale', () => {
 });
 ```
 
-- [ ] **Step 2: Run the tests to see them fail**
+- [x] **Step 2: Run the tests to see them fail**
 
 Run: `pnpm --filter @igrp/framework-next-auth exec vitest run src/__tests__/locale-claim.test.ts`
 Expected: FAIL. `profile().locale` is undefined for `'pt-CV'`; `token.locale` undefined after sign-in; `session.user.locale` undefined.
 
-- [ ] **Step 3: Map the claim in the provider**
+- [x] **Step 3: Map the claim in the provider**
 
 In `packages/framework/next-auth/src/providers.ts`, inside the `profile(profile: OAuth2Profile)` return object (after `image:`):
 
@@ -372,7 +372,7 @@ In `packages/framework/next-auth/src/providers.ts`, inside the `profile(profile:
 
 If `OAuth2Profile` does not declare `locale`, extend that type where it is defined in the same file: `locale?: unknown;`.
 
-- [ ] **Step 4: Seed and update the token in the `jwt` callback**
+- [x] **Step 4: Seed and update the token in the `jwt` callback**
 
 In `packages/framework/next-auth/src/config.ts`, directly after the closing brace of `if (account) { ... }` in the `jwt` callback and before the `withJwtExtension` declaration, insert:
 
@@ -392,7 +392,7 @@ In `packages/framework/next-auth/src/config.ts`, directly after the closing brac
         }
 ```
 
-- [ ] **Step 5: Expose it in the `session` callback**
+- [x] **Step 5: Expose it in the `session` callback**
 
 Replace the `tokenUserId` block in the `session` callback with:
 
@@ -415,7 +415,7 @@ Replace the `tokenUserId` block in the `session` callback with:
 
 Keep the explanatory comment that precedes the original block.
 
-- [ ] **Step 6: Run the tests to see them pass, then the whole package**
+- [x] **Step 6: Run the tests to see them pass, then the whole package**
 
 Run: `pnpm --filter @igrp/framework-next-auth exec vitest run src/__tests__/locale-claim.test.ts`
 Expected: PASS (8 tests).
@@ -423,7 +423,7 @@ Expected: PASS (8 tests).
 Run: `pnpm --filter @igrp/framework-next-auth format && pnpm --filter @igrp/framework-next-auth build && pnpm --filter @igrp/framework-next-auth typecheck && pnpm --filter @igrp/framework-next-auth test`
 Expected: all exit 0. `dist-contract.test.ts` still passes (nothing new reaches the root barrel).
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add packages/framework/next-auth/src/providers.ts packages/framework/next-auth/src/config.ts packages/framework/next-auth/src/__tests__/locale-claim.test.ts
@@ -444,7 +444,7 @@ git commit -m "feat(next-auth): carry the OIDC locale claim on the token and ses
 **Interfaces:**
 - Produces: `IGRPLocale`, `IGRPLocaleResolution`, `IGRPI18nConfigBase`, `IGRPConfigArgs['i18n']`. Plan 4's `igrpDefineI18n` returns an `IGRPI18nConfig extends IGRPI18nConfigBase`.
 
-- [ ] **Step 1: Create the type module**
+- [x] **Step 1: Create the type module**
 
 `packages/framework/next-types/src/types/i18n.ts`:
 
@@ -490,7 +490,7 @@ export interface IGRPI18nConfigBase {
 }
 ```
 
-- [ ] **Step 2: Add the field to `IGRPConfigArgs`**
+- [x] **Step 2: Add the field to `IGRPConfigArgs`**
 
 In `packages/framework/next-types/src/types/igrp.ts`, add the import and the field (place the field after `sessionArgs?`):
 
@@ -509,7 +509,7 @@ import type { IGRPI18nConfigBase } from './i18n.js';
   i18n?: IGRPI18nConfigBase;
 ```
 
-- [ ] **Step 3: Export from the barrel and document**
+- [x] **Step 3: Export from the barrel and document**
 
 In `packages/framework/next-types/src/index.ts`, after the `./types/igrp.js` export line:
 
@@ -525,12 +525,12 @@ Add three rows to the README export table (same column layout as its neighbours)
 | `IGRPI18nConfigBase` | i18n configuration carried on `IGRPConfigArgs.i18n`; built by `igrpDefineI18n`. |
 ```
 
-- [ ] **Step 4: Build and check**
+- [x] **Step 4: Build and check**
 
 Run: `pnpm --filter @igrp/framework-next-types build`
 Expected: exit 0. `check:barrel`, `check:contract` and `check:dist` all pass. If `check:barrel` reports the README rows as missing, match its expected row format exactly (it prints the names it could not find).
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add packages/framework/next-types/src/types/i18n.ts packages/framework/next-types/src/types/igrp.ts packages/framework/next-types/src/index.ts packages/framework/next-types/README.md
@@ -545,7 +545,7 @@ git commit -m "feat(next-types): declare IGRPI18nConfigBase and IGRPConfigArgs.i
 - Modify: `packages/framework/docs/adr/0001-cookie-first-locale-resolution.md`
 - Create: `.changeset/i18n-locale-claim.md`
 
-- [ ] **Step 1: Amend the ADR**
+- [x] **Step 1: Amend the ADR**
 
 Append to `packages/framework/docs/adr/0001-cookie-first-locale-resolution.md`:
 
@@ -556,7 +556,7 @@ Append to `packages/framework/docs/adr/0001-cookie-first-locale-resolution.md`:
 The rejection of "session locale first" above assumed no write-back endpoint. When an app configures `persistLocale` in `igrpDefineI18n`, `igrpSetLocale` writes the profile before the cookie and the client refreshes the token with `update({ locale })`, so both objections fall: the switcher can override the session, and the token never holds a stale value. Such an app resolves `session-first` (session → cookie → `Accept-Language` → default) and may call `igrpSyncLocaleCookie` from its middleware so pages rendered without a session follow the last signed-in user. The strategy is derived from the presence of `persistLocale`, never configured directly, so `session-first` without a write-back cannot be selected. Apps without `persistLocale` keep the cookie-first order above. Design: `docs/superpowers/specs/2026-10-12-framework-i18n-v2-design.md`.
 ```
 
-- [ ] **Step 2: Write the changeset**
+- [x] **Step 2: Write the changeset**
 
 `.changeset/i18n-locale-claim.md`:
 
@@ -569,7 +569,7 @@ The rejection of "session locale first" above assumed no write-back endpoint. Wh
 i18n groundwork: the default provider maps the OIDC `locale` claim, the `jwt` callback carries it as `token.locale` (seeded at sign-in, replaced by `update({ locale })`) and the `session` callback exposes `session.user.locale`. `framework-next-types` declares `IGRPI18nConfigBase` and the optional `IGRPConfigArgs.i18n`. No behaviour change for apps that do not use i18n.
 ```
 
-- [ ] **Step 3: Build the whole framework and type-check the template**
+- [x] **Step 3: Build the whole framework and type-check the template**
 
 Run: `pnpm build:framework`
 Expected: exit 0 in dependency order.
@@ -577,7 +577,7 @@ Expected: exit 0 in dependency order.
 Run: `pnpm --filter @igrp/framework-next-template exec tsc --noEmit`
 Expected: exit 0 (the template only gains an optional field).
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add packages/framework/docs/adr/0001-cookie-first-locale-resolution.md .changeset/i18n-locale-claim.md

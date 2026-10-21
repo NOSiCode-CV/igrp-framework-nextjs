@@ -42,7 +42,7 @@
 **Interfaces:**
 - Produces: `IGRP_I18N_DEFAULTS_PT`, `IGRP_I18N_DEFAULTS_EN`, `IGRP_I18N_DEFAULTS_FR: IGRPI18nStrings`; `IGRP_I18N_DEFAULTS_PT_PT` (deprecated alias of `_PT`). Plan 4 selects one of the three by locale.
 
-- [ ] **Step 1: Write the parity test**
+- [x] **Step 1: Write the parity test**
 
 `packages/design-system/src/i18n/__tests__/parity.test.ts`:
 
@@ -103,12 +103,12 @@ describe("deprecated alias", () => {
 })
 ```
 
-- [ ] **Step 2: Run it to see it fail**
+- [x] **Step 2: Run it to see it fail**
 
 Run: `pnpm --filter @igrp/igrp-framework-react-design-system exec vitest run src/i18n/__tests__/parity.test.ts`
 Expected: FAIL. `strings.en.js` / `strings.fr.js` cannot be resolved; `IGRP_I18N_DEFAULTS_PT` is not exported.
 
-- [ ] **Step 3: Rename the pt constant and keep the alias**
+- [x] **Step 3: Rename the pt constant and keep the alias**
 
 In `packages/design-system/src/i18n/strings.ts` rename the declaration `export const IGRP_I18N_DEFAULTS_PT_PT: IGRPI18nStrings = {` to `export const IGRP_I18N_DEFAULTS_PT: IGRPI18nStrings = {` and update its JSDoc to:
 
@@ -130,7 +130,7 @@ export const IGRP_I18N_DEFAULTS_PT_PT: IGRPI18nStrings = IGRP_I18N_DEFAULTS_PT
 
 Also update the file-header comment ("update `IGRP_I18N_DEFAULTS_PT_PT` with the pt-PT default") to: "add the key here, give it a value in `IGRP_I18N_DEFAULTS_PT`, `strings.en.ts` and `strings.fr.ts` (the parity test fails until all three have it), and call `useIGRPi18n()` from the consuming component."
 
-- [ ] **Step 4: Write the English catalog**
+- [x] **Step 4: Write the English catalog**
 
 `packages/design-system/src/i18n/strings.en.ts`:
 
@@ -343,7 +343,7 @@ export const IGRP_I18N_DEFAULTS_EN: IGRPI18nStrings = {
 }
 ```
 
-- [ ] **Step 5: Write the French catalog**
+- [x] **Step 5: Write the French catalog**
 
 `packages/design-system/src/i18n/strings.fr.ts`:
 
@@ -556,7 +556,7 @@ export const IGRP_I18N_DEFAULTS_FR: IGRPI18nStrings = {
 }
 ```
 
-- [ ] **Step 6: Run the parity test to see it pass**
+- [x] **Step 6: Run the parity test to see it pass**
 
 Run: `pnpm --filter @igrp/igrp-framework-react-design-system exec vitest run src/i18n/__tests__/parity.test.ts`
 Expected: PASS (7 tests). If a key is reported missing, the `richText` group is the usual culprit: compare against the interface in `strings.ts` line by line.
@@ -564,7 +564,7 @@ Expected: PASS (7 tests). If a key is reported missing, the `richText` group is 
 Run: `pnpm --filter @igrp/igrp-framework-react-design-system typecheck`
 Expected: exit 0 (the two new objects satisfy `IGRPI18nStrings`).
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add packages/design-system/src/i18n/strings.ts packages/design-system/src/i18n/strings.en.ts packages/design-system/src/i18n/strings.fr.ts packages/design-system/src/i18n/__tests__/parity.test.ts
@@ -584,7 +584,7 @@ git commit -m "feat(design-system): English and French string catalogs with a pa
 **Interfaces:**
 - Produces: `igrpMergeI18nStrings(base: IGRPI18nStrings, override?: IGRPI18nStrings | IGRPI18nStringsOverride): IGRPI18nStrings`; `IGRPI18nProvider` prop `strings?: IGRPI18nStrings | IGRPI18nStringsOverride` and new prop `base?: IGRPI18nStrings` (the catalog overrides merge over; defaults to pt). Plan 4 passes `strings={fullCatalogForLocale}`.
 
-- [ ] **Step 1: Write the failing merge tests**
+- [x] **Step 1: Write the failing merge tests**
 
 `packages/design-system/src/i18n/__tests__/merge.test.ts`:
 
@@ -661,12 +661,12 @@ Add to `packages/design-system/src/i18n/__tests__/context.test.tsx` (inside the 
   })
 ```
 
-- [ ] **Step 2: Run both tests to see them fail**
+- [x] **Step 2: Run both tests to see them fail**
 
 Run: `pnpm --filter @igrp/igrp-framework-react-design-system exec vitest run src/i18n/__tests__/merge.test.ts src/i18n/__tests__/context.test.tsx`
 Expected: FAIL. `merge.js` does not exist; `base` is not a prop.
 
-- [ ] **Step 3: Implement the merge**
+- [x] **Step 3: Implement the merge**
 
 `packages/design-system/src/i18n/merge.ts`:
 
@@ -701,7 +701,7 @@ export function igrpMergeI18nStrings(
 }
 ```
 
-- [ ] **Step 4: Use it in the provider**
+- [x] **Step 4: Use it in the provider**
 
 Replace the body of `packages/design-system/src/i18n/context.tsx` from the imports down to the `return` of `IGRPI18nProvider` with:
 
@@ -767,12 +767,12 @@ function IGRPI18nProvider({
 
 Keep the `"use client"` directive, the leading comments, `useIGRPi18n`, `useIGRPLocale`, `igrpFormatMessage` and the final `export` line unchanged. Update the `useIGRPi18n` JSDoc to say "Returns the Portuguese defaults if no provider is mounted".
 
-- [ ] **Step 5: Run the tests to see them pass**
+- [x] **Step 5: Run the tests to see them pass**
 
 Run: `pnpm --filter @igrp/igrp-framework-react-design-system exec vitest run src/i18n`
 Expected: PASS for parity, merge and context suites.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add packages/design-system/src/i18n/merge.ts packages/design-system/src/i18n/context.tsx packages/design-system/src/i18n/__tests__/merge.test.ts packages/design-system/src/i18n/__tests__/context.test.tsx
@@ -793,7 +793,7 @@ git commit -m "feat(design-system): generic catalog merge; IGRPI18nProvider acce
 **Interfaces:**
 - Produces: `igrpDateFnsLocale(tag: string): Locale | undefined` (date-fns `Locale`).
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 `packages/design-system/src/i18n/__tests__/date-fns-locale.test.ts`:
 
@@ -861,12 +861,12 @@ describe("ChartTooltipContent number formatting", () => {
 
 If `ChartTooltipContent` requires a `ChartContainer` context, wrap both renders in `<ChartContainer config={{ sales: { label: "Sales" } }}>` from the same module; the assertion is unchanged.
 
-- [ ] **Step 2: Run them to see them fail**
+- [x] **Step 2: Run them to see them fail**
 
 Run: `pnpm --filter @igrp/igrp-framework-react-design-system exec vitest run src/i18n/__tests__/date-fns-locale.test.ts src/components/primitives/__tests__/chart-locale.test.tsx`
 Expected: FAIL. `date-fns-locale.js` missing; the chart renders the runtime locale, not `en-GB`.
 
-- [ ] **Step 3: Implement the mapping**
+- [x] **Step 3: Implement the mapping**
 
 `packages/design-system/src/i18n/date-fns-locale.ts`:
 
@@ -904,7 +904,7 @@ export function igrpDateFnsLocale(tag: string): Locale | undefined {
 }
 ```
 
-- [ ] **Step 4: Wire the calendar**
+- [x] **Step 4: Wire the calendar**
 
 In `packages/design-system/src/components/primitives/calendar.tsx`, add imports:
 
@@ -924,7 +924,7 @@ Inside `Calendar`, before `const defaultClassNames = getDefaultClassNames()`:
 
 Then replace every use of `locale` below in that component with `resolvedLocale`: the `locale={locale}` prop on `DayPicker`, `formatMonthDropdown`'s `locale?.code`, and `DayButton: ({ ...props }) => <CalendarDayButton locale={resolvedLocale} {...props} />`. `CalendarDayButton` itself is unchanged.
 
-- [ ] **Step 5: Wire the chart tooltip**
+- [x] **Step 5: Wire the chart tooltip**
 
 In `packages/design-system/src/components/primitives/chart.tsx`, add `import { useIGRPLocale } from "../../i18n/context.js"`. In the component that renders the tooltip rows (`ChartTooltipContent`), add `const locale = useIGRPLocale()` next to its other hooks, and change the value cell to:
 
@@ -932,7 +932,7 @@ In `packages/design-system/src/components/primitives/chart.tsx`, add `import { u
 {typeof item.value === "number" ? item.value.toLocaleString(locale) : String(item.value)}
 ```
 
-- [ ] **Step 6: Run the tests to see them pass**
+- [x] **Step 6: Run the tests to see them pass**
 
 Run: `pnpm --filter @igrp/igrp-framework-react-design-system exec vitest run src/i18n src/components/primitives/__tests__/chart-locale.test.tsx`
 Expected: PASS.
@@ -940,7 +940,7 @@ Expected: PASS.
 Run the existing calendar/date-picker suites to confirm nothing regressed: `pnpm --filter @igrp/igrp-framework-react-design-system test`
 Expected: exit 0.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add packages/design-system/src/i18n/date-fns-locale.ts packages/design-system/src/i18n/__tests__/date-fns-locale.test.ts packages/design-system/src/components/primitives/calendar.tsx packages/design-system/src/components/primitives/chart.tsx packages/design-system/src/components/primitives/__tests__/chart-locale.test.tsx
@@ -957,7 +957,7 @@ git commit -m "feat(design-system): calendar and chart tooltip follow useIGRPLoc
 - Modify: `packages/design-system/COMPONENTS.md`
 - Create: `.changeset/design-system-i18n-catalogs.md`
 
-- [ ] **Step 1: Export the new symbols**
+- [x] **Step 1: Export the new symbols**
 
 `packages/design-system/src/i18n/index.ts`:
 
@@ -998,7 +998,7 @@ export {
 } from "./i18n/index.js"
 ```
 
-- [ ] **Step 2: Document**
+- [x] **Step 2: Document**
 
 Append to `packages/design-system/COMPONENTS.md`:
 
@@ -1013,7 +1013,7 @@ Every user-visible default string comes from one typed catalog, `IGRPI18nStrings
 Component label props still win over the provider. Strings use `{token}` placeholders substituted by `igrpFormatMessage`; there are no plurals, so wording must fit any count. Adding a key means adding it to the interface and to all three catalogs; `src/i18n/__tests__/parity.test.ts` fails otherwise. `IGRP_I18N_DEFAULTS_PT_PT` is a deprecated alias of `_PT`.
 ```
 
-- [ ] **Step 3: Changeset**
+- [x] **Step 3: Changeset**
 
 `.changeset/design-system-i18n-catalogs.md`:
 
@@ -1025,7 +1025,7 @@ Component label props still win over the provider. Strings use `{token}` placeho
 i18n: English and French string catalogs (`IGRP_I18N_DEFAULTS_EN`, `IGRP_I18N_DEFAULTS_FR`) with a parity test against `IGRP_I18N_DEFAULTS_PT` (the renamed `_PT_PT`, kept as a deprecated alias). `IGRPI18nProvider` accepts a full catalog or a partial override (`strings`) over a `base`, merged generically. The calendar's date-fns locale and the chart tooltip's number formatting follow `useIGRPLocale()`.
 ```
 
-- [ ] **Step 4: Lint, build, downstream check**
+- [x] **Step 4: Lint, build, downstream check**
 
 Run: `pnpm --filter @igrp/igrp-framework-react-design-system format && pnpm --filter @igrp/igrp-framework-react-design-system lint && pnpm --filter @igrp/igrp-framework-react-design-system typecheck && pnpm --filter @igrp/igrp-framework-react-design-system test && pnpm --filter @igrp/igrp-framework-react-design-system build`
 Expected: all exit 0; `check:dist` passes.
@@ -1033,7 +1033,7 @@ Expected: all exit 0; `check:dist` passes.
 Run: `pnpm build:framework`
 Expected: exit 0 (`next-ui` and `next` still compile against the new exports; `IGRP_I18N_DEFAULTS_PT_PT` keeps their current imports valid).
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add packages/design-system/src/i18n/index.ts packages/design-system/src/index.ts packages/design-system/COMPONENTS.md .changeset/design-system-i18n-catalogs.md

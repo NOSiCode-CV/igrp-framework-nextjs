@@ -1,7 +1,7 @@
 # Framework i18n v2: `@igrp/framework-next/i18n`
 
 Date: 2026-10-12
-Status: approved 2026-10-12 (decisions D-1 to D-5 resolved below), pending implementation plan. Supersedes `2026-09-30-framework-i18n-design.md` (approved, never implemented).
+Status: approved 2026-10-12 (decisions D-1 to D-5 resolved below), Implemented in 0.2.0-beta.8 to beta.10; follow-ups in `2026-10-21-i18n-app-center-readiness.md`. Supersedes `2026-09-30-framework-i18n-design.md` (approved, never implemented).
 Vocabulary: `packages/framework/CONTEXT.md`. Decision record: `packages/framework/docs/adr/0001-cookie-first-locale-resolution.md` (amended by D-1 below).
 
 ## Why a v2
@@ -203,7 +203,7 @@ export type IGRPFrameworkMessages = typeof IGRP_MESSAGES_PT;
 
 Missing keys render `namespace.key` and warn in development only. Keys an app shadows are reported by `igrp-i18n` as info.
 
-**`./i18n/testing`**: `igrpRenderWithIntl(ui, { locale?, messages? })`, the application center's helper, mounting the same three providers as `IGRPIntlProvider`.
+**`./i18n/testing`**: `IGRPIntlTestProvider(ui, { locale?, messages? })`, the application center's helper, mounting the same three providers as `IGRPIntlProvider`.
 
 **Layouts and config**:
 
@@ -258,7 +258,7 @@ Follows `.claude/shared/dependency-order.md`; each step is a patch changeset.
 4. `framework-next-ui`: chrome catalog, provider, hook, error-copy defaults.
 5. `framework-next`: `i18n` subpaths, config field, layouts, `Accept-Language`.
 6. `@igrp/framework-next-i18n`.
-7. Template wiring, migration 56, `sync:template-lock`.
+7. Template wiring, migration 58, `sync:template-lock`.
 8. `pnpm build:framework`, template build with `lint:i18n`, release per package.
 
 ## Out of scope
@@ -275,7 +275,7 @@ Follows `.claude/shared/dependency-order.md`; each step is a patch changeset.
 - **D-2 `igrpBuildConfig({ i18n })` instead of an `IGRPRootLayout` prop.** Accepted. The field reaches `IGRPLayoutFull`/`IGRPLayoutBlank`, which need the locale for `Accept-Language`, and the root layout call stays unchanged.
 - **D-3 Checks as the separate dev-only package `@igrp/framework-next-i18n`.** Accepted. A bin inside `framework-next` would have made `typescript` and the ICU parser runtime dependencies of a server package.
 - **D-4 next-intl `locale` stays the base `IGRPLocale`.** Accepted. Formatting goes through `useIGRPFormat()`; the `igrp-i18n` check flags `useFormatter`/`getFormatter`.
-- **D-5 The IdP `locale` claim.** Treated as emitted, as the application center already relies on it (`auth-instance.ts` seeds `token.locale` from `profile.locale`). The framework maps the claim unconditionally and falls through when absent. The implementation plan carries a verification task against the IGRP Authorization Server's claim set; it is not a blocker.
+- **D-5 The IdP `locale` claim.** Verified 2026-10-21: the access-management IdP emits `locale` from `metadata.locale` under the `profile` scope (`ClaimsEnrichmentService.java:308`), and stores the upstream IdP's `locale` claim into metadata (`IgrpOidcUserService.java:387`).
 
 ## Appendix: application-center deltas after this lands
 
@@ -287,10 +287,10 @@ For the separate migration plan; listed here so the design is known to cover the
 | `getSessionLocale()` reading `session.locale` | reads `session.user.locale`; the custom `jwt`/`session` callback extensions in `auth-instance.ts` are deleted (framework does it). |
 | `actions.ts` | `igrpSetLocale(i18n, value)` with `persistLocale: updateCurrentUserLocale`; the app stays `session-first`. |
 | `middleware.ts` `syncLocaleCookie` | `igrpSyncLocaleCookie(..., i18n)`. |
-| `locale-switcher.tsx` | a 10-line client wrapper: `<IGRPLocaleSwitcher action={setLocale} onChanged={(l) => update({ locale: l })} />`. |
+| `locale-switcher.tsx` | a 10-line client wrapper: `<IGRPLocaleSwitcher action={setLocale} onChanged={async (locale, persisted) => { if (persisted) await update({ locale }); }} />`; `onChanged(locale, persisted)` fires after the switch, and `persisted` says whether the server stored it, so the wrapper awaits the session update only then. |
 | `components/i18n-provider.tsx`, root layout `I18nProvider` | deleted; `igrpBuildConfig({ i18n })`. The `<html lang>` TODO closes. |
 | `global-error.tsx` copy tables, `errors.codes.*` in the catalogs, `use-error-copy.ts` code map | deleted; chrome catalog. `useErrorCopy` keeps only the API-detail precedence. |
 | `access-client.ts` `Accept-Language` | unchanged for app actions; framework calls now carry it too. |
 | `__tests__/i18n/messages.consistency.test.ts`, `literal-strings.test.ts` | replaced by `lint:i18n`; `MIGRATED_FOLDERS` becomes the CLI argument list. |
-| `__tests__/helpers/intl.tsx` | `igrpRenderWithIntl`. |
+| `__tests__/helpers/intl.tsx` | `IGRPIntlTestProvider`. |
 | `common`, `i18n`, `errors` namespaces in `pt/en/fr.json` | removed where identical to the framework's; app-specific keys stay and shadow. |

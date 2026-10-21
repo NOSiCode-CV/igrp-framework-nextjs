@@ -51,7 +51,7 @@
 **Interfaces:**
 - Produces (all exported from `@igrp/framework-next/i18n`): `IGRP_LOCALES`, `IGRP_LOCALE_NATIVE_NAMES`, `IGRP_LOCALE_COOKIE`, `IGRP_DEFAULT_FORMAT_LOCALES`, `igrpLocaleCookieOptions(secure)`, `igrpIsLocale`, `igrpNormalizeLocale`, `igrpParseAcceptLanguage`, `igrpParseFormatLocales`, `igrpDefineI18n`, `igrpPickLocale`, `igrpSyncLocaleCookie`, `igrpFormatDate`, `igrpFormatDateTime`, `igrpFormatNumber`, `igrpCompare`, types `IGRPLocale`, `IGRPI18nConfig`, `IGRPI18nOptions`, `IGRPI18nOverrides`, `IGRPChromeStringsOverride`, `IGRPLocaleCandidates`, `IGRPDateInput`.
 
-- [ ] **Step 1: Declare dependencies and exports**
+- [x] **Step 1: Declare dependencies and exports**
 
 In `packages/framework/next/package.json`:
 
@@ -99,7 +99,7 @@ Add to `exports` (keep the existing entries):
 
 Run `pnpm install` at the repo root (`pnpm install:deps` if the registry needs the `.env` credentials) so `next-intl` resolves.
 
-- [ ] **Step 2: Write the failing tests**
+- [x] **Step 2: Write the failing tests**
 
 `packages/framework/next/src/i18n/__tests__/config.test.ts`:
 
@@ -299,12 +299,12 @@ describe('igrpSyncLocaleCookie', () => {
 });
 ```
 
-- [ ] **Step 3: Run them to see them fail**
+- [x] **Step 3: Run them to see them fail**
 
 Run: `pnpm --filter @igrp/framework-next exec vitest run src/i18n/__tests__/config.test.ts src/i18n/__tests__/format.test.ts src/i18n/__tests__/sync-cookie.test.ts`
 Expected: FAIL, modules not found.
 
-- [ ] **Step 4: Implement `config.ts`**
+- [x] **Step 4: Implement `config.ts`**
 
 `packages/framework/next/src/i18n/config.ts`:
 
@@ -505,7 +505,7 @@ export function igrpPickLocale(
 
 Add `'IGRP_I18N_CONFIG_INVALID'` to the `IgrpErrorCode` union in `packages/framework/next/src/errors.ts` (it is `IgrpErrorCode | (string & {})` at the constructor, so this is for completions and the chrome map; the chrome catalog does not need an entry for it: it falls to the generic copy).
 
-- [ ] **Step 5: Implement `format.ts` and `sync-cookie.ts`**
+- [x] **Step 5: Implement `format.ts` and `sync-cookie.ts`**
 
 `packages/framework/next/src/i18n/format.ts`:
 
@@ -631,12 +631,12 @@ export {
 } from './format.js';
 ```
 
-- [ ] **Step 6: Run the tests to see them pass**
+- [x] **Step 6: Run the tests to see them pass**
 
 Run: `pnpm --filter @igrp/framework-next exec vitest run src/i18n/__tests__/config.test.ts src/i18n/__tests__/format.test.ts src/i18n/__tests__/sync-cookie.test.ts`
 Expected: PASS. If the `fr-FR` number assertion fails on the thin-space character, compare against `(1234.5).toLocaleString('fr-FR')` instead; the ICU data decides the separator.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add packages/framework/next/package.json pnpm-lock.yaml packages/framework/next/src/errors.ts packages/framework/next/src/i18n
@@ -656,7 +656,7 @@ git commit -m "feat(next): Edge-safe i18n config, resolution, format helpers and
 **Interfaces:**
 - Produces: `IGRP_MESSAGES_PT | _EN | _FR`, `IGRPFrameworkMessages`, `igrpMergeMessages(i18n, locale, appCatalogs)`, `igrpDeepMergeMessages(base, override)`, `igrpOnIntlError`, `igrpGetMessageFallback`.
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 `packages/framework/next/src/i18n/__tests__/messages.test.ts`:
 
@@ -730,12 +730,12 @@ describe('fallback handlers', () => {
 });
 ```
 
-- [ ] **Step 2: Run it to see it fail**
+- [x] **Step 2: Run it to see it fail**
 
 Run: `pnpm --filter @igrp/framework-next exec vitest run src/i18n/__tests__/messages.test.ts`
 Expected: FAIL, modules not found.
 
-- [ ] **Step 3: Implement**
+- [x] **Step 3: Implement**
 
 `packages/framework/next/src/i18n/fallback.ts`:
 
@@ -981,12 +981,12 @@ export function igrpMergeMessages(
 }
 ```
 
-- [ ] **Step 4: Run the test to see it pass**
+- [x] **Step 4: Run the test to see it pass**
 
 Run: `pnpm --filter @igrp/framework-next exec vitest run src/i18n/__tests__/messages.test.ts`
 Expected: PASS.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add packages/framework/next/src/i18n/fallback.ts packages/framework/next/src/i18n/messages packages/framework/next/src/i18n/__tests__/messages.test.ts
@@ -1008,7 +1008,7 @@ git commit -m "feat(next): generic pt/en/fr message namespaces and the layered m
 **Interfaces:**
 - Produces: `igrpResolveLocale(i18n): Promise<IGRPLocale>` (React-cached per request), `igrpResolveFormatLocale(i18n): Promise<string>`, `igrpCreateRequestConfig(i18n, appCatalogs)`, `igrpGetDesignSystemStrings(i18n, locale): IGRPI18nStrings`, `igrpGetChromeStrings(i18n, locale): IGRPChromeStrings`.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 `packages/framework/next/src/i18n/__tests__/resolve.test.ts`:
 
@@ -1110,12 +1110,12 @@ describe('catalog selection with overrides', () => {
 });
 ```
 
-- [ ] **Step 2: Run them to see them fail**
+- [x] **Step 2: Run them to see them fail**
 
 Run: `pnpm --filter @igrp/framework-next exec vitest run src/i18n/__tests__/resolve.test.ts src/i18n/__tests__/strings.test.ts`
 Expected: FAIL, modules not found.
 
-- [ ] **Step 3: Implement**
+- [x] **Step 3: Implement**
 
 `packages/framework/next/src/i18n/server/resolve.ts`:
 
@@ -1259,7 +1259,7 @@ export { igrpOnIntlError, igrpGetMessageFallback } from '../fallback.js';
 
 (`set-locale.ts` is Task 4; create the barrel line now and the file next, or the type-check fails in between. Order the work so both land before Step 4's run.)
 
-- [ ] **Step 4: Run (after Task 4's file exists) and commit together with Task 4**
+- [x] **Step 4: Run (after Task 4's file exists) and commit together with Task 4**
 
 ---
 
@@ -1272,7 +1272,7 @@ export { igrpOnIntlError, igrpGetMessageFallback } from '../fallback.js';
 **Interfaces:**
 - Produces: `igrpSetLocale(i18n, value: string): Promise<IGRPSetLocaleResult>`; `IGRPSetLocaleResult = { success: true; data: { locale: IGRPLocale; persisted: boolean } } | { success: false; error: string; status: number }`.
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 `packages/framework/next/src/i18n/__tests__/set-locale.test.ts`:
 
@@ -1335,12 +1335,12 @@ describe('igrpSetLocale', () => {
 });
 ```
 
-- [ ] **Step 2: Run it to see it fail**
+- [x] **Step 2: Run it to see it fail**
 
 Run: `pnpm --filter @igrp/framework-next exec vitest run src/i18n/__tests__/set-locale.test.ts`
 Expected: FAIL, module not found.
 
-- [ ] **Step 3: Implement**
+- [x] **Step 3: Implement**
 
 `packages/framework/next/src/i18n/server/set-locale.ts`:
 
@@ -1390,7 +1390,7 @@ export async function igrpSetLocale(i18n: IGRPI18nConfig, value: string): Promis
 }
 ```
 
-- [ ] **Step 4: Run Tasks 3 and 4 tests, then commit both**
+- [x] **Step 4: Run Tasks 3 and 4 tests, then commit both**
 
 Run: `pnpm --filter @igrp/framework-next exec vitest run src/i18n && pnpm --filter @igrp/framework-next typecheck`
 Expected: PASS; exit 0.
@@ -1416,7 +1416,7 @@ git commit -m "feat(next): server locale resolution, request config, catalog sel
 **Interfaces:**
 - Produces: `IGRPIntlProvider(props: IGRPIntlProviderProps)`, `useIGRPLocaleInfo(): { locale, formatLocale, locales }`, `useIGRPFormat()`, `IGRPLocaleSwitcher({ action, onChanged?, className? })`, `IGRPIntlTestProvider({ locale?, messages?, children })`.
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 `packages/framework/next/src/i18n/__tests__/client.test.tsx`:
 
@@ -1470,12 +1470,12 @@ describe('client i18n', () => {
 });
 ```
 
-- [ ] **Step 2: Run it to see it fail**
+- [x] **Step 2: Run it to see it fail**
 
 Run: `pnpm --filter @igrp/framework-next exec vitest run src/i18n/__tests__/client.test.tsx`
 Expected: FAIL, modules not found.
 
-- [ ] **Step 3: Implement the client leaves**
+- [x] **Step 3: Implement the client leaves**
 
 `packages/framework/next/src/i18n/client/locale-info.tsx`:
 
@@ -1753,12 +1753,12 @@ export function IGRPIntlTestProvider({
 }
 ```
 
-- [ ] **Step 4: Run the test to see it pass**
+- [x] **Step 4: Run the test to see it pass**
 
 Run: `pnpm --filter @igrp/framework-next exec vitest run src/i18n/__tests__/client.test.tsx`
 Expected: PASS. If `renderToString` of the Radix dropdown complains about a missing `TooltipProvider` or similar context, wrap the switcher in the test with the design system's `TooltipProvider`; the assertions stay.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add packages/framework/next/src/i18n/client packages/framework/next/src/i18n/testing packages/framework/next/src/i18n/__tests__/client.test.tsx
@@ -1772,7 +1772,7 @@ git commit -m "feat(next): IGRPIntlProvider, locale info, useIGRPFormat, IGRPLoc
 **Files:**
 - Create: `packages/framework/next/src/i18n/__tests__/cookie-parity.test.ts`
 
-- [ ] **Step 1: Write the test**
+- [x] **Step 1: Write the test**
 
 ```ts
 import { describe, expect, it } from 'vitest';
@@ -1787,12 +1787,12 @@ describe('IGRP_LOCALE cookie name', () => {
 });
 ```
 
-- [ ] **Step 2: Run it**
+- [x] **Step 2: Run it**
 
 Run: `pnpm --filter @igrp/framework-next exec vitest run src/i18n/__tests__/cookie-parity.test.ts`
 Expected: PASS (both are `'IGRP_LOCALE'`).
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add packages/framework/next/src/i18n/__tests__/cookie-parity.test.ts
@@ -1811,7 +1811,7 @@ git commit -m "test(next): pin the IGRP_LOCALE cookie name to framework-next-ui'
 **Interfaces:**
 - Produces: `IGRPClientRuntimeConfig.locale?: string`; `igrpGetAccessClient()` sends `Accept-Language` when set.
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```ts
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -1847,12 +1847,12 @@ describe('igrpGetAccessClient headers', () => {
 });
 ```
 
-- [ ] **Step 2: Run it to see it fail**
+- [x] **Step 2: Run it to see it fail**
 
 Run: `pnpm --filter @igrp/framework-next exec vitest run src/lib/__tests__/api-client-locale.test.ts`
 Expected: FAIL on the first case.
 
-- [ ] **Step 3: Implement**
+- [x] **Step 3: Implement**
 
 `api-config.ts`:
 
@@ -1886,7 +1886,7 @@ export function igrpGetAccessClient(): AccessManagementClient {
 
 If `igrpSetAccessClientConfig` copies fields explicitly rather than spreading, add `locale` to that copy; the existing `api-config.test.ts` tells you which.
 
-- [ ] **Step 4: Run and commit**
+- [x] **Step 4: Run and commit**
 
 Run: `pnpm --filter @igrp/framework-next exec vitest run src/lib`
 Expected: PASS.
@@ -1913,7 +1913,7 @@ git commit -m "feat(next): optional locale on the access-client config, sent as 
 **Interfaces:**
 - Consumes: `config.i18n` (typed `IGRPI18nConfigBase`, narrowed to `IGRPI18nConfig` at the call site), `igrpResolveLocale`, `igrpGetDesignSystemStrings`, `igrpGetChromeStrings`, `IGRPIntlProvider`.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 `packages/framework/next/src/layouts/__tests__/igrp-root-layout-i18n.test.tsx`:
 
@@ -2006,12 +2006,12 @@ Add to `igrp-layout-full.test.tsx` (it already mocks `api-config.js`; add `vi.mo
 
 Keep the assertion on `setConfig`; mirror the file's existing way of obtaining the rendered tree for the `HeaderDataProvider` `locale` prop assertion (`expect(header.props.locale).toBe('en')`).
 
-- [ ] **Step 2: Run them to see them fail**
+- [x] **Step 2: Run them to see them fail**
 
 Run: `pnpm --filter @igrp/framework-next exec vitest run src/layouts`
 Expected: FAIL on the i18n cases.
 
-- [ ] **Step 3: Implement the root layout**
+- [x] **Step 3: Implement the root layout**
 
 `packages/framework/next/src/layouts/igrp-root-layout.tsx`: add imports
 
@@ -2060,7 +2060,7 @@ and render:
     </html>
 ```
 
-- [ ] **Step 4: Seed the locale in the full and blank layouts and the providers**
+- [x] **Step 4: Seed the locale in the full and blank layouts and the providers**
 
 `igrp-layout-full.tsx`: import `igrpResolveLocale` and `IGRPI18nConfig` as above; after `const accessTimeout = ...`:
 
@@ -2075,12 +2075,12 @@ include `...(locale ? { locale } : {})` in the `igrpSetAccessClientConfig({...})
 
 `header-data-provider.tsx` and `sidebar-data-provider.tsx`: add `locale?: string;` to the props type (JSDoc: "Base locale for `Accept-Language`; see igrp-layout-full.tsx.") and spread `...(locale ? { locale } : {})` into their `igrpSetAccessClientConfig` calls.
 
-- [ ] **Step 5: Run the layout tests and the whole package**
+- [x] **Step 5: Run the layout tests and the whole package**
 
 Run: `pnpm --filter @igrp/framework-next format && pnpm --filter @igrp/framework-next typecheck && pnpm --filter @igrp/framework-next test && pnpm --filter @igrp/framework-next build`
 Expected: all exit 0; `check:dist` passes (every relative import carries `.js`).
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add packages/framework/next/src/layouts
@@ -2100,7 +2100,7 @@ git commit -m "feat(next): IGRPRootLayout mounts IGRPIntlProvider and sets <html
 **Interfaces:**
 - Produces: bin `igrp-i18n check-catalogs <dir> --default <locale> [--framework-namespaces common,i18n,errors]` and `igrp-i18n check-literals <path...>`; library `checkCatalogs(options): CatalogReport`, `checkLiterals(paths): string[]`.
 
-- [ ] **Step 1: Scaffold the package**
+- [x] **Step 1: Scaffold the package**
 
 `packages/framework/i18n-tools/package.json`:
 
@@ -2163,7 +2163,7 @@ export default defineConfig({ test: { environment: 'node', include: ['src/**/__t
 
 Root `package.json`: add `"build:i18n-tools": "pnpm --filter @igrp/framework-next-i18n build"` and change `build:framework` to `"pnpm build:auth && pnpm build:next-types && pnpm build:ds && pnpm build:next-ui && pnpm build:next && pnpm build:i18n-tools"`. Run `pnpm install` so the workspace links the new package.
 
-- [ ] **Step 2: Write the failing tests**
+- [x] **Step 2: Write the failing tests**
 
 `src/__tests__/catalogs.test.ts`:
 
@@ -2291,12 +2291,12 @@ describe('checkLiterals', () => {
 });
 ```
 
-- [ ] **Step 3: Run them to see them fail**
+- [x] **Step 3: Run them to see them fail**
 
 Run: `pnpm --filter @igrp/framework-next-i18n exec vitest run`
 Expected: FAIL, modules not found.
 
-- [ ] **Step 4: Implement `catalogs.ts`**
+- [x] **Step 4: Implement `catalogs.ts`**
 
 ```ts
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
@@ -2422,7 +2422,7 @@ export function checkCatalogs(options: CheckCatalogsOptions): CatalogReport {
 
 Note the camelCase rule is applied per segment of the default locale's keys too; `errors.status.401` style numeric segments fail it. If the framework's `errors.status` namespace (digit keys) is ever placed in an app JSON, rename to `s401`; the framework catalogs are TypeScript objects and are not checked by this tool.
 
-- [ ] **Step 5: Implement `literals.ts`**
+- [x] **Step 5: Implement `literals.ts`**
 
 ```ts
 import { readdirSync, readFileSync, statSync } from 'node:fs';
@@ -2496,7 +2496,7 @@ export function checkLiterals(paths: string[], cwd = process.cwd()): string[] {
 }
 ```
 
-- [ ] **Step 6: Implement `cli.ts` and `index.ts`**
+- [x] **Step 6: Implement `cli.ts` and `index.ts`**
 
 `src/index.ts`:
 
@@ -2561,12 +2561,12 @@ process.exit(main(process.argv.slice(2)));
 
 `README.md`: the `USAGE` block above plus one paragraph: "Run from an app as `pnpm igrp-i18n check-catalogs src/i18n/messages --default pt && pnpm igrp-i18n check-literals src/components`; add folders as they are migrated. Framework catalogs are TypeScript modules in `@igrp/framework-next/i18n/messages` and are not checked here."
 
-- [ ] **Step 7: Run the tests, typecheck, build, and smoke the bin**
+- [x] **Step 7: Run the tests, typecheck, build, and smoke the bin**
 
 Run: `pnpm --filter @igrp/framework-next-i18n test && pnpm --filter @igrp/framework-next-i18n typecheck && pnpm --filter @igrp/framework-next-i18n build && node packages/framework/i18n-tools/dist/cli.js`
 Expected: tests PASS; the bare invocation prints the usage and exits 2.
 
-- [ ] **Step 8: Commit**
+- [x] **Step 8: Commit**
 
 ```bash
 git add packages/framework/i18n-tools package.json pnpm-lock.yaml
@@ -2581,7 +2581,7 @@ git commit -m "feat(i18n-tools): igrp-i18n CLI with check-catalogs and check-lit
 - Create: `.changeset/framework-next-i18n.md`
 - Create: `.changeset/i18n-tools-initial.md`
 
-- [ ] **Step 1: Changesets**
+- [x] **Step 1: Changesets**
 
 `.changeset/framework-next-i18n.md`:
 
@@ -2605,12 +2605,12 @@ New dev-only package: the `igrp-i18n` CLI with `check-catalogs` (orphan keys, in
 
 If `pnpm changeset version` later complains that `@igrp/framework-next-i18n` is unknown to the pre-release, add `"@igrp/framework-next-i18n": "0.2.0-beta.0"` to `initialVersions` in `.changeset/pre.json`.
 
-- [ ] **Step 2: Build everything and type-check the template**
+- [x] **Step 2: Build everything and type-check the template**
 
 Run: `pnpm build:framework && pnpm --filter @igrp/framework-next-template exec tsc --noEmit`
 Expected: exit 0.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add .changeset/framework-next-i18n.md .changeset/i18n-tools-initial.md

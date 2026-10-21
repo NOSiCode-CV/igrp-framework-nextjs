@@ -41,7 +41,7 @@
 **Interfaces:**
 - Produces: unchanged public signatures of `igrpFormatDate`, `igrpFormatDateTime` and `igrpFormatRelativeTime`. Adds the module-private `isDateOnly(value: IGRPDateInput): value is string`.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```ts
 it('formats a date-only string as that calendar day in any zone', () => {
@@ -61,21 +61,21 @@ it('promotes a rounded value that fills the next unit', () => {
 });
 ```
 
-- [ ] **Step 2: Run, expect 3 FAILs**
+- [x] **Step 2: Run, expect 3 FAILs**
 
 Run: `pnpm --filter @igrp/framework-next exec vitest run src/i18n/__tests__/format.test.ts`
 Expected: 3 failures: `19/10/2026`, `TypeError: Invalid option`, `in 60 seconds`.
 
-- [ ] **Step 3: Implement**
+- [x] **Step 3: Implement**
   - `isDateOnly`: tests `/^\d{4}-\d{2}-\d{2}$/` on strings. In `igrpFormatDate`, when it holds, format with `timeZone: 'UTC'`, overriding both `timeZone` and `options.timeZone`, because `new Date('YYYY-MM-DD')` is UTC midnight. Comment the why in one line.
   - `igrpFormatDateTime`: when `options.dateStyle || options.timeStyle`, pass `options` unmerged; otherwise keep `{ ...DATE_TIME_OPTIONS, ...options }`.
   - `igrpFormatRelativeTime`: after picking `[unit, size]` at index `i`, if `i + 1 < RELATIVE_UNITS.length && Math.abs(Math.round(diff / size)) * size >= RELATIVE_UNITS[i + 1][1]`, step up one unit.
 
-- [ ] **Step 4: Run the whole i18n suite, expect PASS**
+- [x] **Step 4: Run the whole i18n suite, expect PASS**
 
 Run: `pnpm --filter @igrp/framework-next exec vitest run src/i18n`
 
-- [ ] **Step 5: Commit** — `fix(next/i18n): date-only strings, dateStyle in formatDateTime, relative-time rounding`
+- [x] **Step 5: Commit** — `fix(next/i18n): date-only strings, dateStyle in formatDateTime, relative-time rounding`
 
 ---
 
@@ -90,7 +90,7 @@ Run: `pnpm --filter @igrp/framework-next exec vitest run src/i18n`
 - Consumes: `IGRP_LOCALE_COOKIE`, `igrpNormalizeLocale` and `igrpParseAcceptLanguage` from `../i18n/config.js` (pure, Edge-safe).
 - Produces: the module-private `async function recoverLocaleFromRequest(): Promise<IGRPLocale | undefined>`. It reads the cookie first, then the `accept-language` header, via dynamic `import('next/headers')` like `recoverAccessTokenFromCookies`, and returns `undefined` on any throw.
 
-- [ ] **Step 1: Write the failing test** (use the `resetModules` + `doMock` pattern already in this file; seed the ALS store inside the test, not in `beforeEach`)
+- [x] **Step 1: Write the failing test** (use the `resetModules` + `doMock` pattern already in this file; seed the ALS store inside the test, not in `beforeEach`)
 
 ```ts
 it('seeds locale from the IGRP_LOCALE cookie in an action context', async () => {
@@ -104,17 +104,17 @@ it('falls back to Accept-Language when there is no locale cookie', async () => {
 });
 ```
 
-- [ ] **Step 2: Run, expect FAIL** (`locale` is `undefined`)
+- [x] **Step 2: Run, expect FAIL** (`locale` is `undefined`)
 
 Run: `pnpm --filter @igrp/framework-next exec vitest run src/lib/__tests__/permissions-action-context.test.ts`
 
-- [ ] **Step 3: Implement.** Keep the synchronous `igrpSetAccessClientConfig({ token: '', baseUrl })` prologue as the first statement before any `await`. Then `const [token, locale] = await Promise.all([recoverAccessTokenFromCookies(), recoverLocaleFromRequest()])`, and pass `...(locale ? { locale } : {})` into the second `igrpSetAccessClientConfig`. Keep `current.locale` when it is already set.
+- [x] **Step 3: Implement.** Keep the synchronous `igrpSetAccessClientConfig({ token: '', baseUrl })` prologue as the first statement before any `await`. Then `const [token, locale] = await Promise.all([recoverAccessTokenFromCookies(), recoverLocaleFromRequest()])`, and pass `...(locale ? { locale } : {})` into the second `igrpSetAccessClientConfig`. Keep `current.locale` when it is already set.
 
-- [ ] **Step 4: Run all `src/lib` tests, expect PASS**
+- [x] **Step 4: Run all `src/lib` tests, expect PASS**
 
 Run: `pnpm --filter @igrp/framework-next exec vitest run src/lib`
 
-- [ ] **Step 5: Commit** — `fix(next): send Accept-Language from server actions`
+- [x] **Step 5: Commit** — `fix(next): send Accept-Language from server actions`
 
 ---
 
@@ -128,7 +128,7 @@ Run: `pnpm --filter @igrp/framework-next exec vitest run src/lib`
 - Tests: `__tests__/strings.test.ts`, `__tests__/set-locale.test.ts`, `__tests__/messages.test.ts`, `__tests__/client.test.tsx`
 - Changeset: `@igrp/framework-next` patch
 
-- [ ] **Step 1: Write failing tests**
+- [x] **Step 1: Write failing tests**
 
 ```ts
 // strings.test.ts
@@ -154,18 +154,18 @@ it('announces a failed change in a status region', async () => {
 });
 ```
 
-- [ ] **Step 2: Run, expect 4 FAILs**
+- [x] **Step 2: Run, expect 4 FAILs**
 
 Run: `pnpm --filter @igrp/framework-next exec vitest run src/i18n`
 
-- [ ] **Step 3: Implement**
+- [x] **Step 3: Implement**
   - `mergeChrome`: copy only the patch entries whose value is a `string`, the same rule as the DS `merge.ts`.
   - `set-locale.ts`: `secure = proto ? proto === 'https' : headerStore.get('origin')?.startsWith('https:') === true`.
   - `messages/index.ts`: key the inner `Map` by `` `${i18n.defaultLocale}:${locale}` `` and widen its type to `Map<string, …>`.
   - Switcher: render `<span role="status" className="sr-only">{failed ? t('changeError') : ''}</span>` as a sibling of the `DropdownMenu`, wrapped in a fragment.
 
-- [ ] **Step 4: Run, expect PASS** (same command)
-- [ ] **Step 5: Commit** — `fix(next/i18n): chrome override merge, Secure cookie, merge cache key, switcher status`
+- [x] **Step 4: Run, expect PASS** (same command)
+- [x] **Step 5: Commit** — `fix(next/i18n): chrome override merge, Secure cookie, merge cache key, switcher status`
 
 ---
 
@@ -183,7 +183,7 @@ Run: `pnpm --filter @igrp/framework-next exec vitest run src/i18n`
 **Interfaces:**
 - Produces: `useIGRPTimeZone(): string | undefined` and `igrpIsDateOnly(value: unknown): value is string`. Task 6 relies on both.
 
-- [ ] **Step 1: Write failing tests**
+- [x] **Step 1: Write failing tests**
 
 ```tsx
 it('renders a date-only cell as that calendar day', () => {
@@ -197,16 +197,16 @@ it('formats timestamps in the provider time zone', () => {
 it('useIGRPTimeZone is undefined without a provider', () => { /* renderHook → undefined */ });
 ```
 
-- [ ] **Step 2: Run, expect FAIL**
+- [x] **Step 2: Run, expect FAIL**
 
 Run: `pnpm --filter @igrp/igrp-framework-react-design-system exec vitest run src/i18n src/components/horizon/data-table`
 
-- [ ] **Step 3: Implement.**
+- [x] **Step 3: Implement.**
   - Intl path: `timeZone: igrpIsDateOnly(date) ? 'UTC' : (dateOptions?.timeZone ?? tz)`.
   - date-fns `format` path (`dateFormat`): parse date-only strings with the existing `parseLocalDate`. Add a comment: `shortcut: date-fns formats timestamps in the runtime zone, upgrade to @date-fns/tz if a dateFormat cell must show times across zones`.
   - Apply the same rule in `filter.tsx` and `pdf-viewer.tsx`.
-- [ ] **Step 4: Run, expect PASS.** Then run `pnpm build:ds` and the framework-next `src/i18n` tests.
-- [ ] **Step 5: Commit** — `fix(ds): time zone in i18n context; date-only values keep their calendar day`
+- [x] **Step 4: Run, expect PASS.** Then run `pnpm build:ds` and the framework-next `src/i18n` tests.
+- [x] **Step 5: Commit** — `fix(ds): time zone in i18n context; date-only values keep their calendar day`
 
 ---
 
@@ -236,7 +236,7 @@ Run: `pnpm --filter @igrp/igrp-framework-react-design-system exec vitest run src
 - Test: `src/i18n/__tests__/parity.test.ts` (existing, must pass) and `src/components/primitives/__tests__/i18n-defaults.test.tsx` (create)
 - Changeset: DS patch
 
-- [ ] **Step 1: Write failing tests**
+- [x] **Step 1: Write failing tests**
 
 ```tsx
 it.each(['en', 'fr'] as const)('primitives use the %s catalog', (l) => {
@@ -247,10 +247,10 @@ it.each(['en', 'fr'] as const)('primitives use the %s catalog', (l) => {
 it('sidebar trigger is labelled from the catalog', () => { /* SidebarProvider + SidebarTrigger → getByRole('button', { name: IGRP_I18N_DEFAULTS_PT.sidebar.toggle }) */ });
 ```
 
-- [ ] **Step 2: Run, expect FAIL** (types missing)
-- [ ] **Step 3: Add the keys to all three catalogs and wire each file listed above**
-- [ ] **Step 4: Run** `pnpm --filter @igrp/igrp-framework-react-design-system test`. **Expect PASS**, including parity.
-- [ ] **Step 5: Commit** — `fix(ds): translate primitive and Horizon defaults via the catalog`
+- [x] **Step 2: Run, expect FAIL** (types missing)
+- [x] **Step 3: Add the keys to all three catalogs and wire each file listed above**
+- [x] **Step 4: Run** `pnpm --filter @igrp/igrp-framework-react-design-system test`. **Expect PASS**, including parity.
+- [x] **Step 5: Commit** — `fix(ds): translate primitive and Horizon defaults via the catalog`
 
 ---
 
@@ -267,7 +267,7 @@ it('sidebar trigger is labelled from the catalog', () => { /* SidebarProvider + 
 - Test: `src/components/horizon/__tests__/locale-formatting.test.tsx` (create)
 - Changeset: DS patch
 
-- [ ] **Step 1: Write failing tests**
+- [x] **Step 1: Write failing tests**
 
 ```tsx
 it('formats dd MMM yyyy with the pt month', () => { /* IGRPInputDatePicker dateFormat="dd MMM yyyy", locale pt-CV, value 2026-08-26 → '26 ago. 2026' (assert via igrpDateFnsLocale output, not a hard-coded string, if the abbreviation differs) */ });
@@ -277,10 +277,10 @@ it('phone country names follow the locale', () => { /* fr-FR → option 'Cap-Ver
 it('amount cell without currency shows no currency symbol', () => { /* value 10 → not contain 'US$' or '$' */ });
 ```
 
-- [ ] **Step 2: Run, expect FAIL**
-- [ ] **Step 3: Implement as listed above.** `formatChartValue` keeps a `locale` default of `IGRP_DEFAULT_LOCALE`, so existing external callers still compile.
-- [ ] **Step 4: Run the full DS suite plus storybook verify** (`pnpm --filter @igrp/igrp-framework-react-design-system test`, then `storybook build`, per memory `reference_storybook_verify`). **Expect PASS.**
-- [ ] **Step 5: Commit** — `fix(ds): locale-aware dates, sizes, chart values, phone countries; no USD default`
+- [x] **Step 2: Run, expect FAIL**
+- [x] **Step 3: Implement as listed above.** `formatChartValue` keeps a `locale` default of `IGRP_DEFAULT_LOCALE`, so existing external callers still compile.
+- [x] **Step 4: Run the full DS suite plus storybook verify** (`pnpm --filter @igrp/igrp-framework-react-design-system test`, then `storybook build`, per memory `reference_storybook_verify`). **Expect PASS.**
+- [x] **Step 5: Commit** — `fix(ds): locale-aware dates, sizes, chart values, phone countries; no USD default`
 
 ---
 
@@ -295,7 +295,7 @@ it('amount cell without currency shows no currency symbol', () => { /* value 10 
 - Test: `next-ui/src/auths/__tests__/form.test.tsx` (create or extend)
 - Changesets: `@igrp/framework-next-ui` patch (note the removed type), `@igrp/framework-next` patch (README)
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```tsx
 it('shows the catalog sign-in error, not the thrown message', async () => {
@@ -306,10 +306,10 @@ it('shows the catalog sign-in error, not the thrown message', async () => {
 });
 ```
 
-- [ ] **Step 2: Run, expect FAIL** — `pnpm --filter @igrp/framework-next-ui exec vitest run src/auths`
-- [ ] **Step 3: Implement the four edits above**
-- [ ] **Step 4: Run** `pnpm --filter @igrp/framework-next-ui test && pnpm --filter @igrp/framework-next-ui typecheck`. **Expect PASS**, including parity.
-- [ ] **Step 5: Commit** — `fix(next-ui): localized sign-in error, dev-only header toast, drop dead themeSelector strings`
+- [x] **Step 2: Run, expect FAIL** — `pnpm --filter @igrp/framework-next-ui exec vitest run src/auths`
+- [x] **Step 3: Implement the four edits above**
+- [x] **Step 4: Run** `pnpm --filter @igrp/framework-next-ui test && pnpm --filter @igrp/framework-next-ui typecheck`. **Expect PASS**, including parity.
+- [x] **Step 5: Commit** — `fix(next-ui): localized sign-in error, dev-only header toast, drop dead themeSelector strings`
 
 ---
 
@@ -332,7 +332,7 @@ it('shows the catalog sign-in error, not the thrown message', async () => {
 - Tests: `src/__tests__/literals.test.ts`, `src/__tests__/catalogs.test.ts`, and `src/__tests__/cli.test.ts` (create; spawn `node dist/cli.js` after `build`, or export `main` and test it directly)
 - Changeset: `@igrp/framework-next-i18n` patch
 
-- [ ] **Step 1: Write failing tests**
+- [x] **Step 1: Write failing tests**
 
 ```ts
 it.each([
@@ -355,10 +355,10 @@ it('reports plural categories the locale never selects', () => { /* fr: {n, plur
 it('does not swallow the path after an unknown flag', () => { /* main(['check-literals','src/a','--verbose','src/b']) → 2 */ });
 ```
 
-- [ ] **Step 2: Run, expect FAIL** — `pnpm --filter @igrp/framework-next-i18n test`
-- [ ] **Step 3: Implement as listed above**
-- [ ] **Step 4: Run** `pnpm --filter @igrp/framework-next-i18n test && pnpm --filter @igrp/framework-next-i18n build && pnpm --filter @igrp/framework-next-template lint:i18n`. **Expect** tests PASS. The template lint now reports the strings Task 9 removes; record the list.
-- [ ] **Step 5: Commit** — `fix(next-i18n): catch literals in conditionals, hardcoded Intl locales, robust CLI and catalog checks`
+- [x] **Step 2: Run, expect FAIL** — `pnpm --filter @igrp/framework-next-i18n test`
+- [x] **Step 3: Implement as listed above**
+- [x] **Step 4: Run** `pnpm --filter @igrp/framework-next-i18n test && pnpm --filter @igrp/framework-next-i18n build && pnpm --filter @igrp/framework-next-template lint:i18n`. **Expect** tests PASS. The template lint now reports the strings Task 9 removes; record the list.
+- [x] **Step 5: Commit** — `fix(next-i18n): catch literals in conditionals, hardcoded Intl locales, robust CLI and catalog checks`
 
 ---
 
@@ -388,13 +388,13 @@ it('does not swallow the path after an unknown flag', () => { /* main(['check-li
 - Run `pnpm --filter @igrp/template-migrator sync:template-lock`.
 - Changeset: `@igrp/template-migrator` patch.
 
-- [ ] **Step 1: Make the template edits.** Run `pnpm --filter @igrp/framework-next-template lint:i18n`. **Expect** `no hardcoded strings` and coverage 100% for en and fr.
-- [ ] **Step 2: Preview check.** Run `pnpm build:framework`, then `preview_start` the demo with `IGRP_PREVIEW_MODE=true`.
+- [x] **Step 1: Make the template edits.** Run `pnpm --filter @igrp/framework-next-template lint:i18n`. **Expect** `no hardcoded strings` and coverage 100% for en and fr.
+- [ ] **Step 2: Preview check.** Run `pnpm build:framework`, then `preview_start` the demo with `IGRP_PREVIEW_MODE=true`. _(not found in history; verify)_
   - Problem: preview mode redirects `/login` to `/`, so test the login page with preview off if a dev auth setup exists. Otherwise verify through `pnpm build:demo` plus a unit render of `login/page.tsx`.
   - Switch to FR and confirm that the heading, carousel, 404 title and tab title are in French.
-- [ ] **Step 3: Write migration 63 and its payloads, edit 58's prose, then sync the lock**
-- [ ] **Step 4: Run** `pnpm --filter @igrp/template-migrator typecheck && pnpm --filter @igrp/template-migrator test && pnpm --filter @igrp/template-migrator check:drift`. **Expect PASS.** `git diff templates/demo-v1/.igrp-migrations-lock.json` shows only the new 63 entry; 58's `manifestHash` is unchanged.
-- [ ] **Step 5: Commit** — `fix(demo-v1): localize login, 404, metadata and auth screens; migration 63`
+- [x] **Step 3: Write migration 63 and its payloads, edit 58's prose, then sync the lock**
+- [x] **Step 4: Run** `pnpm --filter @igrp/template-migrator typecheck && pnpm --filter @igrp/template-migrator test && pnpm --filter @igrp/template-migrator check:drift`. **Expect PASS.** `git diff templates/demo-v1/.igrp-migrations-lock.json` shows only the new 63 entry; 58's `manifestHash` is unchanged.
+- [x] **Step 5: Commit** — `fix(demo-v1): localize login, 404, metadata and auth screens; migration 63`
   - `build:demo` rewrites about 60 files to LF. Run `git restore` on the EOL-only ones before committing (memory `project_build_demo_biome_eol_side_effect`).
 
 ---
@@ -408,15 +408,15 @@ it('does not swallow the path after an unknown flag', () => { /* main(['check-li
   - `script`: `pnpm --filter @igrp/framework-next-i18n test`, `pnpm --filter @igrp/framework-next-i18n build`, `pnpm --filter @igrp/framework-next-template lint:i18n`
   - Add a comment explaining why: `lint:i18n` otherwise ran only inside local `pnpm build`, and the Dockerfile skips it.
 
-- [ ] **Step 1: Run the three script lines locally in the same order. Expect all PASS.** GitLab itself can't be exercised here, so this local run is the only proof before the MR pipeline.
-- [ ] **Step 2: Commit** — `ci: run i18n catalog and literal checks per MR`
+- [x] **Step 1: Run the three script lines locally in the same order. Expect all PASS.** GitLab itself can't be exercised here, so this local run is the only proof before the MR pipeline.
+- [x] **Step 2: Commit** — `ci: run i18n catalog and literal checks per MR`
 
 ---
 
 ### Task 11: Whole-branch verification
 
-- [ ] `pnpm build:framework`: PASS.
-- [ ] `pnpm --filter <pkg> test` for design-system, framework-next-ui, framework-next, framework-next-i18n and template-migrator: PASS.
-- [ ] `pnpm lint`: PASS. Run `pnpm --filter @igrp/framework-next-template lint:i18n`: PASS.
-- [ ] `pnpm changeset status`: every touched publishable package has a `patch` changeset and none is `minor`/`major`.
-- [ ] Report anything not covered: GitLab job runtime, login-page check under real auth, Storybook visual snapshots (`pnpm test:storybook`, which needs Storybook running).
+- [ ] `pnpm build:framework`: PASS. _(not found in history; verify)_
+- [ ] `pnpm --filter <pkg> test` for design-system, framework-next-ui, framework-next, framework-next-i18n and template-migrator: PASS. _(not found in history; verify)_
+- [ ] `pnpm lint`: PASS. Run `pnpm --filter @igrp/framework-next-template lint:i18n`: PASS. _(not found in history; verify)_
+- [ ] `pnpm changeset status`: every touched publishable package has a `patch` changeset and none is `minor`/`major`. _(not found in history; verify)_
+- [ ] Report anything not covered: GitLab job runtime, login-page check under real auth, Storybook visual snapshots (`pnpm test:storybook`, which needs Storybook running). _(not found in history; verify)_

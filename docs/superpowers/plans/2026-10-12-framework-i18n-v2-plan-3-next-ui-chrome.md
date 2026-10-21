@@ -45,7 +45,7 @@
 **Interfaces:**
 - Produces: `IGRPChromeStrings`, `IGRPChromeErrorCode`, `IGRPErrorCopy`, the label interfaces (`IGRPNavUserLabels`, `IGRPNotificationsLabels`, `IGRPModeSwitcherLabels`, `IGRPThemeSelectorLabels`, `IGRPCommandSearchLabels`, `IGRPMenuLabels`, now declared here), `IGRP_CHROME_STRINGS_PT | _EN | _FR`, `igrpChromeStringsFor(tag: string): IGRPChromeStrings`, `IGRP_LOCALE_COOKIE = 'IGRP_LOCALE'`. Plan 4 imports the catalogs and `IGRPChromeStrings`.
 
-- [ ] **Step 1: Write the parity test**
+- [x] **Step 1: Write the parity test**
 
 `packages/framework/next-ui/src/i18n/__tests__/parity.test.ts`:
 
@@ -114,12 +114,12 @@ describe('igrpChromeStringsFor', () => {
 });
 ```
 
-- [ ] **Step 2: Run it to see it fail**
+- [x] **Step 2: Run it to see it fail**
 
 Run: `pnpm --filter @igrp/framework-next-ui exec vitest run src/i18n/__tests__/parity.test.ts`
 Expected: FAIL, modules not found.
 
-- [ ] **Step 3: Write the interface and the Portuguese catalog**
+- [x] **Step 3: Write the interface and the Portuguese catalog**
 
 `packages/framework/next-ui/src/i18n/strings.ts` (pure data, no directive). The Portuguese values are the defaults the components carry today, moved here verbatim; the `errorCodes` copy comes from the application center's `global-error.tsx`.
 
@@ -392,7 +392,7 @@ export const IGRP_CHROME_STRINGS_PT: IGRPChromeStrings = {
 };
 ```
 
-- [ ] **Step 4: Write the English catalog**
+- [x] **Step 4: Write the English catalog**
 
 `packages/framework/next-ui/src/i18n/strings.en.ts`:
 
@@ -520,7 +520,7 @@ export const IGRP_CHROME_STRINGS_EN: IGRPChromeStrings = {
 };
 ```
 
-- [ ] **Step 5: Write the French catalog**
+- [x] **Step 5: Write the French catalog**
 
 `packages/framework/next-ui/src/i18n/strings.fr.ts`:
 
@@ -649,7 +649,7 @@ export const IGRP_CHROME_STRINGS_FR: IGRPChromeStrings = {
 };
 ```
 
-- [ ] **Step 6: Catalog selection and the cookie constant**
+- [x] **Step 6: Catalog selection and the cookie constant**
 
 `packages/framework/next-ui/src/i18n/cookie.ts`:
 
@@ -686,12 +686,12 @@ export function igrpChromeStringsFor(tag: string | null | undefined): IGRPChrome
 }
 ```
 
-- [ ] **Step 7: Run the parity test to see it pass**
+- [x] **Step 7: Run the parity test to see it pass**
 
 Run: `pnpm --filter @igrp/framework-next-ui exec vitest run src/i18n/__tests__/parity.test.ts`
 Expected: PASS (8 tests).
 
-- [ ] **Step 8: Commit**
+- [x] **Step 8: Commit**
 
 ```bash
 git add packages/framework/next-ui/src/i18n
@@ -709,7 +709,7 @@ git commit -m "feat(next-ui): chrome string catalog in pt, en and fr with a pari
 **Interfaces:**
 - Produces: `IGRPChromeI18nProvider({ strings: IGRPChromeStrings; children })`, `useIGRPChromeI18n(): IGRPChromeStrings`. Plan 4's `IGRPIntlProvider` mounts the provider.
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 `packages/framework/next-ui/src/i18n/__tests__/context.test.tsx`:
 
@@ -778,12 +778,12 @@ describe('useIGRPChromeI18n', () => {
 });
 ```
 
-- [ ] **Step 2: Run it to see it fail**
+- [x] **Step 2: Run it to see it fail**
 
 Run: `pnpm --filter @igrp/framework-next-ui exec vitest run src/i18n/__tests__/context.test.tsx`
 Expected: FAIL, `context.js` not found.
 
-- [ ] **Step 3: Implement the provider and hook**
+- [x] **Step 3: Implement the provider and hook**
 
 `packages/framework/next-ui/src/i18n/context.tsx`:
 
@@ -839,12 +839,12 @@ export function useIGRPChromeI18n(): IGRPChromeStrings {
 }
 ```
 
-- [ ] **Step 4: Run the test to see it pass**
+- [x] **Step 4: Run the test to see it pass**
 
 Run: `pnpm --filter @igrp/framework-next-ui exec vitest run src/i18n/__tests__/context.test.tsx`
 Expected: PASS (4 tests).
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add packages/framework/next-ui/src/i18n/context.tsx packages/framework/next-ui/src/i18n/__tests__/context.test.tsx
@@ -864,7 +864,7 @@ git commit -m "feat(next-ui): IGRPChromeI18nProvider and useIGRPChromeI18n with 
 **Interfaces:**
 - Produces: `igrpResolveErrorCopy(error, { byCode, fallback }, custom?): IGRPErrorCopy`; `IGRPGlobalErrorProps.resolveCopy` and `IGRPSegmentErrorProps.resolveCopy` widened to `(error) => Partial<IGRPErrorCopy> | undefined | void`.
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 `packages/framework/next-ui/src/i18n/__tests__/error-copy.test.ts`:
 
@@ -910,12 +910,12 @@ describe('igrpResolveErrorCopy', () => {
 });
 ```
 
-- [ ] **Step 2: Run it to see it fail**
+- [x] **Step 2: Run it to see it fail**
 
 Run: `pnpm --filter @igrp/framework-next-ui exec vitest run src/i18n/__tests__/error-copy.test.ts`
 Expected: FAIL, module not found.
 
-- [ ] **Step 3: Implement the resolver**
+- [x] **Step 3: Implement the resolver**
 
 `packages/framework/next-ui/src/i18n/error-copy.ts`:
 
@@ -955,7 +955,7 @@ export function igrpResolveErrorCopy(
 }
 ```
 
-- [ ] **Step 4: Use it in both error screens**
+- [x] **Step 4: Use it in both error screens**
 
 `packages/framework/next-ui/src/errors/global.tsx`: delete `DEFAULT_COPY`; add imports:
 
@@ -991,12 +991,12 @@ and the three JSX usages: `{labels.errorRef}`, `{isResetting ? labels.retrying :
 
 The hooks must be called before the `if (children) return <>{children}</>;` early return in both components, next to the existing `useState` calls.
 
-- [ ] **Step 5: Run the tests**
+- [x] **Step 5: Run the tests**
 
 Run: `pnpm --filter @igrp/framework-next-ui exec vitest run src/i18n && pnpm --filter @igrp/framework-next-ui typecheck`
 Expected: PASS; type-check exit 0.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add packages/framework/next-ui/src/i18n/error-copy.ts packages/framework/next-ui/src/i18n/__tests__/error-copy.test.ts packages/framework/next-ui/src/errors/global.tsx packages/framework/next-ui/src/errors/segment.tsx
@@ -1030,7 +1030,7 @@ git commit -m "feat(next-ui): error screens resolve copy from the chrome catalog
 - Consumes: `useIGRPChromeI18n`, the label interfaces from `../i18n/strings.js`.
 - Produces: unchanged component props; `IGRP_*_LABELS_PT_PT` constants kept as `@deprecated` aliases; new barrel exports listed in Step 4.
 
-- [ ] **Step 1: Write the failing precedence test**
+- [x] **Step 1: Write the failing precedence test**
 
 `packages/framework/next-ui/src/templates/__tests__/chrome-labels.test.tsx`:
 
@@ -1073,12 +1073,12 @@ describe('chrome components and the catalog', () => {
 
 `IGRPTemplateNavUser` needs the sidebar context and a user, so precedence for the `labels` object is covered by the same pattern on `IGRPForbidden`; both resolve through `?? chrome.<group>` and `{ ...chrome.<group>, ...overrides }`.
 
-- [ ] **Step 2: Run it to see it fail**
+- [x] **Step 2: Run it to see it fail**
 
 Run: `pnpm --filter @igrp/framework-next-ui exec vitest run src/templates/__tests__/chrome-labels.test.tsx`
 Expected: FAIL on the French assertions.
 
-- [ ] **Step 3: Wire each component**
+- [x] **Step 3: Wire each component**
 
 Apply the same two patterns everywhere. For components with a `labels` object:
 
@@ -1107,7 +1107,7 @@ For components with individual label props: remove the literal default from the 
 
 Every one of these files already has `'use client'`.
 
-- [ ] **Step 4: Export from the barrel**
+- [x] **Step 4: Export from the barrel**
 
 In `packages/framework/next-ui/src/index.ts`, add a section before `// providers`:
 
@@ -1130,12 +1130,12 @@ export { IGRP_CHROME_STRINGS_FR } from './i18n/strings.fr.js';
 
 The existing exports of `IGRP_*_LABELS_PT_PT` and the `IGRP*Labels` types stay as they are (the component modules still export them).
 
-- [ ] **Step 5: Run everything**
+- [x] **Step 5: Run everything**
 
 Run: `pnpm --filter @igrp/framework-next-ui format && pnpm --filter @igrp/framework-next-ui typecheck && pnpm --filter @igrp/framework-next-ui test && pnpm --filter @igrp/framework-next-ui build`
 Expected: all exit 0. `client-boundaries.test.ts` passes (pure i18n modules have no directive and no client-only imports; `context.tsx` has the directive). `build-pipeline.test.ts` passes.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add packages/framework/next-ui/src
@@ -1149,7 +1149,7 @@ git commit -m "feat(next-ui): chrome components read the catalog; label props st
 **Files:**
 - Create: `.changeset/next-ui-chrome-catalog.md`
 
-- [ ] **Step 1: Changeset**
+- [x] **Step 1: Changeset**
 
 ```md
 ---
@@ -1159,12 +1159,12 @@ git commit -m "feat(next-ui): chrome components read the catalog; label props st
 i18n: one typed chrome catalog (`IGRPChromeStrings`) in Portuguese, English and French, covering the header, user menu, notifications, mode and theme switchers, command palette, breadcrumbs, app switcher, sidebar menus, auth screens, loading, forbidden, not-found, the error screens and the platform error codes. `IGRPChromeI18nProvider` supplies it; `useIGRPChromeI18n()` reads it, or, with no provider, the `IGRP_LOCALE` cookie on the client and Portuguese on the server. Every existing label prop still wins. `IGRPGlobalError` / `IGRPSegmentError` resolve copy by platform code by default and accept a partial `resolveCopy`. The `IGRP_*_LABELS_PT_PT` constants are deprecated aliases into `IGRP_CHROME_STRINGS_PT`.
 ```
 
-- [ ] **Step 2: Build the chain and the template**
+- [x] **Step 2: Build the chain and the template**
 
 Run: `pnpm build:framework && pnpm --filter @igrp/framework-next-template exec tsc --noEmit`
 Expected: exit 0. The template's `resolveErrorCopy` (returns a full pair) still satisfies the widened `resolveCopy` type.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add .changeset/next-ui-chrome-catalog.md

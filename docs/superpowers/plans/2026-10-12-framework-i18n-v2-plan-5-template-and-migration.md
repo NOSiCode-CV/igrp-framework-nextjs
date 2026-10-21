@@ -38,7 +38,7 @@
 - Modify: `templates/demo-v1/package.json`
 - Modify: `templates/demo-v1/.env.example`
 
-- [ ] **Step 1: Declare the dependencies and the script**
+- [x] **Step 1: Declare the dependencies and the script**
 
 In `templates/demo-v1/package.json` add `"next-intl": "^4.14.0"` to `dependencies` (the app imports `next-intl` and `next-intl/plugin` directly; pnpm strict resolution needs the declaration) and `"@igrp/framework-next-i18n": "workspace:*"` to `devDependencies`. Scripts:
 
@@ -49,7 +49,7 @@ In `templates/demo-v1/package.json` add `"next-intl": "^4.14.0"` to `dependencie
 
 Run `pnpm install` at the repo root.
 
-- [ ] **Step 2: Document the env key**
+- [x] **Step 2: Document the env key**
 
 Append to `templates/demo-v1/.env.example`, after the `# Next.js Public Configuration` block:
 
@@ -65,7 +65,7 @@ Append to `templates/demo-v1/.env.example`, after the `# Next.js Public Configur
 IGRP_FORMAT_LOCALES=
 ```
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add templates/demo-v1/package.json templates/demo-v1/.env.example pnpm-lock.yaml
@@ -88,7 +88,7 @@ git commit -m "chore(demo-v1): next-intl and @igrp/framework-next-i18n dependenc
 **Interfaces:**
 - Produces: `i18n` (the app's `IGRPI18nConfig`), `setLocale` server action, typed `AppConfig`.
 
-- [ ] **Step 1: Write the i18n module**
+- [x] **Step 1: Write the i18n module**
 
 `templates/demo-v1/src/i18n/index.ts`:
 
@@ -199,7 +199,7 @@ Initial catalogs (Task 5 adds `home`): `templates/demo-v1/src/i18n/messages/pt.j
 }
 ```
 
-- [ ] **Step 2: Wire the plugin and the config**
+- [x] **Step 2: Wire the plugin and the config**
 
 `templates/demo-v1/next.config.ts`: add at the top (after the `node:` and `next` imports):
 
@@ -215,12 +215,12 @@ add `"@igrp/framework-next/i18n"` and `"@igrp/framework-next/i18n/client"` to `e
 
 `templates/demo-v1/src/igrp.template.config.ts`: `import { i18n } from "@/i18n";` and add `i18n,` to the `igrpBuildConfig({ ... })` call, right after `appInformation: getPackageJson(),`.
 
-- [ ] **Step 3: Type-check**
+- [x] **Step 3: Type-check**
 
 Run: `pnpm --filter @igrp/framework-next-template exec tsc --noEmit`
 Expected: exit 0.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add templates/demo-v1/src/i18n templates/demo-v1/next.config.ts templates/demo-v1/src/igrp.template.config.ts
@@ -236,7 +236,7 @@ git commit -m "feat(demo-v1): i18n configuration, request config, setLocale acti
 - Modify: `templates/demo-v1/src/app/(auth)/login/page.tsx`
 - Modify: `templates/demo-v1/src/middleware.ts` (one comment)
 
-- [ ] **Step 1: Header `actions` slot**
+- [x] **Step 1: Header `actions` slot**
 
 In `templates/demo-v1/src/app/(igrp)/layout.tsx` add:
 
@@ -254,7 +254,7 @@ and in `headerSlots`, after the `search` entry:
             actions: <IGRPLocaleSwitcher action={setLocale} />,
 ```
 
-- [ ] **Step 2: Login page**
+- [x] **Step 2: Login page**
 
 In `templates/demo-v1/src/app/(auth)/login/page.tsx` add the same two imports and change the returned `<section>` to carry the switcher in its top-right corner:
 
@@ -284,7 +284,7 @@ In `templates/demo-v1/src/app/(auth)/login/page.tsx` add the same two imports an
   );
 ```
 
-- [ ] **Step 3: Middleware note**
+- [x] **Step 3: Middleware note**
 
 In `templates/demo-v1/src/middleware.ts`, after `return nextWithPath();` at the end of `handleRequest`, add nothing executable; add this comment above the final `return`:
 
@@ -296,7 +296,7 @@ In `templates/demo-v1/src/middleware.ts`, after `return nextWithPath();` at the 
   // importing from "@igrp/framework-next/i18n" (Edge-safe), never from "@/i18n".
 ```
 
-- [ ] **Step 4: Lint and type-check, commit**
+- [x] **Step 4: Lint and type-check, commit**
 
 Run: `pnpm --filter @igrp/framework-next-template lint && pnpm --filter @igrp/framework-next-template exec tsc --noEmit`
 Expected: exit 0.
@@ -318,7 +318,7 @@ git commit -m "feat(demo-v1): language switcher in the header actions slot and o
 - Modify: `templates/demo-v1/src/app/(igrp)/error.tsx`
 - Modify: `templates/demo-v1/src/app/(auth)/error.tsx`
 
-- [ ] **Step 1: The one resolver the template still needs**
+- [x] **Step 1: The one resolver the template still needs**
 
 `templates/demo-v1/src/lib/error-copy.ts`:
 
@@ -341,7 +341,7 @@ export const resolvePublicErrorCopy: IGRPErrorCopyResolver = (error) => {
 
 Delete `templates/demo-v1/src/config/error-messages.ts`.
 
-- [ ] **Step 2: `global-error.tsx`**
+- [x] **Step 2: `global-error.tsx`**
 
 Replace the file body (keep the leading comment block, updating its last paragraph to say the copy comes from the chrome catalog via its cookie fallback):
 
@@ -403,11 +403,11 @@ export default function GlobalError({
 }
 ```
 
-- [ ] **Step 3: `error.tsx` and `(igrp)/error.tsx`**
+- [x] **Step 3: `error.tsx` and `(igrp)/error.tsx`**
 
 In both, replace `import { resolveErrorCopy } from "@/config/error-messages";` with `import { resolvePublicErrorCopy } from "@/lib/error-copy";` and `resolveCopy={resolveErrorCopy}` with `resolveCopy={resolvePublicErrorCopy}`.
 
-- [ ] **Step 4: `(auth)/error.tsx`**
+- [x] **Step 4: `(auth)/error.tsx`**
 
 ```tsx
 "use client";
@@ -449,7 +449,7 @@ export default function AuthSegmentError({
 }
 ```
 
-- [ ] **Step 5: Lint, type-check, commit**
+- [x] **Step 5: Lint, type-check, commit**
 
 Run: `pnpm --filter @igrp/framework-next-template lint && pnpm --filter @igrp/framework-next-template exec tsc --noEmit`
 Expected: exit 0; no remaining import of `@/config/error-messages` (grep to confirm).
@@ -471,7 +471,7 @@ git commit -m "refactor(demo-v1): error screens take their copy from the chrome 
 **Interfaces:**
 - `HomeLayer` keeps `name`, `value`, `detail` as already-translated strings (the server page translates with `getTranslations("home")`); `HomeOverview` translates its own chrome with `useTranslations("home")`.
 
-- [ ] **Step 1: Add the `home` namespace to the three catalogs**
+- [x] **Step 1: Add the `home` namespace to the three catalogs**
 
 `pt.json` (merge with the `app` key from Task 2):
 
@@ -698,12 +698,12 @@ git commit -m "refactor(demo-v1): error screens take their copy from the chrome 
 }
 ```
 
-- [ ] **Step 2: Run the catalog check (the failing test for this task is the literal check)**
+- [x] **Step 2: Run the catalog check (the failing test for this task is the literal check)**
 
 Run: `pnpm --filter @igrp/framework-next-template lint:i18n`
 Expected: `check-catalogs` passes with coverage 100/100/100; `check-literals` FAILS listing the Portuguese literals in `home-overview.tsx` and `(igrp)/page.tsx`.
 
-- [ ] **Step 3: Migrate `home-overview.tsx`**
+- [x] **Step 3: Migrate `home-overview.tsx`**
 
 Add `import { useTranslations } from "next-intl";`. Delete the `STATE_LABEL` and `COPY_LABEL` constants and the `NEXT_STEPS` text (keep the paths). Replace `NEXT_STEPS` with:
 
@@ -729,7 +729,7 @@ In `HomeOverview`, first line of the body: `const t = useTranslations("home");`.
 - next-steps title → `{t("nextSteps.title")}`; subtitle → `{t("nextSteps.subtitle", { count: NEXT_STEPS.length })}`; the sr-only span → `{t("nextSteps.step", { index: index + 1 })}`; `{step.title}` → `{t(`nextSteps.${step.key}.title`)}`; `{step.body}` → `{t(`nextSteps.${step.key}.body`)}`; `key={step.title}` → `key={step.key}`
 - replace aside: title → `{t("replace.title")}`; the body paragraph → `{t.rich("replace.body", { code: (chunks) => <span className="font-mono text-xs">{chunks}</span> })}`; the note → `{t("replace.note")}`.
 
-- [ ] **Step 4: Migrate `(igrp)/page.tsx`**
+- [x] **Step 4: Migrate `(igrp)/page.tsx`**
 
 Add `import { getTranslations } from "next-intl/server";`. In `Home`, before `return`: `const t = await getTranslations("home.layers");` and pass `t` into `buildLayers({ bypass, userName, claimsState, t })`. Change `buildLayers`'s parameter type to add `t: Awaited<ReturnType<typeof getTranslations<"home.layers">>>` and replace each literal with the matching key:
 
@@ -781,12 +781,12 @@ Add `import { getTranslations } from "next-intl/server";`. In `Home`, before `re
 
 Also update the comment in `Home` that mentions `src/config/error-messages.ts` to "copy lookup by `code` in the framework's chrome catalog".
 
-- [ ] **Step 5: Run the checks**
+- [x] **Step 5: Run the checks**
 
 Run: `pnpm --filter @igrp/framework-next-template lint && pnpm --filter @igrp/framework-next-template lint:i18n && pnpm --filter @igrp/framework-next-template exec tsc --noEmit`
 Expected: all exit 0. Then reintroduce one literal (`<p>Olá</p>` in `home-overview.tsx`), run `lint:i18n`, confirm it fails, and revert.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add templates/demo-v1/src/i18n/messages templates/demo-v1/src/components/home-overview.tsx "templates/demo-v1/src/app/(igrp)/page.tsx"
@@ -802,7 +802,7 @@ git commit -m "feat(demo-v1): home page translated in pt, en and fr as the i18n 
 - Modify: `templates/demo-v1/CLAUDE.md`
 - Modify: `templates/demo-v1/docs/ENVIRONMENT.md` (one row for `IGRP_FORMAT_LOCALES`, in the same table format the file uses)
 
-- [ ] **Step 1: Write `docs/I18N.md`**
+- [x] **Step 1: Write `docs/I18N.md`**
 
 ```md
 # Internationalisation (i18n)
@@ -862,7 +862,7 @@ Zod schemas take a translator (`(key) => string`) instead of literals; enum code
 1. Add it to `pt.json`. 2. Use it (`tsc` rejects unknown keys). 3. Translate in `en.json` / `fr.json` with the same ICU arguments; partial files are fine, missing keys fall back to `pt`.
 ```
 
-- [ ] **Step 2: Update `CLAUDE.md`**
+- [x] **Step 2: Update `CLAUDE.md`**
 
 In `templates/demo-v1/CLAUDE.md`, under "Layout composition", replace the bullet claiming `src/app/layout.tsx` mounts `IGRPRootProviders` with:
 
@@ -872,7 +872,7 @@ In `templates/demo-v1/CLAUDE.md`, under "Layout composition", replace the bullet
 
 Add to "Your expertise": "**i18n** — next-intl without routing through `@igrp/framework-next/i18n`; cookie-first resolution; `pnpm lint:i18n`. Read `docs/I18N.md` before touching user-visible text." And to "Hard rules unique to this template": "**User-visible text in migrated folders comes from `src/i18n/messages`**, never literals; dates and numbers go through `useIGRPFormat()` / `igrpFormatDate`. `pnpm lint:i18n` enforces both and runs in `build`."
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add templates/demo-v1/docs/I18N.md templates/demo-v1/CLAUDE.md templates/demo-v1/docs/ENVIRONMENT.md
@@ -886,7 +886,7 @@ git commit -m "docs(demo-v1): i18n guide, env key, CLAUDE.md pointers"
 **Files:**
 - Modify: `docs/superpowers/specs/2026-10-12-framework-i18n-v2-design.md` (the D-5 line, with the finding)
 
-- [ ] **Step 1: Observe a real sign-in**
+- [ ] **Step 1: Observe a real sign-in** _(not done as a live sign-in; D-5 was verified 2026-10-21 from the IdP source and recorded in the spec)_
 
 Against a development IdP (`AUTH_PROVIDER=igrp-auth` with real credentials in `templates/demo-v1/.env`), temporarily add to `templates/demo-v1/src/lib/auth-instance.ts` a `callbacks.jwt` extension:
 
@@ -902,14 +902,14 @@ Against a development IdP (`AUTH_PROVIDER=igrp-auth` with real credentials in `t
 
 Run `pnpm dev:demo`, sign in, read the server log line. Remove the extension afterwards (do not commit it).
 
-- [ ] **Step 2: Record the finding**
+- [x] **Step 2: Record the finding**
 
 Edit the D-5 bullet in the spec to one of:
 
 - "Verified 2026-MM-DD against `<issuer>`: the ID token carries `locale` = `<value>`." or
 - "Verified 2026-MM-DD against `<issuer>`: no `locale` claim. Resolution falls through to the cookie; the Access Management team owns adding the claim (profile scope / token customiser)."
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add docs/superpowers/specs/2026-10-12-framework-i18n-v2-design.md
@@ -920,12 +920,12 @@ git commit -m "docs(i18n): record the D-5 locale-claim verification"
 
 ### Task 8: Build and smoke the template
 
-- [ ] **Step 1: Build**
+- [x] **Step 1: Build**
 
 Run: `pnpm build:framework && pnpm build:demo`
 Expected: exit 0 (`lint`, `lint:i18n`, `next build`).
 
-- [ ] **Step 2: Smoke in preview mode**
+- [ ] **Step 2: Smoke in preview mode** _(not found in history; verify)_
 
 With `IGRP_PREVIEW_MODE=true` in `templates/demo-v1/.env`, run `pnpm dev:demo` and, from another shell (adjust the port and basePath the dev banner prints):
 
@@ -943,11 +943,11 @@ Expected: the cookie wins (`cookie-first`).
 
 In the browser: open the app, use the header switcher to pick English, confirm the header (user menu "Sign out"), the home page and the design-system strings change together, and the console shows no hydration warning. Open `/login` with `IGRP_PREVIEW_MODE=false` and a valid IdP, switch the language there, confirm the login page re-renders in that language.
 
-- [ ] **Step 3: Smoke the failure modes**
+- [ ] **Step 3: Smoke the failure modes** _(not found in history; verify)_
 
 Set `IGRP_FORMAT_LOCALES=de-DE`, reload: the global error screen shows the generic copy with a reference id (the `IGRP_I18N_CONFIG_INVALID` code has no catalog entry, so the fallback pair appears) and the server log names the bad tag. Set `IGRP_LOCALE=fr` as a cookie in the browser, trigger the global error (keep the bad env): the screen is in French with `<html lang="fr-FR">`. Restore the env.
 
-- [ ] **Step 4: Commit any fix, then proceed**
+- [ ] **Step 4: Commit any fix, then proceed** _(not found in history; verify)_
 
 ---
 
@@ -958,14 +958,14 @@ Set `IGRP_FORMAT_LOCALES=de-DE`, reload: the global error screen shows the gener
 - Create: `packages/framework/template-migrator/migrations/demo-v1/payload/56/...` (copies of every new and changed template file)
 - Modify: `templates/demo-v1/.igrp-migrations-lock.json` (via `sync:template-lock`)
 
-- [ ] **Step 1: Materialise the package versions**
+- [x] **Step 1: Materialise the package versions**
 
 Run: `pnpm release:version`
 Expected: the five changesets from Plans 1 to 4 bump `@igrp/framework-next-auth`, `@igrp/framework-next-types`, `@igrp/igrp-framework-react-design-system`, `@igrp/framework-next-ui`, `@igrp/framework-next` and `@igrp/framework-next-i18n` by one beta each and update their CHANGELOGs. Note each new version from its `package.json` (`node -e "console.log(require('./packages/framework/next/package.json').version)"` etc.). If `@igrp/framework-next-i18n` is rejected, add it to `.changeset/pre.json` `initialVersions` as `"0.2.0-beta.0"` and rerun.
 
 Commit: `git add -A .changeset packages/*/package.json packages/framework/*/package.json packages/*/CHANGELOG.md packages/framework/*/CHANGELOG.md && git commit -m "chore: version packages"`.
 
-- [ ] **Step 2: Copy the payload**
+- [x] **Step 2: Copy the payload**
 
 From the repo root, copy each file below from `templates/demo-v1/` to `packages/framework/template-migrator/migrations/demo-v1/payload/56/` at the same relative path:
 
@@ -992,7 +992,7 @@ src/components/home-overview.tsx
 docs/I18N.md
 ```
 
-- [ ] **Step 3: Write the migration**
+- [x] **Step 3: Write the migration**
 
 `packages/framework/template-migrator/migrations/demo-v1/56.MIGRATIONS-<DDMMYYYY>.md` (replace the `<…>` versions with the ones noted in Step 1 and the date with today's):
 
@@ -1134,12 +1134,12 @@ Every IGRP app now shares one locale (`IGRP_LOCALE` cookie, path `/`), one resol
 - Your own feature strings are untouched. Migrate a folder at a time and add it to `lint:i18n` when done.
 ```
 
-- [ ] **Step 4: Sync the lock and run the drift gate**
+- [x] **Step 4: Sync the lock and run the drift gate**
 
 Run: `pnpm --filter @igrp/template-migrator sync:template-lock && pnpm --filter @igrp/template-migrator typecheck && pnpm --filter @igrp/template-migrator test && pnpm --filter @igrp/template-migrator check:drift`
 Expected: exit 0. If `check:drift` lists an orphan file, it is a template file this migration did not cover: add a `file.create` step and its payload rather than touching `template-baseline.json`.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add packages/framework/template-migrator/migrations/demo-v1 templates/demo-v1/.igrp-migrations-lock.json
@@ -1150,11 +1150,11 @@ git commit -m "chore(migrations): add migration 56 for framework i18n"
 
 ### Task 10: Release
 
-- [ ] **Step 1: Follow the repo's release command**
+- [x] **Step 1: Follow the repo's release command**
 
 Run the `/release-framework` workflow (or, by hand and in dependency order, each package's `release` script: `framework-next-auth`, `framework-next-types`, `design-system`, `framework-next-ui`, `framework-next`, `i18n-tools`, then `template-migrator`), verifying the registry state first as `.claude/shared/hard-rules.md` requires. Then `pnpm release:demo` for the template zip.
 
-- [ ] **Step 2: Hand-off to the application center**
+- [ ] **Step 2: Hand-off to the application center** _(not a commit: carried by `2026-10-21-i18n-app-center-readiness.md`)_
 
 The application-center migration is a separate plan; its deltas are the appendix of the spec. Its first step is bumping to the versions released here.
 

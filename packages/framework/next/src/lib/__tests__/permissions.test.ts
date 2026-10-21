@@ -101,6 +101,38 @@ describe('igrpAssertAuthBypassAllowed', () => {
     );
   });
 
+  it('treats any NODE_ENV other than development/test (unset included) as production', () => {
+    for (const NODE_ENV of ['staging', 'Production', ' "qa" ', undefined]) {
+      expect(() => igrpAssertAuthBypassAllowed({ NODE_ENV, IGRP_PREVIEW_MODE: 'true' })).toThrow(
+        IgrpConfigError,
+      );
+    }
+    expect(() => igrpAssertAuthBypassAllowed({ IGRP_PREVIEW_MODE: 'true' })).toThrow(
+      IgrpConfigError,
+    );
+    expect(() =>
+      igrpAssertAuthBypassAllowed({ NODE_ENV: ' "Development" ', IGRP_PREVIEW_MODE: 'true' }),
+    ).not.toThrow();
+  });
+
+  it('names every active bypass variable in the error code context', () => {
+    const catchErr = (env: Record<string, string>) => {
+      try {
+        igrpAssertAuthBypassAllowed({ ...prod, ...env });
+      } catch (e) {
+        return e as IgrpConfigError;
+      }
+      throw new Error('did not throw');
+    };
+    const preview = catchErr({ IGRP_PREVIEW_MODE: 'true' });
+    expect(preview.code).toBe('IGRP_CONFIG_INVALID');
+    expect(preview.context).toEqual({ variable: 'IGRP_PREVIEW_MODE' });
+    expect(catchErr({ AUTH_PROVIDER: 'none' }).context).toEqual({ variable: 'AUTH_PROVIDER' });
+    const both = catchErr({ IGRP_PREVIEW_MODE: 'true', AUTH_PROVIDER: 'none' });
+    expect(both.context).toEqual({ variable: 'IGRP_PREVIEW_MODE, AUTH_PROVIDER' });
+    expect(both.message).toContain('IGRP_PREVIEW_MODE, AUTH_PROVIDER desliga');
+  });
+
   it('accepts only a parsed true as the opt-in', () => {
     const on = { ...prod, IGRP_PREVIEW_MODE: 'true' };
     expect(() =>

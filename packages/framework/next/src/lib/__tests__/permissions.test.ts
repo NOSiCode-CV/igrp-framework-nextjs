@@ -56,6 +56,13 @@ describe('isIgrpAuthBypass', () => {
     expect(isIgrpAuthBypass({ AUTH_PROVIDER: 'None' })).toBe(true);
     expect(isIgrpAuthBypass({ AUTH_PROVIDER: 'NONE' })).toBe(true);
   });
+
+  it('strips surrounding quotes from AUTH_PROVIDER like the other bypass predicates', () => {
+    expect(isIgrpAuthBypass({ AUTH_PROVIDER: '"none"' })).toBe(true);
+    expect(isIgrpAuthBypass({ AUTH_PROVIDER: "'none'" })).toBe(true);
+    expect(isIgrpAuthBypass({ AUTH_PROVIDER: ' "None" ' })).toBe(true);
+    expect(isIgrpAuthBypass({ AUTH_PROVIDER: '"igrp-auth"' })).toBe(false);
+  });
 });
 
 describe('igrpGetClaims', () => {

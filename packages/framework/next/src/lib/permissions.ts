@@ -162,6 +162,8 @@ export function isIgrpAuthBypass(env: Record<string, string | undefined> = proce
   const noneProvider =
     String(env.AUTH_PROVIDER ?? '')
       .trim()
+      .replace(/^["']|["']$/g, '')
+      .trim()
       .toLowerCase() === 'none';
   return preview || noneProvider;
 }

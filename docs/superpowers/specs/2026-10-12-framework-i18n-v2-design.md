@@ -203,7 +203,7 @@ export type IGRPFrameworkMessages = typeof IGRP_MESSAGES_PT;
 
 Missing keys render `namespace.key` and warn in development only. Keys an app shadows are reported by `igrp-i18n` as info.
 
-**`./i18n/testing`**: `IGRPIntlTestProvider(ui, { locale?, messages? })`, the application center's helper, mounting the same three providers as `IGRPIntlProvider`.
+**`./i18n/testing`**: `<IGRPIntlTestProvider>`, a React component taking `{ locale?, defaultLocale?, locales?, formatLocale?, timeZone?, messages?, children }` (e.g. ``render(<X />, { wrapper: ({ children }) => <IGRPIntlTestProvider locale="en">{children}</IGRPIntlTestProvider> })``), the application center's helper, mounting the same three providers as `IGRPIntlProvider`.
 
 **Layouts and config**:
 

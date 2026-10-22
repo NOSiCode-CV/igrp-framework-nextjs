@@ -439,6 +439,12 @@
       "appliedAt": "2026-10-21T00:00:00.000Z",
       "cliVersion": "0.2.0-beta.12",
       "manifestHash": "3d1e1951c54c4b9b"
+    },
+    {
+      "id": "73-session-first-switcher-rollback-docs",
+      "appliedAt": "2026-10-22T00:00:00.000Z",
+      "cliVersion": "0.2.0-beta.13",
+      "manifestHash": "a1d339589a2cef3f"
     }
   ]
 }

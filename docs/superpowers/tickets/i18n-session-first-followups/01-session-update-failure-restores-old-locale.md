@@ -4,7 +4,7 @@
 
 **Blocked by:** None (can start immediately)
 
-**Status:** ready-for-agent
+**Status:** resolved (2026-10-22): option D, roll back. `igrpRunLocaleChange` re-runs `action(previous)` and skips the refresh when `onChanged` fails after a persisted change; template docs and migration 73 show the wrapper that throws on a failed `update()`. The latency item below is still open.
 
 **Found:** 2026-10-22, while the Application Center adopted session-first (App Center spec `2026-10-21-i18n-framework-adoption-spec.md`, Task 5 review).
 
@@ -22,11 +22,11 @@ The result: the switcher shows a failure dot, but the page returns to the old la
 - **C. Retry `update()` once,** then show the switcher's `changeError` with copy that says the change applies at the next sign-in. This changes copy only, plus one key in the i18n catalog.
 
 ## Acceptance criteria
-- [ ] A test in `locale-change.test.ts` (or the sync-cookie tests) reproduces the stale-token rewrite, and it fails before the fix.
-- [ ] After the fix, a failed `onChanged` under session-first never leaves the UI showing success while the page is in the old language.
-- [ ] Cookie-first apps behave exactly as before.
-- [ ] Docs: the template `docs/I18N.md` "Session-first" section describes the failure behaviour.
-- [ ] A changeset is added for `@igrp/framework-next`.
+- [x] A test in `locale-change.test.ts` (or the sync-cookie tests) reproduces the stale-token rewrite, and it fails before the fix.
+- [x] After the fix, a failed `onChanged` under session-first never leaves the UI showing success while the page is in the old language.
+- [x] Cookie-first apps behave exactly as before.
+- [x] Docs: the template `docs/I18N.md` "Session-first" section describes the failure behaviour.
+- [x] A changeset is added for `@igrp/framework-next`.
 
 ## Also worth measuring (same area)
 In dev mode, a language switch in the App Center takes about 4–5 seconds: the server action, then `update()`, then `router.refresh()`. Measure it in a production build. If it's still slow, consider an optimistic `<html lang>` switch, or a clearer pending state on the switcher than the spinner alone.

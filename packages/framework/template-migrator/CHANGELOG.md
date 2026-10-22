@@ -1,5 +1,11 @@
 # @igrp/template-migrator
 
+## 0.2.0-beta.14
+
+### Patch Changes
+
+- 3589087: Migration 73: demo-v1 `docs/I18N.md` session-first switcher snippet checks the result of `update({ locale })` and describes the rollback.
+
 ## 0.2.0-beta.13
 
 ### Patch Changes

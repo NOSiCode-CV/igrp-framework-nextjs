@@ -60,6 +60,7 @@ export function IGRPLocaleSwitcher({ action, onChanged, className }: IGRPLocaleS
         action,
         onChanged,
         refresh: () => router.refresh(),
+        previous: locale,
       });
       setFailed(failed);
     });

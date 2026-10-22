@@ -50,9 +50,27 @@ export function writeLock(appRoot: string, lock: LockFile): void {
   const tmp = `${target}.tmp`;
   try {
     writeFileSync(tmp, JSON.stringify(lock, null, 2) + "\n", "utf8");
-    renameSync(tmp, target);
+    renameWithRetry(tmp, target);
   } catch (err) {
     rmSync(tmp, { force: true });
     throw err;
+  }
+}
+
+// Windows refuses a rename over a file another process holds open (antivirus,
+// an editor, a dev-server watcher) with EPERM/EACCES/EBUSY. The hold is brief,
+// so retry for ~3 s, the way graceful-fs does, before giving up.
+const RENAME_RETRY_CODES = new Set(["EPERM", "EACCES", "EBUSY"]);
+
+function renameWithRetry(from: string, to: string): void {
+  for (let attempt = 0; ; attempt++) {
+    try {
+      renameSync(from, to);
+      return;
+    } catch (err) {
+      const code = (err as NodeJS.ErrnoException).code;
+      if (attempt >= 30 || !code || !RENAME_RETRY_CODES.has(code)) throw err;
+      Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 100);
+    }
   }
 }

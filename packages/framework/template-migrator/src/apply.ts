@@ -255,10 +255,20 @@ export function executeStep(
       assertInsideAppRoot(appRoot, pkgPath);
       const pkg = JSON.parse(readFileSync(pkgPath, "utf8"));
       const touched = new Set<string>();
+      const added: string[] = [];
+      const kept: string[] = [];
       for (const [dep, { field, range }] of Object.entries(step.removed)) {
+        // Already declared (either field): keep the app's range. Authored
+        // restores add new deps to upgraded apps, and overwriting would
+        // downgrade an app that is already ahead.
+        if (pkg.dependencies?.[dep] !== undefined || pkg.devDependencies?.[dep] !== undefined) {
+          kept.push(dep);
+          continue;
+        }
         pkg[field] ??= {};
         pkg[field][dep] = range;
         touched.add(field);
+        added.push(dep);
       }
       for (const field of touched) {
         pkg[field] = Object.fromEntries(
@@ -266,7 +276,11 @@ export function executeStep(
         );
       }
       writeFileSync(pkgPath, `${JSON.stringify(pkg, null, 2)}\n`, "utf8");
-      return { type: "deps.remove", manifest: step.manifest, deps: Object.keys(step.removed) };
+      if (kept.length > 0) {
+        console.warn(`  ⚠ ${step.manifest}: already declared by this app, range kept: ${kept.join(", ")}`);
+      }
+      // Undo removes only what this step added, never a dep the app already had.
+      return { type: "deps.remove", manifest: step.manifest, deps: added };
     }
     default:
       throw new Error(`Unknown step type: ${(step as { type: string }).type}`);

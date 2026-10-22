@@ -445,6 +445,12 @@
       "appliedAt": "2026-10-22T00:00:00.000Z",
       "cliVersion": "0.2.0-beta.13",
       "manifestHash": "a1d339589a2cef3f"
+    },
+    {
+      "id": "74-framework-next-beta14-i18n-deps",
+      "appliedAt": "2026-10-22T00:00:00.000Z",
+      "cliVersion": "0.2.0-beta.14",
+      "manifestHash": "c4dd999f289685db"
     }
   ]
 }

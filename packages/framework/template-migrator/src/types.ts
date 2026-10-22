@@ -15,7 +15,8 @@ export type MigrationStep =
   // Undo of deps.remove. `deps.bump` cannot serve as the inverse: it only
   // updates a dependency that is already declared and will not re-add one.
   // Carries the original field so a devDependency is restored as a
-  // devDependency rather than promoted into `dependencies`.
+  // devDependency rather than promoted into `dependencies`. Also authored to
+  // add a new dep; a dep the app already declares keeps its range.
   | {
       type: "deps.restore";
       manifest: string;

@@ -374,6 +374,33 @@ describe("executeStep: deps.remove / deps.restore", () => {
     expect(undo).toEqual({ type: "deps.restore", manifest: "package.json", removed: {} });
   });
 
+  it("keeps the range of a dep the app already declares and leaves it out of the undo", () => {
+    writeAppFile(
+      "package.json",
+      JSON.stringify({ name: "consumer", dependencies: { "next-intl": "^4.20.0" } }, null, 2) + "\n",
+    );
+    const spy = vi.spyOn(console, "warn").mockImplementation(() => {});
+
+    const undo = executeStep(
+      {
+        type: "deps.restore",
+        manifest: "package.json",
+        removed: {
+          "next-intl": { field: "dependencies", range: "^4.14.0" },
+          "@igrp/framework-next-i18n": { field: "devDependencies", range: "0.2.0-beta.3" },
+        },
+      },
+      appRoot,
+      payloadDir,
+    );
+    spy.mockRestore();
+
+    const pkg = JSON.parse(readAppFile("package.json"));
+    expect(pkg.dependencies["next-intl"]).toBe("^4.20.0");
+    expect(pkg.devDependencies["@igrp/framework-next-i18n"]).toBe("0.2.0-beta.3");
+    expect(undo).toEqual({ type: "deps.remove", manifest: "package.json", deps: ["@igrp/framework-next-i18n"] });
+  });
+
   it("restores into a manifest that no longer has the field at all", () => {
     writeAppFile("package.json", JSON.stringify({ name: "consumer" }, null, 2) + "\n");
 

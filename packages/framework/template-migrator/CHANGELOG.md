@@ -5,6 +5,9 @@
 ### Patch Changes
 
 - 3589087: Migration 73: demo-v1 `docs/I18N.md` session-first switcher snippet checks the result of `update({ locale })` and describes the rollback.
+- Migration 74: bumps `@igrp/framework-next` to `0.2.0-beta.14` and declares `next-intl` and `@igrp/framework-next-i18n` in apps that skipped migration 58's manual steps.
+- `deps.restore` keeps the range of a dependency the app already declares instead of overwriting it, and its undo removes only the dependencies it added.
+- `check:drift` counts `deps.restore` as a pin, and fails when a template dependency no migration pins is new or moved from the range recorded in `template-baseline.json`.
 
 ## 0.2.0-beta.13
 

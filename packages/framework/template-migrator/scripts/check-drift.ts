@@ -4,6 +4,7 @@ import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 import { parse as parseYaml } from "yaml";
 import { sortMigrationFiles } from "../src/migration-order.js";
+import { findUnpinnedDepDrift, unpinnedDeps } from "./drift-deps.js";
 import { findOrphanFiles } from "./drift-orphans.js";
 import {
   diffTemplateLock,
@@ -116,11 +117,14 @@ function listTemplateFiles(): string[] | null {
   }
 }
 
-function readBaseline(): string[] | null {
+function readBaseline(): { files: string[]; dependencies: Record<string, string> } | null {
   if (!existsSync(BASELINE_FILE)) return null;
   try {
-    const parsed = JSON.parse(readFileSync(BASELINE_FILE, "utf8")) as { files?: string[] };
-    return parsed.files ?? [];
+    const parsed = JSON.parse(readFileSync(BASELINE_FILE, "utf8")) as {
+      files?: string[];
+      dependencies?: Record<string, string>;
+    };
+    return { files: parsed.files ?? [], dependencies: parsed.dependencies ?? {} };
   } catch (err) {
     // Same treatment the lock axis already gets: a corrupt input file is a
     // reportable gate failure, not a raw JSON.parse stack trace.
@@ -131,11 +135,12 @@ function readBaseline(): string[] | null {
   }
 }
 
-function writeBaseline(files: string[]): void {
+function writeBaseline(files: string[], dependencies: Record<string, string>): void {
   const doc = {
     comment:
-      "Template files grandfathered by the drift gate's new-file check: they predate migration coverage (or deliberately don't ship to existing apps) and no migration manages them. New template files must NOT be added here casually — author a file.create migration instead. Regenerate deliberately with: pnpm --filter @igrp/template-migrator check:drift:update-baseline",
+      "Template files grandfathered by the drift gate's new-file check: they predate migration coverage (or deliberately don't ship to existing apps) and no migration manages them. `dependencies` does the same for template deps no migration pins: each must keep the range recorded here. New template files or deps must NOT be added here casually — author a migration instead. Regenerate deliberately with: pnpm --filter @igrp/template-migrator check:drift:update-baseline",
     files,
+    dependencies,
   };
   writeFileSync(BASELINE_FILE, JSON.stringify(doc, null, 2) + "\n", "utf8");
 }
@@ -185,6 +190,15 @@ function main(): void {
         // same collapse-to-final-state rule the file checks already use.
         if (typeof step["manifest"] === "string") managedPaths.add(step["manifest"]);
         for (const dep of (step["deps"] as string[]) ?? []) depRanges.delete(dep);
+        continue;
+      }
+      if (type === "deps.restore") {
+        // Declares a dep (only where the app lacks it): a pin, like deps.bump.
+        if (typeof step["manifest"] === "string") managedPaths.add(step["manifest"]);
+        const removed = (step["removed"] as Record<string, { range: string }>) ?? {};
+        for (const [dep, { range }] of Object.entries(removed)) {
+          depRanges.set(dep, { version: range, migrationId: id });
+        }
         continue;
       }
       if (typeof step["file"] === "string") managedPaths.add(step["file"]);
@@ -297,26 +311,30 @@ function main(): void {
   // baseline. Otherwise scaffolded apps get it but upgraded apps never do.
   const updateBaseline = process.argv.includes("--update-baseline");
   const templateFiles = listTemplateFiles();
+  const baseline = updateBaseline ? null : readBaseline();
+  const baselineMissing = !updateBaseline && baseline === null;
+  const pinned = new Set(depRanges.keys());
   let orphans: string[] = [];
   let staleBaseline: string[] = [];
   let orphanCheckSkipped = false;
-  let baselineMissing = false;
 
   if (templateFiles === null) {
     orphanCheckSkipped = true;
   } else if (updateBaseline) {
     // Full recompute: tracked − managed − exempt. Prunes stale entries too.
     const regenerated = findOrphanFiles({ templateFiles, managedPaths, baseline: [] });
-    writeBaseline(regenerated.orphans);
-    console.log(`Baseline regenerated: ${regenerated.orphans.length} grandfathered file(s) written to ${BASELINE_FILE}\n`);
-  } else {
-    const baseline = readBaseline();
-    if (baseline === null) {
-      baselineMissing = true;
-    } else {
-      ({ orphans, staleBaseline } = findOrphanFiles({ templateFiles, managedPaths, baseline }));
-    }
+    const deps = unpinnedDeps(tplDeps, pinned);
+    writeBaseline(regenerated.orphans, deps);
+    console.log(
+      `Baseline regenerated: ${regenerated.orphans.length} grandfathered file(s) and ${Object.keys(deps).length} unpinned dep(s) written to ${BASELINE_FILE}\n`,
+    );
+  } else if (baseline !== null) {
+    ({ orphans, staleBaseline } = findOrphanFiles({ templateFiles, managedPaths, baseline: baseline.files }));
   }
+
+  // --- unpinned dependency drift ---------------------------------------------
+  const unpinnedDrift =
+    baseline === null ? [] : findUnpinnedDepDrift({ templateDeps: tplDeps, pinned, baseline: baseline.dependencies });
 
   const managed = finalState.size;
   const fileCount = templateFiles === null ? "?" : String(templateFiles.length);
@@ -345,7 +363,7 @@ function main(): void {
   // Hard failures — block the release.
   const failed =
     drifted.length + missingTemplate.length + missingPayload.length + depDrift.length + depMissingInTemplate.length +
-    staleDelete.length + orphans.length + (baselineMissing ? 1 : 0) + (lockDrifted ? 1 : 0);
+    staleDelete.length + orphans.length + unpinnedDrift.length + (baselineMissing ? 1 : 0) + (lockDrifted ? 1 : 0);
   if (failed === 0) {
     console.log("✓ No drift: every migration-managed file and dependency pin matches the template, no unmanaged new files were found, and the shipped lock records every migration.");
     return;
@@ -386,6 +404,16 @@ function main(): void {
     }
     console.error("");
     console.error("  → Add a deps.bump step (in a new migration) updating these to the current version.\n");
+  }
+  if (unpinnedDrift.length > 0) {
+    console.error(`✗ ${unpinnedDrift.length} template dependency(ies) no migration pins, changed since the baseline:`);
+    for (const d of unpinnedDrift) {
+      console.error(`    ${d.dep}: template declares ${d.declared}, baseline ${d.baseline ?? "has no entry"}`);
+    }
+    console.error("");
+    console.error("  → Add a deps.bump (range change) or deps.restore (new dep) step in a new migration,");
+    console.error("    or, if it deliberately should not reach upgraded apps, regenerate the baseline with:");
+    console.error("    pnpm --filter @igrp/template-migrator check:drift:update-baseline\n");
   }
   if (depMissingInTemplate.length > 0) {
     console.error(`✗ ${depMissingInTemplate.length} dependency(ies) a migration bumps but the template doesn't declare:`);

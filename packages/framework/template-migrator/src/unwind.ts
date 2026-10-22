@@ -57,7 +57,7 @@ export function unwindSteps(
         mkdirSync(dirname(dest), { recursive: true });
         writeFileSync(dest, content, "utf8");
       } else {
-        executeStep(undo, appRoot, payloadDir);
+        executeStep(undo, appRoot, payloadDir, true);
       }
       reverted++;
     } catch (err) {

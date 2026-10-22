@@ -56,10 +56,43 @@ export function resolvePayload(from: string, payloadDir: string = PAYLOAD_DIR): 
   return join(payloadDir, rel);
 }
 
+const SEMVER = /^[\^~]?(\d+)\.(\d+)\.(\d+)(?:-([0-9A-Za-z.-]+))?$/;
+
+/**
+ * True when `current` is a strictly higher version than `target`, comparing
+ * the versions the ranges name (a `^`/`~` prefix is ignored). Anything that is
+ * not a plain version (`workspace:*`, `latest`, a URL, a compound range)
+ * returns false, so deps.bump keeps its old behaviour for it.
+ */
+export function isNewerVersion(current: string, target: string): boolean {
+  const a = SEMVER.exec(current.trim());
+  const b = SEMVER.exec(target.trim());
+  if (!a || !b) return false;
+  for (let i = 1; i <= 3; i++) {
+    if (Number(a[i]) !== Number(b[i])) return Number(a[i]) > Number(b[i]);
+  }
+  // Same x.y.z: a release outranks any prerelease of it.
+  if (!a[4] || !b[4]) return !a[4] && !!b[4];
+  const pa = a[4].split(".");
+  const pb = b[4].split(".");
+  for (let i = 0; i < Math.max(pa.length, pb.length); i++) {
+    if (pa[i] === undefined || pb[i] === undefined) return pb[i] === undefined;
+    if (pa[i] === pb[i]) continue;
+    const na = /^\d+$/.test(pa[i]);
+    const nb = /^\d+$/.test(pb[i]);
+    if (na && nb) return Number(pa[i]) > Number(pb[i]);
+    if (na !== nb) return nb; // numeric identifiers rank below alphanumeric ones
+    return pa[i] > pb[i];
+  }
+  return false;
+}
+
 export function executeStep(
   step: MigrationStep,
   appRoot: string,
-  payloadDir: string = PAYLOAD_DIR
+  payloadDir: string = PAYLOAD_DIR,
+  /** Undo/rollback: a deps.bump undo restores older ranges on purpose. */
+  isUndo = false,
 ): MigrationStep {
   switch (step.type) {
     case "file.create":
@@ -111,6 +144,8 @@ export function executeStep(
         // An empty (or whitespace-only) file gets no leading blank lines —
         // `"".trimEnd() + eol + eol` would open every fresh .env with two.
         const prefix = existing.trim() === "" ? "" : existing.trimEnd() + eol + eol;
+        // The app may have deleted the folder (e.g. docker/development).
+        ensureDir(envPath);
         writeFileSync(envPath, prefix + lines.join(eol), "utf8");
       }
       // Undo must list only keys THIS call actually appended — never keys that
@@ -185,7 +220,14 @@ export function executeStep(
       const pkg = JSON.parse(readFileSync(pkgPath, "utf8"));
       const prevRanges: Record<string, string> = {};
       const skipped: string[] = [];
+      const ahead: string[] = [];
       for (const [dep, version] of Object.entries(step.ranges)) {
+        const current: string | undefined = pkg.dependencies?.[dep] ?? pkg.devDependencies?.[dep];
+        // An app bumped by hand past this migration must not be moved backwards.
+        if (!isUndo && current !== undefined && isNewerVersion(current, version)) {
+          ahead.push(`${dep}@${current}`);
+          continue;
+        }
         if (pkg.dependencies?.[dep]) {
           prevRanges[dep] = pkg.dependencies[dep];
           pkg.dependencies[dep] = version;
@@ -208,6 +250,9 @@ export function executeStep(
           `  ⚠ ${step.manifest}: not declared by this app, so NOT bumped: ${skipped.join(", ")}\n` +
             `    If the migration's feature depends on one of these, add it manually.`,
         );
+      }
+      if (ahead.length > 0) {
+        console.warn(`  ⚠ ${step.manifest}: already newer than this migration, kept: ${ahead.join(", ")}`);
       }
       return { type: "deps.bump", manifest: step.manifest, ranges: prevRanges };
     }

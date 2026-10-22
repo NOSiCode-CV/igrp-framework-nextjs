@@ -10,7 +10,7 @@ import {
 import { join as joinPath } from "path";
 import { tmpdir } from "os";
 import { join, dirname } from "path";
-import { executeStep } from "../apply";
+import { executeStep, isNewerVersion } from "../apply";
 import type { MigrationStep } from "../types";
 
 let appRoot: string;
@@ -255,6 +255,78 @@ describe("executeStep: deps.bump", () => {
     }
 
     expect(spy).not.toHaveBeenCalled();
+  });
+
+  it("never downgrades a dep the app already moved past, and leaves it out of the undo", () => {
+    writeAppFile(
+      "package.json",
+      JSON.stringify(
+        { name: "consumer", dependencies: { "@igrp/framework-next": "0.2.0-beta.12", next: "15.5.19" } },
+        null,
+        2,
+      ) + "\n",
+    );
+    const spy = vi.spyOn(console, "warn").mockImplementation(() => {});
+
+    const undo = executeStep(
+      {
+        type: "deps.bump",
+        manifest: "package.json",
+        ranges: { "@igrp/framework-next": "0.2.0-beta.9", next: "15.5.28" },
+      },
+      appRoot,
+      payloadDir,
+    );
+    const warning = String(spy.mock.calls[0]?.[0]);
+    spy.mockRestore();
+
+    const pkg = JSON.parse(readAppFile("package.json"));
+    expect(pkg.dependencies["@igrp/framework-next"]).toBe("0.2.0-beta.12");
+    expect(pkg.dependencies.next).toBe("15.5.28");
+    expect(undo).toEqual({ type: "deps.bump", manifest: "package.json", ranges: { next: "15.5.19" } });
+    expect(warning).toContain("@igrp/framework-next@0.2.0-beta.12");
+  });
+
+  it("an undo bump restores the older range", () => {
+    writeAppFile(
+      "package.json",
+      JSON.stringify({ name: "consumer", dependencies: { "@igrp/framework-next": "0.2.0-beta.13" } }, null, 2) + "\n",
+    );
+    executeStep(
+      { type: "deps.bump", manifest: "package.json", ranges: { "@igrp/framework-next": "0.2.0-beta.12" } },
+      appRoot,
+      payloadDir,
+      true,
+    );
+    expect(JSON.parse(readAppFile("package.json")).dependencies["@igrp/framework-next"]).toBe("0.2.0-beta.12");
+  });
+});
+
+describe("executeStep: env.add", () => {
+  it("creates the env file's folder when the app deleted it", () => {
+    executeStep(
+      { type: "env.add", file: "docker/development/.env.development", keys: { A: { default: "1", doc: "" } } },
+      appRoot,
+      payloadDir,
+    );
+    expect(readAppFile("docker/development/.env.development")).toContain("A=1");
+  });
+});
+
+describe("isNewerVersion", () => {
+  it.each([
+    ["0.2.0-beta.12", "0.2.0-beta.9", true],
+    ["0.2.0-beta.9", "0.2.0-beta.12", false],
+    ["0.2.0-beta.9", "0.2.0-beta.9", false],
+    ["0.2.0", "0.2.0-beta.20", true],
+    ["0.2.0-beta.1", "0.1.0-beta.149", true],
+    ["^4.14.9", "^4.14.0", true],
+    ["15.5.19", "15.5.28", false],
+    ["0.2.0-beta.1", "0.2.0-beta", true],
+    ["workspace:*", "0.2.0-beta.9", false],
+    [">=1.0.0 <2", "1.5.0", false],
+  ])("%s newer than %s → %s", (current, target, expected) => {
+    expect(isNewerVersion(current, target)).toBe(expected);
   });
 });
 

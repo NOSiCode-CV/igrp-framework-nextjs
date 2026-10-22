@@ -125,7 +125,7 @@ export async function rollback(
       }
       continue;
     }
-    executeStep(step, appRoot);
+    executeStep(step, appRoot, undefined, true);
   }
   lock.applied.splice(idx, 1);
   writeLock(appRoot, lock);

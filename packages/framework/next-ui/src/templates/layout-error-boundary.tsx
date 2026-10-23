@@ -41,8 +41,8 @@ function useIGRPLayoutErrorReset() {
  * **It must never latch on a Next.js control-flow signal.** `redirect()`,
  * `notFound()`, `forbidden()` and `unauthorized()` all work by throwing. The
  * framework's data providers (`@igrp/framework-next`'s header/sidebar
- * providers) call `redirect('/login')` on a 401/403 from Access Management,
- * and they render inside a `<Suspense>` nested in this boundary — so the throw
+ * providers) call `redirect('/login?reason=session_ended')` on a 401 and
+ * `forbidden()` on a 403 from Access Management, and they render inside a `<Suspense>` nested in this boundary — so the throw
  * is streamed to the client, where THIS boundary is nearer than Next's own
  * `RedirectBoundary` and would latch first. The user with an expired session
  * then sees a permanently broken header/sidebar instead of being sent to the

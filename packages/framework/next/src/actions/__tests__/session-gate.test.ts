@@ -17,7 +17,11 @@ const fetchAppByCode = vi.fn();
 vi.mock('../../hooks/use-menus.js', () => ({ fetchMenus }));
 vi.mock('../../hooks/use-user.js', () => ({ fetchCurrentUser }));
 vi.mock('../../hooks/use-applications.js', () => ({ fetchAppsByUser, fetchAppByCode }));
-vi.mock('next/navigation', () => ({ unstable_rethrow: () => {} }));
+vi.mock('next/navigation', () => ({
+  unstable_rethrow: (e: unknown) => {
+    if (e instanceof Error && e.message.startsWith('NEXT_')) throw e;
+  },
+}));
 
 const igrpEnsureAccessClientConfig = vi.fn();
 const isIgrpAuthBypass = vi.fn(() => false);
@@ -74,5 +78,12 @@ describe('server actions refuse before contacting Access Management', () => {
     vi.spyOn(console, 'error').mockImplementation(() => {});
 
     expect(await actions.fetchAppsByUserAction()).toMatchObject({ ok: false });
+  });
+
+  it('lets a 401 session-ended redirect from the fetch escape the action', async () => {
+    igrpEnsureAccessClientConfig.mockResolvedValue({ token: 'AT', baseUrl: 'http://am' });
+    fetchMenus.mockRejectedValue(new Error('NEXT_REDIRECT:/login?reason=session_ended'));
+
+    await expect(actions.fetchMenusAction('APP')).rejects.toThrow('NEXT_REDIRECT');
   });
 });

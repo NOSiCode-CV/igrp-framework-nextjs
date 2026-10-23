@@ -45,15 +45,31 @@ export const SECURE_SESSION_COOKIE_BASENAME = `${SECURE_COOKIE_PREFIX}${SESSION_
  * Reading the prefix off the real cookie keeps both sides in agreement.
  * Returns `undefined` when no session cookie is present, so `getToken` keeps
  * its own default.
+ *
+ * Pass `basePath` to match only that app's own cookie names (see
+ * {@link sessionCookieName}); omit it for the stock-name matching.
  */
-export function resolveSecureCookie(cookieNames: Iterable<string>): boolean | undefined {
+export function resolveSecureCookie(
+  cookieNames: Iterable<string>,
+  basePath?: string,
+): boolean | undefined {
+  // With a basePath, count only THIS app's own names: a co-hosted app's (or the
+  // root app's) `__Secure-` cookie must not flip the scheme.
+  const own =
+    basePath === undefined ? undefined : (secure: boolean) => sessionCookieName(basePath, secure);
+  const securePrefix = own ? own(true) : SECURE_SESSION_COOKIE_BASENAME;
+  const plainPrefix = own ? own(false) : SESSION_COOKIE_BASENAME;
   let hasPlain = false;
   for (const name of cookieNames) {
-    if (name.startsWith(SECURE_SESSION_COOKIE_BASENAME)) return true;
-    if (name.startsWith(SESSION_COOKIE_BASENAME)) hasPlain = true;
+    if (name.startsWith(securePrefix)) return true;
+    if (name.startsWith(plainPrefix)) hasPlain = true;
   }
   return hasPlain ? false : undefined;
 }
+
+/** Host-wide logout marker, shared by every co-hosted app (see the multi-app auth sessions spec). */
+export const HOST_LOGOUT_COOKIE = 'igrp.logout-at';
+export const HOST_LOGOUT_COOKIE_MAX_AGE_S = 2_592_000;
 
 /**
  * Terminator character closing every basePath suffix.

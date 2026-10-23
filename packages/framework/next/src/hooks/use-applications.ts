@@ -1,11 +1,8 @@
 import 'server-only';
 
 import { cache } from 'react';
-import { ApiClientError } from '@igrp/platform-access-management-client-ts';
-import { redirect } from 'next/navigation';
-import { headers } from 'next/headers';
-import { sanitizeRedirectUrl } from '@igrp/framework-next-auth/sanitize';
 
+import { igrpThrowOnAccessAuthError } from '../lib/access-auth-error.js';
 import { igrpGetAccessClient } from '../lib/api-client.js';
 import { mapperApplications } from '../mappers/applications-mapper.js';
 import { logger } from '../logger.js';
@@ -27,11 +24,7 @@ export async function fetchAppsByUser() {
   try {
     return await getCachedAppsByUser();
   } catch (error) {
-    if (error instanceof ApiClientError && (error.status === 401 || error.status === 403)) {
-      const h = await headers();
-      const callbackUrl = sanitizeRedirectUrl(h.get('x-current-path'), undefined, '');
-      redirect(callbackUrl ? `/login?callbackUrl=${encodeURIComponent(callbackUrl)}` : '/login');
-    }
+    await igrpThrowOnAccessAuthError(error);
     // Non-auth failure (timeout / network / 5xx): surface it so the layout's
     // error boundary engages instead of rendering an empty list that looks like
     // a zero-permission user. The action layer (actions/index.ts) catches this
@@ -52,11 +45,7 @@ export async function fetchAppByCode(appCode: string) {
   try {
     return await getCachedAppByCode(appCode);
   } catch (error) {
-    if (error instanceof ApiClientError && (error.status === 401 || error.status === 403)) {
-      const h = await headers();
-      const callbackUrl = sanitizeRedirectUrl(h.get('x-current-path'), undefined, '');
-      redirect(callbackUrl ? `/login?callbackUrl=${encodeURIComponent(callbackUrl)}` : '/login');
-    }
+    await igrpThrowOnAccessAuthError(error);
     // Non-auth failure (timeout / network / 5xx): surface it so the layout's
     // error boundary engages instead of rendering a null app that silently
     // breaks the layout. The action layer (actions/index.ts) catches this

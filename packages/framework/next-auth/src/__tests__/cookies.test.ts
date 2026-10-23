@@ -4,6 +4,8 @@ import {
   basePathCookiePath,
   basePathCookieSuffix,
   buildAuthCookies,
+  HOST_LOGOUT_COOKIE,
+  HOST_LOGOUT_COOKIE_MAX_AGE_S,
   resolveSecureCookie,
   sessionCookieName,
   SESSION_COOKIE_BASENAME,
@@ -152,6 +154,50 @@ describe('resolveSecureCookie', () => {
   it('returns undefined when no session cookie is present', () => {
     expect(resolveSecureCookie(['some-other-cookie'])).toBeUndefined();
     expect(resolveSecureCookie([])).toBeUndefined();
+  });
+
+  it("with a basePath, ignores another app's __Secure- cookie", () => {
+    expect(
+      resolveSecureCookie(
+        ['__Secure-next-auth.session-token~', 'next-auth.session-token.apps-a_p~'],
+        '/apps/a',
+      ),
+    ).toBe(false);
+  });
+
+  it('with a basePath, returns undefined when only foreign cookies are present', () => {
+    expect(resolveSecureCookie(['__Secure-next-auth.session-token~'], '/apps/a')).toBeUndefined();
+    expect(
+      resolveSecureCookie(['next-auth.session-token.apps-hr-admin_p~'], '/apps/hr'),
+    ).toBeUndefined();
+  });
+
+  it('with a basePath, detects its own chunked secure cookie', () => {
+    expect(
+      resolveSecureCookie(
+        [
+          '__Secure-next-auth.session-token.apps-a_p~.0',
+          '__Secure-next-auth.session-token.apps-a_p~.1',
+          'next-auth.session-token~',
+        ],
+        '/apps/a',
+      ),
+    ).toBe(true);
+  });
+
+  it("with an empty basePath, reads only the root app's terminated names", () => {
+    expect(resolveSecureCookie(['next-auth.session-token~'], '')).toBe(false);
+    expect(resolveSecureCookie(['__Secure-next-auth.session-token'], '')).toBeUndefined();
+  });
+
+  it('exports the host-logout cookie contract', () => {
+    expect(HOST_LOGOUT_COOKIE).toBe('igrp.logout-at');
+    expect(HOST_LOGOUT_COOKIE_MAX_AGE_S).toBe(2_592_000);
+  });
+
+  it('never sweeps the host-logout cookie', () => {
+    expect(staleAuthCookies('/apps/a', [HOST_LOGOUT_COOKIE])).toEqual([]);
+    expect(staleAuthCookies('', [HOST_LOGOUT_COOKIE], { sweepStockNames: true })).toEqual([]);
   });
 
   it('still works for chunked and basePath-scoped names', () => {

@@ -129,4 +129,72 @@ describe('access-token recovery under a basePath', () => {
 
     expect(getToken.mock.calls[0]![0]).toMatchObject({ cookieName: SCOPED_COOKIE });
   });
+
+  it("refuses a jar holding only another app's cookie", async () => {
+    process.env.NEXT_PUBLIC_BASE_PATH = '/apps/a';
+    cookiesGetAll.mockReturnValue([{ name: 'next-auth.session-token~', value: 'center' }]);
+    const config = await igrpEnsureAccessClientConfig();
+    expect(getToken).not.toHaveBeenCalled();
+    expect(config.token).toBe('');
+  });
+
+  it('still decodes chunked stock cookies (cookieIsolation: none)', async () => {
+    cookiesGetAll.mockReturnValue([
+      { name: 'next-auth.session-token.0', value: 'a' },
+      { name: 'next-auth.session-token.1', value: 'b' },
+    ]);
+    await igrpEnsureAccessClientConfig();
+    expect(getToken).toHaveBeenCalledTimes(1);
+    expect(getToken.mock.calls[0]![0]).not.toHaveProperty('cookieName');
+  });
+
+  it("resolves its own scheme when the Center's __Secure- cookie is present", async () => {
+    process.env.NEXT_PUBLIC_BASE_PATH = '/apps/a';
+    cookiesGetAll.mockReturnValue([
+      { name: '__Secure-next-auth.session-token~', value: 'center' },
+      { name: 'next-auth.session-token.apps-a_p~.0', value: 'own0' },
+      { name: 'next-auth.session-token.apps-a_p~.1', value: 'own1' },
+    ]);
+    await igrpEnsureAccessClientConfig();
+    expect(getToken.mock.calls[0]![0]).toMatchObject({
+      secureCookie: false,
+      cookieName: 'next-auth.session-token.apps-a_p~',
+    });
+  });
+  it('decodes an unchunked secure stock cookie with secureCookie: true', async () => {
+    cookiesGetAll.mockReturnValue([{ name: '__Secure-next-auth.session-token', value: 'own' }]);
+    await igrpEnsureAccessClientConfig();
+    expect(getToken.mock.calls[0]![0]).toMatchObject({ secureCookie: true });
+    expect(getToken.mock.calls[0]![0]).not.toHaveProperty('cookieName');
+  });
+
+  /**
+   * NextAuth collects every cookie whose name `startsWith` the stock name, so
+   * the Center's `__Secure-next-auth.session-token~` must neither flip the
+   * scheme to secure nor reach `getToken` at all. (Without a basePath that
+   * cookie is this app's own scoped name, so the case needs one.)
+   */
+  it("hides the Center's secure cookie from a plain stock lookup", async () => {
+    process.env.NEXT_PUBLIC_BASE_PATH = '/apps/a';
+    cookiesGetAll.mockReturnValue([
+      { name: 'next-auth.session-token', value: 'own' },
+      { name: '__Secure-next-auth.session-token~', value: 'center' },
+    ]);
+    await igrpEnsureAccessClientConfig();
+    const arg = getToken.mock.calls[0]![0] as {
+      secureCookie?: boolean;
+      req: { cookies: Record<string, string> };
+    };
+    expect(arg.secureCookie).toBe(false);
+    expect(arg.req.cookies).toHaveProperty(['next-auth.session-token']);
+    expect(arg.req.cookies).not.toHaveProperty(['__Secure-next-auth.session-token~']);
+  });
+
+  it('decodes a stock cookie under a basePath (cookieIsolation: none)', async () => {
+    process.env.NEXT_PUBLIC_BASE_PATH = '/apps/a';
+    cookiesGetAll.mockReturnValue([{ name: 'next-auth.session-token', value: 'own' }]);
+    const config = await igrpEnsureAccessClientConfig();
+    expect(getToken.mock.calls[0]![0]).not.toHaveProperty('cookieName');
+    expect(config.token).toBe('AT');
+  });
 });

@@ -12,6 +12,8 @@ export interface JWT extends DefaultJWT {
   // collapses the union to `string` and loses it.
   error?: 'RefreshAccessTokenError' | (string & {});
   forceLogout?: boolean;
+  /** Sign-in time, unix seconds. Compared with the host logout cookie. */
+  authTime?: number;
   user?: NextAuthUser;
   /**
    * The identity provider's OIDC `locale` claim, carried raw (`pt-CV`, `en`,

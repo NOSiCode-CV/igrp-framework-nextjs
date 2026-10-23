@@ -41,7 +41,7 @@ describe('getAccessToken — session-cookie name resolution', () => {
   it('requests the secure cookie name when a __Secure- session cookie is present', async () => {
     const withIGRPAuth = await getFactory();
     const auth = withIGRPAuth({ env: VALID_ENV });
-    cookieList = [{ name: '__Secure-next-auth.session-token', value: 'enc' }];
+    cookieList = [{ name: '__Secure-next-auth.session-token~', value: 'enc' }];
 
     await auth.getAccessToken();
 
@@ -52,7 +52,7 @@ describe('getAccessToken — session-cookie name resolution', () => {
   it('requests the non-secure cookie name when a plain session cookie is present', async () => {
     const withIGRPAuth = await getFactory();
     const auth = withIGRPAuth({ env: VALID_ENV });
-    cookieList = [{ name: 'next-auth.session-token', value: 'enc' }];
+    cookieList = [{ name: 'next-auth.session-token~', value: 'enc' }];
 
     await auth.getAccessToken();
 
@@ -63,12 +63,25 @@ describe('getAccessToken — session-cookie name resolution', () => {
     const withIGRPAuth = await getFactory();
     const auth = withIGRPAuth({ env: VALID_ENV });
     cookieList = [
-      { name: '__Secure-next-auth.session-token.0', value: 'a' },
-      { name: '__Secure-next-auth.session-token.1', value: 'b' },
+      { name: '__Secure-next-auth.session-token~.0', value: 'a' },
+      { name: '__Secure-next-auth.session-token~.1', value: 'b' },
     ];
 
     await auth.getAccessToken();
 
     expect(getTokenMock.mock.calls[0]?.[0]).toMatchObject({ secureCookie: true });
+  });
+
+  it("ignores the Center's __Secure- cookie in a basePath app", async () => {
+    const auth = (await getFactory())({ env: { ...VALID_ENV, NEXT_PUBLIC_BASE_PATH: '/apps/a' } });
+    cookieList = [
+      { name: '__Secure-next-auth.session-token~', value: 'center' },
+      { name: 'next-auth.session-token.apps-a_p~', value: 'own' },
+    ];
+    await auth.getAccessToken();
+    expect(getTokenMock.mock.calls[0]?.[0]).toMatchObject({
+      secureCookie: false,
+      cookieName: 'next-auth.session-token.apps-a_p~',
+    });
   });
 });

@@ -80,12 +80,15 @@ const SUPER_ADMIN_MOCK: IGRPAccessClaims = { permissions: [], roles: [], isSuper
  * `<name>.0` / `<name>.1`). Failing that, the stock name only when a cookie is
  * EXACTLY it or `<it>.<n>` — never a bare prefix match, because the stock name
  * is a prefix of every co-hosted app's cookie (`next-auth.session-token~`) and
- * NextAuth would decode a foreign session as this app's. Neither: `null`, and
- * the caller recovers nothing.
+ * NextAuth would decode a foreign session as this app's. For the same reason
+ * the stock branch takes the `__Secure-` scheme only from an exact stock name
+ * and returns `keep`, so the caller hands `getToken` the exact stock cookies
+ * alone: its `SessionStore` collects every cookie that `startsWith` the name it
+ * looks for. Neither: `null`, and the caller recovers nothing.
  */
 function sessionCookieLookup(
   cookieNames: string[],
-): { cookieName?: string; secureCookie?: boolean } | null {
+): { cookieName?: string; secureCookie?: boolean; keep?: (name: string) => boolean } | null {
   // No early return for an empty basePath: a root-path app's scoped name is
   // `next-auth.session-token~`.
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
@@ -101,8 +104,12 @@ function sessionCookieLookup(
         (name.startsWith(`${stock}.`) && /^\d+$/.test(name.slice(stock.length + 1))),
     );
   if (!cookieNames.some(isStock)) return null;
-  const stockSecure = resolveSecureCookie(cookieNames);
-  return stockSecure !== undefined ? { secureCookie: stockSecure } : {};
+  return {
+    secureCookie: cookieNames.some(
+      (name) => isStock(name) && name.startsWith(SECURE_SESSION_COOKIE_BASENAME),
+    ),
+    keep: isStock,
+  };
 }
 
 async function recoverAccessTokenFromCookies(): Promise<string> {
@@ -116,16 +123,19 @@ async function recoverAccessTokenFromCookies(): Promise<string> {
     const names = all.map((c) => c.name);
     const lookup = sessionCookieLookup(names);
     if (!lookup) return '';
+    const { keep, ...options } = lookup;
     const token = await getToken({
       req: {
-        cookies: Object.fromEntries(all.map((c) => [c.name, c.value])),
+        cookies: Object.fromEntries(
+          all.filter((c) => !keep || keep(c.name)).map((c) => [c.name, c.value]),
+        ),
       } as Parameters<typeof getToken>[0]['req'],
       secret: process.env.NEXTAUTH_SECRET,
       // With a session store registered the cookie holds only a session id;
       // plain decode would return a token with no `accessToken`. Without one
       // this IS plain decode.
       decode: decodeIGRPSessionToken,
-      ...lookup,
+      ...options,
     });
     return (token as { accessToken?: string } | null)?.accessToken ?? '';
   } catch (error) {

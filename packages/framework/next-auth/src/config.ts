@@ -49,6 +49,7 @@ import type { IGRPTokenRecoveryStore } from './token-store';
 import {
   createSessionTokenDecoder,
   createSessionTokenEncoder,
+  DEFAULT_SESSION_MAX_AGE_S,
   deleteStoredSession,
   refreshUnderSessionLock,
   type IGRPSessionStore,
@@ -272,7 +273,10 @@ export type IGRPAuthOptions = {
   /** NextAuth pages config (e.g. custom signIn page). */
   pages?: NextAuthOptions['pages'];
 
-  /** NextAuth session config. */
+  /**
+   * NextAuth session config. `maxAge` defaults to 28800 s (8 h), AM's absolute
+   * session ceiling, instead of NextAuth's 30 days.
+   */
   session?: NextAuthOptions['session'];
 
   /** Callback extensions that compose on top of IGRP defaults. */
@@ -863,7 +867,7 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
     provider,
     env = process.env,
     pages,
-    session: sessionConfig,
+    session: sessionOption,
     callbacks: callbackExtensions = {},
     middleware: middlewareOptions = {},
     onSessionExpired,
@@ -873,6 +877,7 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
     secureCookies: secureCookiesOption,
     debug = envFlag(env.IGRP_AUTH_DEBUG ?? process.env.IGRP_AUTH_DEBUG),
   } = options;
+  const sessionConfig = { maxAge: DEFAULT_SESSION_MAX_AGE_S, ...sessionOption };
 
   // Resolved once, from the caller's `env` first: a caller that passes a
   // validated env map should not silently get half its config from
@@ -1109,7 +1114,7 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
     // alongside `cookies`, so `cookieIsolation: 'none'` behaves as before.
     ...(authCookies ? { cookies: authCookies, useSecureCookies: secureCookies } : {}),
     ...(pages ? { pages } : {}),
-    ...(sessionConfig ? { session: sessionConfig } : {}),
+    session: sessionConfig,
     jwt: { encode: encodeSessionToken, decode: decodeSessionToken },
 
     callbacks: {

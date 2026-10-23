@@ -1410,3 +1410,19 @@ describe('withIGRPAuth — a throwing callback extension does not end the sessio
     ).rejects.toBe(signal);
   });
 });
+
+describe('withIGRPAuth — session.maxAge', () => {
+  it("defaults to AM's absolute session ceiling (8 h), not NextAuth's 30 days", async () => {
+    const withIGRPAuth = await getFactory();
+    expect(withIGRPAuth({ env: VALID_ENV }).authOptions.session?.maxAge).toBe(28800);
+  });
+
+  it('keeps a caller-supplied maxAge and other session fields', async () => {
+    const withIGRPAuth = await getFactory();
+    const { session } = withIGRPAuth({
+      env: VALID_ENV,
+      session: { maxAge: 3600, updateAge: 60 },
+    }).authOptions;
+    expect(session).toMatchObject({ maxAge: 3600, updateAge: 60 });
+  });
+});

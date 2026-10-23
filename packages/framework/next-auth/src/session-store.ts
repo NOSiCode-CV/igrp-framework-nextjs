@@ -79,8 +79,12 @@ export const SESSION_STORE_KEY_PREFIX = 'igrp:session:';
  */
 const STORE_VALUE_SALT = 'igrp.session-store';
 
-/** NextAuth's own default session lifetime, used when `maxAge` is not passed. */
-const DEFAULT_MAX_AGE_S = 30 * 24 * 60 * 60;
+/**
+ * Default session lifetime: AM's absolute session ceiling (`absolute-timeout-seconds`,
+ * 28800). NextAuth's own 30 days outlived the AM session by ~90×, leaving a dead
+ * cookie and store entry behind after the refresh grant had already failed.
+ */
+export const DEFAULT_SESSION_MAX_AGE_S = 8 * 60 * 60;
 
 /**
  * Token fields that move to the store. These are the bulk of the cookie.
@@ -213,7 +217,7 @@ export function createSessionTokenEncoder(options: CodecOptions = {}) {
     if (!store && !params.salt && hasTokenMaterial(token)) warnNoStoreInProduction();
     if (!store || params.salt || !hasTokenMaterial(token)) return nextAuthEncode(params);
 
-    const maxAge = params.maxAge ?? DEFAULT_MAX_AGE_S;
+    const maxAge = params.maxAge ?? DEFAULT_SESSION_MAX_AGE_S;
     const existingId = typeof token[SESSION_ID_CLAIM] === 'string' ? token[SESSION_ID_CLAIM] : '';
     const sessionId = existingId || newSessionId();
 
@@ -514,7 +518,7 @@ export async function refreshUnderSessionLock(
         sessionId,
         pickStored(result),
         secret,
-        options.maxAge ?? DEFAULT_MAX_AGE_S,
+        options.maxAge ?? DEFAULT_SESSION_MAX_AGE_S,
       ).catch(() => {
         // The encode that follows the jwt callback writes it again; waiters
         // that miss it fall back to refreshing themselves.

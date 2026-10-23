@@ -27,7 +27,10 @@ vi.mock('@igrp/platform-access-management-client-ts', () => ({
 const redirect = vi.fn((url: string) => {
   throw new Error(`NEXT_REDIRECT:${url}`);
 });
-vi.mock('next/navigation', () => ({ redirect }));
+const forbidden = vi.fn(() => {
+  throw new Error('NEXT_FORBIDDEN');
+});
+vi.mock('next/navigation', () => ({ redirect, forbidden }));
 
 const headerStore = new Map<string, string>();
 vi.mock('next/headers', () => ({
@@ -59,6 +62,7 @@ describe('framework hooks sanitize x-current-path before /login redirect', () =>
   beforeEach(() => {
     headerStore.clear();
     redirect.mockClear();
+    forbidden.mockClear();
     getCurrentUserApplicationMenus.mockReset();
     getCurrentUserApplications.mockReset();
     getCurrentUser.mockReset();
@@ -70,15 +74,15 @@ describe('framework hooks sanitize x-current-path before /login redirect', () =>
   it('drops an off-origin x-current-path (no callbackUrl)', async () => {
     igrpSetAccessClientConfig(AM_CONFIG);
     headerStore.set('x-current-path', 'https://evil.com/steal');
-    await expect(fetchMenus('app')).rejects.toThrow('NEXT_REDIRECT:/login');
-    expect(redirect).toHaveBeenCalledWith('/login');
+    await expect(fetchMenus('app')).rejects.toThrow('NEXT_REDIRECT:/login?reason=session_ended');
+    expect(redirect).toHaveBeenCalledWith('/login?reason=session_ended');
   });
 
   it('keeps a safe relative x-current-path as callbackUrl', async () => {
     igrpSetAccessClientConfig(AM_CONFIG);
     headerStore.set('x-current-path', '/dashboard');
     await expect(fetchMenus('app')).rejects.toThrow(
-      'NEXT_REDIRECT:/login?callbackUrl=%2Fdashboard',
+      'NEXT_REDIRECT:/login?reason=session_ended&callbackUrl=%2Fdashboard',
     );
   });
 
@@ -86,23 +90,44 @@ describe('framework hooks sanitize x-current-path before /login redirect', () =>
     igrpSetAccessClientConfig(AM_CONFIG);
     getCurrentUserApplications.mockRejectedValue(new ApiClientError(401));
     headerStore.set('x-current-path', 'https://evil.com/steal');
-    await expect(fetchAppsByUser()).rejects.toThrow('NEXT_REDIRECT:/login');
-    expect(redirect).toHaveBeenCalledWith('/login');
+    await expect(fetchAppsByUser()).rejects.toThrow('NEXT_REDIRECT:/login?reason=session_ended');
+    expect(redirect).toHaveBeenCalledWith('/login?reason=session_ended');
   });
 
   it('drops an off-origin x-current-path in fetchAppByCode (no callbackUrl)', async () => {
     igrpSetAccessClientConfig(AM_CONFIG);
     getApplications.mockRejectedValue(new ApiClientError(401));
     headerStore.set('x-current-path', 'https://evil.com/steal');
-    await expect(fetchAppByCode('app')).rejects.toThrow('NEXT_REDIRECT:/login');
-    expect(redirect).toHaveBeenCalledWith('/login');
+    await expect(fetchAppByCode('app')).rejects.toThrow('NEXT_REDIRECT:/login?reason=session_ended');
+    expect(redirect).toHaveBeenCalledWith('/login?reason=session_ended');
   });
 
   it('drops an off-origin x-current-path in fetchCurrentUser (no callbackUrl)', async () => {
     igrpSetAccessClientConfig(AM_CONFIG);
     getCurrentUser.mockRejectedValue(new ApiClientError(401));
     headerStore.set('x-current-path', 'https://evil.com/steal');
-    await expect(fetchCurrentUser()).rejects.toThrow('NEXT_REDIRECT:/login');
-    expect(redirect).toHaveBeenCalledWith('/login');
+    await expect(fetchCurrentUser()).rejects.toThrow('NEXT_REDIRECT:/login?reason=session_ended');
+    expect(redirect).toHaveBeenCalledWith('/login?reason=session_ended');
+  });
+
+  it.each([
+    ['fetchMenus', () => fetchMenus('app'), getCurrentUserApplicationMenus],
+    ['fetchAppsByUser', () => fetchAppsByUser(), getCurrentUserApplications],
+    ['fetchAppByCode', () => fetchAppByCode('app'), getApplications],
+    ['fetchCurrentUser', () => fetchCurrentUser(), getCurrentUser],
+  ])('%s renders forbidden on 403 instead of redirecting', async (_n, call, mock) => {
+    igrpSetAccessClientConfig(AM_CONFIG);
+    mock.mockRejectedValue(new ApiClientError(403));
+    await expect(call()).rejects.toThrow('NEXT_FORBIDDEN');
+    expect(forbidden).toHaveBeenCalledTimes(1);
+    expect(redirect).not.toHaveBeenCalled();
+  });
+
+  it('still throws a 500 to the error boundary', async () => {
+    igrpSetAccessClientConfig(AM_CONFIG);
+    getCurrentUserApplicationMenus.mockRejectedValue(new ApiClientError(500));
+    await expect(fetchMenus('app')).rejects.toThrow('status 500');
+    expect(redirect).not.toHaveBeenCalled();
+    expect(forbidden).not.toHaveBeenCalled();
   });
 });

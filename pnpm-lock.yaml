@@ -481,7 +481,7 @@ importers:
         specifier: workspace:*
         version: link:../../design-system
       '@igrp/platform-access-management-client-ts':
-        specifier: ^0.2.0-beta.19
+        specifier: ^0.2.0-beta.20
         version: 0.2.0-beta.19
       next-intl:
         specifier: ^4.14.0
@@ -649,7 +649,7 @@ importers:
         specifier: 10.0.1
         version: 10.0.1(eslint@10.12.0(jiti@2.7.0)(supports-color@8.1.1))
       '@igrp/platform-access-management-client-ts':
-        specifier: ^0.2.0-beta.19
+        specifier: ^0.2.0-beta.20
         version: 0.2.0-beta.19
       '@types/node':
         specifier: ^24

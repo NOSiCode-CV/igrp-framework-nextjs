@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import * as oidcModule from '../oidc';
+import { refreshOidcAccessToken } from '../oidc';
 import type { JWT } from '../jwt';
 import { withIGRPAuth } from '../config';
 
@@ -67,9 +68,24 @@ beforeEach(() => {
 afterEach(() => vi.useRealTimers());
 
 describe('authTime claim', () => {
-  it('stamps authTime in seconds at sign-in, silent sign-in included', async () => {
+  it('stamps authTime in seconds at sign-in', async () => {
     const token = await jwt({ token: {}, account: ACCOUNT } as never);
     expect(token.authTime).toBe(NOW_S);
+  });
+
+  it('keeps authTime unchanged through a refresh', async () => {
+    // The real refresh spreads the incoming token (applyRefreshDelta); mirror that.
+    vi.mocked(refreshOidcAccessToken).mockImplementationOnce(async (t) => ({
+      ...t,
+      accessToken: 'refreshed-at',
+    }));
+    const token = await jwt({
+      token: { ...validToken, expiresAt: (NOW_S - 10) * 1000, authTime: 1_600_000_000 },
+      account: null,
+    } as never);
+    expect(refreshOidcAccessToken).toHaveBeenCalled();
+    expect(token.accessToken).toBe('refreshed-at');
+    expect(token.authTime).toBe(1_600_000_000);
   });
 
   it('keeps authTime unchanged on a later call without account', async () => {
@@ -89,6 +105,7 @@ describe('isEndedByHostLogout', () => {
     ['1000', 1001, false], // signed in after the logout
     ['1000', undefined, true], // legacy token with a signal
     ['abc', 999, false], // malformed signal is ignored
+    ['  ', 999, false], // blank signal is ignored
   ])('logout-at %s, authTime %s → ended=%s', (cookie, authTime, ended) => {
     expect(auth.isEndedByHostLogout({ authTime } as JWT, req(cookie))).toBe(ended);
   });

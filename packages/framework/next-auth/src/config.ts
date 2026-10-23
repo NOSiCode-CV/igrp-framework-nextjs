@@ -55,6 +55,7 @@ import {
 } from './session-store';
 import { escapeHtml, sanitizeRedirectUrl, stripAuthApiSuffix, stripBasePath } from './sanitize';
 import {
+  HOST_LOGOUT_COOKIE,
   buildAuthCookies,
   resolveSecureCookie,
   resolveSecureCookiesFlag,
@@ -436,6 +437,18 @@ export type IGRPAuthInstance = {
   isTokenExpiredOrFailed: (token: JWT) => boolean;
 
   /**
+   * Returns true when another co-hosted app ended the browser's session: the
+   * host logout cookie (`igrp.logout-at`, unix seconds) is at or after this
+   * token's `authTime`. A token without `authTime` is treated as older than
+   * any signal; a missing or malformed cookie means no signal (false).
+   * Accepts `unknown` for the request, like `getTokenFromRequest`.
+   *
+   * @example
+   * if (token && auth.isEndedByHostLogout(token, request)) return loginRedirect();
+   */
+  isEndedByHostLogout: (token: JWT, request: unknown) => boolean;
+
+  /**
    * Resolves an app-relative path against the app's **browser-reachable**
    * origin, including its basePath.
    *
@@ -643,6 +656,21 @@ function extractCookieNames(request: unknown): string[] {
       .filter(Boolean);
   } catch {
     return [];
+  }
+}
+
+/**
+ * Best-effort read of one cookie value from a request of unknown shape
+ * (NextRequest in Edge). Any failure means "no value".
+ */
+function extractCookieValue(request: unknown, name: string): string | undefined {
+  try {
+    const cookies = (
+      request as { cookies?: { get?: (n: string) => { value?: string } | undefined } }
+    )?.cookies;
+    return cookies?.get?.(name)?.value;
+  } catch {
+    return undefined;
   }
 }
 
@@ -1102,6 +1130,8 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
             idToken: accountTyped.id_token,
             expiresAt,
             refreshToken: accountTyped.refresh_token,
+            // Sign-in time (unix seconds); compared with the host logout cookie.
+            authTime: Math.floor(Date.now() / 1000),
           };
         }
 
@@ -1501,6 +1531,13 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
     return isExpired || token.error === 'RefreshAccessTokenError';
   }
 
+  function isEndedByHostLogout(token: JWT, request: unknown): boolean {
+    const raw = extractCookieValue(request, HOST_LOGOUT_COOKIE);
+    const logoutAt = raw === undefined || raw.trim() === '' ? NaN : Number(raw);
+    if (!Number.isFinite(logoutAt)) return false;
+    return typeof token.authTime !== 'number' || token.authTime <= logoutAt;
+  }
+
   function resolveAppUrl(path: string, request: { url: string }): URL {
     const explicitBasePath = env.NEXT_PUBLIC_BASE_PATH ?? process.env.NEXT_PUBLIC_BASE_PATH ?? '';
     const relative = path.startsWith('/') ? path : `/${path}`;
@@ -1632,6 +1669,7 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
     isPreviewMode,
     getTokenFromRequest,
     isTokenExpiredOrFailed,
+    isEndedByHostLogout,
     resolveAppUrl,
     getLoginRedirectUrl,
     getAccessToken,

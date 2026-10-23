@@ -51,6 +51,8 @@ export const _jwt: {
   userId: string | undefined;
   sub: string | undefined;
   authProviderId: string | undefined;
+  /** Sign-in time, unix seconds. */
+  authTime: number | undefined;
   /** OIDC `locale` claim, raw. */
   locale: string | undefined;
 } = {
@@ -62,5 +64,6 @@ export const _jwt: {
   userId: j.user?.id,
   sub: j.sub,
   authProviderId: j.authProviderId,
+  authTime: j.authTime,
   locale: j.locale,
 };

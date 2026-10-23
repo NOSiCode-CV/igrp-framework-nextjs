@@ -98,7 +98,9 @@ describe('framework hooks sanitize x-current-path before /login redirect', () =>
     igrpSetAccessClientConfig(AM_CONFIG);
     getApplications.mockRejectedValue(new ApiClientError(401));
     headerStore.set('x-current-path', 'https://evil.com/steal');
-    await expect(fetchAppByCode('app')).rejects.toThrow('NEXT_REDIRECT:/login?reason=session_ended');
+    await expect(fetchAppByCode('app')).rejects.toThrow(
+      'NEXT_REDIRECT:/login?reason=session_ended',
+    );
     expect(redirect).toHaveBeenCalledWith('/login?reason=session_ended');
   });
 

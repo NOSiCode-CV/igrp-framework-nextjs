@@ -1475,7 +1475,10 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
   }
 
   async function getTokenFromRequest(request: unknown): Promise<JWT | null> {
-    const secureCookie = resolveSecureCookie(extractCookieNames(request));
+    const secureCookie = resolveSecureCookie(
+      extractCookieNames(request),
+      resolvedSessionCookieName ? basePath : undefined,
+    );
     return (await getToken({
       req: request as Parameters<typeof getToken>[0]['req'],
       secret,
@@ -1533,7 +1536,10 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
     const { cookies } = await import('next/headers');
     const cookieStore = await cookies();
     const all = cookieStore.getAll();
-    const secureCookie = resolveSecureCookie(all.map((c) => c.name));
+    const secureCookie = resolveSecureCookie(
+      all.map((c) => c.name),
+      resolvedSessionCookieName ? basePath : undefined,
+    );
     const token = await getToken({
       req: {
         cookies: Object.fromEntries(all.map((c) => [c.name, c.value])),

@@ -13,6 +13,8 @@ import {
   resolveSecureCookie,
   resolveSecureCookiesFlag,
   sessionCookieName,
+  SECURE_SESSION_COOKIE_BASENAME,
+  SESSION_COOKIE_BASENAME,
 } from '@igrp/framework-next-auth/cookies';
 import { isNextControlFlowError } from '@igrp/framework-next-auth/runtime';
 
@@ -57,8 +59,8 @@ const SUPER_ADMIN_MOCK: IGRPAccessClaims = { permissions: [], roles: [], isSuper
  * but re-throws Next's control-flow signals (see `isNextControlFlowError`).
  */
 /**
- * The `cookieName` option `getToken` needs, or `{}` to leave it to `getToken`'s
- * own derivation.
+ * The `getToken` cookie options for THIS app's session cookie, or `null` when
+ * the jar holds none.
  *
  * **Decided from the cookie jar, not from configuration.** `withIGRPAuth`
  * suffixes every auth cookie name with the basePath only when `cookieIsolation`
@@ -73,20 +75,34 @@ const SUPER_ADMIN_MOCK: IGRPAccessClaims = { permissions: [], roles: [], isSuper
  * `cookieIsolation: 'none'`, sending `getToken` after a suffixed name for a
  * cookie written with the stock one.
  *
- * Probing the jar sidesteps the whole question. `startsWith` is the right test
- * rather than equality because NextAuth chunks an oversized token into
- * `<name>.0` / `<name>.1`, and `SessionStore` reassembles by prefix.
+ * Probing the jar sidesteps the whole question, in two steps. First this app's
+ * scoped name (`startsWith`, because NextAuth chunks an oversized token into
+ * `<name>.0` / `<name>.1`). Failing that, the stock name only when a cookie is
+ * EXACTLY it or `<it>.<n>` — never a bare prefix match, because the stock name
+ * is a prefix of every co-hosted app's cookie (`next-auth.session-token~`) and
+ * NextAuth would decode a foreign session as this app's. Neither: `null`, and
+ * the caller recovers nothing.
  */
-function scopedCookieNameOption(
+function sessionCookieLookup(
   cookieNames: string[],
-  secureCookie: boolean | undefined,
-): { cookieName?: string } {
+): { cookieName?: string; secureCookie?: boolean } | null {
   // No early return for an empty basePath: a root-path app's scoped name is
-  // `next-auth.session-token~`, and the stock name getToken would otherwise
-  // derive is a prefix of every co-hosted app's cookie.
+  // `next-auth.session-token~`.
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
+  const secureCookie = resolveSecureCookie(cookieNames, basePath);
   const scoped = sessionCookieName(basePath, secureCookie ?? resolveSecureCookiesFlag(process.env));
-  return cookieNames.some((name) => name.startsWith(scoped)) ? { cookieName: scoped } : {};
+  if (cookieNames.some((name) => name.startsWith(scoped))) {
+    return { cookieName: scoped, ...(secureCookie !== undefined ? { secureCookie } : {}) };
+  }
+  const isStock = (name: string) =>
+    [SESSION_COOKIE_BASENAME, SECURE_SESSION_COOKIE_BASENAME].some(
+      (stock) =>
+        name === stock ||
+        (name.startsWith(`${stock}.`) && /^\d+$/.test(name.slice(stock.length + 1))),
+    );
+  if (!cookieNames.some(isStock)) return null;
+  const stockSecure = resolveSecureCookie(cookieNames);
+  return stockSecure !== undefined ? { secureCookie: stockSecure } : {};
 }
 
 async function recoverAccessTokenFromCookies(): Promise<string> {
@@ -98,7 +114,8 @@ async function recoverAccessTokenFromCookies(): Promise<string> {
     ]);
     const all = (await cookies()).getAll();
     const names = all.map((c) => c.name);
-    const secureCookie = resolveSecureCookie(names);
+    const lookup = sessionCookieLookup(names);
+    if (!lookup) return '';
     const token = await getToken({
       req: {
         cookies: Object.fromEntries(all.map((c) => [c.name, c.value])),
@@ -108,8 +125,7 @@ async function recoverAccessTokenFromCookies(): Promise<string> {
       // plain decode would return a token with no `accessToken`. Without one
       // this IS plain decode.
       decode: decodeIGRPSessionToken,
-      ...(secureCookie !== undefined ? { secureCookie } : {}),
-      ...scopedCookieNameOption(names, secureCookie),
+      ...lookup,
     });
     return (token as { accessToken?: string } | null)?.accessToken ?? '';
   } catch (error) {

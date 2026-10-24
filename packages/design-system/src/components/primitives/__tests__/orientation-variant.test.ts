@@ -66,4 +66,10 @@ describe("active variant (ADR 0005)", () => {
     expect(declaration?.[1]).toContain('&[data-state="active"]')
     expect(await css(["data-active:bg-background"])).toContain('[data-state="active"]')
   })
+
+  // sidebar, pagination and input-otp render data-active={isActive}, so an inactive
+  // item carries data-active="false"; matching it painted every sidebar item active.
+  it('data-active does not match data-active="false"', async () => {
+    expect(await css(["data-active:bg-background"])).toContain(':not([data-active="false"])')
+  })
 })

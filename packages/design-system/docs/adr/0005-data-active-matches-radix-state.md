@@ -8,6 +8,6 @@ status: accepted
 
 ## Consequences
 
-- The variant is a strict superset of Tailwind's `data-active:` (`[data-active]`). `sidebar`, `pagination` and `input-otp` set `data-active` themselves and match exactly as before.
+- `sidebar`, `pagination` and `input-otp` set `data-active={isActive}` themselves, and React renders `false` as the string `"false"`. Tailwind's plain `data-active:` (`[data-active]`) matches that, which painted every sidebar item with the active surface. The variant therefore excludes `[data-active="false"]`.
 - Styles that were dead are now live, so Horizon `IGRPTabs` had to be re-checked: its per-variant `data-[state=active]:*` overrides now compete with the primitive's `data-active:*` classes at equal specificity, and Horizon resets the primitive's `data-active` surface per variant.
 - Removing this line brings the defect back; it is load-bearing.

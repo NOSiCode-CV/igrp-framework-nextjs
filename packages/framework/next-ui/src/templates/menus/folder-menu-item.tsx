@@ -9,6 +9,7 @@ import {
   CollapsibleTrigger,
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuLabel,
   DropdownMenuTrigger,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -16,7 +17,7 @@ import {
 } from '@igrp/igrp-framework-react-design-system';
 
 import type { FolderNode } from './utils.js';
-import { isItemActive, ACTIVE_MENU_ITEM_CLASS } from './utils.js';
+import { isItemActive, ACTIVE_MENU_ITEM_CLASS, ACTIVE_MENU_BAR_CLASS } from './utils.js';
 import { formatMenuLabel, type IGRPMenuLabels } from './labels.js';
 import { SubLeafLink } from './sub-leaf-link.js';
 
@@ -58,6 +59,7 @@ export function FolderMenuItem({ node, pathname, labels }: FolderMenuItemProps) 
             className={cn(
               'hidden cursor-pointer group-data-[collapsible=icon]:flex',
               ACTIVE_MENU_ITEM_CLASS,
+              ACTIVE_MENU_BAR_CLASS,
             )}
             aria-label={formatMenuLabel(labels.folderMenu, { name: item.name })}
           >
@@ -65,6 +67,10 @@ export function FolderMenuItem({ node, pathname, labels }: FolderMenuItemProps) 
           </SidebarMenuButton>
         </DropdownMenuTrigger>
         <DropdownMenuContent side="right" align="start" className={cn('min-w-48')}>
+          {/* The trigger is icon-only here, so the pop-out names the folder it belongs to. */}
+          <DropdownMenuLabel className={cn('text-xs text-muted-foreground')}>
+            {item.name}
+          </DropdownMenuLabel>
           {children.map((child) => (
             <SubLeafLink
               key={`dd-${child.item.id ?? child.item.code}`}
@@ -83,10 +89,17 @@ export function FolderMenuItem({ node, pathname, labels }: FolderMenuItemProps) 
           className={cn('flex w-full group-data-[collapsible=icon]:hidden')}
           asChild
         >
+          {/* Open: the active child carries the highlight, the folder only goes bold.
+              Closed: the child is hidden, so the folder takes the highlight. */}
           <SidebarMenuButton
             tooltip={item.name}
-            isActive={hasActiveChild}
-            className={cn('w-full cursor-pointer', ACTIVE_MENU_ITEM_CLASS)}
+            isActive={hasActiveChild && !open}
+            className={cn(
+              'w-full cursor-pointer',
+              hasActiveChild && 'font-medium',
+              ACTIVE_MENU_ITEM_CLASS,
+              ACTIVE_MENU_BAR_CLASS,
+            )}
             aria-label={formatMenuLabel(labels.toggleSubmenu, { name: item.name })}
           >
             {item.icon && <IGRPIcon iconName={item.icon} />}

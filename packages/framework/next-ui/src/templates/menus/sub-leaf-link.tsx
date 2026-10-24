@@ -9,7 +9,13 @@ import {
 } from '@igrp/igrp-framework-react-design-system';
 
 import type { LeafNode } from './utils.js';
-import { resolveHref, resolveAnchorTag, isItemActive, ACTIVE_MENU_ITEM_CLASS } from './utils.js';
+import {
+  resolveHref,
+  resolveAnchorTag,
+  isItemActive,
+  ACTIVE_MENU_ITEM_CLASS,
+  ACTIVE_SUB_ITEM_RAIL_CLASS,
+} from './utils.js';
 import { menuLinkAriaLabel, type IGRPMenuLabels } from './labels.js';
 import { MenuItemLink } from './menu-item-link.js';
 
@@ -60,7 +66,7 @@ export function SubLeafLink({ node, variant, pathname, labels }: SubLeafLinkProp
   }
 
   return (
-    <SidebarMenuSubItem>
+    <SidebarMenuSubItem className={cn(isActive && ACTIVE_SUB_ITEM_RAIL_CLASS)}>
       <SidebarMenuSubButton asChild isActive={isActive} className={ACTIVE_MENU_ITEM_CLASS}>
         {inner}
       </SidebarMenuSubButton>

@@ -53,7 +53,7 @@ export function SectionGroup({ section, pathname, labels }: SectionGroupProps) {
         <Collapsible defaultOpen className="group/collapsible-group">
           <CollapsibleTrigger
             className={cn(
-              'flex h-8 w-full cursor-pointer items-center rounded-md px-2',
+              'group/section-trigger flex h-8 w-full cursor-pointer items-center rounded-md px-2',
               'text-xs font-medium text-sidebar-foreground/70',
               'transition-colors hover:text-sidebar-foreground',
               'group-data-[collapsible=icon]:hidden',
@@ -63,8 +63,12 @@ export function SectionGroup({ section, pathname, labels }: SectionGroupProps) {
             <IGRPIcon
               iconName="ChevronRight"
               className={cn(
-                'ml-auto size-3.5 shrink-0 transition-transform duration-200',
+                'ml-auto size-3.5 shrink-0 transition-[transform,opacity] duration-200',
                 'group-data-[state=open]/collapsible-group:rotate-90',
+                // An always-on chevron made section labels read as folders. Shown on
+                // hover/focus, and always while collapsed so the hidden items stay discoverable.
+                'opacity-0 group-hover/section-trigger:opacity-100 group-focus-visible/section-trigger:opacity-100',
+                'group-data-[state=closed]/collapsible-group:opacity-100',
               )}
               strokeWidth={2}
             />

@@ -12,7 +12,13 @@ import {
 } from '@igrp/igrp-framework-react-design-system';
 
 import type { Section } from './utils.js';
-import { resolveHref, resolveAnchorTag, isItemActive, ACTIVE_MENU_ITEM_CLASS } from './utils.js';
+import {
+  resolveHref,
+  resolveAnchorTag,
+  isItemActive,
+  ACTIVE_MENU_ITEM_CLASS,
+  ACTIVE_MENU_BAR_CLASS,
+} from './utils.js';
 import { formatMenuLabel, menuLinkAriaLabel, type IGRPMenuLabels } from './labels.js';
 import { MenuItemLink } from './menu-item-link.js';
 
@@ -164,7 +170,7 @@ export function SearchResults({ sections, query, pathname, labels }: SearchResul
                   asChild
                   size="lg"
                   isActive={result.isActive}
-                  className={ACTIVE_MENU_ITEM_CLASS}
+                  className={cn(ACTIVE_MENU_ITEM_CLASS, ACTIVE_MENU_BAR_CLASS)}
                 >
                   {inner}
                 </SidebarMenuButton>

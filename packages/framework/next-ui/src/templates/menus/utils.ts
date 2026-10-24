@@ -78,7 +78,26 @@ export const ACTIVE_MENU_ITEM_CLASS = [
   'data-[active=true]:hover:text-sidebar-active-foreground',
   'data-[active=true]:data-[state=open]:hover:bg-sidebar-active',
   'data-[active=true]:data-[state=open]:hover:text-sidebar-active-foreground',
+  'data-[active=true]:font-medium',
 ].join(' ');
+
+/**
+ * Brand bar on the left edge of an active top-level button. The tinted fill
+ * alone is a 10% wash in light mode and barely separates from the sidebar.
+ * Sub-items draw theirs on the submenu rail instead (`ACTIVE_SUB_ITEM_RAIL_CLASS`).
+ */
+export const ACTIVE_MENU_BAR_CLASS = [
+  'relative',
+  'data-[active=true]:before:absolute',
+  'data-[active=true]:before:inset-y-1.5',
+  'data-[active=true]:before:left-0',
+  'data-[active=true]:before:w-0.5',
+  'data-[active=true]:before:bg-sidebar-primary',
+].join(' ');
+
+/** On the sub-item `<li>`: the sub-button clips overflow, and the rail is the `<ul>`'s border 11px to the left. */
+export const ACTIVE_SUB_ITEM_RAIL_CLASS =
+  'before:absolute before:inset-y-1 before:-left-[11px] before:w-0.5 before:bg-sidebar-primary';
 
 export function buildMenuSections(menus: IGRPMenuItemArgs[]): Section[] {
   const byPosition = (a: IGRPMenuItemArgs, b: IGRPMenuItemArgs) =>

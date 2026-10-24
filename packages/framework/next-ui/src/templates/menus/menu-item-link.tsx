@@ -2,6 +2,7 @@
 
 import { forwardRef } from 'react';
 import Link from 'next/link';
+import { cn, IGRPIcon } from '@igrp/igrp-framework-react-design-system';
 
 // `style` is omitted from the typed surface because next/link types it more
 // narrowly than the Radix-augmented React.CSSProperties that
@@ -33,16 +34,25 @@ const MenuItemLink = forwardRef<HTMLAnchorElement, MenuItemLinkProps>(function M
   const ariaCurrent = isActive ? 'page' : undefined;
 
   if (isAnchor) {
+    const resolvedTarget = target ?? '_blank';
     return (
       <a
         ref={ref}
         href={href}
-        target={target ?? '_blank'}
+        target={resolvedTarget}
         rel="noopener noreferrer"
         aria-current={ariaCurrent}
         {...rest}
       >
         {children}
+        {/* Visible new-tab cue; the aria-label already says it to screen readers. */}
+        {resolvedTarget === '_blank' && (
+          <IGRPIcon
+            iconName="ArrowUpRight"
+            aria-hidden
+            className={cn('ml-auto shrink-0 opacity-60 group-data-[collapsible=icon]:hidden')}
+          />
+        )}
       </a>
     );
   }

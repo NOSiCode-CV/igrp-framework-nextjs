@@ -96,7 +96,11 @@ export {
   type IGRPNotificationsLabels,
 } from './templates/notifications.js';
 
-export { IGRPSessionWatcher } from './templates/session-watcher.js';
+export {
+  IGRPSessionWatcher,
+  type IGRPCheckSession,
+  type IGRPSessionWatcherProps,
+} from './templates/session-watcher.js';
 
 // i18n (chrome catalog)
 

@@ -5,6 +5,7 @@ import { unstable_rethrow } from 'next/navigation';
 import { fetchAppByCode, fetchAppsByUser } from '../hooks/use-applications.js';
 import { fetchMenus } from '../hooks/use-menus.js';
 import { fetchCurrentUser } from '../hooks/use-user.js';
+import { igrpGetAccessClient } from '../lib/api-client.js';
 import { igrpEnsureAccessClientConfig, isIgrpAuthBypass } from '../lib/permissions.js';
 import { logger } from '../logger.js';
 
@@ -134,6 +135,40 @@ export async function fetchAppByCodeAction(
       error: 'Falha ao carregar os dados da aplicação.',
       code: 'APP_LOAD_FAILED',
     };
+  }
+}
+
+/**
+ * `reason` is AM's `closed_reason` passed through (`USER_LOGOUT`,
+ * `SESSION_LIMIT_EXCEEDED`, `IDLE_TIMEOUT`, …); an open set, so a string.
+ */
+export type IGRPAccessSessionCheck = { valid: boolean; reason?: string | null };
+
+/**
+ * Asks Access Management whether this app's session is still alive, for a tab
+ * that regains focus. `GET /api/session/check` skips AM's session filter, so a
+ * revoked session answers `valid: false` with a reason instead of a 401.
+ *
+ * Only an explicit `valid: false` ends the session. Auth bypass, no session to
+ * check, and every failure (AM down, timeout, a 401 for an expired access token
+ * the next refresh will replace) answer `valid: true`: an outage must never
+ * sign users out, and the 401 path of the next real AM call still catches a
+ * dead session.
+ */
+export async function igrpCheckAccessSession(): Promise<IGRPAccessSessionCheck> {
+  if (isIgrpAuthBypass()) return { valid: true };
+  const { token } = await igrpEnsureAccessClientConfig();
+  if (!token) return { valid: true };
+  try {
+    const { data } = await igrpGetAccessClient().sessions.checkSession();
+    if (data.valid) return { valid: true };
+    logger.info('[igrpCheckAccessSession] sessão terminada no AM', { reason: data.reason ?? null });
+    return { valid: false, reason: data.reason ?? null };
+  } catch (error) {
+    logger.warn('[igrpCheckAccessSession] verificação da sessão falhou; mantida como válida', {
+      error: error instanceof Error ? error.message : String(error),
+    });
+    return { valid: true };
   }
 }
 

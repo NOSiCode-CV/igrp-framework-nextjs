@@ -20,25 +20,16 @@ export function igrpGetAccessClient(): AccessManagementClient {
 }
 
 /**
- * `sessions.rotateSession()` and `sessions.closeSession()` look like session
- * lifecycle helpers but are traps in an IGRP app, so each warns the first time
- * it is called in this process. They still run — nothing that calls them today
- * breaks.
+ * `sessions.closeSession()` looks like a session lifecycle helper but is a trap
+ * in an IGRP app, so it warns the first time it is called in this process. It
+ * still runs — nothing that calls it today breaks.
  *
- * - `rotateSession` (`POST /api/session/rotate`) closes the CALLER's session and
- *   opens a replacement no token is bound to. The app's access token still
- *   carries the old, now closed `sid`: its next Access Management call gets
- *   `401 session_revoked` and its next refresh fails. Calling it logs the app
- *   out, and the orphan row counts toward the user's session cap.
- * - `closeSession` (`POST /api/session/close`) ends the session server-side but
- *   is NOT a logout: it clears no cookie, does not end the SSO session and
- *   revokes no token. Log out through the template's /logout flow
- *   (`end_session` with `id_token_hint`).
+ * `closeSession` (`POST /api/session/close`) ends the session server-side but is
+ * NOT a logout: it clears no cookie, does not end the SSO session and revokes no
+ * token. Log out through the template's /logout flow (`end_session` with
+ * `id_token_hint`).
  */
 const SESSION_CLIENT_TRAPS = {
-  rotateSession:
-    'sessions.rotateSession() logs the calling app out: Access Management opens a replacement ' +
-    'session no token is bound to, while the app keeps a token for the closed one. Do not use it.',
   closeSession:
     'sessions.closeSession() is not a logout: it clears no cookie, keeps the SSO session and ' +
     'revokes no token. Sign out through the /logout flow (end_session with id_token_hint).',

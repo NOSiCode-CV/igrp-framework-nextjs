@@ -9,6 +9,7 @@ import {
 import type { IGRPConfigArgs } from '@igrp/framework-next-types';
 import { IGRPI18nProvider } from '@igrp/igrp-framework-react-design-system';
 
+import { igrpCheckAccessSession } from '../actions/index.js';
 import { igrpResolveRequestBranding } from '../branding/request.js';
 import { IGRPIntlProvider } from '../i18n/client/index.js';
 import {
@@ -121,7 +122,13 @@ export async function IGRPRootLayout({ children, config, lang }: IGRPRootLayoutA
     <html lang={htmlLang} suppressHydrationWarning className={font}>
       <body className="bg-background overscroll-none h-screen font-sans antialiased">
         <IGRPBrandingStyle branding={branding} />
-        <IGRPNestedProviders session={session} branding={branding} sessionArgs={sessionArgs}>
+        <IGRPNestedProviders
+          session={session}
+          branding={branding}
+          sessionArgs={sessionArgs}
+          // No AM to ask in preview mode.
+          checkSession={previewMode ? undefined : igrpCheckAccessSession}
+        >
           {content}
         </IGRPNestedProviders>
       </body>

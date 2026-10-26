@@ -50,7 +50,7 @@
     "@igrp/framework-next-types": "workspace:*",
     "@igrp/framework-next-ui": "workspace:*",
     "@igrp/igrp-framework-react-design-system": "workspace:*",
-    "@igrp/platform-access-management-client-ts": "^0.2.0-beta.20",
+    "@igrp/platform-access-management-client-ts": "^0.2.0-beta.21",
     "next-intl": "^4.14.0",
     "server-only": "^0.0.1"
   },

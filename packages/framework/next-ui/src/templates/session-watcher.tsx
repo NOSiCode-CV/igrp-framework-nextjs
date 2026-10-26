@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { getSession, useSession } from '@igrp/framework-next-auth/client';
 
@@ -27,7 +27,25 @@ const ADAPTIVE_REFRESH_LEAD_MS = 45_000;
  */
 const ADAPTIVE_REFRESH_MIN_DELAY_MS = 5_000;
 
-export function IGRPSessionWatcher({ children }: { children: React.ReactNode }) {
+/** At most one Access Management session check per this window, however often the tab refocuses. */
+export const SESSION_CHECK_MIN_INTERVAL_MS = 60_000;
+
+/** Server action that asks Access Management whether this app's session is still alive. */
+export type IGRPCheckSession = () => Promise<{ valid: boolean; reason?: string | null }>;
+
+export type IGRPSessionWatcherProps = {
+  children: React.ReactNode;
+  /**
+   * Checked when the tab becomes visible again, so an idle tab notices a
+   * session that ended elsewhere (a logout cascade, an admin kill) before the
+   * user acts on stale data. Pass `igrpCheckAccessSession` from
+   * `@igrp/framework-next/actions`; `IGRPRootLayout` does. Without it the
+   * watcher only reacts to the NextAuth session, as before.
+   */
+  checkSession?: IGRPCheckSession;
+};
+
+export function IGRPSessionWatcher({ children, checkSession }: IGRPSessionWatcherProps) {
   const { data: session, status } = useSession();
   const router = useRouter();
   // `usePathname()` is already basePath-stripped by Next; it is here as a
@@ -93,6 +111,40 @@ export function IGRPSessionWatcher({ children }: { children: React.ReactNode }) 
     }, delay);
     return () => clearTimeout(timer);
   }, [expiresAt, status]);
+
+  // Focus check. AM's session can end while this app's tokens are still valid
+  // (a logout in another app cascades, an admin kills it), and nothing here
+  // notices until the next AM call. Any `valid: false` goes to the same
+  // `/login?reason=session_ended` the server's 401 path uses: it clears the
+  // local session and tries a silent sign-in, so a session AM merely evicted
+  // (`SESSION_LIMIT_EXCEEDED`, SSO still alive) comes straight back, while a
+  // real logout (`USER_LOGOUT`, SSO gone) shows the form.
+  const lastCheckRef = useRef(0);
+  useEffect(() => {
+    if (!checkSession || status !== 'authenticated' || AUTH_UI_PATH.test(pathname)) return;
+
+    const onVisibilityChange = () => {
+      if (document.visibilityState !== 'visible') return;
+      const now = Date.now();
+      if (now - lastCheckRef.current < SESSION_CHECK_MIN_INTERVAL_MS) return;
+      lastCheckRef.current = now;
+      checkSession()
+        .then(({ valid }) => {
+          if (valid) return;
+          const currentPath = pathname + window.location.search;
+          router.replace(
+            currentPath && currentPath !== '/'
+              ? `/login?reason=session_ended&callbackUrl=${encodeURIComponent(currentPath)}`
+              : '/login?reason=session_ended',
+          );
+        })
+        // The action already answers `valid: true` on failure; a rejected
+        // call (network, deploy skew) must not sign the user out either.
+        .catch(() => {});
+    };
+    document.addEventListener('visibilitychange', onVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', onVisibilityChange);
+  }, [checkSession, status, pathname, router]);
 
   // Only hide children during the FIRST session probe (no data yet). NextAuth
   // briefly flips `status` to `'loading'` on every refetch (signOut completion,

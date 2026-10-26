@@ -6,7 +6,7 @@ import type { IGRPBranding } from '@igrp/framework-next-types';
 import { TooltipProvider } from '@igrp/igrp-framework-react-design-system';
 
 import { IGRPBrandingProvider } from '../branding/provider.js';
-import { IGRPSessionWatcher } from '../templates/session-watcher.js';
+import { type IGRPCheckSession, IGRPSessionWatcher } from '../templates/session-watcher.js';
 import { IGRPSessionProvider } from './session.js';
 import { IGRPThemeProvider } from './theme.js';
 
@@ -15,12 +15,15 @@ export type IGRPNestedProvidersArgs = {
   branding?: IGRPBranding | null;
   children: React.ReactNode;
   sessionArgs?: Partial<SessionProviderProps>;
+  /** Forwarded to `IGRPSessionWatcher`: the AM session check run when a tab regains focus. */
+  checkSession?: IGRPCheckSession;
 };
 
 export function IGRPNestedProviders({
   session,
   branding = null,
   sessionArgs,
+  checkSession,
   children,
 }: IGRPNestedProvidersArgs) {
   return (
@@ -34,7 +37,7 @@ export function IGRPNestedProviders({
           enableColorScheme
         >
           <IGRPBrandingProvider branding={branding}>
-            <IGRPSessionWatcher>{children}</IGRPSessionWatcher>
+            <IGRPSessionWatcher checkSession={checkSession}>{children}</IGRPSessionWatcher>
           </IGRPBrandingProvider>
         </IGRPThemeProvider>
       </TooltipProvider>

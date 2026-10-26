@@ -47,26 +47,22 @@ describe('igrpGetAccessClient', () => {
     );
   });
 
-  it('warns once when an app calls the session traps, and still calls through', async () => {
-    const rotateSession = vi.fn().mockResolvedValue('rotated');
-    const closeSession = vi.fn().mockResolvedValue(undefined);
+  it('warns once when an app calls the session trap, and still calls through', async () => {
+    const closeSession = vi.fn().mockResolvedValue('closed');
     const getCurrentSession = vi.fn().mockResolvedValue('current');
     vi.mocked(AccessManagementClient.create).mockReturnValue({
-      sessions: { rotateSession, closeSession, getCurrentSession },
+      sessions: { closeSession, getCurrentSession },
     } as never);
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
     igrpSetAccessClientConfig({ baseUrl: 'https://api.example.com', token: 'tok' });
 
     const client = igrpGetAccessClient();
-    expect(await client.sessions.rotateSession({} as never)).toBe('rotated');
-    await client.sessions.rotateSession({} as never);
+    expect(await client.sessions.closeSession()).toBe('closed');
     await client.sessions.closeSession();
     expect(await client.sessions.getCurrentSession()).toBe('current');
 
-    expect(rotateSession).toHaveBeenCalledTimes(2);
-    expect(closeSession).toHaveBeenCalledTimes(1);
+    expect(closeSession).toHaveBeenCalledTimes(2);
     const messages = warn.mock.calls.map((c) => String(c[0]));
-    expect(messages.filter((m) => m.includes('rotateSession'))).toHaveLength(1);
     expect(messages.filter((m) => m.includes('closeSession'))).toHaveLength(1);
     expect(messages.some((m) => m.includes('getCurrentSession'))).toBe(false);
     warn.mockRestore();

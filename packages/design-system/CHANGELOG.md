@@ -1,5 +1,11 @@
 # @igrp/igrp-framework-react-design-system
 
+## 0.2.0-beta.9
+
+### Patch Changes
+
+- 648978e: Inactive sidebar items no longer render with the active background. The `data-active` variant in `tokens.css` matched `data-active="false"`, so every `SidebarMenuButton` and `SidebarMenuSubButton` looked selected.
+
 ## 0.2.0-beta.8
 
 ### Patch Changes

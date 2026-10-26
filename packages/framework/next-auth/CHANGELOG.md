@@ -1,5 +1,13 @@
 # @igrp/framework-next-auth
 
+## 0.2.0-beta.9
+
+### Patch Changes
+
+- 238a10f: Adds an `authTime` claim (sign-in time, unix seconds) to the JWT, an `isEndedByHostLogout(token, request)` check on the `withIGRPAuth` instance, and the `HOST_LOGOUT_COOKIE` constant, so co-hosted apps can end each other's sessions in the same browser after a logout.
+- 9c0c540: Session-cookie scheme detection now looks only at the app's own cookie names, so another co-hosted app's `__Secure-` cookie can no longer send it into a login loop. Also exports `HOST_LOGOUT_COOKIE` and `HOST_LOGOUT_COOKIE_MAX_AGE_S` from `./cookies`.
+- e17dadb: `withIGRPAuth` now defaults `session.maxAge` to 28800 s (8 h), AM's absolute session ceiling, instead of NextAuth's 30 days. The session cookie and the session-store entry used to outlive the AM session by ~90×: once AM's refresh grant answered `invalid_grant`, the dead entry lingered for weeks. A refresh failure still ends in `/logout` and a fresh sign-in. Pass `session.maxAge` (or set `IGRP_SESSION_MAX_AGE` in the template) to override it.
+
 ## 0.2.0-beta.8
 
 ### Patch Changes

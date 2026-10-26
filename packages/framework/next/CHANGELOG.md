@@ -1,5 +1,28 @@
 # @igrp/framework-next
 
+## 0.2.0-beta.15
+
+### Patch Changes
+
+- 78203e2: A 401 from Access Management now redirects to `/login?reason=session_ended` so the app can clear its local session, and a 403 renders `forbidden()` instead of looping through sign-in.
+- b69b1f9: Requires `@igrp/platform-access-management-client-ts` `^0.2.0-beta.21`, which adds `sessions.checkSession()` and removes `sessions.initializeSession()` and `sessions.rotateSession()` (both always failed: 404 and 501). `igrpGetAccessClient()` no longer wraps `rotateSession` with a warning, since the method is gone; `closeSession()` still warns that it is not a logout.
+- 0c721ca: Token recovery in Server Actions and Route Handlers no longer falls back to another co-hosted app's session cookie.
+- b69b1f9: A tab that regains focus now asks Access Management whether its session is still alive, so an idle tab notices a session that ended elsewhere (a logout cascade, an admin kill) before the user acts on stale data.
+  
+  - `@igrp/framework-next`: new server action `igrpCheckAccessSession()` in `./actions`, returning `{ valid, reason }`. It answers `valid: true` under auth bypass, with no session, and on any failure, so an AM outage never signs users out. `IGRPRootLayout` passes it to the providers (not in preview mode).
+  - `@igrp/framework-next-ui`: `IGRPSessionWatcher` and `IGRPNestedProviders` take an optional `checkSession` prop. On `visibilitychange` to visible, at most once per 60 s, a `valid: false` goes to `/login?reason=session_ended`: a session AM only evicted (`SESSION_LIMIT_EXCEEDED`) comes back through silent sign-in, a real logout (`USER_LOGOUT`) shows the form. Without the prop the watcher behaves as before.
+- Updated dependencies [b69b1f9]
+- Updated dependencies [238a10f]
+- Updated dependencies [9c0c540]
+- Updated dependencies [b69b1f9]
+- Updated dependencies [e17dadb]
+- Updated dependencies [648978e]
+- Updated dependencies [436ff0e]
+  - @igrp/framework-next-types@0.2.0-beta.9
+  - @igrp/framework-next-auth@0.2.0-beta.9
+  - @igrp/framework-next-ui@0.2.0-beta.13
+  - @igrp/igrp-framework-react-design-system@0.2.0-beta.9
+
 ## 0.2.0-beta.14
 
 ### Patch Changes

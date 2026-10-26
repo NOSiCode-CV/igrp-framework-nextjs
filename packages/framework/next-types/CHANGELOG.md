@@ -1,5 +1,15 @@
 # @igrp/framework-next-types
 
+## 0.2.0-beta.9
+
+### Patch Changes
+
+- b69b1f9: Requires `@igrp/platform-access-management-client-ts` `^0.2.0-beta.21`, which adds `sessions.checkSession()` and removes `sessions.initializeSession()` and `sessions.rotateSession()` (both always failed: 404 and 501). `igrpGetAccessClient()` no longer wraps `rotateSession` with a warning, since the method is gone; `closeSession()` still warns that it is not a logout.
+- Updated dependencies [238a10f]
+- Updated dependencies [9c0c540]
+- Updated dependencies [e17dadb]
+  - @igrp/framework-next-auth@0.2.0-beta.9
+
 ## 0.2.0-beta.8
 
 ### Patch Changes

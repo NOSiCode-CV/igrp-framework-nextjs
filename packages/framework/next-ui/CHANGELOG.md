@@ -5,16 +5,18 @@
 ### Patch Changes
 
 - b69b1f9: A tab that regains focus now asks Access Management whether its session is still alive, so an idle tab notices a session that ended elsewhere (a logout cascade, an admin kill) before the user acts on stale data.
-  
+
   - `@igrp/framework-next`: new server action `igrpCheckAccessSession()` in `./actions`, returning `{ valid, reason }`. It answers `valid: true` under auth bypass, with no session, and on any failure, so an AM outage never signs users out. `IGRPRootLayout` passes it to the providers (not in preview mode).
   - `@igrp/framework-next-ui`: `IGRPSessionWatcher` and `IGRPNestedProviders` take an optional `checkSession` prop. On `visibilitychange` to visible, at most once per 60 s, a `valid: false` goes to `/login?reason=session_ended`: a session AM only evicted (`SESSION_LIMIT_EXCEEDED`) comes back through silent sign-in, a real logout (`USER_LOGOUT`) shows the form. Without the prop the watcher behaves as before.
+
 - 436ff0e: Sidebar menu design updates:
-  
+
   - The active item has a bar in the brand colour. For sub-items the bar sits on the sub-menu line.
   - An open folder that contains the current page shows its name in bold with no fill. A closed folder in that state takes the highlight itself.
   - Section headers show their chevron only on hover, on focus, or while the section is collapsed.
   - Links that open in a new tab show a small arrow.
   - In the collapsed sidebar, the folder pop-out shows the folder name at the top.
+
 - Updated dependencies [b69b1f9]
 - Updated dependencies [238a10f]
 - Updated dependencies [9c0c540]

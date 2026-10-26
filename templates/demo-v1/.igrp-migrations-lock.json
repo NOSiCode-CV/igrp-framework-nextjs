@@ -457,6 +457,12 @@
       "appliedAt": "2026-10-22T00:00:00.000Z",
       "cliVersion": "0.2.0-beta.15",
       "manifestHash": "01175883f1b25044"
+    },
+    {
+      "id": "76-resync-framework-next-beta15",
+      "appliedAt": "2026-10-26T00:00:00.000Z",
+      "cliVersion": "0.2.0-beta.16",
+      "manifestHash": "a283c9a9ba7ca93e"
     }
   ]
 }

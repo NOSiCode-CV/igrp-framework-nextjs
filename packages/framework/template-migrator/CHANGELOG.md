@@ -1,5 +1,12 @@
 # @igrp/template-migrator
 
+## 0.2.0-beta.16
+
+### Patch Changes
+
+- Migration 75: demo-v1 multi-app auth sessions. It adds the host-wide logout signal, `/login?reason=session_ended` (clear the local session, then silent SSO), Secure marker cookies on HTTPS, and a root `forbidden.tsx` for 403s thrown by the `(igrp)` layout. Its steps replace whole files, so apps that changed `middleware.ts` or the login/logout pages should merge by hand.
+- Migration 76: demo-v1 resyncs to `@igrp/framework-next` 0.2.0-beta.15 (next-ui beta.13; next-auth, next-types and design-system beta.9): 8 h NextAuth `maxAge`, the Access Management session check on tab focus, and AM client beta.21.
+
 ## 0.2.0-beta.15
 
 ### Patch Changes

@@ -2,6 +2,33 @@
 
 All variables are documented inline in [`.env.example`](../.env.example). Required values are validated when `IGRPRootLayout` renders — misconfiguration surfaces as a typed `IgrpConfigError` in `app/global-error.tsx`, not as an opaque runtime failure.
 
+## Minimum for Access Management
+
+The smallest `.env` that signs in against IGRP Access Management and loads the user, menus and permission claims from it:
+
+```dotenv
+AUTH_PROVIDER=igrp-auth
+IGRP_PREVIEW_MODE=false
+
+IGRP_AUTH_CLIENT_ID=igrp-access-management
+IGRP_AUTH_CLIENT_SECRET=<secret>
+IGRP_AUTH_ISSUER=http://auth.example.com
+IGRP_AUTH_SCOPES=openid
+
+NEXTAUTH_URL=http://localhost:3000/apps/template/api/auth   # <basePath>/api/auth
+NEXTAUTH_SECRET=<openssl rand -base64 32>
+
+IGRP_ACCESS_MANAGEMENT_API=http://am.example.com
+IGRP_APP_CODE=DEMO_APP
+NEXT_PUBLIC_IGRP_APP_CODE=DEMO_APP
+
+NEXT_PUBLIC_BASE_PATH=/apps/template
+```
+
+- The application `IGRP_APP_CODE` must already exist in AM, and the OAuth client must have both redirect URIs registered (see [Auth Server Registration](#auth-server-registration-required)).
+- To have the app register itself, its resources and routes in AM at startup, add `IGRP_SYNC_ACCESS=true` plus the three [M2M variables](#access-management-m2m-required-when-igrp_sync_accesstrue) (`IGRP_SERVICE_ID`, `IGRP_M2M_CLIENT_ID`, `IGRP_M2M_CLIENT_SECRET`). The app code must then contain only letters, digits and underscores, start and end alphanumeric, max 64 chars.
+- With more than one replica, or several IGRP apps on one domain, also set `IGRP_SESSION_STORE_URL` (see `.env.example`).
+
 ## Authentication
 
 | Variable | Description | Default |

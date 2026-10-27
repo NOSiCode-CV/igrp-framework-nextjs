@@ -56,7 +56,28 @@ IGRP_PREVIEW_MODE=true
 IGRP_APP_CODE=DEMO_APP
 ```
 
-For a real auth flow, see [Environment Variables](docs/ENVIRONMENT.md) and [Auth Server Registration](docs/ENVIRONMENT.md#auth-server-registration-required).
+To sign in against IGRP Access Management, this is the minimum:
+
+```env
+AUTH_PROVIDER=igrp-auth
+IGRP_PREVIEW_MODE=false
+
+IGRP_AUTH_CLIENT_ID=igrp-access-management
+IGRP_AUTH_CLIENT_SECRET=<secret>
+IGRP_AUTH_ISSUER=http://auth.example.com
+IGRP_AUTH_SCOPES=openid
+
+NEXTAUTH_URL=http://localhost:3000/apps/template/api/auth   # <basePath>/api/auth
+NEXTAUTH_SECRET=<openssl rand -base64 32>
+
+IGRP_ACCESS_MANAGEMENT_API=http://am.example.com
+IGRP_APP_CODE=DEMO_APP
+NEXT_PUBLIC_IGRP_APP_CODE=DEMO_APP
+
+NEXT_PUBLIC_BASE_PATH=/apps/template
+```
+
+The app code must already exist in AM, and both redirect URIs must be registered on the OAuth client. Startup sync (`IGRP_SYNC_ACCESS=true` + M2M credentials) and the multi-replica session store are optional; see [Minimum for Access Management](docs/ENVIRONMENT.md#minimum-for-access-management), [Environment Variables](docs/ENVIRONMENT.md) and [Auth Server Registration](docs/ENVIRONMENT.md#auth-server-registration-required).
 
 ### 3. Run the dev server
 

@@ -65,8 +65,13 @@ function IGRPHeadline({
   iconPlacement = "start",
   iconSize,
   headlineContentClassName,
+  roleColor: _deprecatedRoleColor,
+  color: _deprecatedColor,
   ...props
 }: IGRPHeadlineProps) {
+  // Retain the deprecated API for older generated pages, without DOM attributes.
+  void _deprecatedRoleColor
+  void _deprecatedColor
   const _id = useId()
   const ref = name ?? id ?? _id
 

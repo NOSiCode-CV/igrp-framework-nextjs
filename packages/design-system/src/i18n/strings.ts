@@ -461,6 +461,12 @@ export interface IGRPI18nStrings {
     /** aria-label for the addon select with no `optionLabel`. */
     selectOption: string
   }
+  lookupField: {
+    /** aria-label of the clear button. */
+    clear: string
+    /** aria-label of the label's info tooltip trigger. */
+    moreInfo: string
+  }
   textarea: {
     /** Screen-reader-only prefix of the textarea counter. */
     counterUsed: string
@@ -762,6 +768,10 @@ export const IGRP_I18N_DEFAULTS_PT: IGRPI18nStrings = {
   },
   inputAddons: {
     selectOption: "Selecionar opção",
+  },
+  lookupField: {
+    clear: "Limpar",
+    moreInfo: "Mais informação",
   },
   textarea: {
     counterUsed: "Caracteres utilizados:",

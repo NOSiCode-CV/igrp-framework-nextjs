@@ -728,6 +728,7 @@ export { IGRPDatePickerSingle, type IGRPDatePickerSingleProps } from "./componen
 export { IGRPDateTimeInput, type IGRPDateTimeInputProps } from "./components/horizon/input/date-time.js"
 export { IGRPInputFile, type IGRPInputFileProps } from "./components/horizon/input/file.js"
 export { IGRPInputHidden } from "./components/horizon/input/hidden.js"
+export { IGRPLookupField, type IGRPLookupFieldProps } from "./components/horizon/input/lookup.js"
 export { IGRPInputNumber, type IGRPInputNumberProps } from "./components/horizon/input/number.js"
 export { IGRPInputPassword, type IGRPInputPasswordProps } from "./components/horizon/input/password.js"
 export { IGRPInputPhone, type IGRPInputPhoneProps } from "./components/horizon/input/phone.js"

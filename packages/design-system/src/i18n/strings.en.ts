@@ -289,6 +289,10 @@ export const IGRP_I18N_DEFAULTS_EN: IGRPI18nStrings = {
   inputAddons: {
     selectOption: "Select option",
   },
+  lookupField: {
+    clear: "Clear",
+    moreInfo: "More information",
+  },
   textarea: {
     counterUsed: "Characters used:",
     counterOf: "of",

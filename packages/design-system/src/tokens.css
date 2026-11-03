@@ -8,6 +8,9 @@
 /* Radix Tabs emits data-state="active", not data-active like the shadcn primitives expect (ADR 0005).
    React renders data-active={false} as "false", which a bare [data-active] would match. */
 @custom-variant data-active (&[data-active]:not([data-active="false"]), &[data-state="active"]);
+/* Radix emits data-state="open"/"closed", not data-open/data-closed like the shadcn primitives expect (ADR 0006). */
+@custom-variant data-open (&[data-open]:not([data-open="false"]), &[data-state="open"]);
+@custom-variant data-closed (&[data-closed]:not([data-closed="false"]), &[data-state="closed"]);
 
 @theme inline {
   --radius-sm: calc(var(--radius) * 0.6);

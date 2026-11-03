@@ -12,7 +12,11 @@ export default {
     className: { control: 'text' },
     disabled: { control: 'boolean' },
     rows: { control: 'number' },
-    error: { control: 'text' },   
+    error: { control: 'text' },
+    maxLength: { control: 'number' },
+    showCounter: { control: 'boolean' },
+    showProgress: { control: 'boolean' },
+    warnAt: { control: 'number' },
   },
 } as Meta;
 
@@ -83,5 +87,16 @@ export const HalfWidth: StoryObj<IGRPTextareaProps> = {
     label: 'Half Width Textarea',
     placeholder: 'This textarea takes half of the available width',
     rows: 4,
+  },
+};
+
+export const WithCounter: StoryObj<IGRPTextareaProps> = {
+  render: Template,
+  args: {
+    name: 'summary',
+    label: 'Summary',
+    maxLength: 100,
+    showCounter: true,
+    defaultValue: 'x'.repeat(85),
   },
 };

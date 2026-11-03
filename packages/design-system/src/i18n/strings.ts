@@ -461,6 +461,12 @@ export interface IGRPI18nStrings {
     /** aria-label for the addon select with no `optionLabel`. */
     selectOption: string
   }
+  textarea: {
+    /** Screen-reader-only prefix of the textarea counter. */
+    counterUsed: string
+    /** Screen-reader-only word between the count and the limit. */
+    counterOf: string
+  }
 }
 
 /**
@@ -756,6 +762,10 @@ export const IGRP_I18N_DEFAULTS_PT: IGRPI18nStrings = {
   },
   inputAddons: {
     selectOption: "Selecionar opção",
+  },
+  textarea: {
+    counterUsed: "Caracteres utilizados:",
+    counterOf: "de",
   },
 }
 

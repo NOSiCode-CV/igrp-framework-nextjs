@@ -289,4 +289,8 @@ export const IGRP_I18N_DEFAULTS_FR: IGRPI18nStrings = {
   inputAddons: {
     selectOption: "Sélectionner une option",
   },
+  textarea: {
+    counterUsed: "Caractères utilisés :",
+    counterOf: "sur",
+  },
 }

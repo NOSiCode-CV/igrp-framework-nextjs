@@ -145,6 +145,9 @@ export const IGRP_I18N_DEFAULTS_EN: IGRPI18nStrings = {
     scrollNext: "Show next steps",
     step: "Step",
   },
+  accordion: {
+    empty: "No records.",
+  },
   tabs: {
     scrollLeft: "Scroll tabs left",
     scrollRight: "Scroll tabs right",

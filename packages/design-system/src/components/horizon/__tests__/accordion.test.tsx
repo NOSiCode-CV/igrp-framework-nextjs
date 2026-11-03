@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from "vitest"
 import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 
+import { IGRPColors } from "../../../lib/colors.js"
 import { IGRPAccordion } from "../accordion.js"
 
 const six = ["Identificação", "Subcategorias", "Campos", "Fiscalização", "Escalões", "Acréscimos"].map((t) => ({
@@ -68,6 +69,53 @@ describe("IGRPAccordion", () => {
     rerender(<IGRPAccordion type="multiple" value={["s1"]} onValueChange={onValueChange} items={items} />)
     expect(screen.queryByText("Identificação conteúdo")).toBeNull()
     expect(screen.getByText("Subcategorias conteúdo")).toBeInTheDocument()
+  })
+
+  it("renders count 0 as a tabular-nums pill", () => {
+    render(<IGRPAccordion items={[{ title: "Escal�es", count: 0, empty: false, content: <p>x</p> }]} />)
+    expect(screen.getByText("0")).toHaveClass("tabular-nums")
+  })
+
+  it("count 0 shows the empty card and does not render content", () => {
+    const Content = vi.fn(() => <p>tabela</p>)
+    render(
+      <IGRPAccordion
+        items={[
+          {
+            title: "Escal�es",
+            count: 0,
+            emptyIcon: "Layers",
+            emptyLabel: "Sem escal�es definidos.",
+            content: <Content />,
+          },
+        ]}
+      />
+    )
+    expect(screen.getByText("Sem escal�es definidos.")).toBeInTheDocument()
+    expect(Content).not.toHaveBeenCalled()
+  })
+
+  it("count 0 with empty={false} renders content", () => {
+    render(<IGRPAccordion items={[{ title: "Escal�es", count: 0, empty: false, content: <p>tabela</p> }]} />)
+    expect(screen.getByText("tabela")).toBeInTheDocument()
+  })
+
+  it("empty without emptyLabel falls back to the catalog text", () => {
+    render(<IGRPAccordion items={[{ title: "Docs", empty: true, content: <p>x</p> }]} />)
+    expect(screen.getByText("Sem registos.")).toBeInTheDocument()
+  })
+
+  it("badgeIcon renders a chip with IGRPColors.soft[badgeColor]", () => {
+    const { container } = render(
+      <IGRPAccordion items={[{ title: "Taxa", badgeIcon: "Layers", badgeColor: "success", content: <p>x</p> }]} />
+    )
+    const chip = container.querySelector("[data-slot=accordion-badge-icon]")
+    expect(chip).toHaveClass(...IGRPColors.soft.success.bg.split(" "), ...IGRPColors.soft.success.text.split(" "))
+  })
+
+  it("an item with none of the new fields renders the bare title as before", () => {
+    render(<IGRPAccordion items={[{ title: "Simples", content: <p>x</p> }]} />)
+    expect(screen.getByRole("button", { name: "Simples" }).querySelector("[data-slot=accordion-title]")).toBeNull()
   })
 })
 

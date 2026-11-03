@@ -252,6 +252,10 @@ export interface IGRPI18nStrings {
     /** Default text of the visually hidden step title. */
     step: string
   }
+  accordion: {
+    /** Default empty-state text of an accordion item. */
+    empty: string
+  }
   tabs: {
     /** aria-label for the scroll-tabs-left button. */
     scrollLeft: string
@@ -608,6 +612,9 @@ export const IGRP_I18N_DEFAULTS_PT: IGRPI18nStrings = {
     scrollPrevious: "Ver etapas anteriores",
     scrollNext: "Ver etapas seguintes",
     step: "Passo",
+  },
+  accordion: {
+    empty: "Sem registos.",
   },
   tabs: {
     scrollLeft: "Deslocar separadores para a esquerda",

@@ -145,6 +145,9 @@ export const IGRP_I18N_DEFAULTS_FR: IGRPI18nStrings = {
     scrollNext: "Voir les étapes suivantes",
     step: "Étape",
   },
+  accordion: {
+    empty: "Aucun enregistrement.",
+  },
   tabs: {
     scrollLeft: "Faire défiler les onglets vers la gauche",
     scrollRight: "Faire défiler les onglets vers la droite",

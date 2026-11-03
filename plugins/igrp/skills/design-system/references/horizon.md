@@ -122,6 +122,7 @@ For row deletes in a table, use the `alert` row action instead (`data-table.md`)
 - `items: { title; content; value?; iconName?; showIcon? }[]`.
 - `type: "single" | "multiple"`. Single (the default) is collapsible and opens the first item by default. `type="multiple"` keeps several items open, and `defaultValue="all"` opens every item (an array opens just those).
 - Controlled single-mode `value` defaults to `item-<title letters lowercased>` (e.g. `"item-dadospessoais"`). Multiple mode takes and reports a `string[]`.
+- Per-item header extras: `count` (a pill; `0` renders), `badgeIcon` + `badgeColor` (soft-colour chip before the title, default `primary`), `empty` / `emptyIcon` / `emptyLabel` (an empty state replacing `content`). `count={0}` hides `content` unless `empty={false}`.
 - Pass `value` per item when titles can collide ("Passo 1" vs "Passo 2"), since they are cleaned to letters only.
 
 **`IGRPMenuNavigation`**: an **in-page section nav** that scrolls to sections; it is not the app menu.

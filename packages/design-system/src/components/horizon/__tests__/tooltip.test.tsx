@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest"
 import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 
+import { IGRPDataTableButtonAlert } from "../data-table/action-button-icon.js"
 import { IGRPTooltip, IGRPTooltipProvider } from "../tooltip.js"
 
 const providerSpy = vi.hoisted(() => vi.fn())
@@ -60,5 +61,11 @@ describe("IGRPTooltip", () => {
       </IGRPTooltipProvider>
     )
     expect(providerSpy).toHaveBeenCalledTimes(1)
+  })
+
+  it("opens on keyboard focus for a disabled alert row action", async () => {
+    render(<IGRPDataTableButtonAlert labelTrigger="Eliminar" modalTitle="Eliminar?" disabled />)
+    await userEvent.tab()
+    expect(await screen.findByRole("tooltip")).toHaveTextContent("Eliminar")
   })
 })

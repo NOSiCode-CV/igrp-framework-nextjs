@@ -38,6 +38,11 @@ interface IGRPTooltipProps {
   delayDuration?: number
   /** Classes for the tooltip content. */
   className?: string
+  /**
+   * Set when the trigger is disabled but the child element doesn't carry `disabled` itself,
+   * e.g. a DialogTrigger wrapping a disabled button. Defaults to the child's own `disabled` prop.
+   */
+  disabled?: boolean
 }
 
 /**
@@ -52,12 +57,13 @@ function IGRPTooltip({
   sideOffset = 6,
   delayDuration = 0,
   className,
+  disabled: disabledProp,
 }: IGRPTooltipProps) {
   const hasProvider = useContext(IGRPTooltipContext)
 
   if (!label) return children
 
-  const disabled = Boolean((children.props as { disabled?: boolean }).disabled)
+  const disabled = Boolean(disabledProp ?? (children.props as { disabled?: boolean }).disabled)
 
   const tooltipNode = (
     <Tooltip>

@@ -42,8 +42,10 @@ function IGRPDataTableActionTooltip({
   tooltipClassName,
   tooltipSideOffset = 6,
   tooltipDelayDuration = 0,
+  disabled,
 }: {
   label?: string
+  disabled?: boolean
   children: ReactElement
   tooltipSide?: "top" | "right" | "bottom" | "left"
   tooltipAlign?: "center" | "start" | "end"
@@ -59,6 +61,7 @@ function IGRPDataTableActionTooltip({
       className={tooltipClassName}
       sideOffset={tooltipSideOffset}
       delayDuration={tooltipDelayDuration}
+      disabled={disabled}
     >
       {children}
     </IGRPTooltip>
@@ -99,6 +102,7 @@ function IGRPDataTableButtonAlert({
     tooltipClassName,
     tooltipSideOffset,
     tooltipDelayDuration,
+    disabled,
   }
 
   return (
@@ -170,6 +174,7 @@ function IGRPDataTableButtonLink({
     tooltipClassName,
     tooltipSideOffset,
     tooltipDelayDuration,
+    disabled,
   }
 
   return href && !disabled ? (
@@ -234,6 +239,7 @@ function IGRPDataTableButtonModal({
     tooltipClassName,
     tooltipSideOffset,
     tooltipDelayDuration,
+    disabled,
   }
 
   return (

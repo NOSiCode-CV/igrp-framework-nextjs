@@ -1,7 +1,7 @@
-import { render, waitFor } from "@testing-library/react"
+import { render, screen, waitFor } from "@testing-library/react"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
-import { IGRPLinkPendingIcon } from "../button-link.js"
+import { IGRPButtonLink, IGRPLinkPendingIcon } from "../button-link.js"
 
 const linkStatus = vi.hoisted(() => ({ pending: false }))
 vi.mock("next/link", async (importOriginal) => {
@@ -61,5 +61,24 @@ describe("IGRPLinkPendingIcon", () => {
     const { container } = render(<IGRPLinkPendingIcon iconName="Eye" showPendingIndicator={false} />)
     await waitFor(() => expect(container.querySelector("svg.lucide-eye")).not.toBeNull())
     expect(container.querySelector('[data-slot="spinner"]')).toBeNull()
+  })
+
+  it("shows the spinner inside the link while pending, then restores the icon", async () => {
+    linkStatus.pending = true
+    const { rerender } = render(<IGRPButtonLink href="/x" label="Abrir" iconName="Eye" />)
+    const link = screen.getByRole("link", { name: "Abrir" })
+    expect(link.querySelector('[data-slot="spinner"]')).not.toBeNull() // inside the <a>, i.e. inside Link
+    linkStatus.pending = false
+    rerender(<IGRPButtonLink href="/x" label="Abrir" iconName="Eye" />)
+    await waitFor(() => expect(link.querySelector("svg.lucide-eye")).not.toBeNull())
+    expect(link.querySelector('[data-slot="spinner"]')).toBeNull()
+  })
+
+  it("never changes the icon with showPendingIndicator={false}", async () => {
+    linkStatus.pending = true
+    render(<IGRPButtonLink href="/x" label="Abrir" iconName="Eye" showPendingIndicator={false} />)
+    const link = screen.getByRole("link", { name: "Abrir" })
+    await waitFor(() => expect(link.querySelector("svg.lucide-eye")).not.toBeNull())
+    expect(link.querySelector('[data-slot="spinner"]')).toBeNull()
   })
 })

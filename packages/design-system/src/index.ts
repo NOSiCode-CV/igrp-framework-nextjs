@@ -433,7 +433,12 @@ export { IGRPBadge, type IGRPBadgeProps, igrpBadgeVariants } from "./components/
 export { IGRPBanner, type IGRPBannerProps } from "./components/horizon/banner.js"
 
 export { IGRPButton, type IGRPButtonProps } from "./components/horizon/button.js"
-export { IGRPLinkPendingIcon, type IGRPLinkPendingIconProps } from "./components/horizon/button-link.js"
+export {
+  IGRPButtonLink,
+  IGRPLinkPendingIcon,
+  type IGRPButtonLinkProps,
+  type IGRPLinkPendingIconProps,
+} from "./components/horizon/button-link.js"
 
 export { isIconOnlySize } from "./lib/button-size.js"
 

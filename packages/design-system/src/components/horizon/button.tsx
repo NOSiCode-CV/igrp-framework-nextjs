@@ -9,7 +9,7 @@ import { Spinner } from "../primitives/spinner.js"
 import { IGRPIcon } from "./icon/index.js"
 import { cn } from "cn"
 import { igrpOmitNonDomProps } from "../../lib/dom-props.js"
-import { isIconOnlySize } from "../../lib/button-size.js"
+import { igrpSpinnerSizeClassName, isIconOnlySize } from "../../lib/button-size.js"
 import type { IGRPBaseAttributes } from "../../types.js"
 import { useIGRPi18n } from "../../i18n/index.js"
 
@@ -64,10 +64,7 @@ function IGRPButton({
 
   const { size } = props
 
-  // Icons are sized by the button primitive via `[&_svg:not([class*='size-'])]`.
-  // Spinner ships a literal `size-4`, which defeats that guard — mirror the
-  // primitive's three size overrides for it only.
-  const spinnerSizeClassName = size === "xs" || size === "icon-xs" ? "size-3" : size === "sm" ? "size-3.5" : undefined
+  const spinnerSizeClassName = igrpSpinnerSizeClassName(size)
 
   if (isIconOnlySize(size)) {
     const hasAccessibleName = Boolean(props["aria-label"] || props["aria-labelledby"])

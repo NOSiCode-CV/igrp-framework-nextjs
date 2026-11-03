@@ -9,6 +9,7 @@ import { Spinner } from "../primitives/spinner.js"
 import { IGRPIcon } from "./icon/index.js"
 import { cn } from "cn"
 import { igrpOmitNonDomProps } from "../../lib/dom-props.js"
+import { isIconOnlySize } from "../../lib/button-size.js"
 import type { IGRPBaseAttributes } from "../../types.js"
 import { useIGRPi18n } from "../../i18n/index.js"
 
@@ -34,12 +35,6 @@ interface IGRPButtonProps
    * @deprecated No longer has any effect — the icon is sized by `size`. Will be removed in the next release.
    */
   iconSize?: string | number
-}
-
-/** True for the `icon*` sizes, which render an icon with no text. */
-// eslint-disable-next-line react-refresh/only-export-components
-export function isIconOnlySize(size: VariantProps<typeof buttonVariants>["size"]): boolean {
-  return typeof size === "string" && size.startsWith("icon")
 }
 
 /**

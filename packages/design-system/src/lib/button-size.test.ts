@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 
-import { isIconOnlySize } from "../button.js"
+import { isIconOnlySize } from "./button-size.js"
 
 describe("isIconOnlySize", () => {
   it.each([

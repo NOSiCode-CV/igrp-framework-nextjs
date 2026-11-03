@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cd /d/nosi-projects/igrp3/igrp-framework-frontend/igrp-framework-nextjs && grep -ril \"IGRPStepperProcess\\\\|stepper\" packages/design-system-storybook/src 2>/dev/null | head -30)",
+      "Bash(cat \"C:\\\\Users\\\\NOSi\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\D--nosi-projects-igrp3-igrp-framework-frontend-igrp-framework-nextjs-packages-design-system\\\\ca052c78-c2ab-4215-9401-20a933827547\\\\tasks\\\\bcfqatya5.output\" 2>/dev/null; echo ---; cat /tmp/sb.log 2>/dev/null)",
+      "Bash(pnpm build:ds)",
+      "Bash(find /d/nosi-projects/igrp3/igrp-framework-frontend/igrp-framework-nextjs -maxdepth 3 -iname \"eslint.config*\" -not -path \"*/node_modules/*\")",
+      "Bash(node -e ' *)",
+      "Bash(npx eslint *)",
+      "Bash(xargs grep -l \"multiple candidate\")",
+      "Bash(xargs grep -l \"RootDir\")",
+      "Bash(node --experimental-vm-modules -e ' *)",
+      "Bash(node ./repro.mjs)",
+      "PowerShell(Get-Process | Where-Object { $_.ProcessName -match 'node|Code|eslint|esbuild|swc' } | Select-Object Id, ProcessName, Path | Format-Table -AutoSize)",
+      "Bash(read d *)",
+      "Bash(pnpm build:reactcompiler)",
+      "Bash(grep -iE \"EPERM|error|Successfully compiled|\\\\$ \")",
+      "Bash(echo \"EXIT CODE: $?\")",
+      "Bash(tail -5 /tmp_build_log.txt)",
+      "Bash(rm -f /tmp_build_log.txt)"
+    ]
+  }
+}

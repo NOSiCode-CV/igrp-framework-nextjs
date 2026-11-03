@@ -109,7 +109,7 @@ interface IGRPDataTableProps<TData, TValue> {
   getRowCanExpand?: TableOptions<TData>["getRowCanExpand"]
   /** Render expanded row content. */
   renderSubComponent?: (row: Row<TData>) => React.ReactElement | undefined
-  /** Stable row id. Required for correct expansion with sorting or pagination (default: row index). */
+  /** Stable row id. Needed for expansion to survive `data` being reordered or replaced, e.g. server-side sorting/paging or a refetch (default: row index). */
   getRowId?: TableOptions<TData>["getRowId"]
   /** HTML id attribute. */
   id?: string
@@ -306,7 +306,7 @@ function IGRPDataTable<TData, TValue>({
     if (process.env.NODE_ENV === "production" || warnedRowId.current || !renderSubComponent || getRowId) return
     warnedRowId.current = true
     console.warn(
-      "IGRPDataTable: renderSubComponent without getRowId keys expanded rows by index; sorting or paging opens a different record. Pass getRowId."
+      "IGRPDataTable: renderSubComponent without getRowId keys expanded rows by index; if data is reordered or replaced (server-side sorting/paging, refetch) a different record opens. Pass getRowId."
     )
   }, [renderSubComponent, getRowId])
 

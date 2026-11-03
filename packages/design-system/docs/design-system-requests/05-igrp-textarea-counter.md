@@ -2,6 +2,8 @@
 
 > Part of the SIGOVP design-system request bundle — see [README.md](README.md). Cite as `§5`.
 
+**Status:** resolved by the `showCounter` / `showProgress` / `warnAt` / `enforceMaxLength` props on `IGRPTextarea` (plan `docs/superpowers/plans/2026-11-03-ds-requests-04-textarea-counter.md`). `formatCounter` declined: reword through the i18n catalog (`textarea.counterUsed`, `textarea.counterOf`). §5.4's `--warning` token pair already ships. §5.2's `name`/`id` point already holds: `IGRPTextarea` uses `name ?? id`.
+
 **Local workaround.** `src/app/(myapp)/_components/limited-textarea-field.tsx`
 (`LimitedTextareaField`).
 

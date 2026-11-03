@@ -99,7 +99,7 @@ Shared props: `name`, `label`, `helperText`, `required` and `className`. Write y
 | `IGRPInputPhone` | E.164 `string \| undefined` | `defaultCountry` (e.g. `"CV"`), `countries`, `international` (default true). |
 | `IGRPInputUrl` | `protocol + address` | `name` is required. `protocols`, `defaultProtocol` (default `"https://"`). An emptied field still holds `"https://"`, so validate with `z.url()`, not `.min(1)`. |
 | `IGRPInputSearch` | `string` | `onSearch`, `isDebounce` + `debounceMs` (2000). Enter runs `onSearch` and **does not submit the form**. |
-| `IGRPTextarea` | `string` | `rows` (3). |
+| `IGRPTextarea` | `string` | `rows` (3). With `maxLength`: `showCounter`, `showProgress` (follows `showCounter`), `warnAt` (0–1 fraction of `maxLength`, > 1 remaining characters; default 0.9), `enforceMaxLength` (default true: `setValue`/`reset` values are truncated and marked dirty; `false` leaves them for Zod `.max()`). |
 | `IGRPInputTime` | `"HH:mm"` | |
 | `IGRPDateTimeInput` | masked `string` `"dd/MM/yyyy, HH:mm"` | Not a `Date`. Pass a matching `placeholder`, because the default uses dashes. |
 | `IGRPDatePickerSingle`, `IGRPDatePickerInputSingle` (typed and masked) | `Date \| null` | **Clearing writes `null`**, so use `z.date().nullable()`. They read a Date, a number, ISO or `"yyyy-MM-dd"`. Props: `dateFormat` (`"dd-MM-yyyy"`), `disableBefore`, `disableAfter`, `disableDayOfWeek`. |

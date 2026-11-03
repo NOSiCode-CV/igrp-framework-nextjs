@@ -1,6 +1,6 @@
 "use client"
 
-import { useId, useState } from "react"
+import { useEffect, useId, useState } from "react"
 import { useFormContext, Controller } from "react-hook-form"
 
 import { cn } from "../cn.js"
@@ -102,6 +102,18 @@ function TextareaCounter({
   )
 }
 
+// A component, not a hook in the main body: the form branch sits after an early return.
+// Watching the value (not onChange) is what catches setValue/reset.
+function TextareaMaxLengthGuard({ name, value, maxLength }: { name: string; value: unknown; maxLength: number }) {
+  const { setValue } = useFormContext()
+  useEffect(() => {
+    if (typeof value === "string" && value.length > maxLength) {
+      setValue(name, value.slice(0, maxLength), { shouldValidate: true, shouldDirty: true })
+    }
+  }, [name, value, maxLength, setValue])
+  return null
+}
+
 /**
  * Textarea with label, helper text, and form integration.
  */
@@ -120,7 +132,7 @@ function IGRPTextarea({
   showCounter = false,
   showProgress = showCounter,
   warnAt = 0.9,
-  enforceMaxLength: _enforceMaxLength,
+  enforceMaxLength = true,
   "aria-describedby": callerDescribedBy,
   ...props
 }: IGRPTextareaProps) {
@@ -131,7 +143,6 @@ function IGRPTextarea({
   const fieldName = name ?? id ?? _id
 
   const formContext = useFormContext()
-  void _enforceMaxLength // consumed by the form branch in the next change
   const [stateLength, setStateLength] = useState(() => textareaValueLength(props.defaultValue))
   const counterId = `${fieldName}-counter`
   const max = maxLength ?? 0
@@ -226,6 +237,9 @@ function IGRPTextarea({
               onBlur={igrpChainHandlers(field.onBlur, onBlur)}
               {...callerProps}
             />
+            {enforceMaxLength && max > 0 && (
+              <TextareaMaxLengthGuard name={fieldName} value={field.value} maxLength={max} />
+            )}
           </div>
 
           <TextareaCounter

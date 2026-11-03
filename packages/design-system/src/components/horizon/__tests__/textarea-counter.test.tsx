@@ -1,8 +1,10 @@
-import { describe, expect, it } from "vitest"
+import { describe, expect, it, vi } from "vitest"
 import type { ReactNode } from "react"
-import { render, screen } from "@testing-library/react"
+import { act, render, screen, waitFor } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
-import { useForm, type FieldValues, type UseFormReturn } from "react-hook-form"
+import { useForm, type FieldValues, type Resolver, type UseFormReturn } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { z } from "zod"
 
 import { Form } from "../../primitives/form.js"
 import { IGRPTextarea } from "../input/textarea.js"
@@ -11,12 +13,14 @@ function Harness({
   children,
   defaultValues = {},
   onForm,
+  resolver,
 }: {
   children: ReactNode
   defaultValues?: FieldValues
   onForm?: (form: UseFormReturn<FieldValues>) => void
+  resolver?: Resolver<FieldValues>
 }) {
-  const form = useForm<FieldValues>({ defaultValues })
+  const form = useForm<FieldValues>({ defaultValues, resolver })
   onForm?.(form)
   return (
     <Form {...form}>
@@ -135,5 +139,72 @@ describe("IGRPTextarea counter", () => {
     )
     const ta = screen.getByRole("textbox")
     for (const a of ["showcounter", "showprogress", "warnat", "enforcemaxlength"]) expect(ta).not.toHaveAttribute(a)
+  })
+
+  describe("value cap (form)", () => {
+    let form!: UseFormReturn<FieldValues>
+    const onForm = (f: UseFormReturn<FieldValues>) => (form = f)
+    const resolver = vi.fn(zodResolver(z.object({ f: z.string().max(10) })) as unknown as Resolver<FieldValues>)
+
+    it("setValue over the limit is truncated, dirty and re-validated", async () => {
+      render(
+        <Harness resolver={resolver} onForm={onForm}>
+          <IGRPTextarea name="f" label="F" maxLength={10} showCounter />
+        </Harness>
+      )
+      resolver.mockClear()
+      act(() => form.setValue("f", "x".repeat(60)))
+      await waitFor(() => expect(form.getValues("f")).toBe("x".repeat(10)))
+      expect(form.getFieldState("f").isDirty).toBe(true)
+      expect(resolver).toHaveBeenCalledWith(
+        expect.objectContaining({ f: "x".repeat(10) }),
+        undefined,
+        expect.anything()
+      )
+      expect(status()).toHaveTextContent(/10\s*\/\s*de\s*10/)
+    })
+
+    it("reset over the limit is truncated and the counter follows", async () => {
+      render(
+        <Harness onForm={onForm}>
+          <IGRPTextarea name="f" label="F" maxLength={10} showCounter />
+        </Harness>
+      )
+      act(() => form.reset({ f: "y".repeat(15) }))
+      await waitFor(() => expect(form.getValues("f")).toBe("y".repeat(10)))
+      expect(status()).toHaveTextContent(/10\s*\/\s*de\s*10/)
+    })
+
+    it("enforceMaxLength={false} keeps the over-long value for Zod to fault", async () => {
+      render(
+        <Harness resolver={resolver} onForm={onForm}>
+          <IGRPTextarea name="f" label="F" maxLength={10} enforceMaxLength={false} />
+        </Harness>
+      )
+      act(() => form.setValue("f", "x".repeat(15)))
+      await act(() => form.trigger("f"))
+      expect(form.getValues("f")).toHaveLength(15)
+      expect(document.querySelector('[data-slot="field-error"]')).toHaveTextContent(/10/)
+    })
+
+    it("leaves a non-string value alone", () => {
+      render(
+        <Harness defaultValues={{ f: 12345678901 }} onForm={onForm}>
+          <IGRPTextarea name="f" label="F" maxLength={10} />
+        </Harness>
+      )
+      expect(form.getValues("f")).toBe(12345678901)
+    })
+
+    it("without maxLength nothing is truncated", async () => {
+      render(
+        <Harness onForm={onForm}>
+          <IGRPTextarea name="f" label="F" />
+        </Harness>
+      )
+      act(() => form.setValue("f", "x".repeat(60)))
+      await act(async () => {})
+      expect(form.getValues("f")).toHaveLength(60)
+    })
   })
 })

@@ -29,7 +29,7 @@ Never run `npx shadcn add` in an IGRP app. If something is missing, use the DS p
 | Media | `Carousel` + `CarouselContent`/`CarouselItem`/`CarouselPrevious`/`CarouselNext`, `useCarousel`, type `CarouselApi`; `Cropper` + `CropperImage`/`CropperCropArea`/`CropperDescription` |
 | Table | `Table`, `TableHeader`, `TableBody`, `TableFooter`, `TableRow`, `TableHead`, `TableCell`, `TableCaption` |
 | Charts | `ChartContainer`, `ChartTooltip`, `ChartTooltipContent`, `ChartLegend`, `ChartLegendContent`, `ChartStyle`. The `ChartConfig` type isn't exported. |
-| Stepper | `Stepper`, `StepperItem`, `StepperTrigger`, `StepperIndicator`, `StepperTitle`, `StepperDescription`, `StepperSeparator` |
+| Stepper | `Stepper`, `StepperItem`, `StepperTrigger`, `StepperIndicator`, `StepperTitle`, `StepperDescription`, `StepperSeparator` (`StepperIndicator variant="number" \| "ring"`; the separator positions itself from it, only labels-below layouts need `absolute w-auto m-0`) |
 | Toast | `Toaster` (sonner). The template root mounts the toaster. In feature code use `useIGRPToast` (no `toast` function is exported). |
 
 ## Rules at this layer

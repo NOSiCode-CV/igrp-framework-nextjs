@@ -173,39 +173,49 @@ function StepperTrigger({ asChild = false, className, children, ...props }: Step
 
 interface StepperIndicatorProps extends React.HTMLAttributes<HTMLDivElement> {
   asChild?: boolean
+  variant?: "number" | "ring"
 }
 
-function StepperIndicator({ asChild = false, className, children, ...props }: StepperIndicatorProps) {
+function StepperIndicator({ asChild = false, variant, className, children, ...props }: StepperIndicatorProps) {
   const { state, step, isLoading } = useStepItem()
 
   return (
     <span
       data-slot="stepper-indicator"
       className={cn(
-        "relative flex size-6 shrink-0 items-center justify-center rounded-full bg-muted text-xs font-medium text-muted-foreground data-[state=active]:bg-primary data-[state=active]:text-muted-foreground data-[state=completed]:bg-primary data-[state=completed]:text-primary-foreground",
+        "relative flex shrink-0 items-center justify-center rounded-full bg-muted text-xs font-medium text-muted-foreground data-[state=active]:bg-step-active data-[state=active]:text-step-active-foreground data-[state=completed]:bg-step-complete data-[state=completed]:text-step-complete-foreground",
+        variant === "number" && "size-8",
+        variant === "ring" &&
+          "size-5 border-2 border-muted-foreground/30 bg-background font-normal data-[state=active]:border-step-active data-[state=completed]:border-step-complete",
+        !variant && "size-6",
         className
       )}
       data-state={state}
+      data-variant={variant}
       {...props}
     >
       {asChild ? (
         children
       ) : (
         <>
-          <span
-            className={cn(
-              "transition-all group-data-loading/step:scale-0 group-data-loading/step:opacity-0 group-data-loading/step:transition-none group-data-[state=completed]/step:scale-0 group-data-[state=completed]/step:opacity-0"
-            )}
-          >
-            {step}
-          </span>
-          <CheckIcon
-            className={cn(
-              "absolute scale-0 opacity-0 transition-all group-data-[state=completed]/step:scale-100 group-data-[state=completed]/step:opacity-100"
-            )}
-            size={16}
-            aria-hidden="true"
-          />
+          {variant !== "ring" && (
+            <>
+              <span
+                className={cn(
+                  "transition-all group-data-loading/step:scale-0 group-data-loading/step:opacity-0 group-data-loading/step:transition-none group-data-[state=completed]/step:scale-0 group-data-[state=completed]/step:opacity-0"
+                )}
+              >
+                {step}
+              </span>
+              <CheckIcon
+                className={cn(
+                  "absolute scale-0 opacity-0 transition-all group-data-[state=completed]/step:scale-100 group-data-[state=completed]/step:opacity-100"
+                )}
+                size={16}
+                aria-hidden="true"
+              />
+            </>
+          )}
           {isLoading && (
             <span className={cn("absolute transition-all")}>
               <LoaderCircleIcon
@@ -239,7 +249,7 @@ function StepperSeparator({ className, ...props }: React.HTMLAttributes<HTMLDivE
     <div
       data-slot="stepper-separator"
       className={cn(
-        "m-0.5 bg-muted group-data-[orientation=horizontal]/stepper:h-0.5 group-data-[orientation=horizontal]/stepper:w-full group-data-[orientation=horizontal]/stepper:flex-1 group-data-[orientation=vertical]/stepper:h-12 group-data-[orientation=vertical]/stepper:w-0.5 group-data-[state=completed]/step:bg-primary",
+        "m-0.5 bg-muted group-has-[[data-variant=number]]/step:top-[0.9375rem] group-has-[[data-variant=number]]/step:right-[calc(-50%+1rem)] group-has-[[data-variant=number]]/step:left-[calc(50%+1rem)] group-has-[[data-variant=ring]]/step:top-[0.5625rem] group-has-[[data-variant=ring]]/step:right-[calc(-50%+0.625rem)] group-has-[[data-variant=ring]]/step:left-[calc(50%+0.625rem)] group-data-[orientation=horizontal]/stepper:h-0.5 group-data-[orientation=horizontal]/stepper:w-full group-data-[orientation=horizontal]/stepper:flex-1 group-data-[orientation=vertical]/stepper:h-12 group-data-[orientation=vertical]/stepper:w-0.5 group-data-[state=active]/step:bg-step-active group-data-[state=completed]/step:bg-step-complete",
         className
       )}
       {...props}

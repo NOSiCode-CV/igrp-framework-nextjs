@@ -99,6 +99,7 @@ export function UsersTable({ data, onDelete }: { data: User[]; onDelete: (u: Use
 | `clientFilters`, `clientClearLabel`, `onFiltersCleared` | | Custom filter UI (see Filters). |
 | `onQueryChange`, `rowCount`, `isServerSide`, `serverFilterComponent` | | Server mode (see below). |
 | `getRowCanExpand`, `renderSubComponent` | `() => false` | Row expansion. Pair it with `IGRPDataTableCellExpander`. |
+| `getRowId` | row index | Stable row id (`(row) => row.id`). Pass it whenever you use `renderSubComponent`: by index, expanded state follows the position when `data` is reordered (refetch, server paging or sorting) and opens a different record. Dev warning otherwise. |
 | `notFoundLabel` | i18n `dataTable.notFound` | |
 | `className`, `filterClassName`, `tableClassName`, `tableHeaderClassName`, `tableBodyClassName`, `paginationClassName`, `id` | | |
 

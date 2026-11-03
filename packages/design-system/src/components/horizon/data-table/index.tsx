@@ -1,7 +1,7 @@
 "use client"
 "use no memo"
 
-import { Fragment, useCallback, useEffect, useId, useMemo, useReducer } from "react"
+import { Fragment, useCallback, useEffect, useId, useMemo, useReducer, useRef } from "react"
 import {
   type ColumnDef,
   type ColumnFiltersState,
@@ -109,6 +109,8 @@ interface IGRPDataTableProps<TData, TValue> {
   getRowCanExpand?: TableOptions<TData>["getRowCanExpand"]
   /** Render expanded row content. */
   renderSubComponent?: (row: Row<TData>) => React.ReactElement | undefined
+  /** Stable row id. Required for correct expansion with sorting or pagination (default: row index). */
+  getRowId?: TableOptions<TData>["getRowId"]
   /** HTML id attribute. */
   id?: string
   /** Called after all client-side column filters are cleared via the clear button. */
@@ -199,6 +201,7 @@ function IGRPDataTable<TData, TValue>({
   // onRowSelectionChange,
   getRowCanExpand = () => false,
   renderSubComponent,
+  getRowId,
   id,
   onFiltersCleared,
   actions,
@@ -298,6 +301,15 @@ function IGRPDataTable<TData, TValue>({
     return [...columns, ...actionColumn] as ColumnDef<TData, TValue>[]
   }, [columns, actions, tableHelper])
 
+  const warnedRowId = useRef(false)
+  useEffect(() => {
+    if (process.env.NODE_ENV === "production" || warnedRowId.current || !renderSubComponent || getRowId) return
+    warnedRowId.current = true
+    console.warn(
+      "IGRPDataTable: renderSubComponent without getRowId keys expanded rows by index; sorting or paging opens a different record. Pass getRowId."
+    )
+  }, [renderSubComponent, getRowId])
+
   // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
     data,
@@ -313,6 +325,7 @@ function IGRPDataTable<TData, TValue>({
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
     getRowCanExpand: getRowCanExpand,
+    getRowId,
 
     onColumnFiltersChange: setColumnFilters,
     onColumnVisibilityChange: setColumnVisibility,

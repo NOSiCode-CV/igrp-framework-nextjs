@@ -182,9 +182,9 @@ function IGRPDataTableButtonLink({
     tooltipDelayDuration,
   }
 
-  return href ? (
+  return href && !disabled ? (
     <IGRPDataTableActionTooltip {...tooltipProps}>
-      <Button variant={variant} size="icon-sm" className={cn("size-8", className)} asChild disabled={disabled}>
+      <Button variant={variant} size="icon-sm" className={cn("size-8", className)} asChild>
         <Link href={href} className={cn("flex items-center")} aria-label={labelTrigger}>
           <IGRPIcon iconName={icon} />
           <span className={cn("sr-only")}>{labelTrigger}</span>

@@ -160,6 +160,11 @@
   --success-foreground: oklch(0.26 0.049 150.069);
   --warning: oklch(0.828 0.189 84.429);
   --warning-foreground: oklch(0.28 0.07 84);
+  /* Aliases compute where declared, so a .dark on a descendant needs its own copies. */
+  --step-active: var(--primary);
+  --step-active-foreground: var(--primary-foreground);
+  --step-complete: var(--success);
+  --step-complete-foreground: var(--success-foreground);
   --info: oklch(0.666 0.2 264.376);
   --info-foreground: oklch(0.24 0.05 264.376);
   --indigo: oklch(0.702 0.183 293.541);

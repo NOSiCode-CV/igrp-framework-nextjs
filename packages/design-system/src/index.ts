@@ -600,6 +600,12 @@ export {
   IGRPDataTableTooltipProvider,
 } from "./components/horizon/data-table/tooltip-provider.js"
 export {
+  IGRPTooltip,
+  IGRPTooltipContext,
+  IGRPTooltipProvider,
+  type IGRPTooltipProps,
+} from "./components/horizon/tooltip.js"
+export {
   IGRPDataTableDateRangeFilterFn,
   IGRPDataTableFacetedFilterFn,
   IGRPDataTableTextFilterFn,

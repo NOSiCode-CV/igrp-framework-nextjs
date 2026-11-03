@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useContext, useState, type ReactElement } from "react"
+import { useCallback, useState, type ReactElement } from "react"
 import Link from "next/link"
 
 import { cn } from "../cn.js"
@@ -26,12 +26,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../../primitives/dialog.js"
-import { Tooltip, TooltipContent, TooltipTrigger } from "../../primitives/tooltip.js"
 import { IGRPButton } from "../button.js"
 import { IGRPIcon } from "../icon/index.js"
 import { igrpModalDialogContentVariants } from "../modal-dialog.js"
+import { IGRPTooltip } from "../tooltip.js"
 import { type IGRPDataTableDialogProps, type IGRPDataTableLinkProps } from "./row-actions.js"
-import { IGRPDataTableTooltipContext, IGRPDataTableTooltipProvider } from "./tooltip-provider.js"
 import { useIGRPi18n } from "../../../i18n/index.js"
 
 /** @internal Wraps action button with tooltip when label is provided. */
@@ -52,27 +51,18 @@ function IGRPDataTableActionTooltip({
   tooltipSideOffset?: number
   tooltipDelayDuration?: number
 }) {
-  const hasProvider = useContext(IGRPDataTableTooltipContext)
-
-  if (!label) return children
-
-  const tooltipNode = (
-    <Tooltip>
-      <TooltipTrigger asChild>{children}</TooltipTrigger>
-      <TooltipContent
-        side={tooltipSide}
-        align={tooltipAlign}
-        className={tooltipClassName}
-        sideOffset={tooltipSideOffset}
-      >
-        {label}
-      </TooltipContent>
-    </Tooltip>
+  return (
+    <IGRPTooltip
+      label={label}
+      side={tooltipSide}
+      align={tooltipAlign}
+      className={tooltipClassName}
+      sideOffset={tooltipSideOffset}
+      delayDuration={tooltipDelayDuration}
+    >
+      {children}
+    </IGRPTooltip>
   )
-
-  if (hasProvider) return tooltipNode
-
-  return <IGRPDataTableTooltipProvider delayDuration={tooltipDelayDuration}>{tooltipNode}</IGRPDataTableTooltipProvider>
 }
 
 /** Icon button that opens an alert dialog. */

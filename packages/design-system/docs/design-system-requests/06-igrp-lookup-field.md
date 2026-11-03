@@ -2,6 +2,8 @@
 
 > Part of the SIGOVP design-system request bundle — see [README.md](README.md). Cite as `§6`.
 
+**Status:** implemented as `IGRPLookupField` (`src/components/horizon/input/lookup.tsx`), with all §6.6 criteria covered by `src/components/horizon/input/__tests__/lookup.test.tsx`.
+
 **Local workaround.** `src/app/(myapp)/_components/lookup-field.tsx`
 (`LookupField` + the private `LookupSearchButton`), with three domain wrappers
 on top: `src/app/(myapp)/_components/nif-field.tsx`,

@@ -38,6 +38,8 @@ interface IGRPAccordionItem extends Partial<AccordionTriggerArgs> {
   emptyIcon?: IGRPIconName | string
   /** Empty-state text. Default: the catalog's `accordion.empty`. */
   emptyLabel?: string
+  /** Node beside the trigger; clicks do not toggle the item. */
+  action?: React.ReactNode
 }
 
 type IGRPAccordionBaseProps = Partial<AccordionTriggerArgs> &
@@ -97,6 +99,7 @@ function IGRPAccordion(props: IGRPAccordionProps) {
           showIcon={item.showIcon ?? showIcon}
           iconPlacement={item.iconPlacement ?? iconPlacement}
           className={classNameTrigger}
+          headerAction={item.action}
         >
           {item.badgeIcon || item.count !== undefined ? (
             <span data-slot="accordion-title" className="flex items-center gap-3">

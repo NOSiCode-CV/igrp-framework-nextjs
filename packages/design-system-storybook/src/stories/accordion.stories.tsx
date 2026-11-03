@@ -1,4 +1,4 @@
-import { type IGRPAccordionProps, IGRPAccordion } from '@igrp/igrp-framework-react-design-system';
+import { type IGRPAccordionProps, IGRPAccordion, IGRPButton } from '@igrp/igrp-framework-react-design-system';
 import type { StoryFn, StoryObj } from '@storybook/nextjs-vite';
 
 export default {
@@ -63,5 +63,25 @@ export const NoIcon: StoryObj<IGRPAccordionProps> = {
     iconPlacement: 'end',
     showIcon: false,
     items: items_examples
+  },
+};
+
+export const SummarySections: StoryObj<IGRPAccordionProps> = {
+  render: Template,
+  args: {
+    type: 'multiple',
+    defaultValue: 'all',
+    items: [
+      { title: 'Identificação', badgeIcon: 'IdCard', badgeColor: 'success', content: 'Dados de identificação.' },
+      { title: 'Subcategorias', badgeIcon: 'Layers', count: 3, content: 'Três subcategorias.' },
+      { title: 'Escalões', badgeIcon: 'Layers', count: 0, emptyIcon: 'Inbox', emptyLabel: 'Sem escalões definidos.', content: null },
+      {
+        title: 'Campos',
+        badgeIcon: 'Settings',
+        count: 5,
+        content: 'Cinco campos.',
+        action: <IGRPButton size='sm' variant='ghost'>Editar</IGRPButton>,
+      },
+    ],
   },
 };

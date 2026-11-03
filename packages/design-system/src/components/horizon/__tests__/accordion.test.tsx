@@ -72,7 +72,7 @@ describe("IGRPAccordion", () => {
   })
 
   it("renders count 0 as a tabular-nums pill", () => {
-    render(<IGRPAccordion items={[{ title: "Escal�es", count: 0, empty: false, content: <p>x</p> }]} />)
+    render(<IGRPAccordion items={[{ title: "Escalões", count: 0, empty: false, content: <p>x</p> }]} />)
     expect(screen.getByText("0")).toHaveClass("tabular-nums")
   })
 
@@ -82,21 +82,21 @@ describe("IGRPAccordion", () => {
       <IGRPAccordion
         items={[
           {
-            title: "Escal�es",
+            title: "Escalões",
             count: 0,
             emptyIcon: "Layers",
-            emptyLabel: "Sem escal�es definidos.",
+            emptyLabel: "Sem escalões definidos.",
             content: <Content />,
           },
         ]}
       />
     )
-    expect(screen.getByText("Sem escal�es definidos.")).toBeInTheDocument()
+    expect(screen.getByText("Sem escalões definidos.")).toBeInTheDocument()
     expect(Content).not.toHaveBeenCalled()
   })
 
   it("count 0 with empty={false} renders content", () => {
-    render(<IGRPAccordion items={[{ title: "Escal�es", count: 0, empty: false, content: <p>tabela</p> }]} />)
+    render(<IGRPAccordion items={[{ title: "Escalões", count: 0, empty: false, content: <p>tabela</p> }]} />)
     expect(screen.getByText("tabela")).toBeInTheDocument()
   })
 
@@ -116,6 +116,39 @@ describe("IGRPAccordion", () => {
   it("an item with none of the new fields renders the bare title as before", () => {
     render(<IGRPAccordion items={[{ title: "Simples", content: <p>x</p> }]} />)
     expect(screen.getByRole("button", { name: "Simples" }).querySelector("[data-slot=accordion-title]")).toBeNull()
+  })
+
+  it("action is clickable without toggling the section", async () => {
+    const onEdit = vi.fn()
+    render(
+      <IGRPAccordion
+        type="multiple"
+        defaultValue="all"
+        items={[
+          {
+            title: "Identificação",
+            content: <p>corpo</p>,
+            action: (
+              <button type="button" onClick={onEdit}>
+                Editar
+              </button>
+            ),
+          },
+        ]}
+      />
+    )
+    await userEvent.click(screen.getByRole("button", { name: "Editar" }))
+    screen.getByRole("button", { name: "Editar" }).focus()
+    await userEvent.keyboard("{Enter} ")
+    expect(onEdit).toHaveBeenCalledTimes(3)
+    expect(screen.getByRole("button", { name: "Identificação" })).toHaveAttribute("aria-expanded", "true")
+  })
+
+  it("action is not nested inside the trigger button", () => {
+    render(<IGRPAccordion items={[{ title: "A", content: <p>a</p>, action: <button type="button">Editar</button> }]} />)
+    expect(screen.getByRole("button", { name: "A" })).not.toContainElement(
+      screen.getByRole("button", { name: "Editar" })
+    )
   })
 })
 

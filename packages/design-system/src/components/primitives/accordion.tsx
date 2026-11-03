@@ -22,7 +22,10 @@ type AccordionTriggerArgs = {
   iconPlacement: "start" | "end"
 }
 
-interface AccordionTriggerProps extends React.ComponentProps<typeof AccordionPrimitive.Trigger>, AccordionTriggerArgs {}
+interface AccordionTriggerProps extends React.ComponentProps<typeof AccordionPrimitive.Trigger>, AccordionTriggerArgs {
+  /** Node rendered beside the trigger (outside the button); clicks do not toggle the item. */
+  headerAction?: React.ReactNode
+}
 
 function AccordionTrigger({
   className,
@@ -30,6 +33,7 @@ function AccordionTrigger({
   iconName = "ChevronDown",
   showIcon,
   iconPlacement = "end",
+  headerAction,
   ...props
 }: AccordionTriggerProps) {
   return (
@@ -54,6 +58,11 @@ function AccordionTrigger({
         )}
         {children}
       </AccordionPrimitive.Trigger>
+      {headerAction && (
+        <div data-slot="accordion-header-action" className="flex shrink-0 items-center pl-2">
+          {headerAction}
+        </div>
+      )}
     </AccordionPrimitive.Header>
   )
 }

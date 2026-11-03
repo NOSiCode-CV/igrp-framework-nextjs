@@ -1,5 +1,7 @@
 # §4. `IGRPCollapsibleSection` — a titled, countable, collapsible panel
 
+**Status:** resolved in the release after `0.2.0-beta.10` by widening `IGRPAccordion` (`type="multiple"`, `count`, `badgeIcon`, `empty*`, `action`, per-item `value`). Not done: `as` heading level, per-section `open` (use `value`/`onValueChange`).
+
 > Part of the SIGOVP design-system request bundle — see [README.md](README.md). Cite as `§4`.
 
 **Local workaround.** `src/app/(myapp)/_components/collapsible-section.tsx`

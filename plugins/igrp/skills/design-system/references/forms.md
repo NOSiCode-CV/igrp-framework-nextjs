@@ -65,16 +65,19 @@ export function UserForm({ onSave }: { onSave: (v: z.output<typeof schema>) => P
 | Prop | Notes |
 | --- | --- |
 | `schema` | The Zod schema. `onSubmit` receives `z.output<typeof schema>`. |
-| `formRef` | **Required by the type.** It's `RefObject<IGRPFormHandle<S> \| null>`, which is `null` until mounted. |
+| `formRef` | **Required by the type.** It's `RefObject<IGRPFormHandle<S> \| null>`, which is `null` until mounted and never re-renders the parent. Use it from event handlers, not to read state during render. |
 | `defaultValues` | `z.input<S>`. Give every field a default, including `""` for text and `null` for dates. |
-| `onSubmit(values)` | May be async. **Throw to report failure.** The form logs it, shows `err.message` (or an i18n fallback) in a red banner above the fields, optionally toasts it, then calls `onError`. The banner clears on the next submit. |
+| `onSubmit(values)` | May be async. **Throw to report failure.** The form logs it, shows `err.message` (or an i18n fallback) in a red banner above the fields, optionally toasts it, then calls `onError`. The banner clears on the next submit. The console log is skipped when `onError` is set. |
 | `onError(err)`, `showToastOnError` | The toast needs a mounted toaster (the template already mounts one). |
+| `showInlineError` | Default `true`. Set `false` when you report failures yourself (e.g. a toast in `onError`), to drop the banner. |
 | `validationMode` | RHF mode, default `"onSubmit"`. |
+| `reValidationMode` | RHF `reValidateMode`: `"onChange"` (default), `"onBlur"` or `"onSubmit"`. |
 | `resetAfterSubmit` | Resets to the defaults after a successful submit. |
 | `disabled` | Disables every field (fieldset) and blocks native submit. `formRef.current.submit()` still submits. |
 | `gridClassName` | Merged into `grid gap-4` (one column by default). Use `sm:grid-cols-2`, plus `sm:col-span-2` on a child, to make a field span both columns. |
 | `resetKey` | Changing it resets values, dirty/touched state and the global error to the current `defaultValues`, even mid-edit. While set, `defaultValues` don't re-sync on their own. |
-| `className`, `id`, `children` | Use `id` with `<IGRPButton type="submit" form={id}>` for a button outside the form (e.g. in a modal footer). |
+| `children` | Nodes, or `(form) => ReactNode`. The function form re-renders on `form.watch("x")`, so use it to show a field based on another field's value. |
+| `className`, `id` | Use `id` with `<IGRPButton type="submit" form={id}>` for a button outside the form (e.g. in a modal footer). |
 
 **`defaultValues` re-sync:** a *new object identity* is applied only while the form is not dirty. A changed value under the same identity, or new defaults arriving after the user has typed, are ignored.
 
@@ -90,7 +93,7 @@ Shared props: `name`, `label`, `helperText`, `required` and `className`. Write y
 
 | Field | Writes | Notes |
 | --- | --- | --- |
-| `IGRPInputText` | `string` | `type="number"` still writes a string, so use `IGRPInputNumber`. |
+| `IGRPInputText` | `string` | `type`: `text`, `email`, `url`, `tel`, `search`, `number`. `type="number"` still writes a string, so use `IGRPInputNumber`. |
 | `IGRPInputNumber` | `number \| undefined` | Clearing writes `undefined` (`z.number().optional()`). Props: `min` / `max` (clamped on blur) and `formatOptions: Intl.NumberFormatOptions`. |
 | `IGRPInputPassword` | `string` | `showPasswordToggle` (default true). |
 | `IGRPInputPhone` | E.164 `string \| undefined` | `defaultCountry` (e.g. `"CV"`), `countries`, `international` (default true). |
@@ -203,13 +206,12 @@ import { IGRPRichTextEditor, IGRPRichTextView } from "@igrp/igrp-framework-react
 
 ## Custom widgets: `IGRPFormField`
 
-For a widget that isn't form-aware (a signature pad, a third-party picker). Unlike the `IGRP*` fields, **it takes `control` explicitly**:
+For a widget that isn't form-aware (a signature pad, a third-party picker). `control` is optional inside `IGRPForm` (or any RHF `FormProvider`); pass it only when using it outside one:
 
 ```tsx
 function SignatureField() {
-  const { form } = useIGRPFormContext()
   return (
-    <IGRPFormField name="signature" label="Assinatura" control={form.control} required>
+    <IGRPFormField name="signature" label="Assinatura" required>
       {(field, fieldState) => <SignaturePad value={field.value} onChange={field.onChange} invalid={!!fieldState.error} />}
     </IGRPFormField>
   )

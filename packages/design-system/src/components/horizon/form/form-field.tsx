@@ -1,6 +1,6 @@
 "use client"
 
-import type { Control, ControllerFieldState, ControllerRenderProps, FieldValues } from "react-hook-form"
+import type { Control, ControllerFieldState, ControllerRenderProps } from "react-hook-form"
 
 import {
   FormControl,
@@ -41,8 +41,10 @@ interface IGRPFormFieldProps {
   children: React.ReactNode | ((field: ControllerRenderProps, fieldState: ControllerFieldState) => React.ReactNode)
   /** Whether the field is required. */
   required?: boolean
-  /** react-hook-form control from useFormContext. */
-  control: Control<FieldValues, unknown, FieldValues>
+  /** react-hook-form control. Optional inside IGRPForm or any FormProvider, which supply it. */
+  // Any-typed so a `Control<MyValues>` from a typed `useForm` is accepted without a cast.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  control?: Control<any, any, any>
   /** Label position ('start' | 'end' | 'center'). */
   labelPlacement?: IGRPPlacementProps
   /** Use horizontal layout (label beside control), e.g. for switches. */

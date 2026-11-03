@@ -6,6 +6,8 @@ import { z } from "zod"
 
 import { IGRPForm, type IGRPFormHandle } from "../form/index.js"
 import { IGRPInputText } from "../input/text.js"
+import { IGRPFormField } from "../form/form-field.js"
+import { Input } from "../../primitives/input.js"
 
 const schema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -211,5 +213,100 @@ describe("IGRPForm resetKey", () => {
     await userEvent.click(screen.getByRole("button", { name: "next" }))
 
     await waitFor(() => expect(input).toHaveValue("Bob"))
+  })
+})
+
+describe("IGRPForm consumer options", () => {
+  const typeSchema = z.object({ kind: z.string(), url: z.string().optional() })
+
+  it("re-renders a render-prop child on a watched value", async () => {
+    render(
+      <IGRPForm
+        schema={typeSchema}
+        formRef={createRef<IGRPFormHandle<typeof typeSchema>>()}
+        onSubmit={vi.fn()}
+        defaultValues={{ kind: "internal" }}
+      >
+        {(form) => (
+          <>
+            <IGRPInputText name="kind" label="Kind" />
+            {form.watch("kind") === "external" && <IGRPInputText name="url" label="URL" type="url" />}
+          </>
+        )}
+      </IGRPForm>
+    )
+
+    expect(screen.queryByRole("textbox", { name: "URL" })).toBeNull()
+    const kind = screen.getByRole("textbox", { name: "Kind" })
+    await userEvent.clear(kind)
+    await userEvent.type(kind, "external")
+    expect(await screen.findByRole("textbox", { name: "URL" })).toHaveAttribute("type", "url")
+  })
+
+  it("skips the banner and console with showInlineError={false} and onError", async () => {
+    const formRef = createRef<IGRPFormHandle<Schema>>()
+    const onError = vi.fn()
+    const log = vi.spyOn(console, "error").mockImplementation(() => {})
+
+    render(
+      <IGRPForm
+        schema={schema}
+        formRef={formRef}
+        onSubmit={vi.fn().mockRejectedValue(new Error("Server down"))}
+        onError={onError}
+        showInlineError={false}
+        defaultValues={{ name: "Bob" }}
+      >
+        <IGRPInputText name="name" label="Name" />
+      </IGRPForm>
+    )
+
+    await formRef.current!.submit()
+
+    await waitFor(() => expect(onError).toHaveBeenCalled())
+    expect(screen.queryByText("Server down")).toBeNull()
+    expect(log).not.toHaveBeenCalled()
+    log.mockRestore()
+  })
+
+  it("passes reValidationMode through: onBlur re-validation leaves the error up while typing", async () => {
+    const formRef = createRef<IGRPFormHandle<Schema>>()
+    render(
+      <IGRPForm
+        schema={schema}
+        formRef={formRef}
+        onSubmit={vi.fn()}
+        reValidationMode="onBlur"
+        defaultValues={{ name: "" }}
+      >
+        <IGRPInputText name="name" label="Name" />
+      </IGRPForm>
+    )
+
+    await formRef.current!.submit()
+    const input = screen.getByRole("textbox", { name: "Name" })
+    await waitFor(() => expect(input).toHaveAttribute("aria-invalid", "true"))
+
+    await userEvent.type(input, "a")
+    expect(input).toHaveAttribute("aria-invalid", "true")
+    await userEvent.tab()
+    await waitFor(() => expect(input).toHaveAttribute("aria-invalid", "false"))
+  })
+
+  it("lets IGRPFormField take its control from the form context", () => {
+    render(
+      <IGRPForm
+        schema={schema}
+        formRef={createRef<IGRPFormHandle<Schema>>()}
+        onSubmit={vi.fn()}
+        defaultValues={{ name: "Ana" }}
+      >
+        <IGRPFormField name="name" label="Name">
+          {(field) => <Input {...field} />}
+        </IGRPFormField>
+      </IGRPForm>
+    )
+
+    expect(screen.getByRole("textbox", { name: "Name" })).toHaveValue("Ana")
   })
 })

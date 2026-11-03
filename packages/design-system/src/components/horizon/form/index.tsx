@@ -54,22 +54,33 @@ export interface IGRPFormProps<TSchema extends AnyZod> {
   defaultValues?: InputOf<TSchema>
   /** Validation mode: 'onSubmit' | 'onChange' | 'onBlur' | 'onTouched' | 'all'. */
   validationMode?: Mode
+  /** When fields re-validate after a failed validation: 'onChange' | 'onBlur' | 'onSubmit'. Default 'onChange'. */
+  reValidationMode?: "onChange" | "onBlur" | "onSubmit"
   /** Called when form is valid and submitted. */
   onSubmit: (values: OutputOf<TSchema>) => void | Promise<void>
   /** Reset form to defaultValues after successful submit. */
   resetAfterSubmit?: boolean
-  /** Ref to access form handle (submit, reset, etc.). */
+  /**
+   * Ref to the form handle, for imperative calls (`submit`, `reset`, `setValue`) from event handlers.
+   * It is assigned after mount and reading it never re-renders, so don't read form state from it during
+   * render — use the render-prop `children` or `useWatch` in a child instead.
+   */
   formRef: React.RefObject<IGRPFormHandle<TSchema> | null>
-  /** Called when submission throws. */
+  /** Called when submission throws. When set, the error is not also logged to the console. */
   onError?: (error: unknown) => void
   /** Show toast on submission error. */
   showToastOnError?: boolean
+  /** Show the error banner inside the form when submission throws. Default true. */
+  showInlineError?: boolean
   /** CSS classes for the form element. */
   className?: string
   /** CSS classes for the grid wrapping form fields. */
   gridClassName?: string
-  /** Form content (IGRPFormField, inputs, etc.). */
-  children: React.ReactNode
+  /**
+   * Form content (IGRPFormField, inputs, etc.), or a function of the form instance. The function form
+   * re-renders on `form.watch(...)` changes, so it can switch fields on a watched value.
+   */
+  children: React.ReactNode | ((form: UseFormReturn<InputOf<TSchema>, unknown, OutputOf<TSchema>>) => React.ReactNode)
   /** HTML id attribute. */
   id?: string
   /** Disable all form inputs. */
@@ -90,11 +101,13 @@ function IGRPForm<TSchema extends AnyZod>({
   schema,
   defaultValues,
   validationMode = "onSubmit",
+  reValidationMode,
   onSubmit,
   resetAfterSubmit = false,
   formRef,
   onError,
   showToastOnError = false,
+  showInlineError = true,
   className,
   gridClassName,
   children,
@@ -114,6 +127,7 @@ function IGRPForm<TSchema extends AnyZod>({
     resolver: zodResolver(schema) as Resolver<InputOf<TSchema>, unknown, OutputOf<TSchema>>,
     defaultValues,
     mode: validationMode,
+    reValidateMode: reValidationMode,
   })
 
   // Sync defaultValues to form when they change. Three safety rails to avoid clobbering state:
@@ -162,10 +176,10 @@ function IGRPForm<TSchema extends AnyZod>({
           form.reset(defaultValues)
         }
       } catch (err) {
-        console.error("Form submission failed:", err)
+        if (!onError) console.error("Form submission failed:", err)
         const errorMessage = err instanceof Error ? err.message : i18n.form.submissionErrorFallback
 
-        setGlobalError(errorMessage)
+        if (showInlineError) setGlobalError(errorMessage)
 
         if (showToastOnError) {
           toast.error(i18n.form.submissionErrorTitle, { description: errorMessage })
@@ -175,7 +189,18 @@ function IGRPForm<TSchema extends AnyZod>({
       }
       setIsSubmitting(false)
     },
-    [clearGlobalError, onSubmit, resetAfterSubmit, form, defaultValues, setGlobalError, showToastOnError, onError, i18n]
+    [
+      clearGlobalError,
+      onSubmit,
+      resetAfterSubmit,
+      form,
+      defaultValues,
+      setGlobalError,
+      showToastOnError,
+      showInlineError,
+      onError,
+      i18n,
+    ]
   )
 
   const submitForm = useCallback(async () => form.handleSubmit(handleSubmit)(), [form, handleSubmit])
@@ -219,7 +244,9 @@ function IGRPForm<TSchema extends AnyZod>({
             </div>
           )}
           <FieldSet disabled={disabled} className={cn("m-0 gap-0 border-0 p-0")}>
-            <div className={cn("grid gap-4", gridClassName)}>{children}</div>
+            <div className={cn("grid gap-4", gridClassName)}>
+              {typeof children === "function" ? children(form) : children}
+            </div>
           </FieldSet>
         </form>
       </Form>

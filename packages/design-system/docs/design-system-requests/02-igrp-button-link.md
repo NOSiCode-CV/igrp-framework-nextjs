@@ -2,6 +2,8 @@
 
 > Part of the SIGOVP design-system request bundle — see [README.md](README.md). Cite as `§2`.
 
+**Status:** Implemented as `IGRPButtonLink` and `IGRPLinkPendingIcon` (plan `docs/superpowers/plans/2026-11-03-ds-requests-05-button-link.md`); §2.0 fixed by plan 01. Requires Next >= 15.3.
+
 **Local workaround.** `src/app/(myapp)/_components/button-link.tsx`
 (`SimpleButtonLink`, plus the private `SimpleLinkLoadingIndicator`).
 

@@ -2,6 +2,8 @@
 
 > Part of the SIGOVP design-system request bundle — see [README.md](README.md). Cite as `§3`.
 
+**Status:** Implemented as the `tooltip`, `tooltipSide` and `tooltipAlign` props on `IGRPButtonLink` (plan 05), on top of `IGRPTooltip` and `isIconOnlySize` (plan 02).
+
 **Local workaround.** `src/app/(myapp)/_components/button-link-tooltip.tsx`
 (`SimpleButtonLinkTooltip`).
 

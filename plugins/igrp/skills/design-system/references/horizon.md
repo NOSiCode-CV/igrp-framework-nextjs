@@ -16,6 +16,10 @@ Shared vocab: `IGRPColorRole` = `"solid" | "outline" | "soft"` (prop `variant`) 
 
 **`IGRPLink`**: next/link, or `<a target="_blank">` for external URLs. Props: `href`, `variant`, `color`, `size: default | sm | lg`, `underline: none | hover | always`. **`showIcon` defaults to true** and shows an `ArrowRight`, so pass `showIcon={false}` for a plain link. `IGRPLinkVariants` is exported for CVA reuse.
 
+**`IGRPButtonLink`**: a button-shaped next/link. Props: `href`, `label`, `variant`, `size`, `iconName`, `iconPlacement`, `iconClassName`, `disabled`, `showPendingIndicator` (default true; set false for `#anchors` and external URLs, where the spinner never fires), `tooltip`, `tooltipSide`, `tooltipAlign`. `disabled` renders a `<button>`, not a link. Icon sizes (`isIconOnlySize`, in `src/lib/button-size.ts`) show no text and use `label` as the tooltip and accessible name; `iconPlacement="center"` falls back to `"start"`. An icon-only or tooltipped link sits inside `IGRPTooltip`'s inline-flex wrapper span. A spinner shows while the route loads, which needs Next >= 15.3. Wrap a list of them in `IGRPTooltipProvider` (not the raw `TooltipProvider`) to share one provider.
+
+**`IGRPLinkPendingIcon`**: put it inside your own `Link` to get the same spinner; outside a `Link` it never spins.
+
 **`IGRPCopyTo`**: a copy icon button with a tooltip and a toast. Props: `value` (required), `successMessage`, `errorMessage`, `tooltipMessage`, `onCopySuccess`, `onCopyError`, `toastDuration` and `tooltipDelayDuration`.
 
 ## Surfaces
@@ -146,7 +150,7 @@ For row deletes in a table, use the `alert` row action instead (`data-table.md`)
 - **`IGRPChat`**: `apiEndpoint` (required) and `labelDescription`. It POSTs `{ messages }` and expects `{ messages: IGRPChatMessage[] }` back, and manages its own state.
 - **`IGRPIcon`**: `iconName` + lucide props (`size` defaults to 16). Icons lazy-load, and an unknown name renders a red alert icon.
 
-`IGRPLink`, `IGRPImage`, `IGRPStatsCard` (image), `IGRPPageHeader` and `IGRPChat` import `next/*`, so they only work in Next.js apps.
+`IGRPLink`, `IGRPButtonLink`, `IGRPImage`, `IGRPStatsCard` (image), `IGRPPageHeader` and `IGRPChat` import `next/*`, so they only work in Next.js apps.
 
 ## Default copy
 

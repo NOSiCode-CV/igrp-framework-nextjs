@@ -1,8 +1,8 @@
 "use client"
 
-import { Controller, useFormContext } from "react-hook-form"
+import { Controller, get, useFormContext, useFormState, useWatch } from "react-hook-form"
 
-import { igrpChainHandlers } from "../../../lib/form-binding.js"
+import { igrpChainHandlers, igrpMergeRefs } from "../../../lib/form-binding.js"
 import { useIGRPi18n } from "../../../i18n/index.js"
 import { cn } from "../cn.js"
 import { Field, FieldDescription, FieldError } from "../../primitives/field.js"
@@ -19,9 +19,9 @@ import { IGRPTooltip } from "../tooltip.js"
 interface IGRPLookupFieldProps {
   /** Input id; also the display field when `displayName` is unset. */
   name: string
-  /** Form field holding the looked-up value. */
+  /** Form field holding the looked-up value, bound to a hidden input. Inside a form only. */
   valueName?: string
-  /** Form field bound to the visible input. Defaults to `name`. */
+  /** Form field bound to the visible input. Defaults to `name`. Inside a form only. */
   displayName?: string
   label: string
   required?: boolean
@@ -41,6 +41,7 @@ interface IGRPLookupFieldProps {
   lookupDisabledReason?: string
   /** Disables the lookup button and shows a spinner in place of the icon. */
   loading?: boolean
+  /** Shows a clear button while a value is set. Inside a form it runs after both fields are set to null. */
   onClear?: () => void
   /** Info tooltip next to the label. */
   labelTooltip?: string
@@ -64,6 +65,9 @@ type ViewProps = IGRPLookupFieldProps & {
   inputValue: string
   error?: string
   inputProps?: Pick<React.ComponentProps<"input">, "onBlur" | "ref">
+  hiddenValue?: string
+  showClear?: boolean
+  onClearClick?: () => void
 }
 
 function LookupView({
@@ -89,6 +93,10 @@ function LookupView({
   inputValue,
   error,
   inputProps,
+  valueName,
+  hiddenValue,
+  showClear,
+  onClearClick,
 }: ViewProps) {
   const i18n = useIGRPi18n()
   const lookupButtonDisabled = Boolean(disabled || lookupDisabled)
@@ -107,6 +115,7 @@ function LookupView({
         )}
         {labelSuffix && <div className="shrink-0">{labelSuffix}</div>}
       </div>
+      {valueName && <input type="hidden" name={valueName} value={hiddenValue ?? ""} />}
       <InputGroup>
         <InputGroupInput
           id={name}
@@ -122,6 +131,16 @@ function LookupView({
           {...inputProps}
         />
         <InputGroupAddon align="inline-end">
+          {showClear && (
+            <IGRPButton
+              size="icon-xs"
+              variant="ghost"
+              iconName="X"
+              aria-label={i18n.lookupField.clear}
+              onClick={onClearClick}
+              disabled={disabled || loading}
+            />
+          )}
           <IGRPTooltip label={lookupButtonDisabled ? lookupDisabledReason : undefined} disabled={lookupButtonDisabled}>
             <IGRPButton
               size="icon-xs"
@@ -147,20 +166,61 @@ function LookupView({
 }
 
 function BoundLookupField(props: IGRPLookupFieldProps) {
-  const { control } = useFormContext()
+  const { control, setValue } = useFormContext()
+  const displayField = props.displayName ?? props.name
+  const { valueName, onClear } = props
+  const { errors, isSubmitted } = useFormState({ control, name: valueName ?? displayField })
+  const pickedValue = useWatch({ control, name: valueName ?? displayField })
+
+  const clear = () => {
+    const opts = { shouldDirty: true, shouldValidate: isSubmitted }
+    setValue(displayField, null, opts)
+    if (valueName) setValue(valueName, null, opts)
+    onClear?.()
+  }
+
+  const view = (
+    field: {
+      value: unknown
+      onChange: (...e: unknown[]) => void
+      onBlur: () => void
+      ref: React.Ref<HTMLInputElement>
+    },
+    fieldState: { error?: { message?: string } },
+    valueField?: { value: unknown; ref: React.Ref<HTMLInputElement> }
+  ) => (
+    <LookupView
+      {...props}
+      inputValue={(field.value as string | null) ?? ""}
+      onChange={igrpChainHandlers(field.onChange, props.onChange)}
+      error={
+        props.errorText ??
+        (valueName ? (get(errors, valueName)?.message as string | undefined) : undefined) ??
+        fieldState.error?.message
+      }
+      // The hidden input never takes focus, so the value field's ref goes on the visible input.
+      inputProps={{ onBlur: field.onBlur, ref: igrpMergeRefs(field.ref, valueField?.ref) }}
+      hiddenValue={valueField ? ((valueField.value as string | null) ?? "") : undefined}
+      showClear={Boolean(onClear && (field.value || pickedValue))}
+      onClearClick={clear}
+    />
+  )
+
   return (
     <Controller
       control={control}
-      name={props.displayName ?? props.name}
-      render={({ field, fieldState }) => (
-        <LookupView
-          {...props}
-          inputValue={field.value ?? ""}
-          onChange={igrpChainHandlers(field.onChange, props.onChange)}
-          error={props.errorText ?? fieldState.error?.message}
-          inputProps={{ onBlur: field.onBlur, ref: field.ref }}
-        />
-      )}
+      name={displayField}
+      render={({ field, fieldState }) =>
+        valueName ? (
+          <Controller
+            control={control}
+            name={valueName}
+            render={({ field: valueField }) => view(field, fieldState, valueField)}
+          />
+        ) : (
+          view(field, fieldState)
+        )
+      }
     />
   )
 }
@@ -172,7 +232,15 @@ function BoundLookupField(props: IGRPLookupFieldProps) {
 function IGRPLookupField(props: IGRPLookupFieldProps) {
   const formContext = useFormContext()
   if (formContext) return <BoundLookupField {...props} />
-  return <LookupView {...props} inputValue={props.value ?? ""} error={props.errorText} />
+  return (
+    <LookupView
+      {...props}
+      inputValue={props.value ?? ""}
+      error={props.errorText}
+      showClear={Boolean(props.onClear && props.value)}
+      onClearClick={props.onClear}
+    />
+  )
 }
 
 export { IGRPLookupField, type IGRPLookupFieldProps }

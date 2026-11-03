@@ -48,7 +48,7 @@ export const PickedValue: Story = {
   render: (args) => {
     const form = useForm({
       resolver: zodResolver(schema),
-      defaultValues: { licencaId: null, licencaNumero: null },
+      defaultValues: { licencaId: '', licencaNumero: '' },
     });
     return (
       <div className='container my-10 mx-auto p-4 border rounded-lg shadow-sm'>

@@ -36,6 +36,12 @@ interface IGRPButtonProps
   iconSize?: string | number
 }
 
+/** True for the `icon*` sizes, which render an icon with no text. */
+// eslint-disable-next-line react-refresh/only-export-components
+export function isIconOnlySize(size: VariantProps<typeof buttonVariants>["size"]): boolean {
+  return typeof size === "string" && size.startsWith("icon")
+}
+
 /**
  * Horizon button with optional icon, loading state, and IGRP attributes.
  * Integrates with form context when used inside IGRPForm.
@@ -68,7 +74,7 @@ function IGRPButton({
   // primitive's three size overrides for it only.
   const spinnerSizeClassName = size === "xs" || size === "icon-xs" ? "size-3" : size === "sm" ? "size-3.5" : undefined
 
-  if (size === "icon" || size === "icon-xs" || size === "icon-sm" || size === "icon-lg") {
+  if (isIconOnlySize(size)) {
     const hasAccessibleName = Boolean(props["aria-label"] || props["aria-labelledby"])
     if (process.env.NODE_ENV !== "production" && !hasAccessibleName) {
       console.warn(

@@ -432,7 +432,7 @@ export { IGRPBadge, type IGRPBadgeProps, igrpBadgeVariants } from "./components/
 
 export { IGRPBanner, type IGRPBannerProps } from "./components/horizon/banner.js"
 
-export { IGRPButton, type IGRPButtonProps } from "./components/horizon/button.js"
+export { IGRPButton, type IGRPButtonProps, isIconOnlySize } from "./components/horizon/button.js"
 
 export { IGRPCalendarSingle, type IGRPCalendarSingleProps } from "./components/horizon/calendar/single.js"
 

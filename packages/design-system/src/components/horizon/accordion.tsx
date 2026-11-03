@@ -21,77 +21,100 @@ interface IGRPAccordionItem extends Partial<AccordionTriggerArgs> {
   title: string
   /** Content shown when expanded. */
   content: React.ReactNode
+  /** Stable item value. Default: `item-${igrpCleanString(title).toLowerCase()}`. */
+  value?: string
 }
+
+type IGRPAccordionBaseProps = Partial<AccordionTriggerArgs> &
+  Omit<React.ComponentProps<typeof Accordion>, "type" | "value" | "defaultValue" | "onValueChange" | "collapsible"> & {
+    /** CSS classes for the trigger. */
+    classNameTrigger?: string
+    /** CSS classes for the content. */
+    classNameContent?: string
+    /** Array of accordion items. */
+    items: IGRPAccordionItem[]
+    /** HTML name attribute. */
+    name?: string
+  }
 
 /**
  * Props for the IGRPAccordion component.
+ * `single` (default) keeps one item open; `multiple` allows several, and `defaultValue="all"` opens every item.
  * @see IGRPAccordion
  */
-interface IGRPAccordionProps
-  extends Partial<AccordionTriggerArgs>, Omit<React.ComponentProps<typeof Accordion>, "type"> {
-  /** CSS classes for the trigger. */
-  classNameTrigger?: string
-  /** CSS classes for the content. */
-  classNameContent?: string
-  /** Array of accordion items. */
-  items: IGRPAccordionItem[]
-  /** Controlled value (open item). */
-  value?: string
-  /** Uncontrolled default value. */
-  defaultValue?: string
-  /** Called when the open item changes. */
-  onValueChange?(value: string): void
-  /** HTML name attribute. */
-  name?: string
+type IGRPAccordionProps = IGRPAccordionBaseProps &
+  (
+    | { type?: "single"; value?: string; defaultValue?: string; onValueChange?(value: string): void }
+    | { type: "multiple"; value?: string[]; defaultValue?: string[] | "all"; onValueChange?(value: string[]): void }
+  )
+
+function itemValue(item: IGRPAccordionItem): string {
+  return item.value ?? `item-${igrpCleanString(item.title).toLowerCase()}`
 }
 
 /**
  * Accordion with collapsible items, optional icons, and single/multiple expand modes.
  */
-function IGRPAccordion({
-  className,
-  classNameTrigger,
-  classNameContent,
-  items,
-  showIcon = true,
-  iconName = "ChevronDown",
-  iconPlacement = "end",
-  defaultValue,
-  name,
-  id,
-  ...accordionProps
-}: IGRPAccordionProps) {
+function IGRPAccordion(props: IGRPAccordionProps) {
+  const {
+    className,
+    classNameTrigger,
+    classNameContent,
+    items,
+    showIcon = true,
+    iconName = "ChevronDown",
+    iconPlacement = "end",
+    name,
+    id,
+    ...rest
+  } = props
   const _id = useId()
   const ref = name ?? id ?? _id
 
-  const _defaultValue = defaultValue || items[0]?.title
-  const defaultId = igrpCleanString(_defaultValue).toLowerCase()
+  const children = items?.map((item) => (
+    <AccordionItem key={itemValue(item)} value={itemValue(item)}>
+      <AccordionTrigger
+        iconName={item.iconName ?? iconName}
+        showIcon={item.showIcon ?? showIcon}
+        iconPlacement={item.iconPlacement ?? iconPlacement}
+        className={classNameTrigger}
+      >
+        {item.title}
+      </AccordionTrigger>
+      <AccordionContent className={classNameContent}>{item.content}</AccordionContent>
+    </AccordionItem>
+  ))
 
+  if (props.type === "multiple") {
+    const { type, defaultValue, ...accordionProps } = rest as Extract<typeof rest, { type: "multiple" }>
+    return (
+      <Accordion
+        id={ref}
+        className={cn(className)}
+        type={type}
+        defaultValue={
+          defaultValue === "all" ? items.map(itemValue) : (defaultValue ?? (items[0] ? [itemValue(items[0])] : []))
+        }
+        {...accordionProps}
+      >
+        {children}
+      </Accordion>
+    )
+  }
+
+  const { defaultValue, ...accordionProps } = rest as Extract<typeof rest, { type?: "single" }>
   return (
     <Accordion
       id={ref}
       className={cn(className)}
       type="single"
       collapsible
-      defaultValue={`item-${defaultId}`}
+      defaultValue={
+        defaultValue ? `item-${igrpCleanString(defaultValue).toLowerCase()}` : items[0] && itemValue(items[0])
+      }
       {...accordionProps}
     >
-      {items?.map((item) => {
-        const id = igrpCleanString(item.title).toLowerCase()
-        return (
-          <AccordionItem key={id} value={`item-${id}`}>
-            <AccordionTrigger
-              iconName={item.iconName ?? iconName}
-              showIcon={item.showIcon ?? showIcon}
-              iconPlacement={item.iconPlacement ?? iconPlacement}
-              className={classNameTrigger}
-            >
-              {item.title}
-            </AccordionTrigger>
-            <AccordionContent className={classNameContent}>{item.content}</AccordionContent>
-          </AccordionItem>
-        )
-      })}
+      {children}
     </Accordion>
   )
 }

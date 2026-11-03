@@ -119,9 +119,10 @@ For row deletes in a table, use the `alert` row action instead (`data-table.md`)
 - `showIcon` and `showBadge` default to false, so set them to show the item icons and badges.
 
 **`IGRPAccordion`**:
-- `items: { title; content; iconName?; showIcon? }[]`. It's always single + collapsible, and the first item opens by default.
-- Controlled `value` uses `item-<title letters lowercased>` (e.g. `"item-dadospessoais"`).
-- Titles that differ only in digits or accents collide ("Passo 1" vs "Passo 2"), so make titles distinct by their letters.
+- `items: { title; content; value?; iconName?; showIcon? }[]`.
+- `type: "single" | "multiple"`. Single (the default) is collapsible and opens the first item by default. `type="multiple"` keeps several items open, and `defaultValue="all"` opens every item (an array opens just those).
+- Controlled single-mode `value` defaults to `item-<title letters lowercased>` (e.g. `"item-dadospessoais"`). Multiple mode takes and reports a `string[]`.
+- Pass `value` per item when titles can collide ("Passo 1" vs "Passo 2"), since they are cleaned to letters only.
 
 **`IGRPMenuNavigation`**: an **in-page section nav** that scrolls to sections; it is not the app menu.
 - `sections: { id; label; icon; disabled? }[]`, `activeSection`, `onSectionChange`, `title`, `isStickyTop`.

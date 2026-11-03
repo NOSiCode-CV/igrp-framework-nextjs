@@ -167,6 +167,13 @@ describe("value pairing", () => {
     expect(await screen.findByText("Escolha uma licença")).toBeInTheDocument()
   })
 
+  it("focuses the lookup button when the input is read-only and only the valueName field fails", async () => {
+    render(<Paired defaults={{ licencaId: "", licencaNumero: "x" }} />)
+    await pairedRef.current!.submit()
+    await screen.findByText("Escolha uma licença")
+    expect(screen.getByRole("button", { name: "Pesquisar licença" })).toHaveFocus()
+  })
+
   it("focuses the visible input when only the valueName field fails on submit", async () => {
     render(<Paired defaults={{ licencaId: "", licencaNumero: "x" }} inputDisabled={false} />)
     await pairedRef.current!.submit()

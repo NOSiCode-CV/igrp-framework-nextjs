@@ -62,13 +62,13 @@ function AccordionContent({ className, children, ...props }: React.ComponentProp
   return (
     <AccordionPrimitive.Content
       data-slot="accordion-content"
-      className="overflow-hidden text-sm data-closed:animate-accordion-up data-open:animate-accordion-down motion-reduce:animate-none"
+      className="overflow-hidden text-sm motion-reduce:animate-none data-open:animate-accordion-down data-closed:animate-accordion-up"
       {...props}
     >
       {/* No fixed height here: Radix measures --radix-accordion-content-height once on open, so content that grows later would be clipped. */}
       <div
         className={cn(
-          "pt-0 pb-4[&_a]:underline [&_a]:underline-offset-3 [&_a]:hover:text-foreground [&_p:not(:last-child)]:mb-4",
+          "pb-4[&_a]:underline pt-0 [&_a]:underline-offset-3 [&_a]:hover:text-foreground [&_p:not(:last-child)]:mb-4",
           className
         )}
       >

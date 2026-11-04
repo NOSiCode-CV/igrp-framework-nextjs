@@ -1,7 +1,7 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
-import { defineConfig } from 'tsup';
+import { defineConfig } from 'tsdown';
 
 /**
  * Entries that must ship a `"use client"` directive.
@@ -72,17 +72,7 @@ export default defineConfig({
   splitting: false,
   target: 'es2022',
   platform: 'neutral',
-  skipNodeModulesBundle: true,
-  external: [
-    'react',
-    'next',
-    'next/server',
-    'next/headers',
-    'next/navigation',
-    'next-auth',
-    'next-auth/react',
-    'next-auth/middleware',
-    'next-auth/jwt',
-    'next-auth/providers/oauth',
-  ],
+  deps: {
+    neverBundle: true,
+  },
 });

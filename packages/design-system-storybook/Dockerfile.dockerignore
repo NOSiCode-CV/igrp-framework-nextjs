@@ -1,0 +1,30 @@
+# Used instead of the repo-root .dockerignore when building packages/design-system-storybook/Dockerfile.
+# Patterns are relative to the build context (the repo root); `**/` reaches nested packages.
+
+# Dependencies and build output: the image installs and builds its own
+**/node_modules
+**/dist
+**/storybook-static
+**/.next
+**/.turbo
+**/coverage
+**/*.tsbuildinfo
+
+# Not needed to build Storybook
+templates
+.git
+.vscode
+.idea
+.claude
+.agents
+.cursor
+.worktrees
+graphify-out
+
+# Local secrets
+**/.env
+**/.env.*
+
+# Logs
+**/npm-debug.log*
+**/pnpm-debug.log*

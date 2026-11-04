@@ -6,7 +6,7 @@ All commands below run from the **template root** (this directory: `templates/de
 
 | File | Role |
 | --- | --- |
-| [`docker/development/Dockerfile`](../docker/development/Dockerfile) | Multi-stage build: Node 22 + pnpm → `next build` → `node server.js` |
+| [`docker/development/Dockerfile`](../docker/development/Dockerfile) | Multi-stage build: Node 26 (slim) + pnpm → `next build` → `node server.js` |
 | [`docker/development/docker-compose.yml`](../docker/development/docker-compose.yml) | Builds that Dockerfile and publishes **host `3001` → container `3000`** |
 | [`docker/development/.env.development`](../docker/development/.env.development) | Copied to `.env.production` **at image build time** (inlines `NEXT_PUBLIC_*`) |
 | [`.dockerignore`](../.dockerignore) | Keeps `node_modules`, `.next`, and local `.env*` out of the build context |
@@ -117,9 +117,9 @@ env_file:
 
 ## Image internals
 
-The Dockerfile is five stages on `node:22-alpine`:
+The Dockerfile is five stages on `node:26.13.0-slim` (Debian, glibc):
 
-1. **base** — `libc6-compat` only. Deliberately thin: `runner` inherits from it, so no build tooling reaches the final image.
+1. **base** — the Node image as is. Deliberately thin: `runner` inherits from it, so no build tooling reaches the final image.
 2. **toolchain** — `base` + `pnpm`. Used by the build stages only.
 3. **deps** — `pnpm install --frozen-lockfile --ignore-scripts`
 4. **builder** — copies sources, copies `docker/development/.env.development` → `.env.production`, runs `pnpm exec next build --turbopack`

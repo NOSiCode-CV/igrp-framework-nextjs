@@ -27,7 +27,7 @@
     "dist"
   ],
   "scripts": {
-    "build:js": "tsup",
+    "build:js": "tsdown",
     "build:types": "tsc -p tsconfig.build.json --emitDeclarationOnly",
     "build": "rimraf dist && pnpm build:js && pnpm build:types",
     "typecheck": "tsc -p tsconfig.json --noEmit",
@@ -39,22 +39,22 @@
     "clean-all": "rimraf node_modules && rimraf dist"
   },
   "dependencies": {
-    "@formatjs/icu-messageformat-parser": "3.5.21",
+    "@formatjs/icu-messageformat-parser": "3.5.22",
     "typescript": "~6.0.3"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
-    "@types/node": "^24",
+    "@types/node": "^26.6.6",
     "eslint": "^10.11.0",
-    "globals": "17.13.0",
+    "globals": "17.14.0",
     "prettier": "^3.9.9",
     "rimraf": "^6.1.3",
-    "tsup": "^8.5.1",
+    "tsdown": "0.23.4",
     "typescript-eslint": "^8.71.2",
     "vitest": "^5.0.1"
   },
   "engines": {
-    "node": ">=22"
+    "node": ">=24.22.2"
   },
   "publishConfig": {
     "registry": "https://sonatype.nosi.cv/repository/igrp/",

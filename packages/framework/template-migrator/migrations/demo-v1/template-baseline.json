@@ -40,7 +40,7 @@
     "@biomejs/biome": "2.5.15",
     "@hookform/resolvers": "5.9.1",
     "@tailwindcss/postcss": "4.3.3",
-    "@types/node": "25.9.1",
+    "@types/node": "26.6.6",
     "@types/react": "19.2.18",
     "class-variance-authority": "0.7.1",
     "next-auth": "4.24.15",

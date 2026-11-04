@@ -9,9 +9,8 @@
 #
 # Runtime base — kept deliberately thin: no pnpm, no build tooling.
 # `runner` inherits from here so none of that reaches the final image.
-FROM node:22-alpine AS base
+FROM node:26.13.0-slim AS base
 
-RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 # Build-time base — adds the package manager on top of `base`.
@@ -47,7 +46,7 @@ ENV NODE_ENV=production
 
 ENV NEXT_TELEMETRY_DISABLED=1
 
-RUN addgroup -g 1001 -S nodejs && adduser -S nextjs -u 1001
+RUN groupadd --system --gid 1001 nodejs && useradd --system --uid 1001 --gid nodejs nextjs
 
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
@@ -63,6 +62,6 @@ ENV HOSTNAME="0.0.0.0"
 ENV HEALTHCHECK_PATH=/api/health
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
-  CMD wget -q -O /dev/null "http://127.0.0.1:${PORT}${HEALTHCHECK_PATH}" || exit 1
+  CMD node -e "fetch('http://127.0.0.1:'+process.env.PORT+process.env.HEALTHCHECK_PATH).then(r=>process.exit(r.ok?0:1),()=>process.exit(1))"
 
 CMD ["node", "server.js"]

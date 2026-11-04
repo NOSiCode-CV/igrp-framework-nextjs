@@ -211,7 +211,7 @@ function BoundLookupField(props: IGRPLookupFieldProps) {
       onChange={igrpChainHandlers(field.onChange, props.onChange)}
       error={
         props.errorText ??
-        (valueName ? (get(errors, valueName)?.message as string | undefined) : undefined) ??
+        (valueName ? (get(errors, valueName) as { message?: string } | undefined)?.message : undefined) ??
         fieldState.error?.message
       }
       inputProps={{ onBlur: field.onBlur, ref: igrpMergeRefs(field.ref, inputRef) }}

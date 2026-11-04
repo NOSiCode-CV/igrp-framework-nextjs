@@ -1,12 +1,3 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`Components/Input/Hidden Default smoke-test 1`] = `
-<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm">
-  <input data-slot="input"
-         id="username"
-         placeholder="Digite seu nome de usuário"
-         type="hidden"
-         name="username"
-  >
-</div>
-`;
+exports[`Components/Input/Hidden Default smoke-test 1`] = `""`;

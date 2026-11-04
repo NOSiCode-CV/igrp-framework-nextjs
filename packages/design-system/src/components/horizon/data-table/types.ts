@@ -103,6 +103,10 @@ export interface IGRPDataTableColumnMeta {
 export type IGRPDataTableLayout = "auto" | "fixed"
 
 declare module "@tanstack/react-table" {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-object-type -- TanStack's signature
-  interface ColumnMeta<TData extends RowData, TValue> extends IGRPDataTableColumnMeta {}
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- TanStack's signature
+  interface ColumnMeta<TData extends RowData, TValue> extends IGRPDataTableColumnMeta {
+    // Without it the all-optional interface is a weak type, and a consumer's own
+    // meta keys (`meta: { align: "right" }`) fail with TS2353.
+    [key: string]: unknown
+  }
 }

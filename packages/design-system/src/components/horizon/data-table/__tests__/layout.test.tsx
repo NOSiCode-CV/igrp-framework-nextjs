@@ -13,6 +13,8 @@ const columnsWithOps = [
   col.accessor("name", { header: "Nome", size: 200, meta: { cellClassName: "text-center tabular-nums" } }),
   col.display({ id: "ops", header: "", meta: { isActionsColumn: true }, cell: () => "Editar" }),
 ]
+// Type-level (tsc): the global ColumnMeta augmentation must keep consumers' own meta keys legal.
+col.accessor("name", { meta: { align: "right", cellClassName: "x" } })
 
 describe("IGRPDataTable column layout", () => {
   it("truncates ordinary cells below lg and wraps them from lg", () => {

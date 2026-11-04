@@ -61,7 +61,7 @@ describe("IGRPMultiStepFormHeader", () => {
   })
 
   it("navigable: clicking a later step calls goToStep and validates", async () => {
-    const onStepValidation = vi.fn((_s: IGRPWizardStep) => true)
+    const onStepValidation = vi.fn<(s: IGRPWizardStep) => boolean>(() => true)
     render(
       <IGRPMultiStepForm steps={mk(["a", "b", "c"])} onStepValidation={onStepValidation}>
         <IGRPMultiStepFormHeader navigable />

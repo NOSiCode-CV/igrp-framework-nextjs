@@ -25,7 +25,7 @@ const columns: ColumnDef<Row>[] = [
 const expandableColumns: ColumnDef<Row>[] = [
   {
     id: 'expand',
-    header: () => null,
+    header: () => <span className="sr-only">Expand</span>,
     cell: ({ row }) => <IGRPDataTableCellExpander row={row} field="user" />,
     enableSorting: false,
     enableHiding: false,

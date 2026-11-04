@@ -235,9 +235,13 @@ function IGRPDataTablePaginationNumeric<TData>({
           onValueChange={(value) => {
             table.setPageSize(Number(value))
           }}
-          aria-label={i18n.dataTable.resultsPerPage}
         >
-          <SelectTrigger id="results-per-page" className={cn("w-fit whitespace-nowrap")}>
+          {/* Select's root renders no element, so the name belongs on the trigger. */}
+          <SelectTrigger
+            id="results-per-page"
+            aria-label={i18n.dataTable.resultsPerPage}
+            className={cn("w-fit whitespace-nowrap")}
+          >
             <SelectValue placeholder={i18n.dataTable.resultsPerPagePlaceholder} />
           </SelectTrigger>
           <SelectContent>

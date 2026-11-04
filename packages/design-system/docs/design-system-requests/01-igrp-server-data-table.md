@@ -245,8 +245,9 @@ just the server one.
    **Finding.** No mismatch in the design system. `hydration.test.tsx` server-renders
    `IGRPDataTable` (with pagination and actions) and `IGRPServerDataTable` with
    `renderToString`, hydrates the markup with `hydrateRoot`, and sees no recoverable
-   error and no `console.error`. The same test fails when the markup is made to differ
-   between server and client, so it does detect a mismatch. The app's guard is not
+   error and no `console.error`, for the default locale and default render. A negative
+   control in the same file (a component whose text differs between server and client)
+   does trigger `onRecoverableError`, so the check can fail. The app's guard is not
    working around the design system and can go.
 
 ---

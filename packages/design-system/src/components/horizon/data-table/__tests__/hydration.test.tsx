@@ -1,7 +1,8 @@
+import type { ReactElement } from "react"
 import { act } from "react"
-import { hydrateRoot } from "react-dom/client"
+import { hydrateRoot, type Root } from "react-dom/client"
 import { renderToString } from "react-dom/server"
-import { afterEach, beforeAll, describe, expect, it, vi } from "vitest"
+import { afterEach, afterAll, beforeAll, describe, expect, it, vi } from "vitest"
 
 import { IGRPDataTable } from "../index.js"
 import { IGRPServerDataTable } from "../server.js"
@@ -18,13 +19,40 @@ const actions: IGRPDataTableAction<R>[] = [
 ]
 const pagination: IGRPServerPaginationState = { pageIndex: 0, pageSize: 10, totalElements: 25, totalPages: 3 }
 
+type Env = { IS_REACT_ACT_ENVIRONMENT?: boolean }
+
+// Hydrates server markup of `ui` and returns what React reported.
+async function hydrate(ui: () => ReactElement) {
+  const container = document.createElement("div")
+  container.innerHTML = renderToString(ui())
+  document.body.append(container)
+  const errors = vi.spyOn(console, "error").mockImplementation(() => {})
+  const onRecoverableError = vi.fn()
+  let root!: Root
+  await act(async () => {
+    root = hydrateRoot(container, ui(), { onRecoverableError })
+  })
+  roots.push(root)
+  return { errors, onRecoverableError }
+}
+
+const roots: Root[] = []
+let previousActEnv: boolean | undefined
+
 // Guards request §1.6.5: the requester defers its first render one frame behind a skeleton.
 describe("data table hydration", () => {
   // Hydrating outside @testing-library/react: tell React that act() is available.
   beforeAll(() => {
-    ;(globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true
+    previousActEnv = (globalThis as Env).IS_REACT_ACT_ENVIRONMENT
+    ;(globalThis as Env).IS_REACT_ACT_ENVIRONMENT = true
   })
-  afterEach(() => {
+  afterAll(() => {
+    ;(globalThis as Env).IS_REACT_ACT_ENVIRONMENT = previousActEnv
+  })
+  afterEach(async () => {
+    await act(async () => {
+      roots.splice(0).forEach((r) => r.unmount())
+    })
     document.body.innerHTML = ""
     vi.restoreAllMocks()
   })
@@ -36,15 +64,16 @@ describe("data table hydration", () => {
       () => <IGRPServerDataTable columns={columns} data={data} pagination={pagination} onPaginationChange={() => {}} />,
     ],
   ])("%s hydrates without a mismatch", async (_, ui) => {
-    const container = document.createElement("div")
-    container.innerHTML = renderToString(ui())
-    document.body.append(container)
-    const errors = vi.spyOn(console, "error").mockImplementation(() => {})
-    const onRecoverableError = vi.fn()
-    await act(async () => {
-      hydrateRoot(container, ui(), { onRecoverableError })
-    })
+    const { errors, onRecoverableError } = await hydrate(ui)
     expect(onRecoverableError).not.toHaveBeenCalled()
     expect(errors).not.toHaveBeenCalled()
+  })
+
+  // Negative control: proves the assertions above can fire (and survive a React upgrade).
+  it("reports a mismatch when server and client markup differ", async () => {
+    let renders = 0
+    const Differs = () => <span>{++renders === 1 ? "server" : "client"}</span>
+    const { onRecoverableError } = await hydrate(() => <Differs />)
+    expect(onRecoverableError).toHaveBeenCalled()
   })
 })

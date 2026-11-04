@@ -536,6 +536,7 @@ export { IGRPContainer } from "./components/horizon/container.js"
 export { IGRPCopyTo, type IGRPCopyToProps } from "./components/horizon/copy-to.js"
 
 export { IGRPDataTable, type IGRPDataTableProps } from "./components/horizon/data-table/index.js"
+export { IGRPServerDataTable, type IGRPServerDataTableProps } from "./components/horizon/data-table/server.js"
 export {
   IGRPDataTableButtonAlert,
   IGRPDataTableButtonLink,
@@ -637,6 +638,7 @@ export type {
   IGRPDataTableLayout,
   IGRPDataTablePaginationConfig,
   IGRPDataTableQuery,
+  IGRPServerPaginationState,
 } from "./components/horizon/data-table/types.js"
 
 export {

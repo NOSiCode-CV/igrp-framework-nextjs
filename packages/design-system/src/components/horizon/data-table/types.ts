@@ -82,6 +82,15 @@ export interface IGRPDataTableQuery {
   filters: { id: string; value: unknown }[]
 }
 
+/** Pagination state a server-driven table renders; the parent owns it. */
+export interface IGRPServerPaginationState {
+  /** 0-based. */
+  pageIndex: number
+  pageSize: number
+  totalElements: number
+  totalPages: number
+}
+
 // ─── Column layout ──────────────────────────────────────────────────────────
 
 export interface IGRPDataTableColumnMeta {

@@ -15,17 +15,18 @@
 - cdda07f: New `IGRPTooltip` and `IGRPTooltipProvider`. The tooltip opens over a disabled control, on hover and keyboard focus. Data-table row actions use it, so their tooltips now also open when the action is disabled. A labelled trigger, including every existing data-table row action, is wrapped in an `inline-flex` span, and Radix's `aria-describedby` and `data-state` now sit on that span instead of the button.
 - 431d491: New `IGRPLookupField`: an input whose value is picked through an adjacent button (`onLookup`) rather than typed. With `valueName` it renders the hidden value input and shows that field's validation error under the visible one. `onClear` adds a clear button that writes `null` to both fields. `inputDisabled` and `lookupDisabled` are independent, `lookupDisabledReason` shows a tooltip over the disabled button, and `loading` swaps its icon for a spinner.
 - 60aace1: New `IGRPMultiStepForm` wizard with `IGRPMultiStepFormHeader`, `IGRPMultiStepFormSteps`, `IGRPMultiStepFormFooter`, `IGRPMultiStepFormPrevious`, `IGRPMultiStepFormNext`, `IGRPMultiStepFormSubmit` and `useIGRPMultiStepForm`. A step cannot be left until it validates: `onStepValidation`, or inside `IGRPForm` the default `form.trigger(step.fields)` followed by clearing errors on fields outside the step (outside a form it resolves true). A step's optional `description` renders under its title in the header. `blockingMessage` disables Next and shows why; it requires an `IGRPForm` ancestor. Transitions are CSS under `motion-safe`; there is no `motion` dependency.
-  
+
   `StepperIndicator` takes an opt-in `variant` (`ring` or `number`); without it the indicator is unchanged in size. `IGRPStepperProcess` does not use these primitives and is unchanged. Apps that render the exported `StepperIndicator` and `StepperSeparator` directly see three changes: completed steps move from the primary to the success colour (`step-complete` token), the separator after the active step turns `bg-step-active` instead of muted, and the active indicator's text uses `step-active-foreground` instead of `muted-foreground`.
+
 - 5e57d6b: `IGRPDataTablePaginationNumeric`: the page-size select now has an accessible name. Its `aria-label` was on the Select root, which renders no element, so it never reached the trigger.
 - 6c46541: New `IGRPServerDataTable`, a controlled, server-paginated table. The parent owns `pagination` (`IGRPServerPaginationState`) and gets `onPaginationChange(pageIndex, pageSize)`. Sorting is manual only when `sorting` and `onSortingChange` are both given. The pagination bar shows whenever there are rows and stays interactive while `isLoading`. Also takes `paginationType`, `layout` and `getRowId`; expanded rows follow the record only with `getRowId`, otherwise the row's index in `data`.
 - a92baf1: New semantic step tokens: `step-active`, `step-complete` and their foregrounds.
 - 01b6fc8: `StepperIndicator`: new opt-in `variant` (`number`, `size-8`; `ring`); without it the indicator is unchanged. `StepperSeparator` positions itself from the indicator variant, and active/completed states use the step tokens. The active indicator no longer renders muted text on the primary background.
 - 2ee2b3b: `IGRPTextarea`: new `showCounter`, `showProgress`, `warnAt` and `enforceMaxLength` props. With `maxLength`, the form value is now truncated to the limit even when it arrives through `setValue` or `reset`, and the field becomes dirty; pass `enforceMaxLength={false}` to keep the old behaviour. Without `showCounter`, nothing changes visually. A caller's `aria-describedby` is now joined with the helper, error and counter ids instead of replacing them.
 - f6d746e: `IGRPForm`: `children` can be a function of the form instance (`(form) => …`), which re-renders on `form.watch(...)`. New props `reValidationMode` (passed to react-hook-form as `reValidateMode`) and `showInlineError` (default `true`; `false` drops the submission error banner). A thrown `onSubmit` is no longer logged to the console when `onError` is set. `formRef` is documented as imperative-only.
-  
+
   `IGRPInputText`: `type` also accepts `"url"`, `"tel"` and `"search"`.
-  
+
   `IGRPFormField`: `control` is optional and falls back to the surrounding form context. It now accepts a typed `Control<MyValues>` without a cast.
 
 ## 0.2.0-beta.10

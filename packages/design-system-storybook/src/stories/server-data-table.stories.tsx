@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import {
+  IGRPDataTableCellExpander,
   IGRPServerDataTable,
   type ColumnDef,
   type IGRPServerDataTableProps,
@@ -19,6 +20,18 @@ const fixture: Row[] = Array.from({ length: 47 }, (_, i) => ({
 const columns: ColumnDef<Row>[] = [
   { accessorKey: 'name', header: 'Name' },
   { accessorKey: 'role', header: 'Role' },
+];
+
+const expandableColumns: ColumnDef<Row>[] = [
+  {
+    id: 'expand',
+    header: () => null,
+    cell: ({ row }) => <IGRPDataTableCellExpander row={row} field="user" />,
+    enableSorting: false,
+    enableHiding: false,
+    size: 46,
+  },
+  ...columns,
 ];
 
 type Args = Partial<IGRPServerDataTableProps<Row, unknown>> & { total?: number };
@@ -60,6 +73,7 @@ export const SinglePage: Story = { args: { total: 4 } };
 
 export const Expandable: Story = {
   args: {
+    columns: expandableColumns,
     getRowId: (row) => String(row.id),
     getRowCanExpand: () => true,
     renderSubComponent: (row) => <div className="p-4">Details for {row.original.name}</div>,

@@ -1,4 +1,4 @@
-import { useRef, useState } from "react"
+import { useState } from "react"
 import { describe, it, expect, vi } from "vitest"
 import { act, render, screen, waitFor } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
@@ -208,9 +208,10 @@ describe("steps and initialStep", () => {
 describe("default validation", () => {
   const schema = z.object({ name: z.string().min(1, "name required"), other: z.string().min(1, "other required") })
 
+  const formRef: { current: IGRPFormHandle<typeof schema> | null } = { current: null }
+
   function inForm(stepList: IGRPWizardStep[]) {
     function Host() {
-      const formRef = useRef<IGRPFormHandle<typeof schema> | null>(null)
       return (
         <IGRPForm schema={schema} formRef={formRef} onSubmit={() => {}} defaultValues={{ name: "", other: "" }}>
           <IGRPMultiStepForm steps={stepList}>
@@ -234,6 +235,8 @@ describe("default validation", () => {
     inForm([{ ...steps3[0], fields: ["name"] }, steps3[1]])
     await click("next")
     expect(await screen.findByText("name required")).toBeInTheDocument()
+    expect(screen.queryByText("other required")).not.toBeInTheDocument()
+    expect(formRef.current?.getFieldState("other").error).toBeUndefined()
     expect(idx()).toBe("1")
     await userEvent.type(screen.getByLabelText("Name"), "x")
     await click("next")

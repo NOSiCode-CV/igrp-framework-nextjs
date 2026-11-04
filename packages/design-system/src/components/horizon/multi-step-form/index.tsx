@@ -69,8 +69,16 @@ function IGRPMultiStepForm({
       try {
         if (form && step.blockingMessage && step.blockingMessage(form.getValues()) !== null) return false
         if (onStepValidation) return await onStepValidation(step)
-        if (form && step.fields.length) return await form.trigger(step.fields)
-        return true
+        if (!form || !step.fields.length) return true
+        await form.trigger(step.fields)
+        // The resolver validates the whole schema and RHF writes every field's error; keep only this step's.
+        const related = (key: string) =>
+          step.fields.some(
+            (f) => f === key || f.startsWith(`${key}.`) || f.startsWith(`${key}[`) || key.startsWith(`${f}.`)
+          )
+        const outside = Object.keys(form.getValues()).filter((key) => !related(key) && form.getFieldState(key).error)
+        if (outside.length) form.clearErrors(outside)
+        return !step.fields.some((f) => form.getFieldState(f).error)
       } catch {
         return false
       }

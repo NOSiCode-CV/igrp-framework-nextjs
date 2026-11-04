@@ -61,14 +61,14 @@ describe("IGRPMultiStepFormHeader", () => {
   })
 
   it("navigable: clicking a later step calls goToStep and validates", async () => {
-    const onStepValidation = vi.fn(() => true)
+    const onStepValidation = vi.fn((_s: IGRPWizardStep) => true)
     render(
       <IGRPMultiStepForm steps={mk(["a", "b", "c"])} onStepValidation={onStepValidation}>
         <IGRPMultiStepFormHeader navigable />
       </IGRPMultiStepForm>
     )
     await userEvent.click(screen.getByText("c"))
-    expect(onStepValidation.mock.calls.map((c) => (c[0] as IGRPWizardStep).key)).toEqual(["a", "b"])
+    expect(onStepValidation.mock.calls.map((c) => c[0]!.key)).toEqual(["a", "b"])
     expect(items(document.body)[2]).toHaveAttribute("data-state", "active")
   })
 
@@ -128,6 +128,6 @@ describe("IGRPMultiStepFormHeader", () => {
       expect(own).toContain("absolute")
       expect(own.join(" ")).not.toContain("calc(")
     })
-    expect(list[2].querySelector('[data-slot="stepper-separator"]')).toBeNull()
+    expect(list[2]!.querySelector('[data-slot="stepper-separator"]')).toBeNull()
   })
 })

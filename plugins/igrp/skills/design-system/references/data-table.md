@@ -97,6 +97,7 @@ export function UsersTable({ data, onDelete }: { data: User[]; onDelete: (u: Use
 | `isNumericPagination` | `false` | Numbered pages instead of prev/next. |
 | `showFilter` / `showToggleColumn` | `false` | Turn on the filter bar / column-visibility toggle. Filters don't render without one of them. |
 | `clientFilters`, `clientClearLabel`, `onFiltersCleared` | | Custom filter UI (see Filters). |
+| `layout` | `"auto"` | `"fixed"` adds `table-fixed` and honours `ColumnDef.size`. See Column layout. |
 | `onQueryChange`, `rowCount`, `isServerSide`, `serverFilterComponent` | | Server mode (see below). |
 | `getRowCanExpand`, `renderSubComponent` | `() => false` | Row expansion. Pair it with `IGRPDataTableCellExpander`. |
 | `getRowId` | row index | Stable row id (`(row) => row.id`). Pass it whenever you use `renderSubComponent`: by index, expanded state follows the position when `data` is reordered (refetch, server paging or sorting) and opens a different record. Dev warning otherwise. |
@@ -168,3 +169,53 @@ const handleQuery = useCallback((q: IGRPDataTableQuery) => {
 - `IGRPDataTableQuery = { page, pageSize, sorting: { id, desc }[], filters: { id, value }[] }`. **`page` is 0-based.**
 - **`onQueryChange` must be stable (`useCallback`).** It fires on mount and on every change, so an inline arrow that sets parent state re-renders forever.
 - Changing the sort or filters resets the page to 0.
+
+## `IGRPServerDataTable`
+
+A controlled table for server-paginated data. The caller owns the page index; the table never moves until `pagination` changes. Pick it over `IGRPDataTable` + `onQueryChange` when the page index lives in your state (a fetch hook, a `useState`), not in the table.
+
+| Prop | Default | Notes |
+| --- | --- | --- |
+| `columns`, `data` | | Stable references. `data` is the current page's rows. |
+| `pagination: IGRPServerPaginationState` | | `{ pageIndex (0-based), pageSize, totalElements, totalPages }`. |
+| `onPaginationChange(pageIndex, pageSize)` | | Flat arguments. |
+| `pageSizeOptions` | `[5, 10, 30, 50]` | |
+| `enablePagination` | `true` | The bar shows whenever `data` has rows. |
+| `paginationType` | `"simple"` | `"numeric"` for numbered pages. |
+| `isLoading` | `false` | Spinner overlay and `aria-busy`; rows stay rendered. The pagination bar stays interactive, so guard in the parent if needed. |
+| `sorting`, `onSortingChange` | | Manual sorting only when both are given; otherwise rows sort client-side within the page. |
+| `layout` | `"auto"` | See Column layout. |
+| `getRowId`, `getRowCanExpand`, `renderSubComponent` | | Row expansion. |
+| `notFoundLabel`, `id`, `className`, `tableClassName`, `tableHeaderClassName`, `tableBodyClassName`, `paginationClassName` | | |
+
+```tsx
+const [filter, setFilter] = useState("")
+const [pagination, setPagination] = useState<IGRPServerPaginationState>({
+  pageIndex: 0, pageSize: 10, totalElements: 0, totalPages: 0,
+})
+// fetch rows for (filter, pagination.pageIndex, pagination.pageSize), then set totals
+
+<IGRPServerDataTable
+  columns={columns}
+  data={rows}
+  pagination={pagination}
+  onPaginationChange={(pageIndex, pageSize) => setPagination((p) => ({ ...p, pageIndex, pageSize }))}
+  isLoading={loading}
+  getRowId={(r) => r.id}
+/>
+
+// on filter change: setFilter(v); setPagination((p) => ({ ...p, pageIndex: 0 }))
+```
+
+- `onPaginationChange` gets flat `(pageIndex, pageSize)`, not an updater.
+- Pass `sorting` and `onSortingChange` together, or omit both.
+- Pass `getRowId` with `renderSubComponent`. Without it, expanded rows follow the row's index in `data`, which breaks when data is reordered or replaced (server sort or page, refetch). A dev warning fires otherwise.
+
+## Column layout (meta)
+
+`ColumnDef.meta` is typed as `IGRPDataTableColumnMeta`; both `IGRPDataTable` and `IGRPServerDataTable` read it.
+
+- `meta.isActionsColumn`: keeps the column on one line and, under `layout="auto"`, shrinks it to fit (no inline width). This is the only way actions columns are detected; `IGRPDataTable`'s generated `actions` column sets it.
+- `meta.cellClassName`: replaces the column's default cell classes.
+- `layout`: `"auto"` (default) lets the browser size columns; `"fixed"` uses `table-fixed` and `ColumnDef.size` widths.
+- Default cells truncate below `lg` and wrap from `lg`; headers can wrap from `lg` (not under `"fixed"`).

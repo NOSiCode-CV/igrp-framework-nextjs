@@ -2,488 +2,402 @@
 
 | | |
 |---|---|
-| **Status** | Draft — awaiting manager approval |
+| **Status** | Draft, revised 2026-11-04 against the current template and framework. Awaiting approval. |
 | **Author** | Fidel da Luz |
-| **Date** | 2026-06-22 |
-| **Scope** | `templates/demo-v1` (login is template-only) + one additive `@igrp/framework-next-ui` change (logout teardown extraction). |
-| **Affects** | `@igrp/framework-next-template` consumers; igrp-studio generated apps; `@igrp/framework-next-ui` |
-| **Risk** | Low (login default path unchanged + fail-safe fallback; logout logic lifted verbatim, behavior-preserving) |
-| **Companion** | Mirrors `docs/2026-06-22-custom-layout-design-spec.md` (same frame/canvas model, same env-switch pattern) |
+| **Date** | 2026-06-22 (revised 2026-11-04) |
+| **Scope** | `templates/demo-v1` only, plus a template-migrator migration. A framework extraction of the logout teardown is kept as an alternative for a separate decision (§6). |
+| **Affects** | `@igrp/framework-next-template` consumers; igrp-studio generated apps |
+| **Risk** | Low. The default login path is unchanged, unknown values fall back to it, and the teardown logic is not touched. |
+| **Companion** | `specs/2026-06-22-custom-layout-design-spec.md` (same frame/canvas model, same env-switch pattern) |
+
+---
+
+## 0. What changed in this revision
+
+Since the first draft, the login page has gained session-ended handling, silent SSO and next-intl texts, and the logout teardown gained host-logout and silent-SSO cookie writes. The draft's code would have removed all of that. This revision:
+
+- Keeps the whole current server frame of `(auth)/login/page.tsx` and puts the `IGRP_AUTH_UI` switch **after** the silent-SSO branch (§4.1).
+- Takes every visible string in the reference form from `src/i18n/messages`. `src/app/(auth)` and `src/components` are in `lint:i18n`'s `check-literals` scope, and `build` runs it, so the draft's pt-PT literals would have failed the build.
+- Fixes the reference form's loading flag. The draft cleared it in `finally`, which un-spins the button mid-redirect and stops the React Compiler from compiling the component (see the comment in next-ui `auths/form.tsx`).
+- **Changes the logout recommendation.** The teardown now involves five template-owned calls (`getLogoutUrl`, `markLogoutPending`, `clearLogoutPending`, `markHostLogout`, `markSilentSsoTried`) plus `reportError`, in three components, not two. A framework extraction would be a component with six callbacks wrapped around template logic. The recommendation is now a template-only loading component (§5); the extraction stays as a corrected alternative (§6).
+- Adds the template-migrator migration every `templates/demo-v1` change needs (§9).
 
 ---
 
 ## 1. Executive summary
 
-The template's `(auth)` route group ships a fixed login screen (`IGRPAuthCarousel` + `IGRPAuthForm`) and a logout screen (`IGRPTemplateLoading` + a ~200-line client teardown). There is no supported way for an end user to ship a generated app with their own login look-and-feel, and the logout page mixes a trivial visual (a spinner) with fragile, security-critical orchestration that end users must not edit.
+The `(auth)` route group ships a fixed login screen (`IGRPAuthCarousel` + `IGRPAuthForm`) and four auth-transition screens that each render `IGRPTemplateLoading` around client-side teardown or sign-in logic. An end user has no supported way to ship their own login design. Rebranding the transition screens today means editing files that hold fragile, security-relevant logic.
 
 This proposal:
 
-1. **Login (template-only, zero framework change).** Adds an env switch in `(auth)/login/page.tsx` that selects, per app, between the default framework login (`IGRPAuthForm` + `IGRPAuthCarousel`) and an **end-user-authored custom login** that lives in the template and can be freely redesigned. The server "frame" (bypass gate, logout-completion handshake, `callbackUrl` sanitization, provider resolution) is preserved in both branches.
-
-2. **Logout (one additive framework change).** Extracts the fragile teardown into two render-slot components in `@igrp/framework-next-ui` — `IGRPLogoutFlow` and `IGRPLogoutCompletion` — that own **all** of the dangerous logic and expose **only** the loading visual as a slot. The template's logout page collapses to a thin wrapper; the cookie contract and the `getLogoutUrl` action stay template-owned (edge middleware reads the cookie).
+1. **Login (template-only).** An env switch in `(auth)/login/page.tsx` renders either the framework login (default) or a **template-owned `CustomAuthForm`** the end user can redesign. Every server step before the visual (bypass, deferred logout, session-ended, sanitize, provider, silent SSO) is shared by both branches.
+2. **Transition screens (template-only).** The four teardown/sign-in components stop rendering `IGRPTemplateLoading` directly and render a template-owned **`AuthLoading`**. That file is the only one an end user edits to rebrand logout. The teardown files stay as they are.
 
 **Key properties**
-- **Login: zero framework-package changes.** Built entirely from already-public exports; default + unknown env always falls back to the proven `IGRPAuthForm`.
-- **Logout: behavior-preserving.** The teardown is *lifted verbatim* into the framework; no logic rewrite. End users can no longer break it — they only supply `renderLoading`.
-- **Auth & preview-mode correctness preserved.** Both login branches reuse the existing bypass + completion + sanitize pipeline; logout keeps the deferred-teardown handshake and the middleware backstop.
+- **No framework-package changes** in the recommended design.
+- **Teardown logic untouched.** No behaviour change to logout, silent SSO or session-ended handling.
+- **Fail-safe.** Unset or unknown `IGRP_AUTH_UI` renders the framework login.
 
-**Estimated effort:** ~0.5 day login (template-only) + ~0.5–1 day logout (incl. changeset + ordered build + release of `@igrp/framework-next-ui`).
+**Estimated effort:** ~0.5 day for login + loading component, plus ~0.5 day for the migration and message keys.
 
 ---
 
-## 2. Background & problem statement
+## 2. Background
 
-### 2.1 Login today — `src/app/(auth)/login/page.tsx` (SERVER)
+### 2.1 Login today: `src/app/(auth)/login/page.tsx` (server)
 
-The login page is already a thin **server orchestrator**: it performs four auth-critical steps, then delegates all *visuals* to two `@igrp/framework-next-ui` client components.
+The page is a server orchestrator. Steps 1–6 are auth-critical; only step 7 is visual.
 
-| Step | Code | Why it is load-bearing |
+| # | Step | Code | Why it matters |
+|---|---|---|---|
+| 1 | Bypass gate | `if (isAuthBypass()) redirect("/")` | No real provider under `IGRP_PREVIEW_MODE` / `AUTH_PROVIDER=none`. |
+| 2 | Deferred logout | `cookieStore.has(LOGOUT_PENDING_COOKIE)` → `<LogoutCompletion/>` | Finishes a logout that left for the IdP. |
+| 3 | Session ended | `reason === "session_ended"` → `<SessionEndedCompletion/>` | AM answered 401: clear this app's session, reload without `reason`. |
+| 4 | Sanitize | `sanitizeCallbackUrl(callbackUrl) ?? silentSsoCallbackUrl(cookie) ?? "/"` | Open-redirect / login-loop guard; recovers the target after a failed silent attempt. |
+| 5 | Provider | `getAuthProviderIdFromEnv(process.env)` | Drives `signIn`. |
+| 6 | Silent SSO | `shouldAttemptSilentSso(…)` → `<SilentSignIn/>` | Still signed in at the IdP → straight in, no click. |
+| 7 | Render | `IGRPLocaleSwitcher` + `IGRPAuthCarousel` + `IGRPAuthForm`, texts from `getTranslations("login")` | **Visual.** |
+
+Facts that shape the design:
+- The only auth call in `IGRPAuthForm` is `signIn(providerId, { callbackUrl })` from `@igrp/framework-next-auth/client`. A custom form repeats that one call.
+- `IGRPAuthCarousel` has no auth role; it is decorative and optional.
+
+### 2.2 Transition screens today
+
+| File | Runs | Visual |
 |---|---|---|
-| 1. Bypass gate | `if (isAuthBypass()) redirect("/")` | No real provider exists under `IGRP_PREVIEW_MODE` / `AUTH_PROVIDER=none` — a form would 404 on submit. |
-| 2. Logout completion | `if (cookieStore.has(LOGOUT_PENDING_COOKIE)) return <LogoutCompletion/>` | Deferred-teardown handshake — finish a logout that left for the IdP. |
-| 3. Sanitize | `sanitizeCallbackUrl(callbackUrl) ?? "/"` | Open-redirect / login-loop guard. |
-| 4. Resolve provider | `getAuthProviderIdFromEnv(process.env)` | Drives `signIn`. |
-| 5. Render | `<IGRPAuthCarousel/>` + `<IGRPAuthForm/>` | **Pure visuals.** |
+| `(auth)/logout/page.tsx` | End-session lookup (3 s race), `logout_pending` marker, `id_token_hint` POST to the IdP, or local `signOut` + `markHostLogout` fallback; 8 s watchdog; module-scoped double-start guard | `IGRPTemplateLoading text={t("signingOut")}` |
+| `(auth)/login/logout-completion.tsx` | Deferred `signOut`, `markHostLogout`, `clearLogoutPending`, `markSilentSsoTried`, reload `/login` | same |
+| `(auth)/login/session-ended-completion.tsx` | `signOut`, reload without `reason` | same |
+| `(auth)/login/silent-sign-in.tsx` | `markSilentSsoTried`, `signIn` with `prompt=none` | `IGRPTemplateLoading` |
 
-The decisive facts:
-- The actual auth primitive lives **inside `IGRPAuthForm`**: `signIn(providerId, { callbackUrl })` from `@igrp/framework-next-auth/client`. A fully custom form re-implements only this one ~3-line call.
-- **`IGRPAuthCarousel` has zero auth role.** It sits in a `hidden md:block md:w-1/2` panel (already hidden on mobile) and renders `carouselItems` images. Nothing in the auth flow depends on it; it is purely decorative and **entirely optional**.
+All four have the same visual: a spinner, a line of text and the app logo. The logic around it is the fragile part.
 
-This is the same "frame vs canvas" shape as the layout spec: a server frame (steps 1–4) wrapping a free visual canvas (step 5).
+### 2.3 Problem
 
-### 2.2 Logout today — `src/app/(auth)/logout/page.tsx` (CLIENT) + `login/logout-completion.tsx`
-
-The opposite situation, and the reason logout needs a framework change. The **visible UI is just `<IGRPTemplateLoading>`** — a spinner with text. Everything else is fragile, correctness-critical orchestration that must NOT be redesigned by end users:
-
-- module-scoped `logoutStarted` guard against a double `signOut`;
-- fetch the end-session URL **before** `signOut` (the access token is needed to build `id_token_hint`), raced against `LOOKUP_TIMEOUT_MS`;
-- `id_token_hint` carried in a **POST body**, never the URL/history/IdP access logs;
-- **deferred teardown:** set `logout_pending` cookie → top-level POST to the IdP `end_session_endpoint` → IdP redirect back to `/login` → `LogoutCompletion` runs the real `signOut` → middleware backstop completes an abandoned logout;
-- `FALLBACK_TIMEOUT_MS` watchdog; the **"every exit path must navigate"** invariant.
-
-So logout has essentially **no canvas — only the loading screen** (text, logo, animation). Today that ~200 lines is duplicated in the template and easy to break on touch.
-
-**Problem:** there is no template-level mechanism to choose a custom login per app, and no safe way to let an end user rebrand the logout screen without inheriting (and risking) the teardown logic.
+There is no switch for a custom login, and no way to rebrand the transition screens without editing the files that hold the teardown.
 
 ---
 
 ## 3. Goals & non-goals
 
 ### Goals
-- Let an end user supply a fully custom **login** screen (any layout; carousel optional) via components they own, selected per app by a single environment variable.
-- Let an end user rebrand the **logout** loading screen **without** touching the teardown logic.
-- Keep the default behavior unchanged and the login path free of framework-package changes.
-- Preserve auth gating, preview-mode bypass, `callbackUrl` sanitization, and the deferred-logout handshake in every branch.
+- A fully custom **login** screen (any layout, carousel optional), selected per app by one env variable.
+- A rebrandable **transition screen** with no edits to teardown or sign-in logic.
+- Default behaviour unchanged.
+- Bypass, deferred logout, session-ended, silent SSO and `callbackUrl` sanitization preserved in every branch.
 
 ### Non-goals
-- Changing how igrp-studio generates pages, or adding a credentials/password login form (the IdP owns authentication; the app only initiates `signIn`).
-- Introducing a second UI library or bypassing the design system.
-- A runtime/per-request login picker UI (the choice is per app/deploy).
-- Reworking the OIDC end-session contract, the `logout_pending` cookie, or the middleware backstop — the logout change is a behavior-preserving **extraction**, not a redesign.
+- A credentials/password form. The IdP owns authentication; the app only starts `signIn`.
+- A second UI library, or bypassing the design system.
+- A runtime/per-request login picker.
+- Changing the OIDC end-session contract, the `logout_pending` / host-logout / silent-SSO cookies, or the middleware backstop.
 
 ---
 
-## 4. Proposed design — Part A: Login (template-only)
+## 4. Part A: Login
 
-### 4.1 Layout selection in `(auth)/login/page.tsx`
+### 4.1 Switch site
 
-The four-step server frame is unchanged. Only step 5 (the visual) is selected by env:
+Steps 1–6 are unchanged. The switch replaces step 7 only:
 
 ```tsx
-// src/app/(auth)/login/page.tsx   ← SERVER (unchanged shell)
-import { getAuthProviderIdFromEnv } from "@igrp/framework-next-auth";
-import { IGRPAuthCarousel, IGRPAuthForm } from "@igrp/framework-next-ui";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
-
-import { carouselItems, loginConfig } from "@/config/login";
-import { siteConfig } from "@/config/site";
+// src/app/(auth)/login/page.tsx  (excerpt; everything above is unchanged)
 import { CustomAuthForm } from "@/components/custom-auth/custom-auth-form";
-import { LOGOUT_PENDING_COOKIE } from "@/lib/logout-pending";
-import { cn, isAuthBypass, sanitizeCallbackUrl } from "@/lib/utils";
 
-import { LogoutCompletion } from "./logout-completion";
+  // … steps 1–6 exactly as today, including the SilentSignIn early return …
 
-const { sliderPosition, texts } = loginConfig;
-const { logo, name } = siteConfig;
-
-export default async function AuthPage({
-  searchParams,
-}: {
-  searchParams: PageProps<"/login">["searchParams"];
-}) {
-  // Frame, step 1: bypass — no provider to sign into.
-  if (isAuthBypass()) redirect("/");
-
-  // Frame, step 2: complete a deferred logout if the marker is present.
-  const cookieStore = await cookies();
-  if (cookieStore.has(LOGOUT_PENDING_COOKIE)) return <LogoutCompletion />;
-
-  // Frame, steps 3–4: sanitize callbackUrl + resolve provider.
-  const { callbackUrl } = await searchParams;
-  const safeCallbackUrl = sanitizeCallbackUrl(callbackUrl) ?? "/";
-  const providerId = getAuthProviderIdFromEnv(process.env);
-
-  // Frame, step 5: choose the canvas. Read inside the function so it evaluates
-  // per render; unknown/unset → the proven default (fail-safe).
+  // Server-only env, read per request. Unset or unknown → the framework login.
   if (process.env.IGRP_AUTH_UI === "custom") {
-    return (
-      <CustomAuthForm callbackUrl={safeCallbackUrl} providerId={providerId} />
-    );
+    return <CustomAuthForm callbackUrl={safeCallbackUrl} providerId={providerId} />;
   }
 
-  return (
-    <section className="flex min-h-screen flex-col md:flex-row">
-      <div
-        className={cn(
-          "relative hidden w-full md:block md:w-1/2",
-          "lg:order-first hidden lg:block",
-          sliderPosition === "right" && "lg:order-last",
-        )}
-      >
-        <IGRPAuthCarousel carouselItems={carouselItems} />
-      </div>
-      <IGRPAuthForm
-        texts={texts}
-        logo={logo}
-        name={name}
-        callbackUrl={safeCallbackUrl}
-        providerId={providerId}
-      />
-    </section>
-  );
-}
+  // … current default render (getTranslations, carousel, IGRPAuthForm) …
 ```
 
-Notes:
-- **Explicit `default → IGRPAuthForm`** keeps the framework path fail-safe and both arms statically imported (bundler-traceable).
-- The env is read **inside the function** so it evaluates per render under the page's existing dynamic behavior, not snapshotted at module load.
-- The `CustomAuthForm` receives **only serializable props** (`callbackUrl: string`, `providerId: AuthProviderId`) — safe across the RSC boundary.
+Putting the switch after step 6 means a user who is still signed in at the IdP never sees either form, the same as today. `CustomAuthForm` receives only serializable props.
 
-### 4.2 End-user freedom: the login "frame" and "canvas"
+### 4.2 The frame and the canvas
 
-**The frame (non-negotiable):**
-1. The page stays a **server component**; bypass (step 1) and logout-completion (step 2) branches stay above the switch.
-2. `callbackUrl` is sanitized and `providerId` is env-resolved **server-side**, then passed as props.
-3. **Exactly one** rendered element must invoke `signIn(providerId, { callbackUrl })` from `@igrp/framework-next-auth/client`, using those props (not a hand-built URL, not an unsanitized `callbackUrl`).
-4. Repo UI hard rules apply: design-system only, semantic tokens only, `"use client"` on DS-importing files, Horizon-first / primitives for full control.
+**Frame (non-negotiable):**
+1. The page stays a server component; steps 1–6 stay above the switch.
+2. `callbackUrl` is sanitized and `providerId` resolved server-side, then passed as props.
+3. **Exactly one** element calls `signIn(providerId, { callbackUrl })` from `@igrp/framework-next-auth/client`, with those props. No hand-built URLs, no unsanitized `callbackUrl`, no reading `callbackUrl` from `window.location`.
+4. User-visible text comes from `src/i18n/messages` (`useTranslations` in the client form).
+5. Template UI rules: design system only (Horizon first), semantic tokens, `"use client"` on DS-importing files.
 
-**The canvas (free):**
-- The **entire visual layout**. A second panel / carousel / hero image is **optional** — `IGRP_AUTH_UI=custom` may render `CustomAuthForm` alone, full-width, with no carousel.
-- Own logo, copy, background (static `<Image>`, video, gradient), split ratio, carousel on either side, or a single centered card.
-- Reuse `IGRPAuthCarousel` as-is, replace it, or omit it.
+**Canvas (free):**
+- The whole visual layout. A second panel, carousel or hero image is optional; the reference form works full-width alone.
+- Logo, copy, background, split ratio, carousel side, or a single centred card.
+- Reuse `IGRPAuthCarousel`, replace it or omit it.
+- Keep or drop the `IGRPLocaleSwitcher` (the reference keeps it).
 
-### 4.3 The custom login form — a CLIENT component (can be anything)
-
-Self-contained so it works **full-width with no carousel**. The only contract is the `signIn` call.
+### 4.3 Reference form (client)
 
 ```tsx
 // src/components/custom-auth/custom-auth-form.tsx   ← CLIENT (end-user editable)
 "use client";
 
-import {
-  IGRP_AUTH_PROVIDER_ID,
-  signIn,
-  type AuthProviderId,
-} from "@igrp/framework-next-auth/client";
-import {
-  Alert, AlertDescription, Button, cn, IGRPIcon,
-} from "@igrp/igrp-framework-react-design-system";
+import { IGRPLocaleSwitcher } from "@igrp/framework-next/i18n/client";
+import { type AuthProviderId, signIn } from "@igrp/framework-next-auth/client";
 import { IGRPTemplateModeSwitcher } from "@igrp/framework-next-ui";
+import {
+  Alert, AlertDescription, IGRPButton, IGRPIcon,
+} from "@igrp/igrp-framework-react-design-system";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 
+import { setLocale } from "@/i18n/actions";
+
 type CustomAuthFormProps = {
-  callbackUrl?: string;            // already sanitized by the server frame
-  providerId?: AuthProviderId;     // already resolved from env by the server frame
+  callbackUrl: string;        // sanitized by the server frame
+  providerId: AuthProviderId; // resolved from env by the server frame
 };
 
-export function CustomAuthForm({
-  callbackUrl = "/",
-  providerId = IGRP_AUTH_PROVIDER_ID,
-}: CustomAuthFormProps) {
+export function CustomAuthForm({ callbackUrl, providerId }: CustomAuthFormProps) {
+  const t = useTranslations("login");
   const [isLoading, setIsLoading] = useState(false);
-  const [authError, setAuthError] = useState<string | null>(null);
+  const [failed, setFailed] = useState(false);
 
   async function onSubmit() {
     setIsLoading(true);
-    setAuthError(null);
+    setFailed(false);
+    // On success signIn() never resolves: it navigates away. Reset the flag
+    // only on failure. A `finally` would un-spin mid-redirect and keeps the
+    // React Compiler from compiling this component.
     try {
-      // ── THE ONE NON-NEGOTIABLE LINE ──────────────────────────────────────
-      await signIn(providerId, { callbackUrl });
+      await signIn(providerId, { callbackUrl }); // ← the one required call
     } catch (error) {
-      setAuthError(
-        error instanceof Error ? error.message : "Falha ao iniciar sessão.",
-      );
-    } finally {
+      console.error("[custom-auth] signIn failed", error);
+      setFailed(true);
       setIsLoading(false);
     }
   }
 
-  // Everything below here is FREE — redesign to taste.
+  // Everything below is free to redesign.
   return (
     <section className="bg-background flex min-h-screen flex-col items-center justify-center gap-8 p-8">
-      <div className="flex w-full max-w-sm justify-end">
+      <div className="flex w-full max-w-sm justify-end gap-2">
+        <IGRPLocaleSwitcher action={setLocale} />
         <IGRPTemplateModeSwitcher />
       </div>
 
       <div className="flex w-full max-w-sm flex-col gap-6">
-        {authError && (
-          <Alert variant="destructive" role="alert" aria-live="polite">
+        {failed && (
+          <Alert variant="destructive" aria-live="polite">
             <IGRPIcon iconName="AlertCircle" className="size-4" aria-hidden />
-            <AlertDescription>{authError}</AlertDescription>
+            <AlertDescription>{t("custom.signInError")}</AlertDescription>
           </Alert>
         )}
 
-        <h1 className="text-center text-2xl font-semibold">Bem-vindo</h1>
-        <p className="text-muted-foreground text-center text-sm">
-          Inicie sessão para continuar.
-        </p>
+        <h1 className="text-center text-2xl font-semibold">{t("welcome")}</h1>
+        <p className="text-muted-foreground text-center text-sm">{t("description")}</p>
 
-        <Button onClick={onSubmit} disabled={isLoading} aria-busy={isLoading}>
-          {isLoading ? (
-            <IGRPIcon iconName="Loader" className="mr-2 animate-spin motion-reduce:animate-none" aria-hidden />
-          ) : (
-            <IGRPIcon iconName="ShieldCheck" className="mr-2 size-5" aria-hidden />
-          )}
-          Iniciar sessão
-        </Button>
+        <IGRPButton onClick={onSubmit} loading={isLoading} iconName="ShieldCheck">
+          {t("custom.signIn")}
+        </IGRPButton>
       </div>
     </section>
   );
 }
 ```
 
-### 4.4 The custom carousel — OPTIONAL
+New message keys (`pt`, `en`, `fr`): `login.custom.signIn`, `login.custom.signInError`. `welcome` and `description` already exist. Before implementation, check `IGRPButton`'s `loading`/`iconName` props and `Alert`'s `variant` against the DS skill reference.
 
-If the end user wants a second panel, they own it; if not, **delete this file and the `<div>` panel** so `CustomAuthForm` goes full-width. A static image is also valid:
+### 4.4 Optional hero / carousel
+
+If the end user wants a second panel, they own it. A static hero is enough:
 
 ```tsx
-// src/components/custom-auth/custom-auth-carousel.tsx   ← CLIENT (optional)
+// src/components/custom-auth/custom-auth-hero.tsx   ← CLIENT (optional, deletable)
 "use client";
 
-import { cn } from "@igrp/igrp-framework-react-design-system";
 import Image from "next/image";
 
-// Either reuse IGRPAuthCarousel (data-driven slideshow), or — for a static hero —
-// just render one <Image fill/>. Decorative only; no auth role.
-export function CustomAuthCarousel({ className }: { className?: string }) {
+export function CustomAuthHero() {
   return (
-    <div className={cn("relative h-full w-full overflow-hidden", className)}>
+    <div className="relative hidden h-full w-full overflow-hidden md:block">
       <Image src="/placeholder-carousel.png" alt="" fill priority className="object-cover" />
-      <div className="absolute inset-0 bg-black/40" />
     </div>
   );
 }
 ```
 
-*(If the carousel is kept, place it in the same optional panel pattern as §4.1's default branch; for full-width login, omit the panel entirely.)*
+Decorative only (`alt=""`). The reference form doesn't import it; the end user places it next to the form, or deletes it.
 
 ---
 
-## 5. Proposed design — Part B: Logout (additive framework change)
+## 5. Part B: Transition screens (recommended, template-only)
 
-### 5.1 New `@igrp/framework-next-ui` exports
-
-Client chrome lives in `next-ui` (downstream of `next-auth`, so it can import `signIn`). Two render-slot components own the teardown; the end user supplies only `renderLoading`.
+### 5.1 One template-owned loading component
 
 ```tsx
-// IGRPLogoutFlow — owns the WHOLE teardown + the id_token_hint POST form.
+// src/components/custom-auth/auth-loading.tsx   ← CLIENT (end-user editable)
+"use client";
+
+import { IGRPTemplateLoading } from "@igrp/framework-next-ui";
+
+/**
+ * The visual for every auth transition (logout, deferred-logout completion,
+ * session-ended, silent sign-in). Redesign freely; it receives only text.
+ * The logic lives in the files that render it — don't edit those.
+ */
+export function AuthLoading({ text }: { text: string }) {
+  return <IGRPTemplateLoading text={text} appCode={process.env.NEXT_PUBLIC_IGRP_APP_CODE} />;
+}
+```
+
+### 5.2 Changes to the four transition files
+
+Each one replaces its `<IGRPTemplateLoading … />` with `<AuthLoading text={…} />`, passing the text it already resolves. **Nothing else in those files changes.** In `logout/page.tsx` the hidden `id_token_hint` form stays next to `AuthLoading`, as it is today next to `IGRPTemplateLoading`.
+
+### 5.3 The frame and the canvas
+
+- **Frame:** the four transition files. Each gets a one-line "do not edit; restyle `AuthLoading` instead" comment at the top (part of §9 row 5). A reviewer should treat any other diff to them as a teardown change.
+- **Canvas:** `auth-loading.tsx`: spinner, splash, logo, copy. Text comes in as a prop, already translated. Any extra copy goes through `src/i18n/messages`.
+
+### 5.4 Why not the framework extraction
+
+Moving the teardown into next-ui (§6) would protect it from edits and let fixes ship as a package release. But every side effect it performs is template-owned: the cookies are read by edge middleware and server actions in the template. The framework component would be the sequencing alone, with all side effects injected, and the template would still own most of the logic. The behaviour gained doesn't justify a new public API, a release and a three-component extraction. §5 gets the rebranding goal with four one-line edits.
+
+---
+
+## 6. Alternative: framework extraction (separate decision)
+
+Kept for the record, with the props the current code actually needs.
+
+```tsx
+// @igrp/framework-next-ui (new, client)
 <IGRPLogoutFlow
-  getEndSessionUrl={(postLogoutRedirectUri: string) => Promise<string | null>}
-  onMarkPending={() => void}        // template owns the cookie (middleware reads it)
-  onError={(err: unknown) => void}  // template's reportError
-  loginPath="/login"                // framework computes origin + basePath itself
-  renderLoading={() => React.ReactNode}  // the ONLY canvas
+  getEndSessionUrl={(postLogoutRedirectUri: string) => Promise<string | null>} // getLogoutUrl
+  onMarkPending={() => void}                 // markLogoutPending
+  onLocalSignedOut={() => Promise<void>}     // markHostLogout (fallback path)
+  onError={(err: unknown) => void}           // reportError
+  loginPath="/login"
+  renderLoading={() => React.ReactNode}
 />
 
-// IGRPLogoutCompletion — deferred-teardown completion, rendered on /login.
 <IGRPLogoutCompletion
-  onClearPending={() => void}
+  onSignedOut={() => Promise<void>}          // markHostLogout, clearLogoutPending, markSilentSsoTried
   onError={(err: unknown) => void}
   loginPath="/login"
   renderLoading={() => React.ReactNode}
 />
 ```
 
-**The framework owns everything dangerous** (lifted verbatim from today's `logout/page.tsx` and `logout-completion.tsx`):
-- the module-scoped `logoutStarted` guard;
-- `LOOKUP_TIMEOUT_MS` / `FALLBACK_TIMEOUT_MS` and the lookup race;
-- the hidden `id_token_hint` **POST form** — built and auto-submitted internally;
-- the deferred-teardown decision (IdP round-trip vs. local-only fallback);
-- the `settled` / "every exit path navigates" invariant and `signOut`.
-
-**Injected (stays template-owned), and why:**
-
-| Prop | Why it is injected, not absorbed |
-|---|---|
-| `getEndSessionUrl` | Wraps the template's `withIGRPAuth` instance (`auth.getAccessToken()` + `buildEndSessionUrl`). The framework component can't own the template's `auth`. |
-| `onMarkPending` / `onClearPending` | The `logout_pending` cookie contract is read by **edge middleware** (`src/middleware.ts` backstop) and must stay co-located with it in the template. Injecting the writers keeps the contract in one place. |
-| `onError` | Template's `reportError` (segment tagging). |
-| `loginPath` | App-specific path; the framework appends it to `origin + NEXT_PUBLIC_BASE_PATH`. |
-| `renderLoading` | The only visual surface — the end user's canvas. |
-
-### 5.2 The template after the change
-
-`(auth)/logout/page.tsx` collapses to a thin wrapper:
-
-```tsx
-// src/app/(auth)/logout/page.tsx   ← CLIENT (thin)
-"use client";
-
-import { IGRPLogoutFlow, IGRPTemplateLoading } from "@igrp/framework-next-ui";
-
-import { getLogoutUrl } from "@/actions/igrp/auth";
-import { markLogoutPending } from "@/lib/logout-pending";
-import { reportError } from "@/lib/report-error";
-
-export default function LogoutPage() {
-  return (
-    <IGRPLogoutFlow
-      getEndSessionUrl={getLogoutUrl}
-      onMarkPending={markLogoutPending}
-      onError={(err) => reportError(err, { segment: "(auth)/logout" })}
-      loginPath="/login"
-      renderLoading={() => (
-        <IGRPTemplateLoading
-          text="A terminar sessão..."
-          appCode={process.env.NEXT_PUBLIC_IGRP_APP_CODE}
-        />
-      )}
-    />
-  );
-}
-```
-
-`(auth)/login/logout-completion.tsx` collapses similarly to `<IGRPLogoutCompletion onClearPending={clearLogoutPending} … renderLoading={…} />`.
-
-**Unchanged:** `getLogoutUrl` (`actions/igrp/auth.ts`), `logout-pending.ts`, and the `src/middleware.ts` backstop.
-
-### 5.3 End-user freedom: the logout "frame" and "canvas"
-
-- **Frame (non-negotiable, framework-owned):** the entire teardown. End users cannot edit it.
-- **Canvas (free):** only `renderLoading` — any DS composition (custom spinner, branded splash, progress copy). The end user *may* also restyle the wrapper page around `<IGRPLogoutFlow/>`, but the flow component must be rendered exactly once.
+- `session-ended-completion.tsx` and `silent-sign-in.tsx` would still need the same treatment, or stay in the template with `AuthLoading`.
+- `onSignedOut` has to run in the `finally` of the deferred `signOut` (today's order: host logout → clear marker → mark silent tried → reload). Getting that order wrong reintroduces the silent-SSO loop after logout.
+- Cost: two to four public exports, a `patch` changeset on `@igrp/framework-next-ui`, ordered `pnpm build:framework`, per-package release, a template migration, and the full logout matrix (§10.2) run against the extracted code.
 
 ---
 
-## 6. Export-safety analysis
+## 7. Export-safety analysis
 
 | Building block | Source | Public? |
 |---|---|---|
-| `signIn`, `IGRP_AUTH_PROVIDER_ID`, `AuthProviderId` | `@igrp/framework-next-auth/client` | ✅ |
+| `signIn`, `AuthProviderId` | `@igrp/framework-next-auth/client` | ✅ |
 | `getAuthProviderIdFromEnv` | `@igrp/framework-next-auth` | ✅ |
 | `IGRPAuthForm`, `IGRPAuthCarousel`, `IGRPTemplateModeSwitcher`, `IGRPTemplateLoading` | `@igrp/framework-next-ui` | ✅ |
-| `buildEndSessionUrl` | `@igrp/framework-next-auth/oidc` | ✅ |
-| `signOut` | `@igrp/framework-next-auth/client` | ✅ |
-| **`IGRPLogoutFlow`, `IGRPLogoutCompletion`** | `@igrp/framework-next-ui` | 🆕 (this proposal) |
+| `IGRPLocaleSwitcher` | `@igrp/framework-next/i18n/client` | ✅ |
+| `IGRPButton`, `IGRPIcon`, `Alert`, `AlertDescription` | DS root | ✅ |
 
-- **Login ships with zero framework changes** — all building blocks are already public.
-- **Logout adds exactly two public client exports** to `next-ui`. They are pure client chrome (the natural home per the dependency order) and take all template-specific behavior via props, so they introduce no server coupling and no new private-surface dependency.
+The recommended design adds no framework exports.
 
 ---
 
-## 7. Correctness: auth & preview mode
+## 8. Correctness: auth & preview mode
 
-- **Login:** both branches sit under the same server frame — `isAuthBypass()` (preview/`AUTH_PROVIDER=none` → redirect `/`), the logout-completion handshake, `sanitizeCallbackUrl`, and `getAuthProviderIdFromEnv`. `CustomAuthForm` only ever calls `signIn(providerId, { callbackUrl })` with the sanitized/resolved props, so open-redirect and login-loop guards hold identically. Under bypass the custom branch is never reached (the page redirects first).
-- **Logout:** the extraction is behavior-preserving. The `logout_pending` cookie, the IdP POST with `id_token_hint`, the timeouts, and the middleware backstop are unchanged in semantics — only their *location* moves into the framework. The template still owns the cookie writers and the `getLogoutUrl` action, so the edge-safe contract in `middleware.ts` is untouched.
-
-Both satisfy the repo rule that every auth-aware branch stay bypass-aware. No change to `middleware.ts`, root layout, or the config builder.
-
----
-
-## 8. Best-practices conformance
-
-- **Composition (Vercel):** explicit variant selected by env instead of a boolean mode (`patterns-explicit-variants`, `architecture-avoid-boolean-props`); render-slot (`renderLoading`) instead of a config-flag-driven internal switch (`patterns-children-over-render-props`); dependency injection for template-specific behavior keeps the framework component pure.
-- **React/Next (Vercel):** minimal serializable props across the RSC boundary (`callbackUrl`, `providerId`); statically analyzable imports for both login arms (`bundle-analyzable-paths`).
-- **Next.js:** correct server/client split — login page server, custom form client; logout flow client.
-- **Design system / shadcn:** DS primitives + Horizon where it fits; semantic tokens only; `cn()`, `size-*`, `flex gap-*`; no `npx shadcn add` in the template.
+- **Login:** both branches sit below the same steps 1–6. Under bypass the page redirects before the switch. A pending logout, a session-ended reload and a silent-SSO attempt all return before it. `CustomAuthForm` calls `signIn` only with the sanitized/resolved props, so the open-redirect and login-loop guards hold.
+- **Transition screens:** no logic changes. `logout_pending`, the `id_token_hint` POST, the timeouts, `markHostLogout`, `markSilentSsoTried` and the middleware backstop behave exactly as before.
+- **No change** to `middleware.ts`, the root layout or `igrp.template.config.ts`.
 
 ---
 
-## 9. Work breakdown (spec)
+## 9. Work breakdown
 
-| # | File | Pkg / Type | Change |
+| # | File | Type | Change |
 |---|---|---|---|
-| 1 | `packages/framework/next-ui/src/components/auths/logout-flow.tsx` | next-ui / CLIENT | New `IGRPLogoutFlow` — teardown + POST form, lifted verbatim from today's `logout/page.tsx`. |
-| 2 | `packages/framework/next-ui/src/components/auths/logout-completion.tsx` | next-ui / CLIENT | New `IGRPLogoutCompletion` — lifted from today's `login/logout-completion.tsx`. |
-| 3 | next-ui barrel / `exports` | next-ui | Export both new components + their prop types. |
-| 4 | `.changeset/*.md` | next-ui | `patch` per hard-rules (pre-release `beta`). |
-| 5 | `src/app/(auth)/login/page.tsx` | template / SERVER | Add the `IGRP_AUTH_UI === "custom"` branch above the default render. |
-| 6 | `src/components/custom-auth/custom-auth-form.tsx` | template / CLIENT | Reference custom form (self-contained; calls `signIn`). |
-| 7 | `src/components/custom-auth/custom-auth-carousel.tsx` | template / CLIENT | **Optional** reference carousel/hero (deletable). |
-| 8 | `src/app/(auth)/logout/page.tsx` | template / CLIENT | Collapse to `<IGRPLogoutFlow/>` wrapper. |
-| 9 | `src/app/(auth)/login/logout-completion.tsx` | template / CLIENT | Collapse to `<IGRPLogoutCompletion/>` wrapper. |
-| 10 | `.env.example` | template / config | Document `IGRP_AUTH_UI`. |
-| 11 | `docs/` (this doc) | template / docs | Design record. |
+| 1 | `src/app/(auth)/login/page.tsx` | SERVER | `IGRP_AUTH_UI === "custom"` branch after silent SSO. |
+| 2 | `src/components/custom-auth/custom-auth-form.tsx` | CLIENT | Reference form. |
+| 3 | `src/components/custom-auth/custom-auth-hero.tsx` | CLIENT | Optional hero. |
+| 4 | `src/components/custom-auth/auth-loading.tsx` | CLIENT | Transition visual. |
+| 5 | `src/app/(auth)/logout/page.tsx`, `login/logout-completion.tsx`, `login/session-ended-completion.tsx`, `login/silent-sign-in.tsx` | CLIENT | Render `AuthLoading` instead of `IGRPTemplateLoading`, plus the "do not edit" comment. Nothing else. |
+| 6 | `src/i18n/messages/{pt,en,fr}.json` | i18n | `login.custom.signIn`, `login.custom.signInError`. |
+| 7 | `.env.example` | config | Document `IGRP_AUTH_UI`. |
+| 8 | `packages/framework/template-migrator/migrations/demo-v1/NN.MIGRATIONS-DDMMYYYY.md` + `payload/NN/` | migration | `file.create` for 2–4, `file.write` for 1, 5 and 6, `env.add` for 7. Then `sync:template-lock`. |
+| 9 | `specs/` (this doc) | docs | Design record. |
 
-No `globals.css` change: `@source` already globs `../src/**/*.{ts,tsx}` and the DS `dist/`.
+No `globals.css` change.
 
-### Environment variable spec
+### Environment variable
 
 | Name | `IGRP_AUTH_UI` |
 |---|---|
 | Visibility | Server-only (not `NEXT_PUBLIC_*`) |
 | Values | `default` \| `custom` |
-| Unset / unknown | Falls back to `default` (`IGRPAuthForm` + `IGRPAuthCarousel`) |
+| Unset / unknown | `IGRPAuthForm` + `IGRPAuthCarousel` |
 | Read site | `(auth)/login/page.tsx` only |
 
----
+### Build & release
 
-## 10. Build & release order
+1. Template edits (rows 1–7), then the migration (row 8), `pnpm --filter @igrp/template-migrator sync:template-lock`, commit `.igrp-migrations-lock.json`.
+2. `pnpm build:demo` (Biome + `lint:i18n` + type-check) and `pnpm --filter @igrp/template-migrator check:drift`.
+3. Release `@igrp/template-migrator` (`patch`, per-package `release`, `--tag latest`), only when authorised.
 
-1. `packages/framework/next-ui` — add the two components, export, changeset (`patch`).
-2. `pnpm build:framework` (ordered — `next-ui` rebuilds; `next` follows per the dependency order).
-3. Release `@igrp/framework-next-ui` via its per-package `release` script (`--tag latest`); verify on the Sonatype registry.
-4. Template consumes the new `next-ui`; apply login + logout template edits; `pnpm build:demo` (Biome).
-
----
-
-## 11. Testing & verification plan
-
-**Login** (`pnpm dev:demo`):
-1. `IGRP_AUTH_UI=custom`, `IGRP_PREVIEW_MODE=false` → custom login renders; clicking sign-in calls `signIn(providerId, { callbackUrl })` with a **sanitized** `callbackUrl`; OIDC round-trip completes and lands on the callback target.
-2. `IGRP_AUTH_UI=default` **and unset/unknown** → `IGRPAuthForm` + `IGRPAuthCarousel` render unchanged.
-3. Custom login with the carousel file deleted → form renders full-width, no layout break; dark mode + mode switcher work.
-4. `IGRP_PREVIEW_MODE=true` → `/login` redirects to `/` in **both** UI modes (bypass reached before the switch).
-
-**Logout** (after the framework release):
-5. IdP round-trip path: end-session POST submits; `logout_pending` set; browser returns to `/login`; `IGRPLogoutCompletion` runs `signOut`, clears the marker, reloads; the login form appears with no session.
-6. No-IdP fallback path (no token / no `end_session_endpoint` / lookup timeout): local `signOut` + hard navigate to `/login`.
-7. Double-`signOut` guard holds across a dev Strict-Mode remount; the `FALLBACK_TIMEOUT_MS` watchdog still fires on a hung `signOut`.
-8. Custom `renderLoading` renders; the middleware backstop still completes an abandoned logout on the next protected request.
-9. Bypass on → `/logout` redirects to `/`.
-
-**Build:** `pnpm build:framework` then `pnpm build:demo` (Biome) clean.
+No `pnpm build:framework`: no framework package changes.
 
 ---
 
-## 12. Risks & mitigations
+## 10. Testing & verification
+
+### 10.1 Login (`pnpm dev:demo`, bypass off, real IdP)
+1. `IGRP_AUTH_UI=custom` → custom form; sign-in reaches the IdP with the sanitized `callbackUrl` and lands on the target.
+2. `default`, unset and `nonsense` → framework login unchanged.
+3. Custom form full-width with the hero deleted; dark mode; locale switch re-renders texts in `pt`/`en`/`fr`.
+4. Signed in at the IdP from another app → silent SSO signs in with no form shown, under both values.
+5. `/login?reason=session_ended` → session cleared, reload, then the custom form.
+6. `/login?callbackUrl=//evil.example` and `?callbackUrl=/logout` → sanitized to `/`.
+7. `signIn` failure (IdP unreachable) → error alert, button usable again.
+8. `IGRP_PREVIEW_MODE=true` → `/login` redirects to `/` under both values.
+
+### 10.2 Transition screens
+9. Logout via IdP: POST submits, `logout_pending` set, back on `/login`, completion runs, marker cleared, login form shown with no session, and no silent-SSO loop.
+10. Logout fallback (no `end_session_endpoint` / lookup timeout): local `signOut` + host-logout cookie + navigate to `/login`.
+11. A customised `AuthLoading` appears on all four screens.
+12. Strict-Mode remount still produces one `signOut`.
+
+### 10.3 Build
+13. `pnpm build:demo` clean, including `lint:i18n`; `check:drift` passes.
+
+---
+
+## 11. Risks & mitigations
 
 | Risk | Likelihood | Mitigation |
 |---|---|---|
-| Regression in the extracted logout teardown | Medium | Lift the logic **verbatim** into `IGRPLogoutFlow` — behavior-preserving, no rewrite; run the full §11 logout matrix before release. |
-| Cookie-contract drift between framework component and template middleware | Medium | Keep `onMarkPending`/`onClearPending` **injected** so the `logout_pending` contract stays template-owned alongside `middleware.ts`. |
-| Custom login form crossing the RSC boundary | Low | `CustomAuthForm` is `"use client"`; receives only serializable `callbackUrl`/`providerId`. |
-| End user bypasses `signIn` / unsanitized `callbackUrl` | Low | Frame passes sanitized props down; §4.2 frame rule 3 documents the single contract; reference form models it. |
-| Unknown env value disables login | Low | Fail-safe `default → IGRPAuthForm`. |
+| Switch placed before silent SSO / session-ended, skipping them | Medium | §4.1 places it after step 6; tests 10.1.4–5. |
+| End user edits a transition file and breaks the teardown | Medium | §5 gives them `auth-loading.tsx` so they don't need to; "do not edit" comments; review rule in §5.3. The framework extraction (§6) is the stronger fix if this happens in practice. |
+| Custom form bypasses `signIn` or reads an unsanitized `callbackUrl` | Low | Frame rule 3; the reference models it. |
+| Hard-coded copy fails `lint:i18n` | Medium | Frame rule 4; message keys in §9 row 6. |
+| Unknown env value disables login | Low | Fail-safe default. |
 
 ---
 
-## 13. Decisions requested for approval
+## 12. Decisions requested
 
-1. **Approve the login env-switch, template-only approach** (§4) as specified — `IGRP_AUTH_UI=default|custom`, carousel optional.
-2. **Approve the additive `@igrp/framework-next-ui` logout extraction** (§5) — `IGRPLogoutFlow` + `IGRPLogoutCompletion` render-slot components, behavior-preserving, `patch` changeset + ordered build + release.
-3. **igrp-studio integration:** should studio scaffold `custom-auth/*` and surface the `IGRP_AUTH_UI` toggle, or is this a manual opt-in for end users initially?
+1. **Approve the login env switch** (§4) as revised: `IGRP_AUTH_UI=default|custom`, after silent SSO, carousel optional.
+2. **Transition screens:** template-only `AuthLoading` (§5, recommended) or the framework extraction (§6).
+3. **igrp-studio integration:** scaffold `custom-auth/*` and expose `IGRP_AUTH_UI`, or manual opt-in first.
 
 ---
 
-## 14. Appendix — referenced source
+## 13. Appendix: referenced source
 
-- `templates/demo-v1/src/app/(auth)/login/page.tsx` — login server frame + switch site.
-- `templates/demo-v1/src/app/(auth)/logout/page.tsx` — teardown to extract.
-- `templates/demo-v1/src/app/(auth)/login/logout-completion.tsx` — completion to extract.
-- `templates/demo-v1/src/actions/igrp/auth.ts` — `getLogoutUrl` (stays template-owned).
-- `templates/demo-v1/src/lib/logout-pending.ts` — cookie contract (stays template-owned, edge-safe).
-- `packages/framework/next-ui/src/components/auths/form.tsx` — `IGRPAuthForm` (`signIn` reference).
-- `packages/framework/next-ui/src/components/auths/carousel.tsx` — `IGRPAuthCarousel` (decorative).
-- `packages/framework/next-auth/src/oidc.ts` — `buildEndSessionUrl`.
-- `docs/2026-06-22-custom-layout-design-spec.md` — companion layout spec (same model).
+- `templates/demo-v1/src/app/(auth)/login/page.tsx`: server frame + switch site.
+- `templates/demo-v1/src/app/(auth)/logout/page.tsx`: logout teardown.
+- `templates/demo-v1/src/app/(auth)/login/{logout-completion,session-ended-completion,silent-sign-in}.tsx`: transition screens.
+- `templates/demo-v1/src/actions/igrp/auth.ts`: `getLogoutUrl`, `markHostLogout`.
+- `templates/demo-v1/src/lib/logout-pending.ts`, `src/lib/silent-sso.ts`: cookie contracts.
+- `packages/framework/next-ui/src/auths/form.tsx`: `IGRPAuthForm` (`signIn` reference, loading-flag note).
+- `packages/framework/next-ui/src/auths/carousel.tsx`: `IGRPAuthCarousel`.
+- `packages/framework/template-migrator/README.md`: adding a migration.

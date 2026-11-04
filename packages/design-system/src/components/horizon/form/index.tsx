@@ -1,4 +1,6 @@
 "use client"
+// `useForm` returns the same object every render, so compiler memoization would freeze `children(form)`.
+"use no memo"
 
 import { useCallback, useEffect, useId, useRef, useState } from "react"
 import { type Mode, useForm, type UseFormReturn, type Resolver } from "react-hook-form"

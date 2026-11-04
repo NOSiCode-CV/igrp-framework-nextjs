@@ -135,6 +135,23 @@ describe("babel build pipeline", () => {
     expect(inspected).toBeGreaterThan(100)
   })
 
+  it("leaves identity-stable render paths unmemoized", { timeout: 120_000 }, () => {
+    // These render from objects that keep their identity across renders
+    // (IGRPForm's `useForm()` handle, the data tables' `table`), so a compiler
+    // cache freezes what they render — dependent IGRPForm fields never
+    // appeared. Each opts out with "use no memo"; this fails if one loses it.
+    const unmemoized = ["components/horizon/form/index.tsx", "components/horizon/data-table/index.tsx"]
+    const results = compileAll().filter((r) =>
+      unmemoized.includes(path.relative(srcRoot, r.file).replaceAll("\\", "/"))
+    )
+
+    expect(results).toHaveLength(unmemoized.length)
+    for (const { file, code } of results) {
+      expect(code, file).toContain("react/jsx-runtime")
+      expect(code, file).not.toContain("_c(")
+    }
+  })
+
   it("has no widespread compiler bailouts", { timeout: 120_000 }, () => {
     const failing = compileAll().filter((r) => r.bailouts.length > 0)
 

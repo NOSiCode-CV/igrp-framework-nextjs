@@ -2,8 +2,8 @@
 # versions plus a local pnpm-lock.yaml in the app root.
 #
 # It does NOT build from the monorepo checkout of templates/demo-v1: the COPY
-# below needs pnpm-lock.yaml / pnpm-workspace.yaml in the build context (they
-# live at the monorepo root, not here), and package.json pins @igrp/* as
+# below needs pnpm-lock.yaml in the build context (it
+# lives at the monorepo root, not here), and package.json pins @igrp/* as
 # `workspace:*`, which no registry can resolve. Use `pnpm dev:demo` from the
 # monorepo root for in-repo work. Full walkthrough: docs/DOCKER-RUN.md.
 #
@@ -20,7 +20,9 @@ RUN npm install -g pnpm@11.1.1
 
 FROM toolchain AS deps
 
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
+# `yam[l]` makes the workspace file optional: a scaffolded app has none, but one
+# that adds pnpm settings (overrides, allowBuilds) needs them for --frozen-lockfile.
+COPY package.json pnpm-lock.yaml pnpm-workspace.yam[l] .npmrc ./
 # --frozen-lockfile (not --prefer-*) so lockfile drift fails the build loudly
 # instead of silently re-resolving to different versions than the local install.
 RUN pnpm install --frozen-lockfile --ignore-scripts

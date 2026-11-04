@@ -2,14 +2,16 @@
 
 exports[`Components/PageHeader CompleteExample smoke-test 1`] = `
 <div class="container mx-auto px-4 py-10">
-  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sticky top-0 z-10 bg-background pt-6 pb-4"
+  <div class="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center sticky top-0 z-10 bg-background pt-6 pb-4"
        id="_r_ID_"
   >
     <div class="flex items-center gap-2">
       <a href="/dashboard"
          aria-label="Voltar"
          data-slot="button"
-         class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 gap-2"
+         data-variant="outline"
+         data-size="default"
+         class="group/button inline-flex shrink-0 items-center justify-center rounded-md border bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border-border bg-background shadow-xs hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 h-9 px-2.5 in-data-[slot=button-group]:rounded-md has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 gap-2"
       >
         <svg xmlns="http://www.w3.org/2000/svg"
              width="16"
@@ -22,7 +24,7 @@ exports[`Components/PageHeader CompleteExample smoke-test 1`] = `
              stroke-linejoin="round"
              class="lucide lucide-arrow-left shrink-0"
              aria-hidden="true"
-             id="ArrowLeft"
+             id="_r_ID_"
         >
           <path d="m12 19-7-7 7-7">
           </path>
@@ -33,8 +35,8 @@ exports[`Components/PageHeader CompleteExample smoke-test 1`] = `
           Voltar ao Dashboard
         </span>
       </a>
-      <div id="h-undefined"
-           class="flex gap-2 items-start text-primary"
+      <div id="h-_r_ID_"
+           class="flex items-start gap-2 text-primary"
       >
         <div class="flex flex-col gap-1">
           <h3 class="scroll-m-20 font-bold tracking-tight text-balance text-2xl lg:text-3xl">
@@ -48,14 +50,18 @@ exports[`Components/PageHeader CompleteExample smoke-test 1`] = `
     </div>
     <div class="flex gap-2">
       <button data-slot="button"
-              class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 relative"
+              data-variant="outline"
+              data-size="default"
+              class="group/button inline-flex shrink-0 items-center justify-center rounded-md border bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border-border bg-background shadow-xs hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 h-9 gap-1.5 px-2.5 in-data-[slot=button-group]:rounded-md has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 relative"
               type="button"
               id="_r_ID_"
       >
         Exportar
       </button>
       <button data-slot="button"
-              class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 hover:text-primary-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 relative"
+              data-variant="default"
+              data-size="default"
+              class="group/button inline-flex shrink-0 items-center justify-center rounded-md border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-primary text-primary-foreground hover:bg-primary/80 h-9 gap-1.5 px-2.5 in-data-[slot=button-group]:rounded-md has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 relative"
               type="button"
               id="_r_ID_"
       >
@@ -73,12 +79,12 @@ exports[`Components/PageHeader CompleteExample smoke-test 1`] = `
 
 exports[`Components/PageHeader Default smoke-test 1`] = `
 <div class="container mx-auto px-4 py-10">
-  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+  <div class="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center"
        id="_r_ID_"
   >
     <div class="flex items-center gap-2">
-      <div id="h-undefined"
-           class="flex gap-2 items-start text-primary"
+      <div id="h-_r_ID_"
+           class="flex items-start gap-2 text-primary"
       >
         <div class="flex flex-col gap-1">
           <h3 class="scroll-m-20 font-bold tracking-tight text-balance text-2xl lg:text-3xl">
@@ -100,12 +106,12 @@ exports[`Components/PageHeader HeadlineVariants smoke-test 1`] = `
     <h3 class="text-sm font-medium mb-4 text-muted-foreground">
       Default
     </h3>
-    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+    <div class="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center"
          id="_r_ID_"
     >
       <div class="flex items-center gap-2">
-        <div id="h-undefined"
-             class="flex gap-2 items-start text-primary"
+        <div id="h-_r_ID_"
+             class="flex items-start gap-2 text-primary"
         >
           <div class="flex flex-col gap-1">
             <h3 class="scroll-m-20 font-bold tracking-tight text-balance text-2xl lg:text-3xl">
@@ -123,12 +129,12 @@ exports[`Components/PageHeader HeadlineVariants smoke-test 1`] = `
     <h3 class="text-sm font-medium mb-4 text-muted-foreground">
       H1
     </h3>
-    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+    <div class="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center"
          id="_r_ID_"
     >
       <div class="flex items-center gap-2">
-        <div id="h-undefined"
-             class="flex gap-2 items-start text-primary"
+        <div id="h-_r_ID_"
+             class="flex items-start gap-2 text-primary"
         >
           <div class="flex flex-col gap-1">
             <h1 class="scroll-m-20 tracking-tight text-balance text-4xl font-extrabold lg:text-5xl">
@@ -146,12 +152,12 @@ exports[`Components/PageHeader HeadlineVariants smoke-test 1`] = `
     <h3 class="text-sm font-medium mb-4 text-muted-foreground">
       H2
     </h3>
-    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+    <div class="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center"
          id="_r_ID_"
     >
       <div class="flex items-center gap-2">
-        <div id="h-undefined"
-             class="flex gap-2 items-start text-primary"
+        <div id="h-_r_ID_"
+             class="flex items-start gap-2 text-primary"
         >
           <div class="flex flex-col gap-1">
             <h2 class="scroll-m-20 font-bold tracking-tight text-balance text-3xl lg:text-4xl">
@@ -169,12 +175,12 @@ exports[`Components/PageHeader HeadlineVariants smoke-test 1`] = `
     <h3 class="text-sm font-medium mb-4 text-muted-foreground">
       H3
     </h3>
-    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+    <div class="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center"
          id="_r_ID_"
     >
       <div class="flex items-center gap-2">
-        <div id="h-undefined"
-             class="flex gap-2 items-start text-primary"
+        <div id="h-_r_ID_"
+             class="flex items-start gap-2 text-primary"
         >
           <div class="flex flex-col gap-1">
             <h3 class="scroll-m-20 font-bold tracking-tight text-balance text-2xl lg:text-3xl">
@@ -193,14 +199,16 @@ exports[`Components/PageHeader HeadlineVariants smoke-test 1`] = `
 
 exports[`Components/PageHeader Sticky smoke-test 1`] = `
 <div class="container mx-auto px-4">
-  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sticky top-0 z-10 bg-background pt-6 pb-4"
+  <div class="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center sticky top-0 z-10 bg-background pt-6 pb-4"
        id="_r_ID_"
   >
     <div class="flex items-center gap-2">
       <a href="/dashboard"
          aria-label="Voltar"
          data-slot="button"
-         class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground size-9"
+         data-variant="outline"
+         data-size="icon"
+         class="group/button inline-flex shrink-0 items-center justify-center rounded-md border bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border-border bg-background shadow-xs hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 size-9"
       >
         <svg xmlns="http://www.w3.org/2000/svg"
              width="16"
@@ -213,7 +221,7 @@ exports[`Components/PageHeader Sticky smoke-test 1`] = `
              stroke-linejoin="round"
              class="lucide lucide-arrow-left shrink-0"
              aria-hidden="true"
-             id="ArrowLeft"
+             id="_r_ID_"
         >
           <path d="m12 19-7-7 7-7">
           </path>
@@ -221,8 +229,8 @@ exports[`Components/PageHeader Sticky smoke-test 1`] = `
           </path>
         </svg>
       </a>
-      <div id="h-undefined"
-           class="flex gap-2 items-start text-primary"
+      <div id="h-_r_ID_"
+           class="flex items-start gap-2 text-primary"
       >
         <div class="flex flex-col gap-1">
           <h3 class="scroll-m-20 font-bold tracking-tight text-balance text-2xl lg:text-3xl">
@@ -235,7 +243,9 @@ exports[`Components/PageHeader Sticky smoke-test 1`] = `
       </div>
     </div>
     <button data-slot="button"
-            class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 hover:text-primary-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 relative"
+            data-variant="default"
+            data-size="default"
+            class="group/button inline-flex shrink-0 items-center justify-center rounded-md border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-primary text-primary-foreground hover:bg-primary/80 h-9 gap-1.5 px-2.5 in-data-[slot=button-group]:rounded-md has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 relative"
             type="button"
             id="_r_ID_"
     >
@@ -312,14 +322,16 @@ exports[`Components/PageHeader Sticky smoke-test 1`] = `
 
 exports[`Components/PageHeader WithActions smoke-test 1`] = `
 <div class="container mx-auto px-4 py-10">
-  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+  <div class="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center"
        id="_r_ID_"
   >
     <div class="flex items-center gap-2">
       <a href="/dashboard"
          aria-label="Voltar"
          data-slot="button"
-         class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground size-9"
+         data-variant="outline"
+         data-size="icon"
+         class="group/button inline-flex shrink-0 items-center justify-center rounded-md border bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border-border bg-background shadow-xs hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 size-9"
       >
         <svg xmlns="http://www.w3.org/2000/svg"
              width="16"
@@ -332,7 +344,7 @@ exports[`Components/PageHeader WithActions smoke-test 1`] = `
              stroke-linejoin="round"
              class="lucide lucide-arrow-left shrink-0"
              aria-hidden="true"
-             id="ArrowLeft"
+             id="_r_ID_"
         >
           <path d="m12 19-7-7 7-7">
           </path>
@@ -340,8 +352,8 @@ exports[`Components/PageHeader WithActions smoke-test 1`] = `
           </path>
         </svg>
       </a>
-      <div id="h-undefined"
-           class="flex gap-2 items-start text-primary"
+      <div id="h-_r_ID_"
+           class="flex items-start gap-2 text-primary"
       >
         <div class="flex flex-col gap-1">
           <h3 class="scroll-m-20 font-bold tracking-tight text-balance text-2xl lg:text-3xl">
@@ -355,14 +367,18 @@ exports[`Components/PageHeader WithActions smoke-test 1`] = `
     </div>
     <div class="flex gap-2">
       <button data-slot="button"
-              class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 relative"
+              data-variant="outline"
+              data-size="default"
+              class="group/button inline-flex shrink-0 items-center justify-center rounded-md border bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border-border bg-background shadow-xs hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 h-9 gap-1.5 px-2.5 in-data-[slot=button-group]:rounded-md has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 relative"
               type="button"
               id="_r_ID_"
       >
         Cancelar
       </button>
       <button data-slot="button"
-              class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 hover:text-primary-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 relative"
+              data-variant="default"
+              data-size="default"
+              class="group/button inline-flex shrink-0 items-center justify-center rounded-md border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-primary text-primary-foreground hover:bg-primary/80 h-9 gap-1.5 px-2.5 in-data-[slot=button-group]:rounded-md has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 relative"
               type="button"
               id="_r_ID_"
       >
@@ -375,14 +391,16 @@ exports[`Components/PageHeader WithActions smoke-test 1`] = `
 
 exports[`Components/PageHeader WithBackButton smoke-test 1`] = `
 <div class="container mx-auto px-4 py-10">
-  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+  <div class="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center"
        id="_r_ID_"
   >
     <div class="flex items-center gap-2">
       <a href="/dashboard"
          aria-label="Voltar"
          data-slot="button"
-         class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground size-9"
+         data-variant="outline"
+         data-size="icon"
+         class="group/button inline-flex shrink-0 items-center justify-center rounded-md border bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border-border bg-background shadow-xs hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 size-9"
       >
         <svg xmlns="http://www.w3.org/2000/svg"
              width="16"
@@ -395,7 +413,7 @@ exports[`Components/PageHeader WithBackButton smoke-test 1`] = `
              stroke-linejoin="round"
              class="lucide lucide-arrow-left shrink-0"
              aria-hidden="true"
-             id="ArrowLeft"
+             id="_r_ID_"
         >
           <path d="m12 19-7-7 7-7">
           </path>
@@ -403,8 +421,8 @@ exports[`Components/PageHeader WithBackButton smoke-test 1`] = `
           </path>
         </svg>
       </a>
-      <div id="h-undefined"
-           class="flex gap-2 items-start text-primary"
+      <div id="h-_r_ID_"
+           class="flex items-start gap-2 text-primary"
       >
         <div class="flex flex-col gap-1">
           <h3 class="scroll-m-20 font-bold tracking-tight text-balance text-2xl lg:text-3xl">
@@ -422,12 +440,14 @@ exports[`Components/PageHeader WithBackButton smoke-test 1`] = `
 
 exports[`Components/PageHeader WithBackButtonBrowserBack smoke-test 1`] = `
 <div class="container mx-auto px-4 py-10">
-  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+  <div class="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center"
        id="_r_ID_"
   >
     <div class="flex items-center gap-2">
       <button data-slot="button"
-              class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground size-9"
+              data-variant="outline"
+              data-size="icon"
+              class="group/button inline-flex shrink-0 items-center justify-center rounded-md border bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border-border bg-background shadow-xs hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 size-9"
               aria-label="Voltar"
       >
         <svg xmlns="http://www.w3.org/2000/svg"
@@ -441,7 +461,7 @@ exports[`Components/PageHeader WithBackButtonBrowserBack smoke-test 1`] = `
              stroke-linejoin="round"
              class="lucide lucide-arrow-left shrink-0"
              aria-hidden="true"
-             id="ArrowLeft"
+             id="_r_ID_"
         >
           <path d="m12 19-7-7 7-7">
           </path>
@@ -449,8 +469,8 @@ exports[`Components/PageHeader WithBackButtonBrowserBack smoke-test 1`] = `
           </path>
         </svg>
       </button>
-      <div id="h-undefined"
-           class="flex gap-2 items-start text-primary"
+      <div id="h-_r_ID_"
+           class="flex items-start gap-2 text-primary"
       >
         <div class="flex flex-col gap-1">
           <h3 class="scroll-m-20 font-bold tracking-tight text-balance text-2xl lg:text-3xl">
@@ -468,12 +488,14 @@ exports[`Components/PageHeader WithBackButtonBrowserBack smoke-test 1`] = `
 
 exports[`Components/PageHeader WithBackButtonCustomHandler smoke-test 1`] = `
 <div class="container mx-auto px-4 py-10">
-  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+  <div class="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center"
        id="_r_ID_"
   >
     <div class="flex items-center gap-2">
       <button data-slot="button"
-              class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground size-9"
+              data-variant="outline"
+              data-size="icon"
+              class="group/button inline-flex shrink-0 items-center justify-center rounded-md border bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border-border bg-background shadow-xs hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 size-9"
               aria-label="Voltar"
       >
         <svg xmlns="http://www.w3.org/2000/svg"
@@ -487,7 +509,7 @@ exports[`Components/PageHeader WithBackButtonCustomHandler smoke-test 1`] = `
              stroke-linejoin="round"
              class="lucide lucide-arrow-left shrink-0"
              aria-hidden="true"
-             id="ArrowLeft"
+             id="_r_ID_"
         >
           <path d="m12 19-7-7 7-7">
           </path>
@@ -495,8 +517,8 @@ exports[`Components/PageHeader WithBackButtonCustomHandler smoke-test 1`] = `
           </path>
         </svg>
       </button>
-      <div id="h-undefined"
-           class="flex gap-2 items-start text-primary"
+      <div id="h-_r_ID_"
+           class="flex items-start gap-2 text-primary"
       >
         <div class="flex flex-col gap-1">
           <h3 class="scroll-m-20 font-bold tracking-tight text-balance text-2xl lg:text-3xl">
@@ -514,14 +536,16 @@ exports[`Components/PageHeader WithBackButtonCustomHandler smoke-test 1`] = `
 
 exports[`Components/PageHeader WithBackButtonCustomIcon smoke-test 1`] = `
 <div class="container mx-auto px-4 py-10">
-  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+  <div class="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center"
        id="_r_ID_"
   >
     <div class="flex items-center gap-2">
       <a href="/dashboard"
          aria-label="Voltar"
          data-slot="button"
-         class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground size-9"
+         data-variant="outline"
+         data-size="icon"
+         class="group/button inline-flex shrink-0 items-center justify-center rounded-md border bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border-border bg-background shadow-xs hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 size-9"
       >
         <svg xmlns="http://www.w3.org/2000/svg"
              width="16"
@@ -534,14 +558,14 @@ exports[`Components/PageHeader WithBackButtonCustomIcon smoke-test 1`] = `
              stroke-linejoin="round"
              class="lucide lucide-chevron-left shrink-0"
              aria-hidden="true"
-             id="ChevronLeft"
+             id="_r_ID_"
         >
           <path d="m15 18-6-6 6-6">
           </path>
         </svg>
       </a>
-      <div id="h-undefined"
-           class="flex gap-2 items-start text-primary"
+      <div id="h-_r_ID_"
+           class="flex items-start gap-2 text-primary"
       >
         <div class="flex flex-col gap-1">
           <h3 class="scroll-m-20 font-bold tracking-tight text-balance text-2xl lg:text-3xl">
@@ -563,14 +587,16 @@ exports[`Components/PageHeader WithBackButtonSizes smoke-test 1`] = `
     <h3 class="text-sm font-medium mb-4 text-muted-foreground">
       Icon (default)
     </h3>
-    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+    <div class="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center"
          id="_r_ID_"
     >
       <div class="flex items-center gap-2">
         <a href="/dashboard"
            aria-label="Voltar"
            data-slot="button"
-           class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground size-9"
+           data-variant="outline"
+           data-size="icon"
+           class="group/button inline-flex shrink-0 items-center justify-center rounded-md border bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border-border bg-background shadow-xs hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 size-9"
         >
           <svg xmlns="http://www.w3.org/2000/svg"
                width="16"
@@ -583,7 +609,7 @@ exports[`Components/PageHeader WithBackButtonSizes smoke-test 1`] = `
                stroke-linejoin="round"
                class="lucide lucide-arrow-left shrink-0"
                aria-hidden="true"
-               id="ArrowLeft"
+               id="_r_ID_"
           >
             <path d="m12 19-7-7 7-7">
             </path>
@@ -591,8 +617,8 @@ exports[`Components/PageHeader WithBackButtonSizes smoke-test 1`] = `
             </path>
           </svg>
         </a>
-        <div id="h-undefined"
-             class="flex gap-2 items-start text-primary"
+        <div id="h-_r_ID_"
+             class="flex items-start gap-2 text-primary"
         >
           <div class="flex flex-col gap-1">
             <h3 class="scroll-m-20 font-bold tracking-tight text-balance text-2xl lg:text-3xl">
@@ -609,14 +635,16 @@ exports[`Components/PageHeader WithBackButtonSizes smoke-test 1`] = `
     <h3 class="text-sm font-medium mb-4 text-muted-foreground">
       Icon Small
     </h3>
-    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+    <div class="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center"
          id="_r_ID_"
     >
       <div class="flex items-center gap-2">
         <a href="/dashboard"
            aria-label="Voltar"
            data-slot="button"
-           class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground size-7 rounded-[min(var(--radius-md),12px)] in-data-[slot=button-group]:rounded-lg"
+           data-variant="outline"
+           data-size="icon-sm"
+           class="group/button inline-flex shrink-0 items-center justify-center border bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border-border bg-background shadow-xs hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 size-8 rounded-[min(var(--radius-md),10px)] in-data-[slot=button-group]:rounded-md"
         >
           <svg xmlns="http://www.w3.org/2000/svg"
                width="16"
@@ -629,7 +657,7 @@ exports[`Components/PageHeader WithBackButtonSizes smoke-test 1`] = `
                stroke-linejoin="round"
                class="lucide lucide-arrow-left shrink-0"
                aria-hidden="true"
-               id="ArrowLeft"
+               id="_r_ID_"
           >
             <path d="m12 19-7-7 7-7">
             </path>
@@ -637,8 +665,8 @@ exports[`Components/PageHeader WithBackButtonSizes smoke-test 1`] = `
             </path>
           </svg>
         </a>
-        <div id="h-undefined"
-             class="flex gap-2 items-start text-primary"
+        <div id="h-_r_ID_"
+             class="flex items-start gap-2 text-primary"
         >
           <div class="flex flex-col gap-1">
             <h3 class="scroll-m-20 font-bold tracking-tight text-balance text-2xl lg:text-3xl">
@@ -655,14 +683,16 @@ exports[`Components/PageHeader WithBackButtonSizes smoke-test 1`] = `
     <h3 class="text-sm font-medium mb-4 text-muted-foreground">
       Icon Large
     </h3>
-    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+    <div class="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center"
          id="_r_ID_"
     >
       <div class="flex items-center gap-2">
         <a href="/dashboard"
            aria-label="Voltar"
            data-slot="button"
-           class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground size-10"
+           data-variant="outline"
+           data-size="icon-lg"
+           class="group/button inline-flex shrink-0 items-center justify-center rounded-md border bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border-border bg-background shadow-xs hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 size-10"
         >
           <svg xmlns="http://www.w3.org/2000/svg"
                width="16"
@@ -675,7 +705,7 @@ exports[`Components/PageHeader WithBackButtonSizes smoke-test 1`] = `
                stroke-linejoin="round"
                class="lucide lucide-arrow-left shrink-0"
                aria-hidden="true"
-               id="ArrowLeft"
+               id="_r_ID_"
           >
             <path d="m12 19-7-7 7-7">
             </path>
@@ -683,8 +713,8 @@ exports[`Components/PageHeader WithBackButtonSizes smoke-test 1`] = `
             </path>
           </svg>
         </a>
-        <div id="h-undefined"
-             class="flex gap-2 items-start text-primary"
+        <div id="h-_r_ID_"
+             class="flex items-start gap-2 text-primary"
         >
           <div class="flex flex-col gap-1">
             <h3 class="scroll-m-20 font-bold tracking-tight text-balance text-2xl lg:text-3xl">
@@ -702,14 +732,16 @@ exports[`Components/PageHeader WithBackButtonSizes smoke-test 1`] = `
 
 exports[`Components/PageHeader WithBackButtonText smoke-test 1`] = `
 <div class="container mx-auto px-4 py-10">
-  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+  <div class="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center"
        id="_r_ID_"
   >
     <div class="flex items-center gap-2">
       <a href="/dashboard"
          aria-label="Voltar"
          data-slot="button"
-         class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 gap-2"
+         data-variant="outline"
+         data-size="default"
+         class="group/button inline-flex shrink-0 items-center justify-center rounded-md border bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border-border bg-background shadow-xs hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 h-9 px-2.5 in-data-[slot=button-group]:rounded-md has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 gap-2"
       >
         <svg xmlns="http://www.w3.org/2000/svg"
              width="16"
@@ -722,7 +754,7 @@ exports[`Components/PageHeader WithBackButtonText smoke-test 1`] = `
              stroke-linejoin="round"
              class="lucide lucide-arrow-left shrink-0"
              aria-hidden="true"
-             id="ArrowLeft"
+             id="_r_ID_"
         >
           <path d="m12 19-7-7 7-7">
           </path>
@@ -733,8 +765,8 @@ exports[`Components/PageHeader WithBackButtonText smoke-test 1`] = `
           Voltar
         </span>
       </a>
-      <div id="h-undefined"
-           class="flex gap-2 items-start text-primary"
+      <div id="h-_r_ID_"
+           class="flex items-start gap-2 text-primary"
       >
         <div class="flex flex-col gap-1">
           <h3 class="scroll-m-20 font-bold tracking-tight text-balance text-2xl lg:text-3xl">
@@ -756,14 +788,16 @@ exports[`Components/PageHeader WithBackButtonVariants smoke-test 1`] = `
     <h3 class="text-sm font-medium mb-4 text-muted-foreground">
       Outline (default)
     </h3>
-    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+    <div class="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center"
          id="_r_ID_"
     >
       <div class="flex items-center gap-2">
         <a href="/dashboard"
            aria-label="Voltar"
            data-slot="button"
-           class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground size-9"
+           data-variant="outline"
+           data-size="icon"
+           class="group/button inline-flex shrink-0 items-center justify-center rounded-md border bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border-border bg-background shadow-xs hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 size-9"
         >
           <svg xmlns="http://www.w3.org/2000/svg"
                width="16"
@@ -776,7 +810,7 @@ exports[`Components/PageHeader WithBackButtonVariants smoke-test 1`] = `
                stroke-linejoin="round"
                class="lucide lucide-arrow-left shrink-0"
                aria-hidden="true"
-               id="ArrowLeft"
+               id="_r_ID_"
           >
             <path d="m12 19-7-7 7-7">
             </path>
@@ -784,8 +818,8 @@ exports[`Components/PageHeader WithBackButtonVariants smoke-test 1`] = `
             </path>
           </svg>
         </a>
-        <div id="h-undefined"
-             class="flex gap-2 items-start text-primary"
+        <div id="h-_r_ID_"
+             class="flex items-start gap-2 text-primary"
         >
           <div class="flex flex-col gap-1">
             <h3 class="scroll-m-20 font-bold tracking-tight text-balance text-2xl lg:text-3xl">
@@ -802,14 +836,16 @@ exports[`Components/PageHeader WithBackButtonVariants smoke-test 1`] = `
     <h3 class="text-sm font-medium mb-4 text-muted-foreground">
       Ghost
     </h3>
-    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+    <div class="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center"
          id="_r_ID_"
     >
       <div class="flex items-center gap-2">
         <a href="/dashboard"
            aria-label="Voltar"
            data-slot="button"
-           class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground size-9"
+           data-variant="ghost"
+           data-size="icon"
+           class="group/button inline-flex shrink-0 items-center justify-center rounded-md border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 size-9"
         >
           <svg xmlns="http://www.w3.org/2000/svg"
                width="16"
@@ -822,7 +858,7 @@ exports[`Components/PageHeader WithBackButtonVariants smoke-test 1`] = `
                stroke-linejoin="round"
                class="lucide lucide-arrow-left shrink-0"
                aria-hidden="true"
-               id="ArrowLeft"
+               id="_r_ID_"
           >
             <path d="m12 19-7-7 7-7">
             </path>
@@ -830,8 +866,8 @@ exports[`Components/PageHeader WithBackButtonVariants smoke-test 1`] = `
             </path>
           </svg>
         </a>
-        <div id="h-undefined"
-             class="flex gap-2 items-start text-primary"
+        <div id="h-_r_ID_"
+             class="flex items-start gap-2 text-primary"
         >
           <div class="flex flex-col gap-1">
             <h3 class="scroll-m-20 font-bold tracking-tight text-balance text-2xl lg:text-3xl">
@@ -848,14 +884,16 @@ exports[`Components/PageHeader WithBackButtonVariants smoke-test 1`] = `
     <h3 class="text-sm font-medium mb-4 text-muted-foreground">
       Secondary
     </h3>
-    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+    <div class="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center"
          id="_r_ID_"
     >
       <div class="flex items-center gap-2">
         <a href="/dashboard"
            aria-label="Voltar"
            data-slot="button"
-           class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80 hover:text-secondary-foreground size-9"
+           data-variant="secondary"
+           data-size="icon"
+           class="group/button inline-flex shrink-0 items-center justify-center rounded-md border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-secondary text-secondary-foreground hover:bg-[color-mix(in_oklch,var(--secondary),var(--foreground)_5%)] aria-expanded:bg-secondary aria-expanded:text-secondary-foreground size-9"
         >
           <svg xmlns="http://www.w3.org/2000/svg"
                width="16"
@@ -868,7 +906,7 @@ exports[`Components/PageHeader WithBackButtonVariants smoke-test 1`] = `
                stroke-linejoin="round"
                class="lucide lucide-arrow-left shrink-0"
                aria-hidden="true"
-               id="ArrowLeft"
+               id="_r_ID_"
           >
             <path d="m12 19-7-7 7-7">
             </path>
@@ -876,8 +914,8 @@ exports[`Components/PageHeader WithBackButtonVariants smoke-test 1`] = `
             </path>
           </svg>
         </a>
-        <div id="h-undefined"
-             class="flex gap-2 items-start text-primary"
+        <div id="h-_r_ID_"
+             class="flex items-start gap-2 text-primary"
         >
           <div class="flex flex-col gap-1">
             <h3 class="scroll-m-20 font-bold tracking-tight text-balance text-2xl lg:text-3xl">
@@ -895,12 +933,12 @@ exports[`Components/PageHeader WithBackButtonVariants smoke-test 1`] = `
 
 exports[`Components/PageHeader WithDescription smoke-test 1`] = `
 <div class="container mx-auto px-4 py-10">
-  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+  <div class="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center"
        id="_r_ID_"
   >
     <div class="flex items-center gap-2">
-      <div id="h-undefined"
-           class="flex gap-2 items-start text-primary"
+      <div id="h-_r_ID_"
+           class="flex items-start gap-2 text-primary"
       >
         <div class="flex flex-col gap-1">
           <h3 class="scroll-m-20 font-bold tracking-tight text-balance text-2xl lg:text-3xl">
@@ -918,12 +956,12 @@ exports[`Components/PageHeader WithDescription smoke-test 1`] = `
 
 exports[`Components/PageHeader WithoutDescription smoke-test 1`] = `
 <div class="container mx-auto px-4 py-10">
-  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+  <div class="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center"
        id="_r_ID_"
   >
     <div class="flex items-center gap-2">
-      <div id="h-undefined"
-           class="flex gap-2 items-start text-primary"
+      <div id="h-_r_ID_"
+           class="flex items-start gap-2 text-primary"
       >
         <div class="flex flex-col gap-1">
           <h3 class="scroll-m-20 font-bold tracking-tight text-balance text-2xl lg:text-3xl">

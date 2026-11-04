@@ -1,29 +1,162 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`Components/PdfViewer AutoFallback smoke-test 1`] = `
-<div class="flex justify-center items-center h-64"
+<div class="flex flex-col"
      id="_r_ID_"
-     role="status"
-     aria-live="polite"
 >
-  <svg xmlns="http://www.w3.org/2000/svg"
-       width="24"
-       height="24"
-       viewbox="0 0 24 24"
-       fill="none"
-       stroke="currentColor"
-       stroke-width="2"
-       stroke-linecap="round"
-       stroke-linejoin="round"
-       class="lucide lucide-loader-circle animate-spin motion-reduce:animate-none size-12 text-primary"
-       aria-hidden="true"
-  >
-    <path d="M21 12a9 9 0 1 1-6.219-8.56">
-    </path>
-  </svg>
-  <span class="sr-only">
-    Loading…
-  </span>
+  <div class="flex flex-col gap-2">
+    <div class="flex flex-col">
+      <div class="flex items-center justify-between">
+        <div>
+          <div id="_r_ID_"
+               class="flex items-start gap-2 text-primary"
+          >
+            <div class="flex flex-col gap-1">
+              <h6 class="scroll-m-20 font-bold tracking-tight text-balance text-base lg:text-lg">
+                FOS
+              </h6>
+              <p class="text-sm">
+              </p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 text-sm text-muted-foreground">
+            <div class="flex items-center gap-1 text-xs">
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="16"
+                   height="16"
+                   viewbox="0 0 24 24"
+                   fill="none"
+                   stroke="currentColor"
+                   stroke-width="2"
+                   stroke-linecap="round"
+                   stroke-linejoin="round"
+                   class="lucide lucide-user text-primary"
+                   aria-hidden="true"
+                   id="_r_ID_"
+              >
+                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2">
+                </path>
+                <circle cx="12"
+                        cy="7"
+                        r="4"
+                >
+                </circle>
+              </svg>
+            </div>
+            <div class="flex items-center gap-1 text-xs">
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="16"
+                   height="16"
+                   viewbox="0 0 24 24"
+                   fill="none"
+                   stroke="currentColor"
+                   stroke-width="2"
+                   stroke-linecap="round"
+                   stroke-linejoin="round"
+                   class="lucide lucide-calendar text-primary"
+                   aria-hidden="true"
+                   id="_r_ID_"
+              >
+                <path d="M8 2v4">
+                </path>
+                <path d="M16 2v4">
+                </path>
+                <rect width="18"
+                      height="18"
+                      x="3"
+                      y="4"
+                      rx="2"
+                >
+                </rect>
+                <path d="M3 10h18">
+                </path>
+              </svg>
+              01/02/2025
+            </div>
+          </div>
+        </div>
+        <button data-slot="button"
+                data-variant="default"
+                data-size="sm"
+                class="group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-primary text-primary-foreground hover:bg-primary/80 h-8 gap-1 rounded-[min(var(--radius-md),10px)] px-2.5 in-data-[slot=button-group]:rounded-md has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 relative"
+                aria-label="Abrir num novo separador FOS"
+                type="button"
+                id="_r_ID_"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-external-link"
+               aria-hidden="true"
+               id="_r_ID_"
+               data-icon="inline-start"
+          >
+            <path d="M15 3h6v6">
+            </path>
+            <path d="M10 14 21 3">
+            </path>
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6">
+            </path>
+          </svg>
+          Abrir num novo separador
+        </button>
+      </div>
+    </div>
+    <div class="relative w-full overflow-hidden rounded-lg bg-muted"
+         aria-busy="false"
+         style="height: 500px;"
+    >
+      <div class="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-background/80 text-sm text-muted-foreground">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-circle-alert lucide-alert-circle text-destructive"
+             aria-hidden="true"
+             id="_r_ID_"
+        >
+          <circle cx="12"
+                  cy="12"
+                  r="10"
+          >
+          </circle>
+          <line x1="12"
+                x2="12"
+                y1="8"
+                y2="12"
+          >
+          </line>
+          <line x1="12"
+                x2="12.01"
+                y1="16"
+                y2="16"
+          >
+          </line>
+        </svg>
+        <span>
+          Could not load PDF (auto fallback engaged)
+        </span>
+      </div>
+      <iframe src="https://assets.accessible-digital-documents.com/uploads/2017/01/sample-tables.pdf"
+              class="h-full w-full border-0 hidden"
+              title="Visualizador de PDF - FOS"
+              aria-label="Visualizador de PDF para FOS"
+              loading="lazy"
+      >
+      </iframe>
+    </div>
+  </div>
 </div>
 `;
 
@@ -33,101 +166,206 @@ exports[`Components/PdfViewer ComparisonView smoke-test 1`] = `
     <h3 class="text-lg font-semibold mb-4">
       Modal Version
     </h3>
-    <div class="flex justify-center items-center h-64"
+    <div class="flex flex-col"
          id="_r_ID_"
-         role="status"
-         aria-live="polite"
     >
-      <svg xmlns="http://www.w3.org/2000/svg"
-           width="24"
-           height="24"
-           viewbox="0 0 24 24"
-           fill="none"
-           stroke="currentColor"
-           stroke-width="2"
-           stroke-linecap="round"
-           stroke-linejoin="round"
-           class="lucide lucide-loader-circle animate-spin motion-reduce:animate-none size-12 text-primary"
-           aria-hidden="true"
+      <div data-slot="card"
+           data-size="default"
+           class="group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl bg-card text-sm text-card-foreground shadow-xs ring-1 ring-foreground/10 [--card-spacing:--spacing(6)] has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(4)] *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl py-3 transition-shadow cursor-pointer hover:shadow-md focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+           role="button"
+           tabindex="0"
       >
-        <path d="M21 12a9 9 0 1 1-6.219-8.56">
-        </path>
-      </svg>
-      <span class="sr-only">
-        Loading…
-      </span>
+        <div data-slot="card-header"
+             class="group/card-header @container/card-header grid auto-rows-min items-start rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing) gap-0"
+        >
+          <div class="flex items-start justify-between">
+            <div class="flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="16"
+                   height="16"
+                   viewbox="0 0 24 24"
+                   fill="none"
+                   stroke="currentColor"
+                   stroke-width="2"
+                   stroke-linecap="round"
+                   stroke-linejoin="round"
+                   class="lucide lucide-file-text text-muted-foreground"
+                   aria-hidden="true"
+                   id="_r_ID_"
+              >
+                <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
+                </path>
+                <path d="M14 2v5a1 1 0 0 0 1 1h5">
+                </path>
+                <path d="M10 9H8">
+                </path>
+                <path d="M16 13H8">
+                </path>
+                <path d="M16 17H8">
+                </path>
+              </svg>
+              <div data-slot="card-title"
+                   class="font-heading group-data-[size=sm]/card:text-sm text-sm leading-tight font-medium"
+              >
+                FOS
+              </div>
+            </div>
+            <div data-slot="badge"
+                 id="_r_ID_"
+                 class="inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border py-0.5 font-medium whitespace-nowrap shadow-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 [&amp;&gt;svg]:pointer-events-none text-xs [&amp;&gt;svg]:size-2.5 text-destructive bg-destructive/5 border-destructive/10 px-3"
+            >
+              <div class="flex items-center">
+                <div class>
+                  PDF
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
   <div>
     <h3 class="text-lg font-semibold mb-4">
       Inline Version
     </h3>
-    <div class="flex justify-center items-center h-64"
+    <div class="flex flex-col"
          id="_r_ID_"
-         role="status"
-         aria-live="polite"
     >
-      <svg xmlns="http://www.w3.org/2000/svg"
-           width="24"
-           height="24"
-           viewbox="0 0 24 24"
-           fill="none"
-           stroke="currentColor"
-           stroke-width="2"
-           stroke-linecap="round"
-           stroke-linejoin="round"
-           class="lucide lucide-loader-circle animate-spin motion-reduce:animate-none size-12 text-primary"
-           aria-hidden="true"
-      >
-        <path d="M21 12a9 9 0 1 1-6.219-8.56">
-        </path>
-      </svg>
-      <span class="sr-only">
-        Loading…
-      </span>
+      <div class="flex flex-col gap-2">
+        <div class="flex flex-col">
+          <div class="flex items-center justify-between">
+            <div>
+              <div id="_r_ID_"
+                   class="flex items-start gap-2 text-primary"
+              >
+                <div class="flex flex-col gap-1">
+                  <h6 class="scroll-m-20 font-bold tracking-tight text-balance text-base lg:text-lg">
+                    FOS
+                  </h6>
+                  <p class="text-sm">
+                  </p>
+                </div>
+              </div>
+              <div class="flex items-center gap-2 text-sm text-muted-foreground">
+                <div class="flex items-center gap-1 text-xs">
+                  <svg xmlns="http://www.w3.org/2000/svg"
+                       width="16"
+                       height="16"
+                       viewbox="0 0 24 24"
+                       fill="none"
+                       stroke="currentColor"
+                       stroke-width="2"
+                       stroke-linecap="round"
+                       stroke-linejoin="round"
+                       class="lucide lucide-user text-primary"
+                       aria-hidden="true"
+                       id="_r_ID_"
+                  >
+                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2">
+                    </path>
+                    <circle cx="12"
+                            cy="7"
+                            r="4"
+                    >
+                    </circle>
+                  </svg>
+                </div>
+                <div class="flex items-center gap-1 text-xs">
+                  <svg xmlns="http://www.w3.org/2000/svg"
+                       width="16"
+                       height="16"
+                       viewbox="0 0 24 24"
+                       fill="none"
+                       stroke="currentColor"
+                       stroke-width="2"
+                       stroke-linecap="round"
+                       stroke-linejoin="round"
+                       class="lucide lucide-calendar text-primary"
+                       aria-hidden="true"
+                       id="_r_ID_"
+                  >
+                    <path d="M8 2v4">
+                    </path>
+                    <path d="M16 2v4">
+                    </path>
+                    <rect width="18"
+                          height="18"
+                          x="3"
+                          y="4"
+                          rx="2"
+                    >
+                    </rect>
+                    <path d="M3 10h18">
+                    </path>
+                  </svg>
+                  01/02/2025
+                </div>
+              </div>
+            </div>
+            <button data-slot="button"
+                    data-variant="default"
+                    data-size="sm"
+                    class="group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-primary text-primary-foreground hover:bg-primary/80 h-8 gap-1 rounded-[min(var(--radius-md),10px)] px-2.5 in-data-[slot=button-group]:rounded-md has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 relative"
+                    aria-label="Abrir num novo separador FOS"
+                    type="button"
+                    id="_r_ID_"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="16"
+                   height="16"
+                   viewbox="0 0 24 24"
+                   fill="none"
+                   stroke="currentColor"
+                   stroke-width="2"
+                   stroke-linecap="round"
+                   stroke-linejoin="round"
+                   class="lucide lucide-external-link"
+                   aria-hidden="true"
+                   id="_r_ID_"
+                   data-icon="inline-start"
+              >
+                <path d="M15 3h6v6">
+                </path>
+                <path d="M10 14 21 3">
+                </path>
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6">
+                </path>
+              </svg>
+              Abrir num novo separador
+            </button>
+          </div>
+        </div>
+        <div class="relative w-full overflow-hidden rounded-lg bg-muted"
+             aria-busy="false"
+             style="height: 400px;"
+        >
+          <iframe src="https://docs.google.com/viewer?url=https%3A%2F%2Fassets.accessible-digital-documents.com%2Fuploads%2F2017%2F01%2Fsample-tables.pdf&amp;embedded=true"
+                  class="h-full w-full border-0 block"
+                  title="Visualizador de PDF - FOS"
+                  aria-label="Visualizador de PDF para FOS"
+                  loading="lazy"
+          >
+          </iframe>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 `;
 
 exports[`Components/PdfViewer CustomLabels smoke-test 1`] = `
-<div class="flex justify-center items-center h-64"
-     id="_r_ID_"
-     role="status"
-     aria-live="polite"
->
-  <svg xmlns="http://www.w3.org/2000/svg"
-       width="24"
-       height="24"
-       viewbox="0 0 24 24"
-       fill="none"
-       stroke="currentColor"
-       stroke-width="2"
-       stroke-linecap="round"
-       stroke-linejoin="round"
-       class="lucide lucide-loader-circle animate-spin motion-reduce:animate-none size-12 text-primary"
-       aria-hidden="true"
-  >
-    <path d="M21 12a9 9 0 1 1-6.219-8.56">
-    </path>
-  </svg>
-  <span class="sr-only">
-    Loading…
-  </span>
-</div>
-`;
-
-exports[`Components/PdfViewer Default smoke-test 1`] = `
 <div class="flex flex-col"
      id="_r_ID_"
 >
   <div data-slot="card"
-       class="bg-card text-card-foreground flex flex-col gap-6 rounded-xl border shadow-sm transition-shadow py-3 cursor-pointer hover:shadow-md"
+       data-size="default"
+       class="group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl bg-card text-sm text-card-foreground shadow-xs ring-1 ring-foreground/10 [--card-spacing:--spacing(6)] has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(4)] *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl py-3 transition-shadow cursor-pointer hover:shadow-md focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
        role="button"
        tabindex="0"
   >
     <div data-slot="card-header"
-         class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6 gap-0"
+         class="group/card-header @container/card-header grid auto-rows-min items-start rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing) gap-0"
     >
       <div class="flex items-start justify-between">
         <div class="flex items-center gap-2">
@@ -142,7 +380,7 @@ exports[`Components/PdfViewer Default smoke-test 1`] = `
                stroke-linejoin="round"
                class="lucide lucide-file-text text-muted-foreground"
                aria-hidden="true"
-               id="FileText"
+               id="_r_ID_"
           >
             <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
             </path>
@@ -156,14 +394,75 @@ exports[`Components/PdfViewer Default smoke-test 1`] = `
             </path>
           </svg>
           <div data-slot="card-title"
-               class="text-sm font-medium leading-tight"
+               class="font-heading group-data-[size=sm]/card:text-sm text-sm leading-tight font-medium"
           >
             FOS
           </div>
         </div>
         <div data-slot="badge"
              id="_r_ID_"
-             class="inline-flex items-center justify-center rounded-full shadow-none border py-0.5 font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-destructive bg-destructive/10 border-destructive/10 px-3"
+             class="inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border py-0.5 font-medium whitespace-nowrap shadow-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 [&amp;&gt;svg]:pointer-events-none text-xs [&amp;&gt;svg]:size-2.5 text-destructive bg-destructive/5 border-destructive/10 px-3"
+        >
+          <div class="flex items-center">
+            <div class>
+              PDF
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/PdfViewer Default smoke-test 1`] = `
+<div class="flex flex-col"
+     id="_r_ID_"
+>
+  <div data-slot="card"
+       data-size="default"
+       class="group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl bg-card text-sm text-card-foreground shadow-xs ring-1 ring-foreground/10 [--card-spacing:--spacing(6)] has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(4)] *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl py-3 transition-shadow cursor-pointer hover:shadow-md focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+       role="button"
+       tabindex="0"
+  >
+    <div data-slot="card-header"
+         class="group/card-header @container/card-header grid auto-rows-min items-start rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing) gap-0"
+    >
+      <div class="flex items-start justify-between">
+        <div class="flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-file-text text-muted-foreground"
+               aria-hidden="true"
+               id="_r_ID_"
+          >
+            <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
+            </path>
+            <path d="M14 2v5a1 1 0 0 0 1 1h5">
+            </path>
+            <path d="M10 9H8">
+            </path>
+            <path d="M16 13H8">
+            </path>
+            <path d="M16 17H8">
+            </path>
+          </svg>
+          <div data-slot="card-title"
+               class="font-heading group-data-[size=sm]/card:text-sm text-sm leading-tight font-medium"
+          >
+            FOS
+          </div>
+        </div>
+        <div data-slot="badge"
+             id="_r_ID_"
+             class="inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border py-0.5 font-medium whitespace-nowrap shadow-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 [&amp;&gt;svg]:pointer-events-none text-xs [&amp;&gt;svg]:size-2.5 text-destructive bg-destructive/5 border-destructive/10 px-3"
         >
           <div class="flex items-center">
             <div class>
@@ -178,110 +477,435 @@ exports[`Components/PdfViewer Default smoke-test 1`] = `
 `;
 
 exports[`Components/PdfViewer Inline smoke-test 1`] = `
-<div class="flex justify-center items-center h-64"
+<div class="flex flex-col"
      id="_r_ID_"
-     role="status"
-     aria-live="polite"
 >
-  <svg xmlns="http://www.w3.org/2000/svg"
-       width="24"
-       height="24"
-       viewbox="0 0 24 24"
-       fill="none"
-       stroke="currentColor"
-       stroke-width="2"
-       stroke-linecap="round"
-       stroke-linejoin="round"
-       class="lucide lucide-loader-circle animate-spin motion-reduce:animate-none size-12 text-primary"
-       aria-hidden="true"
-  >
-    <path d="M21 12a9 9 0 1 1-6.219-8.56">
-    </path>
-  </svg>
-  <span class="sr-only">
-    Loading…
-  </span>
+  <div class="flex flex-col gap-2">
+    <div class="flex flex-col">
+      <div class="flex items-center justify-between">
+        <div>
+          <div id="_r_ID_"
+               class="flex items-start gap-2 text-primary"
+          >
+            <div class="flex flex-col gap-1">
+              <h6 class="scroll-m-20 font-bold tracking-tight text-balance text-base lg:text-lg">
+                FOS
+              </h6>
+              <p class="text-sm">
+              </p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 text-sm text-muted-foreground">
+            <div class="flex items-center gap-1 text-xs">
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="16"
+                   height="16"
+                   viewbox="0 0 24 24"
+                   fill="none"
+                   stroke="currentColor"
+                   stroke-width="2"
+                   stroke-linecap="round"
+                   stroke-linejoin="round"
+                   class="lucide lucide-user text-primary"
+                   aria-hidden="true"
+                   id="_r_ID_"
+              >
+                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2">
+                </path>
+                <circle cx="12"
+                        cy="7"
+                        r="4"
+                >
+                </circle>
+              </svg>
+            </div>
+            <div class="flex items-center gap-1 text-xs">
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="16"
+                   height="16"
+                   viewbox="0 0 24 24"
+                   fill="none"
+                   stroke="currentColor"
+                   stroke-width="2"
+                   stroke-linecap="round"
+                   stroke-linejoin="round"
+                   class="lucide lucide-calendar text-primary"
+                   aria-hidden="true"
+                   id="_r_ID_"
+              >
+                <path d="M8 2v4">
+                </path>
+                <path d="M16 2v4">
+                </path>
+                <rect width="18"
+                      height="18"
+                      x="3"
+                      y="4"
+                      rx="2"
+                >
+                </rect>
+                <path d="M3 10h18">
+                </path>
+              </svg>
+              01/02/2025
+            </div>
+          </div>
+        </div>
+        <button data-slot="button"
+                data-variant="default"
+                data-size="sm"
+                class="group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-primary text-primary-foreground hover:bg-primary/80 h-8 gap-1 rounded-[min(var(--radius-md),10px)] px-2.5 in-data-[slot=button-group]:rounded-md has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 relative"
+                aria-label="Abrir num novo separador FOS"
+                type="button"
+                id="_r_ID_"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-external-link"
+               aria-hidden="true"
+               id="_r_ID_"
+               data-icon="inline-start"
+          >
+            <path d="M15 3h6v6">
+            </path>
+            <path d="M10 14 21 3">
+            </path>
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6">
+            </path>
+          </svg>
+          Abrir num novo separador
+        </button>
+      </div>
+    </div>
+    <div class="relative w-full overflow-hidden rounded-lg bg-muted"
+         aria-busy="false"
+         style="height: 500px;"
+    >
+      <iframe src="https://docs.google.com/viewer?url=https%3A%2F%2Fassets.accessible-digital-documents.com%2Fuploads%2F2017%2F01%2Fsample-tables.pdf&amp;embedded=true"
+              class="h-full w-full border-0 block"
+              title="Visualizador de PDF - FOS"
+              aria-label="Visualizador de PDF para FOS"
+              loading="lazy"
+      >
+      </iframe>
+    </div>
+  </div>
 </div>
 `;
 
 exports[`Components/PdfViewer InlineWithoutCard smoke-test 1`] = `
-<div class="flex justify-center items-center h-64"
+<div class="flex flex-col"
      id="_r_ID_"
-     role="status"
-     aria-live="polite"
 >
-  <svg xmlns="http://www.w3.org/2000/svg"
-       width="24"
-       height="24"
-       viewbox="0 0 24 24"
-       fill="none"
-       stroke="currentColor"
-       stroke-width="2"
-       stroke-linecap="round"
-       stroke-linejoin="round"
-       class="lucide lucide-loader-circle animate-spin motion-reduce:animate-none size-12 text-primary"
-       aria-hidden="true"
-  >
-    <path d="M21 12a9 9 0 1 1-6.219-8.56">
-    </path>
-  </svg>
-  <span class="sr-only">
-    Loading…
-  </span>
+  <div class="flex flex-col gap-2">
+    <div class="flex flex-col">
+      <div class="flex items-center justify-between">
+        <div>
+          <div id="_r_ID_"
+               class="flex items-start gap-2 text-primary"
+          >
+            <div class="flex flex-col gap-1">
+              <h6 class="scroll-m-20 font-bold tracking-tight text-balance text-base lg:text-lg">
+                FOS
+              </h6>
+              <p class="text-sm">
+              </p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 text-sm text-muted-foreground">
+            <div class="flex items-center gap-1 text-xs">
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="16"
+                   height="16"
+                   viewbox="0 0 24 24"
+                   fill="none"
+                   stroke="currentColor"
+                   stroke-width="2"
+                   stroke-linecap="round"
+                   stroke-linejoin="round"
+                   class="lucide lucide-user text-primary"
+                   aria-hidden="true"
+                   id="_r_ID_"
+              >
+                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2">
+                </path>
+                <circle cx="12"
+                        cy="7"
+                        r="4"
+                >
+                </circle>
+              </svg>
+            </div>
+            <div class="flex items-center gap-1 text-xs">
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="16"
+                   height="16"
+                   viewbox="0 0 24 24"
+                   fill="none"
+                   stroke="currentColor"
+                   stroke-width="2"
+                   stroke-linecap="round"
+                   stroke-linejoin="round"
+                   class="lucide lucide-calendar text-primary"
+                   aria-hidden="true"
+                   id="_r_ID_"
+              >
+                <path d="M8 2v4">
+                </path>
+                <path d="M16 2v4">
+                </path>
+                <rect width="18"
+                      height="18"
+                      x="3"
+                      y="4"
+                      rx="2"
+                >
+                </rect>
+                <path d="M3 10h18">
+                </path>
+              </svg>
+              01/02/2025
+            </div>
+          </div>
+        </div>
+        <button data-slot="button"
+                data-variant="default"
+                data-size="sm"
+                class="group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-primary text-primary-foreground hover:bg-primary/80 h-8 gap-1 rounded-[min(var(--radius-md),10px)] px-2.5 in-data-[slot=button-group]:rounded-md has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 relative"
+                aria-label="Abrir num novo separador FOS"
+                type="button"
+                id="_r_ID_"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-external-link"
+               aria-hidden="true"
+               id="_r_ID_"
+               data-icon="inline-start"
+          >
+            <path d="M15 3h6v6">
+            </path>
+            <path d="M10 14 21 3">
+            </path>
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6">
+            </path>
+          </svg>
+          Abrir num novo separador
+        </button>
+      </div>
+    </div>
+    <div class="relative w-full overflow-hidden rounded-lg bg-muted"
+         aria-busy="false"
+         style="height: 400px;"
+    >
+      <iframe src="https://docs.google.com/viewer?url=https%3A%2F%2Fassets.accessible-digital-documents.com%2Fuploads%2F2017%2F01%2Fsample-tables.pdf&amp;embedded=true"
+              class="h-full w-full border-0 block"
+              title="Visualizador de PDF - FOS"
+              aria-label="Visualizador de PDF para FOS"
+              loading="lazy"
+      >
+      </iframe>
+    </div>
+  </div>
 </div>
 `;
 
 exports[`Components/PdfViewer LargeHeightInline smoke-test 1`] = `
-<div class="flex justify-center items-center h-64"
+<div class="flex flex-col"
      id="_r_ID_"
-     role="status"
-     aria-live="polite"
 >
-  <svg xmlns="http://www.w3.org/2000/svg"
-       width="24"
-       height="24"
-       viewbox="0 0 24 24"
-       fill="none"
-       stroke="currentColor"
-       stroke-width="2"
-       stroke-linecap="round"
-       stroke-linejoin="round"
-       class="lucide lucide-loader-circle animate-spin motion-reduce:animate-none size-12 text-primary"
-       aria-hidden="true"
-  >
-    <path d="M21 12a9 9 0 1 1-6.219-8.56">
-    </path>
-  </svg>
-  <span class="sr-only">
-    Loading…
-  </span>
+  <div class="flex flex-col gap-2">
+    <div class="flex flex-col">
+      <div class="flex items-center justify-between">
+        <div>
+          <div id="_r_ID_"
+               class="flex items-start gap-2 text-primary"
+          >
+            <div class="flex flex-col gap-1">
+              <h6 class="scroll-m-20 font-bold tracking-tight text-balance text-base lg:text-lg">
+                FOS
+              </h6>
+              <p class="text-sm">
+              </p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 text-sm text-muted-foreground">
+            <div class="flex items-center gap-1 text-xs">
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="16"
+                   height="16"
+                   viewbox="0 0 24 24"
+                   fill="none"
+                   stroke="currentColor"
+                   stroke-width="2"
+                   stroke-linecap="round"
+                   stroke-linejoin="round"
+                   class="lucide lucide-user text-primary"
+                   aria-hidden="true"
+                   id="_r_ID_"
+              >
+                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2">
+                </path>
+                <circle cx="12"
+                        cy="7"
+                        r="4"
+                >
+                </circle>
+              </svg>
+            </div>
+            <div class="flex items-center gap-1 text-xs">
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="16"
+                   height="16"
+                   viewbox="0 0 24 24"
+                   fill="none"
+                   stroke="currentColor"
+                   stroke-width="2"
+                   stroke-linecap="round"
+                   stroke-linejoin="round"
+                   class="lucide lucide-calendar text-primary"
+                   aria-hidden="true"
+                   id="_r_ID_"
+              >
+                <path d="M8 2v4">
+                </path>
+                <path d="M16 2v4">
+                </path>
+                <rect width="18"
+                      height="18"
+                      x="3"
+                      y="4"
+                      rx="2"
+                >
+                </rect>
+                <path d="M3 10h18">
+                </path>
+              </svg>
+              01/02/2025
+            </div>
+          </div>
+        </div>
+        <button data-slot="button"
+                data-variant="default"
+                data-size="sm"
+                class="group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-primary text-primary-foreground hover:bg-primary/80 h-8 gap-1 rounded-[min(var(--radius-md),10px)] px-2.5 in-data-[slot=button-group]:rounded-md has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 relative"
+                aria-label="Abrir num novo separador FOS"
+                type="button"
+                id="_r_ID_"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-external-link"
+               aria-hidden="true"
+               id="_r_ID_"
+               data-icon="inline-start"
+          >
+            <path d="M15 3h6v6">
+            </path>
+            <path d="M10 14 21 3">
+            </path>
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6">
+            </path>
+          </svg>
+          Abrir num novo separador
+        </button>
+      </div>
+    </div>
+    <div class="relative w-full overflow-hidden rounded-lg bg-muted"
+         aria-busy="false"
+         style="height: 80vh;"
+    >
+      <iframe src="https://docs.google.com/viewer?url=https%3A%2F%2Fassets.accessible-digital-documents.com%2Fuploads%2F2017%2F01%2Fsample-tables.pdf&amp;embedded=true"
+              class="h-full w-full border-0 block"
+              title="Visualizador de PDF - FOS"
+              aria-label="Visualizador de PDF para FOS"
+              loading="lazy"
+      >
+      </iframe>
+    </div>
+  </div>
 </div>
 `;
 
 exports[`Components/PdfViewer LongTitle smoke-test 1`] = `
-<div class="flex justify-center items-center h-64"
+<div class="flex flex-col"
      id="_r_ID_"
-     role="status"
-     aria-live="polite"
 >
-  <svg xmlns="http://www.w3.org/2000/svg"
-       width="24"
-       height="24"
-       viewbox="0 0 24 24"
-       fill="none"
-       stroke="currentColor"
-       stroke-width="2"
-       stroke-linecap="round"
-       stroke-linejoin="round"
-       class="lucide lucide-loader-circle animate-spin motion-reduce:animate-none size-12 text-primary"
-       aria-hidden="true"
+  <div data-slot="card"
+       data-size="default"
+       class="group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl bg-card text-sm text-card-foreground shadow-xs ring-1 ring-foreground/10 [--card-spacing:--spacing(6)] has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(4)] *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl py-3 transition-shadow cursor-pointer hover:shadow-md focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+       role="button"
+       tabindex="0"
   >
-    <path d="M21 12a9 9 0 1 1-6.219-8.56">
-    </path>
-  </svg>
-  <span class="sr-only">
-    Loading…
-  </span>
+    <div data-slot="card-header"
+         class="group/card-header @container/card-header grid auto-rows-min items-start rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing) gap-0"
+    >
+      <div class="flex items-start justify-between">
+        <div class="flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-file-text text-muted-foreground"
+               aria-hidden="true"
+               id="_r_ID_"
+          >
+            <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
+            </path>
+            <path d="M14 2v5a1 1 0 0 0 1 1h5">
+            </path>
+            <path d="M10 9H8">
+            </path>
+            <path d="M16 13H8">
+            </path>
+            <path d="M16 17H8">
+            </path>
+          </svg>
+          <div data-slot="card-title"
+               class="font-heading group-data-[size=sm]/card:text-sm text-sm leading-tight font-medium"
+          >
+            Very Long Document Title That Should Wrap Properly in the Interface
+          </div>
+        </div>
+        <div data-slot="badge"
+             id="_r_ID_"
+             class="inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border py-0.5 font-medium whitespace-nowrap shadow-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 [&amp;&gt;svg]:pointer-events-none text-xs [&amp;&gt;svg]:size-2.5 text-destructive bg-destructive/5 border-destructive/10 px-3"
+        >
+          <div class="flex items-center">
+            <div class>
+              PDF
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 `;
 
@@ -291,169 +915,617 @@ exports[`Components/PdfViewer MultipleDocuments smoke-test 1`] = `
     <h3 class="text-lg font-semibold mb-2">
       Modal Version
     </h3>
-    <div class="flex justify-center items-center h-64"
+    <div class="flex flex-col"
          id="_r_ID_"
-         role="status"
-         aria-live="polite"
     >
-      <svg xmlns="http://www.w3.org/2000/svg"
-           width="24"
-           height="24"
-           viewbox="0 0 24 24"
-           fill="none"
-           stroke="currentColor"
-           stroke-width="2"
-           stroke-linecap="round"
-           stroke-linejoin="round"
-           class="lucide lucide-loader-circle animate-spin motion-reduce:animate-none size-12 text-primary"
-           aria-hidden="true"
+      <div data-slot="card"
+           data-size="default"
+           class="group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl bg-card text-sm text-card-foreground shadow-xs ring-1 ring-foreground/10 [--card-spacing:--spacing(6)] has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(4)] *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl py-3 transition-shadow cursor-pointer hover:shadow-md focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+           role="button"
+           tabindex="0"
       >
-        <path d="M21 12a9 9 0 1 1-6.219-8.56">
-        </path>
-      </svg>
-      <span class="sr-only">
-        Loading…
-      </span>
+        <div data-slot="card-header"
+             class="group/card-header @container/card-header grid auto-rows-min items-start rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing) gap-0"
+        >
+          <div class="flex items-start justify-between">
+            <div class="flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="16"
+                   height="16"
+                   viewbox="0 0 24 24"
+                   fill="none"
+                   stroke="currentColor"
+                   stroke-width="2"
+                   stroke-linecap="round"
+                   stroke-linejoin="round"
+                   class="lucide lucide-file-text text-muted-foreground"
+                   aria-hidden="true"
+                   id="_r_ID_"
+              >
+                <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
+                </path>
+                <path d="M14 2v5a1 1 0 0 0 1 1h5">
+                </path>
+                <path d="M10 9H8">
+                </path>
+                <path d="M16 13H8">
+                </path>
+                <path d="M16 17H8">
+                </path>
+              </svg>
+              <div data-slot="card-title"
+                   class="font-heading group-data-[size=sm]/card:text-sm text-sm leading-tight font-medium"
+              >
+                FOS
+              </div>
+            </div>
+            <div data-slot="badge"
+                 id="_r_ID_"
+                 class="inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border py-0.5 font-medium whitespace-nowrap shadow-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 [&amp;&gt;svg]:pointer-events-none text-xs [&amp;&gt;svg]:size-2.5 text-destructive bg-destructive/5 border-destructive/10 px-3"
+            >
+              <div class="flex items-center">
+                <div class>
+                  PDF
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
   <div>
     <h3 class="text-lg font-semibold mb-2">
       Technical Document
     </h3>
-    <div class="flex justify-center items-center h-64"
+    <div class="flex flex-col"
          id="_r_ID_"
-         role="status"
-         aria-live="polite"
     >
-      <svg xmlns="http://www.w3.org/2000/svg"
-           width="24"
-           height="24"
-           viewbox="0 0 24 24"
-           fill="none"
-           stroke="currentColor"
-           stroke-width="2"
-           stroke-linecap="round"
-           stroke-linejoin="round"
-           class="lucide lucide-loader-circle animate-spin motion-reduce:animate-none size-12 text-primary"
-           aria-hidden="true"
+      <div data-slot="card"
+           data-size="default"
+           class="group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl bg-card text-sm text-card-foreground shadow-xs ring-1 ring-foreground/10 [--card-spacing:--spacing(6)] has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(4)] *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl py-3 transition-shadow cursor-pointer hover:shadow-md focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+           role="button"
+           tabindex="0"
       >
-        <path d="M21 12a9 9 0 1 1-6.219-8.56">
-        </path>
-      </svg>
-      <span class="sr-only">
-        Loading…
-      </span>
+        <div data-slot="card-header"
+             class="group/card-header @container/card-header grid auto-rows-min items-start rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing) gap-0"
+        >
+          <div class="flex items-start justify-between">
+            <div class="flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="16"
+                   height="16"
+                   viewbox="0 0 24 24"
+                   fill="none"
+                   stroke="currentColor"
+                   stroke-width="2"
+                   stroke-linecap="round"
+                   stroke-linejoin="round"
+                   class="lucide lucide-file-text text-muted-foreground"
+                   aria-hidden="true"
+                   id="_r_ID_"
+              >
+                <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
+                </path>
+                <path d="M14 2v5a1 1 0 0 0 1 1h5">
+                </path>
+                <path d="M10 9H8">
+                </path>
+                <path d="M16 13H8">
+                </path>
+                <path d="M16 17H8">
+                </path>
+              </svg>
+              <div data-slot="card-title"
+                   class="font-heading group-data-[size=sm]/card:text-sm text-sm leading-tight font-medium"
+              >
+                Technical Specification Document
+              </div>
+            </div>
+            <div data-slot="badge"
+                 id="_r_ID_"
+                 class="inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border py-0.5 font-medium whitespace-nowrap shadow-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 [&amp;&gt;svg]:pointer-events-none text-xs [&amp;&gt;svg]:size-2.5 text-destructive bg-destructive/5 border-destructive/10 px-3"
+            >
+              <div class="flex items-center">
+                <div class>
+                  PDF
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
   <div>
     <h3 class="text-lg font-semibold mb-2">
       Long Title Document
     </h3>
-    <div class="flex justify-center items-center h-64"
+    <div class="flex flex-col"
          id="_r_ID_"
-         role="status"
-         aria-live="polite"
     >
-      <svg xmlns="http://www.w3.org/2000/svg"
-           width="24"
-           height="24"
-           viewbox="0 0 24 24"
-           fill="none"
-           stroke="currentColor"
-           stroke-width="2"
-           stroke-linecap="round"
-           stroke-linejoin="round"
-           class="lucide lucide-loader-circle animate-spin motion-reduce:animate-none size-12 text-primary"
-           aria-hidden="true"
+      <div data-slot="card"
+           data-size="default"
+           class="group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl bg-card text-sm text-card-foreground shadow-xs ring-1 ring-foreground/10 [--card-spacing:--spacing(6)] has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(4)] *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl py-3 transition-shadow cursor-pointer hover:shadow-md focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+           role="button"
+           tabindex="0"
       >
-        <path d="M21 12a9 9 0 1 1-6.219-8.56">
-        </path>
-      </svg>
-      <span class="sr-only">
-        Loading…
-      </span>
+        <div data-slot="card-header"
+             class="group/card-header @container/card-header grid auto-rows-min items-start rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing) gap-0"
+        >
+          <div class="flex items-start justify-between">
+            <div class="flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="16"
+                   height="16"
+                   viewbox="0 0 24 24"
+                   fill="none"
+                   stroke="currentColor"
+                   stroke-width="2"
+                   stroke-linecap="round"
+                   stroke-linejoin="round"
+                   class="lucide lucide-file-text text-muted-foreground"
+                   aria-hidden="true"
+                   id="_r_ID_"
+              >
+                <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
+                </path>
+                <path d="M14 2v5a1 1 0 0 0 1 1h5">
+                </path>
+                <path d="M10 9H8">
+                </path>
+                <path d="M16 13H8">
+                </path>
+                <path d="M16 17H8">
+                </path>
+              </svg>
+              <div data-slot="card-title"
+                   class="font-heading group-data-[size=sm]/card:text-sm text-sm leading-tight font-medium"
+              >
+                Very Long Document Title That Should Wrap Properly in the Interface
+              </div>
+            </div>
+            <div data-slot="badge"
+                 id="_r_ID_"
+                 class="inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border py-0.5 font-medium whitespace-nowrap shadow-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 [&amp;&gt;svg]:pointer-events-none text-xs [&amp;&gt;svg]:size-2.5 text-destructive bg-destructive/5 border-destructive/10 px-3"
+            >
+              <div class="flex items-center">
+                <div class>
+                  PDF
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 `;
 
 exports[`Components/PdfViewer NativeViewer smoke-test 1`] = `
-<div class="flex justify-center items-center h-64"
+<div class="flex flex-col"
      id="_r_ID_"
-     role="status"
-     aria-live="polite"
 >
-  <svg xmlns="http://www.w3.org/2000/svg"
-       width="24"
-       height="24"
-       viewbox="0 0 24 24"
-       fill="none"
-       stroke="currentColor"
-       stroke-width="2"
-       stroke-linecap="round"
-       stroke-linejoin="round"
-       class="lucide lucide-loader-circle animate-spin motion-reduce:animate-none size-12 text-primary"
-       aria-hidden="true"
-  >
-    <path d="M21 12a9 9 0 1 1-6.219-8.56">
-    </path>
-  </svg>
-  <span class="sr-only">
-    Loading…
-  </span>
+  <div class="flex flex-col gap-2">
+    <div class="flex flex-col">
+      <div class="flex items-center justify-between">
+        <div>
+          <div id="_r_ID_"
+               class="flex items-start gap-2 text-primary"
+          >
+            <div class="flex flex-col gap-1">
+              <h6 class="scroll-m-20 font-bold tracking-tight text-balance text-base lg:text-lg">
+                FOS
+              </h6>
+              <p class="text-sm">
+              </p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 text-sm text-muted-foreground">
+            <div class="flex items-center gap-1 text-xs">
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="16"
+                   height="16"
+                   viewbox="0 0 24 24"
+                   fill="none"
+                   stroke="currentColor"
+                   stroke-width="2"
+                   stroke-linecap="round"
+                   stroke-linejoin="round"
+                   class="lucide lucide-user text-primary"
+                   aria-hidden="true"
+                   id="_r_ID_"
+              >
+                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2">
+                </path>
+                <circle cx="12"
+                        cy="7"
+                        r="4"
+                >
+                </circle>
+              </svg>
+            </div>
+            <div class="flex items-center gap-1 text-xs">
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="16"
+                   height="16"
+                   viewbox="0 0 24 24"
+                   fill="none"
+                   stroke="currentColor"
+                   stroke-width="2"
+                   stroke-linecap="round"
+                   stroke-linejoin="round"
+                   class="lucide lucide-calendar text-primary"
+                   aria-hidden="true"
+                   id="_r_ID_"
+              >
+                <path d="M8 2v4">
+                </path>
+                <path d="M16 2v4">
+                </path>
+                <rect width="18"
+                      height="18"
+                      x="3"
+                      y="4"
+                      rx="2"
+                >
+                </rect>
+                <path d="M3 10h18">
+                </path>
+              </svg>
+              01/02/2025
+            </div>
+          </div>
+        </div>
+        <button data-slot="button"
+                data-variant="default"
+                data-size="sm"
+                class="group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-primary text-primary-foreground hover:bg-primary/80 h-8 gap-1 rounded-[min(var(--radius-md),10px)] px-2.5 in-data-[slot=button-group]:rounded-md has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 relative"
+                aria-label="Abrir num novo separador FOS"
+                type="button"
+                id="_r_ID_"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-external-link"
+               aria-hidden="true"
+               id="_r_ID_"
+               data-icon="inline-start"
+          >
+            <path d="M15 3h6v6">
+            </path>
+            <path d="M10 14 21 3">
+            </path>
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6">
+            </path>
+          </svg>
+          Abrir num novo separador
+        </button>
+      </div>
+    </div>
+    <div class="relative w-full overflow-hidden rounded-lg bg-muted"
+         aria-busy="true"
+         style="height: 500px;"
+    >
+      <div class="absolute inset-0 flex items-center justify-center bg-background/70">
+        <div class="flex h-64 items-center justify-center"
+             id="_r_ID_"
+             role="status"
+             aria-live="polite"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="24"
+               height="24"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-loader-circle animate-spin size-12 text-primary"
+               data-slot="spinner"
+               aria-hidden="true"
+          >
+            <path d="M21 12a9 9 0 1 1-6.219-8.56">
+            </path>
+          </svg>
+          <span class="sr-only">
+            A carregar…
+          </span>
+        </div>
+      </div>
+      <iframe src="https://assets.accessible-digital-documents.com/uploads/2017/01/sample-tables.pdf"
+              class="h-full w-full border-0 block"
+              title="Visualizador de PDF - FOS"
+              aria-label="Visualizador de PDF para FOS"
+              loading="lazy"
+      >
+      </iframe>
+    </div>
+  </div>
 </div>
 `;
 
 exports[`Components/PdfViewer SmallHeightInline smoke-test 1`] = `
-<div class="flex justify-center items-center h-64"
+<div class="flex flex-col"
      id="_r_ID_"
-     role="status"
-     aria-live="polite"
 >
-  <svg xmlns="http://www.w3.org/2000/svg"
-       width="24"
-       height="24"
-       viewbox="0 0 24 24"
-       fill="none"
-       stroke="currentColor"
-       stroke-width="2"
-       stroke-linecap="round"
-       stroke-linejoin="round"
-       class="lucide lucide-loader-circle animate-spin motion-reduce:animate-none size-12 text-primary"
-       aria-hidden="true"
-  >
-    <path d="M21 12a9 9 0 1 1-6.219-8.56">
-    </path>
-  </svg>
-  <span class="sr-only">
-    Loading…
-  </span>
+  <div class="flex flex-col gap-2">
+    <div class="flex flex-col">
+      <div class="flex items-center justify-between">
+        <div>
+          <div id="_r_ID_"
+               class="flex items-start gap-2 text-primary"
+          >
+            <div class="flex flex-col gap-1">
+              <h6 class="scroll-m-20 font-bold tracking-tight text-balance text-base lg:text-lg">
+                FOS
+              </h6>
+              <p class="text-sm">
+              </p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 text-sm text-muted-foreground">
+            <div class="flex items-center gap-1 text-xs">
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="16"
+                   height="16"
+                   viewbox="0 0 24 24"
+                   fill="none"
+                   stroke="currentColor"
+                   stroke-width="2"
+                   stroke-linecap="round"
+                   stroke-linejoin="round"
+                   class="lucide lucide-user text-primary"
+                   aria-hidden="true"
+                   id="_r_ID_"
+              >
+                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2">
+                </path>
+                <circle cx="12"
+                        cy="7"
+                        r="4"
+                >
+                </circle>
+              </svg>
+            </div>
+            <div class="flex items-center gap-1 text-xs">
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="16"
+                   height="16"
+                   viewbox="0 0 24 24"
+                   fill="none"
+                   stroke="currentColor"
+                   stroke-width="2"
+                   stroke-linecap="round"
+                   stroke-linejoin="round"
+                   class="lucide lucide-calendar text-primary"
+                   aria-hidden="true"
+                   id="_r_ID_"
+              >
+                <path d="M8 2v4">
+                </path>
+                <path d="M16 2v4">
+                </path>
+                <rect width="18"
+                      height="18"
+                      x="3"
+                      y="4"
+                      rx="2"
+                >
+                </rect>
+                <path d="M3 10h18">
+                </path>
+              </svg>
+              01/02/2025
+            </div>
+          </div>
+        </div>
+        <button data-slot="button"
+                data-variant="default"
+                data-size="sm"
+                class="group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-primary text-primary-foreground hover:bg-primary/80 h-8 gap-1 rounded-[min(var(--radius-md),10px)] px-2.5 in-data-[slot=button-group]:rounded-md has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 relative"
+                aria-label="Abrir num novo separador FOS"
+                type="button"
+                id="_r_ID_"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-external-link"
+               aria-hidden="true"
+               id="_r_ID_"
+               data-icon="inline-start"
+          >
+            <path d="M15 3h6v6">
+            </path>
+            <path d="M10 14 21 3">
+            </path>
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6">
+            </path>
+          </svg>
+          Abrir num novo separador
+        </button>
+      </div>
+    </div>
+    <div class="relative w-full overflow-hidden rounded-lg bg-muted"
+         aria-busy="false"
+         style="height: 300px;"
+    >
+      <iframe src="https://docs.google.com/viewer?url=https%3A%2F%2Fassets.accessible-digital-documents.com%2Fuploads%2F2017%2F01%2Fsample-tables.pdf&amp;embedded=true"
+              class="h-full w-full border-0 block"
+              title="Visualizador de PDF - FOS"
+              aria-label="Visualizador de PDF para FOS"
+              loading="lazy"
+      >
+      </iframe>
+    </div>
+  </div>
 </div>
 `;
 
 exports[`Components/PdfViewer TechnicalDocument smoke-test 1`] = `
-<div class="flex justify-center items-center h-64"
+<div class="flex flex-col"
      id="_r_ID_"
-     role="status"
-     aria-live="polite"
 >
-  <svg xmlns="http://www.w3.org/2000/svg"
-       width="24"
-       height="24"
-       viewbox="0 0 24 24"
-       fill="none"
-       stroke="currentColor"
-       stroke-width="2"
-       stroke-linecap="round"
-       stroke-linejoin="round"
-       class="lucide lucide-loader-circle animate-spin motion-reduce:animate-none size-12 text-primary"
-       aria-hidden="true"
-  >
-    <path d="M21 12a9 9 0 1 1-6.219-8.56">
-    </path>
-  </svg>
-  <span class="sr-only">
-    Loading…
-  </span>
+  <div class="flex flex-col gap-2">
+    <div class="flex flex-col">
+      <div class="flex items-center justify-between">
+        <div>
+          <div id="_r_ID_"
+               class="flex items-start gap-2 text-primary"
+          >
+            <div class="flex flex-col gap-1">
+              <h6 class="scroll-m-20 font-bold tracking-tight text-balance text-base lg:text-lg">
+                Technical Specification Document
+              </h6>
+              <p class="text-sm">
+              </p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 text-sm text-muted-foreground">
+            <div class="flex items-center gap-1 text-xs">
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="16"
+                   height="16"
+                   viewbox="0 0 24 24"
+                   fill="none"
+                   stroke="currentColor"
+                   stroke-width="2"
+                   stroke-linecap="round"
+                   stroke-linejoin="round"
+                   class="lucide lucide-user text-primary"
+                   aria-hidden="true"
+                   id="_r_ID_"
+              >
+                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2">
+                </path>
+                <circle cx="12"
+                        cy="7"
+                        r="4"
+                >
+                </circle>
+              </svg>
+              Technical Team
+            </div>
+            <div class="flex items-center gap-1 text-xs">
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="16"
+                   height="16"
+                   viewbox="0 0 24 24"
+                   fill="none"
+                   stroke="currentColor"
+                   stroke-width="2"
+                   stroke-linecap="round"
+                   stroke-linejoin="round"
+                   class="lucide lucide-calendar text-primary"
+                   aria-hidden="true"
+                   id="_r_ID_"
+              >
+                <path d="M8 2v4">
+                </path>
+                <path d="M16 2v4">
+                </path>
+                <rect width="18"
+                      height="18"
+                      x="3"
+                      y="4"
+                      rx="2"
+                >
+                </rect>
+                <path d="M3 10h18">
+                </path>
+              </svg>
+              10/03/2024
+            </div>
+          </div>
+        </div>
+        <button data-slot="button"
+                data-variant="default"
+                data-size="sm"
+                class="group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-primary text-primary-foreground hover:bg-primary/80 h-8 gap-1 rounded-[min(var(--radius-md),10px)] px-2.5 in-data-[slot=button-group]:rounded-md has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 relative"
+                aria-label="Abrir num novo separador Technical Specification Document"
+                type="button"
+                id="_r_ID_"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-external-link"
+               aria-hidden="true"
+               id="_r_ID_"
+               data-icon="inline-start"
+          >
+            <path d="M15 3h6v6">
+            </path>
+            <path d="M10 14 21 3">
+            </path>
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6">
+            </path>
+          </svg>
+          Abrir num novo separador
+        </button>
+      </div>
+    </div>
+    <div class="relative w-full overflow-hidden rounded-lg bg-muted"
+         aria-busy="true"
+         style="height: 600px;"
+    >
+      <div class="absolute inset-0 flex items-center justify-center bg-background/70">
+        <div class="flex h-64 items-center justify-center"
+             id="_r_ID_"
+             role="status"
+             aria-live="polite"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="24"
+               height="24"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-loader-circle animate-spin size-12 text-primary"
+               data-slot="spinner"
+               aria-hidden="true"
+          >
+            <path d="M21 12a9 9 0 1 1-6.219-8.56">
+            </path>
+          </svg>
+          <span class="sr-only">
+            A carregar…
+          </span>
+        </div>
+      </div>
+      <iframe src="https://docs.google.com/viewer?url=https%3A%2F%2Fwww.w3.org%2FWAI%2FER%2Ftests%2Fxhtml%2Ftestfiles%2Fresources%2Fpdf%2Fdummy.pdf&amp;embedded=true"
+              class="h-full w-full border-0 block"
+              title="Visualizador de PDF - Technical Specification Document"
+              aria-label="Visualizador de PDF para Technical Specification Document"
+              loading="lazy"
+      >
+      </iframe>
+    </div>
+  </div>
 </div>
 `;

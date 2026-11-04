@@ -1,0 +1,2902 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`Components/Input/RichText Controlled smoke-test 1`] = `
+<div class="grid gap-6 lg:grid-cols-2">
+  <div role="group"
+       data-slot="field"
+       data-orientation="vertical"
+       class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col *:w-full [&amp;&gt;.sr-only]:w-auto"
+  >
+    <label data-slot="label"
+           class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+           for="_r_ID_"
+    >
+      Corpo do documento
+    </label>
+    <div class="rounded-lg border bg-background shadow-xs focus-within:ring-[3px] focus-within:ring-ring/50">
+      <div role="toolbar"
+           aria-label="Formatação"
+           class="flex flex-wrap items-center gap-1 border-b bg-muted/30 p-1"
+      >
+        <button type="button"
+                aria-pressed="false"
+                data-state="closed"
+                data-slot="tooltip-trigger"
+                class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+                aria-label="Desfazer"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-undo"
+               aria-hidden="true"
+               id="_r_ID_"
+          >
+            <path d="M3 7v6h6">
+            </path>
+            <path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13">
+            </path>
+          </svg>
+        </button>
+        <span class="inline-flex cursor-not-allowed"
+              data-state="closed"
+              data-slot="tooltip-trigger"
+        >
+          <button type="button"
+                  aria-pressed="false"
+                  data-state="off"
+                  data-disabled
+                  data-slot="toggle"
+                  class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+                  aria-label="Refazer"
+                  disabled
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-redo"
+                 aria-hidden="true"
+                 id="_r_ID_"
+            >
+              <path d="M21 7v6h-6">
+              </path>
+              <path d="M3 17a9 9 0 0 1 9-9 9 9 0 0 1 6 2.3l3 2.7">
+              </path>
+            </svg>
+          </button>
+        </span>
+        <div data-orientation="vertical"
+             role="none"
+             data-slot="separator"
+             class="shrink-0 bg-border data-vertical:w-px data-vertical:self-stretch data-horizontal:h-px data-horizontal:w-full mx-1 h-6"
+        >
+        </div>
+        <button type="button"
+                aria-pressed="false"
+                data-state="closed"
+                data-slot="tooltip-trigger"
+                class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+                aria-label="Negrito"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-bold"
+               aria-hidden="true"
+               id="_r_ID_"
+          >
+            <path d="M6 12h9a4 4 0 0 1 0 8H7a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h7a4 4 0 0 1 0 8">
+            </path>
+          </svg>
+        </button>
+        <button type="button"
+                aria-pressed="false"
+                data-state="closed"
+                data-slot="tooltip-trigger"
+                class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+                aria-label="Itálico"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-italic"
+               aria-hidden="true"
+               id="_r_ID_"
+          >
+            <line x1="19"
+                  x2="10"
+                  y1="4"
+                  y2="4"
+            >
+            </line>
+            <line x1="14"
+                  x2="5"
+                  y1="20"
+                  y2="20"
+            >
+            </line>
+            <line x1="15"
+                  x2="9"
+                  y1="4"
+                  y2="20"
+            >
+            </line>
+          </svg>
+        </button>
+        <button type="button"
+                aria-pressed="false"
+                data-state="closed"
+                data-slot="tooltip-trigger"
+                class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+                aria-label="Sublinhado"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-underline"
+               aria-hidden="true"
+               id="_r_ID_"
+          >
+            <path d="M6 4v6a6 6 0 0 0 12 0V4">
+            </path>
+            <line x1="4"
+                  x2="20"
+                  y1="20"
+                  y2="20"
+            >
+            </line>
+          </svg>
+        </button>
+        <button type="button"
+                aria-pressed="false"
+                data-state="closed"
+                data-slot="tooltip-trigger"
+                class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+                aria-label="Riscado"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-strikethrough"
+               aria-hidden="true"
+               id="_r_ID_"
+          >
+            <path d="M16 4H9a3 3 0 0 0-2.83 4">
+            </path>
+            <path d="M14 12a4 4 0 0 1 0 8H6">
+            </path>
+            <line x1="4"
+                  x2="20"
+                  y1="12"
+                  y2="12"
+            >
+            </line>
+          </svg>
+        </button>
+        <button type="button"
+                aria-pressed="false"
+                data-state="closed"
+                data-slot="tooltip-trigger"
+                class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+                aria-label="Realce"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-highlighter"
+               aria-hidden="true"
+               id="_r_ID_"
+          >
+            <path d="m9 11-6 6v3h9l3-3">
+            </path>
+            <path d="m22 12-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4">
+            </path>
+          </svg>
+        </button>
+        <button type="button"
+                aria-pressed="false"
+                data-state="closed"
+                data-slot="tooltip-trigger"
+                class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+                aria-label="Subscrito"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-subscript"
+               aria-hidden="true"
+               id="_r_ID_"
+          >
+            <path d="m4 5 8 8">
+            </path>
+            <path d="m12 5-8 8">
+            </path>
+            <path d="M20 19h-4c0-1.5.44-2 1.5-2.5S20 15.33 20 14c0-.47-.17-.93-.48-1.29a2.11 2.11 0 0 0-2.62-.44c-.42.24-.74.62-.9 1.07">
+            </path>
+          </svg>
+        </button>
+        <button type="button"
+                aria-pressed="false"
+                data-state="closed"
+                data-slot="tooltip-trigger"
+                class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+                aria-label="Sobrescrito"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-superscript"
+               aria-hidden="true"
+               id="_r_ID_"
+          >
+            <path d="m4 19 8-8">
+            </path>
+            <path d="m12 19-8-8">
+            </path>
+            <path d="M20 12h-4c0-1.5.442-2 1.5-2.5S20 8.334 20 7.002c0-.472-.17-.93-.484-1.29a2.105 2.105 0 0 0-2.617-.436c-.42.239-.738.614-.899 1.06">
+            </path>
+          </svg>
+        </button>
+        <button type="button"
+                aria-pressed="false"
+                data-state="closed"
+                data-slot="tooltip-trigger"
+                class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+                aria-label="Remover formatação"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-remove-formatting"
+               aria-hidden="true"
+               id="_r_ID_"
+          >
+            <path d="M4 7V4h16v3">
+            </path>
+            <path d="M5 20h6">
+            </path>
+            <path d="M13 4 8 20">
+            </path>
+            <path d="m15 15 5 5">
+            </path>
+            <path d="m20 15-5 5">
+            </path>
+          </svg>
+        </button>
+        <div data-orientation="vertical"
+             role="none"
+             data-slot="separator"
+             class="shrink-0 bg-border data-vertical:w-px data-vertical:self-stretch data-horizontal:h-px data-horizontal:w-full mx-1 h-6"
+        >
+        </div>
+        <button type="button"
+                aria-pressed="false"
+                data-state="closed"
+                data-slot="tooltip-trigger"
+                class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+                aria-label="Título 1"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-heading1 lucide-heading-1"
+               aria-hidden="true"
+               id="_r_ID_"
+          >
+            <path d="M4 12h8">
+            </path>
+            <path d="M4 18V6">
+            </path>
+            <path d="M12 18V6">
+            </path>
+            <path d="m17 12 3-2v8">
+            </path>
+          </svg>
+        </button>
+        <button type="button"
+                aria-pressed="false"
+                data-state="closed"
+                data-slot="tooltip-trigger"
+                class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+                aria-label="Título 2"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-heading2 lucide-heading-2"
+               aria-hidden="true"
+               id="_r_ID_"
+          >
+            <path d="M4 12h8">
+            </path>
+            <path d="M4 18V6">
+            </path>
+            <path d="M12 18V6">
+            </path>
+            <path d="M21 18h-4c0-4 4-3 4-6 0-1.5-2-2.5-4-1">
+            </path>
+          </svg>
+        </button>
+        <button type="button"
+                aria-pressed="false"
+                data-state="closed"
+                data-slot="tooltip-trigger"
+                class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+                aria-label="Título 3"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-heading3 lucide-heading-3"
+               aria-hidden="true"
+               id="_r_ID_"
+          >
+            <path d="M4 12h8">
+            </path>
+            <path d="M4 18V6">
+            </path>
+            <path d="M12 18V6">
+            </path>
+            <path d="M17.5 10.5c1.7-1 3.5 0 3.5 1.5a2 2 0 0 1-2 2">
+            </path>
+            <path d="M17 17.5c2 1.5 4 .3 4-1.5a2 2 0 0 0-2-2">
+            </path>
+          </svg>
+        </button>
+        <div data-orientation="vertical"
+             role="none"
+             data-slot="separator"
+             class="shrink-0 bg-border data-vertical:w-px data-vertical:self-stretch data-horizontal:h-px data-horizontal:w-full mx-1 h-6"
+        >
+        </div>
+        <button type="button"
+                aria-pressed="false"
+                data-state="closed"
+                data-slot="tooltip-trigger"
+                class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+                aria-label="Lista com marcas"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-list"
+               aria-hidden="true"
+               id="_r_ID_"
+          >
+            <path d="M3 5h.01">
+            </path>
+            <path d="M3 12h.01">
+            </path>
+            <path d="M3 19h.01">
+            </path>
+            <path d="M8 5h13">
+            </path>
+            <path d="M8 12h13">
+            </path>
+            <path d="M8 19h13">
+            </path>
+          </svg>
+        </button>
+        <button type="button"
+                aria-pressed="false"
+                data-state="closed"
+                data-slot="tooltip-trigger"
+                class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+                aria-label="Lista numerada"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-list-ordered"
+               aria-hidden="true"
+               id="_r_ID_"
+          >
+            <path d="M11 5h10">
+            </path>
+            <path d="M11 12h10">
+            </path>
+            <path d="M11 19h10">
+            </path>
+            <path d="M4 4h1v5">
+            </path>
+            <path d="M4 9h2">
+            </path>
+            <path d="M6.5 20H3.4c0-1 2.6-1.925 2.6-3.5a1.5 1.5 0 0 0-2.6-1.02">
+            </path>
+          </svg>
+        </button>
+        <button type="button"
+                aria-pressed="false"
+                data-state="closed"
+                data-slot="tooltip-trigger"
+                class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+                aria-label="Citação"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-quote"
+               aria-hidden="true"
+               id="_r_ID_"
+          >
+            <path d="M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z">
+            </path>
+            <path d="M5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z">
+            </path>
+          </svg>
+        </button>
+        <span class="inline-flex cursor-not-allowed"
+              data-state="closed"
+              data-slot="tooltip-trigger"
+        >
+          <button type="button"
+                  aria-pressed="false"
+                  data-state="off"
+                  data-disabled
+                  data-slot="toggle"
+                  class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+                  aria-label="Aumentar avanço"
+                  disabled
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-list-indent-increase"
+                 aria-hidden="true"
+                 id="_r_ID_"
+            >
+              <path d="M21 5H11">
+              </path>
+              <path d="M21 12H11">
+              </path>
+              <path d="M21 19H11">
+              </path>
+              <path d="m3 8 4 4-4 4">
+              </path>
+            </svg>
+          </button>
+        </span>
+        <span class="inline-flex cursor-not-allowed"
+              data-state="closed"
+              data-slot="tooltip-trigger"
+        >
+          <button type="button"
+                  aria-pressed="false"
+                  data-state="off"
+                  data-disabled
+                  data-slot="toggle"
+                  class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+                  aria-label="Diminuir avanço"
+                  disabled
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-list-indent-decrease"
+                 aria-hidden="true"
+                 id="_r_ID_"
+            >
+              <path d="M21 5H11">
+              </path>
+              <path d="M21 12H11">
+              </path>
+              <path d="M21 19H11">
+              </path>
+              <path d="m7 8-4 4 4 4">
+              </path>
+            </svg>
+          </button>
+        </span>
+        <button type="button"
+                aria-pressed="false"
+                data-state="closed"
+                data-slot="tooltip-trigger"
+                class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+                aria-label="Linha horizontal"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-minus"
+               aria-hidden="true"
+               id="_r_ID_"
+          >
+            <path d="M5 12h14">
+            </path>
+          </svg>
+        </button>
+        <div data-orientation="vertical"
+             role="none"
+             data-slot="separator"
+             class="shrink-0 bg-border data-vertical:w-px data-vertical:self-stretch data-horizontal:h-px data-horizontal:w-full mx-1 h-6"
+        >
+        </div>
+        <button type="button"
+                aria-pressed="false"
+                data-state="closed"
+                data-slot="tooltip-trigger"
+                class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+                aria-label="Alinhar à esquerda"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-text-align-start"
+               aria-hidden="true"
+               id="_r_ID_"
+          >
+            <path d="M21 5H3">
+            </path>
+            <path d="M15 12H3">
+            </path>
+            <path d="M17 19H3">
+            </path>
+          </svg>
+        </button>
+        <button type="button"
+                aria-pressed="true"
+                data-state="closed"
+                data-slot="tooltip-trigger"
+                class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+                aria-label="Alinhar ao centro"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-text-align-center"
+               aria-hidden="true"
+               id="_r_ID_"
+          >
+            <path d="M21 5H3">
+            </path>
+            <path d="M17 12H7">
+            </path>
+            <path d="M19 19H5">
+            </path>
+          </svg>
+        </button>
+        <button type="button"
+                aria-pressed="false"
+                data-state="closed"
+                data-slot="tooltip-trigger"
+                class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+                aria-label="Alinhar à direita"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-text-align-end"
+               aria-hidden="true"
+               id="_r_ID_"
+          >
+            <path d="M21 5H3">
+            </path>
+            <path d="M21 12H9">
+            </path>
+            <path d="M21 19H7">
+            </path>
+          </svg>
+        </button>
+        <button type="button"
+                aria-pressed="false"
+                data-state="closed"
+                data-slot="tooltip-trigger"
+                class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+                aria-label="Justificar"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-text-align-justify"
+               aria-hidden="true"
+               id="_r_ID_"
+          >
+            <path d="M3 5h18">
+            </path>
+            <path d="M3 12h18">
+            </path>
+            <path d="M3 19h18">
+            </path>
+          </svg>
+        </button>
+        <div data-orientation="vertical"
+             role="none"
+             data-slot="separator"
+             class="shrink-0 bg-border data-vertical:w-px data-vertical:self-stretch data-horizontal:h-px data-horizontal:w-full mx-1 h-6"
+        >
+        </div>
+        <button type="button"
+                aria-pressed="true"
+                data-state="closed"
+                data-slot="tooltip-trigger"
+                class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+                aria-label="Inserir hiperligação"
+                aria-haspopup="dialog"
+                aria-expanded="false"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-link"
+               aria-hidden="true"
+               id="_r_ID_"
+          >
+            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71">
+            </path>
+            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71">
+            </path>
+          </svg>
+        </button>
+        <button type="button"
+                aria-pressed="false"
+                data-state="closed"
+                data-slot="tooltip-trigger"
+                class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+                aria-label="Tabela"
+                aria-haspopup="dialog"
+                aria-expanded="false"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-table"
+               aria-hidden="true"
+               id="_r_ID_"
+          >
+            <path d="M12 3v18">
+            </path>
+            <rect width="18"
+                  height="18"
+                  x="3"
+                  y="3"
+                  rx="2"
+            >
+            </rect>
+            <path d="M3 9h18">
+            </path>
+            <path d="M3 15h18">
+            </path>
+          </svg>
+        </button>
+        <button type="button"
+                aria-pressed="false"
+                data-state="closed"
+                data-slot="tooltip-trigger"
+                class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+                aria-label="Carácter especial"
+                aria-haspopup="dialog"
+                aria-expanded="false"
+        >
+          <span aria-hidden="true"
+                class="text-sm font-medium"
+          >
+            Ω
+          </span>
+        </button>
+        <button type="button"
+                aria-pressed="false"
+                data-state="closed"
+                data-slot="tooltip-trigger"
+                class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+                aria-label="Cor do texto"
+                aria-haspopup="dialog"
+                aria-expanded="false"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-palette"
+               aria-hidden="true"
+               id="_r_ID_"
+          >
+            <path d="M12 22a1 1 0 0 1 0-20 10 9 0 0 1 10 9 5 5 0 0 1-5 5h-2.25a1.75 1.75 0 0 0-1.4 2.8l.3.4a1.75 1.75 0 0 1-1.4 2.8z">
+            </path>
+            <circle cx="13.5"
+                    cy="6.5"
+                    r=".5"
+                    fill="currentColor"
+            >
+            </circle>
+            <circle cx="17.5"
+                    cy="10.5"
+                    r=".5"
+                    fill="currentColor"
+            >
+            </circle>
+            <circle cx="6.5"
+                    cy="12.5"
+                    r=".5"
+                    fill="currentColor"
+            >
+            </circle>
+            <circle cx="8.5"
+                    cy="7.5"
+                    r=".5"
+                    fill="currentColor"
+            >
+            </circle>
+          </svg>
+        </button>
+        <button type="button"
+                aria-pressed="false"
+                data-state="closed"
+                data-slot="tooltip-trigger"
+                class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+                aria-label="Tamanho do texto"
+                aria-haspopup="dialog"
+                aria-expanded="false"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-baseline"
+               aria-hidden="true"
+               id="_r_ID_"
+          >
+            <path d="M4 20h16">
+            </path>
+            <path d="m6 16 6-12 6 12">
+            </path>
+            <path d="M8 12h8">
+            </path>
+          </svg>
+        </button>
+      </div>
+      <div>
+        <div contenteditable="true"
+             role="textbox"
+             id="_r_ID_"
+             aria-multiline="true"
+             aria-label="Corpo do documento"
+             aria-describedby="_r_ID_-helper"
+             translate="no"
+             class="tiptap ProseMirror text-sm leading-6 text-foreground focus:outline-none [&amp;_h1]:text-2xl [&amp;_h2]:text-xl [&amp;_h3]:text-lg [&amp;_h1]:mt-4 [&amp;_h1]:mb-2 [&amp;_h2]:mt-4 [&amp;_h2]:mb-2 [&amp;_h3]:mt-3 [&amp;_h3]:mb-2 [&amp;_h1]:font-semibold [&amp;_h2]:font-semibold [&amp;_h3]:font-semibold [&amp;_h1]:leading-tight [&amp;_h2]:leading-tight [&amp;_p]:my-2 [&amp;_li&gt;p]:my-0.5 [&amp;_ul]:my-2 [&amp;_ul]:list-disc [&amp;_ul]:ps-6 [&amp;_ol]:my-2 [&amp;_ol]:list-decimal [&amp;_ol]:ps-6 [&amp;_li]:marker:text-muted-foreground [&amp;_blockquote]:my-2 [&amp;_blockquote]:border-s-2 [&amp;_blockquote]:border-border [&amp;_blockquote]:ps-4 [&amp;_blockquote]:italic [&amp;_a]:text-primary [&amp;_a]:underline [&amp;_a]:underline-offset-4 [&amp;_hr]:my-4 [&amp;_hr]:border-border [&amp;_mark]:bg-highlight [&amp;_mark]:text-highlight-foreground [&amp;_table]:my-3 [&amp;_table]:w-full [&amp;_table]:border-collapse [&amp;_th]:border [&amp;_th]:border-border [&amp;_th]:bg-muted [&amp;_th]:p-2 [&amp;_th]:text-start [&amp;_th]:font-semibold [&amp;_td]:border [&amp;_td]:border-border [&amp;_td]:p-2 [&amp;_:is(th,td)&gt;p]:my-0 [&amp;_.selectedCell]:bg-primary/10 [&amp;_.column-resize-handle]:w-0.5 [&amp;_.column-resize-handle]:bg-primary [&amp;_.is-editor-empty:first-child]:before:pointer-events-none [&amp;_.is-editor-empty:first-child]:before:float-left [&amp;_.is-editor-empty:first-child]:before:h-0 [&amp;_.is-editor-empty:first-child]:before:text-muted-foreground [&amp;_.is-editor-empty:first-child]:before:content-[attr(data-placeholder)] min-h-50 p-4"
+             tabindex="0"
+        >
+          <h2>
+            Notificação de deferimento
+          </h2>
+          <p>
+            Caro(a)
+            <strong>
+              {{nome_titular}}
+            </strong>
+            ,
+          </p>
+          <p>
+            Informamos que o processo
+            <em>
+              {{numero_processo}}
+            </em>
+            foi
+            <mark>
+              deferido
+            </mark>
+            .
+          </p>
+          <ul>
+            <li>
+              <p>
+                Levante o alvará no balcão.
+              </p>
+            </li>
+            <li>
+              <p>
+                Traga o documento de identificação.
+              </p>
+            </li>
+          </ul>
+          <blockquote>
+            <p>
+              Prazo de levantamento: 30 dias.
+            </p>
+          </blockquote>
+          <div class="tableWrapper">
+            <table style="min-width: 50px;">
+              <colgroup>
+                <col style="min-width: 25px;">
+                <col style="min-width: 25px;">
+              </colgroup>
+              <tbody>
+                <tr>
+                  <th>
+                    <p>
+                      Taxa
+                    </p>
+                  </th>
+                  <th>
+                    <p>
+                      Valor
+                    </p>
+                  </th>
+                </tr>
+                <tr>
+                  <td>
+                    <p>
+                      Emissão
+                    </p>
+                  </td>
+                  <td>
+                    <p>
+                      1 500 CVE
+                    </p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p style="text-align: center;">
+            <span style="color: rgb(29, 78, 216);">
+              Mais informação em
+            </span>
+            <a target="_blank"
+               rel="noopener noreferrer nofollow"
+               href="https://igrp.cv"
+            >
+              igrp.cv
+            </a>
+          </p>
+        </div>
+      </div>
+      <div class="flex flex-col gap-2 border-t bg-muted/20 p-2">
+        <p class="text-xs text-muted-foreground">
+          Clique numa variável para a inserir na posição do cursor.
+        </p>
+        <div class="flex flex-wrap gap-1.5">
+          <button data-slot="button"
+                  data-variant="outline"
+                  data-size="sm"
+                  class="group/button inline-flex shrink-0 items-center justify-center border bg-clip-padding font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border-border bg-background shadow-xs hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 gap-1 rounded-[min(var(--radius-md),10px)] in-data-[slot=button-group]:rounded-md has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 h-7 px-2 font-mono text-xs"
+                  type="button"
+          >
+            Nome do titular
+          </button>
+          <button data-slot="button"
+                  data-variant="outline"
+                  data-size="sm"
+                  class="group/button inline-flex shrink-0 items-center justify-center border bg-clip-padding font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border-border bg-background shadow-xs hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 gap-1 rounded-[min(var(--radius-md),10px)] in-data-[slot=button-group]:rounded-md has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 h-7 px-2 font-mono text-xs"
+                  type="button"
+          >
+            Nº do processo
+          </button>
+          <button data-slot="button"
+                  data-variant="outline"
+                  data-size="sm"
+                  class="group/button inline-flex shrink-0 items-center justify-center border bg-clip-padding font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border-border bg-background shadow-xs hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 gap-1 rounded-[min(var(--radius-md),10px)] in-data-[slot=button-group]:rounded-md has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 h-7 px-2 font-mono text-xs"
+                  type="button"
+          >
+            Data de emissão
+          </button>
+        </div>
+      </div>
+    </div>
+    <p data-slot="field-description"
+       class="text-left text-sm leading-normal font-normal text-muted-foreground group-has-data-horizontal/field:text-balance [[data-variant=legend]+&amp;]:-mt-1.5 last:mt-0 nth-last-2:-mt-1 [&amp;&gt;a]:underline [&amp;&gt;a]:underline-offset-4 [&amp;&gt;a:hover]:text-primary"
+       id="_r_ID_-helper"
+    >
+      Use as variáveis para dados do processo.
+    </p>
+  </div>
+  <div class="rounded-lg border p-4">
+    <div class="flex flex-col gap-1">
+      <div id="_r_ID_"
+           class="relative"
+      >
+        <div class="text-sm leading-6 focus:outline-none [&amp;_h1]:text-2xl [&amp;_h2]:text-xl [&amp;_h3]:text-lg [&amp;_h1]:mt-4 [&amp;_h1]:mb-2 [&amp;_h2]:mt-4 [&amp;_h2]:mb-2 [&amp;_h3]:mt-3 [&amp;_h3]:mb-2 [&amp;_h1]:font-semibold [&amp;_h2]:font-semibold [&amp;_h3]:font-semibold [&amp;_h1]:leading-tight [&amp;_h2]:leading-tight [&amp;_p]:my-2 [&amp;_li&gt;p]:my-0.5 [&amp;_ul]:my-2 [&amp;_ul]:list-disc [&amp;_ul]:ps-6 [&amp;_ol]:my-2 [&amp;_ol]:list-decimal [&amp;_ol]:ps-6 [&amp;_li]:marker:text-muted-foreground [&amp;_blockquote]:my-2 [&amp;_blockquote]:border-s-2 [&amp;_blockquote]:border-border [&amp;_blockquote]:ps-4 [&amp;_blockquote]:italic [&amp;_a]:text-primary [&amp;_a]:underline [&amp;_a]:underline-offset-4 [&amp;_hr]:my-4 [&amp;_hr]:border-border [&amp;_mark]:bg-highlight [&amp;_mark]:text-highlight-foreground [&amp;_table]:my-3 [&amp;_table]:w-full [&amp;_table]:border-collapse [&amp;_th]:border [&amp;_th]:border-border [&amp;_th]:bg-muted [&amp;_th]:p-2 [&amp;_th]:text-start [&amp;_th]:font-semibold [&amp;_td]:border [&amp;_td]:border-border [&amp;_td]:p-2 [&amp;_:is(th,td)&gt;p]:my-0 [&amp;_.selectedCell]:bg-primary/10 [&amp;_.column-resize-handle]:w-0.5 [&amp;_.column-resize-handle]:bg-primary text-foreground">
+          <div contenteditable="false"
+               role="textbox"
+               translate="no"
+               class="tiptap ProseMirror"
+          >
+            <h2>
+              Notificação de deferimento
+            </h2>
+            <p>
+              Caro(a)
+              <strong>
+                {{nome_titular}}
+              </strong>
+              ,
+            </p>
+            <p>
+              Informamos que o processo
+              <em>
+                {{numero_processo}}
+              </em>
+              foi
+              <mark>
+                deferido
+              </mark>
+              .
+            </p>
+            <ul>
+              <li>
+                <p>
+                  Levante o alvará no balcão.
+                </p>
+              </li>
+              <li>
+                <p>
+                  Traga o documento de identificação.
+                </p>
+              </li>
+            </ul>
+            <blockquote>
+              <p>
+                Prazo de levantamento: 30 dias.
+              </p>
+            </blockquote>
+            <div class="tableWrapper">
+              <table style="min-width: 50px;">
+                <colgroup>
+                  <col style="min-width: 25px;">
+                  <col style="min-width: 25px;">
+                </colgroup>
+                <tbody>
+                  <tr>
+                    <th>
+                      <p>
+                        Taxa
+                      </p>
+                    </th>
+                    <th>
+                      <p>
+                        Valor
+                      </p>
+                    </th>
+                  </tr>
+                  <tr>
+                    <td>
+                      <p>
+                        Emissão
+                      </p>
+                    </td>
+                    <td>
+                      <p>
+                        1 500 CVE
+                      </p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p style="text-align: center;">
+              <span style="color: rgb(29, 78, 216);">
+                Mais informação em
+              </span>
+              <a target="_blank"
+                 rel="noopener noreferrer nofollow"
+                 href="https://igrp.cv"
+              >
+                igrp.cv
+              </a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Input/RichText EmailPreset smoke-test 1`] = `
+<div role="group"
+     data-slot="field"
+     data-orientation="vertical"
+     class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col *:w-full [&amp;&gt;.sr-only]:w-auto"
+>
+  <label data-slot="label"
+         class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+         for="_r_ID_"
+  >
+    Corpo de email
+  </label>
+  <div class="rounded-lg border bg-background shadow-xs focus-within:ring-[3px] focus-within:ring-ring/50">
+    <div role="toolbar"
+         aria-label="Formatação"
+         class="flex flex-wrap items-center gap-1 border-b bg-muted/30 p-1"
+    >
+      <span class="inline-flex cursor-not-allowed"
+            data-state="closed"
+            data-slot="tooltip-trigger"
+      >
+        <button type="button"
+                aria-pressed="false"
+                data-state="off"
+                data-disabled
+                data-slot="toggle"
+                class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+                aria-label="Desfazer"
+                disabled
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-undo"
+               aria-hidden="true"
+               id="_r_ID_"
+          >
+            <path d="M3 7v6h6">
+            </path>
+            <path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13">
+            </path>
+          </svg>
+        </button>
+      </span>
+      <span class="inline-flex cursor-not-allowed"
+            data-state="closed"
+            data-slot="tooltip-trigger"
+      >
+        <button type="button"
+                aria-pressed="false"
+                data-state="off"
+                data-disabled
+                data-slot="toggle"
+                class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+                aria-label="Refazer"
+                disabled
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-redo"
+               aria-hidden="true"
+               id="_r_ID_"
+          >
+            <path d="M21 7v6h-6">
+            </path>
+            <path d="M3 17a9 9 0 0 1 9-9 9 9 0 0 1 6 2.3l3 2.7">
+            </path>
+          </svg>
+        </button>
+      </span>
+      <div data-orientation="vertical"
+           role="none"
+           data-slot="separator"
+           class="shrink-0 bg-border data-vertical:w-px data-vertical:self-stretch data-horizontal:h-px data-horizontal:w-full mx-1 h-6"
+      >
+      </div>
+      <button type="button"
+              aria-pressed="false"
+              data-state="closed"
+              data-slot="tooltip-trigger"
+              class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+              aria-label="Negrito"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-bold"
+             aria-hidden="true"
+             id="_r_ID_"
+        >
+          <path d="M6 12h9a4 4 0 0 1 0 8H7a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h7a4 4 0 0 1 0 8">
+          </path>
+        </svg>
+      </button>
+      <button type="button"
+              aria-pressed="false"
+              data-state="closed"
+              data-slot="tooltip-trigger"
+              class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+              aria-label="Itálico"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-italic"
+             aria-hidden="true"
+             id="_r_ID_"
+        >
+          <line x1="19"
+                x2="10"
+                y1="4"
+                y2="4"
+          >
+          </line>
+          <line x1="14"
+                x2="5"
+                y1="20"
+                y2="20"
+          >
+          </line>
+          <line x1="15"
+                x2="9"
+                y1="4"
+                y2="20"
+          >
+          </line>
+        </svg>
+      </button>
+      <button type="button"
+              aria-pressed="false"
+              data-state="closed"
+              data-slot="tooltip-trigger"
+              class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+              aria-label="Sublinhado"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-underline"
+             aria-hidden="true"
+             id="_r_ID_"
+        >
+          <path d="M6 4v6a6 6 0 0 0 12 0V4">
+          </path>
+          <line x1="4"
+                x2="20"
+                y1="20"
+                y2="20"
+          >
+          </line>
+        </svg>
+      </button>
+      <button type="button"
+              aria-pressed="false"
+              data-state="closed"
+              data-slot="tooltip-trigger"
+              class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+              aria-label="Subscrito"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-subscript"
+             aria-hidden="true"
+             id="_r_ID_"
+        >
+          <path d="m4 5 8 8">
+          </path>
+          <path d="m12 5-8 8">
+          </path>
+          <path d="M20 19h-4c0-1.5.44-2 1.5-2.5S20 15.33 20 14c0-.47-.17-.93-.48-1.29a2.11 2.11 0 0 0-2.62-.44c-.42.24-.74.62-.9 1.07">
+          </path>
+        </svg>
+      </button>
+      <button type="button"
+              aria-pressed="false"
+              data-state="closed"
+              data-slot="tooltip-trigger"
+              class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+              aria-label="Sobrescrito"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-superscript"
+             aria-hidden="true"
+             id="_r_ID_"
+        >
+          <path d="m4 19 8-8">
+          </path>
+          <path d="m12 19-8-8">
+          </path>
+          <path d="M20 12h-4c0-1.5.442-2 1.5-2.5S20 8.334 20 7.002c0-.472-.17-.93-.484-1.29a2.105 2.105 0 0 0-2.617-.436c-.42.239-.738.614-.899 1.06">
+          </path>
+        </svg>
+      </button>
+      <button type="button"
+              aria-pressed="false"
+              data-state="closed"
+              data-slot="tooltip-trigger"
+              class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+              aria-label="Remover formatação"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-remove-formatting"
+             aria-hidden="true"
+             id="_r_ID_"
+        >
+          <path d="M4 7V4h16v3">
+          </path>
+          <path d="M5 20h6">
+          </path>
+          <path d="M13 4 8 20">
+          </path>
+          <path d="m15 15 5 5">
+          </path>
+          <path d="m20 15-5 5">
+          </path>
+        </svg>
+      </button>
+      <div data-orientation="vertical"
+           role="none"
+           data-slot="separator"
+           class="shrink-0 bg-border data-vertical:w-px data-vertical:self-stretch data-horizontal:h-px data-horizontal:w-full mx-1 h-6"
+      >
+      </div>
+      <button type="button"
+              aria-pressed="false"
+              data-state="closed"
+              data-slot="tooltip-trigger"
+              class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+              aria-label="Título 1"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-heading1 lucide-heading-1"
+             aria-hidden="true"
+             id="_r_ID_"
+        >
+          <path d="M4 12h8">
+          </path>
+          <path d="M4 18V6">
+          </path>
+          <path d="M12 18V6">
+          </path>
+          <path d="m17 12 3-2v8">
+          </path>
+        </svg>
+      </button>
+      <button type="button"
+              aria-pressed="false"
+              data-state="closed"
+              data-slot="tooltip-trigger"
+              class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+              aria-label="Título 2"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-heading2 lucide-heading-2"
+             aria-hidden="true"
+             id="_r_ID_"
+        >
+          <path d="M4 12h8">
+          </path>
+          <path d="M4 18V6">
+          </path>
+          <path d="M12 18V6">
+          </path>
+          <path d="M21 18h-4c0-4 4-3 4-6 0-1.5-2-2.5-4-1">
+          </path>
+        </svg>
+      </button>
+      <button type="button"
+              aria-pressed="false"
+              data-state="closed"
+              data-slot="tooltip-trigger"
+              class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+              aria-label="Título 3"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-heading3 lucide-heading-3"
+             aria-hidden="true"
+             id="_r_ID_"
+        >
+          <path d="M4 12h8">
+          </path>
+          <path d="M4 18V6">
+          </path>
+          <path d="M12 18V6">
+          </path>
+          <path d="M17.5 10.5c1.7-1 3.5 0 3.5 1.5a2 2 0 0 1-2 2">
+          </path>
+          <path d="M17 17.5c2 1.5 4 .3 4-1.5a2 2 0 0 0-2-2">
+          </path>
+        </svg>
+      </button>
+      <div data-orientation="vertical"
+           role="none"
+           data-slot="separator"
+           class="shrink-0 bg-border data-vertical:w-px data-vertical:self-stretch data-horizontal:h-px data-horizontal:w-full mx-1 h-6"
+      >
+      </div>
+      <button type="button"
+              aria-pressed="false"
+              data-state="closed"
+              data-slot="tooltip-trigger"
+              class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+              aria-label="Lista com marcas"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-list"
+             aria-hidden="true"
+             id="_r_ID_"
+        >
+          <path d="M3 5h.01">
+          </path>
+          <path d="M3 12h.01">
+          </path>
+          <path d="M3 19h.01">
+          </path>
+          <path d="M8 5h13">
+          </path>
+          <path d="M8 12h13">
+          </path>
+          <path d="M8 19h13">
+          </path>
+        </svg>
+      </button>
+      <button type="button"
+              aria-pressed="false"
+              data-state="closed"
+              data-slot="tooltip-trigger"
+              class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+              aria-label="Lista numerada"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-list-ordered"
+             aria-hidden="true"
+             id="_r_ID_"
+        >
+          <path d="M11 5h10">
+          </path>
+          <path d="M11 12h10">
+          </path>
+          <path d="M11 19h10">
+          </path>
+          <path d="M4 4h1v5">
+          </path>
+          <path d="M4 9h2">
+          </path>
+          <path d="M6.5 20H3.4c0-1 2.6-1.925 2.6-3.5a1.5 1.5 0 0 0-2.6-1.02">
+          </path>
+        </svg>
+      </button>
+      <button type="button"
+              aria-pressed="false"
+              data-state="closed"
+              data-slot="tooltip-trigger"
+              class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+              aria-label="Citação"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-quote"
+             aria-hidden="true"
+             id="_r_ID_"
+        >
+          <path d="M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z">
+          </path>
+          <path d="M5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z">
+          </path>
+        </svg>
+      </button>
+      <span class="inline-flex cursor-not-allowed"
+            data-state="closed"
+            data-slot="tooltip-trigger"
+      >
+        <button type="button"
+                aria-pressed="false"
+                data-state="off"
+                data-disabled
+                data-slot="toggle"
+                class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+                aria-label="Aumentar avanço"
+                disabled
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-list-indent-increase"
+               aria-hidden="true"
+               id="_r_ID_"
+          >
+            <path d="M21 5H11">
+            </path>
+            <path d="M21 12H11">
+            </path>
+            <path d="M21 19H11">
+            </path>
+            <path d="m3 8 4 4-4 4">
+            </path>
+          </svg>
+        </button>
+      </span>
+      <span class="inline-flex cursor-not-allowed"
+            data-state="closed"
+            data-slot="tooltip-trigger"
+      >
+        <button type="button"
+                aria-pressed="false"
+                data-state="off"
+                data-disabled
+                data-slot="toggle"
+                class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+                aria-label="Diminuir avanço"
+                disabled
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-list-indent-decrease"
+               aria-hidden="true"
+               id="_r_ID_"
+          >
+            <path d="M21 5H11">
+            </path>
+            <path d="M21 12H11">
+            </path>
+            <path d="M21 19H11">
+            </path>
+            <path d="m7 8-4 4 4 4">
+            </path>
+          </svg>
+        </button>
+      </span>
+      <div data-orientation="vertical"
+           role="none"
+           data-slot="separator"
+           class="shrink-0 bg-border data-vertical:w-px data-vertical:self-stretch data-horizontal:h-px data-horizontal:w-full mx-1 h-6"
+      >
+      </div>
+      <button type="button"
+              aria-pressed="false"
+              data-state="closed"
+              data-slot="tooltip-trigger"
+              class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+              aria-label="Inserir hiperligação"
+              aria-haspopup="dialog"
+              aria-expanded="false"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-link"
+             aria-hidden="true"
+             id="_r_ID_"
+        >
+          <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71">
+          </path>
+          <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71">
+          </path>
+        </svg>
+      </button>
+      <button type="button"
+              aria-pressed="false"
+              data-state="closed"
+              data-slot="tooltip-trigger"
+              class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+              aria-label="Tabela"
+              aria-haspopup="dialog"
+              aria-expanded="false"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-table"
+             aria-hidden="true"
+             id="_r_ID_"
+        >
+          <path d="M12 3v18">
+          </path>
+          <rect width="18"
+                height="18"
+                x="3"
+                y="3"
+                rx="2"
+          >
+          </rect>
+          <path d="M3 9h18">
+          </path>
+          <path d="M3 15h18">
+          </path>
+        </svg>
+      </button>
+      <button type="button"
+              aria-pressed="false"
+              data-state="closed"
+              data-slot="tooltip-trigger"
+              class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+              aria-label="Carácter especial"
+              aria-haspopup="dialog"
+              aria-expanded="false"
+      >
+        <span aria-hidden="true"
+              class="text-sm font-medium"
+        >
+          Ω
+        </span>
+      </button>
+    </div>
+    <div>
+      <div contenteditable="true"
+           role="textbox"
+           id="_r_ID_"
+           aria-multiline="true"
+           aria-label="Corpo de email"
+           translate="no"
+           class="tiptap ProseMirror text-sm leading-6 text-foreground focus:outline-none [&amp;_h1]:text-2xl [&amp;_h2]:text-xl [&amp;_h3]:text-lg [&amp;_h1]:mt-4 [&amp;_h1]:mb-2 [&amp;_h2]:mt-4 [&amp;_h2]:mb-2 [&amp;_h3]:mt-3 [&amp;_h3]:mb-2 [&amp;_h1]:font-semibold [&amp;_h2]:font-semibold [&amp;_h3]:font-semibold [&amp;_h1]:leading-tight [&amp;_h2]:leading-tight [&amp;_p]:my-2 [&amp;_li&gt;p]:my-0.5 [&amp;_ul]:my-2 [&amp;_ul]:list-disc [&amp;_ul]:ps-6 [&amp;_ol]:my-2 [&amp;_ol]:list-decimal [&amp;_ol]:ps-6 [&amp;_li]:marker:text-muted-foreground [&amp;_blockquote]:my-2 [&amp;_blockquote]:border-s-2 [&amp;_blockquote]:border-border [&amp;_blockquote]:ps-4 [&amp;_blockquote]:italic [&amp;_a]:text-primary [&amp;_a]:underline [&amp;_a]:underline-offset-4 [&amp;_hr]:my-4 [&amp;_hr]:border-border [&amp;_mark]:bg-highlight [&amp;_mark]:text-highlight-foreground [&amp;_table]:my-3 [&amp;_table]:w-full [&amp;_table]:border-collapse [&amp;_th]:border [&amp;_th]:border-border [&amp;_th]:bg-muted [&amp;_th]:p-2 [&amp;_th]:text-start [&amp;_th]:font-semibold [&amp;_td]:border [&amp;_td]:border-border [&amp;_td]:p-2 [&amp;_:is(th,td)&gt;p]:my-0 [&amp;_.selectedCell]:bg-primary/10 [&amp;_.column-resize-handle]:w-0.5 [&amp;_.column-resize-handle]:bg-primary [&amp;_.is-editor-empty:first-child]:before:pointer-events-none [&amp;_.is-editor-empty:first-child]:before:float-left [&amp;_.is-editor-empty:first-child]:before:h-0 [&amp;_.is-editor-empty:first-child]:before:text-muted-foreground [&amp;_.is-editor-empty:first-child]:before:content-[attr(data-placeholder)] min-h-50 p-4"
+           tabindex="0"
+      >
+        <p>
+          Caro(a) {{nome_titular}},
+        </p>
+      </div>
+    </div>
+    <div class="flex flex-col gap-2 border-t bg-muted/20 p-2">
+      <p class="text-xs text-muted-foreground">
+        Clique numa variável para a inserir na posição do cursor.
+      </p>
+      <div class="flex flex-wrap gap-1.5">
+        <button data-slot="button"
+                data-variant="outline"
+                data-size="sm"
+                class="group/button inline-flex shrink-0 items-center justify-center border bg-clip-padding font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border-border bg-background shadow-xs hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 gap-1 rounded-[min(var(--radius-md),10px)] in-data-[slot=button-group]:rounded-md has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 h-7 px-2 font-mono text-xs"
+                type="button"
+        >
+          Nome do titular
+        </button>
+        <button data-slot="button"
+                data-variant="outline"
+                data-size="sm"
+                class="group/button inline-flex shrink-0 items-center justify-center border bg-clip-padding font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border-border bg-background shadow-xs hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 gap-1 rounded-[min(var(--radius-md),10px)] in-data-[slot=button-group]:rounded-md has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 h-7 px-2 font-mono text-xs"
+                type="button"
+        >
+          Nº do processo
+        </button>
+        <button data-slot="button"
+                data-variant="outline"
+                data-size="sm"
+                class="group/button inline-flex shrink-0 items-center justify-center border bg-clip-padding font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border-border bg-background shadow-xs hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 gap-1 rounded-[min(var(--radius-md),10px)] in-data-[slot=button-group]:rounded-md has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 h-7 px-2 font-mono text-xs"
+                type="button"
+        >
+          Data de emissão
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Input/RichText ExplicitControls smoke-test 1`] = `
+<div role="group"
+     data-slot="field"
+     data-orientation="vertical"
+     class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col *:w-full [&amp;&gt;.sr-only]:w-auto"
+>
+  <label data-slot="label"
+         class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+         for="_r_ID_"
+  >
+    Observações
+  </label>
+  <div class="rounded-lg border bg-background shadow-xs focus-within:ring-[3px] focus-within:ring-ring/50">
+    <div role="toolbar"
+         aria-label="Formatação"
+         class="flex flex-wrap items-center gap-1 border-b bg-muted/30 p-1"
+    >
+      <button type="button"
+              aria-pressed="false"
+              data-state="closed"
+              data-slot="tooltip-trigger"
+              class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+              aria-label="Negrito"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-bold"
+             aria-hidden="true"
+             id="_r_ID_"
+        >
+          <path d="M6 12h9a4 4 0 0 1 0 8H7a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h7a4 4 0 0 1 0 8">
+          </path>
+        </svg>
+      </button>
+      <button type="button"
+              aria-pressed="false"
+              data-state="closed"
+              data-slot="tooltip-trigger"
+              class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+              aria-label="Itálico"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-italic"
+             aria-hidden="true"
+             id="_r_ID_"
+        >
+          <line x1="19"
+                x2="10"
+                y1="4"
+                y2="4"
+          >
+          </line>
+          <line x1="14"
+                x2="5"
+                y1="20"
+                y2="20"
+          >
+          </line>
+          <line x1="15"
+                x2="9"
+                y1="4"
+                y2="20"
+          >
+          </line>
+        </svg>
+      </button>
+      <div data-orientation="vertical"
+           role="none"
+           data-slot="separator"
+           class="shrink-0 bg-border data-vertical:w-px data-vertical:self-stretch data-horizontal:h-px data-horizontal:w-full mx-1 h-6"
+      >
+      </div>
+      <button type="button"
+              aria-pressed="false"
+              data-state="closed"
+              data-slot="tooltip-trigger"
+              class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+              aria-label="Inserir hiperligação"
+              aria-haspopup="dialog"
+              aria-expanded="false"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-link"
+             aria-hidden="true"
+             id="_r_ID_"
+        >
+          <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71">
+          </path>
+          <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71">
+          </path>
+        </svg>
+      </button>
+    </div>
+    <div>
+      <div contenteditable="true"
+           role="textbox"
+           id="_r_ID_"
+           aria-multiline="true"
+           aria-label="Observações"
+           translate="no"
+           class="tiptap ProseMirror text-sm leading-6 text-foreground focus:outline-none [&amp;_h1]:text-2xl [&amp;_h2]:text-xl [&amp;_h3]:text-lg [&amp;_h1]:mt-4 [&amp;_h1]:mb-2 [&amp;_h2]:mt-4 [&amp;_h2]:mb-2 [&amp;_h3]:mt-3 [&amp;_h3]:mb-2 [&amp;_h1]:font-semibold [&amp;_h2]:font-semibold [&amp;_h3]:font-semibold [&amp;_h1]:leading-tight [&amp;_h2]:leading-tight [&amp;_p]:my-2 [&amp;_li&gt;p]:my-0.5 [&amp;_ul]:my-2 [&amp;_ul]:list-disc [&amp;_ul]:ps-6 [&amp;_ol]:my-2 [&amp;_ol]:list-decimal [&amp;_ol]:ps-6 [&amp;_li]:marker:text-muted-foreground [&amp;_blockquote]:my-2 [&amp;_blockquote]:border-s-2 [&amp;_blockquote]:border-border [&amp;_blockquote]:ps-4 [&amp;_blockquote]:italic [&amp;_a]:text-primary [&amp;_a]:underline [&amp;_a]:underline-offset-4 [&amp;_hr]:my-4 [&amp;_hr]:border-border [&amp;_mark]:bg-highlight [&amp;_mark]:text-highlight-foreground [&amp;_table]:my-3 [&amp;_table]:w-full [&amp;_table]:border-collapse [&amp;_th]:border [&amp;_th]:border-border [&amp;_th]:bg-muted [&amp;_th]:p-2 [&amp;_th]:text-start [&amp;_th]:font-semibold [&amp;_td]:border [&amp;_td]:border-border [&amp;_td]:p-2 [&amp;_:is(th,td)&gt;p]:my-0 [&amp;_.selectedCell]:bg-primary/10 [&amp;_.column-resize-handle]:w-0.5 [&amp;_.column-resize-handle]:bg-primary [&amp;_.is-editor-empty:first-child]:before:pointer-events-none [&amp;_.is-editor-empty:first-child]:before:float-left [&amp;_.is-editor-empty:first-child]:before:h-0 [&amp;_.is-editor-empty:first-child]:before:text-muted-foreground [&amp;_.is-editor-empty:first-child]:before:content-[attr(data-placeholder)] min-h-50 p-4"
+           tabindex="0"
+      >
+        <p>
+          Só negrito, itálico e ligações.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Input/RichText FormBound smoke-test 1`] = `
+<form novalidate
+      id="_r_ID_"
+>
+  <fieldset data-slot="field-set"
+            class="flex flex-col has-[&gt;[data-slot=checkbox-group]]:gap-3 has-[&gt;[data-slot=radio-group]]:gap-3 m-0 gap-0 border-0 p-0"
+  >
+    <div class="grid gap-4">
+      <div class="flex flex-col gap-4">
+        <div role="group"
+             data-slot="field"
+             data-orientation="vertical"
+             class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col *:w-full [&amp;&gt;.sr-only]:w-auto"
+        >
+          <label data-slot="label"
+                 class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 after:text-destructive after:content-['*'] gap-0.5"
+                 for="corpo"
+          >
+            Corpo de email
+          </label>
+          <div class="rounded-lg border bg-background shadow-xs focus-within:ring-[3px] focus-within:ring-ring/50">
+            <div role="toolbar"
+                 aria-label="Formatação"
+                 class="flex flex-wrap items-center gap-1 border-b bg-muted/30 p-1"
+            >
+              <span class="inline-flex cursor-not-allowed"
+                    data-state="closed"
+                    data-slot="tooltip-trigger"
+              >
+                <button type="button"
+                        aria-pressed="false"
+                        data-state="off"
+                        data-disabled
+                        data-slot="toggle"
+                        class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+                        aria-label="Desfazer"
+                        disabled
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg"
+                       width="16"
+                       height="16"
+                       viewbox="0 0 24 24"
+                       fill="none"
+                       stroke="currentColor"
+                       stroke-width="2"
+                       stroke-linecap="round"
+                       stroke-linejoin="round"
+                       class="lucide lucide-undo"
+                       aria-hidden="true"
+                       id="_r_ID_"
+                  >
+                    <path d="M3 7v6h6">
+                    </path>
+                    <path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13">
+                    </path>
+                  </svg>
+                </button>
+              </span>
+              <span class="inline-flex cursor-not-allowed"
+                    data-state="closed"
+                    data-slot="tooltip-trigger"
+              >
+                <button type="button"
+                        aria-pressed="false"
+                        data-state="off"
+                        data-disabled
+                        data-slot="toggle"
+                        class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+                        aria-label="Refazer"
+                        disabled
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg"
+                       width="16"
+                       height="16"
+                       viewbox="0 0 24 24"
+                       fill="none"
+                       stroke="currentColor"
+                       stroke-width="2"
+                       stroke-linecap="round"
+                       stroke-linejoin="round"
+                       class="lucide lucide-redo"
+                       aria-hidden="true"
+                       id="_r_ID_"
+                  >
+                    <path d="M21 7v6h-6">
+                    </path>
+                    <path d="M3 17a9 9 0 0 1 9-9 9 9 0 0 1 6 2.3l3 2.7">
+                    </path>
+                  </svg>
+                </button>
+              </span>
+              <div data-orientation="vertical"
+                   role="none"
+                   data-slot="separator"
+                   class="shrink-0 bg-border data-vertical:w-px data-vertical:self-stretch data-horizontal:h-px data-horizontal:w-full mx-1 h-6"
+              >
+              </div>
+              <button type="button"
+                      aria-pressed="false"
+                      data-state="closed"
+                      data-slot="tooltip-trigger"
+                      class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+                      aria-label="Negrito"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="16"
+                     height="16"
+                     viewbox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     class="lucide lucide-bold"
+                     aria-hidden="true"
+                     id="_r_ID_"
+                >
+                  <path d="M6 12h9a4 4 0 0 1 0 8H7a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h7a4 4 0 0 1 0 8">
+                  </path>
+                </svg>
+              </button>
+              <button type="button"
+                      aria-pressed="false"
+                      data-state="closed"
+                      data-slot="tooltip-trigger"
+                      class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+                      aria-label="Itálico"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="16"
+                     height="16"
+                     viewbox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     class="lucide lucide-italic"
+                     aria-hidden="true"
+                     id="_r_ID_"
+                >
+                  <line x1="19"
+                        x2="10"
+                        y1="4"
+                        y2="4"
+                  >
+                  </line>
+                  <line x1="14"
+                        x2="5"
+                        y1="20"
+                        y2="20"
+                  >
+                  </line>
+                  <line x1="15"
+                        x2="9"
+                        y1="4"
+                        y2="20"
+                  >
+                  </line>
+                </svg>
+              </button>
+              <button type="button"
+                      aria-pressed="false"
+                      data-state="closed"
+                      data-slot="tooltip-trigger"
+                      class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+                      aria-label="Sublinhado"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="16"
+                     height="16"
+                     viewbox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     class="lucide lucide-underline"
+                     aria-hidden="true"
+                     id="_r_ID_"
+                >
+                  <path d="M6 4v6a6 6 0 0 0 12 0V4">
+                  </path>
+                  <line x1="4"
+                        x2="20"
+                        y1="20"
+                        y2="20"
+                  >
+                  </line>
+                </svg>
+              </button>
+              <button type="button"
+                      aria-pressed="false"
+                      data-state="closed"
+                      data-slot="tooltip-trigger"
+                      class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+                      aria-label="Subscrito"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="16"
+                     height="16"
+                     viewbox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     class="lucide lucide-subscript"
+                     aria-hidden="true"
+                     id="_r_ID_"
+                >
+                  <path d="m4 5 8 8">
+                  </path>
+                  <path d="m12 5-8 8">
+                  </path>
+                  <path d="M20 19h-4c0-1.5.44-2 1.5-2.5S20 15.33 20 14c0-.47-.17-.93-.48-1.29a2.11 2.11 0 0 0-2.62-.44c-.42.24-.74.62-.9 1.07">
+                  </path>
+                </svg>
+              </button>
+              <button type="button"
+                      aria-pressed="false"
+                      data-state="closed"
+                      data-slot="tooltip-trigger"
+                      class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+                      aria-label="Sobrescrito"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="16"
+                     height="16"
+                     viewbox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     class="lucide lucide-superscript"
+                     aria-hidden="true"
+                     id="_r_ID_"
+                >
+                  <path d="m4 19 8-8">
+                  </path>
+                  <path d="m12 19-8-8">
+                  </path>
+                  <path d="M20 12h-4c0-1.5.442-2 1.5-2.5S20 8.334 20 7.002c0-.472-.17-.93-.484-1.29a2.105 2.105 0 0 0-2.617-.436c-.42.239-.738.614-.899 1.06">
+                  </path>
+                </svg>
+              </button>
+              <button type="button"
+                      aria-pressed="false"
+                      data-state="closed"
+                      data-slot="tooltip-trigger"
+                      class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+                      aria-label="Remover formatação"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="16"
+                     height="16"
+                     viewbox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     class="lucide lucide-remove-formatting"
+                     aria-hidden="true"
+                     id="_r_ID_"
+                >
+                  <path d="M4 7V4h16v3">
+                  </path>
+                  <path d="M5 20h6">
+                  </path>
+                  <path d="M13 4 8 20">
+                  </path>
+                  <path d="m15 15 5 5">
+                  </path>
+                  <path d="m20 15-5 5">
+                  </path>
+                </svg>
+              </button>
+              <div data-orientation="vertical"
+                   role="none"
+                   data-slot="separator"
+                   class="shrink-0 bg-border data-vertical:w-px data-vertical:self-stretch data-horizontal:h-px data-horizontal:w-full mx-1 h-6"
+              >
+              </div>
+              <button type="button"
+                      aria-pressed="false"
+                      data-state="closed"
+                      data-slot="tooltip-trigger"
+                      class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+                      aria-label="Título 1"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="16"
+                     height="16"
+                     viewbox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     class="lucide lucide-heading1 lucide-heading-1"
+                     aria-hidden="true"
+                     id="_r_ID_"
+                >
+                  <path d="M4 12h8">
+                  </path>
+                  <path d="M4 18V6">
+                  </path>
+                  <path d="M12 18V6">
+                  </path>
+                  <path d="m17 12 3-2v8">
+                  </path>
+                </svg>
+              </button>
+              <button type="button"
+                      aria-pressed="false"
+                      data-state="closed"
+                      data-slot="tooltip-trigger"
+                      class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+                      aria-label="Título 2"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="16"
+                     height="16"
+                     viewbox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     class="lucide lucide-heading2 lucide-heading-2"
+                     aria-hidden="true"
+                     id="_r_ID_"
+                >
+                  <path d="M4 12h8">
+                  </path>
+                  <path d="M4 18V6">
+                  </path>
+                  <path d="M12 18V6">
+                  </path>
+                  <path d="M21 18h-4c0-4 4-3 4-6 0-1.5-2-2.5-4-1">
+                  </path>
+                </svg>
+              </button>
+              <button type="button"
+                      aria-pressed="false"
+                      data-state="closed"
+                      data-slot="tooltip-trigger"
+                      class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+                      aria-label="Título 3"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="16"
+                     height="16"
+                     viewbox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     class="lucide lucide-heading3 lucide-heading-3"
+                     aria-hidden="true"
+                     id="_r_ID_"
+                >
+                  <path d="M4 12h8">
+                  </path>
+                  <path d="M4 18V6">
+                  </path>
+                  <path d="M12 18V6">
+                  </path>
+                  <path d="M17.5 10.5c1.7-1 3.5 0 3.5 1.5a2 2 0 0 1-2 2">
+                  </path>
+                  <path d="M17 17.5c2 1.5 4 .3 4-1.5a2 2 0 0 0-2-2">
+                  </path>
+                </svg>
+              </button>
+              <div data-orientation="vertical"
+                   role="none"
+                   data-slot="separator"
+                   class="shrink-0 bg-border data-vertical:w-px data-vertical:self-stretch data-horizontal:h-px data-horizontal:w-full mx-1 h-6"
+              >
+              </div>
+              <button type="button"
+                      aria-pressed="false"
+                      data-state="closed"
+                      data-slot="tooltip-trigger"
+                      class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+                      aria-label="Lista com marcas"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="16"
+                     height="16"
+                     viewbox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     class="lucide lucide-list"
+                     aria-hidden="true"
+                     id="_r_ID_"
+                >
+                  <path d="M3 5h.01">
+                  </path>
+                  <path d="M3 12h.01">
+                  </path>
+                  <path d="M3 19h.01">
+                  </path>
+                  <path d="M8 5h13">
+                  </path>
+                  <path d="M8 12h13">
+                  </path>
+                  <path d="M8 19h13">
+                  </path>
+                </svg>
+              </button>
+              <button type="button"
+                      aria-pressed="false"
+                      data-state="closed"
+                      data-slot="tooltip-trigger"
+                      class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+                      aria-label="Lista numerada"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="16"
+                     height="16"
+                     viewbox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     class="lucide lucide-list-ordered"
+                     aria-hidden="true"
+                     id="_r_ID_"
+                >
+                  <path d="M11 5h10">
+                  </path>
+                  <path d="M11 12h10">
+                  </path>
+                  <path d="M11 19h10">
+                  </path>
+                  <path d="M4 4h1v5">
+                  </path>
+                  <path d="M4 9h2">
+                  </path>
+                  <path d="M6.5 20H3.4c0-1 2.6-1.925 2.6-3.5a1.5 1.5 0 0 0-2.6-1.02">
+                  </path>
+                </svg>
+              </button>
+              <button type="button"
+                      aria-pressed="false"
+                      data-state="closed"
+                      data-slot="tooltip-trigger"
+                      class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+                      aria-label="Citação"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="16"
+                     height="16"
+                     viewbox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     class="lucide lucide-quote"
+                     aria-hidden="true"
+                     id="_r_ID_"
+                >
+                  <path d="M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z">
+                  </path>
+                  <path d="M5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z">
+                  </path>
+                </svg>
+              </button>
+              <span class="inline-flex cursor-not-allowed"
+                    data-state="closed"
+                    data-slot="tooltip-trigger"
+              >
+                <button type="button"
+                        aria-pressed="false"
+                        data-state="off"
+                        data-disabled
+                        data-slot="toggle"
+                        class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+                        aria-label="Aumentar avanço"
+                        disabled
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg"
+                       width="16"
+                       height="16"
+                       viewbox="0 0 24 24"
+                       fill="none"
+                       stroke="currentColor"
+                       stroke-width="2"
+                       stroke-linecap="round"
+                       stroke-linejoin="round"
+                       class="lucide lucide-list-indent-increase"
+                       aria-hidden="true"
+                       id="_r_ID_"
+                  >
+                    <path d="M21 5H11">
+                    </path>
+                    <path d="M21 12H11">
+                    </path>
+                    <path d="M21 19H11">
+                    </path>
+                    <path d="m3 8 4 4-4 4">
+                    </path>
+                  </svg>
+                </button>
+              </span>
+              <span class="inline-flex cursor-not-allowed"
+                    data-state="closed"
+                    data-slot="tooltip-trigger"
+              >
+                <button type="button"
+                        aria-pressed="false"
+                        data-state="off"
+                        data-disabled
+                        data-slot="toggle"
+                        class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+                        aria-label="Diminuir avanço"
+                        disabled
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg"
+                       width="16"
+                       height="16"
+                       viewbox="0 0 24 24"
+                       fill="none"
+                       stroke="currentColor"
+                       stroke-width="2"
+                       stroke-linecap="round"
+                       stroke-linejoin="round"
+                       class="lucide lucide-list-indent-decrease"
+                       aria-hidden="true"
+                       id="_r_ID_"
+                  >
+                    <path d="M21 5H11">
+                    </path>
+                    <path d="M21 12H11">
+                    </path>
+                    <path d="M21 19H11">
+                    </path>
+                    <path d="m7 8-4 4 4 4">
+                    </path>
+                  </svg>
+                </button>
+              </span>
+              <div data-orientation="vertical"
+                   role="none"
+                   data-slot="separator"
+                   class="shrink-0 bg-border data-vertical:w-px data-vertical:self-stretch data-horizontal:h-px data-horizontal:w-full mx-1 h-6"
+              >
+              </div>
+              <button type="button"
+                      aria-pressed="false"
+                      data-state="closed"
+                      data-slot="tooltip-trigger"
+                      class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+                      aria-label="Inserir hiperligação"
+                      aria-haspopup="dialog"
+                      aria-expanded="false"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="16"
+                     height="16"
+                     viewbox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     class="lucide lucide-link"
+                     aria-hidden="true"
+                     id="_r_ID_"
+                >
+                  <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71">
+                  </path>
+                  <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71">
+                  </path>
+                </svg>
+              </button>
+              <button type="button"
+                      aria-pressed="false"
+                      data-state="closed"
+                      data-slot="tooltip-trigger"
+                      class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+                      aria-label="Tabela"
+                      aria-haspopup="dialog"
+                      aria-expanded="false"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="16"
+                     height="16"
+                     viewbox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     class="lucide lucide-table"
+                     aria-hidden="true"
+                     id="_r_ID_"
+                >
+                  <path d="M12 3v18">
+                  </path>
+                  <rect width="18"
+                        height="18"
+                        x="3"
+                        y="3"
+                        rx="2"
+                  >
+                  </rect>
+                  <path d="M3 9h18">
+                  </path>
+                  <path d="M3 15h18">
+                  </path>
+                </svg>
+              </button>
+              <button type="button"
+                      aria-pressed="false"
+                      data-state="closed"
+                      data-slot="tooltip-trigger"
+                      class="group/toggle inline-flex items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-transparent min-w-8 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 size-8 p-0"
+                      aria-label="Carácter especial"
+                      aria-haspopup="dialog"
+                      aria-expanded="false"
+              >
+                <span aria-hidden="true"
+                      class="text-sm font-medium"
+                >
+                  Ω
+                </span>
+              </button>
+            </div>
+            <div>
+              <div contenteditable="true"
+                   role="textbox"
+                   id="corpo"
+                   aria-multiline="true"
+                   aria-label="Corpo de email"
+                   aria-required="true"
+                   translate="no"
+                   class="tiptap ProseMirror text-sm leading-6 text-foreground focus:outline-none [&amp;_h1]:text-2xl [&amp;_h2]:text-xl [&amp;_h3]:text-lg [&amp;_h1]:mt-4 [&amp;_h1]:mb-2 [&amp;_h2]:mt-4 [&amp;_h2]:mb-2 [&amp;_h3]:mt-3 [&amp;_h3]:mb-2 [&amp;_h1]:font-semibold [&amp;_h2]:font-semibold [&amp;_h3]:font-semibold [&amp;_h1]:leading-tight [&amp;_h2]:leading-tight [&amp;_p]:my-2 [&amp;_li&gt;p]:my-0.5 [&amp;_ul]:my-2 [&amp;_ul]:list-disc [&amp;_ul]:ps-6 [&amp;_ol]:my-2 [&amp;_ol]:list-decimal [&amp;_ol]:ps-6 [&amp;_li]:marker:text-muted-foreground [&amp;_blockquote]:my-2 [&amp;_blockquote]:border-s-2 [&amp;_blockquote]:border-border [&amp;_blockquote]:ps-4 [&amp;_blockquote]:italic [&amp;_a]:text-primary [&amp;_a]:underline [&amp;_a]:underline-offset-4 [&amp;_hr]:my-4 [&amp;_hr]:border-border [&amp;_mark]:bg-highlight [&amp;_mark]:text-highlight-foreground [&amp;_table]:my-3 [&amp;_table]:w-full [&amp;_table]:border-collapse [&amp;_th]:border [&amp;_th]:border-border [&amp;_th]:bg-muted [&amp;_th]:p-2 [&amp;_th]:text-start [&amp;_th]:font-semibold [&amp;_td]:border [&amp;_td]:border-border [&amp;_td]:p-2 [&amp;_:is(th,td)&gt;p]:my-0 [&amp;_.selectedCell]:bg-primary/10 [&amp;_.column-resize-handle]:w-0.5 [&amp;_.column-resize-handle]:bg-primary [&amp;_.is-editor-empty:first-child]:before:pointer-events-none [&amp;_.is-editor-empty:first-child]:before:float-left [&amp;_.is-editor-empty:first-child]:before:h-0 [&amp;_.is-editor-empty:first-child]:before:text-muted-foreground [&amp;_.is-editor-empty:first-child]:before:content-[attr(data-placeholder)] min-h-50 p-4"
+                   tabindex="0"
+              >
+                <p data-placeholder="Comece a escrever aqui…"
+                   class="is-empty is-editor-empty"
+                >
+                  <br class="ProseMirror-trailingBreak">
+                </p>
+              </div>
+            </div>
+            <div class="flex flex-col gap-2 border-t bg-muted/20 p-2">
+              <p class="text-xs text-muted-foreground">
+                Clique numa variável para a inserir na posição do cursor.
+              </p>
+              <div class="flex flex-wrap gap-1.5">
+                <button data-slot="button"
+                        data-variant="outline"
+                        data-size="sm"
+                        class="group/button inline-flex shrink-0 items-center justify-center border bg-clip-padding font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border-border bg-background shadow-xs hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 gap-1 rounded-[min(var(--radius-md),10px)] in-data-[slot=button-group]:rounded-md has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 h-7 px-2 font-mono text-xs"
+                        type="button"
+                >
+                  Nome do titular
+                </button>
+                <button data-slot="button"
+                        data-variant="outline"
+                        data-size="sm"
+                        class="group/button inline-flex shrink-0 items-center justify-center border bg-clip-padding font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border-border bg-background shadow-xs hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 gap-1 rounded-[min(var(--radius-md),10px)] in-data-[slot=button-group]:rounded-md has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 h-7 px-2 font-mono text-xs"
+                        type="button"
+                >
+                  Nº do processo
+                </button>
+                <button data-slot="button"
+                        data-variant="outline"
+                        data-size="sm"
+                        class="group/button inline-flex shrink-0 items-center justify-center border bg-clip-padding font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border-border bg-background shadow-xs hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 gap-1 rounded-[min(var(--radius-md),10px)] in-data-[slot=button-group]:rounded-md has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 h-7 px-2 font-mono text-xs"
+                        type="button"
+                >
+                  Data de emissão
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="flex gap-2">
+          <button data-slot="button"
+                  data-variant="default"
+                  data-size="default"
+                  class="group/button inline-flex shrink-0 items-center justify-center rounded-md border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-primary text-primary-foreground hover:bg-primary/80 h-9 gap-1.5 px-2.5 in-data-[slot=button-group]:rounded-md has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 relative"
+                  type="submit"
+                  id="_r_ID_"
+          >
+            Guardar
+          </button>
+          <button data-slot="button"
+                  data-variant="outline"
+                  data-size="default"
+                  class="group/button inline-flex shrink-0 items-center justify-center rounded-md border bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border-border bg-background shadow-xs hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 h-9 gap-1.5 px-2.5 in-data-[slot=button-group]:rounded-md has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 relative"
+                  type="button"
+                  id="_r_ID_"
+          >
+            Só leitura
+          </button>
+        </div>
+      </div>
+    </div>
+  </fieldset>
+</form>
+`;
+
+exports[`Components/Input/RichText ViewAllowList smoke-test 1`] = `
+<div class="flex flex-col gap-1">
+  <div id="_r_ID_"
+       class="relative"
+  >
+    <div class="text-sm leading-6 focus:outline-none [&amp;_h1]:text-2xl [&amp;_h2]:text-xl [&amp;_h3]:text-lg [&amp;_h1]:mt-4 [&amp;_h1]:mb-2 [&amp;_h2]:mt-4 [&amp;_h2]:mb-2 [&amp;_h3]:mt-3 [&amp;_h3]:mb-2 [&amp;_h1]:font-semibold [&amp;_h2]:font-semibold [&amp;_h3]:font-semibold [&amp;_h1]:leading-tight [&amp;_h2]:leading-tight [&amp;_p]:my-2 [&amp;_li&gt;p]:my-0.5 [&amp;_ul]:my-2 [&amp;_ul]:list-disc [&amp;_ul]:ps-6 [&amp;_ol]:my-2 [&amp;_ol]:list-decimal [&amp;_ol]:ps-6 [&amp;_li]:marker:text-muted-foreground [&amp;_blockquote]:my-2 [&amp;_blockquote]:border-s-2 [&amp;_blockquote]:border-border [&amp;_blockquote]:ps-4 [&amp;_blockquote]:italic [&amp;_a]:text-primary [&amp;_a]:underline [&amp;_a]:underline-offset-4 [&amp;_hr]:my-4 [&amp;_hr]:border-border [&amp;_mark]:bg-highlight [&amp;_mark]:text-highlight-foreground [&amp;_table]:my-3 [&amp;_table]:w-full [&amp;_table]:border-collapse [&amp;_th]:border [&amp;_th]:border-border [&amp;_th]:bg-muted [&amp;_th]:p-2 [&amp;_th]:text-start [&amp;_th]:font-semibold [&amp;_td]:border [&amp;_td]:border-border [&amp;_td]:p-2 [&amp;_:is(th,td)&gt;p]:my-0 [&amp;_.selectedCell]:bg-primary/10 [&amp;_.column-resize-handle]:w-0.5 [&amp;_.column-resize-handle]:bg-primary text-foreground">
+      <div contenteditable="false"
+           role="textbox"
+           translate="no"
+           class="tiptap ProseMirror"
+      >
+        <p>
+          Texto seguro.
+        </p>
+        <p>
+          imagem removida
+        </p>
+        <p>
+          ligação neutralizada
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Input/RichText ViewEmpty smoke-test 1`] = `
+<p class="text-sm text-foreground">
+  —
+</p>
+`;
+
+exports[`Components/Input/RichText ViewMaxHeight smoke-test 1`] = `
+<div class="flex flex-col gap-1 max-w-xl">
+  <div id="_r_ID_"
+       class="relative overflow-hidden"
+       style="max-height: 160px;"
+  >
+    <div class="text-sm leading-6 focus:outline-none [&amp;_h1]:text-2xl [&amp;_h2]:text-xl [&amp;_h3]:text-lg [&amp;_h1]:mt-4 [&amp;_h1]:mb-2 [&amp;_h2]:mt-4 [&amp;_h2]:mb-2 [&amp;_h3]:mt-3 [&amp;_h3]:mb-2 [&amp;_h1]:font-semibold [&amp;_h2]:font-semibold [&amp;_h3]:font-semibold [&amp;_h1]:leading-tight [&amp;_h2]:leading-tight [&amp;_p]:my-2 [&amp;_li&gt;p]:my-0.5 [&amp;_ul]:my-2 [&amp;_ul]:list-disc [&amp;_ul]:ps-6 [&amp;_ol]:my-2 [&amp;_ol]:list-decimal [&amp;_ol]:ps-6 [&amp;_li]:marker:text-muted-foreground [&amp;_blockquote]:my-2 [&amp;_blockquote]:border-s-2 [&amp;_blockquote]:border-border [&amp;_blockquote]:ps-4 [&amp;_blockquote]:italic [&amp;_a]:text-primary [&amp;_a]:underline [&amp;_a]:underline-offset-4 [&amp;_hr]:my-4 [&amp;_hr]:border-border [&amp;_mark]:bg-highlight [&amp;_mark]:text-highlight-foreground [&amp;_table]:my-3 [&amp;_table]:w-full [&amp;_table]:border-collapse [&amp;_th]:border [&amp;_th]:border-border [&amp;_th]:bg-muted [&amp;_th]:p-2 [&amp;_th]:text-start [&amp;_th]:font-semibold [&amp;_td]:border [&amp;_td]:border-border [&amp;_td]:p-2 [&amp;_:is(th,td)&gt;p]:my-0 [&amp;_.selectedCell]:bg-primary/10 [&amp;_.column-resize-handle]:w-0.5 [&amp;_.column-resize-handle]:bg-primary text-foreground">
+      <div contenteditable="false"
+           role="textbox"
+           translate="no"
+           class="tiptap ProseMirror"
+      >
+        <h2>
+          Notificação de deferimento
+        </h2>
+        <p>
+          Caro(a)
+          <strong>
+            {{nome_titular}}
+          </strong>
+          ,
+        </p>
+        <p>
+          Informamos que o processo
+          <em>
+            {{numero_processo}}
+          </em>
+          foi
+          <mark>
+            deferido
+          </mark>
+          .
+        </p>
+        <ul>
+          <li>
+            <p>
+              Levante o alvará no balcão.
+            </p>
+          </li>
+          <li>
+            <p>
+              Traga o documento de identificação.
+            </p>
+          </li>
+        </ul>
+        <blockquote>
+          <p>
+            Prazo de levantamento: 30 dias.
+          </p>
+        </blockquote>
+        <div class="tableWrapper">
+          <table style="min-width: 50px;">
+            <colgroup>
+              <col style="min-width: 25px;">
+              <col style="min-width: 25px;">
+            </colgroup>
+            <tbody>
+              <tr>
+                <th>
+                  <p>
+                    Taxa
+                  </p>
+                </th>
+                <th>
+                  <p>
+                    Valor
+                  </p>
+                </th>
+              </tr>
+              <tr>
+                <td>
+                  <p>
+                    Emissão
+                  </p>
+                </td>
+                <td>
+                  <p>
+                    1 500 CVE
+                  </p>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="text-align: center;">
+          <span style="color: rgb(29, 78, 216);">
+            Mais informação em
+          </span>
+          <a target="_blank"
+             rel="noopener noreferrer nofollow"
+             href="https://igrp.cv"
+          >
+            igrp.cv
+          </a>
+        </p>
+        <h2>
+          Notificação de deferimento
+        </h2>
+        <p>
+          Caro(a)
+          <strong>
+            {{nome_titular}}
+          </strong>
+          ,
+        </p>
+        <p>
+          Informamos que o processo
+          <em>
+            {{numero_processo}}
+          </em>
+          foi
+          <mark>
+            deferido
+          </mark>
+          .
+        </p>
+        <ul>
+          <li>
+            <p>
+              Levante o alvará no balcão.
+            </p>
+          </li>
+          <li>
+            <p>
+              Traga o documento de identificação.
+            </p>
+          </li>
+        </ul>
+        <blockquote>
+          <p>
+            Prazo de levantamento: 30 dias.
+          </p>
+        </blockquote>
+        <div class="tableWrapper">
+          <table style="min-width: 50px;">
+            <colgroup>
+              <col style="min-width: 25px;">
+              <col style="min-width: 25px;">
+            </colgroup>
+            <tbody>
+              <tr>
+                <th>
+                  <p>
+                    Taxa
+                  </p>
+                </th>
+                <th>
+                  <p>
+                    Valor
+                  </p>
+                </th>
+              </tr>
+              <tr>
+                <td>
+                  <p>
+                    Emissão
+                  </p>
+                </td>
+                <td>
+                  <p>
+                    1 500 CVE
+                  </p>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="text-align: center;">
+          <span style="color: rgb(29, 78, 216);">
+            Mais informação em
+          </span>
+          <a target="_blank"
+             rel="noopener noreferrer nofollow"
+             href="https://igrp.cv"
+          >
+            igrp.cv
+          </a>
+        </p>
+      </div>
+    </div>
+    <div aria-hidden="true"
+         class="pointer-events-none absolute inset-x-0 bottom-0 h-8 bg-linear-to-t from-background to-transparent"
+    >
+    </div>
+  </div>
+  <button data-slot="button"
+          data-variant="link"
+          data-size="sm"
+          class="group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 text-primary underline-offset-4 hover:underline h-8 gap-1 rounded-[min(var(--radius-md),10px)] in-data-[slot=button-group]:rounded-md has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 self-start px-0"
+          type="button"
+          aria-expanded="false"
+          aria-controls="_r_ID_"
+  >
+    Ver mais
+  </button>
+</div>
+`;

@@ -6,7 +6,7 @@ exports[`Components/Input/Number Currency smoke-test 1`] = `
     <div role="group"
          data-slot="field"
          data-orientation="vertical"
-         class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto"
+         class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col *:w-full [&amp;&gt;.sr-only]:w-auto"
     >
       <label data-slot="label"
              class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
@@ -14,9 +14,9 @@ exports[`Components/Input/Number Currency smoke-test 1`] = `
       >
         Price
       </label>
-      <div class="border-input outline-none relative inline-flex h-10 w-full items-center overflow-hidden rounded-md border text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow]">
+      <div class="relative inline-flex h-10 w-full items-center overflow-hidden rounded-md border border-input text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none">
         <input data-slot="input"
-               class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 border text-base shadow-xs transition-[color,box-shadow] file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-background text-foreground flex-1 px-3 py-2 tabular-nums outline-none border-none focus-visible:outline-none focus-visible:ring-ring/0 focus-visible:ring-0 rounded-none"
+               class="h-9 w-full min-w-0 border-input selection:bg-primary selection:text-primary-foreground file:text-foreground placeholder:text-muted-foreground dark:bg-input/30 border text-base shadow-xs transition-[color,box-shadow] file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:border-ring disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 flex-1 rounded-none border-none bg-background px-3 py-2 text-foreground tabular-nums outline-none focus-visible:ring-0 focus-visible:ring-ring/0 focus-visible:outline-none"
                id="price"
                aria-invalid="false"
                aria-valuenow="49.99"
@@ -28,7 +28,9 @@ exports[`Components/Input/Number Currency smoke-test 1`] = `
         >
         <div class="flex h-full flex-col border-l">
           <button data-slot="button"
-                  class="gap-1.5 whitespace-nowrap text-sm font-medium disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive shadow-xs size-6 in-data-[slot=button-group]:rounded-lg [&amp;_svg:not([class*='size-'])]:size-3 bg-background text-muted-foreground hover:bg-accent hover:text-foreground flex h-1/2 w-8 items-center justify-center border-b transition-colors rounded-none"
+                  data-variant="default"
+                  data-size="icon-xs"
+                  class="group/button shrink-0 border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 size-6 in-data-[slot=button-group]:rounded-md [&amp;_svg:not([class*='size-'])]:size-3 flex h-1/2 w-8 items-center justify-center rounded-none border-b bg-background text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
                   type="button"
                   aria-label="Incrementar"
           >
@@ -49,7 +51,9 @@ exports[`Components/Input/Number Currency smoke-test 1`] = `
             </svg>
           </button>
           <button data-slot="button"
-                  class="gap-1.5 whitespace-nowrap font-medium disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive shadow-xs size-6 in-data-[slot=button-group]:rounded-lg [&amp;_svg:not([class*='size-'])]:size-3 bg-background text-muted-foreground/80 hover:bg-accent hover:text-foreground flex h-1/2 w-8 items-center justify-center text-xs transition-colors rounded-none"
+                  data-variant="default"
+                  data-size="icon-xs"
+                  class="group/button shrink-0 border border-transparent bg-clip-padding font-medium whitespace-nowrap outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 size-6 in-data-[slot=button-group]:rounded-md [&amp;_svg:not([class*='size-'])]:size-3 flex h-1/2 w-8 items-center justify-center rounded-none bg-background text-xs text-muted-foreground/80 transition-colors hover:bg-accent hover:text-foreground"
                   type="button"
                   aria-label="Decrementar"
           >
@@ -82,7 +86,7 @@ exports[`Components/Input/Number Decimals smoke-test 1`] = `
     <div role="group"
          data-slot="field"
          data-orientation="vertical"
-         class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto"
+         class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col *:w-full [&amp;&gt;.sr-only]:w-auto"
     >
       <label data-slot="label"
              class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
@@ -90,9 +94,9 @@ exports[`Components/Input/Number Decimals smoke-test 1`] = `
       >
         Weight (kg)
       </label>
-      <div class="border-input outline-none relative inline-flex h-10 w-full items-center overflow-hidden rounded-md border text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow]">
+      <div class="relative inline-flex h-10 w-full items-center overflow-hidden rounded-md border border-input text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none">
         <input data-slot="input"
-               class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 border text-base shadow-xs transition-[color,box-shadow] file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-background text-foreground flex-1 px-3 py-2 tabular-nums outline-none border-none focus-visible:outline-none focus-visible:ring-ring/0 focus-visible:ring-0 rounded-none"
+               class="h-9 w-full min-w-0 border-input selection:bg-primary selection:text-primary-foreground file:text-foreground placeholder:text-muted-foreground dark:bg-input/30 border text-base shadow-xs transition-[color,box-shadow] file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:border-ring disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 flex-1 rounded-none border-none bg-background px-3 py-2 text-foreground tabular-nums outline-none focus-visible:ring-0 focus-visible:ring-ring/0 focus-visible:outline-none"
                id="weight"
                aria-invalid="false"
                aria-valuenow="1.75"
@@ -105,7 +109,9 @@ exports[`Components/Input/Number Decimals smoke-test 1`] = `
         >
         <div class="flex h-full flex-col border-l">
           <button data-slot="button"
-                  class="gap-1.5 whitespace-nowrap text-sm font-medium disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive shadow-xs size-6 in-data-[slot=button-group]:rounded-lg [&amp;_svg:not([class*='size-'])]:size-3 bg-background text-muted-foreground hover:bg-accent hover:text-foreground flex h-1/2 w-8 items-center justify-center border-b transition-colors rounded-none"
+                  data-variant="default"
+                  data-size="icon-xs"
+                  class="group/button shrink-0 border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 size-6 in-data-[slot=button-group]:rounded-md [&amp;_svg:not([class*='size-'])]:size-3 flex h-1/2 w-8 items-center justify-center rounded-none border-b bg-background text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
                   type="button"
                   aria-label="Incrementar"
           >
@@ -126,7 +132,9 @@ exports[`Components/Input/Number Decimals smoke-test 1`] = `
             </svg>
           </button>
           <button data-slot="button"
-                  class="gap-1.5 whitespace-nowrap font-medium disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive shadow-xs size-6 in-data-[slot=button-group]:rounded-lg [&amp;_svg:not([class*='size-'])]:size-3 bg-background text-muted-foreground/80 hover:bg-accent hover:text-foreground flex h-1/2 w-8 items-center justify-center text-xs transition-colors rounded-none"
+                  data-variant="default"
+                  data-size="icon-xs"
+                  class="group/button shrink-0 border border-transparent bg-clip-padding font-medium whitespace-nowrap outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 size-6 in-data-[slot=button-group]:rounded-md [&amp;_svg:not([class*='size-'])]:size-3 flex h-1/2 w-8 items-center justify-center rounded-none bg-background text-xs text-muted-foreground/80 transition-colors hover:bg-accent hover:text-foreground"
                   type="button"
                   aria-label="Decrementar"
           >
@@ -150,7 +158,7 @@ exports[`Components/Input/Number Decimals smoke-test 1`] = `
       </div>
     </div>
     <p data-slot="field-description"
-       class="text-muted-foreground text-sm leading-normal font-normal group-has-data-[orientation=horizontal]/field:text-balance last:mt-0 nth-last-2:-mt-1 [[data-variant=legend]+&amp;]:-mt-1.5 [&amp;&gt;a:hover]:text-primary [&amp;&gt;a]:underline [&amp;&gt;a]:underline-offset-4"
+       class="text-left text-sm leading-normal font-normal text-muted-foreground group-has-data-horizontal/field:text-balance [[data-variant=legend]+&amp;]:-mt-1.5 last:mt-0 nth-last-2:-mt-1 [&amp;&gt;a]:underline [&amp;&gt;a]:underline-offset-4 [&amp;&gt;a:hover]:text-primary"
     >
       Type a decimal (3.14) or step in 0.25 increments
     </p>
@@ -164,7 +172,7 @@ exports[`Components/Input/Number DecimalsWithFixedPrecision smoke-test 1`] = `
     <div role="group"
          data-slot="field"
          data-orientation="vertical"
-         class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto"
+         class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col *:w-full [&amp;&gt;.sr-only]:w-auto"
     >
       <label data-slot="label"
              class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
@@ -172,9 +180,9 @@ exports[`Components/Input/Number DecimalsWithFixedPrecision smoke-test 1`] = `
       >
         Unit price
       </label>
-      <div class="border-input outline-none relative inline-flex h-10 w-full items-center overflow-hidden rounded-md border text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow]">
+      <div class="relative inline-flex h-10 w-full items-center overflow-hidden rounded-md border border-input text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none">
         <input data-slot="input"
-               class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 border text-base shadow-xs transition-[color,box-shadow] file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-background text-foreground flex-1 px-3 py-2 tabular-nums outline-none border-none focus-visible:outline-none focus-visible:ring-ring/0 focus-visible:ring-0 rounded-none"
+               class="h-9 w-full min-w-0 border-input selection:bg-primary selection:text-primary-foreground file:text-foreground placeholder:text-muted-foreground dark:bg-input/30 border text-base shadow-xs transition-[color,box-shadow] file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:border-ring disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 flex-1 rounded-none border-none bg-background px-3 py-2 text-foreground tabular-nums outline-none focus-visible:ring-0 focus-visible:ring-ring/0 focus-visible:outline-none"
                id="unitPrice"
                aria-invalid="false"
                aria-valuenow="12.5"
@@ -186,7 +194,9 @@ exports[`Components/Input/Number DecimalsWithFixedPrecision smoke-test 1`] = `
         >
         <div class="flex h-full flex-col border-l">
           <button data-slot="button"
-                  class="gap-1.5 whitespace-nowrap text-sm font-medium disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive shadow-xs size-6 in-data-[slot=button-group]:rounded-lg [&amp;_svg:not([class*='size-'])]:size-3 bg-background text-muted-foreground hover:bg-accent hover:text-foreground flex h-1/2 w-8 items-center justify-center border-b transition-colors rounded-none"
+                  data-variant="default"
+                  data-size="icon-xs"
+                  class="group/button shrink-0 border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 size-6 in-data-[slot=button-group]:rounded-md [&amp;_svg:not([class*='size-'])]:size-3 flex h-1/2 w-8 items-center justify-center rounded-none border-b bg-background text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
                   type="button"
                   aria-label="Incrementar"
           >
@@ -207,7 +217,9 @@ exports[`Components/Input/Number DecimalsWithFixedPrecision smoke-test 1`] = `
             </svg>
           </button>
           <button data-slot="button"
-                  class="gap-1.5 whitespace-nowrap font-medium disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive shadow-xs size-6 in-data-[slot=button-group]:rounded-lg [&amp;_svg:not([class*='size-'])]:size-3 bg-background text-muted-foreground/80 hover:bg-accent hover:text-foreground flex h-1/2 w-8 items-center justify-center text-xs transition-colors rounded-none"
+                  data-variant="default"
+                  data-size="icon-xs"
+                  class="group/button shrink-0 border border-transparent bg-clip-padding font-medium whitespace-nowrap outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 size-6 in-data-[slot=button-group]:rounded-md [&amp;_svg:not([class*='size-'])]:size-3 flex h-1/2 w-8 items-center justify-center rounded-none bg-background text-xs text-muted-foreground/80 transition-colors hover:bg-accent hover:text-foreground"
                   type="button"
                   aria-label="Decrementar"
           >
@@ -231,7 +243,7 @@ exports[`Components/Input/Number DecimalsWithFixedPrecision smoke-test 1`] = `
       </div>
     </div>
     <p data-slot="field-description"
-       class="text-muted-foreground text-sm leading-normal font-normal group-has-data-[orientation=horizontal]/field:text-balance last:mt-0 nth-last-2:-mt-1 [[data-variant=legend]+&amp;]:-mt-1.5 [&amp;&gt;a:hover]:text-primary [&amp;&gt;a]:underline [&amp;&gt;a]:underline-offset-4"
+       class="text-left text-sm leading-normal font-normal text-muted-foreground group-has-data-horizontal/field:text-balance [[data-variant=legend]+&amp;]:-mt-1.5 last:mt-0 nth-last-2:-mt-1 [&amp;&gt;a]:underline [&amp;&gt;a]:underline-offset-4 [&amp;&gt;a:hover]:text-primary"
     >
       Always shown with 2 decimal places
     </p>
@@ -245,7 +257,7 @@ exports[`Components/Input/Number Default smoke-test 1`] = `
     <div role="group"
          data-slot="field"
          data-orientation="vertical"
-         class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto"
+         class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col *:w-full [&amp;&gt;.sr-only]:w-auto"
     >
       <label data-slot="label"
              class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
@@ -253,9 +265,9 @@ exports[`Components/Input/Number Default smoke-test 1`] = `
       >
         Quantity
       </label>
-      <div class="border-input outline-none relative inline-flex h-10 w-full items-center overflow-hidden rounded-md border text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow]">
+      <div class="relative inline-flex h-10 w-full items-center overflow-hidden rounded-md border border-input text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none">
         <input data-slot="input"
-               class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 border text-base shadow-xs transition-[color,box-shadow] file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-background text-foreground flex-1 px-3 py-2 tabular-nums outline-none border-none focus-visible:outline-none focus-visible:ring-ring/0 focus-visible:ring-0 rounded-none"
+               class="h-9 w-full min-w-0 border-input selection:bg-primary selection:text-primary-foreground file:text-foreground placeholder:text-muted-foreground dark:bg-input/30 border text-base shadow-xs transition-[color,box-shadow] file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:border-ring disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 flex-1 rounded-none border-none bg-background px-3 py-2 text-foreground tabular-nums outline-none focus-visible:ring-0 focus-visible:ring-ring/0 focus-visible:outline-none"
                id="quantity"
                aria-invalid="false"
                aria-valuenow="0"
@@ -266,7 +278,9 @@ exports[`Components/Input/Number Default smoke-test 1`] = `
         >
         <div class="flex h-full flex-col border-l">
           <button data-slot="button"
-                  class="gap-1.5 whitespace-nowrap text-sm font-medium disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive shadow-xs size-6 in-data-[slot=button-group]:rounded-lg [&amp;_svg:not([class*='size-'])]:size-3 bg-background text-muted-foreground hover:bg-accent hover:text-foreground flex h-1/2 w-8 items-center justify-center border-b transition-colors rounded-none"
+                  data-variant="default"
+                  data-size="icon-xs"
+                  class="group/button shrink-0 border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 size-6 in-data-[slot=button-group]:rounded-md [&amp;_svg:not([class*='size-'])]:size-3 flex h-1/2 w-8 items-center justify-center rounded-none border-b bg-background text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
                   type="button"
                   aria-label="Incrementar"
           >
@@ -287,7 +301,9 @@ exports[`Components/Input/Number Default smoke-test 1`] = `
             </svg>
           </button>
           <button data-slot="button"
-                  class="gap-1.5 whitespace-nowrap font-medium disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive shadow-xs size-6 in-data-[slot=button-group]:rounded-lg [&amp;_svg:not([class*='size-'])]:size-3 bg-background text-muted-foreground/80 hover:bg-accent hover:text-foreground flex h-1/2 w-8 items-center justify-center text-xs transition-colors rounded-none"
+                  data-variant="default"
+                  data-size="icon-xs"
+                  class="group/button shrink-0 border border-transparent bg-clip-padding font-medium whitespace-nowrap outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 size-6 in-data-[slot=button-group]:rounded-md [&amp;_svg:not([class*='size-'])]:size-3 flex h-1/2 w-8 items-center justify-center rounded-none bg-background text-xs text-muted-foreground/80 transition-colors hover:bg-accent hover:text-foreground"
                   type="button"
                   aria-label="Decrementar"
           >
@@ -320,7 +336,7 @@ exports[`Components/Input/Number Disabled smoke-test 1`] = `
     <div role="group"
          data-slot="field"
          data-orientation="vertical"
-         class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto"
+         class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col *:w-full [&amp;&gt;.sr-only]:w-auto"
     >
       <label data-slot="label"
              class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
@@ -328,9 +344,9 @@ exports[`Components/Input/Number Disabled smoke-test 1`] = `
       >
         Disabled Input
       </label>
-      <div class="border-input outline-none relative inline-flex h-10 w-full items-center overflow-hidden rounded-md border text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] opacity-50">
+      <div class="relative inline-flex h-10 w-full items-center overflow-hidden rounded-md border border-input text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none opacity-50">
         <input data-slot="input"
-               class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 border text-base shadow-xs transition-[color,box-shadow] file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-background text-foreground flex-1 px-3 py-2 tabular-nums outline-none border-none focus-visible:outline-none focus-visible:ring-ring/0 focus-visible:ring-0 rounded-none"
+               class="h-9 w-full min-w-0 border-input selection:bg-primary selection:text-primary-foreground file:text-foreground placeholder:text-muted-foreground dark:bg-input/30 border text-base shadow-xs transition-[color,box-shadow] file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:border-ring disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 flex-1 rounded-none border-none bg-background px-3 py-2 text-foreground tabular-nums outline-none focus-visible:ring-0 focus-visible:ring-ring/0 focus-visible:outline-none"
                id="disabledValue"
                disabled
                aria-invalid="false"
@@ -342,7 +358,9 @@ exports[`Components/Input/Number Disabled smoke-test 1`] = `
         >
         <div class="flex h-full flex-col border-l">
           <button data-slot="button"
-                  class="gap-1.5 whitespace-nowrap text-sm font-medium disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive shadow-xs size-6 in-data-[slot=button-group]:rounded-lg [&amp;_svg:not([class*='size-'])]:size-3 bg-background text-muted-foreground hover:bg-accent hover:text-foreground flex h-1/2 w-8 items-center justify-center border-b transition-colors rounded-none"
+                  data-variant="default"
+                  data-size="icon-xs"
+                  class="group/button shrink-0 border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 size-6 in-data-[slot=button-group]:rounded-md [&amp;_svg:not([class*='size-'])]:size-3 flex h-1/2 w-8 items-center justify-center rounded-none border-b bg-background text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
                   type="button"
                   disabled
                   aria-label="Incrementar"
@@ -364,7 +382,9 @@ exports[`Components/Input/Number Disabled smoke-test 1`] = `
             </svg>
           </button>
           <button data-slot="button"
-                  class="gap-1.5 whitespace-nowrap font-medium disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive shadow-xs size-6 in-data-[slot=button-group]:rounded-lg [&amp;_svg:not([class*='size-'])]:size-3 bg-background text-muted-foreground/80 hover:bg-accent hover:text-foreground flex h-1/2 w-8 items-center justify-center text-xs transition-colors rounded-none"
+                  data-variant="default"
+                  data-size="icon-xs"
+                  class="group/button shrink-0 border border-transparent bg-clip-padding font-medium whitespace-nowrap outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 size-6 in-data-[slot=button-group]:rounded-md [&amp;_svg:not([class*='size-'])]:size-3 flex h-1/2 w-8 items-center justify-center rounded-none bg-background text-xs text-muted-foreground/80 transition-colors hover:bg-accent hover:text-foreground"
                   type="button"
                   disabled
                   aria-label="Decrementar"
@@ -398,7 +418,7 @@ exports[`Components/Input/Number Percentage smoke-test 1`] = `
     <div role="group"
          data-slot="field"
          data-orientation="vertical"
-         class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto"
+         class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col *:w-full [&amp;&gt;.sr-only]:w-auto"
     >
       <label data-slot="label"
              class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
@@ -406,9 +426,9 @@ exports[`Components/Input/Number Percentage smoke-test 1`] = `
       >
         Discount
       </label>
-      <div class="border-input outline-none relative inline-flex h-10 w-full items-center overflow-hidden rounded-md border text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow]">
+      <div class="relative inline-flex h-10 w-full items-center overflow-hidden rounded-md border border-input text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none">
         <input data-slot="input"
-               class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 border text-base shadow-xs transition-[color,box-shadow] file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-background text-foreground flex-1 px-3 py-2 tabular-nums outline-none border-none focus-visible:outline-none focus-visible:ring-ring/0 focus-visible:ring-0 rounded-none"
+               class="h-9 w-full min-w-0 border-input selection:bg-primary selection:text-primary-foreground file:text-foreground placeholder:text-muted-foreground dark:bg-input/30 border text-base shadow-xs transition-[color,box-shadow] file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:border-ring disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 flex-1 rounded-none border-none bg-background px-3 py-2 text-foreground tabular-nums outline-none focus-visible:ring-0 focus-visible:ring-ring/0 focus-visible:outline-none"
                id="discount"
                aria-invalid="false"
                aria-valuenow="0.25"
@@ -421,7 +441,9 @@ exports[`Components/Input/Number Percentage smoke-test 1`] = `
         >
         <div class="flex h-full flex-col border-l">
           <button data-slot="button"
-                  class="gap-1.5 whitespace-nowrap text-sm font-medium disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive shadow-xs size-6 in-data-[slot=button-group]:rounded-lg [&amp;_svg:not([class*='size-'])]:size-3 bg-background text-muted-foreground hover:bg-accent hover:text-foreground flex h-1/2 w-8 items-center justify-center border-b transition-colors rounded-none"
+                  data-variant="default"
+                  data-size="icon-xs"
+                  class="group/button shrink-0 border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 size-6 in-data-[slot=button-group]:rounded-md [&amp;_svg:not([class*='size-'])]:size-3 flex h-1/2 w-8 items-center justify-center rounded-none border-b bg-background text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
                   type="button"
                   aria-label="Incrementar"
           >
@@ -442,7 +464,9 @@ exports[`Components/Input/Number Percentage smoke-test 1`] = `
             </svg>
           </button>
           <button data-slot="button"
-                  class="gap-1.5 whitespace-nowrap font-medium disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive shadow-xs size-6 in-data-[slot=button-group]:rounded-lg [&amp;_svg:not([class*='size-'])]:size-3 bg-background text-muted-foreground/80 hover:bg-accent hover:text-foreground flex h-1/2 w-8 items-center justify-center text-xs transition-colors rounded-none"
+                  data-variant="default"
+                  data-size="icon-xs"
+                  class="group/button shrink-0 border border-transparent bg-clip-padding font-medium whitespace-nowrap outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 size-6 in-data-[slot=button-group]:rounded-md [&amp;_svg:not([class*='size-'])]:size-3 flex h-1/2 w-8 items-center justify-center rounded-none bg-background text-xs text-muted-foreground/80 transition-colors hover:bg-accent hover:text-foreground"
                   type="button"
                   aria-label="Decrementar"
           >
@@ -475,7 +499,7 @@ exports[`Components/Input/Number ReadOnly smoke-test 1`] = `
     <div role="group"
          data-slot="field"
          data-orientation="vertical"
-         class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto"
+         class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col *:w-full [&amp;&gt;.sr-only]:w-auto"
     >
       <label data-slot="label"
              class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
@@ -483,9 +507,9 @@ exports[`Components/Input/Number ReadOnly smoke-test 1`] = `
       >
         Fixed Value
       </label>
-      <div class="border-input outline-none relative inline-flex h-10 w-full items-center overflow-hidden rounded-md border text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow]">
+      <div class="relative inline-flex h-10 w-full items-center overflow-hidden rounded-md border border-input text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none">
         <input data-slot="input"
-               class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 border text-base shadow-xs transition-[color,box-shadow] file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-background text-foreground flex-1 px-3 py-2 tabular-nums outline-none border-none focus-visible:outline-none focus-visible:ring-ring/0 focus-visible:ring-0 rounded-none"
+               class="h-9 w-full min-w-0 border-input selection:bg-primary selection:text-primary-foreground file:text-foreground placeholder:text-muted-foreground dark:bg-input/30 border text-base shadow-xs transition-[color,box-shadow] file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:border-ring disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 flex-1 rounded-none border-none bg-background px-3 py-2 text-foreground tabular-nums outline-none focus-visible:ring-0 focus-visible:ring-ring/0 focus-visible:outline-none"
                id="readOnlyValue"
                readonly
                aria-invalid="false"
@@ -507,7 +531,7 @@ exports[`Components/Input/Number WithCustomSteps smoke-test 1`] = `
     <div role="group"
          data-slot="field"
          data-orientation="vertical"
-         class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto"
+         class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col *:w-full [&amp;&gt;.sr-only]:w-auto"
     >
       <label data-slot="label"
              class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
@@ -515,9 +539,9 @@ exports[`Components/Input/Number WithCustomSteps smoke-test 1`] = `
       >
         Temperature
       </label>
-      <div class="border-input outline-none relative inline-flex h-10 w-full items-center overflow-hidden rounded-md border text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow]">
+      <div class="relative inline-flex h-10 w-full items-center overflow-hidden rounded-md border border-input text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none">
         <input data-slot="input"
-               class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 border text-base shadow-xs transition-[color,box-shadow] file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-background text-foreground flex-1 px-3 py-2 tabular-nums outline-none border-none focus-visible:outline-none focus-visible:ring-ring/0 focus-visible:ring-0 rounded-none"
+               class="h-9 w-full min-w-0 border-input selection:bg-primary selection:text-primary-foreground file:text-foreground placeholder:text-muted-foreground dark:bg-input/30 border text-base shadow-xs transition-[color,box-shadow] file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:border-ring disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 flex-1 rounded-none border-none bg-background px-3 py-2 text-foreground tabular-nums outline-none focus-visible:ring-0 focus-visible:ring-ring/0 focus-visible:outline-none"
                id="temperature"
                aria-invalid="false"
                aria-valuenow="21"
@@ -530,7 +554,9 @@ exports[`Components/Input/Number WithCustomSteps smoke-test 1`] = `
         >
         <div class="flex h-full flex-col border-l">
           <button data-slot="button"
-                  class="gap-1.5 whitespace-nowrap text-sm font-medium disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive shadow-xs size-6 in-data-[slot=button-group]:rounded-lg [&amp;_svg:not([class*='size-'])]:size-3 bg-background text-muted-foreground hover:bg-accent hover:text-foreground flex h-1/2 w-8 items-center justify-center border-b transition-colors rounded-none"
+                  data-variant="default"
+                  data-size="icon-xs"
+                  class="group/button shrink-0 border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 size-6 in-data-[slot=button-group]:rounded-md [&amp;_svg:not([class*='size-'])]:size-3 flex h-1/2 w-8 items-center justify-center rounded-none border-b bg-background text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
                   type="button"
                   aria-label="Incrementar"
           >
@@ -551,7 +577,9 @@ exports[`Components/Input/Number WithCustomSteps smoke-test 1`] = `
             </svg>
           </button>
           <button data-slot="button"
-                  class="gap-1.5 whitespace-nowrap font-medium disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive shadow-xs size-6 in-data-[slot=button-group]:rounded-lg [&amp;_svg:not([class*='size-'])]:size-3 bg-background text-muted-foreground/80 hover:bg-accent hover:text-foreground flex h-1/2 w-8 items-center justify-center text-xs transition-colors rounded-none"
+                  data-variant="default"
+                  data-size="icon-xs"
+                  class="group/button shrink-0 border border-transparent bg-clip-padding font-medium whitespace-nowrap outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 size-6 in-data-[slot=button-group]:rounded-md [&amp;_svg:not([class*='size-'])]:size-3 flex h-1/2 w-8 items-center justify-center rounded-none bg-background text-xs text-muted-foreground/80 transition-colors hover:bg-accent hover:text-foreground"
                   type="button"
                   aria-label="Decrementar"
           >
@@ -584,7 +612,7 @@ exports[`Components/Input/Number WithError smoke-test 1`] = `
     <div role="group"
          data-slot="field"
          data-orientation="vertical"
-         class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto"
+         class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col *:w-full [&amp;&gt;.sr-only]:w-auto"
     >
       <label data-slot="label"
              class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
@@ -592,9 +620,9 @@ exports[`Components/Input/Number WithError smoke-test 1`] = `
       >
         Value with Error
       </label>
-      <div class="outline-none relative inline-flex h-10 w-full items-center overflow-hidden rounded-md border text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] ring-ring-invalid border-destructive">
+      <div class="relative inline-flex h-10 w-full items-center overflow-hidden rounded-md border text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none border-destructive ring-ring-invalid">
         <input data-slot="input"
-               class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 border text-base shadow-xs transition-[color,box-shadow] file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-background text-foreground flex-1 px-3 py-2 tabular-nums outline-none border-none focus-visible:outline-none focus-visible:ring-ring/0 focus-visible:ring-0 rounded-none"
+               class="h-9 w-full min-w-0 border-input selection:bg-primary selection:text-primary-foreground file:text-foreground placeholder:text-muted-foreground dark:bg-input/30 border text-base shadow-xs transition-[color,box-shadow] file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:border-ring disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 flex-1 rounded-none border-none bg-background px-3 py-2 text-foreground tabular-nums outline-none focus-visible:ring-0 focus-visible:ring-ring/0 focus-visible:outline-none"
                id="errorValue"
                aria-invalid="true"
                aria-valuenow="150"
@@ -607,7 +635,9 @@ exports[`Components/Input/Number WithError smoke-test 1`] = `
         >
         <div class="flex h-full flex-col border-l">
           <button data-slot="button"
-                  class="gap-1.5 whitespace-nowrap text-sm font-medium disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive shadow-xs size-6 in-data-[slot=button-group]:rounded-lg [&amp;_svg:not([class*='size-'])]:size-3 bg-background text-muted-foreground hover:bg-accent hover:text-foreground flex h-1/2 w-8 items-center justify-center border-b transition-colors rounded-none"
+                  data-variant="default"
+                  data-size="icon-xs"
+                  class="group/button shrink-0 border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 size-6 in-data-[slot=button-group]:rounded-md [&amp;_svg:not([class*='size-'])]:size-3 flex h-1/2 w-8 items-center justify-center rounded-none border-b bg-background text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
                   type="button"
                   disabled
                   aria-label="Incrementar"
@@ -629,7 +659,9 @@ exports[`Components/Input/Number WithError smoke-test 1`] = `
             </svg>
           </button>
           <button data-slot="button"
-                  class="gap-1.5 whitespace-nowrap font-medium disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive shadow-xs size-6 in-data-[slot=button-group]:rounded-lg [&amp;_svg:not([class*='size-'])]:size-3 bg-background text-muted-foreground/80 hover:bg-accent hover:text-foreground flex h-1/2 w-8 items-center justify-center text-xs transition-colors rounded-none"
+                  data-variant="default"
+                  data-size="icon-xs"
+                  class="group/button shrink-0 border border-transparent bg-clip-padding font-medium whitespace-nowrap outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 size-6 in-data-[slot=button-group]:rounded-md [&amp;_svg:not([class*='size-'])]:size-3 flex h-1/2 w-8 items-center justify-center rounded-none bg-background text-xs text-muted-foreground/80 transition-colors hover:bg-accent hover:text-foreground"
                   type="button"
                   aria-label="Decrementar"
           >
@@ -654,7 +686,7 @@ exports[`Components/Input/Number WithError smoke-test 1`] = `
     </div>
     <div role="alert"
          data-slot="field-error"
-         class="text-destructive text-sm font-normal"
+         class="text-sm font-normal text-destructive"
     >
       Value exceeds maximum allowed
     </div>
@@ -668,7 +700,7 @@ exports[`Components/Input/Number WithHelperText smoke-test 1`] = `
     <div role="group"
          data-slot="field"
          data-orientation="vertical"
-         class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto"
+         class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col *:w-full [&amp;&gt;.sr-only]:w-auto"
     >
       <label data-slot="label"
              class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
@@ -676,9 +708,9 @@ exports[`Components/Input/Number WithHelperText smoke-test 1`] = `
       >
         Amount
       </label>
-      <div class="border-input outline-none relative inline-flex h-10 w-full items-center overflow-hidden rounded-md border text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow]">
+      <div class="relative inline-flex h-10 w-full items-center overflow-hidden rounded-md border border-input text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none">
         <input data-slot="input"
-               class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 border text-base shadow-xs transition-[color,box-shadow] file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-background text-foreground flex-1 px-3 py-2 tabular-nums outline-none border-none focus-visible:outline-none focus-visible:ring-ring/0 focus-visible:ring-0 rounded-none"
+               class="h-9 w-full min-w-0 border-input selection:bg-primary selection:text-primary-foreground file:text-foreground placeholder:text-muted-foreground dark:bg-input/30 border text-base shadow-xs transition-[color,box-shadow] file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:border-ring disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 flex-1 rounded-none border-none bg-background px-3 py-2 text-foreground tabular-nums outline-none focus-visible:ring-0 focus-visible:ring-ring/0 focus-visible:outline-none"
                id="amount"
                aria-invalid="false"
                aria-valuenow="100"
@@ -691,7 +723,9 @@ exports[`Components/Input/Number WithHelperText smoke-test 1`] = `
         >
         <div class="flex h-full flex-col border-l">
           <button data-slot="button"
-                  class="gap-1.5 whitespace-nowrap text-sm font-medium disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive shadow-xs size-6 in-data-[slot=button-group]:rounded-lg [&amp;_svg:not([class*='size-'])]:size-3 bg-background text-muted-foreground hover:bg-accent hover:text-foreground flex h-1/2 w-8 items-center justify-center border-b transition-colors rounded-none"
+                  data-variant="default"
+                  data-size="icon-xs"
+                  class="group/button shrink-0 border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 size-6 in-data-[slot=button-group]:rounded-md [&amp;_svg:not([class*='size-'])]:size-3 flex h-1/2 w-8 items-center justify-center rounded-none border-b bg-background text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
                   type="button"
                   aria-label="Incrementar"
           >
@@ -712,7 +746,9 @@ exports[`Components/Input/Number WithHelperText smoke-test 1`] = `
             </svg>
           </button>
           <button data-slot="button"
-                  class="gap-1.5 whitespace-nowrap font-medium disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive shadow-xs size-6 in-data-[slot=button-group]:rounded-lg [&amp;_svg:not([class*='size-'])]:size-3 bg-background text-muted-foreground/80 hover:bg-accent hover:text-foreground flex h-1/2 w-8 items-center justify-center text-xs transition-colors rounded-none"
+                  data-variant="default"
+                  data-size="icon-xs"
+                  class="group/button shrink-0 border border-transparent bg-clip-padding font-medium whitespace-nowrap outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 size-6 in-data-[slot=button-group]:rounded-md [&amp;_svg:not([class*='size-'])]:size-3 flex h-1/2 w-8 items-center justify-center rounded-none bg-background text-xs text-muted-foreground/80 transition-colors hover:bg-accent hover:text-foreground"
                   type="button"
                   aria-label="Decrementar"
           >
@@ -736,7 +772,7 @@ exports[`Components/Input/Number WithHelperText smoke-test 1`] = `
       </div>
     </div>
     <p data-slot="field-description"
-       class="text-muted-foreground text-sm leading-normal font-normal group-has-data-[orientation=horizontal]/field:text-balance last:mt-0 nth-last-2:-mt-1 [[data-variant=legend]+&amp;]:-mt-1.5 [&amp;&gt;a:hover]:text-primary [&amp;&gt;a]:underline [&amp;&gt;a]:underline-offset-4"
+       class="text-left text-sm leading-normal font-normal text-muted-foreground group-has-data-horizontal/field:text-balance [[data-variant=legend]+&amp;]:-mt-1.5 last:mt-0 nth-last-2:-mt-1 [&amp;&gt;a]:underline [&amp;&gt;a]:underline-offset-4 [&amp;&gt;a:hover]:text-primary"
     >
       Enter an amount between $0 and $1000
     </p>
@@ -750,7 +786,7 @@ exports[`Components/Input/Number WithMinMax smoke-test 1`] = `
     <div role="group"
          data-slot="field"
          data-orientation="vertical"
-         class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto"
+         class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col *:w-full [&amp;&gt;.sr-only]:w-auto"
     >
       <label data-slot="label"
              class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
@@ -758,9 +794,9 @@ exports[`Components/Input/Number WithMinMax smoke-test 1`] = `
       >
         Rating
       </label>
-      <div class="border-input outline-none relative inline-flex h-10 w-full items-center overflow-hidden rounded-md border text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow]">
+      <div class="relative inline-flex h-10 w-full items-center overflow-hidden rounded-md border border-input text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none">
         <input data-slot="input"
-               class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 border text-base shadow-xs transition-[color,box-shadow] file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-background text-foreground flex-1 px-3 py-2 tabular-nums outline-none border-none focus-visible:outline-none focus-visible:ring-ring/0 focus-visible:ring-0 rounded-none"
+               class="h-9 w-full min-w-0 border-input selection:bg-primary selection:text-primary-foreground file:text-foreground placeholder:text-muted-foreground dark:bg-input/30 border text-base shadow-xs transition-[color,box-shadow] file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:border-ring disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 flex-1 rounded-none border-none bg-background px-3 py-2 text-foreground tabular-nums outline-none focus-visible:ring-0 focus-visible:ring-ring/0 focus-visible:outline-none"
                id="rating"
                aria-invalid="false"
                aria-valuenow="3"
@@ -773,7 +809,9 @@ exports[`Components/Input/Number WithMinMax smoke-test 1`] = `
         >
         <div class="flex h-full flex-col border-l">
           <button data-slot="button"
-                  class="gap-1.5 whitespace-nowrap text-sm font-medium disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive shadow-xs size-6 in-data-[slot=button-group]:rounded-lg [&amp;_svg:not([class*='size-'])]:size-3 bg-background text-muted-foreground hover:bg-accent hover:text-foreground flex h-1/2 w-8 items-center justify-center border-b transition-colors rounded-none"
+                  data-variant="default"
+                  data-size="icon-xs"
+                  class="group/button shrink-0 border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 size-6 in-data-[slot=button-group]:rounded-md [&amp;_svg:not([class*='size-'])]:size-3 flex h-1/2 w-8 items-center justify-center rounded-none border-b bg-background text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
                   type="button"
                   aria-label="Incrementar"
           >
@@ -794,7 +832,9 @@ exports[`Components/Input/Number WithMinMax smoke-test 1`] = `
             </svg>
           </button>
           <button data-slot="button"
-                  class="gap-1.5 whitespace-nowrap font-medium disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive shadow-xs size-6 in-data-[slot=button-group]:rounded-lg [&amp;_svg:not([class*='size-'])]:size-3 bg-background text-muted-foreground/80 hover:bg-accent hover:text-foreground flex h-1/2 w-8 items-center justify-center text-xs transition-colors rounded-none"
+                  data-variant="default"
+                  data-size="icon-xs"
+                  class="group/button shrink-0 border border-transparent bg-clip-padding font-medium whitespace-nowrap outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 size-6 in-data-[slot=button-group]:rounded-md [&amp;_svg:not([class*='size-'])]:size-3 flex h-1/2 w-8 items-center justify-center rounded-none bg-background text-xs text-muted-foreground/80 transition-colors hover:bg-accent hover:text-foreground"
                   type="button"
                   aria-label="Decrementar"
           >
@@ -818,7 +858,7 @@ exports[`Components/Input/Number WithMinMax smoke-test 1`] = `
       </div>
     </div>
     <p data-slot="field-description"
-       class="text-muted-foreground text-sm leading-normal font-normal group-has-data-[orientation=horizontal]/field:text-balance last:mt-0 nth-last-2:-mt-1 [[data-variant=legend]+&amp;]:-mt-1.5 [&amp;&gt;a:hover]:text-primary [&amp;&gt;a]:underline [&amp;&gt;a]:underline-offset-4"
+       class="text-left text-sm leading-normal font-normal text-muted-foreground group-has-data-horizontal/field:text-balance [[data-variant=legend]+&amp;]:-mt-1.5 last:mt-0 nth-last-2:-mt-1 [&amp;&gt;a]:underline [&amp;&gt;a]:underline-offset-4 [&amp;&gt;a:hover]:text-primary"
     >
       Rate from 0 to 5
     </p>

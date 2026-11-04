@@ -8,20 +8,21 @@ exports[`Components/InfoCard ColorMatrix smoke-test 1`] = `
     </h3>
     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
       <div data-slot="card"
-           class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-transparent text-card-foreground border-primary"
+           data-size="default"
+           class="group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl py-(--card-spacing) text-sm shadow-xs ring-1 ring-foreground/10 [--card-spacing:--spacing(6)] has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(4)] *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl bg-transparent text-card-foreground border-primary"
            id="_r_ID_"
       >
         <div data-slot="card-header"
-             class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+             class="group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing)"
         >
           <div data-slot="card-title"
-               class="text-2xl font-semibold leading-none tracking-tight text-primary"
+               class="font-heading group-data-[size=sm]/card:text-sm text-2xl leading-none font-semibold tracking-tight text-primary"
           >
             primary
           </div>
         </div>
         <div data-slot="card-content"
-             class="px-6 @container/igrp-info-card flex flex-col gap-4"
+             class="px-(--card-spacing) @container/igrp-info-card flex flex-col gap-4"
         >
           <dl class="grid gap-4 grid-cols-1">
             <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
@@ -60,7 +61,7 @@ exports[`Components/InfoCard ColorMatrix smoke-test 1`] = `
                      stroke-linejoin="round"
                      class="lucide lucide-building2 lucide-building-2 shrink-0"
                      aria-hidden="true"
-                     id="Building2"
+                     id="_r_ID_"
                 >
                   <path d="M10 12h4">
                   </path>
@@ -82,20 +83,21 @@ exports[`Components/InfoCard ColorMatrix smoke-test 1`] = `
         </div>
       </div>
       <div data-slot="card"
-           class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-transparent text-card-foreground border-success"
+           data-size="default"
+           class="group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl py-(--card-spacing) text-sm shadow-xs ring-1 ring-foreground/10 [--card-spacing:--spacing(6)] has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(4)] *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl bg-transparent text-card-foreground border-success"
            id="_r_ID_"
       >
         <div data-slot="card-header"
-             class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+             class="group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing)"
         >
           <div data-slot="card-title"
-               class="text-2xl font-semibold leading-none tracking-tight text-success"
+               class="font-heading group-data-[size=sm]/card:text-sm text-2xl leading-none font-semibold tracking-tight text-success"
           >
             success
           </div>
         </div>
         <div data-slot="card-content"
-             class="px-6 @container/igrp-info-card flex flex-col gap-4"
+             class="px-(--card-spacing) @container/igrp-info-card flex flex-col gap-4"
         >
           <dl class="grid gap-4 grid-cols-1">
             <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
@@ -134,7 +136,7 @@ exports[`Components/InfoCard ColorMatrix smoke-test 1`] = `
                      stroke-linejoin="round"
                      class="lucide lucide-building2 lucide-building-2 shrink-0"
                      aria-hidden="true"
-                     id="Building2"
+                     id="_r_ID_"
                 >
                   <path d="M10 12h4">
                   </path>
@@ -156,20 +158,21 @@ exports[`Components/InfoCard ColorMatrix smoke-test 1`] = `
         </div>
       </div>
       <div data-slot="card"
-           class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-transparent text-card-foreground border-destructive"
+           data-size="default"
+           class="group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl py-(--card-spacing) text-sm shadow-xs ring-1 ring-foreground/10 [--card-spacing:--spacing(6)] has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(4)] *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl bg-transparent text-card-foreground border-destructive"
            id="_r_ID_"
       >
         <div data-slot="card-header"
-             class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+             class="group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing)"
         >
           <div data-slot="card-title"
-               class="text-2xl font-semibold leading-none tracking-tight text-destructive"
+               class="font-heading group-data-[size=sm]/card:text-sm text-2xl leading-none font-semibold tracking-tight text-destructive"
           >
             destructive
           </div>
         </div>
         <div data-slot="card-content"
-             class="px-6 @container/igrp-info-card flex flex-col gap-4"
+             class="px-(--card-spacing) @container/igrp-info-card flex flex-col gap-4"
         >
           <dl class="grid gap-4 grid-cols-1">
             <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
@@ -208,7 +211,7 @@ exports[`Components/InfoCard ColorMatrix smoke-test 1`] = `
                      stroke-linejoin="round"
                      class="lucide lucide-building2 lucide-building-2 shrink-0"
                      aria-hidden="true"
-                     id="Building2"
+                     id="_r_ID_"
                 >
                   <path d="M10 12h4">
                   </path>
@@ -230,20 +233,21 @@ exports[`Components/InfoCard ColorMatrix smoke-test 1`] = `
         </div>
       </div>
       <div data-slot="card"
-           class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-transparent text-card-foreground border-warning"
+           data-size="default"
+           class="group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl py-(--card-spacing) text-sm shadow-xs ring-1 ring-foreground/10 [--card-spacing:--spacing(6)] has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(4)] *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl bg-transparent text-card-foreground border-warning"
            id="_r_ID_"
       >
         <div data-slot="card-header"
-             class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+             class="group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing)"
         >
           <div data-slot="card-title"
-               class="text-2xl font-semibold leading-none tracking-tight text-warning"
+               class="font-heading group-data-[size=sm]/card:text-sm text-2xl leading-none font-semibold tracking-tight text-warning"
           >
             warning
           </div>
         </div>
         <div data-slot="card-content"
-             class="px-6 @container/igrp-info-card flex flex-col gap-4"
+             class="px-(--card-spacing) @container/igrp-info-card flex flex-col gap-4"
         >
           <dl class="grid gap-4 grid-cols-1">
             <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
@@ -282,7 +286,7 @@ exports[`Components/InfoCard ColorMatrix smoke-test 1`] = `
                      stroke-linejoin="round"
                      class="lucide lucide-building2 lucide-building-2 shrink-0"
                      aria-hidden="true"
-                     id="Building2"
+                     id="_r_ID_"
                 >
                   <path d="M10 12h4">
                   </path>
@@ -304,20 +308,21 @@ exports[`Components/InfoCard ColorMatrix smoke-test 1`] = `
         </div>
       </div>
       <div data-slot="card"
-           class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-transparent text-card-foreground border-info"
+           data-size="default"
+           class="group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl py-(--card-spacing) text-sm shadow-xs ring-1 ring-foreground/10 [--card-spacing:--spacing(6)] has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(4)] *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl bg-transparent text-card-foreground border-info"
            id="_r_ID_"
       >
         <div data-slot="card-header"
-             class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+             class="group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing)"
         >
           <div data-slot="card-title"
-               class="text-2xl font-semibold leading-none tracking-tight text-info"
+               class="font-heading group-data-[size=sm]/card:text-sm text-2xl leading-none font-semibold tracking-tight text-info"
           >
             info
           </div>
         </div>
         <div data-slot="card-content"
-             class="px-6 @container/igrp-info-card flex flex-col gap-4"
+             class="px-(--card-spacing) @container/igrp-info-card flex flex-col gap-4"
         >
           <dl class="grid gap-4 grid-cols-1">
             <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
@@ -356,7 +361,7 @@ exports[`Components/InfoCard ColorMatrix smoke-test 1`] = `
                      stroke-linejoin="round"
                      class="lucide lucide-building2 lucide-building-2 shrink-0"
                      aria-hidden="true"
-                     id="Building2"
+                     id="_r_ID_"
                 >
                   <path d="M10 12h4">
                   </path>
@@ -378,20 +383,21 @@ exports[`Components/InfoCard ColorMatrix smoke-test 1`] = `
         </div>
       </div>
       <div data-slot="card"
-           class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-transparent text-card-foreground border-border"
+           data-size="default"
+           class="group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl py-(--card-spacing) text-sm shadow-xs ring-1 ring-foreground/10 [--card-spacing:--spacing(6)] has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(4)] *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl bg-transparent text-card-foreground border-border"
            id="_r_ID_"
       >
         <div data-slot="card-header"
-             class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+             class="group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing)"
         >
           <div data-slot="card-title"
-               class="text-2xl font-semibold leading-none tracking-tight text-muted-foreground"
+               class="font-heading group-data-[size=sm]/card:text-sm text-2xl leading-none font-semibold tracking-tight text-muted-foreground"
           >
             secondary
           </div>
         </div>
         <div data-slot="card-content"
-             class="px-6 @container/igrp-info-card flex flex-col gap-4"
+             class="px-(--card-spacing) @container/igrp-info-card flex flex-col gap-4"
         >
           <dl class="grid gap-4 grid-cols-1">
             <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
@@ -430,7 +436,7 @@ exports[`Components/InfoCard ColorMatrix smoke-test 1`] = `
                      stroke-linejoin="round"
                      class="lucide lucide-building2 lucide-building-2 shrink-0"
                      aria-hidden="true"
-                     id="Building2"
+                     id="_r_ID_"
                 >
                   <path d="M10 12h4">
                   </path>
@@ -452,20 +458,21 @@ exports[`Components/InfoCard ColorMatrix smoke-test 1`] = `
         </div>
       </div>
       <div data-slot="card"
-           class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-transparent text-card-foreground border-indigo"
+           data-size="default"
+           class="group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl py-(--card-spacing) text-sm shadow-xs ring-1 ring-foreground/10 [--card-spacing:--spacing(6)] has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(4)] *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl bg-transparent text-card-foreground border-indigo"
            id="_r_ID_"
       >
         <div data-slot="card-header"
-             class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+             class="group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing)"
         >
           <div data-slot="card-title"
-               class="text-2xl font-semibold leading-none tracking-tight text-indigo"
+               class="font-heading group-data-[size=sm]/card:text-sm text-2xl leading-none font-semibold tracking-tight text-indigo"
           >
             indigo
           </div>
         </div>
         <div data-slot="card-content"
-             class="px-6 @container/igrp-info-card flex flex-col gap-4"
+             class="px-(--card-spacing) @container/igrp-info-card flex flex-col gap-4"
         >
           <dl class="grid gap-4 grid-cols-1">
             <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
@@ -504,7 +511,7 @@ exports[`Components/InfoCard ColorMatrix smoke-test 1`] = `
                      stroke-linejoin="round"
                      class="lucide lucide-building2 lucide-building-2 shrink-0"
                      aria-hidden="true"
-                     id="Building2"
+                     id="_r_ID_"
                 >
                   <path d="M10 12h4">
                   </path>
@@ -533,20 +540,21 @@ exports[`Components/InfoCard ColorMatrix smoke-test 1`] = `
     </h3>
     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
       <div data-slot="card"
-           class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-primary/10 text-card-foreground border-transparent"
+           data-size="default"
+           class="group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl py-(--card-spacing) text-sm shadow-xs ring-1 ring-foreground/10 [--card-spacing:--spacing(6)] has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(4)] *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl bg-primary/5 text-card-foreground border-transparent"
            id="_r_ID_"
       >
         <div data-slot="card-header"
-             class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+             class="group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing)"
         >
           <div data-slot="card-title"
-               class="text-2xl font-semibold leading-none tracking-tight text-primary"
+               class="font-heading group-data-[size=sm]/card:text-sm text-2xl leading-none font-semibold tracking-tight text-primary"
           >
             primary
           </div>
         </div>
         <div data-slot="card-content"
-             class="px-6 @container/igrp-info-card flex flex-col gap-4"
+             class="px-(--card-spacing) @container/igrp-info-card flex flex-col gap-4"
         >
           <dl class="grid gap-4 grid-cols-1">
             <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
@@ -585,7 +593,7 @@ exports[`Components/InfoCard ColorMatrix smoke-test 1`] = `
                      stroke-linejoin="round"
                      class="lucide lucide-building2 lucide-building-2 shrink-0"
                      aria-hidden="true"
-                     id="Building2"
+                     id="_r_ID_"
                 >
                   <path d="M10 12h4">
                   </path>
@@ -607,20 +615,21 @@ exports[`Components/InfoCard ColorMatrix smoke-test 1`] = `
         </div>
       </div>
       <div data-slot="card"
-           class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-success/10 text-card-foreground border-transparent"
+           data-size="default"
+           class="group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl py-(--card-spacing) text-sm shadow-xs ring-1 ring-foreground/10 [--card-spacing:--spacing(6)] has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(4)] *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl bg-success/5 text-card-foreground border-transparent"
            id="_r_ID_"
       >
         <div data-slot="card-header"
-             class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+             class="group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing)"
         >
           <div data-slot="card-title"
-               class="text-2xl font-semibold leading-none tracking-tight text-success"
+               class="font-heading group-data-[size=sm]/card:text-sm text-2xl leading-none font-semibold tracking-tight text-success"
           >
             success
           </div>
         </div>
         <div data-slot="card-content"
-             class="px-6 @container/igrp-info-card flex flex-col gap-4"
+             class="px-(--card-spacing) @container/igrp-info-card flex flex-col gap-4"
         >
           <dl class="grid gap-4 grid-cols-1">
             <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
@@ -659,7 +668,7 @@ exports[`Components/InfoCard ColorMatrix smoke-test 1`] = `
                      stroke-linejoin="round"
                      class="lucide lucide-building2 lucide-building-2 shrink-0"
                      aria-hidden="true"
-                     id="Building2"
+                     id="_r_ID_"
                 >
                   <path d="M10 12h4">
                   </path>
@@ -681,20 +690,21 @@ exports[`Components/InfoCard ColorMatrix smoke-test 1`] = `
         </div>
       </div>
       <div data-slot="card"
-           class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-destructive/10 text-card-foreground border-transparent"
+           data-size="default"
+           class="group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl py-(--card-spacing) text-sm shadow-xs ring-1 ring-foreground/10 [--card-spacing:--spacing(6)] has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(4)] *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl bg-destructive/5 text-card-foreground border-transparent"
            id="_r_ID_"
       >
         <div data-slot="card-header"
-             class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+             class="group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing)"
         >
           <div data-slot="card-title"
-               class="text-2xl font-semibold leading-none tracking-tight text-destructive"
+               class="font-heading group-data-[size=sm]/card:text-sm text-2xl leading-none font-semibold tracking-tight text-destructive"
           >
             destructive
           </div>
         </div>
         <div data-slot="card-content"
-             class="px-6 @container/igrp-info-card flex flex-col gap-4"
+             class="px-(--card-spacing) @container/igrp-info-card flex flex-col gap-4"
         >
           <dl class="grid gap-4 grid-cols-1">
             <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
@@ -733,7 +743,7 @@ exports[`Components/InfoCard ColorMatrix smoke-test 1`] = `
                      stroke-linejoin="round"
                      class="lucide lucide-building2 lucide-building-2 shrink-0"
                      aria-hidden="true"
-                     id="Building2"
+                     id="_r_ID_"
                 >
                   <path d="M10 12h4">
                   </path>
@@ -755,20 +765,21 @@ exports[`Components/InfoCard ColorMatrix smoke-test 1`] = `
         </div>
       </div>
       <div data-slot="card"
-           class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-warning/10 text-card-foreground border-transparent"
+           data-size="default"
+           class="group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl py-(--card-spacing) text-sm shadow-xs ring-1 ring-foreground/10 [--card-spacing:--spacing(6)] has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(4)] *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl bg-warning/5 text-card-foreground border-transparent"
            id="_r_ID_"
       >
         <div data-slot="card-header"
-             class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+             class="group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing)"
         >
           <div data-slot="card-title"
-               class="text-2xl font-semibold leading-none tracking-tight text-warning"
+               class="font-heading group-data-[size=sm]/card:text-sm text-2xl leading-none font-semibold tracking-tight text-warning"
           >
             warning
           </div>
         </div>
         <div data-slot="card-content"
-             class="px-6 @container/igrp-info-card flex flex-col gap-4"
+             class="px-(--card-spacing) @container/igrp-info-card flex flex-col gap-4"
         >
           <dl class="grid gap-4 grid-cols-1">
             <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
@@ -807,7 +818,7 @@ exports[`Components/InfoCard ColorMatrix smoke-test 1`] = `
                      stroke-linejoin="round"
                      class="lucide lucide-building2 lucide-building-2 shrink-0"
                      aria-hidden="true"
-                     id="Building2"
+                     id="_r_ID_"
                 >
                   <path d="M10 12h4">
                   </path>
@@ -829,20 +840,21 @@ exports[`Components/InfoCard ColorMatrix smoke-test 1`] = `
         </div>
       </div>
       <div data-slot="card"
-           class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-info/10 text-card-foreground border-transparent"
+           data-size="default"
+           class="group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl py-(--card-spacing) text-sm shadow-xs ring-1 ring-foreground/10 [--card-spacing:--spacing(6)] has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(4)] *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl bg-info/5 text-card-foreground border-transparent"
            id="_r_ID_"
       >
         <div data-slot="card-header"
-             class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+             class="group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing)"
         >
           <div data-slot="card-title"
-               class="text-2xl font-semibold leading-none tracking-tight text-info"
+               class="font-heading group-data-[size=sm]/card:text-sm text-2xl leading-none font-semibold tracking-tight text-info"
           >
             info
           </div>
         </div>
         <div data-slot="card-content"
-             class="px-6 @container/igrp-info-card flex flex-col gap-4"
+             class="px-(--card-spacing) @container/igrp-info-card flex flex-col gap-4"
         >
           <dl class="grid gap-4 grid-cols-1">
             <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
@@ -881,7 +893,7 @@ exports[`Components/InfoCard ColorMatrix smoke-test 1`] = `
                      stroke-linejoin="round"
                      class="lucide lucide-building2 lucide-building-2 shrink-0"
                      aria-hidden="true"
-                     id="Building2"
+                     id="_r_ID_"
                 >
                   <path d="M10 12h4">
                   </path>
@@ -903,20 +915,21 @@ exports[`Components/InfoCard ColorMatrix smoke-test 1`] = `
         </div>
       </div>
       <div data-slot="card"
-           class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-muted text-card-foreground border-transparent"
+           data-size="default"
+           class="group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl py-(--card-spacing) text-sm shadow-xs ring-1 ring-foreground/10 [--card-spacing:--spacing(6)] has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(4)] *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl bg-muted text-card-foreground border-transparent"
            id="_r_ID_"
       >
         <div data-slot="card-header"
-             class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+             class="group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing)"
         >
           <div data-slot="card-title"
-               class="text-2xl font-semibold leading-none tracking-tight text-muted-foreground"
+               class="font-heading group-data-[size=sm]/card:text-sm text-2xl leading-none font-semibold tracking-tight text-muted-foreground"
           >
             secondary
           </div>
         </div>
         <div data-slot="card-content"
-             class="px-6 @container/igrp-info-card flex flex-col gap-4"
+             class="px-(--card-spacing) @container/igrp-info-card flex flex-col gap-4"
         >
           <dl class="grid gap-4 grid-cols-1">
             <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
@@ -955,7 +968,7 @@ exports[`Components/InfoCard ColorMatrix smoke-test 1`] = `
                      stroke-linejoin="round"
                      class="lucide lucide-building2 lucide-building-2 shrink-0"
                      aria-hidden="true"
-                     id="Building2"
+                     id="_r_ID_"
                 >
                   <path d="M10 12h4">
                   </path>
@@ -977,20 +990,21 @@ exports[`Components/InfoCard ColorMatrix smoke-test 1`] = `
         </div>
       </div>
       <div data-slot="card"
-           class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-indigo/10 text-card-foreground border-transparent"
+           data-size="default"
+           class="group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl py-(--card-spacing) text-sm shadow-xs ring-1 ring-foreground/10 [--card-spacing:--spacing(6)] has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(4)] *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl bg-indigo/5 text-card-foreground border-transparent"
            id="_r_ID_"
       >
         <div data-slot="card-header"
-             class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+             class="group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing)"
         >
           <div data-slot="card-title"
-               class="text-2xl font-semibold leading-none tracking-tight text-indigo"
+               class="font-heading group-data-[size=sm]/card:text-sm text-2xl leading-none font-semibold tracking-tight text-indigo"
           >
             indigo
           </div>
         </div>
         <div data-slot="card-content"
-             class="px-6 @container/igrp-info-card flex flex-col gap-4"
+             class="px-(--card-spacing) @container/igrp-info-card flex flex-col gap-4"
         >
           <dl class="grid gap-4 grid-cols-1">
             <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
@@ -1029,7 +1043,7 @@ exports[`Components/InfoCard ColorMatrix smoke-test 1`] = `
                      stroke-linejoin="round"
                      class="lucide lucide-building2 lucide-building-2 shrink-0"
                      aria-hidden="true"
-                     id="Building2"
+                     id="_r_ID_"
                 >
                   <path d="M10 12h4">
                   </path>
@@ -1058,20 +1072,21 @@ exports[`Components/InfoCard ColorMatrix smoke-test 1`] = `
     </h3>
     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
       <div data-slot="card"
-           class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-primary text-primary-foreground border-primary"
+           data-size="default"
+           class="group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl py-(--card-spacing) text-sm shadow-xs ring-1 ring-foreground/10 [--card-spacing:--spacing(6)] has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(4)] *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl bg-primary text-primary-foreground border-primary"
            id="_r_ID_"
       >
         <div data-slot="card-header"
-             class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+             class="group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing)"
         >
           <div data-slot="card-title"
-               class="text-2xl font-semibold leading-none tracking-tight text-primary-foreground"
+               class="font-heading group-data-[size=sm]/card:text-sm text-2xl leading-none font-semibold tracking-tight text-primary-foreground"
           >
             primary
           </div>
         </div>
         <div data-slot="card-content"
-             class="px-6 @container/igrp-info-card flex flex-col gap-4"
+             class="px-(--card-spacing) @container/igrp-info-card flex flex-col gap-4"
         >
           <dl class="grid gap-4 grid-cols-1">
             <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
@@ -1110,7 +1125,7 @@ exports[`Components/InfoCard ColorMatrix smoke-test 1`] = `
                      stroke-linejoin="round"
                      class="lucide lucide-building2 lucide-building-2 shrink-0"
                      aria-hidden="true"
-                     id="Building2"
+                     id="_r_ID_"
                 >
                   <path d="M10 12h4">
                   </path>
@@ -1132,20 +1147,21 @@ exports[`Components/InfoCard ColorMatrix smoke-test 1`] = `
         </div>
       </div>
       <div data-slot="card"
-           class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-success text-success-foreground border-success"
+           data-size="default"
+           class="group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl py-(--card-spacing) text-sm shadow-xs ring-1 ring-foreground/10 [--card-spacing:--spacing(6)] has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(4)] *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl bg-success text-success-foreground border-success"
            id="_r_ID_"
       >
         <div data-slot="card-header"
-             class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+             class="group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing)"
         >
           <div data-slot="card-title"
-               class="text-2xl font-semibold leading-none tracking-tight text-success-foreground"
+               class="font-heading group-data-[size=sm]/card:text-sm text-2xl leading-none font-semibold tracking-tight text-success-foreground"
           >
             success
           </div>
         </div>
         <div data-slot="card-content"
-             class="px-6 @container/igrp-info-card flex flex-col gap-4"
+             class="px-(--card-spacing) @container/igrp-info-card flex flex-col gap-4"
         >
           <dl class="grid gap-4 grid-cols-1">
             <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
@@ -1184,7 +1200,7 @@ exports[`Components/InfoCard ColorMatrix smoke-test 1`] = `
                      stroke-linejoin="round"
                      class="lucide lucide-building2 lucide-building-2 shrink-0"
                      aria-hidden="true"
-                     id="Building2"
+                     id="_r_ID_"
                 >
                   <path d="M10 12h4">
                   </path>
@@ -1206,20 +1222,21 @@ exports[`Components/InfoCard ColorMatrix smoke-test 1`] = `
         </div>
       </div>
       <div data-slot="card"
-           class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-destructive text-destructive-foreground border-destructive"
+           data-size="default"
+           class="group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl py-(--card-spacing) text-sm shadow-xs ring-1 ring-foreground/10 [--card-spacing:--spacing(6)] has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(4)] *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl bg-destructive text-destructive-foreground border-destructive"
            id="_r_ID_"
       >
         <div data-slot="card-header"
-             class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+             class="group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing)"
         >
           <div data-slot="card-title"
-               class="text-2xl font-semibold leading-none tracking-tight text-destructive-foreground"
+               class="font-heading group-data-[size=sm]/card:text-sm text-2xl leading-none font-semibold tracking-tight text-destructive-foreground"
           >
             destructive
           </div>
         </div>
         <div data-slot="card-content"
-             class="px-6 @container/igrp-info-card flex flex-col gap-4"
+             class="px-(--card-spacing) @container/igrp-info-card flex flex-col gap-4"
         >
           <dl class="grid gap-4 grid-cols-1">
             <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
@@ -1258,7 +1275,7 @@ exports[`Components/InfoCard ColorMatrix smoke-test 1`] = `
                      stroke-linejoin="round"
                      class="lucide lucide-building2 lucide-building-2 shrink-0"
                      aria-hidden="true"
-                     id="Building2"
+                     id="_r_ID_"
                 >
                   <path d="M10 12h4">
                   </path>
@@ -1280,20 +1297,21 @@ exports[`Components/InfoCard ColorMatrix smoke-test 1`] = `
         </div>
       </div>
       <div data-slot="card"
-           class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-warning text-warning-foreground border-warning"
+           data-size="default"
+           class="group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl py-(--card-spacing) text-sm shadow-xs ring-1 ring-foreground/10 [--card-spacing:--spacing(6)] has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(4)] *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl bg-warning text-warning-foreground border-warning"
            id="_r_ID_"
       >
         <div data-slot="card-header"
-             class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+             class="group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing)"
         >
           <div data-slot="card-title"
-               class="text-2xl font-semibold leading-none tracking-tight text-warning-foreground"
+               class="font-heading group-data-[size=sm]/card:text-sm text-2xl leading-none font-semibold tracking-tight text-warning-foreground"
           >
             warning
           </div>
         </div>
         <div data-slot="card-content"
-             class="px-6 @container/igrp-info-card flex flex-col gap-4"
+             class="px-(--card-spacing) @container/igrp-info-card flex flex-col gap-4"
         >
           <dl class="grid gap-4 grid-cols-1">
             <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
@@ -1332,7 +1350,7 @@ exports[`Components/InfoCard ColorMatrix smoke-test 1`] = `
                      stroke-linejoin="round"
                      class="lucide lucide-building2 lucide-building-2 shrink-0"
                      aria-hidden="true"
-                     id="Building2"
+                     id="_r_ID_"
                 >
                   <path d="M10 12h4">
                   </path>
@@ -1354,20 +1372,21 @@ exports[`Components/InfoCard ColorMatrix smoke-test 1`] = `
         </div>
       </div>
       <div data-slot="card"
-           class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-info text-info-foreground border-info"
+           data-size="default"
+           class="group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl py-(--card-spacing) text-sm shadow-xs ring-1 ring-foreground/10 [--card-spacing:--spacing(6)] has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(4)] *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl bg-info text-info-foreground border-info"
            id="_r_ID_"
       >
         <div data-slot="card-header"
-             class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+             class="group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing)"
         >
           <div data-slot="card-title"
-               class="text-2xl font-semibold leading-none tracking-tight text-info-foreground"
+               class="font-heading group-data-[size=sm]/card:text-sm text-2xl leading-none font-semibold tracking-tight text-info-foreground"
           >
             info
           </div>
         </div>
         <div data-slot="card-content"
-             class="px-6 @container/igrp-info-card flex flex-col gap-4"
+             class="px-(--card-spacing) @container/igrp-info-card flex flex-col gap-4"
         >
           <dl class="grid gap-4 grid-cols-1">
             <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
@@ -1406,7 +1425,7 @@ exports[`Components/InfoCard ColorMatrix smoke-test 1`] = `
                      stroke-linejoin="round"
                      class="lucide lucide-building2 lucide-building-2 shrink-0"
                      aria-hidden="true"
-                     id="Building2"
+                     id="_r_ID_"
                 >
                   <path d="M10 12h4">
                   </path>
@@ -1428,20 +1447,21 @@ exports[`Components/InfoCard ColorMatrix smoke-test 1`] = `
         </div>
       </div>
       <div data-slot="card"
-           class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-secondary text-secondary-foreground border-border"
+           data-size="default"
+           class="group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl py-(--card-spacing) text-sm shadow-xs ring-1 ring-foreground/10 [--card-spacing:--spacing(6)] has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(4)] *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl bg-secondary text-secondary-foreground border-border"
            id="_r_ID_"
       >
         <div data-slot="card-header"
-             class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+             class="group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing)"
         >
           <div data-slot="card-title"
-               class="text-2xl font-semibold leading-none tracking-tight text-secondary-foreground"
+               class="font-heading group-data-[size=sm]/card:text-sm text-2xl leading-none font-semibold tracking-tight text-secondary-foreground"
           >
             secondary
           </div>
         </div>
         <div data-slot="card-content"
-             class="px-6 @container/igrp-info-card flex flex-col gap-4"
+             class="px-(--card-spacing) @container/igrp-info-card flex flex-col gap-4"
         >
           <dl class="grid gap-4 grid-cols-1">
             <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
@@ -1480,7 +1500,7 @@ exports[`Components/InfoCard ColorMatrix smoke-test 1`] = `
                      stroke-linejoin="round"
                      class="lucide lucide-building2 lucide-building-2 shrink-0"
                      aria-hidden="true"
-                     id="Building2"
+                     id="_r_ID_"
                 >
                   <path d="M10 12h4">
                   </path>
@@ -1502,20 +1522,21 @@ exports[`Components/InfoCard ColorMatrix smoke-test 1`] = `
         </div>
       </div>
       <div data-slot="card"
-           class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-indigo text-indigo-foreground border-indigo"
+           data-size="default"
+           class="group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl py-(--card-spacing) text-sm shadow-xs ring-1 ring-foreground/10 [--card-spacing:--spacing(6)] has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(4)] *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl bg-indigo text-indigo-foreground border-indigo"
            id="_r_ID_"
       >
         <div data-slot="card-header"
-             class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+             class="group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing)"
         >
           <div data-slot="card-title"
-               class="text-2xl font-semibold leading-none tracking-tight text-indigo-foreground"
+               class="font-heading group-data-[size=sm]/card:text-sm text-2xl leading-none font-semibold tracking-tight text-indigo-foreground"
           >
             indigo
           </div>
         </div>
         <div data-slot="card-content"
-             class="px-6 @container/igrp-info-card flex flex-col gap-4"
+             class="px-(--card-spacing) @container/igrp-info-card flex flex-col gap-4"
         >
           <dl class="grid gap-4 grid-cols-1">
             <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
@@ -1554,7 +1575,7 @@ exports[`Components/InfoCard ColorMatrix smoke-test 1`] = `
                      stroke-linejoin="round"
                      class="lucide lucide-building2 lucide-building-2 shrink-0"
                      aria-hidden="true"
-                     id="Building2"
+                     id="_r_ID_"
                 >
                   <path d="M10 12h4">
                   </path>
@@ -1583,20 +1604,21 @@ exports[`Components/InfoCard ColorMatrix smoke-test 1`] = `
 exports[`Components/InfoCard CompanyInfo smoke-test 1`] = `
 <div class="container px-6 py-12 mx-auto">
   <div data-slot="card"
-       class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-transparent text-card-foreground border-primary"
+       data-size="default"
+       class="group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl py-(--card-spacing) text-sm shadow-xs ring-1 ring-foreground/10 [--card-spacing:--spacing(6)] has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(4)] *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl bg-transparent text-card-foreground border-primary"
        id="_r_ID_"
   >
     <div data-slot="card-header"
-         class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+         class="group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing)"
     >
       <div data-slot="card-title"
-           class="text-2xl font-semibold leading-none tracking-tight text-primary"
+           class="font-heading group-data-[size=sm]/card:text-sm text-2xl leading-none font-semibold tracking-tight text-primary"
       >
         Informações da Empresa
       </div>
     </div>
     <div data-slot="card-content"
-         class="px-6 @container/igrp-info-card flex flex-col gap-4"
+         class="px-(--card-spacing) @container/igrp-info-card flex flex-col gap-4"
     >
       <dl class="grid gap-4 grid-cols-1">
         <div class="flex min-w-0 flex-col gap-0.5">
@@ -1633,7 +1655,7 @@ exports[`Components/InfoCard CompanyInfo smoke-test 1`] = `
       <div data-orientation="horizontal"
            role="none"
            data-slot="separator"
-           class="bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px"
+           class="shrink-0 bg-border data-vertical:w-px data-vertical:self-stretch data-horizontal:h-px data-horizontal:w-full"
       >
       </div>
       <dl class="grid gap-4 grid-cols-1">
@@ -1671,7 +1693,7 @@ exports[`Components/InfoCard CompanyInfo smoke-test 1`] = `
       <div data-orientation="horizontal"
            role="none"
            data-slot="separator"
-           class="bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px"
+           class="shrink-0 bg-border data-vertical:w-px data-vertical:self-stretch data-horizontal:h-px data-horizontal:w-full"
       >
       </div>
       <dl class="grid gap-4 grid-cols-1">
@@ -1704,20 +1726,21 @@ exports[`Components/InfoCard CompanyInfo smoke-test 1`] = `
 exports[`Components/InfoCard CustomTitle smoke-test 1`] = `
 <div class="container px-6 py-12 mx-auto">
   <div data-slot="card"
-       class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-transparent text-card-foreground border-primary"
+       data-size="default"
+       class="group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl py-(--card-spacing) text-sm shadow-xs ring-1 ring-foreground/10 [--card-spacing:--spacing(6)] has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(4)] *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl bg-transparent text-card-foreground border-primary"
        id="_r_ID_"
   >
     <div data-slot="card-header"
-         class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+         class="group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing)"
     >
       <div data-slot="card-title"
-           class="text-2xl font-semibold leading-none tracking-tight text-primary"
+           class="font-heading group-data-[size=sm]/card:text-sm text-2xl leading-none font-semibold tracking-tight text-primary"
       >
         Perfil do Cliente Premium
       </div>
     </div>
     <div data-slot="card-content"
-         class="px-6 @container/igrp-info-card flex flex-col gap-4"
+         class="px-(--card-spacing) @container/igrp-info-card flex flex-col gap-4"
     >
       <dl class="grid gap-4 grid-cols-1">
         <div class="flex min-w-0 flex-col gap-0.5">
@@ -1754,7 +1777,7 @@ exports[`Components/InfoCard CustomTitle smoke-test 1`] = `
       <div data-orientation="horizontal"
            role="none"
            data-slot="separator"
-           class="bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px"
+           class="shrink-0 bg-border data-vertical:w-px data-vertical:self-stretch data-horizontal:h-px data-horizontal:w-full"
       >
       </div>
       <dl class="grid gap-4 grid-cols-1">
@@ -1787,20 +1810,21 @@ exports[`Components/InfoCard CustomTitle smoke-test 1`] = `
 exports[`Components/InfoCard Default smoke-test 1`] = `
 <div class="container px-6 py-12 mx-auto">
   <div data-slot="card"
-       class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-success text-success-foreground border-success"
+       data-size="default"
+       class="group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl py-(--card-spacing) text-sm shadow-xs ring-1 ring-foreground/10 [--card-spacing:--spacing(6)] has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(4)] *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl bg-success text-success-foreground border-success"
        id="_r_ID_"
   >
     <div data-slot="card-header"
-         class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+         class="group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing)"
     >
       <div data-slot="card-title"
-           class="text-2xl font-semibold leading-none tracking-tight text-success-foreground"
+           class="font-heading group-data-[size=sm]/card:text-sm text-2xl leading-none font-semibold tracking-tight text-success-foreground"
       >
         Informações Básicas
       </div>
     </div>
     <div data-slot="card-content"
-         class="px-6 @container/igrp-info-card flex flex-col gap-4"
+         class="px-(--card-spacing) @container/igrp-info-card flex flex-col gap-4"
     >
       <dl class="grid gap-4 grid-cols-1">
         <div class="flex min-w-0 flex-col gap-0.5">
@@ -1837,7 +1861,7 @@ exports[`Components/InfoCard Default smoke-test 1`] = `
       <div data-orientation="horizontal"
            role="none"
            data-slot="separator"
-           class="shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px bg-current opacity-30"
+           class="shrink-0 data-vertical:w-px data-vertical:self-stretch data-horizontal:h-px data-horizontal:w-full bg-current opacity-30"
       >
       </div>
       <dl class="grid gap-4 grid-cols-1">
@@ -1875,7 +1899,7 @@ exports[`Components/InfoCard Default smoke-test 1`] = `
       <div data-orientation="horizontal"
            role="none"
            data-slot="separator"
-           class="shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px bg-current opacity-30"
+           class="shrink-0 data-vertical:w-px data-vertical:self-stretch data-horizontal:h-px data-horizontal:w-full bg-current opacity-30"
       >
       </div>
       <dl class="grid gap-4 grid-cols-1">
@@ -1898,20 +1922,21 @@ exports[`Components/InfoCard Default smoke-test 1`] = `
 exports[`Components/InfoCard FinancialInfo smoke-test 1`] = `
 <div class="container px-6 py-12 mx-auto">
   <div data-slot="card"
-       class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-transparent text-card-foreground border-primary"
+       data-size="default"
+       class="group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl py-(--card-spacing) text-sm shadow-xs ring-1 ring-foreground/10 [--card-spacing:--spacing(6)] has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(4)] *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl bg-transparent text-card-foreground border-primary"
        id="_r_ID_"
   >
     <div data-slot="card-header"
-         class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+         class="group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing)"
     >
       <div data-slot="card-title"
-           class="text-2xl font-semibold leading-none tracking-tight text-primary"
+           class="font-heading group-data-[size=sm]/card:text-sm text-2xl leading-none font-semibold tracking-tight text-primary"
       >
         Informações Financeiras
       </div>
     </div>
     <div data-slot="card-content"
-         class="px-6 @container/igrp-info-card flex flex-col gap-4"
+         class="px-(--card-spacing) @container/igrp-info-card flex flex-col gap-4"
     >
       <dl class="grid gap-4 grid-cols-1">
         <div class="flex min-w-0 flex-col gap-0.5">
@@ -1950,7 +1975,7 @@ exports[`Components/InfoCard FinancialInfo smoke-test 1`] = `
                  stroke-linejoin="round"
                  class="lucide lucide-clock shrink-0"
                  aria-hidden="true"
-                 id="Clock"
+                 id="_r_ID_"
             >
               <circle cx="12"
                       cy="12"
@@ -1969,7 +1994,7 @@ exports[`Components/InfoCard FinancialInfo smoke-test 1`] = `
       <div data-orientation="horizontal"
            role="none"
            data-slot="separator"
-           class="bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px"
+           class="shrink-0 bg-border data-vertical:w-px data-vertical:self-stretch data-horizontal:h-px data-horizontal:w-full"
       >
       </div>
       <dl class="grid gap-4 grid-cols-1">
@@ -2012,20 +2037,21 @@ exports[`Components/InfoCard FinancialInfo smoke-test 1`] = `
 exports[`Components/InfoCard HorizontalOrientation smoke-test 1`] = `
 <div class="container px-6 py-12 mx-auto">
   <div data-slot="card"
-       class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-transparent text-card-foreground border-primary"
+       data-size="default"
+       class="group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl py-(--card-spacing) text-sm shadow-xs ring-1 ring-foreground/10 [--card-spacing:--spacing(6)] has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(4)] *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl bg-transparent text-card-foreground border-primary"
        id="_r_ID_"
   >
     <div data-slot="card-header"
-         class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+         class="group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing)"
     >
       <div data-slot="card-title"
-           class="text-2xl font-semibold leading-none tracking-tight text-primary"
+           class="font-heading group-data-[size=sm]/card:text-sm text-2xl leading-none font-semibold tracking-tight text-primary"
       >
         Informações Básicas
       </div>
     </div>
     <div data-slot="card-content"
-         class="px-6 @container/igrp-info-card flex flex-col gap-4"
+         class="px-(--card-spacing) @container/igrp-info-card flex flex-col gap-4"
     >
       <dl class="grid gap-4 grid-cols-1">
         <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
@@ -2064,7 +2090,7 @@ exports[`Components/InfoCard HorizontalOrientation smoke-test 1`] = `
                  stroke-linejoin="round"
                  class="lucide lucide-building2 lucide-building-2 shrink-0"
                  aria-hidden="true"
-                 id="Building2"
+                 id="_r_ID_"
             >
               <path d="M10 12h4">
               </path>
@@ -2086,7 +2112,7 @@ exports[`Components/InfoCard HorizontalOrientation smoke-test 1`] = `
       <div data-orientation="horizontal"
            role="none"
            data-slot="separator"
-           class="bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px"
+           class="shrink-0 bg-border data-vertical:w-px data-vertical:self-stretch data-horizontal:h-px data-horizontal:w-full"
       >
       </div>
       <dl class="grid gap-4 grid-cols-1">
@@ -2106,7 +2132,7 @@ exports[`Components/InfoCard HorizontalOrientation smoke-test 1`] = `
                  stroke-linejoin="round"
                  class="lucide lucide-mail shrink-0"
                  aria-hidden="true"
-                 id="Mail"
+                 id="_r_ID_"
             >
               <path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7">
               </path>
@@ -2139,7 +2165,7 @@ exports[`Components/InfoCard HorizontalOrientation smoke-test 1`] = `
                  stroke-linejoin="round"
                  class="lucide lucide-phone shrink-0"
                  aria-hidden="true"
-                 id="Phone"
+                 id="_r_ID_"
             >
               <path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384">
               </path>
@@ -2165,7 +2191,7 @@ exports[`Components/InfoCard HorizontalOrientation smoke-test 1`] = `
                  stroke-linejoin="round"
                  class="lucide lucide-map-pin shrink-0"
                  aria-hidden="true"
-                 id="MapPin"
+                 id="_r_ID_"
             >
               <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0">
               </path>
@@ -2189,20 +2215,21 @@ exports[`Components/InfoCard HorizontalOrientation smoke-test 1`] = `
 exports[`Components/InfoCard HorizontalTwoColumns smoke-test 1`] = `
 <div class="container px-6 py-12 mx-auto">
   <div data-slot="card"
-       class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-info/10 text-card-foreground border-transparent"
+       data-size="default"
+       class="group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl py-(--card-spacing) text-sm shadow-xs ring-1 ring-foreground/10 [--card-spacing:--spacing(6)] has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(4)] *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl bg-info/5 text-card-foreground border-transparent"
        id="_r_ID_"
   >
     <div data-slot="card-header"
-         class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+         class="group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing)"
     >
       <div data-slot="card-title"
-           class="text-2xl font-semibold leading-none tracking-tight text-info"
+           class="font-heading group-data-[size=sm]/card:text-sm text-2xl leading-none font-semibold tracking-tight text-info"
       >
         Informações Básicas
       </div>
     </div>
     <div data-slot="card-content"
-         class="px-6 @container/igrp-info-card flex flex-col gap-4"
+         class="px-(--card-spacing) @container/igrp-info-card flex flex-col gap-4"
     >
       <dl class="grid gap-4 grid-cols-1 @2xl/igrp-info-card:grid-cols-2">
         <div class="flex min-w-0 flex-col gap-0.5 @2xl/igrp-info-card:flex-row @2xl/igrp-info-card:items-baseline @2xl/igrp-info-card:gap-3">
@@ -2241,7 +2268,7 @@ exports[`Components/InfoCard HorizontalTwoColumns smoke-test 1`] = `
                  stroke-linejoin="round"
                  class="lucide lucide-building2 lucide-building-2 shrink-0"
                  aria-hidden="true"
-                 id="Building2"
+                 id="_r_ID_"
             >
               <path d="M10 12h4">
               </path>
@@ -2263,7 +2290,7 @@ exports[`Components/InfoCard HorizontalTwoColumns smoke-test 1`] = `
       <div data-orientation="horizontal"
            role="none"
            data-slot="separator"
-           class="bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px"
+           class="shrink-0 bg-border data-vertical:w-px data-vertical:self-stretch data-horizontal:h-px data-horizontal:w-full"
       >
       </div>
       <dl class="grid gap-4 grid-cols-1 @2xl/igrp-info-card:grid-cols-2">
@@ -2283,7 +2310,7 @@ exports[`Components/InfoCard HorizontalTwoColumns smoke-test 1`] = `
                  stroke-linejoin="round"
                  class="lucide lucide-mail shrink-0"
                  aria-hidden="true"
-                 id="Mail"
+                 id="_r_ID_"
             >
               <path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7">
               </path>
@@ -2316,7 +2343,7 @@ exports[`Components/InfoCard HorizontalTwoColumns smoke-test 1`] = `
                  stroke-linejoin="round"
                  class="lucide lucide-phone shrink-0"
                  aria-hidden="true"
-                 id="Phone"
+                 id="_r_ID_"
             >
               <path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384">
               </path>
@@ -2342,7 +2369,7 @@ exports[`Components/InfoCard HorizontalTwoColumns smoke-test 1`] = `
                  stroke-linejoin="round"
                  class="lucide lucide-map-pin shrink-0"
                  aria-hidden="true"
-                 id="MapPin"
+                 id="_r_ID_"
             >
               <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0">
               </path>
@@ -2366,20 +2393,21 @@ exports[`Components/InfoCard HorizontalTwoColumns smoke-test 1`] = `
 exports[`Components/InfoCard LongContent smoke-test 1`] = `
 <div class="container px-6 py-12 mx-auto">
   <div data-slot="card"
-       class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-transparent text-card-foreground border-primary"
+       data-size="default"
+       class="group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl py-(--card-spacing) text-sm shadow-xs ring-1 ring-foreground/10 [--card-spacing:--spacing(6)] has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(4)] *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl bg-transparent text-card-foreground border-primary"
        id="_r_ID_"
   >
     <div data-slot="card-header"
-         class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+         class="group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing)"
     >
       <div data-slot="card-title"
-           class="text-2xl font-semibold leading-none tracking-tight text-primary"
+           class="font-heading group-data-[size=sm]/card:text-sm text-2xl leading-none font-semibold tracking-tight text-primary"
       >
         Informações Detalhadas
       </div>
     </div>
     <div data-slot="card-content"
-         class="px-6 @container/igrp-info-card flex flex-col gap-4"
+         class="px-(--card-spacing) @container/igrp-info-card flex flex-col gap-4"
     >
       <dl class="grid gap-4 grid-cols-1">
         <div class="flex min-w-0 flex-col gap-0.5">
@@ -2416,7 +2444,7 @@ exports[`Components/InfoCard LongContent smoke-test 1`] = `
       <div data-orientation="horizontal"
            role="none"
            data-slot="separator"
-           class="bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px"
+           class="shrink-0 bg-border data-vertical:w-px data-vertical:self-stretch data-horizontal:h-px data-horizontal:w-full"
       >
       </div>
       <dl class="grid gap-4 grid-cols-1">
@@ -2459,20 +2487,21 @@ exports[`Components/InfoCard LongContent smoke-test 1`] = `
 exports[`Components/InfoCard Minimal smoke-test 1`] = `
 <div class="container px-6 py-12 mx-auto">
   <div data-slot="card"
-       class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-transparent text-card-foreground border-primary"
+       data-size="default"
+       class="group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl py-(--card-spacing) text-sm shadow-xs ring-1 ring-foreground/10 [--card-spacing:--spacing(6)] has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(4)] *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl bg-transparent text-card-foreground border-primary"
        id="_r_ID_"
   >
     <div data-slot="card-header"
-         class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+         class="group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing)"
     >
       <div data-slot="card-title"
-           class="text-2xl font-semibold leading-none tracking-tight text-primary"
+           class="font-heading group-data-[size=sm]/card:text-sm text-2xl leading-none font-semibold tracking-tight text-primary"
       >
         Resumo
       </div>
     </div>
     <div data-slot="card-content"
-         class="px-6 @container/igrp-info-card flex flex-col gap-4"
+         class="px-(--card-spacing) @container/igrp-info-card flex flex-col gap-4"
     >
       <dl class="grid gap-4 grid-cols-1">
         <div class="flex min-w-0 flex-col gap-0.5">
@@ -2504,20 +2533,21 @@ exports[`Components/InfoCard Minimal smoke-test 1`] = `
 exports[`Components/InfoCard SingleSection smoke-test 1`] = `
 <div class="container px-6 py-12 mx-auto">
   <div data-slot="card"
-       class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-transparent text-card-foreground border-primary"
+       data-size="default"
+       class="group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl py-(--card-spacing) text-sm shadow-xs ring-1 ring-foreground/10 [--card-spacing:--spacing(6)] has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(4)] *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl bg-transparent text-card-foreground border-primary"
        id="_r_ID_"
   >
     <div data-slot="card-header"
-         class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+         class="group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing)"
     >
       <div data-slot="card-title"
-           class="text-2xl font-semibold leading-none tracking-tight text-primary"
+           class="font-heading group-data-[size=sm]/card:text-sm text-2xl leading-none font-semibold tracking-tight text-primary"
       >
         Informações Pessoais
       </div>
     </div>
     <div data-slot="card-content"
-         class="px-6 @container/igrp-info-card flex flex-col gap-4"
+         class="px-(--card-spacing) @container/igrp-info-card flex flex-col gap-4"
     >
       <dl class="grid gap-4 grid-cols-1">
         <div class="flex min-w-0 flex-col gap-0.5">
@@ -2559,20 +2589,21 @@ exports[`Components/InfoCard SingleSection smoke-test 1`] = `
 exports[`Components/InfoCard ThreeColumns smoke-test 1`] = `
 <div class="container px-6 py-12 mx-auto">
   <div data-slot="card"
-       class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-transparent text-card-foreground border-primary"
+       data-size="default"
+       class="group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl py-(--card-spacing) text-sm shadow-xs ring-1 ring-foreground/10 [--card-spacing:--spacing(6)] has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(4)] *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl bg-transparent text-card-foreground border-primary"
        id="_r_ID_"
   >
     <div data-slot="card-header"
-         class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+         class="group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing)"
     >
       <div data-slot="card-title"
-           class="text-2xl font-semibold leading-none tracking-tight text-primary"
+           class="font-heading group-data-[size=sm]/card:text-sm text-2xl leading-none font-semibold tracking-tight text-primary"
       >
         Resumo
       </div>
     </div>
     <div data-slot="card-content"
-         class="px-6 @container/igrp-info-card flex flex-col gap-4"
+         class="px-(--card-spacing) @container/igrp-info-card flex flex-col gap-4"
     >
       <dl class="grid gap-4 grid-cols-1 @2xl/igrp-info-card:grid-cols-2 @5xl/igrp-info-card:grid-cols-3">
         <div class="flex min-w-0 flex-col gap-0.5">
@@ -2611,7 +2642,7 @@ exports[`Components/InfoCard ThreeColumns smoke-test 1`] = `
                  stroke-linejoin="round"
                  class="lucide lucide-building2 lucide-building-2 shrink-0"
                  aria-hidden="true"
-                 id="Building2"
+                 id="_r_ID_"
             >
               <path d="M10 12h4">
               </path>
@@ -2645,7 +2676,7 @@ exports[`Components/InfoCard ThreeColumns smoke-test 1`] = `
                  stroke-linejoin="round"
                  class="lucide lucide-mail shrink-0"
                  aria-hidden="true"
-                 id="Mail"
+                 id="_r_ID_"
             >
               <path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7">
               </path>
@@ -2678,7 +2709,7 @@ exports[`Components/InfoCard ThreeColumns smoke-test 1`] = `
                  stroke-linejoin="round"
                  class="lucide lucide-phone shrink-0"
                  aria-hidden="true"
-                 id="Phone"
+                 id="_r_ID_"
             >
               <path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384">
               </path>
@@ -2704,7 +2735,7 @@ exports[`Components/InfoCard ThreeColumns smoke-test 1`] = `
                  stroke-linejoin="round"
                  class="lucide lucide-map-pin shrink-0"
                  aria-hidden="true"
-                 id="MapPin"
+                 id="_r_ID_"
             >
               <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0">
               </path>
@@ -2728,20 +2759,21 @@ exports[`Components/InfoCard ThreeColumns smoke-test 1`] = `
 exports[`Components/InfoCard WithoutIcons smoke-test 1`] = `
 <div class="container px-6 py-12 mx-auto">
   <div data-slot="card"
-       class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-transparent text-card-foreground border-primary"
+       data-size="default"
+       class="group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl py-(--card-spacing) text-sm shadow-xs ring-1 ring-foreground/10 [--card-spacing:--spacing(6)] has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(4)] *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl bg-transparent text-card-foreground border-primary"
        id="_r_ID_"
   >
     <div data-slot="card-header"
-         class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+         class="group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing)"
     >
       <div data-slot="card-title"
-           class="text-2xl font-semibold leading-none tracking-tight text-primary"
+           class="font-heading group-data-[size=sm]/card:text-sm text-2xl leading-none font-semibold tracking-tight text-primary"
       >
         Dados Simples
       </div>
     </div>
     <div data-slot="card-content"
-         class="px-6 @container/igrp-info-card flex flex-col gap-4"
+         class="px-(--card-spacing) @container/igrp-info-card flex flex-col gap-4"
     >
       <dl class="grid gap-4 grid-cols-1">
         <div class="flex min-w-0 flex-col gap-0.5">
@@ -2778,7 +2810,7 @@ exports[`Components/InfoCard WithoutIcons smoke-test 1`] = `
       <div data-orientation="horizontal"
            role="none"
            data-slot="separator"
-           class="bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px"
+           class="shrink-0 bg-border data-vertical:w-px data-vertical:self-stretch data-horizontal:h-px data-horizontal:w-full"
       >
       </div>
       <dl class="grid gap-4 grid-cols-1">

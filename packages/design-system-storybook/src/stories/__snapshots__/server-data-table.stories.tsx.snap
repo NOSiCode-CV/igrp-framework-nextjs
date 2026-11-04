@@ -1,0 +1,2101 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`Components/ServerDataTable Default smoke-test 1`] = `
+<div class="flex flex-col gap-4">
+  <div class="relative overflow-hidden rounded-md border">
+    <div data-slot="table-container"
+         class="relative w-full overflow-x-auto"
+    >
+      <table data-slot="table"
+             class="w-full caption-bottom text-sm"
+      >
+        <thead data-slot="table-header"
+               class="[&amp;_tr]:border-b"
+        >
+          <tr data-slot="table-row"
+              class="transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted border-b"
+          >
+            <th data-slot="table-head"
+                class="h-10 text-left align-middle whitespace-nowrap text-foreground [&amp;:has([role=checkbox])]:pr-0 px-3 font-semibold lg:whitespace-normal"
+                colspan="1"
+                aria-sort="none"
+                style="width: 150px;"
+            >
+              Name
+            </th>
+            <th data-slot="table-head"
+                class="h-10 text-left align-middle whitespace-nowrap text-foreground [&amp;:has([role=checkbox])]:pr-0 px-3 font-semibold lg:whitespace-normal"
+                colspan="1"
+                aria-sort="none"
+                style="width: 150px;"
+            >
+              Role
+            </th>
+          </tr>
+        </thead>
+        <tbody data-slot="table-body"
+               class="[&amp;_tr:last-child]:border-0"
+        >
+          <tr data-slot="table-row"
+              class="border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted"
+              data-state="false"
+          >
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              User 1
+            </td>
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              Admin
+            </td>
+          </tr>
+          <tr data-slot="table-row"
+              class="border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted"
+              data-state="false"
+          >
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              User 2
+            </td>
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              Manager
+            </td>
+          </tr>
+          <tr data-slot="table-row"
+              class="border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted"
+              data-state="false"
+          >
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              User 3
+            </td>
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              Analyst
+            </td>
+          </tr>
+          <tr data-slot="table-row"
+              class="border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted"
+              data-state="false"
+          >
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              User 4
+            </td>
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              Viewer
+            </td>
+          </tr>
+          <tr data-slot="table-row"
+              class="border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted"
+              data-state="false"
+          >
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              User 5
+            </td>
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              Admin
+            </td>
+          </tr>
+          <tr data-slot="table-row"
+              class="border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted"
+              data-state="false"
+          >
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              User 6
+            </td>
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              Manager
+            </td>
+          </tr>
+          <tr data-slot="table-row"
+              class="border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted"
+              data-state="false"
+          >
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              User 7
+            </td>
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              Analyst
+            </td>
+          </tr>
+          <tr data-slot="table-row"
+              class="border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted"
+              data-state="false"
+          >
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              User 8
+            </td>
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              Viewer
+            </td>
+          </tr>
+          <tr data-slot="table-row"
+              class="border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted"
+              data-state="false"
+          >
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              User 9
+            </td>
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              Admin
+            </td>
+          </tr>
+          <tr data-slot="table-row"
+              class="border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted"
+              data-state="false"
+          >
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              User 10
+            </td>
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              Manager
+            </td>
+          </tr>
+        </tbody>
+        <tbody aria-hidden="true">
+          <tr class="h-1">
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="flex items-center gap-6 px-2 justify-between max-sm:flex-col max-sm:items-stretch">
+    <div class="flex grow items-center justify-end gap-3">
+      <label data-slot="label"
+             class="flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 max-sm:sr-only"
+             for="_r_ID_"
+      >
+        Registos por página
+      </label>
+      <button type="button"
+              role="combobox"
+              aria-expanded="false"
+              aria-autocomplete="none"
+              dir="ltr"
+              data-state="closed"
+              data-slot="select-trigger"
+              data-size="default"
+              class="flex items-center justify-between gap-1.5 rounded-md border border-input bg-transparent py-2 pr-2 pl-2.5 text-sm shadow-xs transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 data-placeholder:text-muted-foreground data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-1.5 dark:bg-input/30 dark:hover:bg-input/50 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 w-fit whitespace-nowrap"
+              id="_r_ID_"
+      >
+        <span data-slot="select-value"
+              style="pointer-events: none;"
+        >
+          10
+        </span>
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="24"
+             height="24"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-chevron-down pointer-events-none size-4 text-muted-foreground"
+             aria-hidden="true"
+        >
+          <path d="m6 9 6 6 6-6">
+          </path>
+        </svg>
+      </button>
+    </div>
+    <div class="text-sm whitespace-nowrap text-muted-foreground">
+      <p class="text-sm whitespace-nowrap text-muted-foreground"
+         aria-live="polite"
+      >
+        <span class="text-foreground">
+          1-10
+        </span>
+        de
+        <span class="text-foreground">
+          47
+        </span>
+      </p>
+    </div>
+    <div>
+      <nav role="navigation"
+           aria-label="Paginação"
+           data-slot="pagination"
+           class="mx-auto flex w-full justify-center"
+      >
+        <ul data-slot="pagination-content"
+            class="flex items-center gap-1"
+        >
+          <li data-slot="pagination-item">
+            <button data-slot="button"
+                    data-variant="outline"
+                    data-size="icon"
+                    class="group/button inline-flex shrink-0 items-center justify-center rounded-md border bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border-border bg-background shadow-xs hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 size-9 disabled:pointer-events-none disabled:opacity-50"
+                    disabled
+                    aria-label="Ir para a primeira página"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="16"
+                   height="16"
+                   viewbox="0 0 24 24"
+                   fill="none"
+                   stroke="currentColor"
+                   stroke-width="2"
+                   stroke-linecap="round"
+                   stroke-linejoin="round"
+                   class="lucide lucide-chevron-first"
+                   aria-hidden="true"
+              >
+                <path d="m17 18-6-6 6-6">
+                </path>
+                <path d="M7 6v12">
+                </path>
+              </svg>
+            </button>
+          </li>
+          <li data-slot="pagination-item">
+            <button data-slot="button"
+                    data-variant="outline"
+                    data-size="icon"
+                    class="group/button inline-flex shrink-0 items-center justify-center rounded-md border bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border-border bg-background shadow-xs hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 size-9 disabled:pointer-events-none disabled:opacity-50"
+                    disabled
+                    aria-label="Ir para a página anterior"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="16"
+                   height="16"
+                   viewbox="0 0 24 24"
+                   fill="none"
+                   stroke="currentColor"
+                   stroke-width="2"
+                   stroke-linecap="round"
+                   stroke-linejoin="round"
+                   class="lucide lucide-chevron-left"
+                   aria-hidden="true"
+              >
+                <path d="m15 18-6-6 6-6">
+                </path>
+              </svg>
+            </button>
+          </li>
+          <li data-slot="pagination-item">
+            <button data-slot="button"
+                    data-variant="outline"
+                    data-size="icon"
+                    class="group/button inline-flex shrink-0 items-center justify-center rounded-md border bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border-border bg-background shadow-xs hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 size-9 disabled:pointer-events-none disabled:opacity-50"
+                    aria-label="Ir para a página seguinte"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="16"
+                   height="16"
+                   viewbox="0 0 24 24"
+                   fill="none"
+                   stroke="currentColor"
+                   stroke-width="2"
+                   stroke-linecap="round"
+                   stroke-linejoin="round"
+                   class="lucide lucide-chevron-right"
+                   aria-hidden="true"
+              >
+                <path d="m9 18 6-6-6-6">
+                </path>
+              </svg>
+            </button>
+          </li>
+          <li data-slot="pagination-item">
+            <button data-slot="button"
+                    data-variant="outline"
+                    data-size="icon"
+                    class="group/button inline-flex shrink-0 items-center justify-center rounded-md border bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border-border bg-background shadow-xs hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 size-9 disabled:pointer-events-none disabled:opacity-50"
+                    aria-label="Ir para a última página"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="16"
+                   height="16"
+                   viewbox="0 0 24 24"
+                   fill="none"
+                   stroke="currentColor"
+                   stroke-width="2"
+                   stroke-linecap="round"
+                   stroke-linejoin="round"
+                   class="lucide lucide-chevron-last"
+                   aria-hidden="true"
+              >
+                <path d="m7 18 6-6-6-6">
+                </path>
+                <path d="M17 6v12">
+                </path>
+              </svg>
+            </button>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/ServerDataTable Expandable smoke-test 1`] = `
+<div class="flex flex-col gap-4">
+  <div class="relative overflow-hidden rounded-md border">
+    <div data-slot="table-container"
+         class="relative w-full overflow-x-auto"
+    >
+      <table data-slot="table"
+             class="w-full caption-bottom text-sm"
+      >
+        <thead data-slot="table-header"
+               class="[&amp;_tr]:border-b"
+        >
+          <tr data-slot="table-row"
+              class="transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted border-b"
+          >
+            <th data-slot="table-head"
+                class="h-10 text-left align-middle whitespace-nowrap text-foreground [&amp;:has([role=checkbox])]:pr-0 px-3 font-semibold lg:whitespace-normal"
+                colspan="1"
+                style="width: 46px;"
+            >
+              <span class="sr-only">
+                Expand
+              </span>
+            </th>
+            <th data-slot="table-head"
+                class="h-10 text-left align-middle whitespace-nowrap text-foreground [&amp;:has([role=checkbox])]:pr-0 px-3 font-semibold lg:whitespace-normal"
+                colspan="1"
+                aria-sort="none"
+                style="width: 150px;"
+            >
+              Name
+            </th>
+            <th data-slot="table-head"
+                class="h-10 text-left align-middle whitespace-nowrap text-foreground [&amp;:has([role=checkbox])]:pr-0 px-3 font-semibold lg:whitespace-normal"
+                colspan="1"
+                aria-sort="none"
+                style="width: 150px;"
+            >
+              Role
+            </th>
+          </tr>
+        </thead>
+        <tbody data-slot="table-body"
+               class="[&amp;_tr:last-child]:border-0"
+        >
+          <tr data-slot="table-row"
+              class="border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted"
+              data-state="false"
+          >
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              <button data-slot="button"
+                      data-variant="ghost"
+                      data-size="sm"
+                      class="group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 h-8 gap-1 rounded-[min(var(--radius-md),10px)] px-2.5 in-data-[slot=button-group]:rounded-md has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 shadow-none"
+                      aria-expanded="false"
+                      aria-label="Expandir detalhes"
+              >
+                <span>
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="16"
+                     height="16"
+                     viewbox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     class="lucide lucide-chevron-right"
+                     aria-hidden="true"
+                     id="_r_ID_"
+                >
+                  <path d="m9 18 6-6-6-6">
+                  </path>
+                </svg>
+              </button>
+            </td>
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              User 1
+            </td>
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              Admin
+            </td>
+          </tr>
+          <tr data-slot="table-row"
+              class="border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted"
+              data-state="false"
+          >
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              <button data-slot="button"
+                      data-variant="ghost"
+                      data-size="sm"
+                      class="group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 h-8 gap-1 rounded-[min(var(--radius-md),10px)] px-2.5 in-data-[slot=button-group]:rounded-md has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 shadow-none"
+                      aria-expanded="false"
+                      aria-label="Expandir detalhes"
+              >
+                <span>
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="16"
+                     height="16"
+                     viewbox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     class="lucide lucide-chevron-right"
+                     aria-hidden="true"
+                     id="_r_ID_"
+                >
+                  <path d="m9 18 6-6-6-6">
+                  </path>
+                </svg>
+              </button>
+            </td>
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              User 2
+            </td>
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              Manager
+            </td>
+          </tr>
+          <tr data-slot="table-row"
+              class="border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted"
+              data-state="false"
+          >
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              <button data-slot="button"
+                      data-variant="ghost"
+                      data-size="sm"
+                      class="group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 h-8 gap-1 rounded-[min(var(--radius-md),10px)] px-2.5 in-data-[slot=button-group]:rounded-md has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 shadow-none"
+                      aria-expanded="false"
+                      aria-label="Expandir detalhes"
+              >
+                <span>
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="16"
+                     height="16"
+                     viewbox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     class="lucide lucide-chevron-right"
+                     aria-hidden="true"
+                     id="_r_ID_"
+                >
+                  <path d="m9 18 6-6-6-6">
+                  </path>
+                </svg>
+              </button>
+            </td>
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              User 3
+            </td>
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              Analyst
+            </td>
+          </tr>
+          <tr data-slot="table-row"
+              class="border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted"
+              data-state="false"
+          >
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              <button data-slot="button"
+                      data-variant="ghost"
+                      data-size="sm"
+                      class="group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 h-8 gap-1 rounded-[min(var(--radius-md),10px)] px-2.5 in-data-[slot=button-group]:rounded-md has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 shadow-none"
+                      aria-expanded="false"
+                      aria-label="Expandir detalhes"
+              >
+                <span>
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="16"
+                     height="16"
+                     viewbox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     class="lucide lucide-chevron-right"
+                     aria-hidden="true"
+                     id="_r_ID_"
+                >
+                  <path d="m9 18 6-6-6-6">
+                  </path>
+                </svg>
+              </button>
+            </td>
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              User 4
+            </td>
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              Viewer
+            </td>
+          </tr>
+          <tr data-slot="table-row"
+              class="border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted"
+              data-state="false"
+          >
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              <button data-slot="button"
+                      data-variant="ghost"
+                      data-size="sm"
+                      class="group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 h-8 gap-1 rounded-[min(var(--radius-md),10px)] px-2.5 in-data-[slot=button-group]:rounded-md has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 shadow-none"
+                      aria-expanded="false"
+                      aria-label="Expandir detalhes"
+              >
+                <span>
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="16"
+                     height="16"
+                     viewbox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     class="lucide lucide-chevron-right"
+                     aria-hidden="true"
+                     id="_r_ID_"
+                >
+                  <path d="m9 18 6-6-6-6">
+                  </path>
+                </svg>
+              </button>
+            </td>
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              User 5
+            </td>
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              Admin
+            </td>
+          </tr>
+          <tr data-slot="table-row"
+              class="border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted"
+              data-state="false"
+          >
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              <button data-slot="button"
+                      data-variant="ghost"
+                      data-size="sm"
+                      class="group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 h-8 gap-1 rounded-[min(var(--radius-md),10px)] px-2.5 in-data-[slot=button-group]:rounded-md has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 shadow-none"
+                      aria-expanded="false"
+                      aria-label="Expandir detalhes"
+              >
+                <span>
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="16"
+                     height="16"
+                     viewbox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     class="lucide lucide-chevron-right"
+                     aria-hidden="true"
+                     id="_r_ID_"
+                >
+                  <path d="m9 18 6-6-6-6">
+                  </path>
+                </svg>
+              </button>
+            </td>
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              User 6
+            </td>
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              Manager
+            </td>
+          </tr>
+          <tr data-slot="table-row"
+              class="border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted"
+              data-state="false"
+          >
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              <button data-slot="button"
+                      data-variant="ghost"
+                      data-size="sm"
+                      class="group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 h-8 gap-1 rounded-[min(var(--radius-md),10px)] px-2.5 in-data-[slot=button-group]:rounded-md has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 shadow-none"
+                      aria-expanded="false"
+                      aria-label="Expandir detalhes"
+              >
+                <span>
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="16"
+                     height="16"
+                     viewbox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     class="lucide lucide-chevron-right"
+                     aria-hidden="true"
+                     id="_r_ID_"
+                >
+                  <path d="m9 18 6-6-6-6">
+                  </path>
+                </svg>
+              </button>
+            </td>
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              User 7
+            </td>
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              Analyst
+            </td>
+          </tr>
+          <tr data-slot="table-row"
+              class="border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted"
+              data-state="false"
+          >
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              <button data-slot="button"
+                      data-variant="ghost"
+                      data-size="sm"
+                      class="group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 h-8 gap-1 rounded-[min(var(--radius-md),10px)] px-2.5 in-data-[slot=button-group]:rounded-md has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 shadow-none"
+                      aria-expanded="false"
+                      aria-label="Expandir detalhes"
+              >
+                <span>
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="16"
+                     height="16"
+                     viewbox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     class="lucide lucide-chevron-right"
+                     aria-hidden="true"
+                     id="_r_ID_"
+                >
+                  <path d="m9 18 6-6-6-6">
+                  </path>
+                </svg>
+              </button>
+            </td>
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              User 8
+            </td>
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              Viewer
+            </td>
+          </tr>
+          <tr data-slot="table-row"
+              class="border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted"
+              data-state="false"
+          >
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              <button data-slot="button"
+                      data-variant="ghost"
+                      data-size="sm"
+                      class="group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 h-8 gap-1 rounded-[min(var(--radius-md),10px)] px-2.5 in-data-[slot=button-group]:rounded-md has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 shadow-none"
+                      aria-expanded="false"
+                      aria-label="Expandir detalhes"
+              >
+                <span>
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="16"
+                     height="16"
+                     viewbox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     class="lucide lucide-chevron-right"
+                     aria-hidden="true"
+                     id="_r_ID_"
+                >
+                  <path d="m9 18 6-6-6-6">
+                  </path>
+                </svg>
+              </button>
+            </td>
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              User 9
+            </td>
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              Admin
+            </td>
+          </tr>
+          <tr data-slot="table-row"
+              class="border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted"
+              data-state="false"
+          >
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              <button data-slot="button"
+                      data-variant="ghost"
+                      data-size="sm"
+                      class="group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 h-8 gap-1 rounded-[min(var(--radius-md),10px)] px-2.5 in-data-[slot=button-group]:rounded-md has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 shadow-none"
+                      aria-expanded="false"
+                      aria-label="Expandir detalhes"
+              >
+                <span>
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="16"
+                     height="16"
+                     viewbox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     class="lucide lucide-chevron-right"
+                     aria-hidden="true"
+                     id="_r_ID_"
+                >
+                  <path d="m9 18 6-6-6-6">
+                  </path>
+                </svg>
+              </button>
+            </td>
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              User 10
+            </td>
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              Manager
+            </td>
+          </tr>
+        </tbody>
+        <tbody aria-hidden="true">
+          <tr class="h-1">
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="flex items-center gap-6 px-2 justify-between max-sm:flex-col max-sm:items-stretch">
+    <div class="flex grow items-center justify-end gap-3">
+      <label data-slot="label"
+             class="flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 max-sm:sr-only"
+             for="_r_ID_"
+      >
+        Registos por página
+      </label>
+      <button type="button"
+              role="combobox"
+              aria-expanded="false"
+              aria-autocomplete="none"
+              dir="ltr"
+              data-state="closed"
+              data-slot="select-trigger"
+              data-size="default"
+              class="flex items-center justify-between gap-1.5 rounded-md border border-input bg-transparent py-2 pr-2 pl-2.5 text-sm shadow-xs transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 data-placeholder:text-muted-foreground data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-1.5 dark:bg-input/30 dark:hover:bg-input/50 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 w-fit whitespace-nowrap"
+              id="_r_ID_"
+      >
+        <span data-slot="select-value"
+              style="pointer-events: none;"
+        >
+          10
+        </span>
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="24"
+             height="24"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-chevron-down pointer-events-none size-4 text-muted-foreground"
+             aria-hidden="true"
+        >
+          <path d="m6 9 6 6 6-6">
+          </path>
+        </svg>
+      </button>
+    </div>
+    <div class="text-sm whitespace-nowrap text-muted-foreground">
+      <p class="text-sm whitespace-nowrap text-muted-foreground"
+         aria-live="polite"
+      >
+        <span class="text-foreground">
+          1-10
+        </span>
+        de
+        <span class="text-foreground">
+          47
+        </span>
+      </p>
+    </div>
+    <div>
+      <nav role="navigation"
+           aria-label="Paginação"
+           data-slot="pagination"
+           class="mx-auto flex w-full justify-center"
+      >
+        <ul data-slot="pagination-content"
+            class="flex items-center gap-1"
+        >
+          <li data-slot="pagination-item">
+            <button data-slot="button"
+                    data-variant="outline"
+                    data-size="icon"
+                    class="group/button inline-flex shrink-0 items-center justify-center rounded-md border bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border-border bg-background shadow-xs hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 size-9 disabled:pointer-events-none disabled:opacity-50"
+                    disabled
+                    aria-label="Ir para a primeira página"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="16"
+                   height="16"
+                   viewbox="0 0 24 24"
+                   fill="none"
+                   stroke="currentColor"
+                   stroke-width="2"
+                   stroke-linecap="round"
+                   stroke-linejoin="round"
+                   class="lucide lucide-chevron-first"
+                   aria-hidden="true"
+              >
+                <path d="m17 18-6-6 6-6">
+                </path>
+                <path d="M7 6v12">
+                </path>
+              </svg>
+            </button>
+          </li>
+          <li data-slot="pagination-item">
+            <button data-slot="button"
+                    data-variant="outline"
+                    data-size="icon"
+                    class="group/button inline-flex shrink-0 items-center justify-center rounded-md border bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border-border bg-background shadow-xs hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 size-9 disabled:pointer-events-none disabled:opacity-50"
+                    disabled
+                    aria-label="Ir para a página anterior"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="16"
+                   height="16"
+                   viewbox="0 0 24 24"
+                   fill="none"
+                   stroke="currentColor"
+                   stroke-width="2"
+                   stroke-linecap="round"
+                   stroke-linejoin="round"
+                   class="lucide lucide-chevron-left"
+                   aria-hidden="true"
+              >
+                <path d="m15 18-6-6 6-6">
+                </path>
+              </svg>
+            </button>
+          </li>
+          <li data-slot="pagination-item">
+            <button data-slot="button"
+                    data-variant="outline"
+                    data-size="icon"
+                    class="group/button inline-flex shrink-0 items-center justify-center rounded-md border bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border-border bg-background shadow-xs hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 size-9 disabled:pointer-events-none disabled:opacity-50"
+                    aria-label="Ir para a página seguinte"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="16"
+                   height="16"
+                   viewbox="0 0 24 24"
+                   fill="none"
+                   stroke="currentColor"
+                   stroke-width="2"
+                   stroke-linecap="round"
+                   stroke-linejoin="round"
+                   class="lucide lucide-chevron-right"
+                   aria-hidden="true"
+              >
+                <path d="m9 18 6-6-6-6">
+                </path>
+              </svg>
+            </button>
+          </li>
+          <li data-slot="pagination-item">
+            <button data-slot="button"
+                    data-variant="outline"
+                    data-size="icon"
+                    class="group/button inline-flex shrink-0 items-center justify-center rounded-md border bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border-border bg-background shadow-xs hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 size-9 disabled:pointer-events-none disabled:opacity-50"
+                    aria-label="Ir para a última página"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="16"
+                   height="16"
+                   viewbox="0 0 24 24"
+                   fill="none"
+                   stroke="currentColor"
+                   stroke-width="2"
+                   stroke-linecap="round"
+                   stroke-linejoin="round"
+                   class="lucide lucide-chevron-last"
+                   aria-hidden="true"
+              >
+                <path d="m7 18 6-6-6-6">
+                </path>
+                <path d="M17 6v12">
+                </path>
+              </svg>
+            </button>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/ServerDataTable Loading smoke-test 1`] = `
+<div class="flex flex-col gap-4">
+  <div class="relative overflow-hidden rounded-md border"
+       aria-busy="true"
+  >
+    <div data-slot="table-container"
+         class="relative w-full overflow-x-auto"
+    >
+      <table data-slot="table"
+             class="w-full caption-bottom text-sm"
+      >
+        <thead data-slot="table-header"
+               class="[&amp;_tr]:border-b"
+        >
+          <tr data-slot="table-row"
+              class="transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted border-b"
+          >
+            <th data-slot="table-head"
+                class="h-10 text-left align-middle whitespace-nowrap text-foreground [&amp;:has([role=checkbox])]:pr-0 px-3 font-semibold lg:whitespace-normal"
+                colspan="1"
+                aria-sort="none"
+                style="width: 150px;"
+            >
+              Name
+            </th>
+            <th data-slot="table-head"
+                class="h-10 text-left align-middle whitespace-nowrap text-foreground [&amp;:has([role=checkbox])]:pr-0 px-3 font-semibold lg:whitespace-normal"
+                colspan="1"
+                aria-sort="none"
+                style="width: 150px;"
+            >
+              Role
+            </th>
+          </tr>
+        </thead>
+        <tbody data-slot="table-body"
+               class="[&amp;_tr:last-child]:border-0"
+        >
+          <tr data-slot="table-row"
+              class="border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted"
+              data-state="false"
+          >
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              User 1
+            </td>
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              Admin
+            </td>
+          </tr>
+          <tr data-slot="table-row"
+              class="border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted"
+              data-state="false"
+          >
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              User 2
+            </td>
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              Manager
+            </td>
+          </tr>
+          <tr data-slot="table-row"
+              class="border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted"
+              data-state="false"
+          >
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              User 3
+            </td>
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              Analyst
+            </td>
+          </tr>
+          <tr data-slot="table-row"
+              class="border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted"
+              data-state="false"
+          >
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              User 4
+            </td>
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              Viewer
+            </td>
+          </tr>
+          <tr data-slot="table-row"
+              class="border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted"
+              data-state="false"
+          >
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              User 5
+            </td>
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              Admin
+            </td>
+          </tr>
+          <tr data-slot="table-row"
+              class="border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted"
+              data-state="false"
+          >
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              User 6
+            </td>
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              Manager
+            </td>
+          </tr>
+          <tr data-slot="table-row"
+              class="border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted"
+              data-state="false"
+          >
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              User 7
+            </td>
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              Analyst
+            </td>
+          </tr>
+          <tr data-slot="table-row"
+              class="border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted"
+              data-state="false"
+          >
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              User 8
+            </td>
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              Viewer
+            </td>
+          </tr>
+          <tr data-slot="table-row"
+              class="border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted"
+              data-state="false"
+          >
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              User 9
+            </td>
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              Admin
+            </td>
+          </tr>
+          <tr data-slot="table-row"
+              class="border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted"
+              data-state="false"
+          >
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              User 10
+            </td>
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              Manager
+            </td>
+          </tr>
+        </tbody>
+        <tbody aria-hidden="true">
+          <tr class="h-1">
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="absolute inset-0 flex items-center justify-center bg-background/60">
+      <div class="flex items-center justify-center h-auto"
+           id="_r_ID_"
+           role="status"
+           aria-live="polite"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="24"
+             height="24"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-loader-circle animate-spin size-12 text-primary"
+             data-slot="spinner"
+             aria-hidden="true"
+        >
+          <path d="M21 12a9 9 0 1 1-6.219-8.56">
+          </path>
+        </svg>
+        <span class="sr-only">
+          A carregar…
+        </span>
+      </div>
+    </div>
+  </div>
+  <div class="flex items-center gap-6 px-2 justify-between max-sm:flex-col max-sm:items-stretch">
+    <div class="flex grow items-center justify-end gap-3">
+      <label data-slot="label"
+             class="flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 max-sm:sr-only"
+             for="_r_ID_"
+      >
+        Registos por página
+      </label>
+      <button type="button"
+              role="combobox"
+              aria-expanded="false"
+              aria-autocomplete="none"
+              dir="ltr"
+              data-state="closed"
+              data-slot="select-trigger"
+              data-size="default"
+              class="flex items-center justify-between gap-1.5 rounded-md border border-input bg-transparent py-2 pr-2 pl-2.5 text-sm shadow-xs transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 data-placeholder:text-muted-foreground data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-1.5 dark:bg-input/30 dark:hover:bg-input/50 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 w-fit whitespace-nowrap"
+              id="_r_ID_"
+      >
+        <span data-slot="select-value"
+              style="pointer-events: none;"
+        >
+          10
+        </span>
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="24"
+             height="24"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-chevron-down pointer-events-none size-4 text-muted-foreground"
+             aria-hidden="true"
+        >
+          <path d="m6 9 6 6 6-6">
+          </path>
+        </svg>
+      </button>
+    </div>
+    <div class="text-sm whitespace-nowrap text-muted-foreground">
+      <p class="text-sm whitespace-nowrap text-muted-foreground"
+         aria-live="polite"
+      >
+        <span class="text-foreground">
+          1-10
+        </span>
+        de
+        <span class="text-foreground">
+          47
+        </span>
+      </p>
+    </div>
+    <div>
+      <nav role="navigation"
+           aria-label="Paginação"
+           data-slot="pagination"
+           class="mx-auto flex w-full justify-center"
+      >
+        <ul data-slot="pagination-content"
+            class="flex items-center gap-1"
+        >
+          <li data-slot="pagination-item">
+            <button data-slot="button"
+                    data-variant="outline"
+                    data-size="icon"
+                    class="group/button inline-flex shrink-0 items-center justify-center rounded-md border bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border-border bg-background shadow-xs hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 size-9 disabled:pointer-events-none disabled:opacity-50"
+                    disabled
+                    aria-label="Ir para a primeira página"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="16"
+                   height="16"
+                   viewbox="0 0 24 24"
+                   fill="none"
+                   stroke="currentColor"
+                   stroke-width="2"
+                   stroke-linecap="round"
+                   stroke-linejoin="round"
+                   class="lucide lucide-chevron-first"
+                   aria-hidden="true"
+              >
+                <path d="m17 18-6-6 6-6">
+                </path>
+                <path d="M7 6v12">
+                </path>
+              </svg>
+            </button>
+          </li>
+          <li data-slot="pagination-item">
+            <button data-slot="button"
+                    data-variant="outline"
+                    data-size="icon"
+                    class="group/button inline-flex shrink-0 items-center justify-center rounded-md border bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border-border bg-background shadow-xs hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 size-9 disabled:pointer-events-none disabled:opacity-50"
+                    disabled
+                    aria-label="Ir para a página anterior"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="16"
+                   height="16"
+                   viewbox="0 0 24 24"
+                   fill="none"
+                   stroke="currentColor"
+                   stroke-width="2"
+                   stroke-linecap="round"
+                   stroke-linejoin="round"
+                   class="lucide lucide-chevron-left"
+                   aria-hidden="true"
+              >
+                <path d="m15 18-6-6 6-6">
+                </path>
+              </svg>
+            </button>
+          </li>
+          <li data-slot="pagination-item">
+            <button data-slot="button"
+                    data-variant="outline"
+                    data-size="icon"
+                    class="group/button inline-flex shrink-0 items-center justify-center rounded-md border bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border-border bg-background shadow-xs hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 size-9 disabled:pointer-events-none disabled:opacity-50"
+                    aria-label="Ir para a página seguinte"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="16"
+                   height="16"
+                   viewbox="0 0 24 24"
+                   fill="none"
+                   stroke="currentColor"
+                   stroke-width="2"
+                   stroke-linecap="round"
+                   stroke-linejoin="round"
+                   class="lucide lucide-chevron-right"
+                   aria-hidden="true"
+              >
+                <path d="m9 18 6-6-6-6">
+                </path>
+              </svg>
+            </button>
+          </li>
+          <li data-slot="pagination-item">
+            <button data-slot="button"
+                    data-variant="outline"
+                    data-size="icon"
+                    class="group/button inline-flex shrink-0 items-center justify-center rounded-md border bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border-border bg-background shadow-xs hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 size-9 disabled:pointer-events-none disabled:opacity-50"
+                    aria-label="Ir para a última página"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="16"
+                   height="16"
+                   viewbox="0 0 24 24"
+                   fill="none"
+                   stroke="currentColor"
+                   stroke-width="2"
+                   stroke-linecap="round"
+                   stroke-linejoin="round"
+                   class="lucide lucide-chevron-last"
+                   aria-hidden="true"
+              >
+                <path d="m7 18 6-6-6-6">
+                </path>
+                <path d="M17 6v12">
+                </path>
+              </svg>
+            </button>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/ServerDataTable Numeric smoke-test 1`] = `
+<div class="flex flex-col gap-4">
+  <div class="relative overflow-hidden rounded-md border">
+    <div data-slot="table-container"
+         class="relative w-full overflow-x-auto"
+    >
+      <table data-slot="table"
+             class="w-full caption-bottom text-sm"
+      >
+        <thead data-slot="table-header"
+               class="[&amp;_tr]:border-b"
+        >
+          <tr data-slot="table-row"
+              class="transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted border-b"
+          >
+            <th data-slot="table-head"
+                class="h-10 text-left align-middle whitespace-nowrap text-foreground [&amp;:has([role=checkbox])]:pr-0 px-3 font-semibold lg:whitespace-normal"
+                colspan="1"
+                aria-sort="none"
+                style="width: 150px;"
+            >
+              Name
+            </th>
+            <th data-slot="table-head"
+                class="h-10 text-left align-middle whitespace-nowrap text-foreground [&amp;:has([role=checkbox])]:pr-0 px-3 font-semibold lg:whitespace-normal"
+                colspan="1"
+                aria-sort="none"
+                style="width: 150px;"
+            >
+              Role
+            </th>
+          </tr>
+        </thead>
+        <tbody data-slot="table-body"
+               class="[&amp;_tr:last-child]:border-0"
+        >
+          <tr data-slot="table-row"
+              class="border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted"
+              data-state="false"
+          >
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              User 1
+            </td>
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              Admin
+            </td>
+          </tr>
+          <tr data-slot="table-row"
+              class="border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted"
+              data-state="false"
+          >
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              User 2
+            </td>
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              Manager
+            </td>
+          </tr>
+          <tr data-slot="table-row"
+              class="border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted"
+              data-state="false"
+          >
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              User 3
+            </td>
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              Analyst
+            </td>
+          </tr>
+          <tr data-slot="table-row"
+              class="border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted"
+              data-state="false"
+          >
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              User 4
+            </td>
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              Viewer
+            </td>
+          </tr>
+          <tr data-slot="table-row"
+              class="border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted"
+              data-state="false"
+          >
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              User 5
+            </td>
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              Admin
+            </td>
+          </tr>
+          <tr data-slot="table-row"
+              class="border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted"
+              data-state="false"
+          >
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              User 6
+            </td>
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              Manager
+            </td>
+          </tr>
+          <tr data-slot="table-row"
+              class="border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted"
+              data-state="false"
+          >
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              User 7
+            </td>
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              Analyst
+            </td>
+          </tr>
+          <tr data-slot="table-row"
+              class="border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted"
+              data-state="false"
+          >
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              User 8
+            </td>
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              Viewer
+            </td>
+          </tr>
+          <tr data-slot="table-row"
+              class="border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted"
+              data-state="false"
+          >
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              User 9
+            </td>
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              Admin
+            </td>
+          </tr>
+          <tr data-slot="table-row"
+              class="border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted"
+              data-state="false"
+          >
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              User 10
+            </td>
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              Manager
+            </td>
+          </tr>
+        </tbody>
+        <tbody aria-hidden="true">
+          <tr class="h-1">
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div id="_r_ID_"
+       class="flex items-center gap-3 justify-between max-sm:flex-col max-sm:items-stretch"
+  >
+    <p class="flex-1 text-sm whitespace-nowrap text-muted-foreground"
+       aria-live="polite"
+    >
+      Página 1 de 5
+    </p>
+    <div class="grow">
+      <nav role="navigation"
+           aria-label="Paginação"
+           data-slot="pagination"
+           class="mx-auto flex w-full justify-center"
+      >
+        <ul data-slot="pagination-content"
+            class="flex items-center gap-1"
+        >
+          <li data-slot="pagination-item">
+            <button data-slot="button"
+                    data-variant="outline"
+                    data-size="icon"
+                    class="group/button inline-flex shrink-0 items-center justify-center rounded-md border bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border-border bg-background shadow-xs hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 size-9 disabled:pointer-events-none disabled:opacity-50"
+                    disabled
+                    aria-label="Ir para a página anterior"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="16"
+                   height="16"
+                   viewbox="0 0 24 24"
+                   fill="none"
+                   stroke="currentColor"
+                   stroke-width="2"
+                   stroke-linecap="round"
+                   stroke-linejoin="round"
+                   class="lucide lucide-chevron-left"
+                   aria-hidden="true"
+              >
+                <path d="m15 18-6-6 6-6">
+                </path>
+              </svg>
+            </button>
+          </li>
+          <li data-slot="pagination-item">
+            <button data-slot="button"
+                    data-variant="outline"
+                    data-size="icon"
+                    class="group/button inline-flex shrink-0 items-center justify-center rounded-md border bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border-border bg-background shadow-xs hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 size-9"
+                    aria-current="page"
+            >
+              1
+            </button>
+          </li>
+          <li data-slot="pagination-item">
+            <button data-slot="button"
+                    data-variant="ghost"
+                    data-size="icon"
+                    class="group/button inline-flex shrink-0 items-center justify-center rounded-md border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 size-9"
+            >
+              2
+            </button>
+          </li>
+          <li data-slot="pagination-item">
+            <button data-slot="button"
+                    data-variant="ghost"
+                    data-size="icon"
+                    class="group/button inline-flex shrink-0 items-center justify-center rounded-md border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 size-9"
+            >
+              3
+            </button>
+          </li>
+          <li data-slot="pagination-item">
+            <button data-slot="button"
+                    data-variant="ghost"
+                    data-size="icon"
+                    class="group/button inline-flex shrink-0 items-center justify-center rounded-md border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 size-9"
+            >
+              4
+            </button>
+          </li>
+          <li data-slot="pagination-item">
+            <button data-slot="button"
+                    data-variant="ghost"
+                    data-size="icon"
+                    class="group/button inline-flex shrink-0 items-center justify-center rounded-md border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 size-9"
+            >
+              5
+            </button>
+          </li>
+          <li data-slot="pagination-item">
+            <span aria-hidden="true"
+                  data-slot="pagination-ellipsis"
+                  class="flex size-9 items-center justify-center [&amp;_svg:not([class*='size-'])]:size-4"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="24"
+                   height="24"
+                   viewbox="0 0 24 24"
+                   fill="none"
+                   stroke="currentColor"
+                   stroke-width="2"
+                   stroke-linecap="round"
+                   stroke-linejoin="round"
+                   class="lucide lucide-ellipsis"
+                   aria-hidden="true"
+              >
+                <circle cx="12"
+                        cy="12"
+                        r="1"
+                >
+                </circle>
+                <circle cx="19"
+                        cy="12"
+                        r="1"
+                >
+                </circle>
+                <circle cx="5"
+                        cy="12"
+                        r="1"
+                >
+                </circle>
+              </svg>
+              <span class="sr-only">
+                Mais páginas
+              </span>
+            </span>
+          </li>
+          <li data-slot="pagination-item">
+            <button data-slot="button"
+                    data-variant="outline"
+                    data-size="icon"
+                    class="group/button inline-flex shrink-0 items-center justify-center rounded-md border bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border-border bg-background shadow-xs hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 size-9 disabled:pointer-events-none disabled:opacity-50"
+                    aria-label="Ir para a página seguinte"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="16"
+                   height="16"
+                   viewbox="0 0 24 24"
+                   fill="none"
+                   stroke="currentColor"
+                   stroke-width="2"
+                   stroke-linecap="round"
+                   stroke-linejoin="round"
+                   class="lucide lucide-chevron-right"
+                   aria-hidden="true"
+              >
+                <path d="m9 18 6-6-6-6">
+                </path>
+              </svg>
+            </button>
+          </li>
+        </ul>
+      </nav>
+    </div>
+    <div class="flex flex-1 justify-end">
+      <button type="button"
+              role="combobox"
+              aria-expanded="false"
+              aria-autocomplete="none"
+              dir="ltr"
+              data-state="closed"
+              data-slot="select-trigger"
+              data-size="default"
+              class="flex items-center justify-between gap-1.5 rounded-md border border-input bg-transparent py-2 pr-2 pl-2.5 text-sm shadow-xs transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 data-placeholder:text-muted-foreground data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-1.5 dark:bg-input/30 dark:hover:bg-input/50 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 w-fit whitespace-nowrap"
+              id="results-per-page"
+              aria-label="Resultados por página"
+      >
+        <span data-slot="select-value"
+              style="pointer-events: none;"
+        >
+          10 / página
+        </span>
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="24"
+             height="24"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-chevron-down pointer-events-none size-4 text-muted-foreground"
+             aria-hidden="true"
+        >
+          <path d="m6 9 6 6 6-6">
+          </path>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/ServerDataTable SinglePage smoke-test 1`] = `
+<div class="flex flex-col gap-4">
+  <div class="relative overflow-hidden rounded-md border">
+    <div data-slot="table-container"
+         class="relative w-full overflow-x-auto"
+    >
+      <table data-slot="table"
+             class="w-full caption-bottom text-sm"
+      >
+        <thead data-slot="table-header"
+               class="[&amp;_tr]:border-b"
+        >
+          <tr data-slot="table-row"
+              class="transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted border-b"
+          >
+            <th data-slot="table-head"
+                class="h-10 text-left align-middle whitespace-nowrap text-foreground [&amp;:has([role=checkbox])]:pr-0 px-3 font-semibold lg:whitespace-normal"
+                colspan="1"
+                aria-sort="none"
+                style="width: 150px;"
+            >
+              Name
+            </th>
+            <th data-slot="table-head"
+                class="h-10 text-left align-middle whitespace-nowrap text-foreground [&amp;:has([role=checkbox])]:pr-0 px-3 font-semibold lg:whitespace-normal"
+                colspan="1"
+                aria-sort="none"
+                style="width: 150px;"
+            >
+              Role
+            </th>
+          </tr>
+        </thead>
+        <tbody data-slot="table-body"
+               class="[&amp;_tr:last-child]:border-0"
+        >
+          <tr data-slot="table-row"
+              class="border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted"
+              data-state="false"
+          >
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              User 1
+            </td>
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              Admin
+            </td>
+          </tr>
+          <tr data-slot="table-row"
+              class="border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted"
+              data-state="false"
+          >
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              User 2
+            </td>
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              Manager
+            </td>
+          </tr>
+          <tr data-slot="table-row"
+              class="border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted"
+              data-state="false"
+          >
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              User 3
+            </td>
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              Analyst
+            </td>
+          </tr>
+          <tr data-slot="table-row"
+              class="border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted"
+              data-state="false"
+          >
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              User 4
+            </td>
+            <td data-slot="table-cell"
+                class="align-middle whitespace-nowrap [&amp;:has([role=checkbox])]:pr-0 h-[inherit] p-3 [&amp;:has([aria-expanded])]:w-px [&amp;:has([aria-expanded])]:py-0 [&amp;:has([aria-expanded])]:pr-0 truncate lg:overflow-visible lg:text-clip lg:whitespace-normal lg:wrap-anywhere"
+            >
+              Viewer
+            </td>
+          </tr>
+        </tbody>
+        <tbody aria-hidden="true">
+          <tr class="h-1">
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="flex items-center gap-6 px-2 justify-between max-sm:flex-col max-sm:items-stretch">
+    <div class="flex grow items-center justify-end gap-3">
+      <label data-slot="label"
+             class="flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 max-sm:sr-only"
+             for="_r_ID_"
+      >
+        Registos por página
+      </label>
+      <button type="button"
+              role="combobox"
+              aria-expanded="false"
+              aria-autocomplete="none"
+              dir="ltr"
+              data-state="closed"
+              data-slot="select-trigger"
+              data-size="default"
+              class="flex items-center justify-between gap-1.5 rounded-md border border-input bg-transparent py-2 pr-2 pl-2.5 text-sm shadow-xs transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 data-placeholder:text-muted-foreground data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-1.5 dark:bg-input/30 dark:hover:bg-input/50 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 w-fit whitespace-nowrap"
+              id="_r_ID_"
+      >
+        <span data-slot="select-value"
+              style="pointer-events: none;"
+        >
+          10
+        </span>
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="24"
+             height="24"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-chevron-down pointer-events-none size-4 text-muted-foreground"
+             aria-hidden="true"
+        >
+          <path d="m6 9 6 6 6-6">
+          </path>
+        </svg>
+      </button>
+    </div>
+    <div class="text-sm whitespace-nowrap text-muted-foreground">
+      <p class="text-sm whitespace-nowrap text-muted-foreground"
+         aria-live="polite"
+      >
+        <span class="text-foreground">
+          1-4
+        </span>
+        de
+        <span class="text-foreground">
+          4
+        </span>
+      </p>
+    </div>
+    <div>
+      <nav role="navigation"
+           aria-label="Paginação"
+           data-slot="pagination"
+           class="mx-auto flex w-full justify-center"
+      >
+        <ul data-slot="pagination-content"
+            class="flex items-center gap-1"
+        >
+          <li data-slot="pagination-item">
+            <button data-slot="button"
+                    data-variant="outline"
+                    data-size="icon"
+                    class="group/button inline-flex shrink-0 items-center justify-center rounded-md border bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border-border bg-background shadow-xs hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 size-9 disabled:pointer-events-none disabled:opacity-50"
+                    disabled
+                    aria-label="Ir para a primeira página"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="16"
+                   height="16"
+                   viewbox="0 0 24 24"
+                   fill="none"
+                   stroke="currentColor"
+                   stroke-width="2"
+                   stroke-linecap="round"
+                   stroke-linejoin="round"
+                   class="lucide lucide-chevron-first"
+                   aria-hidden="true"
+              >
+                <path d="m17 18-6-6 6-6">
+                </path>
+                <path d="M7 6v12">
+                </path>
+              </svg>
+            </button>
+          </li>
+          <li data-slot="pagination-item">
+            <button data-slot="button"
+                    data-variant="outline"
+                    data-size="icon"
+                    class="group/button inline-flex shrink-0 items-center justify-center rounded-md border bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border-border bg-background shadow-xs hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 size-9 disabled:pointer-events-none disabled:opacity-50"
+                    disabled
+                    aria-label="Ir para a página anterior"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="16"
+                   height="16"
+                   viewbox="0 0 24 24"
+                   fill="none"
+                   stroke="currentColor"
+                   stroke-width="2"
+                   stroke-linecap="round"
+                   stroke-linejoin="round"
+                   class="lucide lucide-chevron-left"
+                   aria-hidden="true"
+              >
+                <path d="m15 18-6-6 6-6">
+                </path>
+              </svg>
+            </button>
+          </li>
+          <li data-slot="pagination-item">
+            <button data-slot="button"
+                    data-variant="outline"
+                    data-size="icon"
+                    class="group/button inline-flex shrink-0 items-center justify-center rounded-md border bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border-border bg-background shadow-xs hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 size-9 disabled:pointer-events-none disabled:opacity-50"
+                    disabled
+                    aria-label="Ir para a página seguinte"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="16"
+                   height="16"
+                   viewbox="0 0 24 24"
+                   fill="none"
+                   stroke="currentColor"
+                   stroke-width="2"
+                   stroke-linecap="round"
+                   stroke-linejoin="round"
+                   class="lucide lucide-chevron-right"
+                   aria-hidden="true"
+              >
+                <path d="m9 18 6-6-6-6">
+                </path>
+              </svg>
+            </button>
+          </li>
+          <li data-slot="pagination-item">
+            <button data-slot="button"
+                    data-variant="outline"
+                    data-size="icon"
+                    class="group/button inline-flex shrink-0 items-center justify-center rounded-md border bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border-border bg-background shadow-xs hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 size-9 disabled:pointer-events-none disabled:opacity-50"
+                    disabled
+                    aria-label="Ir para a última página"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="16"
+                   height="16"
+                   viewbox="0 0 24 24"
+                   fill="none"
+                   stroke="currentColor"
+                   stroke-width="2"
+                   stroke-linecap="round"
+                   stroke-linejoin="round"
+                   class="lucide lucide-chevron-last"
+                   aria-hidden="true"
+              >
+                <path d="m7 18 6-6-6-6">
+                </path>
+                <path d="M17 6v12">
+                </path>
+              </svg>
+            </button>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+`;

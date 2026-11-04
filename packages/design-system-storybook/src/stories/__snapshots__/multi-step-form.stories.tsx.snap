@@ -1,0 +1,541 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`Horizon/MultiStepForm Blocking smoke-test 1`] = `
+<div class="max-w-xl p-4">
+  <form novalidate
+        id="_r_ID_"
+  >
+    <fieldset data-slot="field-set"
+              class="flex flex-col has-[&gt;[data-slot=checkbox-group]]:gap-3 has-[&gt;[data-slot=radio-group]]:gap-3 m-0 gap-0 border-0 p-0"
+    >
+      <div class="grid gap-4">
+        <div data-slot="multi-step-form"
+             class="flex w-full max-w-full min-w-0 flex-col gap-8 pt-3"
+        >
+          <div data-slot="multi-step-form-header"
+               class="w-full max-w-full min-w-0"
+          >
+            <div data-slot="stepper"
+                 class="group/stepper inline-flex data-[orientation=horizontal]:w-full data-[orientation=horizontal]:flex-row data-[orientation=vertical]:flex-col"
+                 data-orientation="horizontal"
+            >
+              <div data-slot="stepper-item"
+                   class="group/step flex items-center group-data-[orientation=horizontal]/stepper:flex-row group-data-[orientation=vertical]/stepper:flex-col relative flex-1 flex-col"
+                   data-state="active"
+              >
+                <button type="button"
+                        data-slot="stepper-trigger"
+                        class="inline-flex items-center gap-3 rounded-full outline-none focus-visible:z-10 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 flex-col"
+                >
+                  <span data-slot="stepper-indicator"
+                        class="relative flex shrink-0 items-center justify-center rounded-full text-xs text-muted-foreground data-[state=active]:bg-step-active data-[state=active]:text-step-active-foreground data-[state=completed]:bg-step-complete data-[state=completed]:text-step-complete-foreground size-5 border-2 border-muted-foreground/30 bg-background font-normal data-[state=active]:border-step-active data-[state=completed]:border-step-complete"
+                        data-state="active"
+                        data-variant="ring"
+                  >
+                  </span>
+                  <h3 data-slot="stepper-title"
+                      class="text-sm font-medium"
+                  >
+                    Identidade
+                  </h3>
+                </button>
+                <div data-slot="stepper-separator"
+                     class="bg-muted group-has-[[data-variant=number]]/step:top-[0.9375rem] group-has-[[data-variant=number]]/step:right-[calc(-50%+1rem)] group-has-[[data-variant=number]]/step:left-[calc(50%+1rem)] group-has-[[data-variant=ring]]/step:top-[0.5625rem] group-has-[[data-variant=ring]]/step:right-[calc(-50%+0.625rem)] group-has-[[data-variant=ring]]/step:left-[calc(50%+0.625rem)] group-data-[orientation=horizontal]/stepper:h-0.5 group-data-[orientation=horizontal]/stepper:w-full group-data-[orientation=horizontal]/stepper:flex-1 group-data-[orientation=vertical]/stepper:h-12 group-data-[orientation=vertical]/stepper:w-0.5 group-data-[state=active]/step:bg-step-active group-data-[state=completed]/step:bg-step-complete absolute m-0 w-auto"
+                >
+                </div>
+              </div>
+              <div data-slot="stepper-item"
+                   class="group/step flex items-center group-data-[orientation=horizontal]/stepper:flex-row group-data-[orientation=vertical]/stepper:flex-col relative flex-1 flex-col"
+                   data-state="inactive"
+              >
+                <span class="inline-flex"
+                      data-slot="tooltip-trigger-wrapper"
+                      tabindex="0"
+                      data-state="closed"
+                >
+                  <button type="button"
+                          data-slot="stepper-trigger"
+                          class="inline-flex items-center gap-3 rounded-full outline-none focus-visible:z-10 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 flex-col"
+                          disabled
+                  >
+                    <span data-slot="stepper-indicator"
+                          class="relative flex shrink-0 items-center justify-center rounded-full text-xs text-muted-foreground data-[state=active]:bg-step-active data-[state=active]:text-step-active-foreground data-[state=completed]:bg-step-complete data-[state=completed]:text-step-complete-foreground size-5 border-2 border-muted-foreground/30 bg-background font-normal data-[state=active]:border-step-active data-[state=completed]:border-step-complete"
+                          data-state="inactive"
+                          data-variant="ring"
+                    >
+                    </span>
+                    <h3 data-slot="stepper-title"
+                        class="text-sm font-medium"
+                    >
+                      Contacto
+                    </h3>
+                  </button>
+                </span>
+                <div data-slot="stepper-separator"
+                     class="bg-muted group-has-[[data-variant=number]]/step:top-[0.9375rem] group-has-[[data-variant=number]]/step:right-[calc(-50%+1rem)] group-has-[[data-variant=number]]/step:left-[calc(50%+1rem)] group-has-[[data-variant=ring]]/step:top-[0.5625rem] group-has-[[data-variant=ring]]/step:right-[calc(-50%+0.625rem)] group-has-[[data-variant=ring]]/step:left-[calc(50%+0.625rem)] group-data-[orientation=horizontal]/stepper:h-0.5 group-data-[orientation=horizontal]/stepper:w-full group-data-[orientation=horizontal]/stepper:flex-1 group-data-[orientation=vertical]/stepper:h-12 group-data-[orientation=vertical]/stepper:w-0.5 group-data-[state=active]/step:bg-step-active group-data-[state=completed]/step:bg-step-complete absolute m-0 w-auto"
+                >
+                </div>
+              </div>
+              <div data-slot="stepper-item"
+                   class="group/step flex items-center group-data-[orientation=horizontal]/stepper:flex-row group-data-[orientation=vertical]/stepper:flex-col relative flex-1 flex-col"
+                   data-state="inactive"
+              >
+                <span class="inline-flex"
+                      data-slot="tooltip-trigger-wrapper"
+                      tabindex="0"
+                      data-state="closed"
+                >
+                  <button type="button"
+                          data-slot="stepper-trigger"
+                          class="inline-flex items-center gap-3 rounded-full outline-none focus-visible:z-10 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 flex-col"
+                          disabled
+                  >
+                    <span data-slot="stepper-indicator"
+                          class="relative flex shrink-0 items-center justify-center rounded-full text-xs text-muted-foreground data-[state=active]:bg-step-active data-[state=active]:text-step-active-foreground data-[state=completed]:bg-step-complete data-[state=completed]:text-step-complete-foreground size-5 border-2 border-muted-foreground/30 bg-background font-normal data-[state=active]:border-step-active data-[state=completed]:border-step-complete"
+                          data-state="inactive"
+                          data-variant="ring"
+                    >
+                    </span>
+                    <h3 data-slot="stepper-title"
+                        class="text-sm font-medium"
+                    >
+                      Morada
+                    </h3>
+                  </button>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div data-slot="multi-step-form-steps"
+               class="w-full max-w-full min-w-0 motion-safe:animate-[igrp-step-in_0.3s_ease-out_both]"
+          >
+            <div data-slot="form-item"
+                 class="flex flex-col gap-2"
+            >
+              <label data-slot="form-label"
+                     class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 data-[error=true]:text-destructive gap-0.5 after:text-destructive after:content-['*']"
+                     data-error="false"
+                     for="_r_ID_-form-item"
+              >
+                Nome
+              </label>
+              <div class="relative">
+                <input data-slot="form-control"
+                       class="h-9 w-full min-w-0 border-input selection:bg-primary selection:text-primary-foreground file:text-foreground placeholder:text-muted-foreground dark:bg-input/30 rounded-md border px-3 shadow-xs transition-[color,box-shadow] file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:border-ring focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:ring-2 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 peer bg-background py-3 text-sm outline-hidden"
+                       required
+                       aria-required="true"
+                       id="_r_ID_-form-item"
+                       aria-describedby="_r_ID_-form-item-description"
+                       aria-invalid="false"
+                       type="text"
+                       value
+                       name="name"
+                >
+              </div>
+            </div>
+          </div>
+          <div data-slot="multi-step-form-footer"
+               class="flex w-full items-center justify-end gap-3 pt-3"
+          >
+            <span class="inline-flex"
+                  data-slot="tooltip-trigger-wrapper"
+                  tabindex="0"
+                  data-state="closed"
+            >
+              <button data-slot="button"
+                      data-variant="default"
+                      data-size="default"
+                      class="group/button inline-flex shrink-0 items-center justify-center rounded-md border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-primary text-primary-foreground hover:bg-primary/80 h-9 gap-1.5 px-2.5 in-data-[slot=button-group]:rounded-md has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 relative"
+                      disabled
+                      type="button"
+                      id="_r_ID_"
+              >
+                Próximo
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="16"
+                     height="16"
+                     viewbox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     class="lucide lucide-chevron-right"
+                     aria-hidden="true"
+                     id="_r_ID_"
+                     data-icon="inline-end"
+                >
+                  <path d="m9 18 6-6-6-6">
+                  </path>
+                </svg>
+              </button>
+            </span>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+  </form>
+</div>
+`;
+
+exports[`Horizon/MultiStepForm Number smoke-test 1`] = `
+<div class="max-w-xl p-4">
+  <form novalidate
+        id="_r_ID_"
+  >
+    <fieldset data-slot="field-set"
+              class="flex flex-col has-[&gt;[data-slot=checkbox-group]]:gap-3 has-[&gt;[data-slot=radio-group]]:gap-3 m-0 gap-0 border-0 p-0"
+    >
+      <div class="grid gap-4">
+        <div data-slot="multi-step-form"
+             class="flex w-full max-w-full min-w-0 flex-col gap-8 pt-3"
+        >
+          <div data-slot="multi-step-form-header"
+               class="w-full max-w-full min-w-0"
+          >
+            <div data-slot="stepper"
+                 class="group/stepper inline-flex data-[orientation=horizontal]:w-full data-[orientation=horizontal]:flex-row data-[orientation=vertical]:flex-col"
+                 data-orientation="horizontal"
+            >
+              <div data-slot="stepper-item"
+                   class="group/step flex items-center group-data-[orientation=horizontal]/stepper:flex-row group-data-[orientation=vertical]/stepper:flex-col relative flex-1 flex-col"
+                   data-state="active"
+              >
+                <div class="flex flex-col items-center gap-3"
+                     data-slot="stepper-trigger"
+                >
+                  <span data-slot="stepper-indicator"
+                        class="relative flex shrink-0 items-center justify-center rounded-full bg-muted text-xs font-medium text-muted-foreground data-[state=active]:bg-step-active data-[state=active]:text-step-active-foreground data-[state=completed]:bg-step-complete data-[state=completed]:text-step-complete-foreground size-8"
+                        data-state="active"
+                        data-variant="number"
+                  >
+                    <span class="transition-all group-data-loading/step:scale-0 group-data-loading/step:opacity-0 group-data-loading/step:transition-none group-data-[state=completed]/step:scale-0 group-data-[state=completed]/step:opacity-0">
+                      1
+                    </span>
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         width="16"
+                         height="16"
+                         viewbox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2"
+                         stroke-linecap="round"
+                         stroke-linejoin="round"
+                         class="lucide lucide-check absolute scale-0 opacity-0 transition-all group-data-[state=completed]/step:scale-100 group-data-[state=completed]/step:opacity-100"
+                         aria-hidden="true"
+                    >
+                      <path d="M20 6 9 17l-5-5">
+                      </path>
+                    </svg>
+                  </span>
+                  <h3 data-slot="stepper-title"
+                      class="text-sm font-medium"
+                  >
+                    Identidade
+                  </h3>
+                </div>
+                <div data-slot="stepper-separator"
+                     class="bg-muted group-has-[[data-variant=number]]/step:top-[0.9375rem] group-has-[[data-variant=number]]/step:right-[calc(-50%+1rem)] group-has-[[data-variant=number]]/step:left-[calc(50%+1rem)] group-has-[[data-variant=ring]]/step:top-[0.5625rem] group-has-[[data-variant=ring]]/step:right-[calc(-50%+0.625rem)] group-has-[[data-variant=ring]]/step:left-[calc(50%+0.625rem)] group-data-[orientation=horizontal]/stepper:h-0.5 group-data-[orientation=horizontal]/stepper:w-full group-data-[orientation=horizontal]/stepper:flex-1 group-data-[orientation=vertical]/stepper:h-12 group-data-[orientation=vertical]/stepper:w-0.5 group-data-[state=active]/step:bg-step-active group-data-[state=completed]/step:bg-step-complete absolute m-0 w-auto"
+                >
+                </div>
+              </div>
+              <div data-slot="stepper-item"
+                   class="group/step flex items-center group-data-[orientation=horizontal]/stepper:flex-row group-data-[orientation=vertical]/stepper:flex-col relative flex-1 flex-col"
+                   data-state="inactive"
+              >
+                <div class="flex flex-col items-center gap-3"
+                     data-slot="stepper-trigger"
+                >
+                  <span data-slot="stepper-indicator"
+                        class="relative flex shrink-0 items-center justify-center rounded-full bg-muted text-xs font-medium text-muted-foreground data-[state=active]:bg-step-active data-[state=active]:text-step-active-foreground data-[state=completed]:bg-step-complete data-[state=completed]:text-step-complete-foreground size-8"
+                        data-state="inactive"
+                        data-variant="number"
+                  >
+                    <span class="transition-all group-data-loading/step:scale-0 group-data-loading/step:opacity-0 group-data-loading/step:transition-none group-data-[state=completed]/step:scale-0 group-data-[state=completed]/step:opacity-0">
+                      2
+                    </span>
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         width="16"
+                         height="16"
+                         viewbox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2"
+                         stroke-linecap="round"
+                         stroke-linejoin="round"
+                         class="lucide lucide-check absolute scale-0 opacity-0 transition-all group-data-[state=completed]/step:scale-100 group-data-[state=completed]/step:opacity-100"
+                         aria-hidden="true"
+                    >
+                      <path d="M20 6 9 17l-5-5">
+                      </path>
+                    </svg>
+                  </span>
+                  <h3 data-slot="stepper-title"
+                      class="text-sm font-medium"
+                  >
+                    Contacto
+                  </h3>
+                </div>
+                <div data-slot="stepper-separator"
+                     class="bg-muted group-has-[[data-variant=number]]/step:top-[0.9375rem] group-has-[[data-variant=number]]/step:right-[calc(-50%+1rem)] group-has-[[data-variant=number]]/step:left-[calc(50%+1rem)] group-has-[[data-variant=ring]]/step:top-[0.5625rem] group-has-[[data-variant=ring]]/step:right-[calc(-50%+0.625rem)] group-has-[[data-variant=ring]]/step:left-[calc(50%+0.625rem)] group-data-[orientation=horizontal]/stepper:h-0.5 group-data-[orientation=horizontal]/stepper:w-full group-data-[orientation=horizontal]/stepper:flex-1 group-data-[orientation=vertical]/stepper:h-12 group-data-[orientation=vertical]/stepper:w-0.5 group-data-[state=active]/step:bg-step-active group-data-[state=completed]/step:bg-step-complete absolute m-0 w-auto"
+                >
+                </div>
+              </div>
+              <div data-slot="stepper-item"
+                   class="group/step flex items-center group-data-[orientation=horizontal]/stepper:flex-row group-data-[orientation=vertical]/stepper:flex-col relative flex-1 flex-col"
+                   data-state="inactive"
+              >
+                <div class="flex flex-col items-center gap-3"
+                     data-slot="stepper-trigger"
+                >
+                  <span data-slot="stepper-indicator"
+                        class="relative flex shrink-0 items-center justify-center rounded-full bg-muted text-xs font-medium text-muted-foreground data-[state=active]:bg-step-active data-[state=active]:text-step-active-foreground data-[state=completed]:bg-step-complete data-[state=completed]:text-step-complete-foreground size-8"
+                        data-state="inactive"
+                        data-variant="number"
+                  >
+                    <span class="transition-all group-data-loading/step:scale-0 group-data-loading/step:opacity-0 group-data-loading/step:transition-none group-data-[state=completed]/step:scale-0 group-data-[state=completed]/step:opacity-0">
+                      3
+                    </span>
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         width="16"
+                         height="16"
+                         viewbox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2"
+                         stroke-linecap="round"
+                         stroke-linejoin="round"
+                         class="lucide lucide-check absolute scale-0 opacity-0 transition-all group-data-[state=completed]/step:scale-100 group-data-[state=completed]/step:opacity-100"
+                         aria-hidden="true"
+                    >
+                      <path d="M20 6 9 17l-5-5">
+                      </path>
+                    </svg>
+                  </span>
+                  <h3 data-slot="stepper-title"
+                      class="text-sm font-medium"
+                  >
+                    Morada
+                  </h3>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div data-slot="multi-step-form-steps"
+               class="w-full max-w-full min-w-0 motion-safe:animate-[igrp-step-in_0.3s_ease-out_both]"
+          >
+            <div data-slot="form-item"
+                 class="flex flex-col gap-2"
+            >
+              <label data-slot="form-label"
+                     class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 data-[error=true]:text-destructive gap-0.5 after:text-destructive after:content-['*']"
+                     data-error="false"
+                     for="_r_ID_-form-item"
+              >
+                Nome
+              </label>
+              <div class="relative">
+                <input data-slot="form-control"
+                       class="h-9 w-full min-w-0 border-input selection:bg-primary selection:text-primary-foreground file:text-foreground placeholder:text-muted-foreground dark:bg-input/30 rounded-md border px-3 shadow-xs transition-[color,box-shadow] file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:border-ring focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:ring-2 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 peer bg-background py-3 text-sm outline-hidden"
+                       required
+                       aria-required="true"
+                       id="_r_ID_-form-item"
+                       aria-describedby="_r_ID_-form-item-description"
+                       aria-invalid="false"
+                       type="text"
+                       value
+                       name="name"
+                >
+              </div>
+            </div>
+          </div>
+          <div data-slot="multi-step-form-footer"
+               class="flex w-full items-center justify-end gap-3 pt-3"
+          >
+            <button data-slot="button"
+                    data-variant="default"
+                    data-size="default"
+                    class="group/button inline-flex shrink-0 items-center justify-center rounded-md border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-primary text-primary-foreground hover:bg-primary/80 h-9 gap-1.5 px-2.5 in-data-[slot=button-group]:rounded-md has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 relative"
+                    type="button"
+                    id="_r_ID_"
+            >
+              Próximo
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="16"
+                   height="16"
+                   viewbox="0 0 24 24"
+                   fill="none"
+                   stroke="currentColor"
+                   stroke-width="2"
+                   stroke-linecap="round"
+                   stroke-linejoin="round"
+                   class="lucide lucide-chevron-right"
+                   aria-hidden="true"
+                   id="_r_ID_"
+                   data-icon="inline-end"
+              >
+                <path d="m9 18 6-6-6-6">
+                </path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+  </form>
+</div>
+`;
+
+exports[`Horizon/MultiStepForm Ring smoke-test 1`] = `
+<div class="max-w-xl p-4">
+  <form novalidate
+        id="_r_ID_"
+  >
+    <fieldset data-slot="field-set"
+              class="flex flex-col has-[&gt;[data-slot=checkbox-group]]:gap-3 has-[&gt;[data-slot=radio-group]]:gap-3 m-0 gap-0 border-0 p-0"
+    >
+      <div class="grid gap-4">
+        <div data-slot="multi-step-form"
+             class="flex w-full max-w-full min-w-0 flex-col gap-8 pt-3"
+        >
+          <div data-slot="multi-step-form-header"
+               class="w-full max-w-full min-w-0"
+          >
+            <div data-slot="stepper"
+                 class="group/stepper inline-flex data-[orientation=horizontal]:w-full data-[orientation=horizontal]:flex-row data-[orientation=vertical]:flex-col"
+                 data-orientation="horizontal"
+            >
+              <div data-slot="stepper-item"
+                   class="group/step flex items-center group-data-[orientation=horizontal]/stepper:flex-row group-data-[orientation=vertical]/stepper:flex-col relative flex-1 flex-col"
+                   data-state="active"
+              >
+                <div class="flex flex-col items-center gap-3"
+                     data-slot="stepper-trigger"
+                >
+                  <span data-slot="stepper-indicator"
+                        class="relative flex shrink-0 items-center justify-center rounded-full text-xs text-muted-foreground data-[state=active]:bg-step-active data-[state=active]:text-step-active-foreground data-[state=completed]:bg-step-complete data-[state=completed]:text-step-complete-foreground size-5 border-2 border-muted-foreground/30 bg-background font-normal data-[state=active]:border-step-active data-[state=completed]:border-step-complete"
+                        data-state="active"
+                        data-variant="ring"
+                  >
+                  </span>
+                  <h3 data-slot="stepper-title"
+                      class="text-sm font-medium"
+                  >
+                    Identidade
+                  </h3>
+                </div>
+                <div data-slot="stepper-separator"
+                     class="bg-muted group-has-[[data-variant=number]]/step:top-[0.9375rem] group-has-[[data-variant=number]]/step:right-[calc(-50%+1rem)] group-has-[[data-variant=number]]/step:left-[calc(50%+1rem)] group-has-[[data-variant=ring]]/step:top-[0.5625rem] group-has-[[data-variant=ring]]/step:right-[calc(-50%+0.625rem)] group-has-[[data-variant=ring]]/step:left-[calc(50%+0.625rem)] group-data-[orientation=horizontal]/stepper:h-0.5 group-data-[orientation=horizontal]/stepper:w-full group-data-[orientation=horizontal]/stepper:flex-1 group-data-[orientation=vertical]/stepper:h-12 group-data-[orientation=vertical]/stepper:w-0.5 group-data-[state=active]/step:bg-step-active group-data-[state=completed]/step:bg-step-complete absolute m-0 w-auto"
+                >
+                </div>
+              </div>
+              <div data-slot="stepper-item"
+                   class="group/step flex items-center group-data-[orientation=horizontal]/stepper:flex-row group-data-[orientation=vertical]/stepper:flex-col relative flex-1 flex-col"
+                   data-state="inactive"
+              >
+                <div class="flex flex-col items-center gap-3"
+                     data-slot="stepper-trigger"
+                >
+                  <span data-slot="stepper-indicator"
+                        class="relative flex shrink-0 items-center justify-center rounded-full text-xs text-muted-foreground data-[state=active]:bg-step-active data-[state=active]:text-step-active-foreground data-[state=completed]:bg-step-complete data-[state=completed]:text-step-complete-foreground size-5 border-2 border-muted-foreground/30 bg-background font-normal data-[state=active]:border-step-active data-[state=completed]:border-step-complete"
+                        data-state="inactive"
+                        data-variant="ring"
+                  >
+                  </span>
+                  <h3 data-slot="stepper-title"
+                      class="text-sm font-medium"
+                  >
+                    Contacto
+                  </h3>
+                </div>
+                <div data-slot="stepper-separator"
+                     class="bg-muted group-has-[[data-variant=number]]/step:top-[0.9375rem] group-has-[[data-variant=number]]/step:right-[calc(-50%+1rem)] group-has-[[data-variant=number]]/step:left-[calc(50%+1rem)] group-has-[[data-variant=ring]]/step:top-[0.5625rem] group-has-[[data-variant=ring]]/step:right-[calc(-50%+0.625rem)] group-has-[[data-variant=ring]]/step:left-[calc(50%+0.625rem)] group-data-[orientation=horizontal]/stepper:h-0.5 group-data-[orientation=horizontal]/stepper:w-full group-data-[orientation=horizontal]/stepper:flex-1 group-data-[orientation=vertical]/stepper:h-12 group-data-[orientation=vertical]/stepper:w-0.5 group-data-[state=active]/step:bg-step-active group-data-[state=completed]/step:bg-step-complete absolute m-0 w-auto"
+                >
+                </div>
+              </div>
+              <div data-slot="stepper-item"
+                   class="group/step flex items-center group-data-[orientation=horizontal]/stepper:flex-row group-data-[orientation=vertical]/stepper:flex-col relative flex-1 flex-col"
+                   data-state="inactive"
+              >
+                <div class="flex flex-col items-center gap-3"
+                     data-slot="stepper-trigger"
+                >
+                  <span data-slot="stepper-indicator"
+                        class="relative flex shrink-0 items-center justify-center rounded-full text-xs text-muted-foreground data-[state=active]:bg-step-active data-[state=active]:text-step-active-foreground data-[state=completed]:bg-step-complete data-[state=completed]:text-step-complete-foreground size-5 border-2 border-muted-foreground/30 bg-background font-normal data-[state=active]:border-step-active data-[state=completed]:border-step-complete"
+                        data-state="inactive"
+                        data-variant="ring"
+                  >
+                  </span>
+                  <h3 data-slot="stepper-title"
+                      class="text-sm font-medium"
+                  >
+                    Morada
+                  </h3>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div data-slot="multi-step-form-steps"
+               class="w-full max-w-full min-w-0 motion-safe:animate-[igrp-step-in_0.3s_ease-out_both]"
+          >
+            <div data-slot="form-item"
+                 class="flex flex-col gap-2"
+            >
+              <label data-slot="form-label"
+                     class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 data-[error=true]:text-destructive gap-0.5 after:text-destructive after:content-['*']"
+                     data-error="false"
+                     for="_r_ID_-form-item"
+              >
+                Nome
+              </label>
+              <div class="relative">
+                <input data-slot="form-control"
+                       class="h-9 w-full min-w-0 border-input selection:bg-primary selection:text-primary-foreground file:text-foreground placeholder:text-muted-foreground dark:bg-input/30 rounded-md border px-3 shadow-xs transition-[color,box-shadow] file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:border-ring focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:ring-2 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 peer bg-background py-3 text-sm outline-hidden"
+                       required
+                       aria-required="true"
+                       id="_r_ID_-form-item"
+                       aria-describedby="_r_ID_-form-item-description"
+                       aria-invalid="false"
+                       type="text"
+                       value
+                       name="name"
+                >
+              </div>
+            </div>
+          </div>
+          <div data-slot="multi-step-form-footer"
+               class="flex w-full items-center justify-end gap-3 pt-3"
+          >
+            <button data-slot="button"
+                    data-variant="default"
+                    data-size="default"
+                    class="group/button inline-flex shrink-0 items-center justify-center rounded-md border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-primary text-primary-foreground hover:bg-primary/80 h-9 gap-1.5 px-2.5 in-data-[slot=button-group]:rounded-md has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 relative"
+                    type="button"
+                    id="_r_ID_"
+            >
+              Próximo
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="16"
+                   height="16"
+                   viewbox="0 0 24 24"
+                   fill="none"
+                   stroke="currentColor"
+                   stroke-width="2"
+                   stroke-linecap="round"
+                   stroke-linejoin="round"
+                   class="lucide lucide-chevron-right"
+                   aria-hidden="true"
+                   id="_r_ID_"
+                   data-icon="inline-end"
+              >
+                <path d="m9 18 6-6-6-6">
+                </path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+  </form>
+</div>
+`;

@@ -3,7 +3,7 @@
 exports[`Components/Notification Default smoke-test 1`] = `
 <div role="status"
      aria-live="polite"
-     class="bg-background z-50 rounded-md p-4 shadow-lg text-foreground border-0"
+     class="z-50 rounded-md bg-background p-4 shadow-lg text-foreground border-0"
      id="_r_ID_"
 >
   <div class="flex justify-between gap-3">
@@ -17,9 +17,9 @@ exports[`Components/Notification Default smoke-test 1`] = `
            stroke-width="2"
            stroke-linecap="round"
            stroke-linejoin="round"
-           class="lucide lucide-refresh-ccw bg-background z-50 rounded-md text-foreground border-0 me-3 inline-flex shadow-none p-0 mt-0.5"
+           class="lucide lucide-refresh-ccw z-50 rounded-md bg-background text-foreground border-0 me-3 mt-0.5 inline-flex p-0 shadow-none"
            aria-hidden="true"
-           id="RefreshCcw"
+           id="_r_ID_"
       >
         <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8">
         </path>
@@ -31,7 +31,6 @@ exports[`Components/Notification Default smoke-test 1`] = `
         </path>
       </svg>
       <div>
-        We use cookies to improve your experience, and show personalized content.
       </div>
     </div>
     <div class="flex items-center gap-3">

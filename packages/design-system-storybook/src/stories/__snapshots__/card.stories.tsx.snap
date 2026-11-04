@@ -3,19 +3,20 @@
 exports[`Components/Card Default smoke-test 1`] = `
 <div class="p-6 max-w-sm">
   <div data-slot="card"
-       class="bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm"
+       data-size="default"
+       class="group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl bg-card py-(--card-spacing) text-sm text-card-foreground shadow-xs ring-1 ring-foreground/10 [--card-spacing:--spacing(6)] has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(4)] *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl"
        id="_r_ID_"
   >
     <div data-slot="card-header"
-         class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+         class="group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing)"
     >
       <div data-slot="card-title"
-           class="leading-none font-semibold"
+           class="font-heading text-base leading-normal font-medium group-data-[size=sm]/card:text-sm"
       >
         Project Atlas
       </div>
       <div data-slot="card-description"
-           class="text-muted-foreground text-sm"
+           class="text-sm text-muted-foreground"
       >
         Updated 3 hours ago
       </div>
@@ -23,7 +24,9 @@ exports[`Components/Card Default smoke-test 1`] = `
            class="col-start-2 row-span-2 row-start-1 self-start justify-self-end"
       >
         <button data-slot="button"
-                class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground size-9"
+                data-variant="ghost"
+                data-size="icon"
+                class="group/button inline-flex shrink-0 items-center justify-center rounded-md border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 size-9"
                 aria-label="More options"
                 type="button"
                 id="_r_ID_"
@@ -39,7 +42,7 @@ exports[`Components/Card Default smoke-test 1`] = `
                stroke-linejoin="round"
                class="lucide lucide-ellipsis-vertical"
                aria-hidden="true"
-               id="EllipsisVertical"
+               id="_r_ID_"
           >
             <circle cx="12"
                     cy="12"
@@ -61,24 +64,28 @@ exports[`Components/Card Default smoke-test 1`] = `
       </div>
     </div>
     <div data-slot="card-content"
-         class="px-6"
+         class="flex flex-col gap-3 px-(--card-spacing)"
     >
       <p class="text-sm text-muted-foreground">
         A card groups related content and actions. Compose it from the header, content and footer sub-components.
       </p>
     </div>
     <div data-slot="card-footer"
-         class="flex items-center px-6 [.border-t]:pt-6 gap-2"
+         class="flex items-center rounded-b-xl px-(--card-spacing) [.border-t]:pt-(--card-spacing) gap-2"
     >
       <button data-slot="button"
-              class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 relative"
+              data-variant="outline"
+              data-size="default"
+              class="group/button inline-flex shrink-0 items-center justify-center rounded-md border bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border-border bg-background shadow-xs hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 h-9 gap-1.5 px-2.5 in-data-[slot=button-group]:rounded-md has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 relative"
               type="button"
               id="_r_ID_"
       >
         Cancel
       </button>
       <button data-slot="button"
-              class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 hover:text-primary-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 relative"
+              data-variant="default"
+              data-size="default"
+              class="group/button inline-flex shrink-0 items-center justify-center rounded-md border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-primary text-primary-foreground hover:bg-primary/80 h-9 gap-1.5 px-2.5 in-data-[slot=button-group]:rounded-md has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 relative"
               type="button"
               id="_r_ID_"
       >
@@ -92,20 +99,21 @@ exports[`Components/Card Default smoke-test 1`] = `
 exports[`Components/Card Simple smoke-test 1`] = `
 <div class="p-6 max-w-sm">
   <div data-slot="card"
-       class="bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm"
+       data-size="default"
+       class="group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl bg-card py-(--card-spacing) text-sm text-card-foreground shadow-xs ring-1 ring-foreground/10 [--card-spacing:--spacing(6)] has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(4)] *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl"
        id="_r_ID_"
   >
     <div data-slot="card-header"
-         class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+         class="group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing)"
     >
       <div data-slot="card-title"
-           class="leading-none font-semibold"
+           class="font-heading text-base leading-normal font-medium group-data-[size=sm]/card:text-sm"
       >
         Notifications
       </div>
     </div>
     <div data-slot="card-content"
-         class="px-6"
+         class="flex flex-col gap-3 px-(--card-spacing)"
     >
       <p class="text-sm text-muted-foreground">
         You have 3 unread messages.
@@ -118,19 +126,20 @@ exports[`Components/Card Simple smoke-test 1`] = `
 exports[`Components/Card WithAction smoke-test 1`] = `
 <div class="p-6 max-w-sm">
   <div data-slot="card"
-       class="bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm"
+       data-size="default"
+       class="group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl bg-card py-(--card-spacing) text-sm text-card-foreground shadow-xs ring-1 ring-foreground/10 [--card-spacing:--spacing(6)] has-[&gt;img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(4)] *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl"
        id="_r_ID_"
   >
     <div data-slot="card-header"
-         class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+         class="group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing)"
     >
       <div data-slot="card-description"
-           class="text-muted-foreground text-sm"
+           class="text-sm text-muted-foreground"
       >
         Total revenue
       </div>
       <div data-slot="card-title"
-           class="font-semibold text-3xl"
+           class="font-heading font-medium group-data-[size=sm]/card:text-sm text-3xl"
       >
         € 45,231
       </div>
@@ -138,7 +147,9 @@ exports[`Components/Card WithAction smoke-test 1`] = `
            class="col-start-2 row-span-2 row-start-1 self-start justify-self-end"
       >
         <button data-slot="button"
-                class="inline-flex items-center justify-center whitespace-nowrap font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground h-7 gap-1 rounded-[min(var(--radius-md),12px)] px-2.5 text-[0.8rem] in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&amp;_svg:not([class*='size-'])]:size-3.5 relative"
+                data-variant="outline"
+                data-size="sm"
+                class="group/button inline-flex shrink-0 items-center justify-center border bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border-border bg-background shadow-xs hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 h-8 gap-1 rounded-[min(var(--radius-md),10px)] px-2.5 in-data-[slot=button-group]:rounded-md has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 relative"
                 type="button"
                 id="_r_ID_"
         >
@@ -147,7 +158,7 @@ exports[`Components/Card WithAction smoke-test 1`] = `
       </div>
     </div>
     <div data-slot="card-content"
-         class="px-6"
+         class="flex flex-col gap-3 px-(--card-spacing)"
     >
       <p class="text-sm text-muted-foreground">
         +20.1% from last month

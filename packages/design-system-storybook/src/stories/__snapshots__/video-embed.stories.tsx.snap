@@ -6,7 +6,7 @@ exports[`Components/VideoEmbed AllowFullScreen smoke-test 1`] = `
        id="_r_ID_"
   >
     <iframe src="https://www.youtube.com/embed/tqJN0u9T98g?si=WrK-u8rgK5MhWYHo&amp;autoplay=1&amp;mute=1&amp;controls=1&amp;loop=1"
-            class="w-full h-full border-0 aspect-square"
+            class="h-full w-full border-0 aspect-square"
             title="Embed Video"
             loading="lazy"
             allowfullscreen
@@ -24,7 +24,7 @@ exports[`Components/VideoEmbed Default smoke-test 1`] = `
        id="_r_ID_"
   >
     <iframe src="https://www.youtube.com/embed/tqJN0u9T98g?si=WrK-u8rgK5MhWYHo&amp;autoplay=1&amp;mute=1&amp;controls=1&amp;loop=1"
-            class="w-full h-full border-0 aspect-video"
+            class="h-full w-full border-0 aspect-video"
             title="Embed Video"
             loading="eager"
             allowfullscreen
@@ -42,7 +42,7 @@ exports[`Components/VideoEmbed InvalidUrl smoke-test 1`] = `
        id="_r_ID_"
   >
     <iframe src="https://youtu.be/tqJN0u9T98g?si=Zv71XxNwn8_L0VzZ&amp;autoplay=0&amp;mute=1&amp;controls=0&amp;loop=1"
-            class="w-full h-full border-0 aspect-square"
+            class="h-full w-full border-0 aspect-square"
             title="Embed Video"
             loading="lazy"
             allow="autoplay; encrypted-media"
@@ -59,7 +59,7 @@ exports[`Components/VideoEmbed Muted smoke-test 1`] = `
        id="_r_ID_"
   >
     <iframe src="https://www.youtube.com/embed/tqJN0u9T98g?si=WrK-u8rgK5MhWYHo&amp;autoplay=0&amp;mute=1&amp;controls=1&amp;loop=1"
-            class="w-full h-full border-0 aspect-square"
+            class="h-full w-full border-0 aspect-square"
             title="Embed Video"
             loading="lazy"
             allow="autoplay; encrypted-media"
@@ -76,7 +76,7 @@ exports[`Components/VideoEmbed NoAutoPlay smoke-test 1`] = `
        id="_r_ID_"
   >
     <iframe src="https://www.youtube.com/embed/tqJN0u9T98g?si=WrK-u8rgK5MhWYHo&amp;autoplay=0&amp;mute=1&amp;controls=1&amp;loop=1"
-            class="w-full h-full border-0 aspect-square"
+            class="h-full w-full border-0 aspect-square"
             title="Embed Video"
             loading="lazy"
             allow="autoplay; encrypted-media"
@@ -93,7 +93,7 @@ exports[`Components/VideoEmbed NoControls smoke-test 1`] = `
        id="_r_ID_"
   >
     <iframe src="https://www.youtube.com/embed/tqJN0u9T98g?si=MGLy73pVgebnmCJg&amp;autoplay=0&amp;mute=1&amp;controls=0&amp;loop=1"
-            class="w-full h-full border-0 aspect-square"
+            class="h-full w-full border-0 aspect-square"
             title="Embed Video"
             loading="lazy"
             allow="autoplay; encrypted-media"

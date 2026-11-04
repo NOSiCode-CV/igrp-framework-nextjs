@@ -4,7 +4,7 @@ exports[`Components/Alert Default smoke-test 1`] = `
 <div class="container mx-auto px-4 py-10">
   <div role="status"
        aria-live="polite"
-       class="rounded-md border px-4 py-3 text-info bg-info/10 border-info/20"
+       class="rounded-md border px-4 py-3 text-info bg-info/5 border-info/20"
        id="_r_ID_"
   >
     <div class="flex gap-3 items-baseline">
@@ -17,9 +17,9 @@ exports[`Components/Alert Default smoke-test 1`] = `
            stroke-width="2"
            stroke-linecap="round"
            stroke-linejoin="round"
-           class="lucide lucide-info shrink-0 size-5 text-info"
+           class="lucide lucide-info size-5 shrink-0 text-info"
            aria-hidden="true"
-           id="Info"
+           id="_r_ID_"
       >
         <circle cx="12"
                 cy="12"
@@ -32,7 +32,7 @@ exports[`Components/Alert Default smoke-test 1`] = `
         </path>
       </svg>
       <div class="flex grow justify-between gap-3">
-        <div class="grow flex flex-col gap-1">
+        <div class="flex grow flex-col gap-1">
           <p class="text-sm font-medium">
             Password does not meet requirements:
           </p>
@@ -68,9 +68,9 @@ exports[`Components/Alert NoColors smoke-test 1`] = `
            stroke-width="2"
            stroke-linecap="round"
            stroke-linejoin="round"
-           class="lucide lucide-circle-alert shrink-0 size-5"
+           class="lucide lucide-circle-alert size-5 shrink-0"
            aria-hidden="true"
-           id="CircleAlert"
+           id="_r_ID_"
       >
         <circle cx="12"
                 cy="12"
@@ -91,7 +91,7 @@ exports[`Components/Alert NoColors smoke-test 1`] = `
         </line>
       </svg>
       <div class="flex grow justify-between gap-3">
-        <div class="grow flex flex-col gap-1">
+        <div class="flex grow flex-col gap-1">
           <p>
             This alert has no colored text, background, or border.
           </p>
@@ -111,37 +111,27 @@ exports[`Components/Alert SubtleWarning smoke-test 1`] = `
   >
     <div class="flex gap-3 items-baseline">
       <svg xmlns="http://www.w3.org/2000/svg"
-           width="24"
-           height="24"
+           width="16"
+           height="16"
            viewbox="0 0 24 24"
            fill="none"
            stroke="currentColor"
            stroke-width="2"
            stroke-linecap="round"
            stroke-linejoin="round"
-           class="lucide lucide-circle-alert text-destructive"
+           class="lucide lucide-triangle-alert lucide-alert-triangle size-5 shrink-0 text-warning"
            aria-hidden="true"
+           id="_r_ID_"
       >
-        <circle cx="12"
-                cy="12"
-                r="10"
-        >
-        </circle>
-        <line x1="12"
-              x2="12"
-              y1="8"
-              y2="12"
-        >
-        </line>
-        <line x1="12"
-              x2="12.01"
-              y1="16"
-              y2="16"
-        >
-        </line>
+        <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3">
+        </path>
+        <path d="M12 9v4">
+        </path>
+        <path d="M12 17h.01">
+        </path>
       </svg>
       <div class="flex grow justify-between gap-3">
-        <div class="grow flex flex-col gap-1">
+        <div class="flex grow flex-col gap-1">
           <p>
             This is a
             <strong>
@@ -173,9 +163,9 @@ exports[`Components/Alert WithLink smoke-test 1`] = `
            stroke-width="2"
            stroke-linecap="round"
            stroke-linejoin="round"
-           class="lucide lucide-info shrink-0 size-5 text-info-foreground"
+           class="lucide lucide-info size-5 shrink-0 text-info-foreground"
            aria-hidden="true"
-           id="Info"
+           id="_r_ID_"
       >
         <circle cx="12"
                 cy="12"
@@ -188,16 +178,16 @@ exports[`Components/Alert WithLink smoke-test 1`] = `
         </path>
       </svg>
       <div class="flex grow justify-between gap-3">
-        <div class="grow flex flex-col gap-1">
+        <div class="flex grow flex-col gap-1">
           <p>
             There is more information available on this topic.
           </p>
         </div>
         <a href="#"
-           class="transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 text-base no-underline hover:underline underline-offset-3 text-info-foreground bg-info border-info/50"
+           class="transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none text-base no-underline underline-offset-3 hover:underline text-info-foreground bg-info border-info/50"
            id="_r_ID_"
         >
-          <span class="group flex gap-1 items-center whitespace-nowrap flex-row-reverse">
+          <span class="group flex items-center gap-1 whitespace-nowrap flex-row-reverse">
             <svg xmlns="http://www.w3.org/2000/svg"
                  width="14"
                  height="14"
@@ -209,7 +199,7 @@ exports[`Components/Alert WithLink smoke-test 1`] = `
                  stroke-linejoin="round"
                  class="lucide lucide-arrow-right inline-flex transition-transform group-hover:translate-x-0.5"
                  aria-hidden="true"
-                 id="ArrowRight"
+                 id="_r_ID_"
             >
               <path d="M5 12h14">
               </path>

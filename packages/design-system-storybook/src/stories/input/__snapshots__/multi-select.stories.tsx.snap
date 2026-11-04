@@ -1,0 +1,408 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`Components/Input/MultiSelect Controlled smoke-test 1`] = `
+<div class="w-96">
+  <div role="group"
+       data-slot="field"
+       data-orientation="vertical"
+       class="group/field flex gap-3 data-[invalid=true]:text-destructive flex-col *:w-full [&amp;&gt;.sr-only]:w-auto w-full min-w-0"
+  >
+    <label data-slot="label"
+           class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+           for="_r_ID_"
+    >
+      Tipo de atualização
+    </label>
+    <div class="flex w-full min-w-0 flex-col gap-2">
+      <button data-slot="popover-trigger"
+              data-variant="outline"
+              data-size="default"
+              class="group/button inline-flex shrink-0 items-center rounded-md border bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-background shadow-xs hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 h-9 px-2.5 in-data-[slot=button-group]:rounded-md has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 w-full min-w-0 justify-between gap-2 border-input font-normal"
+              id="_r_ID_"
+              type="button"
+              role="combobox"
+              aria-expanded="false"
+              aria-controls="_r_ID_"
+              aria-haspopup="dialog"
+              data-state="closed"
+      >
+        <span class="truncate">
+          Alteração de morada
+        </span>
+        <span class="flex shrink-0 items-center gap-1.5">
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-chevrons-up-down size-4 opacity-50"
+               aria-hidden="true"
+               id="_r_ID_"
+          >
+            <path d="m7 15 5 5 5-5">
+            </path>
+            <path d="m7 9 5-5 5 5">
+            </path>
+          </svg>
+        </span>
+      </button>
+      <ul class="flex flex-wrap gap-1.5">
+        <li>
+          <span data-slot="badge"
+                data-variant="secondary"
+                class="inline-flex w-fit shrink-0 items-center justify-center overflow-hidden rounded-full border px-2 text-xs whitespace-nowrap transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&amp;&gt;svg]:pointer-events-none [&amp;&gt;svg]:size-3 border-transparent bg-secondary text-secondary-foreground [a&amp;]:hover:bg-secondary/90 gap-1 py-1 pr-1 pl-2 font-normal"
+          >
+            <span class="truncate">
+              Alteração de morada
+            </span>
+            <button data-slot="button"
+                    data-variant="ghost"
+                    data-size="icon-xs"
+                    class="group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 hover:bg-muted aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 rounded-[min(var(--radius-md),8px)] in-data-[slot=button-group]:rounded-md [&amp;_svg:not([class*='size-'])]:size-3 size-5 text-muted-foreground hover:text-foreground"
+                    type="button"
+                    aria-label="Remover Alteração de morada"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="16"
+                   height="16"
+                   viewbox="0 0 24 24"
+                   fill="none"
+                   stroke="currentColor"
+                   stroke-width="2"
+                   stroke-linecap="round"
+                   stroke-linejoin="round"
+                   class="lucide lucide-x size-3"
+                   aria-hidden="true"
+                   id="_r_ID_"
+              >
+                <path d="M18 6 6 18">
+                </path>
+                <path d="m6 6 12 12">
+                </path>
+              </svg>
+            </button>
+          </span>
+        </li>
+      </ul>
+    </div>
+    <p data-slot="field-description"
+       class="text-left text-sm leading-normal font-normal text-muted-foreground group-has-data-horizontal/field:text-balance [[data-variant=legend]+&amp;]:-mt-1.5 last:mt-0 nth-last-2:-mt-1 [&amp;&gt;a]:underline [&amp;&gt;a]:underline-offset-4 [&amp;&gt;a:hover]:text-primary"
+    >
+      Escolha pelo menos um tipo.
+    </p>
+  </div>
+  <pre class="mt-4 text-xs">
+    ["MORADA"]
+  </pre>
+</div>
+`;
+
+exports[`Components/Input/MultiSelect GroupedWithSearch smoke-test 1`] = `
+<div class="w-96">
+  <div role="group"
+       data-slot="field"
+       data-orientation="vertical"
+       class="group/field flex gap-3 data-[invalid=true]:text-destructive flex-col *:w-full [&amp;&gt;.sr-only]:w-auto w-full min-w-0"
+  >
+    <label data-slot="label"
+           class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+           for="_r_ID_"
+    >
+      Cidades
+    </label>
+    <div class="flex w-full min-w-0 flex-col gap-2">
+      <button data-slot="popover-trigger"
+              data-variant="outline"
+              data-size="default"
+              class="group/button inline-flex shrink-0 items-center rounded-md border bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-background shadow-xs hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 h-9 px-2.5 in-data-[slot=button-group]:rounded-md has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 w-full min-w-0 justify-between gap-2 border-input font-normal text-muted-foreground"
+              id="_r_ID_"
+              type="button"
+              role="combobox"
+              aria-expanded="false"
+              aria-controls="_r_ID_"
+              aria-haspopup="dialog"
+              data-state="closed"
+      >
+        <span class="truncate">
+          Selecione as opções
+        </span>
+        <span class="flex shrink-0 items-center gap-1.5">
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-chevrons-up-down size-4 opacity-50"
+               aria-hidden="true"
+               id="_r_ID_"
+          >
+            <path d="m7 15 5 5 5-5">
+            </path>
+            <path d="m7 9 5-5 5 5">
+            </path>
+          </svg>
+        </span>
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Input/MultiSelect InForm smoke-test 1`] = `
+<div class="w-96">
+  <form novalidate
+        id="_r_ID_"
+  >
+    <fieldset data-slot="field-set"
+              class="flex flex-col has-[&gt;[data-slot=checkbox-group]]:gap-3 has-[&gt;[data-slot=radio-group]]:gap-3 m-0 gap-0 border-0 p-0"
+    >
+      <div class="grid gap-4">
+        <div class="w-full min-w-0">
+          <div data-slot="form-item"
+               class="flex flex-col gap-2"
+          >
+            <div class="flex flex-col gap-2">
+              <label data-slot="form-label"
+                     class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 data-[error=true]:text-destructive gap-0.5 after:text-destructive after:content-['*']"
+                     data-error="false"
+                     for="_r_ID_-form-item"
+              >
+                Tipo de atualização
+              </label>
+              <div class="flex w-full min-w-0 flex-col gap-2">
+                <button data-slot="popover-trigger"
+                        data-variant="outline"
+                        data-size="default"
+                        class="group/button inline-flex shrink-0 items-center rounded-md border bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-background shadow-xs hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 h-9 px-2.5 in-data-[slot=button-group]:rounded-md has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 w-full min-w-0 justify-between gap-2 border-input font-normal"
+                        id="_r_ID_-form-item"
+                        type="button"
+                        role="combobox"
+                        aria-expanded="false"
+                        aria-controls="_r_ID_"
+                        aria-describedby="_r_ID_-form-item-description"
+                        aria-haspopup="dialog"
+                        data-state="closed"
+                >
+                  <span class="truncate">
+                    2 opções selecionadas
+                  </span>
+                  <span class="flex shrink-0 items-center gap-1.5">
+                    <span data-slot="badge"
+                          data-variant="secondary"
+                          class="inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border px-2 py-0.5 text-xs font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&amp;&gt;svg]:pointer-events-none [&amp;&gt;svg]:size-3 border-transparent bg-secondary text-secondary-foreground [a&amp;]:hover:bg-secondary/90 tabular-nums"
+                    >
+                      2
+                    </span>
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         width="16"
+                         height="16"
+                         viewbox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2"
+                         stroke-linecap="round"
+                         stroke-linejoin="round"
+                         class="lucide lucide-chevrons-up-down size-4 opacity-50"
+                         aria-hidden="true"
+                         id="_r_ID_"
+                    >
+                      <path d="m7 15 5 5 5-5">
+                      </path>
+                      <path d="m7 9 5-5 5 5">
+                      </path>
+                    </svg>
+                  </span>
+                </button>
+                <ul class="flex flex-wrap gap-1.5">
+                  <li>
+                    <span data-slot="badge"
+                          data-variant="secondary"
+                          class="inline-flex w-fit shrink-0 items-center justify-center overflow-hidden rounded-full border px-2 text-xs whitespace-nowrap transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&amp;&gt;svg]:pointer-events-none [&amp;&gt;svg]:size-3 border-transparent bg-secondary text-secondary-foreground [a&amp;]:hover:bg-secondary/90 gap-1 py-1 pr-1 pl-2 font-normal"
+                    >
+                      <span class="truncate">
+                        Alteração de titular
+                      </span>
+                      <button data-slot="button"
+                              data-variant="ghost"
+                              data-size="icon-xs"
+                              class="group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 hover:bg-muted aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 rounded-[min(var(--radius-md),8px)] in-data-[slot=button-group]:rounded-md [&amp;_svg:not([class*='size-'])]:size-3 size-5 text-muted-foreground hover:text-foreground"
+                              type="button"
+                              aria-label="Remover Alteração de titular"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             width="16"
+                             height="16"
+                             viewbox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2"
+                             stroke-linecap="round"
+                             stroke-linejoin="round"
+                             class="lucide lucide-x size-3"
+                             aria-hidden="true"
+                             id="_r_ID_"
+                        >
+                          <path d="M18 6 6 18">
+                          </path>
+                          <path d="m6 6 12 12">
+                          </path>
+                        </svg>
+                      </button>
+                    </span>
+                  </li>
+                  <li>
+                    <span data-slot="badge"
+                          data-variant="secondary"
+                          class="inline-flex w-fit shrink-0 items-center justify-center overflow-hidden rounded-full border px-2 text-xs whitespace-nowrap transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&amp;&gt;svg]:pointer-events-none [&amp;&gt;svg]:size-3 border-transparent bg-secondary text-secondary-foreground [a&amp;]:hover:bg-secondary/90 gap-1 py-1 pr-1 pl-2 font-normal"
+                    >
+                      <span class="truncate">
+                        Alteração de horário
+                      </span>
+                      <button data-slot="button"
+                              data-variant="ghost"
+                              data-size="icon-xs"
+                              class="group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 hover:bg-muted aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 rounded-[min(var(--radius-md),8px)] in-data-[slot=button-group]:rounded-md [&amp;_svg:not([class*='size-'])]:size-3 size-5 text-muted-foreground hover:text-foreground"
+                              type="button"
+                              aria-label="Remover Alteração de horário"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             width="16"
+                             height="16"
+                             viewbox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2"
+                             stroke-linecap="round"
+                             stroke-linejoin="round"
+                             class="lucide lucide-x size-3"
+                             aria-hidden="true"
+                             id="_r_ID_"
+                        >
+                          <path d="M18 6 6 18">
+                          </path>
+                          <path d="m6 6 12 12">
+                          </path>
+                        </svg>
+                      </button>
+                    </span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button data-slot="button"
+                data-variant="default"
+                data-size="default"
+                class="group/button inline-flex shrink-0 items-center justify-center rounded-md border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-primary text-primary-foreground hover:bg-primary/80 h-9 gap-1.5 px-2.5 in-data-[slot=button-group]:rounded-md has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 relative mt-4"
+                type="submit"
+                id="_r_ID_"
+        >
+          Submeter
+        </button>
+      </div>
+    </fieldset>
+  </form>
+</div>
+`;
+
+exports[`Components/Input/MultiSelect WithCap smoke-test 1`] = `
+<div class="w-96">
+  <div role="group"
+       data-slot="field"
+       data-orientation="vertical"
+       class="group/field flex gap-3 data-[invalid=true]:text-destructive flex-col *:w-full [&amp;&gt;.sr-only]:w-auto w-full min-w-0"
+  >
+    <label data-slot="label"
+           class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+           for="_r_ID_"
+    >
+      Até duas cidades
+    </label>
+    <div class="flex w-full min-w-0 flex-col gap-2">
+      <button data-slot="popover-trigger"
+              data-variant="outline"
+              data-size="default"
+              class="group/button inline-flex shrink-0 items-center rounded-md border bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 bg-background shadow-xs hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 h-9 px-2.5 in-data-[slot=button-group]:rounded-md has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 w-full min-w-0 justify-between gap-2 border-input font-normal"
+              id="_r_ID_"
+              type="button"
+              role="combobox"
+              aria-expanded="false"
+              aria-controls="_r_ID_"
+              aria-haspopup="dialog"
+              data-state="closed"
+      >
+        <span class="truncate">
+          Praia
+        </span>
+        <span class="flex shrink-0 items-center gap-1.5">
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-chevrons-up-down size-4 opacity-50"
+               aria-hidden="true"
+               id="_r_ID_"
+          >
+            <path d="m7 15 5 5 5-5">
+            </path>
+            <path d="m7 9 5-5 5 5">
+            </path>
+          </svg>
+        </span>
+      </button>
+      <ul class="flex flex-wrap gap-1.5">
+        <li>
+          <span data-slot="badge"
+                data-variant="secondary"
+                class="inline-flex w-fit shrink-0 items-center justify-center overflow-hidden rounded-full border px-2 text-xs whitespace-nowrap transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&amp;&gt;svg]:pointer-events-none [&amp;&gt;svg]:size-3 border-transparent bg-secondary text-secondary-foreground [a&amp;]:hover:bg-secondary/90 gap-1 py-1 pr-1 pl-2 font-normal"
+          >
+            <span class="truncate">
+              Praia
+            </span>
+            <button data-slot="button"
+                    data-variant="ghost"
+                    data-size="icon-xs"
+                    class="group/button inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 hover:bg-muted aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 rounded-[min(var(--radius-md),8px)] in-data-[slot=button-group]:rounded-md [&amp;_svg:not([class*='size-'])]:size-3 size-5 text-muted-foreground hover:text-foreground"
+                    type="button"
+                    aria-label="Remover Praia"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="16"
+                   height="16"
+                   viewbox="0 0 24 24"
+                   fill="none"
+                   stroke="currentColor"
+                   stroke-width="2"
+                   stroke-linecap="round"
+                   stroke-linejoin="round"
+                   class="lucide lucide-x size-3"
+                   aria-hidden="true"
+                   id="_r_ID_"
+              >
+                <path d="M18 6 6 18">
+                </path>
+                <path d="m6 6 12 12">
+                </path>
+              </svg>
+            </button>
+          </span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+`;

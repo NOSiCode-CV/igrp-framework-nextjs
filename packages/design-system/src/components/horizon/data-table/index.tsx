@@ -1,13 +1,12 @@
 "use client"
 "use no memo"
 
-import { Fragment, useCallback, useEffect, useId, useMemo, useReducer, useRef } from "react"
+import { useCallback, useEffect, useId, useMemo, useReducer } from "react"
 import {
   type ColumnDef,
   type ColumnFiltersState,
   createColumnHelper,
   type ExpandedState,
-  flexRender,
   getCoreRowModel,
   getExpandedRowModel,
   getFacetedMinMaxValues,
@@ -29,8 +28,7 @@ import {
 
 import { useIGRPi18n } from "../../../i18n/index.js"
 import { cn } from "../cn.js"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../primitives/table.js"
-import { IGRPIcon } from "../icon/index.js"
+import { Table, TableBody, TableHeader } from "../../primitives/table.js"
 import { type IGRPDataTableClientFilterListProps, IGRPDataTableClientFilter } from "./client-filter.js"
 import type { IGRPAccessorColumnDef } from "./column-helper.js"
 import {
@@ -43,6 +41,7 @@ import {
 } from "./filter.js"
 import { IGRPDataTablePagination, IGRPDataTablePaginationNumeric } from "./pagination.js"
 import { IGRPDataTableRowActionsCell } from "./row-actions-cell.js"
+import { IGRPDataTableBodyRows, IGRPDataTableHeaderRows, useIGRPDataTableRowIdWarning } from "./table-rows.js"
 import { IGRPDataTableToggleVisibility } from "./toggle-visibility.js"
 import type { IGRPDataTableAction, IGRPDataTablePaginationConfig, IGRPDataTableQuery } from "./types.js"
 
@@ -301,14 +300,7 @@ function IGRPDataTable<TData, TValue>({
     return [...columns, ...actionColumn] as ColumnDef<TData, TValue>[]
   }, [columns, actions, tableHelper])
 
-  const warnedRowId = useRef(false)
-  useEffect(() => {
-    if (process.env.NODE_ENV === "production" || warnedRowId.current || !renderSubComponent || getRowId) return
-    warnedRowId.current = true
-    console.warn(
-      "IGRPDataTable: renderSubComponent without getRowId keys expanded rows by index; if data is reordered or replaced (server-side sorting/paging, refetch) a different record opens. Pass getRowId."
-    )
-  }, [renderSubComponent, getRowId])
+  useIGRPDataTableRowIdWarning("IGRPDataTable", !!renderSubComponent, !!getRowId)
 
   // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
@@ -387,13 +379,6 @@ function IGRPDataTable<TData, TValue>({
     [columns]
   )
 
-  const NotFoundRowSubComponent = (
-    <div className={cn("flex items-center gap-2 p-3")}>
-      <IGRPIcon iconName="OctagonAlert" />
-      <span>{i18n.dataTable.notAvailable}</span>
-    </div>
-  )
-
   return (
     <div className={cn("flex flex-col gap-4", className)} id={ref}>
       {showFilter || showToggleColumn ? (
@@ -467,87 +452,16 @@ function IGRPDataTable<TData, TValue>({
       <div className={cn("overflow-hidden rounded-md border")}>
         <Table className={tableClassName}>
           <TableHeader className={tableHeaderClassName}>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id} className={cn("border-b")}>
-                {headerGroup.headers.map((header) => {
-                  // aria-sort is only honoured on the columnheader itself, never on a
-                  // wrapper inside it — so it is resolved here rather than in header.tsx.
-                  const sorted = header.column.getIsSorted()
-                  const ariaSort = !header.column.getCanSort()
-                    ? undefined
-                    : sorted === "asc"
-                      ? "ascending"
-                      : sorted === "desc"
-                        ? "descending"
-                        : "none"
-
-                  return (
-                    <TableHead
-                      key={header.id}
-                      colSpan={header.colSpan}
-                      style={{ width: `${header.getSize()}px` }}
-                      className={cn("px-3 font-semibold")}
-                      aria-sort={ariaSort}
-                    >
-                      {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-                    </TableHead>
-                  )
-                })}
-              </TableRow>
-            ))}
+            <IGRPDataTableHeaderRows table={table} />
           </TableHeader>
 
           <TableBody className={cn(tableBodyClassName)}>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => {
-                return (
-                  <Fragment key={row.id}>
-                    <TableRow
-                      key={row.id}
-                      data-state={row.getIsSelected() && "selected"}
-                      // className={cn(
-                      //   'border-0 [&:first-child>td:first-child]:rounded-tl-lg',
-                      //   '[&:first-child>td:last-child]:rounded-tr-lg',
-                      //   '[&:last-child>td:first-child]:rounded-bl-lg',
-                      //   '[&:last-child>td:last-child]:rounded-br-lg h-px hover:bg-accent/50',
-                      // )}
-                    >
-                      {row.getVisibleCells().map((cell) => (
-                        <TableCell
-                          key={cell.id}
-                          className={cn(
-                            "h-[inherit] truncate p-3 [&:has([aria-expanded])]:w-px [&:has([aria-expanded])]:py-0 [&:has([aria-expanded])]:pr-0"
-                          )}
-                        >
-                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                        </TableCell>
-                      ))}
-                    </TableRow>
-
-                    {row.getIsExpanded() && (
-                      <TableRow key={`${row.id}-expanded`}>
-                        <TableCell colSpan={row.getVisibleCells().length}>
-                          {renderSubComponent ? renderSubComponent(row) : NotFoundRowSubComponent}
-                        </TableCell>
-                      </TableRow>
-                    )}
-                  </Fragment>
-                )
-              })
-            ) : (
-              <TableRow
-              // className={cn(
-              //   'hover:bg-transparent [&:first-child>td:first-child]:rounded-tl-lg',
-              //   '[&:first-child>td:last-child]:rounded-tr-lg',
-              //   '[&:last-child>td:first-child]:rounded-bl-lg',
-              //   '[&:last-child>td:last-child]:rounded-br-lg',
-              // )}
-              >
-                <TableCell colSpan={allColumns.length} className={cn("h-24 text-center font-semibold")}>
-                  {resolvedNotFoundLabel}
-                </TableCell>
-              </TableRow>
-            )}
+            <IGRPDataTableBodyRows
+              table={table}
+              emptyColSpan={allColumns.length}
+              notFoundLabel={resolvedNotFoundLabel}
+              renderSubComponent={renderSubComponent}
+            />
           </TableBody>
           <tbody aria-hidden="true">
             <tr className={cn("h-1")} />

@@ -43,7 +43,13 @@ import { IGRPDataTablePagination, IGRPDataTablePaginationNumeric } from "./pagin
 import { IGRPDataTableRowActionsCell } from "./row-actions-cell.js"
 import { IGRPDataTableBodyRows, IGRPDataTableHeaderRows, useIGRPDataTableRowIdWarning } from "./table-rows.js"
 import { IGRPDataTableToggleVisibility } from "./toggle-visibility.js"
-import type { IGRPDataTableAction, IGRPDataTablePaginationConfig, IGRPDataTableQuery } from "./types.js"
+import { igrpDataTableTableClassName } from "./layout.js"
+import type {
+  IGRPDataTableAction,
+  IGRPDataTableLayout,
+  IGRPDataTablePaginationConfig,
+  IGRPDataTableQuery,
+} from "./types.js"
 
 /**
  * Props for the IGRPDataTable component.
@@ -125,6 +131,8 @@ interface IGRPDataTableProps<TData, TValue> {
   onQueryChange?: (query: IGRPDataTableQuery) => void
   /** Pagination display configuration. */
   pagination?: IGRPDataTablePaginationConfig
+  /** Column sizing. "auto" fits content; "fixed" honours ColumnDef.size. Default "auto". */
+  layout?: IGRPDataTableLayout
 }
 
 type TableState = {
@@ -191,6 +199,7 @@ function IGRPDataTable<TData, TValue>({
   className,
   filterClassName,
   tableClassName,
+  layout = "auto",
   tableHeaderClassName,
   tableBodyClassName,
   paginationClassName,
@@ -293,6 +302,7 @@ function IGRPDataTable<TData, TValue>({
               cell: ({ row }) => <IGRPDataTableRowActionsCell row={row} actions={actions} />,
               enableSorting: false,
               enableHiding: false,
+              meta: { isActionsColumn: true },
               size: actions.length <= 2 ? actions.length * 44 : 44,
             }),
           ]
@@ -450,14 +460,15 @@ function IGRPDataTable<TData, TValue>({
       ) : null}
 
       <div className={cn("overflow-hidden rounded-md border")}>
-        <Table className={tableClassName}>
+        <Table className={cn(igrpDataTableTableClassName(layout), tableClassName)}>
           <TableHeader className={tableHeaderClassName}>
-            <IGRPDataTableHeaderRows table={table} />
+            <IGRPDataTableHeaderRows table={table} layout={layout} />
           </TableHeader>
 
           <TableBody className={cn(tableBodyClassName)}>
             <IGRPDataTableBodyRows
               table={table}
+              layout={layout}
               emptyColSpan={allColumns.length}
               notFoundLabel={resolvedNotFoundLabel}
               renderSubComponent={renderSubComponent}

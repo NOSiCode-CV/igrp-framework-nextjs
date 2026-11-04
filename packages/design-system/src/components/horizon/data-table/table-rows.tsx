@@ -3,18 +3,21 @@
 "use no memo"
 
 import { Fragment, type ReactElement, useEffect, useRef } from "react"
-import { flexRender, type Row, type Table } from "@tanstack/react-table"
+import { flexRender, type Column, type Row, type Table } from "@tanstack/react-table"
 
 import { useIGRPi18n } from "../../../i18n/index.js"
 import { cn } from "../cn.js"
 import { TableCell, TableHead, TableRow } from "../../primitives/table.js"
 import { IGRPIcon } from "../icon/index.js"
+import { igrpDataTableCellClassName, igrpDataTableHeadClassName, igrpDataTableHeadStyle } from "./layout.js"
+import type { IGRPDataTableLayout } from "./types.js"
 
 interface IGRPDataTableHeaderRowsProps<TData> {
   table: Table<TData>
+  layout: IGRPDataTableLayout
 }
 
-function IGRPDataTableHeaderRows<TData>({ table }: IGRPDataTableHeaderRowsProps<TData>): ReactElement {
+function IGRPDataTableHeaderRows<TData>({ table, layout }: IGRPDataTableHeaderRowsProps<TData>): ReactElement {
   return (
     <>
       {table.getHeaderGroups().map((headerGroup) => (
@@ -35,8 +38,8 @@ function IGRPDataTableHeaderRows<TData>({ table }: IGRPDataTableHeaderRowsProps<
               <TableHead
                 key={header.id}
                 colSpan={header.colSpan}
-                style={{ width: `${header.getSize()}px` }}
-                className={cn("px-3 font-semibold")}
+                style={igrpDataTableHeadStyle(header.column as Column<unknown, unknown>, layout)}
+                className={cn("px-3 font-semibold", igrpDataTableHeadClassName(header.column.columnDef.meta, layout))}
                 aria-sort={ariaSort}
               >
                 {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
@@ -51,6 +54,7 @@ function IGRPDataTableHeaderRows<TData>({ table }: IGRPDataTableHeaderRowsProps<
 
 interface IGRPDataTableBodyRowsProps<TData> {
   table: Table<TData>
+  layout: IGRPDataTableLayout
   /** colSpan of the empty-state cell. */
   emptyColSpan: number
   notFoundLabel: string
@@ -61,6 +65,7 @@ interface IGRPDataTableBodyRowsProps<TData> {
 
 function IGRPDataTableBodyRows<TData>({
   table,
+  layout,
   emptyColSpan,
   notFoundLabel,
   renderSubComponent,
@@ -96,7 +101,8 @@ function IGRPDataTableBodyRows<TData>({
               <TableCell
                 key={cell.id}
                 className={cn(
-                  "h-[inherit] truncate p-3 [&:has([aria-expanded])]:w-px [&:has([aria-expanded])]:py-0 [&:has([aria-expanded])]:pr-0"
+                  "h-[inherit] p-3 [&:has([aria-expanded])]:w-px [&:has([aria-expanded])]:py-0 [&:has([aria-expanded])]:pr-0",
+                  igrpDataTableCellClassName(cell.column.columnDef.meta, layout)
                 )}
               >
                 {flexRender(cell.column.columnDef.cell, cell.getContext())}

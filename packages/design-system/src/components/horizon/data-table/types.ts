@@ -1,5 +1,5 @@
 import type { ReactNode } from "react"
-import type { Row } from "@tanstack/react-table"
+import type { Row, RowData } from "@tanstack/react-table"
 import type { IGRPIconName } from "../icon/index.js"
 
 // ─── Actions ────────────────────────────────────────────────────────────────
@@ -80,4 +80,20 @@ export interface IGRPDataTableQuery {
   pageSize: number
   sorting: { id: string; desc: boolean }[]
   filters: { id: string; value: unknown }[]
+}
+
+// ─── Column layout ──────────────────────────────────────────────────────────
+
+export interface IGRPDataTableColumnMeta {
+  /** Marks the row-actions column: nowrap, and shrink-to-fit under layout "auto". */
+  isActionsColumn?: boolean
+  /** Replaces the default cell classes (`truncate`/wrap, or the actions classes). */
+  cellClassName?: string
+}
+
+export type IGRPDataTableLayout = "auto" | "fixed"
+
+declare module "@tanstack/react-table" {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-object-type -- TanStack's signature
+  interface ColumnMeta<TData extends RowData, TValue> extends IGRPDataTableColumnMeta {}
 }

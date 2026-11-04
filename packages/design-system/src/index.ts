@@ -631,8 +631,10 @@ export type {
   IGRPDataTableActionAlert,
   IGRPDataTableActionModal,
   IGRPDataTableActionCustom,
+  IGRPDataTableColumnMeta,
   IGRPDataTableFilterDescriptor,
   IGRPDataTableFilterType,
+  IGRPDataTableLayout,
   IGRPDataTablePaginationConfig,
   IGRPDataTableQuery,
 } from "./components/horizon/data-table/types.js"

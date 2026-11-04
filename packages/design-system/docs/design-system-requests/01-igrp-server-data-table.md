@@ -1,5 +1,7 @@
 # §1. `IGRPServerDataTable` — a controlled, server-paginated data table
 
+**Status:** resolved in the release after `0.2.0-beta.10` by `IGRPServerDataTable`, `IGRPDataTableColumnMeta` (`meta.isActionsColumn`, `meta.cellClassName`) and `getRowId` on both tables · **Declined:** `paginationFromApiPage`, `useServerPaginatedResource` (app-shaped), the name-based actions-column match (use `meta.isActionsColumn`) · **Open:** row selection (see `packages/design-system/KNOWN-ISSUES.md`)
+
 > Part of the SIGOVP design-system request bundle — see [README.md](README.md). Cite as `§1`.
 
 **Local workaround.** `src/app/(myapp)/_components/server-paginated-data-table.tsx`
@@ -239,6 +241,13 @@ just the server one.
    first render one animation frame behind a skeleton. If that guard is working
    around something inside `IGRPDataTable`, it should be fixed there rather
    than re-implemented per app.
+
+   **Finding.** No mismatch in the design system. `hydration.test.tsx` server-renders
+   `IGRPDataTable` (with pagination and actions) and `IGRPServerDataTable` with
+   `renderToString`, hydrates the markup with `hydrateRoot`, and sees no recoverable
+   error and no `console.error`. The same test fails when the markup is made to differ
+   between server and client, so it does detect a mismatch. The app's guard is not
+   working around the design system and can go.
 
 ---
 

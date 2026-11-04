@@ -185,6 +185,11 @@ export const IGRP_I18N_DEFAULTS_FR: IGRPI18nStrings = {
     submissionErrorTitle: "Erreur lors de l'envoi du formulaire",
     submissionErrorFallback: "Une erreur inattendue s'est produite",
   },
+  multiStepForm: {
+    previous: "Précédent",
+    next: "Suivant",
+    submit: "Soumettre",
+  },
   formList: {
     addItem: "Ajouter",
     removeItem: "Retirer l'élément {index}",

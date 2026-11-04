@@ -201,6 +201,16 @@
 /* Keyframes referenced by DS components via arbitrary animate-[...] utilities.
    They must ship here, not in index.css (Storybook-only): consumers import only
    /tokens, and Tailwind emits the utility but never the keyframes it names. */
+@keyframes igrp-step-in {
+  from {
+    opacity: 0;
+    transform: translateX(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
 @keyframes igrp-text-fade-in {
   from {
     opacity: 0;

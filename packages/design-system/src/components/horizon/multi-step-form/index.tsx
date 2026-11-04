@@ -153,9 +153,16 @@ function IGRPMultiStepForm({
   return (
     <IGRPMultiStepFormContext.Provider value={value}>
       <IGRPMultiStepFormBlockingContext.Provider value={blocking}>
+        {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions -- keydown only bubbles from the inputs inside; the wrapper is not itself interactive */}
         <div
           data-slot="multi-step-form"
           className={cn("flex w-full max-w-full min-w-0 flex-col gap-8 pt-3", className)}
+          onKeyDown={(event) => {
+            // Stop implicit submission from a text input until the last step; textareas and buttons keep Enter.
+            if (event.key === "Enter" && !value.isLastStep && event.target instanceof HTMLInputElement) {
+              event.preventDefault()
+            }
+          }}
         >
           {children}
         </div>

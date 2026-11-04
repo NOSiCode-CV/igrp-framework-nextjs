@@ -312,6 +312,14 @@ export interface IGRPI18nStrings {
     /** Fallback global error message when the thrown error isn't an Error instance. */
     submissionErrorFallback: string
   }
+  multiStepForm: {
+    /** Wizard "previous step" button label. */
+    previous: string
+    /** Wizard "next step" button label. */
+    next: string
+    /** Wizard "submit" button label (last step). */
+    submit: string
+  }
   formList: {
     /** Add-item button label. */
     addItem: string
@@ -664,6 +672,11 @@ export const IGRP_I18N_DEFAULTS_PT: IGRPI18nStrings = {
   form: {
     submissionErrorTitle: "Erro ao submeter formulário",
     submissionErrorFallback: "Ocorreu um erro inesperado",
+  },
+  multiStepForm: {
+    previous: "Anterior",
+    next: "Próximo",
+    submit: "Submeter",
   },
   formList: {
     addItem: "Adicionar",

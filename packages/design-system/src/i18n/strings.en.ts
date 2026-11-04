@@ -185,6 +185,11 @@ export const IGRP_I18N_DEFAULTS_EN: IGRPI18nStrings = {
     submissionErrorTitle: "Error submitting the form",
     submissionErrorFallback: "An unexpected error occurred",
   },
+  multiStepForm: {
+    previous: "Previous",
+    next: "Next",
+    submit: "Submit",
+  },
   formList: {
     addItem: "Add",
     removeItem: "Remove item {index}",

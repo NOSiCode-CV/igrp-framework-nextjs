@@ -7,6 +7,7 @@ import { createIGRPColumnHelper } from "../column-helper.js"
 import { IGRPDataTableCellExpander } from "../cell.js"
 import { IGRPDataTableHeaderSortToggle } from "../header.js"
 import type { IGRPServerPaginationState } from "../types.js"
+import { IGRP_I18N_DEFAULTS_PT } from "../../../../i18n/index.js"
 
 type R = { id: string; name: string }
 
@@ -218,5 +219,30 @@ describe("IGRPServerDataTable", () => {
     expect(warn).toHaveBeenCalledTimes(1)
     expect(warn.mock.calls[0]![0]).toMatch(/^IGRPServerDataTable:.*getRowId/)
     warn.mockRestore()
+  })
+
+  it("renders numbered pages with paginationType numeric and reports a page click flat", async () => {
+    const onPage = vi.fn()
+    render(
+      <IGRPServerDataTable
+        columns={columns}
+        data={page(10)}
+        pagination={p({ totalPages: 3 })}
+        onPaginationChange={onPage}
+        paginationType="numeric"
+      />
+    )
+    await userEvent.click(screen.getByRole("button", { name: "2" }))
+    expect(onPage).toHaveBeenCalledWith(1, 10)
+  })
+
+  it("overlays the loading spinner and marks the table busy while isLoading", () => {
+    const base = { columns, data: page(3), pagination: p(), onPaginationChange: noop }
+    const { rerender } = render(<IGRPServerDataTable {...base} isLoading />)
+    expect(screen.getByRole("status")).toHaveTextContent(IGRP_I18N_DEFAULTS_PT.loadingSpinner.label)
+    expect(screen.getByRole("table").closest("[aria-busy]")).toHaveAttribute("aria-busy", "true")
+    expect(screen.getAllByRole("row").length).toBeGreaterThan(1)
+    rerender(<IGRPServerDataTable {...base} />)
+    expect(screen.queryByRole("status")).toBeNull()
   })
 })

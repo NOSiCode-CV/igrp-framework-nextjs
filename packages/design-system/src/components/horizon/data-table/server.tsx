@@ -21,7 +21,8 @@ import { useIGRPi18n } from "../../../i18n/index.js"
 import { cn } from "../cn.js"
 import { Table, TableBody, TableHeader } from "../../primitives/table.js"
 import { igrpDataTableTableClassName } from "./layout.js"
-import { IGRPDataTablePagination } from "./pagination.js"
+import { IGRPLoadingSpinner } from "../loading-spinner.js"
+import { IGRPDataTablePagination, IGRPDataTablePaginationNumeric } from "./pagination.js"
 import { IGRPDataTableBodyRows, IGRPDataTableHeaderRows, useIGRPDataTableRowIdWarning } from "./table-rows.js"
 import type { IGRPDataTableLayout, IGRPServerPaginationState } from "./types.js"
 
@@ -42,6 +43,10 @@ interface IGRPServerDataTableProps<TData, TValue> {
   pageSizeOptions?: number[]
   /** Show the pagination bar. */
   enablePagination?: boolean
+  /** Pagination bar style: previous/next ("simple", default) or numbered pages. */
+  paginationType?: "simple" | "numeric"
+  /** Overlay a spinner and mark the table busy; rows stay rendered. */
+  isLoading?: boolean
   /** Controlled sorting; together with `onSortingChange` the rows are not sorted here. */
   sorting?: SortingState
   onSortingChange?: (sorting: SortingState) => void
@@ -70,6 +75,8 @@ function IGRPServerDataTable<TData, TValue>({
   onPaginationChange,
   pageSizeOptions = [5, 10, 30, 50],
   enablePagination = true,
+  paginationType = "simple",
+  isLoading = false,
   sorting,
   onSortingChange,
   layout = "auto",
@@ -128,7 +135,7 @@ function IGRPServerDataTable<TData, TValue>({
 
   return (
     <div id={id} className={cn("flex flex-col gap-4", className)}>
-      <div className="relative overflow-hidden rounded-md border">
+      <div className="relative overflow-hidden rounded-md border" aria-busy={isLoading || undefined}>
         <Table className={cn(igrpDataTableTableClassName(layout), tableClassName)}>
           <TableHeader className={tableHeaderClassName}>
             <IGRPDataTableHeaderRows table={table} layout={layout} />
@@ -148,15 +155,28 @@ function IGRPServerDataTable<TData, TValue>({
             <tr className={cn("h-1")} />
           </tbody>
         </Table>
+        {isLoading && (
+          <div className="absolute inset-0 flex items-center justify-center bg-background/60">
+            <IGRPLoadingSpinner parentClassName="h-auto" />
+          </div>
+        )}
       </div>
 
-      {enablePagination && data.length > 0 && (
-        <IGRPDataTablePagination
-          table={table}
-          pageSize={pageSizeOptions}
-          className={cn("justify-between max-sm:flex-col max-sm:items-stretch", paginationClassName)}
-        />
-      )}
+      {enablePagination &&
+        data.length > 0 &&
+        (paginationType === "numeric" ? (
+          <IGRPDataTablePaginationNumeric
+            table={table}
+            pageSize={pageSizeOptions}
+            className={cn("justify-between max-sm:flex-col max-sm:items-stretch", paginationClassName)}
+          />
+        ) : (
+          <IGRPDataTablePagination
+            table={table}
+            pageSize={pageSizeOptions}
+            className={cn("justify-between max-sm:flex-col max-sm:items-stretch", paginationClassName)}
+          />
+        ))}
     </div>
   )
 }

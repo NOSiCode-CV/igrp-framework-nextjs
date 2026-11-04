@@ -139,6 +139,15 @@ For row deletes in a table, use the `alert` row action instead (`data-table.md`)
 - `children: (step) => ReactNode` (a render prop, so the file must be a client file).
 - `onStepChange(step, data)`, `isLoading`.
 
+**`IGRPMultiStepForm`**: a form-aware wizard. Use it for a multi-step form; use `IGRPStepperProcess` for a process viewer the caller drives.
+- Compound shape, all named exports (no `IGRPMultiStepForm.Header`, which fails in a server component): `IGRPMultiStepForm` > `IGRPMultiStepFormHeader`, `IGRPMultiStepFormSteps`, `IGRPMultiStepFormFooter` > `IGRPMultiStepFormPrevious` / `IGRPMultiStepFormNext` / `IGRPMultiStepFormSubmit`. Wrap it in `IGRPForm`.
+- `steps: IGRPWizardStep[]` (`{ key; title; description?; fields: string[]; component; blockingMessage? }`), `initialStep` (1-based; changing it re-applies it), `onStepChange(next, prev)`, `onStepValidation(step)`.
+- Validation: a step cannot be left until it validates. The default inside `IGRPForm` is `form.trigger(step.fields)`, then errors on fields outside the step are cleared; outside a form it resolves `true`. `onStepValidation` replaces it.
+- `blockingMessage(values)` returns why the step cannot be left, or `null`. It disables Next and the header shows the reason; it needs an `IGRPForm` ancestor (it uses `useWatch`).
+- `useIGRPMultiStepForm()`: `steps`, `currentStepIndex` (1-based), `currentStepData`, `isFirstStep`, `isLastStep`, `goToNext`, `goToPrevious`, `goToFirstStep`, `goToStep(n, { force })` (`force` skips validating the steps passed over), `setSteps`.
+- `IGRPMultiStepFormHeader`: `variant` `"ring"` (default) or `"number"`, `navigable` (off by default; a click calls `goToStep`), `isLoading`. `IGRPMultiStepFormSteps` takes `animate` (default true; CSS, motion-safe only).
+- Previous, Next and Submit are `IGRPButton`s: `children` overrides the pt-PT default label. Previous is hidden on the first step, Next and Submit swap on the last.
+
 ## Data and media
 
 - **`IGRPTable<T>`**: a lightweight static table without TanStack. Props: `content: T[]`, `columns: { header; accessorKey: keyof T; render? }[]`, `actions?: (row) => ReactNode`, `isStriped`, `isHeaderSticky`, `showFooter` + `footerContent`. Use `IGRPDataTable` once you need sorting, filtering or paging.

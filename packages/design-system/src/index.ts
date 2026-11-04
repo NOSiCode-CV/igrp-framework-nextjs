@@ -813,6 +813,25 @@ export {
   type IGRPStepProcessProps,
 } from "./components/horizon/process/stepper.js"
 
+export { IGRPMultiStepForm, type IGRPMultiStepFormProps } from "./components/horizon/multi-step-form/index.js"
+export {
+  useIGRPMultiStepForm,
+  type IGRPWizardStep,
+  type IGRPGoToStepOptions,
+  type IGRPMultiStepFormContextValue,
+} from "./components/horizon/multi-step-form/context.js"
+export {
+  IGRPMultiStepFormHeader,
+  type IGRPMultiStepFormHeaderProps,
+} from "./components/horizon/multi-step-form/header.js"
+export { IGRPMultiStepFormSteps } from "./components/horizon/multi-step-form/steps.js"
+export {
+  IGRPMultiStepFormFooter,
+  IGRPMultiStepFormPrevious,
+  IGRPMultiStepFormNext,
+  IGRPMultiStepFormSubmit,
+} from "./components/horizon/multi-step-form/footer.js"
+
 export { IGRPSeparator } from "./components/horizon/separator.js"
 
 export {

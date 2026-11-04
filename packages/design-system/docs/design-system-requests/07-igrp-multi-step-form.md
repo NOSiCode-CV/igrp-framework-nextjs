@@ -1,5 +1,7 @@
 # §7. `IGRPMultiStepForm` — a form-aware wizard, and two fixes to `Stepper`
 
+**Status:** implemented in 0.2.0-beta.<n> — exported as named components (`IGRPMultiStepFormHeader` …), not `IGRPMultiStepForm.Header`; `progress` and the `motion` dependency dropped; `ResetButton` not shipped (use `IGRPButton variant="ghost" size="sm"`).
+
 > Part of the SIGOVP design-system request bundle — see [README.md](README.md). Cite as `§7`.
 
 **Local workaround.** `src/app/(myapp)/_components/multi-step-viewer.tsx`

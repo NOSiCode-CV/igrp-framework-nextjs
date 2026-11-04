@@ -89,7 +89,7 @@ export function UserForm({ onSave }: { onSave: (v: z.output<typeof schema>) => P
 
 ## Fields and the value each one writes
 
-Shared props: `name`, `label`, `helperText`, `required` and `className`. Write your Zod schema to match the **Writes** column.
+Shared props: `name`, `label`, `helperText`, `required` and `className`. Write your Zod schema to match the **Writes** column. For a multi-step form, see `IGRPMultiStepForm` in `horizon.md`.
 
 | Field | Writes | Notes |
 | --- | --- | --- |

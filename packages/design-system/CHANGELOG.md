@@ -1,5 +1,33 @@
 # @igrp/igrp-framework-react-design-system
 
+## 0.2.0-beta.11
+
+### Patch Changes
+
+- 612c6a4: `IGRPAccordion` items take `action`, rendered beside the trigger; clicking it does not toggle the item. The `AccordionTrigger` primitive takes `headerAction` for the same slot.
+- 7e19a20: `IGRPAccordion` items take `count` (a pill; `0` renders), `badgeIcon` and `badgeColor` (a soft-colour chip before the title), and `empty`, `emptyIcon`, `emptyLabel` (an empty state that replaces `content`; on by default when `count` is `0`).
+- 6e83c1f: `IGRPAccordion`: new `type="multiple"` (with `defaultValue="all"`) to keep several items open, and an optional `value` per item so items whose titles collide stay independent. `type="single"` stays the default and behaves as before.
+- cc094df: `IGRPDataTableButtonLink`: with `href` and `disabled`, it now renders a disabled button instead of a link that still navigated.
+- f3a0836: `IGRPDataTable`: cells now truncate below `lg` and wrap from `lg`. Mark a column with `meta.isActionsColumn` to keep it on one line and shrink it to fit; the generated `actions` column already is. `meta.cellClassName` replaces a column's default cell classes. New `layout` prop: `"fixed"` honours `ColumnDef.size`. Column `meta` is typed as `IGRPDataTableColumnMeta` and still accepts the app's own keys. Existing consumers with no `meta` see three changes: body cells wrap from `lg` instead of truncating, headers can wrap from `lg`, and the generated actions column drops its inline width and shrinks to fit.
+- 9ad547a: `IGRPDataTable`: new `getRowId` prop; without it, expanded rows followed the row index and opened a different record when `data` was reordered or replaced (server-side sorting or paging, a refetch). Warns in development when `renderSubComponent` is used without it.
+- 085f2e4: New `isIconOnlySize(size)` helper.
+- 67a1af8: New `IGRPButtonLink`: a button-shaped `next/link` that shows a spinner while the target route loads, renders a real disabled `<button>` when `disabled`, and takes `tooltip`, `tooltipSide` and `tooltipAlign`. With an icon size, `label` becomes the tooltip and accessible name instead of visible text. New `IGRPLinkPendingIcon` exposes the spinner for custom link controls. The `next` peer dependency is now `^15.3.0`, the first version with `useLinkStatus`.
+- cdda07f: New `IGRPTooltip` and `IGRPTooltipProvider`. The tooltip opens over a disabled control, on hover and keyboard focus. Data-table row actions use it, so their tooltips now also open when the action is disabled. A labelled trigger, including every existing data-table row action, is wrapped in an `inline-flex` span, and Radix's `aria-describedby` and `data-state` now sit on that span instead of the button.
+- 431d491: New `IGRPLookupField`: an input whose value is picked through an adjacent button (`onLookup`) rather than typed. With `valueName` it renders the hidden value input and shows that field's validation error under the visible one. `onClear` adds a clear button that writes `null` to both fields. `inputDisabled` and `lookupDisabled` are independent, `lookupDisabledReason` shows a tooltip over the disabled button, and `loading` swaps its icon for a spinner.
+- 60aace1: New `IGRPMultiStepForm` wizard with `IGRPMultiStepFormHeader`, `IGRPMultiStepFormSteps`, `IGRPMultiStepFormFooter`, `IGRPMultiStepFormPrevious`, `IGRPMultiStepFormNext`, `IGRPMultiStepFormSubmit` and `useIGRPMultiStepForm`. A step cannot be left until it validates: `onStepValidation`, or inside `IGRPForm` the default `form.trigger(step.fields)` followed by clearing errors on fields outside the step (outside a form it resolves true). A step's optional `description` renders under its title in the header. `blockingMessage` disables Next and shows why; it requires an `IGRPForm` ancestor. Transitions are CSS under `motion-safe`; there is no `motion` dependency.
+  
+  `StepperIndicator` takes an opt-in `variant` (`ring` or `number`); without it the indicator is unchanged in size. `IGRPStepperProcess` does not use these primitives and is unchanged. Apps that render the exported `StepperIndicator` and `StepperSeparator` directly see three changes: completed steps move from the primary to the success colour (`step-complete` token), the separator after the active step turns `bg-step-active` instead of muted, and the active indicator's text uses `step-active-foreground` instead of `muted-foreground`.
+- 5e57d6b: `IGRPDataTablePaginationNumeric`: the page-size select now has an accessible name. Its `aria-label` was on the Select root, which renders no element, so it never reached the trigger.
+- 6c46541: New `IGRPServerDataTable`, a controlled, server-paginated table. The parent owns `pagination` (`IGRPServerPaginationState`) and gets `onPaginationChange(pageIndex, pageSize)`. Sorting is manual only when `sorting` and `onSortingChange` are both given. The pagination bar shows whenever there are rows and stays interactive while `isLoading`. Also takes `paginationType`, `layout` and `getRowId`; expanded rows follow the record only with `getRowId`, otherwise the row's index in `data`.
+- a92baf1: New semantic step tokens: `step-active`, `step-complete` and their foregrounds.
+- 01b6fc8: `StepperIndicator`: new opt-in `variant` (`number`, `size-8`; `ring`); without it the indicator is unchanged. `StepperSeparator` positions itself from the indicator variant, and active/completed states use the step tokens. The active indicator no longer renders muted text on the primary background.
+- 2ee2b3b: `IGRPTextarea`: new `showCounter`, `showProgress`, `warnAt` and `enforceMaxLength` props. With `maxLength`, the form value is now truncated to the limit even when it arrives through `setValue` or `reset`, and the field becomes dirty; pass `enforceMaxLength={false}` to keep the old behaviour. Without `showCounter`, nothing changes visually. A caller's `aria-describedby` is now joined with the helper, error and counter ids instead of replacing them.
+- f6d746e: `IGRPForm`: `children` can be a function of the form instance (`(form) => …`), which re-renders on `form.watch(...)`. New props `reValidationMode` (passed to react-hook-form as `reValidateMode`) and `showInlineError` (default `true`; `false` drops the submission error banner). A thrown `onSubmit` is no longer logged to the console when `onError` is set. `formRef` is documented as imperative-only.
+  
+  `IGRPInputText`: `type` also accepts `"url"`, `"tel"` and `"search"`.
+  
+  `IGRPFormField`: `control` is optional and falls back to the surrounding form context. It now accepts a typed `Control<MyValues>` without a cast.
+
 ## 0.2.0-beta.10
 
 ### Patch Changes

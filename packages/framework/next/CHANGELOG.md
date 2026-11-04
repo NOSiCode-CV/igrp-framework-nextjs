@@ -1,5 +1,29 @@
 # @igrp/framework-next
 
+## 0.2.0-beta.17
+
+### Patch Changes
+
+- Updated dependencies [612c6a4]
+- Updated dependencies [7e19a20]
+- Updated dependencies [6e83c1f]
+- Updated dependencies [cc094df]
+- Updated dependencies [f3a0836]
+- Updated dependencies [9ad547a]
+- Updated dependencies [085f2e4]
+- Updated dependencies [67a1af8]
+- Updated dependencies [cdda07f]
+- Updated dependencies [431d491]
+- Updated dependencies [60aace1]
+- Updated dependencies [5e57d6b]
+- Updated dependencies [6c46541]
+- Updated dependencies [a92baf1]
+- Updated dependencies [01b6fc8]
+- Updated dependencies [2ee2b3b]
+- Updated dependencies [f6d746e]
+  - @igrp/igrp-framework-react-design-system@0.2.0-beta.11
+  - @igrp/framework-next-ui@0.2.0-beta.15
+
 ## 0.2.0-beta.16
 
 ### Patch Changes

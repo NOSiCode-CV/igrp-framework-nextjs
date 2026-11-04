@@ -247,8 +247,9 @@ just the server one.
    `renderToString`, hydrates the markup with `hydrateRoot`, and sees no recoverable
    error and no `console.error`, for the default locale and default render. A negative
    control in the same file (a component whose text differs between server and client)
-   does trigger `onRecoverableError`, so the check can fail. The app's guard is not
-   working around the design system and can go.
+   does trigger `onRecoverableError`, so the check can fail. For the default locale
+   and default render, the app's guard is not working around the design system and
+   can go; a custom locale or custom cell renderers are not covered by the test.
 
 ---
 

@@ -207,7 +207,7 @@ import { IGRPRichTextEditor, IGRPRichTextView } from "@igrp/igrp-framework-react
 
 ## Custom widgets: `IGRPFormField`
 
-For a widget that isn't form-aware (a signature pad, a third-party picker). `control` is optional inside `IGRPForm` (or any RHF `FormProvider`); pass it only when using it outside one:
+For a widget that isn't form-aware (a signature pad, a third-party picker). Use it inside `IGRPForm` or an RHF `FormProvider`: it reads form context, so it does not work outside one, even with `control`. `control` is optional there and defaults to the surrounding form's:
 
 ```tsx
 function SignatureField() {

@@ -98,7 +98,7 @@
   --success-foreground: oklch(0.985 0.002 150);
   --warning: oklch(0.554 0.188 70.08);
   --warning-foreground: oklch(0.985 0.002 70);
-  /* Stepper states alias existing brand/success tokens, so .dark inherits their dark values. */
+  /* Stepper states alias existing brand/success tokens. */
   --step-active: var(--primary);
   --step-active-foreground: var(--primary-foreground);
   --step-complete: var(--success);

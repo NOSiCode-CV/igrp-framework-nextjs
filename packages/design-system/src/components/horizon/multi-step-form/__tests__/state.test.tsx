@@ -172,6 +172,18 @@ describe("steps and initialStep", () => {
     expect(idx()).toBe("3")
   })
 
+  it("applies initialStep against the new steps when both change in the same render", () => {
+    const ui = (list: IGRPWizardStep[], n: number) => (
+      <IGRPMultiStepForm steps={list} initialStep={n}>
+        <Probe />
+      </IGRPMultiStepForm>
+    )
+    const { rerender } = render(ui([], 1))
+    rerender(ui(mk(["a", "b", "c", "d", "e"]), 3))
+    expect(idx()).toBe("3")
+    expect(screen.getByTestId("key")).toHaveTextContent("c")
+  })
+
   it("replacing steps while on a removed step resets to the first step", async () => {
     setup({ initialStep: 3 }, mk(["a", "b"]))
     await click("set")

@@ -38,6 +38,8 @@ function IGRPMultiStepForm({
 
   const [steps, setSteps] = useState(stepsProp)
   const [prevStepsProp, setPrevStepsProp] = useState(stepsProp)
+  // setSteps below only takes effect on the next pass, so key reconciliation in this pass reads `base`.
+  const base = prevStepsProp !== stepsProp ? stepsProp : steps
   if (prevStepsProp !== stepsProp) {
     setPrevStepsProp(stepsProp)
     setSteps(stepsProp)
@@ -53,14 +55,17 @@ function IGRPMultiStepForm({
 
   // A changed initialStep re-applies (a saved draft resumes at the step the backend accepted).
   const [prevInitialStep, setPrevInitialStep] = useState(initialStep)
+  let nextKey = currentKey
   if (prevInitialStep !== initialStep) {
     setPrevInitialStep(initialStep)
-    setCurrentKey(steps[clampStepIndex(initialStep, steps.length) - 1]?.key)
+    nextKey = base[clampStepIndex(initialStep, base.length) - 1]?.key
+    setCurrentKey(nextKey)
   }
 
   // A removed current key falls back to step 1 in render; persist it so the old key returning later
   // does not pull the user back.
-  if (steps.length && currentKey !== currentStepData?.key) setCurrentKey(currentStepData?.key)
+  const fallbackKey = base[resolveStepIndex(base, nextKey) - 1]?.key
+  if (base.length && nextKey !== fallbackKey) setCurrentKey(fallbackKey)
 
   const inFlight = useRef(false)
 

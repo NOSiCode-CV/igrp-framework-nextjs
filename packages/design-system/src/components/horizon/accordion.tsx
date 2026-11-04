@@ -61,7 +61,14 @@ type IGRPAccordionBaseProps = Partial<AccordionTriggerArgs> &
  */
 type IGRPAccordionProps = IGRPAccordionBaseProps &
   (
-    | { type?: "single"; value?: string; defaultValue?: string; onValueChange?(value: string): void }
+    | {
+        type?: "single"
+        value?: string
+        defaultValue?: string
+        onValueChange?(value: string): void
+        /** Whether the open item can be closed. Default `true`. */
+        collapsible?: boolean
+      }
     | { type: "multiple"; value?: string[]; defaultValue?: string[] | "all"; onValueChange?(value: string[]): void }
   )
 
@@ -163,7 +170,12 @@ function IGRPAccordion(props: IGRPAccordionProps) {
       type="single"
       collapsible
       defaultValue={
-        defaultValue ? `item-${igrpCleanString(defaultValue).toLowerCase()}` : items[0] && itemValue(items[0])
+        defaultValue
+          ? // An item's own `value` wins; otherwise `defaultValue` is the legacy title form.
+            items.some((item) => itemValue(item) === defaultValue)
+            ? defaultValue
+            : `item-${igrpCleanString(defaultValue).toLowerCase()}`
+          : items[0] && itemValue(items[0])
       }
       {...accordionProps}
     >

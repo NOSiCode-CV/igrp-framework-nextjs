@@ -25,6 +25,19 @@ describe("IGRPAccordion", () => {
     expect(screen.getByText("a")).toBeInTheDocument()
   })
 
+  it("single: defaultValue matching an item's own value opens that item", () => {
+    const items = ["p1", "p2"].map((v) => ({ title: v.toUpperCase(), value: v, content: <p>{v} conteúdo</p> }))
+    render(<IGRPAccordion items={items} defaultValue="p2" />)
+    expect(screen.getByText("p2 conteúdo")).toBeInTheDocument()
+    expect(screen.queryByText("p1 conteúdo")).toBeNull()
+  })
+
+  it("single: collapsible={false} keeps the open item open", async () => {
+    render(<IGRPAccordion items={six.slice(0, 1)} collapsible={false} />)
+    await userEvent.click(screen.getByRole("button", { name: "Identificação" }))
+    expect(screen.getByText("Identificação conteúdo")).toBeInTheDocument()
+  })
+
   it("multiple + defaultValue='all': six open, collapsing one leaves five", async () => {
     render(<IGRPAccordion type="multiple" defaultValue="all" items={six} />)
     six.forEach((s) => expect(screen.getByText(`${s.title} conteúdo`)).toBeInTheDocument())

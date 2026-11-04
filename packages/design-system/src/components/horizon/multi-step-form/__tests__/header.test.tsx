@@ -31,6 +31,18 @@ describe("IGRPMultiStepFormHeader", () => {
     for (const t of ["a", "b", "c"]) expect(screen.getByText(t)).toBeInTheDocument()
   })
 
+  it("renders a step's description under its title", () => {
+    const steps = mk(["a", "b"]).map((s, i) => (i === 0 ? { ...s, description: "Dados pessoais" } : s))
+    const { container } = render(
+      <IGRPMultiStepForm steps={steps}>
+        <IGRPMultiStepFormHeader />
+      </IGRPMultiStepForm>
+    )
+    const [first, second] = items(container)
+    expect(within(first!).getByText("Dados pessoais")).toHaveAttribute("data-slot", "stepper-description")
+    expect(second!.querySelector('[data-slot="stepper-description"]')).toBeNull()
+  })
+
   it("passes variant to every indicator", () => {
     const { container } = render(
       <IGRPMultiStepForm steps={mk(["a", "b", "c"])}>

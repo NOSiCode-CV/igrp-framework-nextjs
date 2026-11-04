@@ -6,6 +6,7 @@ import { igrpOmitNonDomProps } from "../../../lib/dom-props.js"
 import { cn } from "../cn.js"
 import {
   Stepper,
+  StepperDescription,
   StepperIndicator,
   StepperItem,
   StepperSeparator,
@@ -47,6 +48,7 @@ function IGRPMultiStepFormHeader({
             <>
               <StepperIndicator variant={variant} />
               <StepperTitle>{step.title}</StepperTitle>
+              {step.description && <StepperDescription className="text-xs">{step.description}</StepperDescription>}
             </>
           )
           return (

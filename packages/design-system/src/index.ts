@@ -828,7 +828,7 @@ export {
   IGRPMultiStepFormHeader,
   type IGRPMultiStepFormHeaderProps,
 } from "./components/horizon/multi-step-form/header.js"
-export { IGRPMultiStepFormSteps } from "./components/horizon/multi-step-form/steps.js"
+export { IGRPMultiStepFormSteps, type IGRPMultiStepFormStepsProps } from "./components/horizon/multi-step-form/steps.js"
 export {
   IGRPMultiStepFormFooter,
   IGRPMultiStepFormPrevious,

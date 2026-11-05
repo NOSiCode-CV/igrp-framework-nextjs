@@ -1,5 +1,12 @@
 # @igrp/framework-next-ui
 
+## 0.2.0-beta.16
+
+### Patch Changes
+
+- Updated dependencies [012c0bc]
+  - @igrp/igrp-framework-react-design-system@0.2.0-beta.12
+
 ## 0.2.0-beta.15
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @igrp/template-migrator
 
+## 0.2.0-beta.21
+
+### Patch Changes
+
+- a477040: Build `dist/cli.js` and `dist/index.js` again instead of `.mjs`, so the `igrp-migrate` bin in `package.json` exists and `igrp migrate` / `pnpm dlx` can run it.
+
 ## 0.2.0-beta.20
 
 ### Patch Changes

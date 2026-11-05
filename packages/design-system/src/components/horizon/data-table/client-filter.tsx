@@ -43,7 +43,7 @@ function IGRPDataTableClientFilter<TData>({
   filterList,
   filterLabel,
   onFiltersCleared,
-  className
+  className,
 }: IGRPDataTableFilterClientProps<TData>) {
   const { isFiltered, handleClear } = useFilterState(table, onFiltersCleared)
 

@@ -9,6 +9,8 @@ const shared = {
   sourcemap: false,
   outDir: "dist",
   splitting: false,
+  // Emit .js, not .mjs: package.json bin/main/exports point at dist/*.js (newer tsdown defaults to .mjs on node).
+  fixedExtension: false,
   // Do NOT enable shims — shims inject import statements before the bundle
   // content, which would push the shebang banner off line 1 and cause a
   // SyntaxError in Node's ESM loader. __dirname is handled manually in

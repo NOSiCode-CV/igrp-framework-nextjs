@@ -1,5 +1,11 @@
 # @igrp/template-migrator
 
+## 0.2.0-beta.23
+
+### Patch Changes
+
+- f8c1b14: Migration 82: resync demo-v1 to framework-next 0.2.0-beta.20, framework-next-ui 0.2.0-beta.18 and design system 0.2.0-beta.14 (rich-text links ignore `class`, `rel` and `target` from stored HTML; the view's empty check no longer freezes on unclosed `<`).
+
 ## 0.2.0-beta.22
 
 ### Patch Changes

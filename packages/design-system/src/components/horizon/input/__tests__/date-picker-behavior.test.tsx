@@ -9,6 +9,7 @@ import { IGRPForm, type IGRPFormHandle } from "../../form/index.js"
 import { IGRPCalendarSingle } from "../../calendar/single.js"
 import { IGRPDatePickerSingle } from "../date-picker/single.js"
 import { IGRPDatePickerInputSingle } from "../date-picker/input-single.js"
+import { IGRPDatePickerMultiple } from "../date-picker/multiple.js"
 
 const schema = z.object({ d: z.any() })
 
@@ -284,6 +285,26 @@ describe("IGRPDatePickerSingle", () => {
   it("defaults its placeholder to the pt-PT catalog", () => {
     render(<IGRPDatePickerSingle name="d" date={undefined} onDateChange={() => {}} />)
     expect(screen.getByText("Selecionar data")).toBeInTheDocument()
+  })
+})
+
+describe("IGRPDatePickerMultiple", () => {
+  it("stops displaying the dates it was told to clear", async () => {
+    const user = userEvent.setup()
+    let formValue: unknown = "unset"
+    render(
+      <Wrapper defaultValues={{ d: ["2026-08-26"] }}>
+        <IGRPDatePickerMultiple name="d" label="Datas" />
+        <FormValueProbe onValue={(v) => (formValue = v)} />
+      </Wrapper>
+    )
+
+    expect(screen.getByText("26-08-2026")).toBeInTheDocument()
+
+    await user.click(screen.getByLabelText("Limpar data"))
+
+    expect(screen.queryByText("26-08-2026")).not.toBeInTheDocument()
+    expect(formValue).toBeNull()
   })
 })
 

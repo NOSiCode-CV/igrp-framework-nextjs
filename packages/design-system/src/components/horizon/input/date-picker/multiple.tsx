@@ -206,7 +206,10 @@ function IGRPDatePickerMultiple({
                 {...fieldProps}
                 value={toLocalDates(field.value)}
                 onChange={(val) => {
-                  field.onChange(val)
+                  // `null`, not `undefined`: react-hook-form reads an `undefined` field as
+                  // "no value set" and `useWatch` hands back the *default*, so a cleared
+                  // picker re-rendered the dates it had just dropped.
+                  field.onChange(val ?? null)
                   onDateChange?.(val)
                 }}
                 triggerRef={field.ref}

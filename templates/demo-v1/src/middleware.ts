@@ -118,7 +118,10 @@ function isPublicPath(pathname: string): boolean {
   // too — they are protected because `(igrp)/layout.tsx` calls `verifySession()`
   // on the server for every route beneath it. Do not move a protected route out
   // from under that layout on the assumption middleware covers it.
-  if (/\.[^/]+$/.test(pathname)) return true;
+  // Last segment only: on the full path, dots before a later "/" make this O(n²).
+  if (/\.[^/]+$/.test(pathname.slice(pathname.lastIndexOf("/") + 1))) {
+    return true;
+  }
   return false;
 }
 

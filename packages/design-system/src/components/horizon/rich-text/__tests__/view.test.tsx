@@ -66,6 +66,20 @@ describe("IGRPRichTextView — the schema is the allow-list", () => {
     expect(container.innerHTML).not.toMatch(/javascript:/i)
   })
 
+  it("never lets a stored link pick its own class, rel or target", async () => {
+    const { container } = render(
+      <IGRPRichTextView
+        html={'<p><a href="https://igrp.cv" class="fixed inset-0 z-50 opacity-0" rel="opener" target="_top">x</a></p>'}
+      />
+    )
+    const link = (await document_(container)).querySelector("a")!
+    expect(link.getAttribute("href")).toBe("https://igrp.cv")
+    expect(link.hasAttribute("class")).toBe(false)
+    expect(link.getAttribute("rel")).toBe("noopener noreferrer nofollow")
+    expect(link.getAttribute("target")).toBe("_blank")
+    expect(container.innerHTML).not.toMatch(/inset-0|"opener"|"_top"/)
+  })
+
   it("drops undeclared inline handlers on allowed elements", async () => {
     const { container } = render(
       <IGRPRichTextView html={'<p onclick="alert(1)"><strong onmouseover="x()">a</strong></p>'} />

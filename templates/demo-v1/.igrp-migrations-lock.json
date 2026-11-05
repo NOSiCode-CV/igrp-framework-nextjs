@@ -487,6 +487,12 @@
       "appliedAt": "2026-11-05T00:00:00.000Z",
       "cliVersion": "0.2.0-beta.19",
       "manifestHash": "e3a9ab4e1678a819"
+    },
+    {
+      "id": "81-logout-host-marker-and-public-path-regex",
+      "appliedAt": "2026-11-05T00:00:00.000Z",
+      "cliVersion": "0.2.0-beta.21",
+      "manifestHash": "ff815ec5a95451f3"
     }
   ]
 }

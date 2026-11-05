@@ -1,4 +1,4 @@
-import type { Extensions } from "@tiptap/core"
+import type { Attributes, Extensions, Mark } from "@tiptap/core"
 import Highlight from "@tiptap/extension-highlight"
 import Placeholder from "@tiptap/extension-placeholder"
 import Subscript from "@tiptap/extension-subscript"
@@ -7,6 +7,34 @@ import { TableKit } from "@tiptap/extension-table"
 import TextAlign from "@tiptap/extension-text-align"
 import { Color, FontSize, TextStyle } from "@tiptap/extension-text-style"
 import StarterKit from "@tiptap/starter-kit"
+
+/**
+ * A stored `<a>` keeps its `href` and `title`, but never picks its own `target`,
+ * `rel` or `class`: those always take Link's defaults (`_blank`,
+ * `noopener noreferrer nofollow`, none). Read from HTML, a `class` could lay an
+ * invisible link over the whole page and `rel="opener"` would undo `noopener`.
+ * StarterKit does not re-export Link, so its bundled copy is narrowed in place.
+ */
+const RichTextStarterKit = StarterKit.extend({
+  addExtensions() {
+    return (this.parent?.() ?? []).map((extension) =>
+      extension.name === "link"
+        ? (extension as Mark).extend({
+            addAttributes() {
+              const attributes = (this.parent?.() ?? {}) as Attributes
+              const fromSchema = { parseHTML: () => null }
+              return {
+                ...attributes,
+                target: { ...attributes.target, ...fromSchema },
+                rel: { ...attributes.rel, ...fromSchema },
+                class: { ...attributes.class, ...fromSchema },
+              }
+            },
+          })
+        : extension
+    )
+  },
+})
 
 /**
  * The single rich-text schema shared by `IGRPRichTextEditor` and
@@ -31,7 +59,7 @@ import StarterKit from "@tiptap/starter-kit"
  */
 function createRichTextSchema(placeholder = ""): Extensions {
   return [
-    StarterKit.configure({
+    RichTextStarterKit.configure({
       heading: { levels: [1, 2, 3] },
       code: false,
       codeBlock: false,
@@ -57,6 +85,9 @@ function createRichTextSchema(placeholder = ""): Extensions {
 function isBlankRichText(html: string | null | undefined): boolean {
   if (!html) return true
   if (/<(hr|table)\b/i.test(html)) return false
+  // A '<' with no '>' after it survives the strip below, so the body is not blank. Answering
+  // here also keeps that strip linear: each such '<' would otherwise rescan to the end (O(n²)).
+  if (html.lastIndexOf("<") > html.lastIndexOf(">")) return false
   return (
     html
       .replace(/<[^>]*>/g, "")

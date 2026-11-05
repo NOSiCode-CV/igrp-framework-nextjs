@@ -16,7 +16,7 @@ WORKDIR /app
 # Build-time base — adds the package manager on top of `base`.
 FROM base AS toolchain
 
-RUN npm install -g pnpm@11.1.1
+RUN npm install -g pnpm@12.15.0
 
 FROM toolchain AS deps
 

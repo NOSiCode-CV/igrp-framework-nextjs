@@ -90,3 +90,7 @@ igrp-hidden is a hidden input but still show in the html
 
 - hide the i18n
 - template e migration is no inclued all the package.json changes
+
+O feature i18n como default de uma language e pode hide o selector para não mostrar ou carregar dados desnecessários caso for só uma language
+
+O separador do header não estão linhados

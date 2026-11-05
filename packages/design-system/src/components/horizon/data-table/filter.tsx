@@ -256,40 +256,42 @@ function IGRPDataTableFilterFaceted<TData>({
         <PopoverContent className={cn("w-auto min-w-36 p-1")} align="start">
           <Command>
             {showFilter && <CommandInput placeholder={resolvedPlaceholder} className={cn("h-8")} />}
-            <CommandEmpty>{resolvedLabelSearchField}</CommandEmpty>
-            <CommandGroup>
-              {options?.map((option, i) => (
-                <CommandItem
-                  key={String(option.value)}
-                  value={String(option.value)}
-                  onSelect={() => handleSelect(option.value)}
-                  className={cn("gap-2", className)}
-                >
-                  <Checkbox
-                    id={`${id}-${i}`}
-                    checked={selectedValues.has(option.value)}
-                    onCheckedChange={() => handleSelect(option.value)}
-                    aria-label={option.label}
-                    className={cn("border-foreground data-[state=checked]:**:[svg]:!text-primary-foreground")}
-                  />
-                  <label htmlFor={`${id}-${i}`} className="flex-1 cursor-pointer">
-                    {option.label}
-                  </label>
-                  <span className="ml-auto font-mono text-xs">{facets?.get(option.value) ?? 0}</span>
-                </CommandItem>
-              ))}
-            </CommandGroup>
-            {selectedValues.size > 0 && (
-              <>
-                <CommandSeparator />
-                <CommandGroup>
-                  <CommandItem onSelect={handleClear}>
-                    <IGRPIcon iconName="X" />
-                    {resolvedLabelFilter}
+            <CommandList>
+              <CommandEmpty>{resolvedLabelSearchField}</CommandEmpty>
+              <CommandGroup>
+                {options?.map((option, i) => (
+                  <CommandItem
+                    key={String(option.value)}
+                    value={String(option.value)}
+                    onSelect={() => handleSelect(option.value)}
+                    className={cn("gap-2", className)}
+                  >
+                    <Checkbox
+                      id={`${id}-${i}`}
+                      checked={selectedValues.has(option.value)}
+                      onCheckedChange={() => handleSelect(option.value)}
+                      aria-label={option.label}
+                      className={cn("border-foreground data-[state=checked]:**:[svg]:!text-primary-foreground")}
+                    />
+                    <label htmlFor={`${id}-${i}`} className="flex-1 cursor-pointer">
+                      {option.label}
+                    </label>
+                    <span className="ml-auto font-mono text-xs">{facets?.get(option.value) ?? 0}</span>
                   </CommandItem>
-                </CommandGroup>
-              </>
-            )}
+                ))}
+              </CommandGroup>
+              {selectedValues.size > 0 && (
+                <>
+                  <CommandSeparator />
+                  <CommandGroup>
+                    <CommandItem onSelect={handleClear}>
+                      <IGRPIcon iconName="X" />
+                      {resolvedLabelFilter}
+                    </CommandItem>
+                  </CommandGroup>
+                </>
+              )}
+            </CommandList>
           </Command>
         </PopoverContent>
       </Popover>
@@ -428,7 +430,7 @@ function IGRPDataTableFilterSelect<TData>({
       <SelectTrigger id={`${id}-select`} className={cn(className)}>
         <SelectValue placeholder={resolvedPlaceholder} />
       </SelectTrigger>
-      <SelectContent className={cn(className)}>
+      <SelectContent className={cn("max-h-72", className)}>
         <SelectGroup>
           <SelectItem value="all">{resolvedPlaceholder}</SelectItem>
           {options?.map((opt) => (

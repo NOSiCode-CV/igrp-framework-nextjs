@@ -32,6 +32,7 @@ interface IGRPDataTableFilterClientProps<TData> {
   filterLabel: string
   /** Optional callback invoked after all filters are cleared. */
   onFiltersCleared?: () => void
+  className?: string
 }
 
 /**
@@ -42,13 +43,14 @@ function IGRPDataTableClientFilter<TData>({
   filterList,
   filterLabel,
   onFiltersCleared,
+  className
 }: IGRPDataTableFilterClientProps<TData>) {
   const { isFiltered, handleClear } = useFilterState(table, onFiltersCleared)
 
   if (!filterList) return null
 
   return (
-    <div className={cn("flex flex-col gap-2 md:flex-row md:items-center")}>
+    <div className={cn("flex flex-col gap-2 md:flex-row md:items-center", className)}>
       {filterList.map(({ columnId, component }) => {
         const column = table.getColumn(columnId as string)
         return column && <Fragment key={columnId as string}>{component({ column })}</Fragment>

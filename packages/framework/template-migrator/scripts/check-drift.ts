@@ -25,7 +25,7 @@ import {
 // if they differ — so a forgotten migration can't pass into a release.
 //
 // It also runs the inverse check: every git-tracked template file must be
-// migration-managed, exempt (docs/AI-tooling/zip-excluded paths — see
+// migration-managed, exempt (AI-tooling/zip-excluded paths — see
 // drift-orphans.ts), or grandfathered in migrations/demo-v1/template-baseline.json.
 // A brand-new template file matching none of those is an "orphan" and fails the
 // gate: author a file.create migration for it, or — when it deliberately should

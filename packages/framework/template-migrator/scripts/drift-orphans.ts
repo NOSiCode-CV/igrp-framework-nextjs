@@ -11,7 +11,7 @@
  * Directory prefixes exempt from the new-file check.
  * Two categories:
  * - never ship to consumers (excluded from the template zip),
- * - ship in the zip but are docs/AI-tooling content, not app runtime code —
+ * - ship in the zip but are AI-tooling content, not app runtime code —
  *   an upgraded app missing them behaves identically to a scaffolded one.
  */
 export const TEMPLATE_EXEMPT_PREFIXES: string[] = [
@@ -21,8 +21,8 @@ export const TEMPLATE_EXEMPT_PREFIXES: string[] = [
   ".next/",
   ".git/",
   "superpowers/",
-  // docs / AI-tooling content — ships in the zip, but not runtime code
-  "docs/",
+  // AI-tooling content — ships in the zip, but not runtime code. docs/ is
+  // not exempt: guides are user-facing and ship through migrations.
   "specs/",
   // .agents/ is the canonical AI rule hub; .github/.cursor/.trae are thin
   // bridges that point at it. All four are instructions for coding agents,

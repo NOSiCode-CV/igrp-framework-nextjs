@@ -31,7 +31,7 @@ describe("findOrphanFiles", () => {
 
   it("does not flag files under exempt prefixes", () => {
     const { orphans } = findOrphanFiles({
-      templateFiles: ["docs/NEW_GUIDE.md", "specs/2026-07-09-thing.md", ".github/workflows/ci.yml"],
+      templateFiles: ["specs/2026-07-09-thing.md", ".github/workflows/ci.yml"],
       managedPaths: [],
       baseline: [],
     });
@@ -93,8 +93,8 @@ describe("findOrphanFiles", () => {
     expect(staleBaseline).toEqual([]);
   });
 
-  it("exports exemption lists that cover the non-shipped and docs paths", () => {
-    expect(TEMPLATE_EXEMPT_PREFIXES).toContain("docs/");
+  it("exports exemption lists that cover the non-shipped paths and not docs/", () => {
+    expect(TEMPLATE_EXEMPT_PREFIXES).not.toContain("docs/");
     expect(TEMPLATE_EXEMPT_PREFIXES).toContain("create-template/");
     expect(TEMPLATE_EXEMPT_FILES).toContain("CLAUDE.md");
   });

@@ -7,6 +7,10 @@ allowBuilds:
   esbuild: true
   sharp: true
   unrs-resolver: true
+# Explicit, not inherited: pnpm's built-in 1440 default is non-strict, and
+# pnpm/pnpm#14409 means strict must be spelled out too.
+minimumReleaseAge: 1440
+minimumReleaseAgeStrict: true
 minimumReleaseAgeExclude:
   - '@igrp/platform-access-management-client-ts@0.2.0-beta.21'
   - '@next/env@15.5.29'

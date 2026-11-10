@@ -9,6 +9,7 @@ import { ScrollArea } from "../../primitives/scroll-area.js"
 import { Stepper, StepperItem, StepperTitle, StepperTrigger } from "../../primitives/stepper.js"
 import { Button } from "../../primitives/button.js"
 import { Tooltip, TooltipTrigger, TooltipContent } from "../../primitives/tooltip.js"
+import { IGRPTooltipProvider } from "../tooltip.js"
 import { useIGRPi18n } from "../../../i18n/index.js"
 
 function getScrollBehavior(): ScrollBehavior {
@@ -206,115 +207,118 @@ function IGRPStepperProcess({
     return null
   }
 
+  // Own provider: an app-level one may come from another copy of radix-ui and not resolve here.
   return (
-    <div className={cn("flex w-full flex-col gap-8")} id={ref}>
-      <div className={cn("relative flex items-center justify-center gap-4")}>
-        <div ref={scrollAreaRef} className={cn("w-[90vw]")}>
-          <ScrollArea className={cn("w-full")}>
-            <Stepper
-              value={validCurrentStep}
-              onValueChange={handleStepChange}
-              className={cn(stepperClassName)}
-              role="navigation"
-              aria-label={i18n.stepper.processSteps}
-            >
-              {steps.map(({ step, stepKey, title, isCompleted, isActive }, index) => {
-                const isFirst = index === 0
-                const isLast = index === steps.length - 1
+    <IGRPTooltipProvider>
+      <div className={cn("flex w-full flex-col gap-8")} id={ref}>
+        <div className={cn("relative flex items-center justify-center gap-4")}>
+          <div ref={scrollAreaRef} className={cn("w-[90vw]")}>
+            <ScrollArea className={cn("w-full")}>
+              <Stepper
+                value={validCurrentStep}
+                onValueChange={handleStepChange}
+                className={cn(stepperClassName)}
+                role="navigation"
+                aria-label={i18n.stepper.processSteps}
+              >
+                {steps.map(({ step, stepKey, title, isCompleted, isActive }, index) => {
+                  const isFirst = index === 0
+                  const isLast = index === steps.length - 1
 
-                return (
-                  <StepperItem
-                    key={stepKey ?? step}
-                    step={step}
-                    completed={isCompleted}
-                    disabled={!isActive}
-                    aria-current={isActive ? "step" : undefined}
-                    className={cn(getStepperItemClassName(), stepperItemsClassName)}
-                    loading={isLoading && validCurrentStep === step}
-                    style={getStepOffsetStyle(isFirst, isLast)}
-                  >
-                    <span
-                      aria-hidden="true"
-                      className={cn(
-                        "pointer-events-none absolute inset-0 bg-muted",
-                        "group-data-[state=completed]/step:bg-process-completed",
-                        "group-data-[state=active]/step:bg-process-active",
-                        "group-data-[state=inactive]/step:bg-muted",
-                        isFirst && "rounded-l-2xl",
-                        isLast && "rounded-r-2xl"
-                      )}
-                      style={getStepShapeStyle(isFirst, isLast)}
-                    />
-                    <StepperTrigger asChild className={cn("z-10 cursor-pointer gap-1 rounded max-md:flex-col")}>
-                      <Button
-                        variant="ghost"
+                  return (
+                    <StepperItem
+                      key={stepKey ?? step}
+                      step={step}
+                      completed={isCompleted}
+                      disabled={!isActive}
+                      aria-current={isActive ? "step" : undefined}
+                      className={cn(getStepperItemClassName(), stepperItemsClassName)}
+                      loading={isLoading && validCurrentStep === step}
+                      style={getStepOffsetStyle(isFirst, isLast)}
+                    >
+                      <span
+                        aria-hidden="true"
                         className={cn(
-                          "flex items-center justify-center bg-transparent text-center hover:bg-transparent",
-                          "w-34 text-[10px] shadow-none",
-                          (isActive || isCompleted) && "text-background hover:text-background"
+                          "pointer-events-none absolute inset-0 bg-muted",
+                          "group-data-[state=completed]/step:bg-process-completed",
+                          "group-data-[state=active]/step:bg-process-active",
+                          "group-data-[state=inactive]/step:bg-muted",
+                          isFirst && "rounded-l-2xl",
+                          isLast && "rounded-r-2xl"
                         )}
-                        size="xs"
-                      >
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <span className={cn("flex w-full min-w-0 items-center justify-center gap-2")}>
-                              <CheckIcon
-                                className={cn(
-                                  "hidden",
-                                  isCompleted && "block shrink-0 stroke-[2.5] opacity-70 group-hover/step:hidden"
-                                )}
-                                aria-hidden="true"
-                              />
-                              <StepperTitle
-                                className={cn(
-                                  isCompleted
-                                    ? "hidden min-w-0 truncate group-hover/step:block"
-                                    : "w-full min-w-0 truncate"
-                                )}
-                              >
-                                {title}
-                              </StepperTitle>
-                            </span>
-                          </TooltipTrigger>
-                          <TooltipContent side="bottom">{title}</TooltipContent>
-                        </Tooltip>
-                      </Button>
-                    </StepperTrigger>
-                  </StepperItem>
-                )
-              })}
-            </Stepper>
-          </ScrollArea>
-        </div>
+                        style={getStepShapeStyle(isFirst, isLast)}
+                      />
+                      <StepperTrigger asChild className={cn("z-10 cursor-pointer gap-1 rounded max-md:flex-col")}>
+                        <Button
+                          variant="ghost"
+                          className={cn(
+                            "flex items-center justify-center bg-transparent text-center hover:bg-transparent",
+                            "w-34 text-[10px] shadow-none",
+                            (isActive || isCompleted) && "text-background hover:text-background"
+                          )}
+                          size="xs"
+                        >
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <span className={cn("flex w-full min-w-0 items-center justify-center gap-2")}>
+                                <CheckIcon
+                                  className={cn(
+                                    "hidden",
+                                    isCompleted && "block shrink-0 stroke-[2.5] opacity-70 group-hover/step:hidden"
+                                  )}
+                                  aria-hidden="true"
+                                />
+                                <StepperTitle
+                                  className={cn(
+                                    isCompleted
+                                      ? "hidden min-w-0 truncate group-hover/step:block"
+                                      : "w-full min-w-0 truncate"
+                                  )}
+                                >
+                                  {title}
+                                </StepperTitle>
+                              </span>
+                            </TooltipTrigger>
+                            <TooltipContent side="bottom">{title}</TooltipContent>
+                          </Tooltip>
+                        </Button>
+                      </StepperTrigger>
+                    </StepperItem>
+                  )
+                })}
+              </Stepper>
+            </ScrollArea>
+          </div>
 
-        <div className={cn("flex items-center justify-center gap-1")}>
-          <Button
-            variant="outline"
-            size="icon-sm"
-            className={cn("mb-3 size-6 shrink-0")}
-            onClick={scrollLeft}
-            aria-label={i18n.stepper.scrollPrevious}
-            type="button"
-            disabled={!canScrollLeft}
-          >
-            <ChevronLeft className={cn("size-3")} aria-hidden="true" />
-          </Button>
+          <div className={cn("flex items-center justify-center gap-1")}>
+            <Button
+              variant="outline"
+              size="icon-sm"
+              className={cn("mb-3 size-6 shrink-0")}
+              onClick={scrollLeft}
+              aria-label={i18n.stepper.scrollPrevious}
+              type="button"
+              disabled={!canScrollLeft}
+            >
+              <ChevronLeft className={cn("size-3")} aria-hidden="true" />
+            </Button>
 
-          <Button
-            variant="outline"
-            size="icon-sm"
-            className={cn("mb-3 size-6 shrink-0")}
-            onClick={scrollRight}
-            aria-label={i18n.stepper.scrollNext}
-            type="button"
-            disabled={!canScrollRight}
-          >
-            <ChevronRight className={cn("size-3")} aria-hidden="true" />
-          </Button>
+            <Button
+              variant="outline"
+              size="icon-sm"
+              className={cn("mb-3 size-6 shrink-0")}
+              onClick={scrollRight}
+              aria-label={i18n.stepper.scrollNext}
+              type="button"
+              disabled={!canScrollRight}
+            >
+              <ChevronRight className={cn("size-3")} aria-hidden="true" />
+            </Button>
+          </div>
         </div>
+        {children(validCurrentStep)}
       </div>
-      {children(validCurrentStep)}
-    </div>
+    </IGRPTooltipProvider>
   )
 }
 

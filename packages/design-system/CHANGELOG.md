@@ -1,5 +1,11 @@
 # @igrp/igrp-framework-react-design-system
 
+## 0.2.0-beta.15
+
+### Patch Changes
+
+- 2c6b197: `IGRPStepperProcess` mounts its own tooltip provider. It threw "Tooltip must be used within TooltipProvider" when the app-level provider came from a different copy of the design system or radix-ui.
+
 ## 0.2.0-beta.14
 
 ### Patch Changes

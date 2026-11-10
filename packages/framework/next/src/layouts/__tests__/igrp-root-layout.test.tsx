@@ -81,6 +81,11 @@ describe('IGRPRootLayout organization branding', () => {
     expect(find(tree, IGRPNestedProviders)?.props.branding ?? null).toBeNull();
   });
 
+  it('forwards the CSP nonce to the providers', async () => {
+    const tree = await IGRPRootLayout({ children: null, config: config(), nonce: 'abc' });
+    expect(find(tree, IGRPNestedProviders)?.props.nonce).toBe('abc');
+  });
+
   it('no longer emits a preset theme class on the body', async () => {
     const tree = await IGRPRootLayout({ children: null, config: config() });
     const body = JSON.stringify(tree);

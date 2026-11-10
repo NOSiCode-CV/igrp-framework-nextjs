@@ -17,6 +17,8 @@ export type IGRPNestedProvidersArgs = {
   sessionArgs?: Partial<SessionProviderProps>;
   /** Forwarded to `IGRPSessionWatcher`: the AM session check run when a tab regains focus. */
   checkSession?: IGRPCheckSession;
+  /** CSP nonce for the theme boot script next-themes inlines in the HTML. */
+  nonce?: string;
 };
 
 export function IGRPNestedProviders({
@@ -24,6 +26,7 @@ export function IGRPNestedProviders({
   branding = null,
   sessionArgs,
   checkSession,
+  nonce,
   children,
 }: IGRPNestedProvidersArgs) {
   return (
@@ -35,6 +38,7 @@ export function IGRPNestedProviders({
           enableSystem
           disableTransitionOnChange
           enableColorScheme
+          nonce={nonce}
         >
           <IGRPBrandingProvider branding={branding}>
             <IGRPSessionWatcher checkSession={checkSession}>{children}</IGRPSessionWatcher>

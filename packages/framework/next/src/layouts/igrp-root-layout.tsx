@@ -36,9 +36,14 @@ export type IGRPRootLayoutArgs = {
    * format locale when `config.i18n` is set, else `"pt"`.
    */
   readonly lang?: string;
+  /**
+   * CSP nonce of this request, for the inline theme boot script. A prop, not a
+   * `headers()` read here, so apps without a nonce-based CSP stay as they are.
+   */
+  readonly nonce?: string;
 };
 
-export async function IGRPRootLayout({ children, config, lang }: IGRPRootLayoutArgs) {
+export async function IGRPRootLayout({ children, config, lang, nonce }: IGRPRootLayoutArgs) {
   const {
     font,
     layout,
@@ -126,6 +131,7 @@ export async function IGRPRootLayout({ children, config, lang }: IGRPRootLayoutA
           session={session}
           branding={branding}
           sessionArgs={sessionArgs}
+          nonce={nonce}
           // No AM to ask in preview mode.
           checkSession={previewMode ? undefined : igrpCheckAccessSession}
         >

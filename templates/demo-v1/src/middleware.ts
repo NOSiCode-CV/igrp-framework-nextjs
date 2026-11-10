@@ -20,13 +20,12 @@ import { isAuthBypass, sanitizeCallbackUrl } from "@/lib/utilities";
  * floating-UI positioning, with no CSP nonce escape hatch — this is not
  * fixable from application code.
  *
- * script-src intentionally does NOT allow 'unsafe-inline'. This WILL surface
- * a real violation from next-themes' inline theme-boot script (no nonce
- * wired today) — that's expected, not a bug in this policy. Silencing it
- * properly means threading a nonce from here through IGRPThemeProvider into
- * next-themes' `nonce` prop, a framework-next-ui change, not a header one.
+ * script-src does NOT allow 'unsafe-inline'. Inline scripts carry the
+ * per-request nonce instead: Next.js reads it from this policy on the request
+ * headers for its own scripts, and the root layout passes `x-nonce` to
+ * IGRPRootLayout for next-themes' theme boot script.
  */
-function buildCspReportOnly(): string {
+function buildCspReportOnly(nonce?: string): string {
   const imageDomains = (process.env.NEXT_PUBLIC_ALLOWED_DOMAINS ?? "")
     .split(",")
     .map((domain) => domain.trim())
@@ -46,7 +45,7 @@ function buildCspReportOnly(): string {
 
   return [
     "default-src 'self'",
-    "script-src 'self'",
+    `script-src 'self'${nonce ? ` 'nonce-${nonce}'` : ""}`,
     "style-src 'self' 'unsafe-inline'",
     `img-src 'self' data:${imageDomains.length ? ` ${imageDomains.join(" ")}` : ""}`,
     "font-src 'self'",
@@ -77,14 +76,19 @@ const SECURITY_HEADERS: Record<string, string> = {
   // proxy or directly). Safe to send unconditionally in the production gate
   // below — browsers ignore it on plain HTTP.
   "Strict-Transport-Security": "max-age=63072000; includeSubDomains",
-  "Content-Security-Policy-Report-Only": buildCspReportOnly(),
 };
 
-function withSecurityHeaders(response: NextResponse): NextResponse {
-  if (process.env.NODE_ENV === "production") {
+const IS_PRODUCTION = process.env.NODE_ENV === "production";
+
+function withSecurityHeaders(
+  response: NextResponse,
+  csp = buildCspReportOnly(),
+): NextResponse {
+  if (IS_PRODUCTION) {
     for (const [key, value] of Object.entries(SECURITY_HEADERS)) {
       response.headers.set(key, value);
     }
+    response.headers.set("Content-Security-Policy-Report-Only", csp);
   }
   return response;
 }
@@ -176,12 +180,21 @@ async function handleRequest(request: NextRequest): Promise<NextResponse> {
   const { pathname, search } = request.nextUrl;
   const currentPath = pathname + search;
 
-  // Passes the request through, forwarding the current path to server components.
+  // Passes the request through, forwarding the current path and a fresh CSP
+  // nonce (`x-nonce`, read by the root layout) to server components.
   const nextWithPath = (): NextResponse => {
+    const nonce = btoa(crypto.randomUUID());
+    const csp = buildCspReportOnly(nonce);
     const requestHeaders = new Headers(request.headers);
     requestHeaders.set("x-current-path", currentPath);
+    requestHeaders.set("x-nonce", nonce);
+    // Next.js takes the nonce for its own inline scripts from the request's policy.
+    if (IS_PRODUCTION) {
+      requestHeaders.set("Content-Security-Policy-Report-Only", csp);
+    }
     return withSecurityHeaders(
       NextResponse.next({ request: { headers: requestHeaders } }),
+      csp,
     );
   };
 

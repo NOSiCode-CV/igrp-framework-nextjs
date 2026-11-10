@@ -1,6 +1,7 @@
 import "@/styles/globals.css";
 
 import type { Metadata, Viewport } from "next";
+import { headers } from "next/headers";
 
 import {
   IGRPRootLayout,
@@ -39,6 +40,12 @@ export default async function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   const layoutConfig = await getLayoutConfig();
   const config = await createConfig(layoutConfig);
+  // Set per request by the middleware; it also goes in the CSP's script-src.
+  const nonce = (await headers()).get("x-nonce") ?? undefined;
 
-  return <IGRPRootLayout config={config}>{children}</IGRPRootLayout>;
+  return (
+    <IGRPRootLayout config={config} nonce={nonce}>
+      {children}
+    </IGRPRootLayout>
+  );
 }

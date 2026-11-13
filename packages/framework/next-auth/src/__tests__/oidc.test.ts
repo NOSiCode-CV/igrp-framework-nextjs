@@ -26,7 +26,6 @@ const MOCK_DISCOVERY = {
   token_endpoint: 'http://localhost:9090/oauth2/token',
   revocation_endpoint: 'http://localhost:9090/oauth2/revoke',
   end_session_endpoint: 'http://localhost:9090/connect/logout',
-  introspection_endpoint: 'http://localhost:9090/oauth2/introspect',
 };
 
 function makeToken(overrides: Partial<JWT> = {}): JWT {
@@ -471,151 +470,6 @@ describe('buildEndSessionUrl', () => {
   });
 });
 
-describe('introspectOidcToken', () => {
-  it('returns true when IdP responds with active: true', async () => {
-    mockFetch([
-      { url: DISCOVERY_URL, body: MOCK_DISCOVERY },
-      { url: MOCK_DISCOVERY.introspection_endpoint, body: { active: true } },
-    ]);
-    const { introspectOidcToken } = await import('../oidc');
-    expect(await introspectOidcToken(makeToken(), VALID_ENV)).toBe(true);
-  });
-
-  it('returns false when IdP responds with active: false', async () => {
-    mockFetch([
-      { url: DISCOVERY_URL, body: MOCK_DISCOVERY },
-      { url: MOCK_DISCOVERY.introspection_endpoint, body: { active: false } },
-    ]);
-    const { introspectOidcToken } = await import('../oidc');
-    expect(await introspectOidcToken(makeToken(), VALID_ENV)).toBe(false);
-  });
-
-  it('returns true (fail-open) when introspection_endpoint is absent from discovery', async () => {
-    const { introspection_endpoint: _, ...discoveryWithout } = MOCK_DISCOVERY;
-    mockFetch([{ url: DISCOVERY_URL, body: discoveryWithout }]);
-    const { introspectOidcToken } = await import('../oidc');
-    expect(await introspectOidcToken(makeToken(), VALID_ENV)).toBe(true);
-  });
-
-  it('returns true (fail-open) when introspection endpoint returns non-ok status', async () => {
-    mockFetch([
-      { url: DISCOVERY_URL, body: MOCK_DISCOVERY },
-      { url: MOCK_DISCOVERY.introspection_endpoint, body: { error: 'server_error' }, ok: false },
-    ]);
-    const { introspectOidcToken } = await import('../oidc');
-    expect(await introspectOidcToken(makeToken(), VALID_ENV)).toBe(true);
-  });
-
-  it('returns true (fail-open) when refreshToken is missing', async () => {
-    const { introspectOidcToken } = await import('../oidc');
-    expect(await introspectOidcToken(makeToken({ refreshToken: undefined }), VALID_ENV)).toBe(true);
-  });
-
-  it('introspects the refresh token, not the access token', async () => {
-    const capturedBody: string[] = [];
-    vi.stubGlobal(
-      'fetch',
-      vi.fn((url: string, init?: RequestInit) => {
-        if (url === MOCK_DISCOVERY.introspection_endpoint) {
-          capturedBody.push(String(init?.body ?? ''));
-        }
-        const bodies: Record<string, unknown> = {
-          [DISCOVERY_URL]: MOCK_DISCOVERY,
-          [MOCK_DISCOVERY.introspection_endpoint]: { active: true },
-        };
-        return Promise.resolve({ ok: true, json: () => Promise.resolve(bodies[url] ?? {}) });
-      }),
-    );
-    const { introspectOidcToken } = await import('../oidc');
-    await introspectOidcToken(
-      makeToken({ refreshToken: 'rt-xyz', accessToken: 'at-xyz' }),
-      VALID_ENV,
-    );
-
-    const params = new URLSearchParams(capturedBody[0]);
-    expect(params.get('token')).toBe('rt-xyz');
-    expect(params.get('token_type_hint')).toBe('refresh_token');
-  });
-
-  it('returns true (fail-open) for none provider without making fetch calls', async () => {
-    const fetchSpy = vi.fn();
-    vi.stubGlobal('fetch', fetchSpy);
-    const { introspectOidcToken } = await import('../oidc');
-
-    expect(await introspectOidcToken({ authProviderId: 'none' }, { AUTH_PROVIDER: 'none' })).toBe(
-      true,
-    );
-    expect(fetchSpy).not.toHaveBeenCalled();
-  });
-
-  it('sends Basic auth header with base64-encoded clientId:clientSecret', async () => {
-    const capturedInit: RequestInit[] = [];
-    vi.stubGlobal(
-      'fetch',
-      vi.fn((url: string, init?: RequestInit) => {
-        if (url === MOCK_DISCOVERY.introspection_endpoint) capturedInit.push(init ?? {});
-        const bodies: Record<string, unknown> = {
-          [DISCOVERY_URL]: MOCK_DISCOVERY,
-          [MOCK_DISCOVERY.introspection_endpoint]: { active: true },
-        };
-        return Promise.resolve({ ok: true, json: () => Promise.resolve(bodies[url] ?? {}) });
-      }),
-    );
-    const { introspectOidcToken } = await import('../oidc');
-    await introspectOidcToken(makeToken(), VALID_ENV);
-
-    const headers = capturedInit[0]?.headers as Record<string, string>;
-    expect(headers['Authorization']).toBe(`Basic ${btoa('test-client:test-secret')}`);
-  });
-
-  it('passes an abort signal (timeout) to the introspection request (NA-1)', async () => {
-    const fetchSpy = vi.fn(async (url: string | URL, _init?: RequestInit) => {
-      const u = String(url);
-      if (u.includes('.well-known')) {
-        return { ok: true, json: async () => MOCK_DISCOVERY } as Response;
-      }
-      return { ok: true, json: async () => ({ active: true }) } as Response;
-    });
-    vi.stubGlobal('fetch', fetchSpy);
-
-    const { introspectOidcToken } = await import('../oidc');
-    await introspectOidcToken(makeToken(), VALID_ENV);
-
-    expect(fetchSpy).toHaveBeenCalledWith(
-      MOCK_DISCOVERY.introspection_endpoint,
-      expect.objectContaining({ signal: expect.any(AbortSignal) }),
-    );
-  });
-
-  it('fails open when the introspection request exceeds the timeout (NA-1)', async () => {
-    vi.useFakeTimers();
-    try {
-      const fetchSpy = vi.fn((url: string | URL, init?: RequestInit) => {
-        const u = String(url);
-        if (u.includes('.well-known')) {
-          return Promise.resolve({ ok: true, json: async () => MOCK_DISCOVERY } as Response);
-        }
-        // Hang forever; only reject when the timeout aborts us — mirrors a
-        // stalled IdP. Without a signal this promise never settles and the
-        // test times out, which is exactly the bug being fixed.
-        return new Promise<Response>((_resolve, reject) => {
-          init?.signal?.addEventListener('abort', () =>
-            reject(new DOMException('The operation was aborted.', 'AbortError')),
-          );
-        });
-      });
-      vi.stubGlobal('fetch', fetchSpy);
-
-      const { introspectOidcToken } = await import('../oidc');
-      const resultPromise = introspectOidcToken(makeToken(), VALID_ENV);
-      await vi.advanceTimersByTimeAsync(5000); // > IDP_FETCH_TIMEOUT_MS (4000)
-      await expect(resultPromise).resolves.toBe(true);
-    } finally {
-      vi.useRealTimers();
-    }
-  });
-});
-
 // ─── configureOidcTokenRecoveryStore ─────────────────────────────────────────
 
 describe('refreshOidcAccessToken — expiry when the IdP omits or mangles expires_in', () => {
@@ -859,7 +713,7 @@ describe('OIDC helpers — a provider this package does not manage', () => {
   // Regression: a custom provider passed to `withIGRPAuth` has no entry in the
   // registry, so `getAuthProviderDiscoveryUrl` resolved to '' and `fetch('')`
   // threw — turning every first refresh of a healthy session into a forced
-  // logout. There is nothing to refresh, revoke or introspect against, so the
+  // logout. There is nothing to refresh or revoke against, so the
   // helpers must no-op rather than fail destructively.
   const customToken = () => makeToken({ authProviderId: 'github' });
 
@@ -881,14 +735,6 @@ describe('OIDC helpers — a provider this package does not manage', () => {
     const { revokeOidcSession } = await import('../oidc');
     const result = await revokeOidcSession(customToken(), VALID_ENV);
     expect(result).toEqual({ ok: false, reason: 'provider_not_managed' });
-  });
-
-  it('introspectOidcToken fails open without a network call', async () => {
-    const fetchSpy = vi.fn();
-    vi.stubGlobal('fetch', fetchSpy);
-    const { introspectOidcToken } = await import('../oidc');
-    expect(await introspectOidcToken(customToken(), VALID_ENV)).toBe(true);
-    expect(fetchSpy).not.toHaveBeenCalled();
   });
 
   it('buildEndSessionUrl returns null rather than a malformed URL', async () => {
@@ -946,9 +792,9 @@ describe('isUsableRecoveredToken', () => {
 
 describe('token-endpoint client authentication', () => {
   // RFC 6749 §2.3.1: a server MUST support HTTP Basic for clients with a
-  // secret and only MAY support `client_secret_post`. Introspection already
-  // used Basic; refresh and revocation posted the secret in the body, so an
-  // authorization server registered for a single method broke one side.
+  // secret and only MAY support `client_secret_post`. Refresh and revocation
+  // once posted the secret in the body, so an authorization server registered
+  // for a single method broke one side.
   function tokenEndpointCall(url: string): RequestInit {
     const call = vi
       .mocked(fetch)
@@ -985,6 +831,54 @@ describe('token-endpoint client authentication', () => {
       `Basic ${btoa('test-client:test-secret')}`,
     );
     expect((init.body as URLSearchParams).has('client_secret')).toBe(false);
+  });
+});
+
+describe('client credentials from a mounted secret file', () => {
+  // `kubectl create secret --from-file` keeps the file's trailing newline.
+  const ENV_WITH_NEWLINES = {
+    ...VALID_ENV,
+    IGRP_AUTH_CLIENT_ID: 'test-client\n',
+    IGRP_AUTH_CLIENT_SECRET: 'test-secret\n',
+  };
+
+  it('trims them for the refresh Basic header and the end-session client_id', async () => {
+    mockFetch([
+      { url: DISCOVERY_URL, body: MOCK_DISCOVERY },
+      { url: MOCK_DISCOVERY.token_endpoint, body: { access_token: 'new-at', expires_in: 60 } },
+    ]);
+    const { refreshOidcAccessToken, buildEndSessionUrl } = await import('../oidc');
+    await refreshOidcAccessToken(makeToken(), ENV_WITH_NEWLINES);
+    const url = await buildEndSessionUrl(makeToken(), ENV_WITH_NEWLINES, 'http://app/login');
+
+    const call = vi
+      .mocked(fetch)
+      .mock.calls.find(([u]) => u === MOCK_DISCOVERY.token_endpoint) as unknown as [
+      string,
+      RequestInit,
+    ];
+    expect((call[1].headers as Record<string, string>).Authorization).toBe(
+      `Basic ${btoa('test-client:test-secret')}`,
+    );
+    expect(new URL(url!).searchParams.get('client_id')).toBe('test-client');
+  });
+});
+
+describe('refreshOidcAccessToken — discovery failure', () => {
+  it('keeps the session (no error, no forceLogout) so the next read retries', async () => {
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const fetchSpy = vi.fn((_url: string) => Promise.reject(new TypeError('fetch failed')));
+    vi.stubGlobal('fetch', fetchSpy);
+    const { refreshOidcAccessToken } = await import('../oidc');
+
+    const token = makeToken();
+    const result = await refreshOidcAccessToken(token, VALID_ENV);
+
+    expect(result).toEqual(token);
+    expect(result.error).toBeUndefined();
+    expect(result.forceLogout).toBeFalsy();
+    // Only discovery was attempted: the refresh token never left.
+    expect(fetchSpy.mock.calls.every(([u]) => u === DISCOVERY_URL)).toBe(true);
   });
 });
 
@@ -1031,22 +925,23 @@ describe('getOpenIdConfiguration — poisoned-entry eviction', () => {
           Promise.resolve({
             ok: true,
             status: 200,
-            json: () => Promise.resolve({ ...MOCK_DISCOVERY, active: true }),
+            json: () => Promise.resolve(MOCK_DISCOVERY),
           }),
         );
       vi.stubGlobal('fetch', fetchMock);
-      const { introspectOidcToken } = await import('../oidc');
+      const { buildEndSessionUrl } = await import('../oidc');
+      const endSession = () => buildEndSessionUrl(makeToken(), VALID_ENV, 'http://app/login');
 
       // 1. First discovery fetch hangs.
-      const first = introspectOidcToken(makeToken(), VALID_ENV);
+      const first = endSession();
       // 2. Its cache entry ages past the TTL; the next call fetches discovery again.
       vi.advanceTimersByTime(5 * 60_000 + 1);
-      await introspectOidcToken(makeToken(), VALID_ENV);
+      await endSession();
       // 3. The ORIGINAL fetch now fails. Its cleanup must not drop the entry from step 2.
       rejectFirst(new Error('boom'));
-      await first;
+      await first.catch(() => {});
       // 4. A third call must hit the cache, not the network.
-      await introspectOidcToken(makeToken(), VALID_ENV);
+      await endSession();
 
       const discoveryFetches = fetchMock.mock.calls.filter(([url]) => url === DISCOVERY_URL);
       expect(discoveryFetches).toHaveLength(2);

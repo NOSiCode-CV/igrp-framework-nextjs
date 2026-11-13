@@ -94,7 +94,7 @@ Shared props: `name`, `label`, `helperText`, `required` and `className`. Write y
 | Field | Writes | Notes |
 | --- | --- | --- |
 | `IGRPInputText` | `string` | `type`: `text`, `email`, `url`, `tel`, `search`, `number`. `type="number"` still writes a string, so use `IGRPInputNumber`. |
-| `IGRPInputNumber` | `number \| undefined` | Clearing writes `undefined` (`z.number().optional()`). Props: `min` / `max` (clamped on blur) and `formatOptions: Intl.NumberFormatOptions`. |
+| `IGRPInputNumber` | `number \| null` | **Clearing writes `null`** (an untouched field keeps its default, often `undefined`), so use `z.number().nullish()`. Unformatted fields also accept the locale decimal comma (`1,5`). Props: `min` / `max` (clamped on blur) and `formatOptions: Intl.NumberFormatOptions`. |
 | `IGRPInputPassword` | `string` | `showPasswordToggle` (default true). |
 | `IGRPInputPhone` | E.164 `string \| undefined` | `defaultCountry` (e.g. `"CV"`), `countries`, `international` (default true). |
 | `IGRPInputUrl` | `protocol + address` | `name` is required. `protocols`, `defaultProtocol` (default `"https://"`). An emptied field still holds `"https://"`, so validate with `z.url()`, not `.min(1)`. |
@@ -104,7 +104,7 @@ Shared props: `name`, `label`, `helperText`, `required` and `className`. Write y
 | `IGRPInputTime` | `"HH:mm"` | |
 | `IGRPDateTimeInput` | masked `string` `"dd/MM/yyyy, HH:mm"` | Not a `Date`. Pass a matching `placeholder`, because the default uses dashes. |
 | `IGRPDatePickerSingle`, `IGRPDatePickerInputSingle` (typed and masked) | `Date \| null` | **Clearing writes `null`**, so use `z.date().nullable()`. They read a Date, a number, ISO or `"yyyy-MM-dd"`. Props: `dateFormat` (`"dd-MM-yyyy"`), `disableBefore`, `disableAfter`, `disableDayOfWeek`. |
-| `IGRPDatePickerRange` | `DateRange { from, to? }` | |
+| `IGRPDatePickerRange` | `DateRange { from, to? } \| null` | Clicking the selected day again can clear it, which writes `null`, so use `.nullable()`. |
 | `IGRPDatePickerMultiple` | `Date[] \| null` | **Clearing writes `null`**, so use `z.array(z.date()).nullable()`. |
 | `IGRPSelect` | `string` | `placeholder` defaults to the catalog ("Selecionar uma opção"). Also `showSearch`. |
 | `IGRPCombobox` | `string` | Searchable single choice for long lists. Re-clicking the selected option clears it to `""`. |

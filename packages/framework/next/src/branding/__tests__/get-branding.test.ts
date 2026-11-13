@@ -96,9 +96,21 @@ describe('igrpGetBranding', () => {
     getGlobalConfiguration.mockResolvedValueOnce(ok('red'));
     await igrpGetBranding({ baseUrl: BASE, token: 't' });
     getGlobalConfiguration.mockResolvedValueOnce(ok('green'));
+    vi.advanceTimersByTime(5_000);
     const savedAt = Date.now() + 1000;
     await igrpGetBranding({ baseUrl: BASE, token: 't', savedAt });
     await vi.waitFor(() => expect(getGlobalConfiguration).toHaveBeenCalledTimes(2));
+  });
+
+  it('refetches at most once per floor interval when the cookie value changes every request', async () => {
+    getGlobalConfiguration.mockResolvedValue(ok('red'));
+    await igrpGetBranding({ baseUrl: BASE, token: 't' });
+    vi.advanceTimersByTime(5_000);
+    await igrpGetBranding({ baseUrl: BASE, token: 't', savedAt: Date.now() + 20_000 });
+    await vi.advanceTimersByTimeAsync(10);
+    await igrpGetBranding({ baseUrl: BASE, token: 't', savedAt: Date.now() + 20_001 });
+    await vi.advanceTimersByTimeAsync(10);
+    expect(getGlobalConfiguration).toHaveBeenCalledTimes(2);
   });
 
   it('forgets the entry after invalidate', async () => {
@@ -132,6 +144,7 @@ describe('igrpGetBranding', () => {
   it('honours one freshness cookie value once, not on every request', async () => {
     getGlobalConfiguration.mockResolvedValue(ok('red'));
     await igrpGetBranding({ baseUrl: BASE, token: 't' });
+    vi.advanceTimersByTime(5_000);
     const savedAt = Date.now() + 1000;
     for (let i = 0; i < 4; i += 1) {
       await igrpGetBranding({ baseUrl: BASE, token: 't', savedAt });

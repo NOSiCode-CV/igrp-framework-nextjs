@@ -1157,7 +1157,7 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
         // A provider this package does not manage owns its own token lifecycle:
         // there is no discovery document, no token endpoint and no credentials
         // to refresh with. Everything below — the expiry buffer, the recovery
-        // store, introspection, refresh — is OIDC machinery that cannot apply,
+        // store, refresh — is OIDC machinery that cannot apply,
         // and running it anyway is what used to end custom-provider sessions on
         // a schedule (first by forcing a logout, then by inventing an expiry).
         // Hand the token straight to the caller's extension instead.
@@ -1191,9 +1191,9 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
         //
         // First, try to recover a rotated token from a recent refresh that
         // could not persist its cookie (e.g. a refresh that ran inside an RSC
-        // render). This MUST run before introspection: after rotation the old
-        // refresh token reads `active: false`, so introspecting here would
-        // short-circuit a recoverable session straight to forceLogout.
+        // render). This MUST run before the refresh: after rotation the
+        // cookie's refresh token is spent, and presenting it again reads as
+        // reuse and revokes the session.
         const recovered = await getRecoveredToken(igrpToken.refreshToken);
         if (isUsableRecoveredToken(recovered)) {
           // Take only the auth material: the stored token was built by whichever
@@ -1248,9 +1248,10 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
                   warnOnShortTokenLifetime(refreshed.expiresAt);
                 }
                 return refreshed;
-              } catch {
+              } catch (error) {
                 console.error(
                   '[next-auth] jwt: refreshOidcAccessToken threw unexpectedly — user will be logged out.',
+                  error,
                 );
                 return { ...tokenToRefresh, error: 'RefreshAccessTokenError', forceLogout: true };
               }

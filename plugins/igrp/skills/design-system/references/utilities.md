@@ -53,7 +53,7 @@ When a role you need has no token, ask for one in the DS (`tokens.css`). Don't f
 | `detectFormat(value)` / `colorToOklch(value, format)` | `ColorFormat = "hex" \| "rgb" \| "hsl" \| "oklch"`. For theming tools; apps rarely need them. |
 | `convertValuesToFormData(values)` | Top-level values → `FormData`: files stay binary (one entry per file), nested objects become JSON and dates become ISO instants. See `forms.md`. |
 | `igrpCreateListItem`, `igrpListItems` | Build items for `IGRPTextList`. |
-| Calendar: `formatDateToString`, `formatDateRange`, `parseStringToDate`, `parseStringToRange`, `isValidDate`, `getDisabledDays({ disableBefore, disableAfter, disableDayOfWeek })` | Used by the date pickers. Reuse them to format or parse the same way. |
+| Calendar: `formatDateToString`, `parseStringToDate`, `isValidDate`, `getDisabledDays({ disableBefore, disableAfter, disableDayOfWeek })` | Used by the date pickers. Reuse them to format or parse the same way. |
 | Date masking: `maskDateInput`, `parseDateInput`, `getDateFormatParts`, `getDateFormatMaxLength` | Typed-date input masks. |
 | Charts: `formatChartValue`, `IGRP_CHART_COLORS`, … | See `charts.md`. |
 | Data-table filter fns: `IGRPDataTableTextFilterFn`, `IGRPDataTableFacetedFilterFn`, `IGRPDataTableDateRangeFilterFn` | See `data-table.md`. |

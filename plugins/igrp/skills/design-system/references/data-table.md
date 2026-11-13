@@ -80,7 +80,7 @@ export function UsersTable({ data, onDelete }: { data: User[]; onDelete: (u: Use
 - **Stability is required.** `columns`, `data` and `actions` must be referentially stable, either at module scope or in `useMemo`. The table opts out of the React Compiler (`"use no memo"`), so it can't stabilise them for you.
 - **`createIGRPColumnHelper<T>()`.**
   - `accessor(key, def)` is `{ accessorKey: key, ...def }`. It doesn't infer `TValue`, so `getValue()` is `unknown`. Read `row.original.x` instead.
-  - It only adds `filter` (below) to the column def. `cellType`, `variants`, `format`, `currency` and `href` are typed but **not implemented**, so render with `cell` instead.
+  - It only adds `filter` (below) to the column def. Render cells with `cell`.
   - `display` and `group` are TanStack's.
   - The result goes straight into `columns`. Plain `ColumnDef<T>[]` literals with `accessorKey` also work, but they can't carry `filter`.
 - **Sorting has no automatic UI.** Put `IGRPDataTableHeaderSortToggle` or `IGRPDataTableHeaderSortDropdown` (`{ column, title }`) in `header`. Sort removal is off: clicking cycles asc ↔ desc.
@@ -129,7 +129,7 @@ A union discriminated by `type`. Every action has `label`, `icon?` and `hidden?(
 | --- | --- |
 | `IGRPDataTableCellBadge` | `label` + `IGRPBadge` props (`variant: solid \| soft \| outline`, `color: IGRPColorVariants`, `size`, `badgeClassName`). |
 | `IGRPDataTableCellDate` | `date: string \| Date`, `language?` (defaults to the provider locale), `dateOptions?: Intl.DateTimeFormatOptions`. `dateFormat` is deprecated. |
-| `IGRPDataTableCellAmount` | `field: string` (the numeric value **as a string**, `parseFloat`'d), `currency = "USD"` (**pass `"CVE"` / `"EUR"`**), `language?`, `formatStyle: currency \| decimal \| percent \| unit`. |
+| `IGRPDataTableCellAmount` | `field: string` (the numeric value **as a string**, `parseFloat`'d), `currency?` (without it a currency cell renders as a plain number; pass `"CVE"` / `"EUR"`), `language?`, `formatStyle: currency \| decimal \| percent`. Renders nothing when `field` is not a number. |
 | `IGRPDataTableCellLink` | `IGRPLink` props (`href`, `children`, …). |
 | `IGRPDataTableCellTooltip` | `text`, `side`, `align`. It renders the text truncated with a tooltip; it doesn't wrap children. |
 | `IGRPDataTableCellExpander` | `row`, `label?`. Renders nothing when the row can't expand. |

@@ -620,12 +620,7 @@ export {
   IGRPDataTableTextFilterFn,
 } from "./components/horizon/data-table/lib/filters-utils.js"
 export { createIGRPColumnHelper } from "./components/horizon/data-table/column-helper.js"
-export type {
-  IGRPColumnHelper,
-  IGRPAccessorColumnDef,
-  IGRPCellType,
-  IGRPCellConfig,
-} from "./components/horizon/data-table/column-helper.js"
+export type { IGRPColumnHelper, IGRPAccessorColumnDef } from "./components/horizon/data-table/column-helper.js"
 export type {
   IGRPDataTableAction,
   IGRPDataTableActionLink,
@@ -927,14 +922,7 @@ export { useIsMobile } from "./hooks/use-mobile.js"
 
 // libs
 
-export {
-  formatDateRange,
-  formatDateToString,
-  getDisabledDays,
-  isValidDate,
-  parseStringToDate,
-  parseStringToRange,
-} from "./lib/calendar-utils.js"
+export { formatDateToString, getDisabledDays, isValidDate, parseStringToDate } from "./lib/calendar-utils.js"
 export { getDateFormatMaxLength, getDateFormatParts, maskDateInput, parseDateInput } from "./lib/date-input-format.js"
 export {
   IGRPColors,

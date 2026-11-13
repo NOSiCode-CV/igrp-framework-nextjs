@@ -33,11 +33,13 @@ export function usePagination({
   totalPages,
   paginationItemsToDisplay,
 }: UsePaginationProps): UsePaginationReturn {
-  const showLeftEllipsis = currentPage - 1 > paginationItemsToDisplay / 2
-  const showRightEllipsis = totalPages - currentPage + 1 > paginationItemsToDisplay / 2
+  // Every page fits: nothing is elided, so no ellipsis either side.
+  const allPagesFit = totalPages <= paginationItemsToDisplay
+  const showLeftEllipsis = !allPagesFit && currentPage - 1 > paginationItemsToDisplay / 2
+  const showRightEllipsis = !allPagesFit && totalPages - currentPage + 1 > paginationItemsToDisplay / 2
 
   function calculatePaginationRange(): number[] {
-    if (totalPages <= paginationItemsToDisplay) {
+    if (allPagesFit) {
       return Array.from({ length: totalPages }, (_, i) => i + 1)
     }
 

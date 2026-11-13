@@ -31,11 +31,6 @@
 - `pnpm changeset` — record a change
 - `pnpm version:changesets` — apply versions, regenerate CHANGELOGs (baseBranch = `main`)
 
-## Codemods
-
-- `pnpm migrate:primitives` — dry-run
-- `pnpm migrate:primitives:apply` — rewrite files
-
 ## Template migrator (`packages/framework/template-migrator` — `@igrp/template-migrator`, CLI `igrp-migrate`)
 
 - `pnpm template-migrations` — build the migrator (`pnpm --filter @igrp/template-migrator build`)

@@ -14,6 +14,8 @@ export const BRANDING_FETCH_TIMEOUT_MS = 3_000;
 export const BRANDING_COOKIE_MAX_AGE_MS = 300_000;
 /** Clock skew tolerated between the instance that saved and the one reading. */
 const BRANDING_COOKIE_SKEW_MS = 30_000;
+/** Minimum gap between cookie-driven refetches, so a cookie that changes every request cannot keep one in flight. */
+const BRANDING_COOKIE_REFETCH_FLOOR_MS = 5_000;
 
 type Entry = {
   value: IGRPBranding | null;
@@ -107,11 +109,14 @@ function startRefresh(key: string, args: IGRPGetBrandingArgs): Promise<void> {
 
 /**
  * Whether the freshness cookie asks for a refetch: newer than the cache, not
- * already honoured, and plausible (not far in the future, not past its max age).
- * A forged or skewed value therefore costs at most one fetch.
+ * already honoured, plausible (not far in the future, not past its max age),
+ * and the last fetch is at least BRANDING_COOKIE_REFETCH_FLOOR_MS old. A cookie
+ * value that changes on every request therefore costs at most one fetch per
+ * floor interval per process.
  */
 function cookieWantsRefetch(entry: Entry, savedAt: number | undefined, now: number): boolean {
   if (!savedAt || savedAt <= entry.fetchedAt || savedAt === entry.honoredSavedAt) return false;
+  if (now - entry.fetchedAt < BRANDING_COOKIE_REFETCH_FLOOR_MS) return false;
   return savedAt <= now + BRANDING_COOKIE_SKEW_MS && now - savedAt <= BRANDING_COOKIE_MAX_AGE_MS;
 }
 

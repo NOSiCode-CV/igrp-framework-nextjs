@@ -1,8 +1,9 @@
-import { mkdirSync, writeFileSync } from "fs";
+import { existsSync, mkdirSync, writeFileSync } from "fs";
 import { join, dirname } from "path";
 import { getManifest } from "../manifest.js";
 import { readLock, writeLock } from "../lock.js";
-import { assertInsideAppRoot, executeStep } from "../apply.js";
+import { assertInsideAppRoot, executeStep, resolvePayload } from "../apply.js";
+import { hashFileIgnoringEol } from "../hash.js";
 import type { MigrationStep } from "../types.js";
 
 function isPlaceholder(step: MigrationStep): boolean {
@@ -18,7 +19,7 @@ function stepPath(step: MigrationStep): string | undefined {
 export async function rollback(
   appRoot: string,
   id: string,
-  opts: { force?: boolean } = {}
+  opts: { force?: boolean; payloadDir?: string } = {}
 ): Promise<boolean> {
   const manifest = getManifest();
   const lock = readLock(appRoot);
@@ -95,6 +96,37 @@ export async function rollback(
     return false;
   }
 
+  // Undo deletes what the migration created and overwrites what it changed, so
+  // an edit the consumer made since would be lost silently. Compare each path
+  // with what this migration left there (the same payload baseline `apply`
+  // uses). A file it deleted that exists again is also someone's new content.
+  const finalWrite = new Map<string, string | null>(); // path -> payload, null = deleted
+  for (const step of manifest.migrations.find((m) => m.id === id)?.steps ?? []) {
+    if ((step.type === "file.create" || step.type === "file.write") && step.from) finalWrite.set(step.path, step.from);
+    else if (step.type === "file.delete") finalWrite.set(step.path, null);
+  }
+  const edited: string[] = [];
+  for (const [path, from] of finalWrite) {
+    const target = join(appRoot, path);
+    if (from === null) {
+      if (existsSync(target)) edited.push(path);
+      continue;
+    }
+    const expected = hashFileIgnoringEol(resolvePayload(from, opts.payloadDir));
+    const current = hashFileIgnoringEol(target);
+    // No payload on disk means no baseline; a missing file has nothing to lose.
+    if (expected !== null && current !== null && current !== expected) edited.push(path);
+  }
+  if (edited.length > 0 && !opts.force) {
+    console.error(`\nCannot roll back ${id} — ${edited.length} file(s) changed since it ran:`);
+    for (const path of edited) console.error(`  - ${path}`);
+    console.error(
+      "\nRolling back would delete or overwrite these changes. Commit or copy them" +
+        "\nfirst, or re-run with --force to discard them.\n",
+    );
+    return false;
+  }
+
   console.log(`\nRolling back ${id} (${undoSteps.length} undo step(s))\n`);
   // Undo steps must run in REVERSE apply order so multi-step touches of the
   // same path unwind correctly (e.g. delete-then-recreate: first remove the
@@ -125,7 +157,7 @@ export async function rollback(
       }
       continue;
     }
-    executeStep(step, appRoot, undefined, true);
+    executeStep(step, appRoot, opts.payloadDir, true);
   }
   lock.applied.splice(idx, 1);
   writeLock(appRoot, lock);

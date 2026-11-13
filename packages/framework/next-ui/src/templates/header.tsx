@@ -208,10 +208,12 @@ function IGRPTemplateHeader({
     showSettings,
     settingsUrl,
     settingsIcon,
-    userProfileUrl,
-    notificationsUrl,
     notifications,
   } = data;
+  // An unset env reaches us as "", which as an href reloads the page; the
+  // child components default only on undefined.
+  const userProfileUrl = data.userProfileUrl || undefined;
+  const notificationsUrl = data.notificationsUrl || undefined;
 
   // Brand header mark first, then the app's `headerLogo`, then the fallback.
   const logo = resolveHeaderLogo({

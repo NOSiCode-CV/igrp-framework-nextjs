@@ -77,17 +77,18 @@ function getLocaleSeparators(locale: string): { group: string; decimal: string }
 
 /**
  * @internal Parses what the user typed into a number.
- * Unformatted fields are parsed with "." as the decimal separator; formatted
- * fields are parsed with the locale separators used to display them, so a
- * value such as "1 234,56" can be edited in place instead of collapsing into
- * 123456.
+ * Unformatted fields accept the locale decimal separator as well as "." (so
+ * pt-PT "1,5" is 1.5, not 15); formatted fields are parsed with the locale
+ * separators used to display them, so a value such as "1 234,56" can be
+ * edited in place instead of collapsing into 123456.
  */
 function parseInputToNumber(inputValue: string, locale: string, formatOptions?: Intl.NumberFormatOptions): number {
+  const { group, decimal } = getLocaleSeparators(locale)
   if (!formatOptions) {
-    return parseFloat(inputValue.replace(/[^\d.-]/g, ""))
+    const normalized = decimal === "." ? inputValue : inputValue.split(decimal).join(".")
+    return parseFloat(normalized.replace(/[^\d.-]/g, ""))
   }
 
-  const { group, decimal } = getLocaleSeparators(locale)
   let cleaned = inputValue.split(group).join("")
   cleaned = cleaned.replace(/[\s\u00a0\u202f]/g, "")
   if (decimal !== ".") cleaned = cleaned.split(decimal).join(".")
@@ -297,7 +298,7 @@ type FormNumberInputProps = {
   errorMessage: string
   validationError: boolean
   setValidationError: (v: boolean) => void
-  onValueChange?: (value: number) => void
+  onValueChange?: (value: number | undefined) => void
   className?: string
 }
 
@@ -322,7 +323,7 @@ function FormNumberInput({
       prevControlledValueRef.current = controlledValue
     }
     if (controlledValueChanged && field.value !== controlledValue) {
-      field.onChange(controlledValue === undefined ? undefined : controlledValue)
+      field.onChange(controlledValue ?? null)
     }
   }, [field.value, controlledValue, field, prevControlledValueRef])
 
@@ -336,8 +337,11 @@ function FormNumberInput({
 
   const formOnValueChange = (newValue: NumberValue) => {
     if (newValue === "") {
-      field.onChange(undefined)
+      // null, not undefined: react-hook-form treats undefined as "no value" and
+      // `useWatch` falls back to the default, so the cleared number came back.
+      field.onChange(null)
       setValidationError(false)
+      onValueChange?.(undefined)
       return
     }
     field.onChange(newValue)
@@ -569,10 +573,9 @@ function IGRPInputNumber({
     <Controller
       name={fieldName}
       control={formContext.control}
-      // No `?? ""`: registering an empty string makes an untouched empty field
-      // submit "" while a cleared one submits undefined, and `z.number()`
-      // rejects the former. Falling through to the form-level default keeps
-      // both paths on undefined.
+      // No `?? ""`: `z.number()` rejects "". An untouched empty field falls
+      // through to the form-level default (usually undefined) and a cleared one
+      // writes null, so an optional number needs `z.number().nullish()`.
       defaultValue={defaultValue}
       render={({ field, fieldState }) => (
         <FormNumberInput

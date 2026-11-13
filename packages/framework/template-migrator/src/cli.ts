@@ -32,7 +32,8 @@ Flags:
   --yes, -y   Skip the per-migration confirmation prompt
   --force     apply:    overwrite files you have modified locally
               rollback: proceed despite missing undo content, a scaffold
-                        baseline entry, or still-applied dependents
+                        baseline entry, still-applied dependents, or files
+                        edited since the migration wrote them
 `;
 
 /**
@@ -63,11 +64,11 @@ async function main() {
       case "status": status(appRoot); break;
       case "plan": plan(appRoot, flagValue("--to")); break;
       case "apply":
-        await apply(appRoot, {
+        if (!(await apply(appRoot, {
           toId: flagValue("--to"),
           yes: args.includes("--yes") || args.includes("-y"),
           force: args.includes("--force"),
-        });
+        }))) process.exitCode = 1;
         break;
       case "rollback": {
         const id = args[1];

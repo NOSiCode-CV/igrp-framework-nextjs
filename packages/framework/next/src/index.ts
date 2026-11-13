@@ -10,7 +10,6 @@ export { IGRPGlobalLoading } from './components/global-loading.js';
 export { IGRPLayoutFull, type IGRPLayoutFullArgs } from './layouts/igrp-layout-full.js';
 export { IGRPLayoutBlank, type IGRPLayoutBlankArgs } from './layouts/igrp-layout-blank.js';
 // @deprecated Use IGRPLayoutFull instead.
-export { IGRPLayout, type IGRPLayoutArgs } from './layouts/igrp-layout.js';
 
 export { IGRPRootLayout, type IGRPRootLayoutArgs } from './layouts/igrp-root-layout.js';
 
@@ -20,7 +19,7 @@ export { igrpBuildConfig } from './lib/build.js';
 // read the layout data source themselves (e.g. a template's header search).
 export { igrpResolveLayoutDataSource } from './lib/layout-data-source.js';
 
-export { igrpGetAccessClient, igrpResetAccessClient } from './lib/api-client.js';
+export { igrpGetAccessClient } from './lib/api-client.js';
 
 export {
   type IGRPClientRuntimeConfig,

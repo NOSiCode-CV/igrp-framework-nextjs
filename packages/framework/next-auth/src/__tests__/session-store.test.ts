@@ -359,6 +359,25 @@ describe('refresh lock', () => {
     expect(result.accessToken).toBe('at-2');
   });
 
+  it('drops a stale failure flag when adopting a healthy stored refresh', async () => {
+    const store = createMemorySessionStore();
+    const session = await expiringSession(store);
+    await createSessionTokenEncoder({ store })({
+      token: { ...session, accessToken: 'at-2', expiresAt: Date.now() + 3_600_000 },
+      secret: SECRET,
+    });
+
+    const result = await refreshUnderSessionLock(
+      { ...session, error: 'RefreshAccessTokenError', forceLogout: true },
+      { store, secret: SECRET },
+      slowRefresh(0, 'at-3'),
+    );
+
+    expect(result.accessToken).toBe('at-2');
+    expect(result.error).toBeUndefined();
+    expect(result.forceLogout).toBe(false);
+  });
+
   it('takes over the lock of a holder that died, then refreshes under it', async () => {
     const store = createMemorySessionStore();
     const session = await expiringSession(store);
@@ -439,6 +458,25 @@ describe('refresh lock', () => {
     expect(
       (await refreshUnderSessionLock(session, { store, secret: SECRET }, refresh)).accessToken,
     ).toBe('at-2');
+  });
+});
+
+describe('memory store', () => {
+  it('sweeps expired entries on set once the map is large, without reads', async () => {
+    vi.useFakeTimers();
+    try {
+      const store = createMemorySessionStore();
+      for (let i = 0; i < 1000; i++) await store.set(`abandoned-${i}`, 'v', 1);
+      vi.advanceTimersByTime(2000);
+      const deleted = vi.spyOn(Map.prototype, 'delete');
+
+      await store.set('fresh', 'v', 60);
+
+      expect(deleted).toHaveBeenCalledTimes(1000);
+      expect(await store.get('fresh')).toBe('v');
+    } finally {
+      vi.useRealTimers();
+    }
   });
 });
 

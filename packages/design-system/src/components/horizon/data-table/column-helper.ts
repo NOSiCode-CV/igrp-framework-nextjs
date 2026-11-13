@@ -2,53 +2,10 @@ import { createColumnHelper } from "@tanstack/react-table"
 import type { ColumnDef, ColumnHelper } from "@tanstack/react-table"
 import type { IGRPDataTableFilterDescriptor } from "./types.js"
 
-// ─── Cell type shortcuts ─────────────────────────────────────────────────────
-
-export type IGRPCellType = "text" | "badge" | "date" | "amount" | "link" | "tooltip" | "switch" | "checkbox"
-
-export interface IGRPCellBadgeConfig {
-  cellType: "badge"
-  variants?: Record<string, string>
-}
-
-export interface IGRPCellDateConfig {
-  cellType: "date"
-  format?: string
-}
-
-export interface IGRPCellAmountConfig {
-  cellType: "amount"
-  currency?: string
-}
-
-export interface IGRPCellLinkConfig {
-  cellType: "link"
-  href: (row: unknown) => string
-}
-
-export interface IGRPCellSimpleConfig {
-  cellType?: "text" | "tooltip" | "switch" | "checkbox"
-}
-
-export type IGRPCellConfig =
-  IGRPCellBadgeConfig | IGRPCellDateConfig | IGRPCellAmountConfig | IGRPCellLinkConfig | IGRPCellSimpleConfig
-
 // ─── Extended column definition ──────────────────────────────────────────────
 
-/**
- * Extended column definition for use with `createIGRPColumnHelper`.
- *
- * The `cellType`, `variants`, `format`, `currency`, and `href` fields are
- * type-level scaffolding for upcoming cell-renderer wiring. They are not yet
- * consumed by `IGRPDataTable` — columns render as plain text until that follow-up
- * ships. Use the raw `cell` escape hatch for custom rendering today.
- */
+/** Column definition for `createIGRPColumnHelper`: a TanStack `ColumnDef` plus the IGRP `filter` descriptor. */
 export type IGRPAccessorColumnDef<TData, TValue = unknown> = Omit<ColumnDef<TData, TValue>, "cell"> & {
-  cellType?: IGRPCellType
-  variants?: Record<string, string>
-  format?: string
-  currency?: string
-  href?: (row: unknown) => string
   filter?: IGRPDataTableFilterDescriptor
   cell?: ColumnDef<TData, TValue>["cell"]
 }

@@ -46,7 +46,6 @@ function DatePickerRangeField({
   /** Called when the popover closes — form-bound fields mark themselves touched here. */
   onClose?: () => void
 }) {
-  const selectionCompleteRef = React.useRef(false)
   const locale = igrpDateFnsLocale(useIGRPLocale())
   const displayText = value?.from
     ? value.to
@@ -83,12 +82,7 @@ function DatePickerRangeField({
           mode="range"
           defaultMonth={value?.from}
           selected={value}
-          onSelect={(val) => {
-            onChange(val)
-            if (val?.from && val?.to) {
-              selectionCompleteRef.current = true
-            }
-          }}
+          onSelect={onChange}
           disabled={disabled}
         />
       </PopoverContent>
@@ -105,29 +99,34 @@ type IGRPDatePickerRangeProps = IGRPCalendarRangeProps & IGRPDatePickerBaseProps
 /**
  * Date range picker with popover calendar. Integrates with react-hook-form.
  */
-function IGRPDatePickerRange({
-  name,
-  id,
-  date,
-  onDateChange,
-  label,
-  labelClassName,
-  helperText,
-  className,
-  required = false,
-  disabledPicker = false,
-  disabled,
-  dateFormat = DD_MM_YYYY,
-  placeholder: placeholderProp,
-  ...props
-}: IGRPDatePickerRangeProps) {
+function IGRPDatePickerRange(allProps: IGRPDatePickerRangeProps) {
+  // See IGRPDatePickerSingle: `date ?? localDate` cannot express "cleared" by the parent.
+  const isControlled = "date" in allProps
+
+  const {
+    name,
+    id,
+    date,
+    onDateChange,
+    label,
+    labelClassName,
+    helperText,
+    className,
+    required = false,
+    disabledPicker = false,
+    disabled,
+    dateFormat = DD_MM_YYYY,
+    placeholder: placeholderProp,
+    ...props
+  } = allProps
+
   const i18n = useIGRPi18n()
   const placeholder = placeholderProp ?? i18n.datePicker.placeholder
   const _id = React.useId()
   const fieldName = name ?? id ?? _id
 
   const [localDate, setLocalDate] = React.useState<DateRange | undefined>(undefined)
-  const displayDate = date ?? localDate
+  const displayDate = isControlled ? date : localDate
   const formContext = useFormContext()
 
   React.useEffect(() => {
@@ -162,7 +161,8 @@ function IGRPDatePickerRange({
                 {...fieldProps}
                 value={toLocalDateRange(field.value)}
                 onChange={(val) => {
-                  field.onChange(val)
+                  // null on clear: see IGRPDatePickerSingle.
+                  field.onChange(val ?? null)
                   onDateChange?.(val)
                 }}
                 triggerRef={field.ref}

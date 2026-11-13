@@ -362,6 +362,14 @@ function IGRPDataTable<TData, TValue>({
   })
 
   const { pageIndex, pageSize } = table.getState().pagination
+  // `data` shrinking (a refetch, a delete) can leave the page past the end, with
+  // an empty body. Clamp during render; dispatching here re-renders before commit.
+  // Server-side waits for a known `rowCount` so a loading `undefined` doesn't reset it.
+  const pageCount = table.getPageCount()
+  if (pageIndex > 0 && pageIndex >= pageCount && (!onQueryChange || rowCount !== undefined)) {
+    dispatch({ type: "pagination", payload: { pageIndex: Math.max(0, pageCount - 1), pageSize } })
+  }
+  const pageSizeOptions = pagination?.pageSizeOptions ?? pageSizePagination
   const sorting = table.getState().sorting
   const columnFilters = table.getState().columnFilters
 
@@ -480,20 +488,14 @@ function IGRPDataTable<TData, TValue>({
         </Table>
       </div>
 
-      {table.getRowCount() > state.pagination.pageSize &&
+      {/* Against the smallest option, not the current size: picking a size >= the row
+          count must not hide the selector that would undo it. */}
+      {table.getRowCount() > Math.min(...pageSizeOptions) &&
         showPagination &&
         (isNumericPagination || pagination?.type === "numeric" ? (
-          <IGRPDataTablePaginationNumeric
-            table={table}
-            pageSize={pagination?.pageSizeOptions ?? pageSizePagination}
-            className={paginationClassName}
-          />
+          <IGRPDataTablePaginationNumeric table={table} pageSize={pageSizeOptions} className={paginationClassName} />
         ) : (
-          <IGRPDataTablePagination
-            table={table}
-            pageSize={pagination?.pageSizeOptions ?? pageSizePagination}
-            className={paginationClassName}
-          />
+          <IGRPDataTablePagination table={table} pageSize={pageSizeOptions} className={paginationClassName} />
         ))}
     </div>
   )

@@ -2,7 +2,7 @@ import { mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "fs"
 import { tmpdir } from "os";
 import { join } from "path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { copyPayloadFile, isBinary, toLf } from "../payload-copy.js";
+import { copyPayloadFile, copyPayloads, isBinary, toLf } from "../payload-copy.js";
 
 let dir: string;
 
@@ -108,5 +108,13 @@ describe("copyPayloadFile", () => {
     copyPayloadFile(join(dir, "b", "f.ts"), join(dir, "outB", "f.ts"));
 
     expect(readFileSync(join(dir, "outA", "f.ts")).equals(readFileSync(join(dir, "outB", "f.ts")))).toBe(true);
+  });
+});
+
+describe("copyPayloads", () => {
+  it("throws on a missing payload instead of shipping a migration without it", () => {
+    expect(() =>
+      copyPayloads([{ type: "file.create", path: "x.ts", from: "payload/99/x.ts" }], dir, join(dir, "out")),
+    ).toThrow(/Payload not found/);
   });
 });

@@ -131,7 +131,7 @@ try {
 } catch {
   Write-Host "Failed to write resolved package.json."
   if ($packageJsonRaw) {
-    Set-Content -Path $packageJsonPath -Value $packageJsonRaw -Encoding UTF8
+    Set-Content -Path $packageJsonPath -Value $packageJsonRaw -Encoding UTF8 -NoNewline
   }
   exit 1
 }
@@ -153,11 +153,22 @@ try {
     New-Item -ItemType Directory -Path $excludeTemp | Out-Null
   }
 
+  # Everything git ignores stays out of the zip too: a developer's .env.local,
+  # tsconfig.tsbuildinfo, next-env.d.ts. Listed before the skill injection, so
+  # the injected skill dirs are not affected.
+  $ignored = @(git ls-files --others --ignored --exclude-standard --directory . |
+    ForEach-Object { $_.TrimEnd('/') } |
+    Where-Object { $_ -ne $zipName })
+  if ($LASTEXITCODE -ne 0) {
+    Write-Host "git ls-files failed; refusing to zip without the ignore list."
+    exit 1
+  }
+
   # Each excluded path keeps its relative location under $excludeTemp and is
   # moved back to exactly that path in the finally block. Flattening them into
   # $excludeTemp would let a nested entry (.agents/README.md) come back as
   # ./README.md and overwrite the template's own README.
-  foreach ($folder in $excludeFolders) {
+  foreach ($folder in ($excludeFolders + $ignored | Select-Object -Unique)) {
     if (Test-Path $folder) {
       $excludeDest = Join-Path $excludeTemp $folder
       $excludeDestParent = Split-Path $excludeDest -Parent
@@ -316,27 +327,15 @@ Deep references are at ``.agents/skills/igrp-design-system/references/``. Load o
 
   # === UPLOAD ZIP TO NEXUS ===
   Write-Host "Uploading to Nexus..."
-  $logPath = "$env:TEMP\nexus-upload.log"
-  $curlCmd = "curl.exe -v -u ${username}:`"${password}`" --upload-file `"$zipName`" `"$nexusUploadUrl`" > `"$logPath`" 2>&1"
-  Invoke-Expression $curlCmd
-
-  # === PARSE RESPONSE ===
-  $logContent = Get-Content $logPath
-  $statusLine = $logContent | Where-Object { $_ -match '^< HTTP/' }
-
-  if ($statusLine -match 'HTTP/\d\.\d\s+(?<code>\d{3})') {
-    $statusCode = [int]$Matches['code']
-    if ($statusCode -ge 200 -and $statusCode -lt 300) {
-      Write-Host "Upload successful! HTTP $statusCode"
-      Write-Host "File URL: $nexusUploadUrl"
-    } else {
-      Write-Host "Upload failed. HTTP $statusCode"
-      Write-Host "Check log: $logPath"
-    }
-  } else {
-    Write-Host "Could not determine HTTP status code."
-    Write-Host "Check log: $logPath"
+  # Called directly, not through Invoke-Expression, so the password is passed as
+  # one argument and never re-parsed. No -v: it would print the Basic auth header.
+  $statusCode = & curl.exe -sS -o NUL -w '%{http_code}' -u "${username}:${password}" --upload-file $zipName $nexusUploadUrl
+  if ($LASTEXITCODE -ne 0 -or $statusCode -notmatch '^2\d\d$') {
+    Write-Host "Upload failed. curl exit $LASTEXITCODE, HTTP $statusCode"
+    exit 1
   }
+  Write-Host "Upload successful! HTTP $statusCode"
+  Write-Host "File URL: $nexusUploadUrl"
 } finally {
   # Remove the injected design-system skill content so the monorepo working
   # tree returns to its pre-script state. We touch only what we created;
@@ -379,6 +378,6 @@ Deep references are at ``.agents/skills/igrp-design-system/references/``. Load o
   }
 
   if ($packageJsonSanitized -and $packageJsonRaw) {
-    Set-Content -Path $packageJsonPath -Value $packageJsonRaw -Encoding UTF8
+    Set-Content -Path $packageJsonPath -Value $packageJsonRaw -Encoding UTF8 -NoNewline
   }
 }

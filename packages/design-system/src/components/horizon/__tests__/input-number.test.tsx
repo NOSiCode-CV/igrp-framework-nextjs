@@ -190,4 +190,38 @@ describe("IGRPInputNumber", () => {
       expect(onChange).toHaveBeenLastCalledWith(2.25)
     })
   })
+
+  it("reads the pt-PT decimal comma in an unformatted field", async () => {
+    const onChange = vi.fn()
+    render(<IGRPInputNumber name="weight" label="Weight" onChange={onChange} />)
+
+    const input = screen.getByRole("spinbutton")
+    await userEvent.click(input)
+    await userEvent.type(input, "1,5")
+
+    expect(onChange).toHaveBeenLastCalledWith(1.5)
+  })
+
+  it("writes null on clear inside a form so the default does not come back", async () => {
+    const onChange = vi.fn()
+    let readQty: () => unknown = () => "unset"
+    const Wrapper = () => {
+      const methods = useForm({ defaultValues: { qty: 5 } })
+      readQty = () => methods.getValues("qty")
+      return (
+        <FormProvider {...methods}>
+          <IGRPInputNumber name="qty" label="Quantity" onChange={onChange} />
+        </FormProvider>
+      )
+    }
+    render(<Wrapper />)
+
+    const input = screen.getByRole("spinbutton")
+    await userEvent.clear(input)
+    await userEvent.tab()
+
+    expect(readQty()).toBeNull()
+    expect(onChange).toHaveBeenLastCalledWith(undefined)
+    expect(input).toHaveValue("")
+  })
 })

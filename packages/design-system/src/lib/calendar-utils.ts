@@ -14,23 +14,6 @@ export function getDefaultCalendarMonthBounds(from: Date = new Date()) {
   }
 }
 
-/** Formats a date range to string. */
-export function formatDateRange(range: DateRange | undefined, dateFormat: string, locale?: Locale) {
-  if (!range?.from) {
-    return ""
-  }
-
-  const fromDate = formatDateToString(range.from, dateFormat, locale)
-
-  if (!range.to) {
-    return fromDate
-  }
-
-  const toDate = formatDateToString(range.to, dateFormat, locale)
-
-  return `${fromDate} / ${toDate}`
-}
-
 /**
  * Formats a date to string using date-fns `format`.
  *
@@ -78,16 +61,6 @@ export function isValidDate(date: Date | undefined) {
  */
 export function parseStringToDate(dateString: string, dateFormat: string, locale?: Locale) {
   return parseDateInput(dateString, dateFormat, locale)
-}
-
-/** Parses a "from / to" range string to DateRange. Ends that are incomplete come back undefined. */
-export function parseStringToRange(rangeString: string, dateFormat: string, locale?: Locale) {
-  const [from, to] = rangeString.trim().split("/")
-
-  return {
-    from: from ? parseDateInput(from, dateFormat, locale) : undefined,
-    to: to ? parseDateInput(to, dateFormat, locale) : undefined,
-  }
 }
 
 const DATE_ONLY_RE = /^(\d{4})-(\d{2})-(\d{2})$/

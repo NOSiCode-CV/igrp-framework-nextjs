@@ -34,7 +34,7 @@ templates/
 | `@igrp/framework-next-types` | Shared TypeScript types — no runtime code |
 | `@igrp/igrp-framework-react-design-system` | React component library: Horizon IGRP components, Primitives (Radix + CVA), Custom domain components |
 | `@igrp/framework-next-ui` | Client-side template chrome: header, sidebar, nav, auth carousel, providers |
-| `@igrp/framework-next` | Server-side layouts (`IGRPRootLayout`, `IGRPLayout`), config builder (`igrpBuildConfig`), access-management API client |
+| `@igrp/framework-next` | Server-side layouts (`IGRPRootLayout`, `IGRPLayoutFull`), config builder (`igrpBuildConfig`), access-management API client |
 | `@igrp/template-migrator` | CLI (`igrp-migrate`) that automates template upgrades via migration guides |
 
 ---

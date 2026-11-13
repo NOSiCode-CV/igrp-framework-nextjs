@@ -46,10 +46,14 @@ export function readLock(appRoot: string): LockFile {
  * sees either the old file or the new one, never half of either.
  */
 export function writeLock(appRoot: string, lock: LockFile): void {
-  const target = lockPath(appRoot);
+  writeFileAtomic(lockPath(appRoot), JSON.stringify(lock, null, 2) + "\n");
+}
+
+/** Temp file + rename, so a reader never sees a torn write. Also used by journal.ts. */
+export function writeFileAtomic(target: string, content: string): void {
   const tmp = `${target}.tmp`;
   try {
-    writeFileSync(tmp, JSON.stringify(lock, null, 2) + "\n", "utf8");
+    writeFileSync(tmp, content, "utf8");
     renameWithRetry(tmp, target);
   } catch (err) {
     rmSync(tmp, { force: true });

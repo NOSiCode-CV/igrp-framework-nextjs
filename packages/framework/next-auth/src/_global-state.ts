@@ -57,7 +57,7 @@ function warnedKeys(): Set<string> {
  * Emits `warn()` the first time `key` is seen in this process, and never again.
  *
  * Used for operational warnings that describe a persistent condition — a broken
- * introspection endpoint, a misconfigured poll interval. Repeating them on every
+ * revocation endpoint, a misconfigured poll interval. Repeating them on every
  * session read would flood the log; losing them entirely would hide an outage.
  * Returns true when it actually warned.
  */

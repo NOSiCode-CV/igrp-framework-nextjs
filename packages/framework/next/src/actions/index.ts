@@ -6,7 +6,11 @@ import { fetchAppByCode, fetchAppsByUser } from '../hooks/use-applications.js';
 import { fetchMenus } from '../hooks/use-menus.js';
 import { fetchCurrentUser } from '../hooks/use-user.js';
 import { igrpGetAccessClient } from '../lib/api-client.js';
-import { igrpEnsureAccessClientConfig, isIgrpAuthBypass } from '../lib/permissions.js';
+import {
+  igrpAssertAuthBypassAllowed,
+  igrpEnsureAccessClientConfig,
+  isIgrpAuthBypass,
+} from '../lib/permissions.js';
 import { logger } from '../logger.js';
 
 /**
@@ -53,7 +57,10 @@ export type ActionResult<T> =
 let warnedNoSession = false;
 
 async function requireSession(): Promise<Extract<ActionResult<never>, { ok: false }> | null> {
-  if (isIgrpAuthBypass()) return null;
+  if (isIgrpAuthBypass()) {
+    igrpAssertAuthBypassAllowed();
+    return null;
+  }
   const { token } = await igrpEnsureAccessClientConfig();
   if (token) return null;
   if (!warnedNoSession) {
@@ -171,21 +178,3 @@ export async function igrpCheckAccessSession(): Promise<IGRPAccessSessionCheck> 
     return { valid: true };
   }
 }
-
-// use-menus/use-applications/use-user intentionally use React.cache() rather
-// than fetch()/unstable_cache() tags (see CHANGELOG — tag-based caching used
-// to embed rotating access tokens in the cache key, causing stale 401s).
-// React.cache() is request-scoped, so there is no tagged cache entry for these
-// functions to invalidate; freshness after a mutation comes from the caller's
-// router.refresh() (see useLayoutData), which forces a new request and a new
-// React.cache() scope. These two actions are kept as no-ops purely for public
-// API stability — do not reintroduce revalidateTag() here without also
-// reintroducing tagged fetch/unstable_cache calls in the hooks above.
-//
-// `useLayoutData` no longer awaits them: a round-trip to a documented no-op
-// only delays the router.refresh() that does the actual work.
-/** @deprecated No-op. Call `router.refresh()` instead. */
-export async function revalidateMenusAction(_appCode: string): Promise<void> {}
-
-/** @deprecated No-op. Call `router.refresh()` instead. */
-export async function revalidateAppsAction(): Promise<void> {}

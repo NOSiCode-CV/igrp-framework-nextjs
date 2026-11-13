@@ -10,6 +10,8 @@ import { IGRPCalendarSingle } from "../../calendar/single.js"
 import { IGRPDatePickerSingle } from "../date-picker/single.js"
 import { IGRPDatePickerInputSingle } from "../date-picker/input-single.js"
 import { IGRPDatePickerMultiple } from "../date-picker/multiple.js"
+import { IGRPDatePickerRange } from "../date-picker/range.js"
+import type { DateRange } from "react-day-picker"
 
 const schema = z.object({ d: z.any() })
 
@@ -321,5 +323,69 @@ describe("IGRPCalendarSingle", () => {
     // `date ?? ownDate` made this impossible once an internal selection existed.
     rerender(<IGRPCalendarSingle month={month} date={undefined} onDateChange={() => {}} />)
     expect(selected()).toBeNull()
+  })
+})
+
+const day = (d: Date) => document.querySelector(`[data-day="${d.toLocaleDateString("pt-PT")}"]`) as HTMLElement
+
+describe("pickers cleared by a controlling parent", () => {
+  it("IGRPDatePickerRange drops a picked range when the parent passes no date", async () => {
+    const user = userEvent.setup()
+    function Host() {
+      const [date, setDate] = useState<DateRange | undefined>({ from: new Date(2026, 7, 3) })
+      return (
+        <>
+          <button onClick={() => setDate(undefined)}>reset</button>
+          <IGRPDatePickerRange name="d" date={date} onDateChange={setDate} />
+        </>
+      )
+    }
+    render(<Host />)
+
+    await user.click(screen.getByText("03-08-2026"))
+    await user.click(day(new Date(2026, 7, 10)))
+    expect(screen.getByText("03-08-2026 - 10-08-2026")).toBeInTheDocument()
+
+    await user.click(screen.getByText("reset"))
+    expect(screen.queryByText(/03-08-2026/)).not.toBeInTheDocument()
+  })
+
+  it("IGRPDatePickerMultiple drops picked dates when the parent passes no date", async () => {
+    const user = userEvent.setup()
+    function Host() {
+      const [date, setDate] = useState<Date[] | undefined>([new Date(2026, 7, 3)])
+      return (
+        <>
+          <button onClick={() => setDate(undefined)}>reset</button>
+          <IGRPDatePickerMultiple name="d" date={date} onDateChange={setDate} />
+        </>
+      )
+    }
+    render(<Host />)
+
+    await user.click(screen.getByText("03-08-2026"))
+    await user.click(day(new Date(2026, 7, 10)))
+    expect(screen.getByText(/10-08-2026/)).toBeInTheDocument()
+
+    await user.click(screen.getByText("reset"))
+    expect(screen.queryByText(/10-08-2026/)).not.toBeInTheDocument()
+  })
+
+  it("IGRPDatePickerSingle writes null when the selected day is clicked again", async () => {
+    const user = userEvent.setup()
+    // The popover calendar opens on the current month, so pick a day in it.
+    const now = new Date()
+    const picked = new Date(now.getFullYear(), now.getMonth(), 15)
+    let formValue: unknown = "unset"
+    render(
+      <Wrapper defaultValues={{ d: picked }}>
+        <IGRPDatePickerSingle name="d" label="Data" />
+        <FormValueProbe onValue={(v) => (formValue = v)} />
+      </Wrapper>
+    )
+
+    await user.click(screen.getByText(`15-${String(now.getMonth() + 1).padStart(2, "0")}-${now.getFullYear()}`))
+    await user.click(day(picked))
+    expect(formValue).toBeNull()
   })
 })

@@ -213,7 +213,7 @@ function IGRPDatePickerSingle(allProps: IGRPDatePickerSingleProps) {
                   {...fieldProps}
                   value={toLocalDate(field.value)}
                   onChange={(val) => {
-                    field.onChange(val)
+                    field.onChange(val ?? null)
                     onDateChange?.(val)
                   }}
                   // `null`, not `undefined`: react-hook-form reads an `undefined` field as

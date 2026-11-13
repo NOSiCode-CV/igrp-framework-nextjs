@@ -86,6 +86,16 @@ describe('igrpBuildConfig validation (FN-2)', () => {
     await expect(igrpBuildConfig(cfg)).rejects.toMatchObject({ code: 'IGRP_APP_CODE_MISSING' });
   });
 
+  it('throws IGRP_APP_CODE_MISSING when preview is off and appCode is blank, even with sync off', async () => {
+    const cfg = baseConfig({
+      appCode: '',
+      previewMode: false,
+      syncAccess: false,
+      apiManagementConfig: { baseUrl: 'https://am.example.com' },
+    });
+    await expect(igrpBuildConfig(cfg)).rejects.toMatchObject({ code: 'IGRP_APP_CODE_MISSING' });
+  });
+
   it('throws IGRP_CONFIG_INVALID when layoutData getters are not functions', async () => {
     const cfg = baseConfig({
       layoutData: { getHeaderData: 'nope', getSidebarData: async () => ({}) },

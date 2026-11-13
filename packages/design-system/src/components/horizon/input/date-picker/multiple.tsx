@@ -149,29 +149,34 @@ type IGRPDatePickerMultipleProps = IGRPCalendarMultipleProps & IGRPDatePickerBas
 /**
  * Multi-date picker with popover calendar. Integrates with react-hook-form.
  */
-function IGRPDatePickerMultiple({
-  name,
-  id,
-  date,
-  onDateChange,
-  label,
-  labelClassName,
-  helperText,
-  className,
-  required = false,
-  disabledPicker = false,
-  disabled,
-  dateFormat = DD_MM_YYYY,
-  placeholder: placeholderProp,
-  ...props
-}: IGRPDatePickerMultipleProps) {
+function IGRPDatePickerMultiple(allProps: IGRPDatePickerMultipleProps) {
+  // See IGRPDatePickerSingle: `date ?? localDate` cannot express "cleared" by the parent.
+  const isControlled = "date" in allProps
+
+  const {
+    name,
+    id,
+    date,
+    onDateChange,
+    label,
+    labelClassName,
+    helperText,
+    className,
+    required = false,
+    disabledPicker = false,
+    disabled,
+    dateFormat = DD_MM_YYYY,
+    placeholder: placeholderProp,
+    ...props
+  } = allProps
+
   const i18n = useIGRPi18n()
   const placeholder = placeholderProp ?? i18n.datePicker.placeholder
   const _id = useId()
   const fieldName = name ?? id ?? _id
 
   const [localDate, setLocalDate] = useState<Date[] | undefined>(undefined)
-  const displayDate = date ?? localDate
+  const displayDate = isControlled ? date : localDate
   const formContext = useFormContext()
 
   useEffect(() => {

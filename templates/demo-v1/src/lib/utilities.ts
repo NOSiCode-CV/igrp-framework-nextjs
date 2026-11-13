@@ -7,6 +7,7 @@ export function isPreviewMode(): boolean {
   const previewModeValue = rawValue
     ?.trim()
     ?.replace(/^["']|["']$/g, "")
+    ?.trim()
     ?.toLowerCase();
   return previewModeValue === "true";
 }
@@ -20,6 +21,7 @@ export function isAuthDisabled(): boolean {
   const providerValue = rawValue
     ?.trim()
     ?.replace(/^["']|["']$/g, "")
+    ?.trim()
     ?.toLowerCase();
   return providerValue === "none";
 }

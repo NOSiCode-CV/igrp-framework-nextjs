@@ -109,7 +109,7 @@ interface IGRPDataTableCellAmountProps {
   /** Locale for formatting. Defaults to the `IGRPI18nProvider` locale (`pt-PT`). */
   language?: string
   /** Intl.format style. */
-  formatStyle?: "currency" | "decimal" | "percent" | "unit"
+  formatStyle?: "currency" | "decimal" | "percent"
 }
 
 /** Formatted amount/number cell. */
@@ -121,6 +121,7 @@ function IGRPDataTableCellAmount({
 }: IGRPDataTableCellAmountProps) {
   const locale = useIGRPLocale()
   const amount = Number.parseFloat(field)
+  if (Number.isNaN(amount)) return null
   const formatted = new Intl.NumberFormat(language ?? locale, {
     // Intl throws on style "currency" without a currency; no currency means a plain number.
     style: formatStyle === "currency" && !currency ? "decimal" : formatStyle,

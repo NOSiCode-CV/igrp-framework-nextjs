@@ -10,7 +10,6 @@ vi.mock('../oidc', async (importOriginal) => {
   return {
     ...original,
     revokeOidcSession: vi.fn().mockResolvedValue({ ok: true, status: 200 }),
-    introspectOidcToken: vi.fn().mockResolvedValue(true),
     refreshOidcAccessToken: vi
       .fn()
       .mockResolvedValue({ accessToken: 'refreshed-at', forceLogout: false }),

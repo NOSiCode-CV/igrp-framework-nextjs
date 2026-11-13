@@ -200,7 +200,9 @@ export function isIgrpAuthBypass(env: Record<string, string | undefined> = proce
  * `IGRP_ALLOW_AUTH_BYPASS_IN_PRODUCTION=true`. Skipped only when `NODE_ENV` is
  * `development` or `test`; any other value, unset included, counts as production.
  * Call it from `register()` in the template's `instrumentation.ts`: the throw
- * makes Next log the error and answer every request with 500.
+ * makes Next log the error and answer every request with 500. The framework's
+ * own bypass branches (`igrpGetClaims`, the Server Action session gate) call it
+ * too, so a production build fails closed without that wiring.
  */
 export function igrpAssertAuthBypassAllowed(
   env: Record<string, string | undefined> = process.env,
@@ -285,6 +287,8 @@ export async function igrpEnsureAccessClientConfig(): Promise<IGRPClientRuntimeC
 // so reading process.env (via isIgrpAuthBypass) inside is per-request, not stale.
 export const igrpGetClaims = cache(async function igrpGetClaims(): Promise<IGRPClaimsState> {
   if (isIgrpAuthBypass()) {
+    // Fail closed in production even if the app never wired the instrumentation guard.
+    igrpAssertAuthBypassAllowed();
     return { status: 'ok', claims: { ...SUPER_ADMIN_MOCK } };
   }
   try {

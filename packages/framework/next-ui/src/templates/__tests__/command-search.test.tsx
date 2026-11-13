@@ -80,6 +80,30 @@ describe('IGRPTemplateCommandSearch', () => {
     expect(document.body.textContent).toContain('Navegação');
   });
 
+  it('selects only one of two items that share a label', () => {
+    const first = vi.fn();
+    const second = vi.fn();
+    mount(
+      <IGRPTemplateCommandSearch
+        commands={[
+          { label: 'Listar', group: 'Clientes', onSelect: first },
+          { label: 'Listar', group: 'Faturas', onSelect: second },
+        ]}
+      />,
+    );
+
+    pressCtrlK();
+
+    const selected = document.body.querySelectorAll(
+      '[data-slot="command-item"][data-selected="true"]',
+    );
+    expect(selected).toHaveLength(1);
+    const items = document.body.querySelectorAll<HTMLElement>('[data-slot="command-item"]');
+    act(() => items[1]!.click());
+    expect(second).toHaveBeenCalledTimes(1);
+    expect(first).not.toHaveBeenCalled();
+  });
+
   it('opens with no commands and shows the pt-PT empty state', () => {
     const errors = mount(<IGRPTemplateCommandSearch />);
 

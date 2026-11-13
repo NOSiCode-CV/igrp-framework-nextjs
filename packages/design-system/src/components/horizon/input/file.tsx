@@ -180,12 +180,6 @@ function IGRPDropzoneInternal({
 
   const onDrop = useCallback(
     (accepted: File[], rejected: FileRejection[]) => {
-      if (rejected.length > 0) {
-        setRejectedFiles(rejected)
-      } else {
-        setRejectedFiles([])
-      }
-
       const newItems: FileWithProgress[] = accepted.map((file) => ({
         file,
         progress: 0,
@@ -193,12 +187,21 @@ function IGRPDropzoneInternal({
       }))
 
       if (multiple) {
-        updateFiles([...files, ...newItems])
+        // react-dropzone checks `maxFiles` per drop only; files already kept count too.
+        const room = maxFiles === undefined ? newItems.length : Math.max(0, maxFiles - files.length)
+        const overflow: FileRejection[] = newItems.slice(room).map(({ file }) => ({
+          // react-dropzone hands `onDrop` its own FileWithPath objects; the param is typed File.
+          file: file as FileRejection["file"],
+          errors: [{ code: "too-many-files", message: `${maxFilesLabel} ${maxFiles}` }],
+        }))
+        setRejectedFiles([...rejected, ...overflow])
+        updateFiles([...files, ...newItems.slice(0, room)])
       } else {
+        setRejectedFiles(rejected)
         updateFiles(newItems)
       }
     },
-    [multiple, files, updateFiles]
+    [multiple, maxFiles, maxFilesLabel, files, updateFiles]
   )
 
   const { getRootProps, getInputProps, isDragActive, isDragReject } = useDropzone({

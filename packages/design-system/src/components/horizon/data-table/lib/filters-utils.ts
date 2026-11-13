@@ -1,10 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import type { FilterFn } from "@tanstack/react-table"
+import { addDays, startOfDay } from "date-fns"
+
+import { isValidDate, toLocalDate } from "../../../../lib/calendar-utils.js"
 
 /**
  * Filter function for date range filtering in IGRP data tables.
  * Filters rows based on whether the cell value falls within the specified date range.
+ * The range covers whole local days: a datetime anywhere on the `to` day is included.
  *
  * @param row - The table row to filter
  * @param columnId - The ID of the column to filter
@@ -13,20 +17,21 @@ import type { FilterFn } from "@tanstack/react-table"
  */
 export const IGRPDataTableDateRangeFilterFn: FilterFn<any> = (row, columnId, filterValue) => {
   if (!filterValue || !filterValue.from) return true
-  const cellValue = row.getValue(columnId) as string
-  const date = new Date(cellValue)
-  const start = new Date(filterValue.from)
-  const end = filterValue.to ? new Date(filterValue.to) : undefined
+  // Date-only strings are read at local midnight: `new Date("2026-08-26")` is UTC midnight,
+  // the previous evening in any UTC-N zone, which dropped the row from a range ending that day.
+  const date = toLocalDate(row.getValue(columnId))
+  const start = toLocalDate(filterValue.from)
+  const end = toLocalDate(filterValue.to)
 
   // Invalid filter bound → do not filter (show all). Invalid cell date → cannot
   // be "in range", so exclude. Prevents a misformatted column silently vanishing
   // with no error.
-  if (Number.isNaN(start.getTime())) return true
-  if (Number.isNaN(date.getTime())) return false
-  if (end && !Number.isNaN(end.getTime())) {
-    return date >= start && date <= end
+  if (!start || !isValidDate(start)) return true
+  if (!date || !isValidDate(date)) return false
+  if (end && isValidDate(end)) {
+    return date >= startOfDay(start) && date < addDays(startOfDay(end), 1)
   }
-  return date >= start
+  return date >= startOfDay(start)
 }
 
 /**

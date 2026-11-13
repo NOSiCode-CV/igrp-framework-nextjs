@@ -21,7 +21,6 @@ type OpenIdConfiguration = {
   token_endpoint: string;
   revocation_endpoint?: string;
   end_session_endpoint?: string;
-  introspection_endpoint?: string;
 };
 
 const DISCOVERY_CACHE_TTL_MS = 5 * 60 * 1000;
@@ -54,7 +53,7 @@ const REFRESH_RETRY_DELAY_MS = 300;
  * Timeout for the refresh-token call itself, longer than other IdP calls: an
  * abort is an ambiguous outcome (above), so a slow-but-successful refresh is
  * worth waiting for. Keep `REFRESH_LOCK_TTL_MS` in ./session-store above
- * introspection + refresh + one retry.
+ * discovery + refresh + one retry.
  */
 const REFRESH_FETCH_TIMEOUT_MS = 8000;
 
@@ -191,22 +190,22 @@ function warnUnmanagedProvider(operation: string, providerId: SessionAuthProvide
   );
 }
 
+// Trimmed like sign-in's getRequiredEnvValue: a secret mounted with --from-file
+// carries a trailing newline, and an untrimmed one 401s every refresh.
 function getClientCredentials(env: AuthEnvironment) {
   return {
-    clientId: env.IGRP_AUTH_CLIENT_ID!,
-    clientSecret: env.IGRP_AUTH_CLIENT_SECRET!,
+    clientId: (env.IGRP_AUTH_CLIENT_ID ?? '').trim(),
+    clientSecret: (env.IGRP_AUTH_CLIENT_SECRET ?? '').trim(),
   };
 }
 
 /**
  * HTTP Basic client authentication per RFC 6749 §2.3.1 — used for EVERY call
- * this module makes with client credentials (refresh, revocation,
- * introspection). §2.3.1 says a server MUST support Basic for clients with a
+ * this module makes with client credentials (refresh, revocation). §2.3.1 says a server MUST support Basic for clients with a
  * secret and only MAY accept the secret in the body (`client_secret_post`), so
  * Basic is the one method a conforming authorization server cannot refuse.
  * Mixing the two — Basic here, body there — meant a server registered for a
- * single method broke one side: refresh failed closed into a logout, while
- * introspection failed open and merely warned.
+ * single method broke one side.
  *
  * Two details a plain `btoa(`${id}:${secret}`)` gets wrong:
  *
@@ -214,10 +213,8 @@ function getClientCredentials(env: AuthEnvironment) {
  *    client secrets are usually base64-ish and contain `+` `/` `=`, which a
  *    spec-compliant server (Keycloak, Spring Authorization Server) URL-decodes
  *    on receipt — sending them raw can mismatch.
- * 2. `btoa` is Latin-1 only and THROWS on any non-ASCII character. In
- *    `introspectOidcToken` that throw is swallowed by the outer catch and
- *    turned into a fail-open `true`, silently disabling the revocation gate
- *    for the whole process. Encoding to UTF-8 bytes first removes the throw.
+ * 2. `btoa` is Latin-1 only and THROWS on any non-ASCII character. Encoding
+ *    to UTF-8 bytes first removes the throw.
  */
 function buildBasicAuthHeader(clientId: string, clientSecret: string): string {
   const encoded = `${encodeURIComponent(clientId)}:${encodeURIComponent(clientSecret)}`;
@@ -271,8 +268,7 @@ function inflightRefreshes(): Map<string, Promise<RefreshOutcome>> {
 // so the TTL is sized to the backstop with margin, not to the watcher: an
 // earlier 180s figure, derived from a 150s poll that no longer exists, let the
 // entry expire first — the cookie then replayed the consumed refresh token,
-// introspection reported it inactive, and a healthy session was force-logged-
-// out. Holding the rotated token a few minutes longer costs nothing the cookie
+// the IdP rejected it, and a healthy session was force-logged-out. Holding the rotated token a few minutes longer costs nothing the cookie
 // is not already paying for 30 days.
 const RECOVERY_TTL_MS = 15 * 60_000;
 
@@ -389,6 +385,8 @@ type RefreshDelta = {
 type RefreshOutcome =
   | { status: 'refreshed'; delta: RefreshDelta }
   | { status: 'recovered'; token: JWT }
+  // Nothing was sent (discovery failed): keep the token, the next read retries.
+  | { status: 'unchanged' }
   | { status: 'failed' };
 
 /** Auth-material fields, i.e. everything a refresh is allowed to overwrite. */
@@ -456,6 +454,7 @@ export async function refreshOidcAccessToken(token: JWT, env: AuthEnvironment): 
   const outcome = await inflight;
   if (outcome.status === 'refreshed') return applyRefreshDelta(token, outcome.delta);
   if (outcome.status === 'recovered') return applyRecoveredToken(token, outcome.token);
+  if (outcome.status === 'unchanged') return token;
   return failedRefresh(token);
 }
 
@@ -467,7 +466,18 @@ async function performRefresh(
   assertAuthProviderEnv(env, providerId);
 
   const discoveryUrl = getAuthProviderDiscoveryUrl(env, providerId);
-  const openIdConfiguration = await getOpenIdConfiguration(discoveryUrl);
+  let openIdConfiguration: OpenIdConfiguration;
+  try {
+    openIdConfiguration = await getOpenIdConfiguration(discoveryUrl);
+  } catch (error) {
+    // The refresh token was never sent, so this is safe to retry — unlike a
+    // failed token call. Logging the user out over an IdP blip is not.
+    console.warn(
+      '[oidc.refreshOidcAccessToken] discovery failed — keeping the session, the next read retries:',
+      error instanceof Error ? `${error.name}: ${error.message}` : error,
+    );
+    return { status: 'unchanged' };
+  }
   const { clientId, clientSecret } = getClientCredentials(env);
 
   // Include the original auth scopes on refresh so the IdP re-issues an
@@ -906,84 +916,4 @@ export async function buildEndSessionUrl(
   }
 
   return url.toString();
-}
-
-/**
- * Introspection deliberately fails OPEN — a flaky or misconfigured
- * introspection endpoint must never block a refresh. But failing open in
- * silence means an operator cannot tell "the IdP says this token is live" from
- * "introspection has been returning 401 for a month", and the gate that is
- * supposed to catch server-side revocation is simply gone. Warn once per
- * reason, per process.
- */
-function warnIntrospectionDisabled(reason: string, detail?: unknown): void {
-  warnOnce(`oidc.introspection.${reason}`, () =>
-    console.warn(
-      `[oidc.introspectOidcToken] failing open (${reason}) — server-side revocation is NOT being ` +
-        'detected until this is resolved; refresh will proceed regardless.',
-      detail instanceof Error ? `${detail.name}: ${detail.message}` : (detail ?? ''),
-    ),
-  );
-}
-
-export async function introspectOidcToken(token: JWT, env: AuthEnvironment): Promise<boolean> {
-  // Introspect the REFRESH token, not the access token. This gate only runs
-  // once the access token has expired (or is inside its refresh buffer), at
-  // which point an access-token introspection always returns `active: false`
-  // per RFC 7662 — so gating on it would block every refresh exactly when one
-  // is needed. The refresh token's liveness is what actually determines
-  // whether the upcoming `grant_type=refresh_token` call can succeed, and lets
-  // us detect a server-side revocation before attempting the grant.
-  if (!token.refreshToken) return true;
-
-  const providerId = getProviderIdFromTokenOrEnv(token, env);
-  // Not managed here (AUTH_PROVIDER=none, or a custom provider) — nothing to
-  // introspect against, and the gate fails open by design.
-  if (!isOidcManagedProviderId(providerId)) {
-    if (providerId !== 'none') warnUnmanagedProvider('introspectOidcToken', providerId);
-    return true;
-  }
-
-  try {
-    const discoveryUrl = getAuthProviderDiscoveryUrl(env, providerId);
-    const openIdConfiguration = await getOpenIdConfiguration(discoveryUrl);
-    if (!openIdConfiguration.introspection_endpoint) {
-      warnIntrospectionDisabled('no introspection_endpoint in the IdP discovery document');
-      return true;
-    }
-
-    const { clientId, clientSecret } = getClientCredentials(env);
-
-    const response = await fetchWithTimeout(
-      openIdConfiguration.introspection_endpoint,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          Authorization: buildBasicAuthHeader(clientId, clientSecret),
-        },
-        body: new URLSearchParams({
-          token: token.refreshToken,
-          token_type_hint: 'refresh_token',
-        }),
-      },
-      IDP_FETCH_TIMEOUT_MS,
-    );
-
-    if (!response.ok) {
-      warnIntrospectionDisabled(
-        `introspection endpoint returned HTTP ${response.status}`,
-        response.status === 401 || response.status === 403
-          ? 'check IGRP_AUTH_CLIENT_ID / IGRP_AUTH_CLIENT_SECRET'
-          : undefined,
-      );
-      return true;
-    }
-
-    const result = (await response.json()) as { active?: boolean };
-    return result.active !== false;
-  } catch (error) {
-    warnIntrospectionDisabled('introspection request threw', error);
-    return true;
-  }
 }

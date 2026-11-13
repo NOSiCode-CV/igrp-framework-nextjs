@@ -28,7 +28,6 @@ pnpm add @igrp/framework-next
 | `IGRPRootLayout`    | `.`   | Root-level server layout. Wraps `<html>` with theme + global providers.             |
 | `IGRPLayoutFull`    | `.`   | Route-group server layout. Renders header + sidebar chrome around protected routes. |
 | `IGRPLayoutBlank`   | `.`   | Route-group server layout without chrome (toaster only) — login/logout routes.      |
-| `IGRPLayout`        | `.`   | **Deprecated** alias of `IGRPLayoutFull`; will be removed.                          |
 | `IGRPGlobalLoading` | `.`   | Full-page loading indicator for `loading.tsx` files.                                |
 
 #### `IGRPRootLayout` props
@@ -55,7 +54,6 @@ pnpm add @igrp/framework-next
 | `igrpGetAccessClient`                                                 | `.`   | Returns a pre-configured typed API client for the IGRP Access Management service.                                                           |
 | `igrpGetAccessClientConfig`                                           | `.`   | Returns the raw config object used to construct the client.                                                                                 |
 | `igrpBuildQueryString`                                                | `.`   | Type-safe query-string builder for access-management requests.                                                                              |
-| `igrpResetAccessClient`                                               | `.`   | **Deprecated** — clears the per-request config only; use `igrpResetAccessClientConfig`.                                                     |
 | `igrpSetAccessClientConfig(config)` / `igrpResetAccessClientConfig()` | `.`   | Write / clear the per-request (`AsyncLocalStorage`) store: `{ token, baseUrl, timeout?, locale? }` (`IGRPClientRuntimeConfig`).             |
 | `igrpWithAccessClientConfig(partial, fn)`                             | `.`   | Runs `fn` with a copy of the store overridden by `partial`.                                                                                 |
 | `igrpResolveDefaultTimeout(env?)`                                     | `.`   | Client timeout in ms: `IGRP_ACCESS_MANAGEMENT_TIMEOUT`, else 10000.                                                                         |
@@ -97,12 +95,12 @@ Token-claims checks (server side). `@igrp/framework-next-ui`'s permission compon
 
 ### Other subpaths
 
-| Entry         | Exports                                                                                                                                | Purpose                                                                                                                                                                                                                                                                             |
-| ------------- | -------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `./actions`   | `fetchMenusAction(appCode)`, `fetchCurrentUserAction()`, `fetchAppsByUserAction()`, `fetchAppByCodeAction(appCode)`, `ActionResult<T>` | `'use server'` actions returning `{ ok: true, data } \| { ok: false, error, code }` (show users the next-intl message `errors.actions.<code>`); refuse before any AM call when no session can be recovered. `revalidateMenusAction` / `revalidateAppsAction` are deprecated no-ops. |
-| `./client`    | `useLayoutData(appCode)`                                                                                                               | Client hook: `{ refreshMenus, refreshApps, refreshUser }`, each a `router.refresh()` in a transition.                                                                                                                                                                               |
-| `./logger`    | `logger.error(message, error?, meta?)`, `logger.warn(message, meta?)`, `logger.info(message, meta?)`                                   | Prefixed server-side console logger; stack traces in development only.                                                                                                                                                                                                              |
-| `./app-error` | `AppError`, `parsePublicDigest`, `getDisplayableErrorMessage`, `PUBLIC_ERROR_DELIMITER`, `PublicErrorId`, `PublicErrorMessage`         | `new AppError({ error?, internalMessage?, publicMessage? })` carries a user-facing message through `error.digest`, which Next does not redact in production; `parsePublicDigest(error.digest)` recovers it in `error.tsx`.                                                          |
+| Entry         | Exports                                                                                                                                | Purpose                                                                                                                                                                                                                    |
+| ------------- | -------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `./actions`   | `fetchMenusAction(appCode)`, `fetchCurrentUserAction()`, `fetchAppsByUserAction()`, `fetchAppByCodeAction(appCode)`, `ActionResult<T>` | `'use server'` actions returning `{ ok: true, data } \| { ok: false, error, code }` (show users the next-intl message `errors.actions.<code>`); refuse before any AM call when no session can be recovered.                |
+| `./client`    | `useLayoutData(appCode)`                                                                                                               | Client hook: `{ refreshMenus, refreshApps, refreshUser }`, each a `router.refresh()` in a transition.                                                                                                                      |
+| `./logger`    | `logger.error(message, error?, meta?)`, `logger.warn(message, meta?)`, `logger.info(message, meta?)`                                   | Prefixed server-side console logger; stack traces in development only.                                                                                                                                                     |
+| `./app-error` | `AppError`, `parsePublicDigest`, `getDisplayableErrorMessage`, `PUBLIC_ERROR_DELIMITER`, `PublicErrorId`, `PublicErrorMessage`         | `new AppError({ error?, internalMessage?, publicMessage? })` carries a user-facing message through `error.digest`, which Next does not redact in production; `parsePublicDigest(error.digest)` recovers it in `error.tsx`. |
 
 ---
 
@@ -167,8 +165,6 @@ export default async function Layout({ children }: { children: React.ReactNode }
   return <IGRPLayoutFull config={config}>{children}</IGRPLayoutFull>;
 }
 ```
-
-`IGRPLayout` still works but is a deprecated alias of `IGRPLayoutFull`.
 
 ### Config builder
 

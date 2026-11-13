@@ -3,7 +3,7 @@ import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, rmSync, existsSync
 import { tmpdir } from "os";
 import { join, dirname } from "path";
 import { readLock } from "../lock";
-import { journalPath, readJournal } from "../journal";
+import { journalPath, readJournal, writeJournal } from "../journal";
 import type { Manifest } from "../types";
 
 const manifestRef: { current: Manifest } = {
@@ -167,17 +167,25 @@ describe("recovery from an interrupted run", () => {
     expect(existsSync(journalPath(appRoot))).toBe(true);
   });
 
-  it("ignores an unreadable journal rather than blocking apply", async () => {
-    writeFileAt(appRoot, "src/edited.ts", "ORIGINAL\n");
+  it("aborts on an unreadable journal instead of re-running over a half-migrated tree", async () => {
+    writeFileAt(appRoot, "src/edited.ts", "HALF MIGRATED\n");
     writeFileSync(journalPath(appRoot), "{ not json", "utf8");
 
-    await apply(appRoot, { yes: true, payloadDir });
+    expect(await apply(appRoot, { yes: true, payloadDir })).toBe(false);
 
-    expect(readLock(appRoot).applied).toHaveLength(1);
+    expect(readLock(appRoot).applied).toHaveLength(0);
+    expect(readFileSync(join(appRoot, "src/edited.ts"), "utf8")).toBe("HALF MIGRATED\n");
+    expect(existsSync(journalPath(appRoot))).toBe(true);
   });
 
-  it("readJournal returns null for a journal missing required fields", () => {
+  it("readJournal throws for a journal missing required fields", () => {
     writeFileSync(journalPath(appRoot), JSON.stringify({ version: 1 }), "utf8");
-    expect(readJournal(appRoot)).toBeNull();
+    expect(() => readJournal(appRoot)).toThrow(/cannot be read/);
+  });
+
+  it("writeJournal leaves no temp file behind (atomic tmp + rename)", () => {
+    writeJournal(appRoot, { version: 1, id: "x", startedAt: "", cliVersion: "t", undo: [], undoPayloads: {} });
+    expect(readJournal(appRoot)?.id).toBe("x");
+    expect(existsSync(`${journalPath(appRoot)}.tmp`)).toBe(false);
   });
 });

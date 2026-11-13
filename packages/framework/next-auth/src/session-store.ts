@@ -380,11 +380,11 @@ export async function deleteStoredSession(
 const LOCK_KEY_PREFIX = `${SESSION_STORE_KEY_PREFIX}lock:`;
 
 /**
- * Lock lifetime. Covers a refresh's remote hops with margin: discovery and
- * introspection (4 s each) plus the token call (8 s) and its one pre-send
- * retry. A holder that dies just lets the lock expire.
+ * Lock lifetime. Covers a refresh's worst case with margin: discovery (4 s),
+ * the token call (8 s), the retry delay (0.3 s) and the one pre-send retry
+ * (8 s). A holder that dies just lets the lock expire.
  */
-export const REFRESH_LOCK_TTL_MS = 20_000;
+export const REFRESH_LOCK_TTL_MS = 30_000;
 
 /**
  * How long a replica that lost the race waits for the winner's result. Longer
@@ -409,6 +409,14 @@ function isNewerHealthy(stored: StoredFields | null, token: JWT): stored is Stor
     stored.accessToken &&
     (stored.expiresAt ?? 0) > (token.expiresAt ?? 0),
   );
+}
+
+/**
+ * `current` is healthy, but `pickStored` drops undefined fields, so a plain
+ * spread would keep a stale failure flag from `token`.
+ */
+function adoptStored(token: JWT, current: StoredFields): JWT {
+  return { ...token, ...current, error: undefined, forceLogout: false };
 }
 
 export type SessionRefreshLockOptions = CodecOptions & {
@@ -489,7 +497,7 @@ export async function refreshUnderSessionLock(
     while (!acquired && Date.now() < deadline) {
       await sleep(REFRESH_LOCK_POLL_MS);
       const current = await readStored(store, sessionId, secret).catch(() => null);
-      if (isNewerHealthy(current, token)) return { ...token, ...current };
+      if (isNewerHealthy(current, token)) return adoptStored(token, current);
       acquired = await store.acquireLock(lockKey, owner, REFRESH_LOCK_TTL_MS).catch(() => false);
     }
     if (!acquired) {
@@ -509,7 +517,7 @@ export async function refreshUnderSessionLock(
 
   try {
     const current = await readStored(store, sessionId, secret).catch(() => null);
-    if (isNewerHealthy(current, token)) return { ...token, ...current };
+    if (isNewerHealthy(current, token)) return adoptStored(token, current);
 
     const result = await refresh(token);
     if (!result.error) {
@@ -534,6 +542,9 @@ export async function refreshUnderSessionLock(
 
 // ─── In-memory store ─────────────────────────────────────────────────────────
 
+/** Map size at which `set` first sweeps expired entries. */
+const MEMORY_STORE_SWEEP_THRESHOLD = 1000;
+
 /**
  * Per-process store for development and single-instance deployments.
  *
@@ -543,6 +554,20 @@ export async function refreshUnderSessionLock(
  */
 export function createMemorySessionStore(): IGRPSessionStore {
   const entries = new Map<string, { value: string; expiresAt: number }>();
+  // Expired entries are otherwise dropped only when read, and an abandoned
+  // session is never read again. Doubling the threshold keeps sweeps amortised
+  // when most entries are live.
+  let sweepAt = MEMORY_STORE_SWEEP_THRESHOLD;
+  function put(key: string, value: string, expiresAt: number) {
+    if (!entries.has(key) && entries.size >= sweepAt) {
+      const now = Date.now();
+      for (const [k, entry] of entries) {
+        if (entry.expiresAt <= now) entries.delete(k);
+      }
+      sweepAt = Math.max(MEMORY_STORE_SWEEP_THRESHOLD, entries.size * 2);
+    }
+    entries.set(key, { value, expiresAt });
+  }
   return {
     async get(key) {
       const entry = entries.get(key);
@@ -554,7 +579,7 @@ export function createMemorySessionStore(): IGRPSessionStore {
       return entry.value;
     },
     async set(key, value, ttlSeconds) {
-      entries.set(key, { value, expiresAt: Date.now() + ttlSeconds * 1000 });
+      put(key, value, Date.now() + ttlSeconds * 1000);
     },
     async delete(key) {
       entries.delete(key);
@@ -562,7 +587,7 @@ export function createMemorySessionStore(): IGRPSessionStore {
     async acquireLock(key, owner, ttlMs) {
       const entry = entries.get(key);
       if (entry && entry.expiresAt > Date.now()) return false;
-      entries.set(key, { value: owner, expiresAt: Date.now() + ttlMs });
+      put(key, owner, Date.now() + ttlMs);
       return true;
     },
     async releaseLock(key, owner) {

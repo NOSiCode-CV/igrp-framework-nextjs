@@ -511,6 +511,12 @@
       "appliedAt": "2026-11-10T00:00:00.000Z",
       "cliVersion": "0.2.0-beta.24",
       "manifestHash": "7a7fdc83f2ab8d12"
+    },
+    {
+      "id": "85-middleware-dotted-routes-csp-report",
+      "appliedAt": "2026-11-13T00:00:00.000Z",
+      "cliVersion": "0.2.0-beta.25",
+      "manifestHash": "b61c97af74eb3a41"
     }
   ]
 }

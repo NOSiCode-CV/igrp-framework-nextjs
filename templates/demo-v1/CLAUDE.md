@@ -6,7 +6,7 @@ You are working inside `templates/demo-v1/` — the **canonical reference templa
 
 - **Next.js 15 + App Router** — async `cookies()`/`headers()`/`params`/`searchParams`, server vs. client component boundaries, route groups, parallel/intercepted routes, middleware, `basePath`, `output: "standalone"`, Turbopack dev.
 - **NextAuth v4 + OIDC** — provider config, `NEXTAUTH_URL` semantics (it points at the NextAuth API root, **including** `basePath` + `/api/auth`), `redirect_uri` registration, JWT/session callbacks, token refresh, middleware-based gating, `callbackUrl` sanitization to prevent open-redirect and login-loop chains.
-- **IGRP framework consumer patterns** — how the template wires `withIGRPAuth`, `IGRPRootLayout`, `IGRPLayout`, `igrpBuildConfig`, `igrpGetAccessClient`, server actions, and the `IGRP_PREVIEW_MODE` / `AUTH_PROVIDER=none` bypass paths.
+- **IGRP framework consumer patterns** — how the template wires `withIGRPAuth`, `IGRPRootLayout`, `IGRPLayoutFull`, `igrpBuildConfig`, `igrpGetAccessClient`, server actions, and the `IGRP_PREVIEW_MODE` / `AUTH_PROVIDER=none` bypass paths.
 - **`workspace:*` consumption** — every `@igrp/*` dep is linked from `packages/**`. After any public-API change in a framework package, run `pnpm build:framework` before assuming this template still builds.
 - **Tailwind v4** — Tailwind compiles **once here** in the app, not in framework packages. `@source` must point at this app's `src/` **and** the consumed `dist/` of each `@igrp/*` package. Import tokens only (`@igrp/igrp-framework-react-design-system/tokens`) — never the prebuilt `styles.css`.
 - **Biome** — this template uses **Biome** for lint/format. Don't introduce ESLint/Prettier configs here; framework packages have their own (ESLint + Prettier) and the toolchains don't cross-apply.
@@ -64,7 +64,7 @@ The shadcn CLI **is** appropriate inside `packages/design-system` itself, when r
 ### Layout composition
 
 - `src/app/layout.tsx` mounts `IGRPRootLayout`, which renders `<html lang>`, `IGRPNestedProviders` (session, tooltip, theme, session watcher) and, because `igrpBuildConfig({ i18n })` is set, `IGRPIntlProvider` (next-intl + design-system + chrome catalogs for the resolved locale).
-- `src/app/(igrp)/layout.tsx` runs auth check, loads session via `serverSession()`, calls `igrpBuildConfig(...)`, renders `IGRPLayout` (header + sidebar + nav-user + breadcrumbs + command search) around `children`.
+- `src/app/(igrp)/layout.tsx` runs auth check, loads session via `serverSession()`, calls `igrpBuildConfig(...)`, renders `IGRPLayoutFull` (header + sidebar + nav-user + breadcrumbs + command search) around `children`.
 - Route groups: `(auth)` for login/logout, `(igrp)` for the authenticated shell.
   Demo pages live in `(igrp)/(demo)`; Studio-regenerated route shells in
   `(igrp)/(generated)`. **`(myapp)` is a sibling of `(igrp)`, not a child** — it

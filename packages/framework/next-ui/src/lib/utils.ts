@@ -29,16 +29,3 @@ export function withBasePath(src: string): string {
   }
   return `${base}${src}`;
 }
-
-/**
- * Inverse of {@link withBasePath} for `window.location.pathname`, so route
- * matching can be written against app-relative paths (`/login`) and still match
- * `/apps/template/login`.
- */
-export function stripBasePath(pathname: string): string {
-  const base = basePath();
-  if (!base) return pathname;
-  if (pathname === base) return '/';
-  if (pathname.startsWith(`${base}/`)) return pathname.slice(base.length);
-  return pathname;
-}

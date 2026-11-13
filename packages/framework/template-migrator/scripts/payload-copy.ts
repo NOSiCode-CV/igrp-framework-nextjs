@@ -17,8 +17,8 @@
 // without rewriting 166 committed payload files, and makes the EOL habits of
 // whoever authored a migration irrelevant to what ships.
 
-import { copyFileSync, mkdirSync, readFileSync, writeFileSync } from "fs";
-import { dirname } from "path";
+import { copyFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
+import { dirname, join } from "path";
 
 /** Bytes inspected when sniffing for binary content. */
 const SNIFF_BYTES = 8000;
@@ -59,4 +59,26 @@ export function copyPayloadFile(src: string, dest: string): boolean {
   const normalised = toLf(original);
   writeFileSync(dest, normalised, "utf8");
   return normalised !== original;
+}
+
+/** Copy every payload a migration's steps reference; returns how many were normalised. */
+export function copyPayloads(
+  steps: Record<string, unknown>[],
+  migrationsDir: string,
+  payloadOut: string,
+): number {
+  let normalised = 0;
+  for (const step of steps) {
+    const from = step["from"];
+    if (typeof from === "string" && !from.startsWith("__")) {
+      const src = join(migrationsDir, from);
+      // Strip the leading "payload/" prefix so files land at dist/payload/NN/...
+      // rather than the redundant dist/payload/payload/NN/...
+      const rel = from.startsWith("payload/") ? from.slice("payload/".length) : from;
+      // A missing payload ships a migration that fails mid-apply on every consumer.
+      if (!existsSync(src)) throw new Error(`Payload not found: ${src}`);
+      if (copyPayloadFile(src, join(payloadOut, rel))) normalised++;
+    }
+  }
+  return normalised;
 }

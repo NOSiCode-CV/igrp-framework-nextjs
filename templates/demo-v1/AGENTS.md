@@ -29,7 +29,7 @@ relate to it. Put rule content in `.agents/rules/`, never in a bridge.
 
 - `src/app/` — Next.js App Router routes.
 - `src/app/(igrp)/layout.tsx` — runs auth checks, loads session, wraps the route
-  group in `IGRPLayout`.
+  group in `IGRPLayoutFull`.
 - `src/middleware.ts` — NextAuth session validation, honors
   `IGRP_PREVIEW_MODE` / `AUTH_PROVIDER=none`.
 - `src/igrp.template.config.ts` — assembles the IGRP runtime config via

@@ -72,7 +72,7 @@ Read the reference for the family you're about to write, before you write it. Ea
 - **`IGRPButton` icons:** `iconName` renders only with `showIcon`. Icon-size buttons need an `aria-label`. For navigation use `IGRPButtonLink`, not `IGRPButton asChild` around a `Link`.
 - **Submit button state:** `IGRPButton` doesn't watch the form. Take `loading` from `useIGRPFormContext().isSubmitting` in a child component.
 - **Loading another record:** pass `resetKey={record.id}` (it resets values and dirty state to the new `defaultValues`).
-- **Date pickers write `null` when cleared,** so schemas need `.nullable()`. `IGRPInputNumber` writes `undefined`.
+- **Date pickers and `IGRPInputNumber` write `null` when cleared,** so schemas need `.nullable()` (`.nullish()` for a number whose untouched default is `undefined`).
 - **Table row actions** go in the `actions` prop. With 3 or more they collapse into a dropdown, where a `custom` action must return a single element.
 - **Table** `columns` / `data` / `actions` / `onQueryChange` must be stable references (module scope, `useMemo`, `useCallback`).
 - **Charts:** every chart requires `categoryKey`, and Pie / RadialBar also need `nameKey`. `valueFormatter` is a function. Leave out `color` and the themed palette applies.

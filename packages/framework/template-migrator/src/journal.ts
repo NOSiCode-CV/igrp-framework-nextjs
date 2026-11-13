@@ -20,8 +20,9 @@
 // doing anything else, which is the same recovery the in-process unwind would
 // have performed.
 
-import { existsSync, readFileSync, rmSync, writeFileSync } from "fs";
+import { existsSync, readFileSync, rmSync } from "fs";
 import { join } from "path";
+import { writeFileAtomic } from "./lock.js";
 import type { MigrationStep } from "./types.js";
 
 const JOURNAL_FILE = ".igrp-migration-journal.json";
@@ -45,23 +46,28 @@ export function journalPath(appRoot: string): string {
 /**
  * Read a pending journal, or null when there is none.
  *
- * An unreadable journal is treated as absent rather than fatal: it must never
- * be the thing that blocks a consumer from running `apply`. The caller warns.
+ * A journal that exists but cannot be read throws: a run died mid-migration and
+ * we no longer know what to undo, so `apply` must stop rather than re-run over
+ * a half-migrated tree and record a wrong undo baseline.
  */
 export function readJournal(appRoot: string): Journal | null {
   const p = journalPath(appRoot);
   if (!existsSync(p)) return null;
+  let parsed: Journal | null = null;
   try {
-    const parsed = JSON.parse(readFileSync(p, "utf8")) as Journal;
-    if (!parsed || typeof parsed.id !== "string" || !Array.isArray(parsed.undo)) return null;
-    return parsed;
-  } catch {
-    return null;
+    parsed = JSON.parse(readFileSync(p, "utf8")) as Journal;
+  } catch { /* reported below */ }
+  if (!parsed || typeof parsed.id !== "string" || !Array.isArray(parsed.undo)) {
+    throw new Error(
+      `${p} exists but cannot be read, so the interrupted migration it records cannot be undone.\n` +
+        "Restore the app's files (e.g. from git), delete that file, and re-run.",
+    );
   }
+  return parsed;
 }
 
 export function writeJournal(appRoot: string, journal: Journal): void {
-  writeFileSync(journalPath(appRoot), JSON.stringify(journal, null, 2) + "\n", "utf8");
+  writeFileAtomic(journalPath(appRoot), JSON.stringify(journal, null, 2) + "\n");
 }
 
 export function clearJournal(appRoot: string): void {

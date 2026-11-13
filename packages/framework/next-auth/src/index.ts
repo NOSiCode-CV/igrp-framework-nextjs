@@ -10,7 +10,7 @@
 // `./middleware`, `./jwt` and `./oidc` are NOT re-exported here: the first two
 // pull `next-auth/middleware` / `next-auth/jwt` into whatever bundle touches
 // the barrel, and `./oidc` is the server-side token machinery (refresh,
-// revocation, introspection, the recovery store). Previously a single
+// revocation, the recovery store). Previously a single
 // `import { getAuthProviderIdFromEnv } from '@igrp/framework-next-auth'` in a
 // login page dragged all three into that page's graph. Import them from their
 // dedicated subpath entries — which is also what this package's own rule says:

@@ -331,7 +331,7 @@ export const FormExamples: StoryObj = {
         .array(
           z.object({
             idActividadeEconomica: z.number(),
-            soat: z.number().optional(),
+            soat: z.number().nullish(),
             nivelActividade: z.boolean().optional(),
           }),
         )

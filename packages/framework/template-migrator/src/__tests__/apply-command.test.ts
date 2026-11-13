@@ -14,6 +14,7 @@ vi.mock("../manifest", () => ({
 }));
 
 import { apply } from "../commands/apply";
+import { rollback } from "../commands/rollback";
 
 let appRoot: string;
 let payloadDir: string;
@@ -261,5 +262,85 @@ describe("apply self-heals the template identifier", () => {
 
     expect(readLock(appRoot).applied).toHaveLength(1);
     expect(readLock(appRoot).template).toBe("demo-v1");
+  });
+});
+
+/** One migration: overwrite src/a.ts, create src/new.ts. */
+function setEditableManifest() {
+  writeFileAt(payloadDir, "50/src/a.ts", "MIGRATED A\n");
+  writeFileAt(payloadDir, "50/src/new.ts", "NEW\n");
+  manifestRef.current = {
+    version: 1, cliVersion: "test", template: "demo-v1",
+    migrations: [{
+      id: "50-edit-test", date: "2026-11-13", requires: [], targetFrameworkVersion: null,
+      guideHref: "50.md", contentHash: "5".repeat(16),
+      steps: [
+        { type: "file.write", mode: "replace", path: "src/a.ts", from: "50/src/a.ts" },
+        { type: "file.create", path: "src/new.ts", from: "50/src/new.ts" },
+      ],
+    }],
+  };
+}
+
+describe("rollback refuses to discard edits made after the migration", () => {
+  it("refuses without --force and leaves the edited file intact; --force proceeds", async () => {
+    writeFileAt(appRoot, "src/a.ts", "ORIGINAL A\n");
+    setEditableManifest();
+    expect(await apply(appRoot, { yes: true, payloadDir })).toBe(true);
+    writeFileAt(appRoot, "src/new.ts", "MY EDIT\n");
+
+    expect(await rollback(appRoot, "50-edit-test", { payloadDir })).toBe(false);
+    expect(readFileSync(join(appRoot, "src/new.ts"), "utf8")).toBe("MY EDIT\n");
+    expect(readLock(appRoot).applied).toHaveLength(1);
+
+    expect(await rollback(appRoot, "50-edit-test", { force: true, payloadDir })).toBe(true);
+    expect(existsSync(join(appRoot, "src/new.ts"))).toBe(false);
+    expect(readFileSync(join(appRoot, "src/a.ts"), "utf8")).toBe("ORIGINAL A\n");
+  });
+});
+
+describe("apply reports failure", () => {
+  it("returns false when it aborts", async () => {
+    writeFileAt(payloadDir, "x/src/x.ts", "x\n");
+    manifestRef.current = {
+      version: 1, cliVersion: "test", template: "demo-v1",
+      migrations: [{
+        id: "needs-missing", date: "2026-06-26", requires: ["not-applied"],
+        targetFrameworkVersion: null, guideHref: "x.md", contentHash: "f".repeat(16),
+        steps: [{ type: "file.create", path: "src/x.ts", from: "x/src/x.ts" }],
+      }],
+    };
+    expect(await apply(appRoot, { yes: true, payloadDir })).toBe(false);
+  });
+
+  it("fails fast without --yes when stdin is not a terminal", async () => {
+    setEditableManifest();
+    const tty = process.stdin.isTTY;
+    process.stdin.isTTY = false;
+    try {
+      expect(await apply(appRoot, { payloadDir })).toBe(false);
+    } finally {
+      process.stdin.isTTY = tty;
+    }
+    expect(existsSync(join(appRoot, "src/new.ts"))).toBe(false);
+  });
+});
+
+describe("apply warns before replacing a file no earlier migration wrote", () => {
+  it("lists the path, still applies, and stops writing fileHashes", async () => {
+    writeFileAt(appRoot, "src/a.ts", "TEMPLATE ORIGINAL\n");
+    setEditableManifest();
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    try {
+      expect(await apply(appRoot, { yes: true, payloadDir })).toBe(true);
+      const warned = warn.mock.calls.map((c) => String(c[0])).join("\n");
+      expect(warned).toContain("src/a.ts");
+      expect(warned).toContain("igrp-migrate rollback 50-edit-test");
+      expect(warned).not.toContain("src/new.ts");
+    } finally {
+      warn.mockRestore();
+    }
+    expect(readFileSync(join(appRoot, "src/a.ts"), "utf8")).toBe("MIGRATED A\n");
+    expect(readLock(appRoot).applied[0].fileHashes).toBeUndefined();
   });
 });

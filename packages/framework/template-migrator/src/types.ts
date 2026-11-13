@@ -56,8 +56,8 @@ export interface LockEntry {
    * Treat missing as empty: `entry.undo ?? []`.
    */
   undo?: MigrationStep[];
-  /** Pre-migration hash of each path the migration touched. Forensic only —
-   *  nothing reads it. Absent on baseline entries (see `undo`). */
+  /** Pre-migration hash of each path the migration touched. Written only by
+   *  older CLIs; nothing reads it, kept so their locks still type-check. */
   fileHashes?: Record<string, string>;
   /**
    * Pre-migration file contents keyed by app-relative path, captured at apply

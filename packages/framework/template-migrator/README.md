@@ -26,7 +26,7 @@ Commit the resulting `.igrp-migrations-lock.json`.
 
 ### Programmatic API
 
-`src/index.ts` re-exports the commands as functions: `status(appRoot)`, `list()`, `plan(appRoot, toId?)`, `apply(appRoot, { toId?, yes?, force? })` (async), `rollback(appRoot, id, { force? })` (async), `check(appRoot)` and `convert(appRoot)` (both return `boolean`). It also exports `getManifest()`, `readLock(appRoot)`, `writeLock(appRoot, lock)`, the `LegacyLockError` class, and the types `Manifest`, `MigrationEntry`, `MigrationStep`, `LockFile`, `LockEntry`.
+`src/index.ts` re-exports the commands as functions: `status(appRoot)`, `list()`, `plan(appRoot, toId?)`, `apply(appRoot, { toId?, yes?, force? })` and `rollback(appRoot, id, { force? })` (both async, resolving to `false` when they abort), `check(appRoot)` and `convert(appRoot)` (both return `boolean`). It also exports `getManifest()`, `readLock(appRoot)`, `writeLock(appRoot, lock)`, the `LegacyLockError` class, and the types `Manifest`, `MigrationEntry`, `MigrationStep`, `LockFile`, `LockEntry`.
 
 ---
 

@@ -163,7 +163,7 @@ const AUTH_PROVIDER_REGISTRY: Record<AuthProviderId, AuthProviderDefinition> = {
 /**
  * True for a provider id this package manages end to end: it is in the registry
  * AND is a real IdP (not the `none` bypass). Everything OIDC — discovery,
- * refresh, introspection, revocation, end-session — only applies to these.
+ * refresh, revocation, end-session — only applies to these.
  *
  * A custom provider passed straight to `withIGRPAuth` (`provider:
  * GitHubProvider({...})`) is NOT managed: the framework has no issuer, no

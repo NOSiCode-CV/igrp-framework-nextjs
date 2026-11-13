@@ -165,6 +165,16 @@ describe('igrpGetClaims', () => {
     });
   });
 
+  it('throws instead of returning super-admin when bypass is on in production', async () => {
+    process.env.AUTH_PROVIDER = 'none';
+    vi.stubEnv('NODE_ENV', 'production');
+    try {
+      await expect(igrpGetClaims()).rejects.toBeInstanceOf(IgrpConfigError);
+    } finally {
+      vi.unstubAllEnvs();
+    }
+  });
+
   it('decodes the token when not in bypass', async () => {
     getConfig.mockReturnValue({ token: TOKEN, baseUrl: '' });
     const state = await igrpGetClaims();

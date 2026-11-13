@@ -11,7 +11,6 @@ vi.mock('../oidc', async (importOriginal) => {
     // so every test in the signOut suite passed while the code under test never
     // once reached its success path.
     revokeOidcSession: vi.fn().mockResolvedValue({ ok: true, status: 200 }),
-    introspectOidcToken: vi.fn().mockResolvedValue(true),
     refreshOidcAccessToken: vi
       .fn()
       .mockResolvedValue({ accessToken: 'refreshed-at', forceLogout: false }),
@@ -275,11 +274,10 @@ describe('withIGRPAuth — isTokenExpiredOrFailed (middleware grace)', () => {
   });
 });
 
-describe('withIGRPAuth — jwt callback refresh (no introspection)', () => {
+describe('withIGRPAuth — jwt callback refresh', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    // Default: token is active, refresh succeeds
-    vi.mocked(oidcModule.introspectOidcToken).mockResolvedValue(true);
+    // Default: refresh succeeds
     vi.mocked(oidcModule.refreshOidcAccessToken).mockResolvedValue({
       accessToken: 'new-at',
       forceLogout: false,
@@ -287,11 +285,7 @@ describe('withIGRPAuth — jwt callback refresh (no introspection)', () => {
     } as any);
   });
 
-  it('never introspects the refresh token before refreshing', async () => {
-    // Introspecting a rotated-out refresh token with token_type_hint=refresh_token
-    // trips the IdP's reuse detection and revokes the session — and the refresh
-    // itself already reports a revoked token (invalid_grant).
-
+  it('refreshes an expired token', async () => {
     const withIGRPAuth = await getFactory();
     const instance = withIGRPAuth({ env: VALID_ENV });
     const jwtCallback = instance.authOptions.callbacks?.jwt;
@@ -305,7 +299,6 @@ describe('withIGRPAuth — jwt callback refresh (no introspection)', () => {
 
     const result = await jwtCallback!({ token: expiredToken, account: null } as any);
 
-    expect(oidcModule.introspectOidcToken).not.toHaveBeenCalled();
     expect(oidcModule.refreshOidcAccessToken).toHaveBeenCalledTimes(1);
     expect((result as any).accessToken).toBe('new-at');
   });
@@ -360,7 +353,6 @@ describe('withIGRPAuth — jwt callback refresh (no introspection)', () => {
     expect(result.error).toBeUndefined();
     expect(result.forceLogout).toBe(false);
     expect(oidcModule.refreshOidcAccessToken).not.toHaveBeenCalled();
-    expect(oidcModule.introspectOidcToken).not.toHaveBeenCalled();
   });
 
   it('calls refresh with the expired token', async () => {
@@ -638,7 +630,7 @@ describe('withIGRPAuth — jwt callback rotation recovery', () => {
     vi.clearAllMocks();
   });
 
-  it('uses a recovered token and skips introspection + refresh on a cache hit', async () => {
+  it('uses a recovered token and skips the refresh on a cache hit', async () => {
     const withIGRPAuth = await getFactory();
     const instance = withIGRPAuth({ env: VALID_ENV });
     const jwtCb = instance.authOptions.callbacks?.jwt;
@@ -663,7 +655,6 @@ describe('withIGRPAuth — jwt callback rotation recovery', () => {
     const result = (await jwtCb!({ token: expiredToken, account: undefined } as any)) as any;
 
     expect(oidcModule.getRecoveredToken).toHaveBeenCalledWith('old-rt');
-    expect(oidcModule.introspectOidcToken).not.toHaveBeenCalled();
     expect(oidcModule.refreshOidcAccessToken).not.toHaveBeenCalled();
     expect(result.accessToken).toBe('new-at');
     expect(result.refreshToken).toBe('new-rt');
@@ -684,7 +675,6 @@ describe('withIGRPAuth — jwt callback rotation recovery', () => {
     };
     await jwtCb!({ token: expiredToken, account: undefined } as any);
 
-    expect(oidcModule.introspectOidcToken).not.toHaveBeenCalled();
     expect(oidcModule.refreshOidcAccessToken).toHaveBeenCalled();
   });
 });
@@ -1076,7 +1066,6 @@ describe('withIGRPAuth — short access-token lifetime', () => {
 describe('withIGRPAuth — recovered token freshness', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.mocked(oidcModule.introspectOidcToken).mockResolvedValue(true);
     vi.mocked(oidcModule.refreshOidcAccessToken).mockImplementation(async (token) => ({
       ...token,
       accessToken: 'refreshed-at',

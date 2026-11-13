@@ -8,10 +8,7 @@ import { useRouter } from 'next/navigation';
  *
  * All three are `router.refresh()`. The layout data comes from `React.cache()`
  * helpers, which are request-scoped — there is no tagged cache entry to
- * invalidate, so a new request *is* the invalidation. This hook used to `await`
- * `revalidateMenusAction` / `revalidateAppsAction` first; both are documented
- * no-ops kept only for API stability, so that was a Server Action round-trip
- * that delayed the refresh and changed nothing.
+ * invalidate, so a new request *is* the invalidation.
  */
 export function useLayoutData(_appCode: string) {
   const router = useRouter();

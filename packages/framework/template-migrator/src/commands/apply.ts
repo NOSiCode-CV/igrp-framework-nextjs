@@ -4,7 +4,7 @@ import { join } from "path";
 import { getManifest } from "../manifest.js";
 import { readLock, writeLock } from "../lock.js";
 import { executeStep, resolvePayload } from "../apply.js";
-import { hashFile, hashFileIgnoringEol } from "../hash.js";
+import { hashFileIgnoringEol } from "../hash.js";
 import { clearJournal, readJournal, writeJournal, type Journal } from "../journal.js";
 import { unwindSteps } from "../unwind.js";
 import type { LockEntry, MigrationStep } from "../types.js";
@@ -19,7 +19,7 @@ async function confirm(question: string): Promise<boolean> {
 export async function apply(
   appRoot: string,
   opts: { toId?: string; yes?: boolean; force?: boolean; payloadDir?: string }
-) {
+): Promise<boolean> {
   const manifest = getManifest();
 
   // Read the lock BEFORE any recovery: a legacy lock must abort while the tree
@@ -32,7 +32,13 @@ export async function apply(
   // back before doing anything else: without this the migration re-runs and
   // captures its undo baseline from already-migrated files, which silently
   // makes a later rollback restore the wrong content. See journal.ts.
-  const pendingJournal = readJournal(appRoot);
+  let pendingJournal;
+  try {
+    pendingJournal = readJournal(appRoot);
+  } catch (err) {
+    console.error(`✗ ${(err as Error).message}`);
+    return false;
+  }
   if (pendingJournal && lock.applied.some((a) => a.id === pendingJournal.id)) {
     // The lock ALREADY records this migration, so the run died in the narrow
     // window between `writeLock` and `clearJournal` — after the migration had
@@ -54,7 +60,7 @@ export async function apply(
     if (failures.length > 0) {
       console.error("\n  Recovery was incomplete — restore the listed paths (e.g. from git)");
       console.error("  before re-running, or the migration may record a wrong undo baseline.\n");
-      return;
+      return false;
     }
     clearJournal(appRoot);
     console.log("  ✓ recovered\n");
@@ -92,10 +98,16 @@ export async function apply(
   let pending = manifest.migrations.filter((m) => !appliedIds.has(m.id));
   if (opts.toId) {
     const idx = pending.findIndex((m) => m.id === opts.toId);
-    if (idx === -1) { console.log(`Migration ${opts.toId} not found or already applied.`); return; }
+    if (idx === -1) { console.error(`Migration ${opts.toId} not found or already applied.`); return false; }
     pending = pending.slice(0, idx + 1);
   }
-  if (pending.length === 0) { console.log("Nothing to apply — already up to date."); return; }
+  if (pending.length === 0) { console.log("Nothing to apply — already up to date."); return true; }
+  // Without a terminal nobody can answer the prompt: readline would wait on a
+  // closed or idle stdin forever (or read EOF as "no" and skip everything).
+  if (!opts.yes && !process.stdin.isTTY) {
+    console.error("✗ apply needs confirmation but stdin is not a terminal. Re-run with --yes.");
+    return false;
+  }
 
   console.log(`\nApplying ${pending.length} migration(s) to ${appRoot}\n`);
   // .env files that actually gained keys during this run, for the closing hint.
@@ -107,17 +119,27 @@ export async function apply(
     if (missingReqs.length > 0) {
       console.error(`  ✗ ${migration.id} requires unapplied migration(s): ${missingReqs.join(", ")}`);
       console.error("  Aborting — apply the prerequisite(s) first.");
-      return;
+      return false;
     }
     // Refuse to overwrite a managed file the consumer has edited since the
     // migration that last wrote it. `apply` used to clobber these silently.
     // A local edit is far more likely to be deliberate than accidental, so
     // this stops rather than warns.
     const locallyModified: string[] = [];
+    // Paths no earlier migration wrote, so there is no baseline to call an edit
+    // "local". Usually template originals, expected to be replaced — warn only.
+    const replaced = new Set<string>();
     for (const step of migration.steps) {
       if (step.type !== "file.write" && step.type !== "file.create" && step.type !== "file.delete") continue;
       const from = lastWritten.get(step.path);
-      if (from === undefined) continue;
+      if (from === undefined) {
+        if (step.type !== "file.delete" && step.from) {
+          const current = hashFileIgnoringEol(join(appRoot, step.path));
+          const next = hashFileIgnoringEol(resolvePayload(step.from, opts.payloadDir));
+          if (current !== null && current !== next) replaced.add(step.path);
+        }
+        continue;
+      }
       const expected = hashFileIgnoringEol(resolvePayload(from, opts.payloadDir));
       // No payload on disk (a hand-authored `from`, or a trimmed install) means
       // no baseline to judge against — say nothing rather than guess.
@@ -135,7 +157,12 @@ export async function apply(
       console.error("  These differ from what the last migration left in them, so the changes");
       console.error("  are yours. Commit or stash them and re-run, or pass --force to overwrite.");
       console.error("  Aborting before any step ran.\n");
-      return;
+      return false;
+    }
+    if (replaced.size > 0) {
+      console.warn(`  ! ${replaced.size} file(s) will be replaced; prior content is saved —`);
+      console.warn(`    \`igrp-migrate rollback ${migration.id}\` restores it:`);
+      for (const path of replaced) console.warn(`      ${path}`);
     }
 
     if (!opts.yes) {
@@ -143,7 +170,6 @@ export async function apply(
       if (!ok) { console.log("  Skipped.\n"); continue; }
     }
 
-    const fileHashes: Record<string, string> = {};
     const undoPayloads: Record<string, string> = {};
     const undoSteps: MigrationStep[] = [];
     // Opened before the first step and cleared only once the lock entry is
@@ -160,10 +186,6 @@ export async function apply(
     try {
       for (const step of migration.steps) {
         const pathKey = (step as Record<string, unknown>).path ?? (step as Record<string, unknown>).file ?? (step as Record<string, unknown>).manifest;
-        if (pathKey && typeof pathKey === "string") {
-          const hash = hashFile(join(appRoot, pathKey));
-          if (hash) fileHashes[pathKey] = hash;
-        }
         // Capture prior content for steps whose undo would otherwise be an
         // unrestorable __undo__ placeholder: an overwrite of an existing file,
         // or a delete. (A file.create over nothing undoes cleanly via delete.)
@@ -211,7 +233,7 @@ export async function apply(
       for (const failure of failures) console.error(`  ✗ Unwind step failed: ${failure}`);
       clearJournal(appRoot);
       console.error("  Migration aborted and rolled back. Fix the cause, then re-run.");
-      return;
+      return false;
     }
 
     const entry: LockEntry = {
@@ -220,7 +242,6 @@ export async function apply(
       cliVersion: manifest.cliVersion,
       manifestHash: migration.contentHash,
       undo: undoSteps,
-      fileHashes,
       ...(Object.keys(undoPayloads).length > 0 ? { undoPayloads } : {}),
     };
     lock.applied.push(entry);
@@ -244,4 +265,5 @@ export async function apply(
     console.log("  #   (values without defaults, e.g. client IDs/secrets, must be filled in)");
   }
   // console.log("  # (pnpm build:framework if inside the monorepo)\n");
+  return true;
 }

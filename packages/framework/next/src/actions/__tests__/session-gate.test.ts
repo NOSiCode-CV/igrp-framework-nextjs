@@ -25,7 +25,12 @@ vi.mock('next/navigation', () => ({
 
 const igrpEnsureAccessClientConfig = vi.fn();
 const isIgrpAuthBypass = vi.fn(() => false);
-vi.mock('../../lib/permissions.js', () => ({ igrpEnsureAccessClientConfig, isIgrpAuthBypass }));
+const igrpAssertAuthBypassAllowed = vi.fn();
+vi.mock('../../lib/permissions.js', () => ({
+  igrpAssertAuthBypassAllowed,
+  igrpEnsureAccessClientConfig,
+  isIgrpAuthBypass,
+}));
 
 const actions = await import('../index.js');
 
@@ -70,6 +75,7 @@ describe('server actions refuse before contacting Access Management', () => {
 
     expect(await actions.fetchCurrentUserAction()).toEqual({ ok: true, data: { id: 1 } });
     expect(igrpEnsureAccessClientConfig).not.toHaveBeenCalled();
+    expect(igrpAssertAuthBypassAllowed).toHaveBeenCalledTimes(1);
   });
 
   it('still surfaces a downstream failure as a failure result', async () => {

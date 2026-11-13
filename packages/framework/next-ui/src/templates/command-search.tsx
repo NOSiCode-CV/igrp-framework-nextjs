@@ -18,7 +18,7 @@ import { useIGRPChromeI18n } from '../i18n/context.js';
 import { IGRP_CHROME_STRINGS_PT, type IGRPCommandSearchLabels } from '../i18n/strings.js';
 
 export interface IGRPCommandItem {
-  /** Optional stable identifier for use as React key. Falls back to label. */
+  /** Optional stable identifier, used as React key and cmdk value. Falls back to group + label + position. */
   id?: string;
   /** Display label shown in the command list. */
   label: string;
@@ -136,16 +136,23 @@ function IGRPTemplateCommandSearch({
                   className="**:[[cmdk-group-heading]]:px-3 **:[[cmdk-group-heading]]:pb-2 **:[[cmdk-group-items]]:flex **:[[cmdk-group-items]]:flex-col **:[[cmdk-group-items]]:gap-1"
                   heading={group}
                 >
-                  {items.map((item) => (
-                    <CommandItem
-                      key={item.id ?? item.label}
-                      className="cursor-pointer gap-3 px-3 py-2.5"
-                      onSelect={() => runCommand(item.onSelect)}
-                    >
-                      {item.icon && <IGRPIcon iconName={item.icon} />}
-                      <span>{item.label}</span>
-                    </CommandItem>
-                  ))}
+                  {items.map((item, index) => {
+                    // cmdk selects by `value` (the label by default), so duplicate labels
+                    // highlighted together and Enter ran the first; filter on `keywords`.
+                    const value = item.id ?? `${group ?? ''}/${item.label}/${index}`;
+                    return (
+                      <CommandItem
+                        key={value}
+                        value={value}
+                        keywords={[item.label, group ?? '']}
+                        className="cursor-pointer gap-3 px-3 py-2.5"
+                        onSelect={() => runCommand(item.onSelect)}
+                      >
+                        {item.icon && <IGRPIcon iconName={item.icon} />}
+                        <span>{item.label}</span>
+                      </CommandItem>
+                    );
+                  })}
                 </CommandGroup>
               </Fragment>
             ))}

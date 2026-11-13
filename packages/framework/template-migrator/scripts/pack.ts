@@ -6,7 +6,7 @@ import { hashSteps } from "../src/hash.js";
 import { sortMigrationFiles } from "../src/migration-order.js";
 import { validateRequires } from "../src/validate-requires.js";
 import { validateSteps } from "../src/validate-steps.js";
-import { copyPayloadFile } from "./payload-copy.js";
+import { copyPayloads } from "./payload-copy.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -30,32 +30,6 @@ function parseFrontMatter(content: string): { fm: FrontMatter; body: string } {
   if (!match) throw new Error("No frontmatter found");
   const fm = parseYaml(match[1]) as FrontMatter;
   return { fm, body: match[2] };
-}
-
-function copyPayloads(
-  steps: Record<string, unknown>[],
-  migrationsDir: string,
-  payloadOut: string,
-): number {
-  let normalised = 0;
-  for (const step of steps) {
-    const from = step["from"];
-    if (typeof from === "string" && !from.startsWith("__")) {
-      const src = join(migrationsDir, from);
-      // Strip the leading "payload/" prefix so files land at dist/payload/NN/...
-      // rather than the redundant dist/payload/payload/NN/...
-      const rel = from.startsWith("payload/") ? from.slice("payload/".length) : from;
-      const dest = join(payloadOut, rel);
-      if (!existsSync(src)) {
-        console.warn(`Warning: payload not found: ${src}`);
-        continue;
-      }
-      // Text payloads are normalised to LF on the way into dist/ so upgraded
-      // apps and freshly scaffolded ones agree byte-for-byte. See payload-copy.ts.
-      if (copyPayloadFile(src, dest)) normalised++;
-    }
-  }
-  return normalised;
 }
 
 function main() {

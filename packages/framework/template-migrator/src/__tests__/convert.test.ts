@@ -42,6 +42,26 @@ describe("convert", () => {
     expect(readFileSync(join(appRoot, NEW_LOCK), "utf8")).toBe(newContent);
   });
 
+  it("does not trust a torn new lock: rewrites it from legacy before deleting legacy", () => {
+    mkdirSync(join(appRoot, LEGACY), { recursive: true });
+    const legacy = JSON.stringify({ version: 1, template: "demo-v1", applied: [] });
+    writeFileSync(join(appRoot, LEGACY, "lock.json"), legacy, "utf8");
+    writeFileSync(join(appRoot, NEW_LOCK), "{ \"version\": 1, \"appl", "utf8");
+
+    expect(convert(appRoot)).toBe(true);
+    expect(readFileSync(join(appRoot, NEW_LOCK), "utf8")).toBe(legacy);
+    expect(existsSync(join(appRoot, LEGACY, "lock.json"))).toBe(false);
+  });
+
+  it("keeps the legacy lock when the converted copy does not parse", () => {
+    mkdirSync(join(appRoot, LEGACY), { recursive: true });
+    writeFileSync(join(appRoot, LEGACY, "lock.json"), "{ broken", "utf8");
+    vi.spyOn(console, "error").mockImplementation(() => {});
+
+    expect(convert(appRoot)).toBe(false);
+    expect(existsSync(join(appRoot, LEGACY, "lock.json"))).toBe(true);
+  });
+
   it("reports failure when there is no legacy lock to convert", () => {
     const exitSpy = vi.spyOn(process, "exit").mockImplementation((() => {
       throw new Error("process.exit called");

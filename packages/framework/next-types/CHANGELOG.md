@@ -1,5 +1,14 @@
 # @igrp/framework-next-types
 
+## 0.2.0-beta.10
+
+### Patch Changes
+
+- 6271fe4: `IGRPSidebarDataArgs.defaultOpen` is marked `@deprecated`: nothing reads it. Pass `defaultSidebarOpen` to `IGRPLayoutFull` instead.
+- Updated dependencies [6271fe4]
+- Updated dependencies [53feae2]
+  - @igrp/framework-next-auth@0.2.0-beta.10
+
 ## 0.2.0-beta.9
 
 ### Patch Changes

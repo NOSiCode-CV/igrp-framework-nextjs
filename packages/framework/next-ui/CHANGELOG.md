@@ -1,5 +1,24 @@
 # @igrp/framework-next-ui
 
+## 0.2.0-beta.21
+
+### Patch Changes
+
+- 6271fe4: The error boundaries show only the id part of an `AppError` digest as the error reference, so the message is no longer repeated. Command search matches the label and group only: typing a digit no longer matches every item through its id or position. Each word typed matches on its own, accent- and case-insensitively, so "rel con" finds "Relatórios Contabilísticos".
+- 53feae2: - Command search: items get a unique cmdk `value` (`id`, else group + label + position) with the label as a keyword, so two items with the same label no longer highlight together and Enter runs the one selected.
+  - Header: an empty `userProfileUrl` / `notificationsUrl` now falls back to `/profile` / `/notifications` instead of rendering `href=""`.
+  - `IGRPSessionProvider` is now a direct re-export of `SessionProvider`; same name and props.
+  - Removed the unused internal `stripBasePath` helper.
+- Updated dependencies [6271fe4]
+- Updated dependencies [53feae2]
+- Updated dependencies [6271fe4]
+- Updated dependencies [6271fe4]
+- Updated dependencies [53feae2]
+- Updated dependencies [6271fe4]
+  - @igrp/igrp-framework-react-design-system@0.2.0-beta.16
+  - @igrp/framework-next-auth@0.2.0-beta.10
+  - @igrp/framework-next-types@0.2.0-beta.10
+
 ## 0.2.0-beta.20
 
 ### Patch Changes

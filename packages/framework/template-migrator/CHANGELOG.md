@@ -1,5 +1,19 @@
 # @igrp/template-migrator
 
+## 0.2.0-beta.26
+
+### Patch Changes
+
+- 53feae2: Migration 85: the demo-v1 middleware no longer skips the auth check for routes whose last segment contains a dot (`/api/users/john.doe`); only static-asset extensions are public. The CSP report-only header now reports to a new `/api/csp-report` route that logs violations, and the template's preview-mode and `AUTH_PROVIDER` checks parse quoted env values the same way the framework does.
+- 6271fe4: Migration 86: the demo-v1 middleware no longer treats `/api/*` paths ending in an asset extension (`.pdf`, `.json`, `.txt`, `.xml`, …) as public, so they go through the token check. The `/api/csp-report` route logs report bodies as quoted JSON so they cannot forge log lines.
+- 6271fe4: `rollback --force` now names the locally changed files it discards, and the refusal says they "differ from what <id> wrote" instead of "changed since it ran". `apply --to <id>` exits 0 when `<id>` is already applied, so repeated scripted runs succeed. `check:drift` also fails on an unpinned dependency the template dropped but `template-baseline.json` still lists, and no longer reports a dropped dependency a migration pins under both checks.
+  
+  A payload file overwritten in place is now caught. The manifest carries a `payloadHash` per migration (the step payloads, line endings ignored), `apply` records it in the lock, and `check`/`status` report the migration as changed when the recorded value differs. Lock entries written before this release have no `payloadHash` and are compared on `manifestHash` alone, so upgrading the CLI does not flag every applied migration. The template's shipped lock now records `payloadHash` for every migration.
+  
+  For a migration flagged changed only because its payload files changed, `check` and `status` now advise removing its lock entry and re-running `apply` instead of rolling it back, which the rollback edit guard would always refuse.
+- 53feae2: `rollback` refuses to delete or overwrite files you edited after the migration ran (pass `--force` to discard them). `apply` now exits 1 when it aborts, fails fast without `--yes` when stdin is not a terminal, warns before replacing files no earlier migration wrote, writes its crash journal atomically, and stops if that journal is unreadable. `convert` keeps the legacy lock until the new one reads back. The packer fails on a missing payload. Lock entries no longer carry the unused `fileHashes` field.
+- 6271fe4: Migrations that share a number (the two `47.MIGRATIONS-*` files) are now ordered by file name, so pack, the template lock and the drift check agree on Windows and Linux. Before, their order was whatever the directory listing returned, which differs between NTFS and ext4.
+
 ## 0.2.0-beta.25
 
 ### Patch Changes

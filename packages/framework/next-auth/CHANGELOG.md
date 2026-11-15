@@ -1,5 +1,23 @@
 # @igrp/framework-next-auth
 
+## 0.2.0-beta.10
+
+### Patch Changes
+
+- 6271fe4: `isNextControlFlowError` now counts a `digest` only when it starts with one of Next's own codes (`NEXT_REDIRECT`, `NEXT_HTTP_ERROR_FALLBACK`, `DYNAMIC_SERVER_USAGE`, …). An application error with a digest, such as framework-next's `AppError`, thrown from a `callbacks.jwt` extension no longer gets rethrown and no longer clears the session. The README's `getToken` recipe now passes `decode: decodeIGRPSessionToken`, and says `withAuth` is unsupported with a session store. Build docs now name tsdown, and the unused `splitting` option is gone.
+  
+  `getSession` no longer logs out a session whose access token is still valid but inside the 60 s refresh window: it now uses the middleware rule (expired, or 10 s from expiry). Before, a token with 50 s left plus one failed discovery fetch during refresh sent the user to `/logout`. `isNextControlFlowError` also recognises Next 15's static-generation bailout, which sets `code: 'NEXT_STATIC_GEN_BAILOUT'` and keeps `name` as `Error`. The OIDC discovery timeout now also covers reading the response body, so a proxy that stalls the body no longer hangs every refresh on the pod for the 5-minute cache lifetime.
+  
+  The token-endpoint response body is also read under a timeout: a body that stalls after the headers now ends the refresh as failed (never retried, since the token may already be spent) instead of hanging it.
+- 53feae2: Session refresh and logout fixes.
+  
+  - `IGRP_AUTH_CLIENT_ID` and `IGRP_AUTH_CLIENT_SECRET` are trimmed for refresh, revocation and RP-initiated logout, as sign-in already did. A secret mounted from a file with a trailing newline made the first refresh fail with `invalid_client` and logged every user out.
+  - If the IdP discovery document cannot be fetched during a refresh, the session is kept unchanged and the next request retries. It used to force a logout, although the refresh token was never sent.
+  - A replica that adopts another replica's refresh from the session store now clears a stale `RefreshAccessTokenError` / `forceLogout` flag.
+  - The refresh lock lasts 30 s instead of 20 s, which covers a worst-case refresh with its retry.
+  - The in-memory session store now removes expired entries as it grows, so abandoned sessions no longer accumulate.
+  - Removed `introspectOidcToken` from `./oidc`. Nothing called it, and introspecting a rotated-out refresh token makes Access Management revoke the session.
+
 ## 0.2.0-beta.9
 
 ### Patch Changes

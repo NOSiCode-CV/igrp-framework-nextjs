@@ -10,6 +10,7 @@ export interface IGRPSidebarDataArgs {
    * thrown away. `IGRPTemplateSidebar` supplies the `[]` default.
    */
   menuItems?: IGRPMenuItemArgs[];
+  /** @deprecated No effect: nothing reads it. Pass `defaultSidebarOpen` to `IGRPLayoutFull` instead. */
   defaultOpen?: boolean;
   user?: IGRPUserArgs;
   /**

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 
-import { IGRPColors, IGRPColorObjectRole, IGRPColorObjectVariants } from "./colors.js"
+import { IGRPColors, IGRPColorObjectRole, IGRPColorObjectVariants, igrpColorText } from "./colors.js"
 
 /** Every slot, flattened to `[role, color, slot]` for exhaustive assertions. */
 const everySlot = IGRPColorObjectRole.flatMap((role) =>
@@ -31,5 +31,16 @@ describe("IGRPColors", () => {
     it.each(everySlot)("%s/%s still declares a background", (_role, _color, slot) => {
       expect(slot.bgStatic).toMatch(/^bg-/)
     })
+  })
+})
+
+describe("igrpColorText", () => {
+  it("returns the coloured text class, not the on-fill foreground", () => {
+    expect(igrpColorText("success")).toBe("text-success")
+    expect(igrpColorText("primary")).toBe("text-primary")
+  })
+
+  it.each(IGRPColorObjectVariants)("%s is not the on-fill (solid) text class", (color) => {
+    expect(igrpColorText(color)).not.toBe(IGRPColors.solid[color].text)
   })
 })

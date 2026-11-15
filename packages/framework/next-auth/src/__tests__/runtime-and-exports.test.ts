@@ -7,11 +7,18 @@ import { interopDefault } from '../_interop';
 import { isIGRPAuthConfigError, IGRPAuthConfigError } from '../config';
 
 describe('isNextControlFlowError', () => {
-  it('recognises anything carrying a string digest', () => {
-    // redirect() / notFound() / forbidden() / the prerender bailout all do.
-    expect(isNextControlFlowError(Object.assign(new Error('x'), { digest: 'NEXT_REDIRECT' }))).toBe(
-      true,
-    );
+  it("recognises Next's own digests", () => {
+    // redirect() / notFound() / forbidden() / the prerender bailout all carry one.
+    expect(
+      isNextControlFlowError(
+        Object.assign(new Error('x'), { digest: 'NEXT_REDIRECT;replace;/login;307;' }),
+      ),
+    ).toBe(true);
+    expect(
+      isNextControlFlowError(
+        Object.assign(new Error('x'), { digest: 'NEXT_HTTP_ERROR_FALLBACK;404' }),
+      ),
+    ).toBe(true);
     expect(
       isNextControlFlowError(Object.assign(new Error('x'), { digest: 'DYNAMIC_SERVER_USAGE' })),
     ).toBe(true);
@@ -26,12 +33,23 @@ describe('isNextControlFlowError', () => {
     ).toBe(true);
   });
 
+  it("recognises Next 15's static-generation bailout by its code", () => {
+    // Next 15 sets `code`, leaving `name` as 'Error'.
+    expect(
+      isNextControlFlowError(Object.assign(new Error('x'), { code: 'NEXT_STATIC_GEN_BAILOUT' })),
+    ).toBe(true);
+  });
+
   it('does NOT claim ordinary failures', () => {
     expect(isNextControlFlowError(new Error('JWE decryption failed'))).toBe(false);
     expect(isNextControlFlowError(new TypeError('boom'))).toBe(false);
     expect(isNextControlFlowError(null)).toBe(false);
     expect(isNextControlFlowError(undefined)).toBe(false);
     expect(isNextControlFlowError('NEXT_REDIRECT')).toBe(false);
+    // An application digest (framework-next's AppError: `<id>|<message>`).
+    expect(isNextControlFlowError(Object.assign(new Error('x'), { digest: 'abc|msg' }))).toBe(
+      false,
+    );
     // A numeric digest is not Next's shape.
     expect(isNextControlFlowError({ digest: 123 })).toBe(false);
   });

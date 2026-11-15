@@ -81,7 +81,7 @@ function IGRPLineChartInner({
   tooltipIndicator = "line",
   footer,
 }: IGRPLineChartProps) {
-  const chartHeight = getChartHeight(size, data, height)
+  const chartHeight = getChartHeight(size, [], height)
   const chartWidth = getChartWidth(width)
   const locale = useIGRPLocale()
   const formatValue = (value: number) => formatChartValue(value, valueFormatter, locale)
@@ -173,7 +173,7 @@ function IGRPLineChartInner({
                     dataKey: line.dataKey,
                     name: line.name || line.dataKey,
                     stroke: line.color ? line.color : `var(--chart-${(lineIndex % 8) + 1})`,
-                    strokeWidth: line.strokeWidth || 2,
+                    strokeWidth: line.strokeWidth ?? 2,
                     strokeDasharray: line.strokeDasharray,
                     type: line.type || "monotone",
                     dot:
@@ -190,7 +190,7 @@ function IGRPLineChartInner({
                     dataKey={line.dataKey}
                     name={line.name || line.dataKey}
                     stroke={line.color ? line.color : `var(--chart-${(lineIndex % 8) + 1})`}
-                    strokeWidth={line.strokeWidth || 2}
+                    strokeWidth={line.strokeWidth ?? 2}
                     strokeDasharray={line.strokeDasharray}
                     type={line.type || "monotone"}
                     dot={
@@ -205,7 +205,7 @@ function IGRPLineChartInner({
                     {line.showLabels && (
                       <LabelList
                         position={line.labelPosition || "top"}
-                        offset={line.labelOffset || 12}
+                        offset={line.labelOffset ?? 12}
                         className={cn("fill-foreground")}
                         fontSize={12}
                       />

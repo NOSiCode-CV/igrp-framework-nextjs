@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest"
-import { act, render, screen } from "@testing-library/react"
+import { act, fireEvent, render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { FormProvider, useForm, type Resolver, type UseFormReturn } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -194,6 +194,49 @@ describe("IGRPInputColor", () => {
   it("points the picker at its helper text", () => {
     render(<IGRPInputColor name="brand" label="Cor" helperText="Cor principal da marca" />)
     expect(screen.getByLabelText("Cor")).toHaveAccessibleDescription("Cor principal da marca")
+  })
+})
+
+describe("IGRPInputColor — empty form value", () => {
+  const swatch = (container: HTMLElement) => container.querySelector<HTMLElement>("[data-empty], [style*='background']")
+
+  it("shows an empty swatch and value for an unset field, not #000000", () => {
+    function Unset() {
+      const form = useForm<{ brand?: string }>()
+      return (
+        <FormProvider {...form}>
+          <IGRPInputColor name="brand" label="Cor" />
+        </FormProvider>
+      )
+    }
+    const { container } = render(<Unset />)
+    expect(screen.getByRole("textbox", { name: /Cor/ })).toHaveValue("")
+    expect(swatch(container)).toHaveAttribute("data-empty")
+  })
+
+  it("empties after setValue(name, null) instead of keeping the previous colour", async () => {
+    let form!: UseFormReturn<{ brand: string }>
+    const { container } = render(
+      <FormHarness onReady={(f) => (form = f)}>
+        <IGRPInputColor name="brand" label="Cor" />
+      </FormHarness>
+    )
+    await act(async () => form.setValue("brand", null as unknown as string))
+    expect(screen.getByRole("textbox", { name: /Cor/ })).toHaveValue("")
+    expect(swatch(container)).toHaveAttribute("data-empty")
+  })
+
+  it("writes a pick of the previous colour after the field was cleared", async () => {
+    let form!: UseFormReturn<{ brand: string }>
+    render(
+      <FormHarness onReady={(f) => (form = f)}>
+        <IGRPInputColor name="brand" label="Cor" format="hex" />
+      </FormHarness>
+    )
+    await act(async () => form.setValue("brand", null as unknown as string))
+    // React drops a change event whose value equals the input's current one.
+    fireEvent.change(screen.getByLabelText("Cor"), { target: { value: "#ff0000" } })
+    expect(form.getValues("brand")).toBe("#ff0000")
   })
 })
 

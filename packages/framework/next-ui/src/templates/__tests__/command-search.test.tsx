@@ -104,6 +104,43 @@ describe('IGRPTemplateCommandSearch', () => {
     expect(first).not.toHaveBeenCalled();
   });
 
+  it('filters on the label and group only, never on the id or index in `value`', () => {
+    const onSelect = vi.fn();
+    mount(
+      <IGRPTemplateCommandSearch
+        commands={[
+          { label: 'Alfa', group: 'Menu', onSelect },
+          { label: 'Beta', group: 'Menu', onSelect },
+          { label: 'Gama', group: 'Menu', onSelect },
+          { label: 'Delta', group: 'Menu', onSelect },
+          { id: 'rep-3', label: 'Relatórios Contabilísticos', group: 'Menu', onSelect },
+        ]}
+      />,
+    );
+    pressCtrlK();
+
+    const input = document.body.querySelector<HTMLInputElement>('[data-slot="command-input"]')!;
+    const type = (text: string) =>
+      act(() => {
+        Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')!.set!.call(
+          input,
+          text,
+        );
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+      });
+    const visible = () =>
+      [...document.body.querySelectorAll('[data-slot="command-item"]')].map((el) => el.textContent);
+
+    // "3" is only in the 4th item's index value and in an id.
+    type('3');
+    expect(visible()).toEqual([]);
+    type('relato');
+    expect(visible()).toEqual(['Relatórios Contabilísticos']);
+    // Each token matches a word on its own, as cmdk's fuzzy scoring allowed.
+    type('rel con');
+    expect(visible()).toEqual(['Relatórios Contabilísticos']);
+  });
+
   it('opens with no commands and shows the pt-PT empty state', () => {
     const errors = mount(<IGRPTemplateCommandSearch />);
 

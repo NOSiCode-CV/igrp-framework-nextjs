@@ -906,6 +906,30 @@ describe('refreshOidcAccessToken — malformed success response', () => {
     expect(result.error).toBe('RefreshAccessTokenError');
     expect(result.forceLogout).toBe(true);
   });
+
+  it('gives up on a token-endpoint body that stalls, without retrying the refresh', async () => {
+    vi.useFakeTimers();
+    try {
+      const fetchMock = vi.fn((url: string) =>
+        Promise.resolve(
+          url === DISCOVERY_URL
+            ? { ok: true, status: 200, json: () => Promise.resolve(MOCK_DISCOVERY) }
+            : { ok: true, status: 200, json: () => new Promise(() => {}) },
+        ),
+      );
+      vi.stubGlobal('fetch', fetchMock);
+      const { refreshOidcAccessToken } = await import('../oidc');
+      const pending = refreshOidcAccessToken(makeToken(), VALID_ENV);
+      await vi.advanceTimersByTimeAsync(10_000);
+      const result = await pending;
+      expect(result.error).toBe('RefreshAccessTokenError');
+      expect(
+        fetchMock.mock.calls.filter(([url]) => url === MOCK_DISCOVERY.token_endpoint),
+      ).toHaveLength(1);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
 });
 
 describe('getOpenIdConfiguration — poisoned-entry eviction', () => {
@@ -945,6 +969,38 @@ describe('getOpenIdConfiguration — poisoned-entry eviction', () => {
 
       const discoveryFetches = fetchMock.mock.calls.filter(([url]) => url === DISCOVERY_URL);
       expect(discoveryFetches).toHaveLength(2);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+});
+
+describe('getOpenIdConfiguration — stalled body', () => {
+  it('times out a discovery body that never finishes and evicts the cache entry', async () => {
+    vi.useFakeTimers();
+    try {
+      const fetchMock = vi
+        .fn()
+        .mockImplementationOnce(() =>
+          Promise.resolve({ ok: true, status: 200, json: () => new Promise(() => {}) }),
+        )
+        .mockImplementation(() =>
+          Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(MOCK_DISCOVERY) }),
+        );
+      vi.stubGlobal('fetch', fetchMock);
+      const { buildEndSessionUrl } = await import('../oidc');
+      const endSession = () => buildEndSessionUrl(makeToken(), VALID_ENV, 'http://app/login');
+
+      const first = endSession().then(
+        () => 'resolved',
+        () => 'rejected',
+      );
+      await vi.advanceTimersByTimeAsync(4_000);
+      expect(await first).toBe('rejected');
+
+      // The stalled entry is gone: the next call fetches discovery again and succeeds.
+      expect(await endSession()).not.toBeNull();
+      expect(fetchMock.mock.calls.filter(([url]) => url === DISCOVERY_URL)).toHaveLength(2);
     } finally {
       vi.useRealTimers();
     }

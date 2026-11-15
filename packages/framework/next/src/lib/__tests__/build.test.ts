@@ -86,14 +86,15 @@ describe('igrpBuildConfig validation (FN-2)', () => {
     await expect(igrpBuildConfig(cfg)).rejects.toMatchObject({ code: 'IGRP_APP_CODE_MISSING' });
   });
 
-  it('throws IGRP_APP_CODE_MISSING when preview is off and appCode is blank, even with sync off', async () => {
+  it('validates with preview off, sync off and a blank appCode (the sidebar reports it in its own boundary)', async () => {
+    // Failing here would take down every route, /login included, via global-error.
     const cfg = baseConfig({
       appCode: '',
       previewMode: false,
       syncAccess: false,
       apiManagementConfig: { baseUrl: 'https://am.example.com' },
     });
-    await expect(igrpBuildConfig(cfg)).rejects.toMatchObject({ code: 'IGRP_APP_CODE_MISSING' });
+    await expect(igrpBuildConfig(cfg)).resolves.toBe(cfg);
   });
 
   it('throws IGRP_CONFIG_INVALID when layoutData getters are not functions', async () => {

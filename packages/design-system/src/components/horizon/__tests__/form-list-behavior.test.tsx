@@ -4,7 +4,7 @@
  * refused to shrink, and standalone mode re-keyed rows on every removal.
  */
 import { useState } from "react"
-import { describe, expect, it } from "vitest"
+import { describe, expect, it, vi } from "vitest"
 import { act, render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 
@@ -127,5 +127,121 @@ describe("IGRPFormList standalone item identity", () => {
 
     expect(screen.queryByLabelText("field-um")).toBeNull()
     expect(screen.getByLabelText("field-tres")).toHaveValue("editado")
+  })
+})
+
+describe("IGRPFormList standalone without defaultItem", () => {
+  it("still passes renderItem an onChange that writes the edit", async () => {
+    const user = userEvent.setup()
+    function NoDefault() {
+      const [items, setItems] = useState<Item[]>([{ label: "um" }])
+      return (
+        <>
+          <output>{items[0]?.label}</output>
+          <IGRPFormList<Item>
+            id="things"
+            label="Things"
+            value={items}
+            onChange={setItems}
+            computeLabel={(item) => item.label}
+            renderItem={(item, _index, onChange) => (
+              <input aria-label="field" value={item.label} onChange={(e) => onChange?.({ label: e.target.value })} />
+            )}
+          />
+        </>
+      )
+    }
+    render(<NoDefault />)
+    await settle()
+
+    await user.type(screen.getByLabelText("field"), "x")
+    expect(screen.getByRole("status")).toHaveTextContent("umx")
+  })
+})
+
+describe("IGRPFormList standalone keys for rows supplied from outside", () => {
+  it("keeps each row's own subtree when the first external row is removed", async () => {
+    const user = userEvent.setup()
+    function External() {
+      const [items, setItems] = useState<Item[]>([])
+      return (
+        <>
+          <button type="button" onClick={() => setItems([{ label: "a" }, { label: "b" }, { label: "c" }])}>
+            load
+          </button>
+          <IGRPFormList<Item>
+            id="things"
+            label="Things"
+            value={items}
+            onChange={setItems}
+            defaultItem={{ label: "novo" }}
+            allowEmpty
+            allowMultipleOpen
+            computeLabel={(item) => item.label}
+            renderItem={(item) => <input aria-label={`field-${item.label}`} defaultValue={item.label} />}
+          />
+        </>
+      )
+    }
+    render(<External />)
+    await user.click(screen.getByRole("button", { name: "load" }))
+    await settle()
+
+    await user.click(screen.getByRole("button", { name: "b" }))
+    await settle()
+    const b = screen.getByLabelText("field-b")
+    await user.clear(b)
+    await user.type(b, "editado")
+
+    await user.click(screen.getByRole("button", { name: "Remover item 1" }))
+    await settle()
+
+    expect(screen.queryByLabelText("field-a")).toBeNull()
+    expect(screen.getByLabelText("field-b")).toHaveValue("editado")
+  })
+})
+
+describe("IGRPFormList padded keys after a remove", () => {
+  it("gives an externally appended row a fresh key instead of reusing a stored padded one", async () => {
+    const user = userEvent.setup()
+    const errors = vi.spyOn(console, "error").mockImplementation(() => {})
+    function External() {
+      const [items, setItems] = useState<Item[]>([])
+      return (
+        <>
+          <button type="button" onClick={() => setItems([{ label: "a" }, { label: "b" }, { label: "c" }])}>
+            load
+          </button>
+          <button type="button" onClick={() => setItems((prev) => [...prev, { label: "d" }])}>
+            append
+          </button>
+          <IGRPFormList<Item>
+            id="things"
+            label="Things"
+            value={items}
+            onChange={setItems}
+            defaultItem={{ label: "novo" }}
+            allowEmpty
+            allowMultipleOpen
+            computeLabel={(item) => item.label}
+            renderItem={(item) => <input aria-label={`field-${item.label}`} defaultValue={item.label} />}
+          />
+        </>
+      )
+    }
+    try {
+      render(<External />)
+      await user.click(screen.getByRole("button", { name: "load" }))
+      await settle()
+      await user.click(screen.getByRole("button", { name: "Remover item 1" }))
+      await settle()
+      await user.click(screen.getByRole("button", { name: "append" }))
+      await settle()
+
+      expect(["b", "c", "d"].map((label) => screen.getAllByRole("button", { name: label }).length)).toEqual([1, 1, 1])
+      expect(errors.mock.calls.flat().join(" ")).not.toMatch(/same key/)
+    } finally {
+      errors.mockRestore()
+    }
   })
 })

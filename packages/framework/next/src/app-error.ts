@@ -91,7 +91,7 @@ export function getDisplayableErrorMessage(
   const isSanitized =
     rawMessage.includes('omitted in production') ||
     rawMessage.includes('specific message is omitted');
-  if (!isSanitized && rawMessage) {
+  if (process.env.NODE_ENV !== 'production' && !isSanitized && rawMessage) {
     return { message: rawMessage, errorId: error.digest ?? null };
   }
   return { message: fallback, errorId: error.digest ?? null };

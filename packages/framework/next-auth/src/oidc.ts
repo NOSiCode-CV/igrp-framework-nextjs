@@ -114,12 +114,38 @@ export function resolveTokenResponseExpiry(
  * `fetch` with an AbortController-backed timeout. On timeout the returned
  * promise rejects with the AbortError, which existing call sites already treat
  * as a network failure (cache eviction + retry for discovery, `network_error`
- * for revocation).
+ * for revocation). The timeout also covers `read`, so a body that stalls after
+ * the headers arrive cannot hang the caller.
  */
-function fetchWithTimeout(input: string, init: RequestInit, timeoutMs: number): Promise<Response> {
+function fetchWithTimeout<T = Response>(
+  input: string,
+  init: RequestInit,
+  timeoutMs: number,
+  read: (response: Response) => T | Promise<T> = (response) => response as T,
+): Promise<T> {
   const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), timeoutMs);
-  return fetch(input, { ...init, signal: controller.signal }).finally(() => clearTimeout(timer));
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const timedOut = new Promise<never>((_resolve, reject) => {
+    timer = setTimeout(() => {
+      controller.abort();
+      reject(controller.signal.reason);
+    }, timeoutMs);
+  });
+  return Promise.race([
+    fetch(input, { ...init, signal: controller.signal }).then(read),
+    timedOut,
+  ]).finally(() => clearTimeout(timer));
+}
+
+/** `response.json()`, or `null` when it fails or takes longer than `ms`. */
+function readJsonWithin(response: Response, ms: number): Promise<Record<string, unknown> | null> {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  return Promise.race([
+    response.json().catch(() => null) as Promise<Record<string, unknown> | null>,
+    new Promise<null>((resolve) => {
+      timer = setTimeout(() => resolve(null), ms);
+    }),
+  ]).finally(() => clearTimeout(timer));
 }
 
 type DiscoveryCacheEntry = { promise: Promise<OpenIdConfiguration>; expiresAt: number };
@@ -147,13 +173,14 @@ function getOpenIdConfiguration(discoveryUrl: string) {
       },
     },
     IDP_FETCH_TIMEOUT_MS,
-  ).then(async (response) => {
-    if (!response.ok) {
-      throw new Error(`Failed to fetch OpenID configuration from ${discoveryUrl}`);
-    }
+    async (response) => {
+      if (!response.ok) {
+        throw new Error(`Failed to fetch OpenID configuration from ${discoveryUrl}`);
+      }
 
-    return (await response.json()) as OpenIdConfiguration;
-  });
+      return (await response.json()) as OpenIdConfiguration;
+    },
+  );
 
   cache.set(discoveryUrl, {
     promise,
@@ -540,8 +567,11 @@ async function performRefresh(
   // wrong status — is a failed refresh like any other, not an exception: a
   // rejection here propagated to every caller sharing the in-flight promise
   // and was logged as "threw unexpectedly" instead of taking the recovery path.
+  // The fetch timeout ends when headers arrive, so the body read gets its own:
+  // a proxy that stalls the body would otherwise hang this refresh (and every
+  // caller sharing it). Never retried — the token may already be spent.
   const refreshedToken: Record<string, unknown> | null =
-    response && response.ok ? await response.json().catch(() => null) : null;
+    response && response.ok ? await readJsonWithin(response, REFRESH_FETCH_TIMEOUT_MS) : null;
 
   if (
     !refreshedToken ||

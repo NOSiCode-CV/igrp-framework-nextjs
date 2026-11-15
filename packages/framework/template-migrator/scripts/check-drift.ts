@@ -406,9 +406,10 @@ function main(): void {
     console.error("  → Add a deps.bump step (in a new migration) updating these to the current version.\n");
   }
   if (unpinnedDrift.length > 0) {
-    console.error(`✗ ${unpinnedDrift.length} template dependency(ies) no migration pins, changed since the baseline:`);
+    console.error(`✗ ${unpinnedDrift.length} template dependency(ies) no migration pins, out of step with the baseline:`);
     for (const d of unpinnedDrift) {
-      console.error(`    ${d.dep}: template declares ${d.declared}, baseline ${d.baseline ?? "has no entry"}`);
+      const tpl = d.declared === null ? "no longer declares it" : `declares ${d.declared}`;
+      console.error(`    ${d.dep}: template ${tpl}, baseline ${d.baseline ?? "has no entry"}`);
     }
     console.error("");
     console.error("  → Add a deps.bump (range change) or deps.restore (new dep) step in a new migration,");
@@ -435,7 +436,7 @@ function main(): void {
       console.error(`    ${lockDiff.unknown.length} entry(ies) for migrations that no longer exist: ${lockDiff.unknown.join(", ")}`);
     }
     for (const m of lockDiff.hashMismatch) {
-      console.error(`    ${m.id}: recorded hash ${m.recorded}, migration steps now hash to ${m.expected}`);
+      console.error(`    ${m.id}: recorded hash ${m.recorded}, migration steps/payloads now hash to ${m.expected}`);
     }
     if (lockDiff.outOfOrder) {
       console.error("    entries are not in migration order");

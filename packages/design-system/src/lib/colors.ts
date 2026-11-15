@@ -290,8 +290,9 @@ export const IGRPColorObjectVariants = Object.keys(IGRPColors.solid) as IGRPColo
 export const IGRPColorObjectRole = Object.keys(IGRPColors) as IGRPColorRole[]
 
 /**
- * Returns the text class for a color variant (solid style).
+ * Returns the text class for a color variant on a neutral background (outline style).
+ * For text on a filled background use `IGRPColors.solid[value].text`.
  */
 export const igrpColorText = (value: IGRPColorVariants) => {
-  return IGRPColors["solid"][value].text
+  return IGRPColors.outline[value].text
 }

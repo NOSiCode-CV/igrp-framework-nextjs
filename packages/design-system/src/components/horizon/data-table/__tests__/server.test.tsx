@@ -123,9 +123,14 @@ describe("IGRPServerDataTable", () => {
     expect(screen.getByRole("combobox")).toBeInTheDocument()
   })
 
-  it("hides the bar when data is empty and when enablePagination is false", () => {
+  it("hides the bar when there are no elements and when enablePagination is false", () => {
     const { unmount } = render(
-      <IGRPServerDataTable columns={columns} data={[]} pagination={p()} onPaginationChange={noop} />
+      <IGRPServerDataTable
+        columns={columns}
+        data={[]}
+        pagination={p({ totalElements: 0, totalPages: 0 })}
+        onPaginationChange={noop}
+      />
     )
     expect(screen.queryByRole("combobox")).toBeNull()
     unmount()
@@ -139,6 +144,20 @@ describe("IGRPServerDataTable", () => {
       />
     )
     expect(screen.queryByRole("combobox")).toBeNull()
+  })
+
+  it("keeps the bar on an empty page past the end so the user can go back", async () => {
+    const onPage = vi.fn()
+    render(
+      <IGRPServerDataTable
+        columns={columns}
+        data={[]}
+        pagination={p({ pageIndex: 3, totalElements: 30, totalPages: 3 })}
+        onPaginationChange={onPage}
+      />
+    )
+    await userEvent.click(screen.getByRole("button", { name: "Ir para a primeira página" }))
+    expect(onPage).toHaveBeenCalledWith(0, 10)
   })
 
   it("renders the empty row spanning every column with the catalog default", () => {

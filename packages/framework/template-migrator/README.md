@@ -68,11 +68,11 @@ Flags worth knowing:
 
 | Flag | Effect |
 |---|---|
-| `plan --to <id>` / `apply --to <id>` | Stop after this migration. A missing id (or a flag in its place) is an error, not "apply everything" |
+| `plan --to <id>` / `apply --to <id>` | Stop after this migration. `apply` exits 0 when it is already applied. A missing id (or a flag in its place) is an error, not "apply everything" |
 | `apply --yes` (`-y`) | Skip the per-migration confirmation prompt (the CI path) |
 | `apply --force` | Overwrite managed files the consumer has modified locally. Without it, `apply` names them and aborts before running any step |
 | `rollback --force` | Proceed despite missing undo content, a scaffold baseline entry, or still-applied migrations that `require` this one |
-| `check` | Exits 1 on pending migrations **and** on an applied migration whose steps have changed since |
+| `check` | Exits 1 on pending migrations **and** on an applied migration whose steps or payload files have changed since |
 | `convert` | Moves a legacy `.igrpmigrations/lock.json` to `.igrp-migrations-lock.json` (and heals an interrupted convert). Until you run it, every command that reads the lock (`status`, `plan`, `apply`, `rollback`, `check`) stops with a `LegacyLockError` telling you to. `list` and `convert` never read the lock |
 
 The **source of truth for migrations lives in this package at `migrations/demo-v1/`**. `scripts/pack.ts` reads those files at build time and embeds everything into `dist/`.
@@ -226,7 +226,7 @@ It **fails** (exit 1) when:
 - a migration bumps a dependency the template doesn't declare **and no later migration removes it** (a `deps.remove` retires an earlier `deps.bump`, the same collapse-to-final-state rule the file checks use),
 - a **new template file** exists (tracked or untracked-but-not-gitignored) that no migration ships, is not exempt, and is not grandfathered in the baseline (see below),
 - a migration **deletes** a path the live template still ships — the exact mirror of "a migration ships a file the template no longer has": scaffolded apps keep the file, upgraded apps lose it,
-- the template's shipped **`.igrp-migrations-lock.json`** doesn't record every migration as applied, records one that no longer exists, has a stale `manifestHash`, or lists entries out of migration order (see below),
+- the template's shipped **`.igrp-migrations-lock.json`** doesn't record every migration as applied, records one that no longer exists, has a stale `manifestHash` or `payloadHash`, or lists entries out of migration order (see below),
 - `migrations/demo-v1/template-baseline.json` is missing.
 
 It **warns** (exit 0) for `@igrp/*` template deps no migration ever pins, baseline entries the template no longer has, patch-mode paths it cannot content-verify (no full-file payload), and when it cannot enumerate template files (`git ls-files` failed) — the new-file check is then skipped.
@@ -264,7 +264,7 @@ pnpm --filter @igrp/template-migrator sync:template-lock
 
 Add `--check` for a dry run that reports what's stale and exits 1 without writing — the same condition the gate enforces.
 
-Regeneration is **append-and-refresh, not rewrite**: existing entries keep their recorded `appliedAt` and `cliVersion` (that's history, and churning it every release would lose the record of which CLI stamped each migration). Only `manifestHash` is refreshed, missing entries are appended in migration order, and entries for deleted migrations are dropped.
+Regeneration is **append-and-refresh, not rewrite**: existing entries keep their recorded `appliedAt` and `cliVersion` (that's history, and churning it every release would lose the record of which CLI stamped each migration). Only `manifestHash` and `payloadHash` are refreshed, missing entries are appended in migration order, and entries for deleted migrations are dropped.
 
 New entries carry **no** `undo`/`fileHashes` at all, which is the honest representation: nothing was executed against a file tree here — the template simply *is* the post-migration state, so rolling a scaffolded app back past its baseline isn't a supported operation. Omitting the fields says that more plainly than one copy per migration of `[]` and `{}`. A prior entry that does carry real content keeps it: that can only come from a lock some consumer actually ran against, which isn't ours to discard.
 
@@ -353,7 +353,8 @@ interface LockEntry {
   id: string;               // migration ID, e.g. "04-multi-auth-provider"
   appliedAt: string;        // ISO 8601 timestamp
   cliVersion: string;       // CLI version that applied this migration
-  manifestHash: string;     // the migration's `contentHash` at apply time
+  manifestHash: string;     // the migration's `contentHash` (steps) at apply time
+  payloadHash?: string;     // the migration's `payloadHash` (payload files); absent on older entries
 
   // Present only when the CLI actually executed the migration here.
   undo?: MigrationStep[];                // inverse steps for rollback
@@ -364,7 +365,7 @@ interface LockEntry {
 
 Hashes are the first 16 hex characters of a SHA-256 of the file's UTF-8 text.
 
-**Baseline entries carry only the first four fields.** The template ships its own lock so a scaffolded app opens with every migration already applied — but nothing was executed against a file tree there, the template simply *is* the post-migration state. There is no undo to record, so the fields are absent rather than written empty. Read them as `entry.undo ?? []`. `scripts/sync-template-lock.ts` regenerates the file in this shape; it rewrites on a byte difference, not only a semantic one, so a lock left in an outdated shape is something it can actually fix.
+**Baseline entries carry only the first five fields.** The template ships its own lock so a scaffolded app opens with every migration already applied — but nothing was executed against a file tree there, the template simply *is* the post-migration state. There is no undo to record, so the fields are absent rather than written empty. Read them as `entry.undo ?? []`. `scripts/sync-template-lock.ts` regenerates the file in this shape; it rewrites on a byte difference, not only a semantic one, so a lock left in an outdated shape is something it can actually fix.
 
 `fileHashes` is the state *before* the migration ran. It is a forensic record only — nothing reads it.
 
@@ -376,7 +377,7 @@ Deriving it from the payloads rather than recording hashes in the lock is what m
 
 The comparison ignores line endings. Payloads are normalised to LF at pack time, but a consumer on Windows with `core.autocrlf=true` has CRLF on disk; without that allowance every managed file would look modified on every Windows checkout. EOL is the one difference that is never a real edit.
 
-`manifestHash` is compared against the manifest by `check` and `status`: a migration whose steps were corrected in place after release leaves apps that applied the old version holding the old result, and nothing else would ever say so.
+`manifestHash` is compared against the manifest by `check` and `status`: a migration whose steps were corrected in place after release leaves apps that applied the old version holding the old result, and nothing else would ever say so. `payloadHash` does the same for a payload file overwritten in place: the packer hashes each step's `from` file (line endings ignored) into the manifest, and `apply` records it. It is a separate field because locks written before it existed hold a steps-only `manifestHash`; an entry without `payloadHash` is compared on `manifestHash` alone instead of being reported changed. When only `payloadHash` differs, `check` and `status` mark the migration "(payload files only)" and advise removing its lock entry and re-running `apply`: rolling it back would always be refused, since the app's files differ from the new payload by definition.
 
 The lock file is owned by the consumer — they commit it to version control. The CLI never deletes it; `rollback <id>` removes that entry and reverses the files it wrote. It refuses (unless `--force`) when another **still-applied** migration declares the target in its `requires`: `apply` will not run a migration whose prerequisite is unapplied, and rolling the prerequisite out from under it reaches that same state from the other side.
 

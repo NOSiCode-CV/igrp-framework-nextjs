@@ -116,4 +116,44 @@ describe("IGRPSelect showSearch", () => {
     expect(screen.queryByText("Santiago")).toBeNull()
     expect(screen.getByText("São Vicente")).toBeInTheDocument()
   })
+
+  it("matches without accents and case, and shows an empty state", async () => {
+    const user = userEvent.setup()
+    render(
+      <IGRPSelect
+        id="island"
+        options={[...OPTIONS, { label: "São Vicente", value: "sv" }]}
+        placeholder="pick"
+        showSearch
+      />
+    )
+    await settle()
+    await user.click(trigger())
+    await settle()
+
+    await user.type(screen.getByRole("textbox"), "SAO")
+    await settle()
+    expect(screen.queryAllByRole("option").map((option) => option.textContent)).toEqual(["São Vicente"])
+
+    await user.type(screen.getByRole("textbox"), "zzz")
+    await settle()
+    expect(screen.queryAllByRole("option")).toHaveLength(0)
+    expect(screen.getByText("Nenhuma opção encontrada.")).toBeInTheDocument()
+  })
+
+  it("clears the search when the dropdown closes", async () => {
+    const user = userEvent.setup()
+    render(<IGRPSelect id="city" options={OPTIONS} placeholder="pick" showSearch />)
+    await settle()
+    await user.click(trigger())
+    await settle()
+    await user.type(screen.getByRole("textbox"), "zzz")
+    await user.keyboard("{Escape}")
+    await settle()
+
+    await user.click(trigger())
+    await settle()
+    expect(screen.getByRole("textbox")).toHaveValue("")
+    expect(screen.queryAllByRole("option")).toHaveLength(OPTIONS.length)
+  })
 })

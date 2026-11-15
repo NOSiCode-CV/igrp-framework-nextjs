@@ -84,6 +84,7 @@ function IGRPDataTableCellExpander<TData>({ row, label }: IGRPDataTableCellExpan
 
   return (
     <Button
+      type="button"
       className="shadow-none"
       onClick={row.getToggleExpandedHandler()}
       aria-expanded={row.getIsExpanded()}

@@ -1528,7 +1528,8 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
     })) as JWT | null;
   }
 
-  function isTokenExpiredOrFailed(token: JWT): boolean {
+  // Also judges a Session (same `expiresAt` / `error` claims) in getSession.
+  function isTokenExpiredOrFailed(token: Pick<JWT, 'expiresAt' | 'error'>): boolean {
     const expiresAt = typeof token.expiresAt === 'number' ? token.expiresAt : undefined;
     const isExpired = expiresAt !== undefined && expiresAt <= Date.now() + TOKEN_EXPIRY_GRACE_MS;
     // `token.error` is only ever set to 'RefreshAccessTokenError' (the refresh
@@ -1639,18 +1640,16 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
 
     if (!session) return null;
 
-    const providerExp = typeof session.expiresAt === 'number' ? session.expiresAt : undefined;
-    const providerExpired =
-      providerExp !== undefined && providerExp < Date.now() + TOKEN_REFRESH_BUFFER_MS;
-    const refreshFailed = session.error === 'RefreshAccessTokenError';
-
+    // Same rule as middleware: real expiry minus a small grace, NOT the 60 s
+    // refresh buffer. A refresh that hit a discovery failure returns the token
+    // unchanged, so a still-valid token inside the buffer must not log out.
     // Expired access token or a failed refresh: hand control to onSessionExpired
     // (typically `redirect('/logout')`). This MUST run outside the try/catch
     // above — `redirect()` signals via a thrown NEXT_REDIRECT error, and
     // swallowing it would silently cancel the redirect, leaving a dead session
     // mounted until the next access-token-bearing request 401s into the error
     // boundary.
-    if (providerExpired || refreshFailed) {
+    if (isTokenExpiredOrFailed(session)) {
       onSessionExpired?.();
       return null;
     }

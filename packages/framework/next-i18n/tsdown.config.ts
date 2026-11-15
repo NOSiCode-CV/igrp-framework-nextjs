@@ -8,7 +8,9 @@ const shared = {
   // at src/ paths that are not in the tarball — a broken map is worse than none.
   sourcemap: false,
   outDir: "dist",
-  splitting: false,
+  // package.json's `bin`, `main` and `exports` name `.js`; tsdown defaults to
+  // `.mjs`, which left `igrp-i18n` pointing at a file the build never wrote.
+  fixedExtension: false,
   // Do NOT enable shims — shims inject import statements before the bundle
   // content, which would push the shebang banner off line 1 and cause a
   // SyntaxError in Node's ESM loader.
@@ -17,7 +19,7 @@ const shared = {
 
 export default defineConfig([
   {
-    // CLI binary — src/cli.ts carries the shebang on line 1; tsup preserves it.
+    // CLI binary — src/cli.ts carries the shebang on line 1; tsdown preserves it.
     ...shared,
     entry: { cli: "src/cli.ts" },
   },

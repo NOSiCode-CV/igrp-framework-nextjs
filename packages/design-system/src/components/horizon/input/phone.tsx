@@ -231,9 +231,11 @@ function IGRPInputPhone({
             id={fieldName}
             placeholder={resolvedPlaceholder}
             ref={field.ref}
-            value={field.value}
+            value={field.value || undefined}
             onChange={(newValue) => {
-              field.onChange(newValue)
+              // "", not undefined: undefined makes useWatch bring the default back,
+              // and null fails z.string() schemas.
+              field.onChange(newValue ?? "")
               onChange?.(newValue)
             }}
             onBlur={igrpChainHandlers(field.onBlur, onBlur)}

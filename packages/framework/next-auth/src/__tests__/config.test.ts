@@ -226,6 +226,18 @@ describe('withIGRPAuth — getSession', () => {
     expect(session).toBeNull();
   });
 
+  it('keeps a session 50 s from expiry (inside the refresh buffer, outside the grace)', async () => {
+    // A refresh that hit a discovery failure returns the token unchanged; the
+    // 60 s refresh buffer must not turn that into a logout.
+    mockServerSession({ accessToken: 'at', expiresAt: Date.now() + 50_000 });
+    const withIGRPAuth = await getFactory();
+    const onSessionExpired = vi.fn();
+    const instance = withIGRPAuth({ env: VALID_ENV, onSessionExpired });
+
+    expect(await instance.getSession()).not.toBeNull();
+    expect(onSessionExpired).not.toHaveBeenCalled();
+  });
+
   it('does NOT swallow a redirect thrown by onSessionExpired (regression)', async () => {
     // `redirect()` from next/navigation signals via a thrown NEXT_REDIRECT
     // error. getSession must let it propagate, not catch it — otherwise the

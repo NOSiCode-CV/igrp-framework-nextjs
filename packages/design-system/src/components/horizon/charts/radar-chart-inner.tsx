@@ -87,7 +87,7 @@ function IGRPRadarChartInner({
   showRadiusLines = true,
   gridFilled = false,
 }: IGRPRadarChartProps) {
-  const chartHeight = getChartHeight(size, data, height)
+  const chartHeight = getChartHeight(size, [], height)
   const chartWidth = getChartWidth(width)
   const locale = useIGRPLocale()
   const formatValue = (value: number) => formatChartValue(value, valueFormatter, locale)
@@ -170,8 +170,8 @@ function IGRPRadarChartInner({
                   dataKey={radar.dataKey}
                   stroke={radar.color || `var(--chart-${(index % 8) + 1})`}
                   fill={radar.fill || radar.color || `var(--chart-${(index % 8) + 1})`}
-                  fillOpacity={radar.fillOpacity || 0.6}
-                  strokeWidth={radar.strokeWidth || 2}
+                  fillOpacity={radar.fillOpacity ?? 0.6}
+                  strokeWidth={radar.strokeWidth ?? 2}
                   dot={radar.dot}
                   activeDot={radar.activeDot}
                   isAnimationActive={radar.isAnimationActive}

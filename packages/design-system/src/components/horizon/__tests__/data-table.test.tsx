@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest"
+import { describe, expect, it, vi } from "vitest"
 import { fireEvent, render, screen } from "@testing-library/react"
 import type { ColumnDef } from "@tanstack/react-table"
 
@@ -68,5 +68,51 @@ describe("IGRPDataTable pagination", () => {
       />
     )
     expect(screen.getByText("Registos por página")).toBeInTheDocument()
+  })
+
+  it("pages when the default size is below every option", () => {
+    render(
+      <IGRPDataTable<Row, unknown>
+        columns={columns}
+        data={many(30)}
+        showPagination
+        pagination={{ defaultPageSize: 5 }}
+      />
+    )
+    expect(screen.getByRole("button", { name: "Ir para a página seguinte" })).toBeInTheDocument()
+  })
+
+  it("pages with empty page-size options", () => {
+    render(
+      <IGRPDataTable<Row, unknown>
+        columns={columns}
+        data={many(30)}
+        showPagination
+        pagination={{ pageSizeOptions: [], defaultPageSize: 10 }}
+      />
+    )
+    expect(screen.getByRole("button", { name: "Ir para a página seguinte" })).toBeInTheDocument()
+  })
+
+  it("server-side keeps the page while rowCount is 0 (loading)", () => {
+    const onQueryChange = vi.fn()
+    const props = { columns, data: many(10), showPagination: true, pageSizePagination: [10, 50], onQueryChange }
+    const { rerender } = render(<IGRPDataTable<Row, unknown> {...props} rowCount={30} />)
+    fireEvent.click(screen.getByRole("button", { name: "Ir para a página seguinte" }))
+    rerender(<IGRPDataTable<Row, unknown> {...props} rowCount={0} />)
+    rerender(<IGRPDataTable<Row, unknown> {...props} rowCount={30} />)
+    expect(onQueryChange).toHaveBeenLastCalledWith(expect.objectContaining({ page: 1 }))
+  })
+
+  it("does not submit an enclosing form when paging", () => {
+    const onSubmit = vi.fn((e: { preventDefault: () => void }) => e.preventDefault())
+    render(
+      <form onSubmit={onSubmit}>
+        <IGRPDataTable<Row, unknown> columns={columns} data={many(30)} showPagination pageSizePagination={[10, 50]} />
+      </form>
+    )
+    fireEvent.click(screen.getByRole("button", { name: "Ir para a página seguinte" }))
+    expect(screen.getByText("Row 11")).toBeInTheDocument()
+    expect(onSubmit).not.toHaveBeenCalled()
   })
 })

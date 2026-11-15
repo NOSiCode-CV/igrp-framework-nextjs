@@ -14,7 +14,7 @@ import {
 } from "../template-lock.js";
 
 function migration(id: string, date = "2026-01-01", steps: unknown = [{ type: "noop", id }]): MigrationSummary {
-  return { id, date, contentHash: hashSteps(steps) };
+  return { id, date, contentHash: hashSteps(steps), payloadHash: "p".repeat(16) };
 }
 
 /**
@@ -28,6 +28,7 @@ function entry(m: MigrationSummary, overrides: Partial<LockEntry> = {}): LockEnt
     appliedAt: `${m.date}T00:00:00.000Z`,
     cliVersion: "0.1.0-beta.100",
     manifestHash: m.contentHash,
+    payloadHash: m.payloadHash,
     ...overrides,
   };
 }
@@ -112,6 +113,7 @@ describe("buildTemplateLock", () => {
       appliedAt: "2026-03-04T00:00:00.000Z",
       cliVersion: "0.1.0-beta.134",
       manifestHash: second.contentHash,
+      payloadHash: second.payloadHash,
     });
   });
 
@@ -156,6 +158,7 @@ describe("buildTemplateLock", () => {
           appliedAt: "2025-11-10T00:00:00.000Z",
           cliVersion: "0.1.0-beta.134",
           manifestHash: migrations[0].contentHash,
+          payloadHash: migrations[0].payloadHash,
         },
       ],
     });
@@ -169,6 +172,7 @@ describe("buildTemplateLock", () => {
       "appliedAt",
       "cliVersion",
       "manifestHash",
+      "payloadHash",
     ]);
   });
 
@@ -194,7 +198,7 @@ describe("buildTemplateLock", () => {
   });
 
   it("rejects a migration whose date cannot be parsed", () => {
-    const broken: MigrationSummary = { id: "01-a", date: "not-a-date", contentHash: "abc" };
+    const broken: MigrationSummary = { id: "01-a", date: "not-a-date", contentHash: "abc", payloadHash: "def" };
     expect(() => buildTemplateLock({ migrations: [broken], existing: null, cliVersion: "1.0.0" })).toThrow(
       /unparsable date/,
     );
@@ -233,10 +237,28 @@ describe("readTemplateLock", () => {
 describe("summarise", () => {
   it("hashes steps the same way the packer stamps contentHash", () => {
     const steps = [{ type: "file.write", path: "src/middleware.ts" }];
-    expect(summarise({ id: "01-a", date: "2026-01-01", steps }).contentHash).toBe(hashSteps(steps));
+    expect(summarise({ id: "01-a", date: "2026-01-01", steps }, ".").contentHash).toBe(hashSteps(steps));
   });
 
   it("tolerates frontmatter with no date", () => {
-    expect(summarise({ id: "01-a", steps: [] }).date).toBe("");
+    expect(summarise({ id: "01-a", steps: [] }, ".").date).toBe("");
+  });
+
+  it("changes payloadHash when a payload file is overwritten in place, not on an EOL change", () => {
+    const dir = mkdtempSync(join(tmpdir(), "tl-payload-"));
+    const steps = [{ type: "file.write", mode: "replace", path: "src/a.ts", from: "a.ts" }];
+    try {
+      writeFileSync(join(dir, "a.ts"), "one\n");
+      const before = summarise({ id: "01-a", steps }, dir);
+      writeFileSync(join(dir, "a.ts"), "one\r\n");
+      expect(summarise({ id: "01-a", steps }, dir).payloadHash).toBe(before.payloadHash);
+      writeFileSync(join(dir, "a.ts"), "two\n");
+      const after = summarise({ id: "01-a", steps }, dir);
+      expect(after.contentHash).toBe(before.contentHash);
+      expect(after.payloadHash).not.toBe(before.payloadHash);
+      expect(isLockClean(diffTemplateLock({ migrations: [after], lock: lockOf([entry(before)]) }))).toBe(false);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
   });
 });

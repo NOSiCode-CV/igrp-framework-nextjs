@@ -96,9 +96,13 @@ export async function apply(
   }
 
   let pending = manifest.migrations.filter((m) => !appliedIds.has(m.id));
+  if (opts.toId && appliedIds.has(opts.toId)) {
+    console.log(`Migration ${opts.toId} is already applied.`);
+    return true;
+  }
   if (opts.toId) {
     const idx = pending.findIndex((m) => m.id === opts.toId);
-    if (idx === -1) { console.error(`Migration ${opts.toId} not found or already applied.`); return false; }
+    if (idx === -1) { console.error(`Migration ${opts.toId} not found.`); return false; }
     pending = pending.slice(0, idx + 1);
   }
   if (pending.length === 0) { console.log("Nothing to apply — already up to date."); return true; }
@@ -241,6 +245,7 @@ export async function apply(
       appliedAt: new Date().toISOString(),
       cliVersion: manifest.cliVersion,
       manifestHash: migration.contentHash,
+      ...(migration.payloadHash ? { payloadHash: migration.payloadHash } : {}),
       undo: undoSteps,
       ...(Object.keys(undoPayloads).length > 0 ? { undoPayloads } : {}),
     };

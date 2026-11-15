@@ -6,7 +6,7 @@ import { defineConfig } from 'tsdown';
 /**
  * Entries that must ship a `"use client"` directive.
  *
- * esbuild drops module-level directives when bundling, so a `'use client'` in
+ * The bundler drops module-level directives, so a `'use client'` in
  * `src/client.ts` cannot survive on its own — and `next-auth`'s own CJS `react`
  * entry has never carried one. Without the directive,
  * `@igrp/framework-next-auth/client` is a server-first module and importing
@@ -69,7 +69,6 @@ export default defineConfig({
   sourcemap: true,
   clean: true,
   treeshake: true,
-  splitting: false,
   target: 'es2022',
   platform: 'neutral',
   deps: {

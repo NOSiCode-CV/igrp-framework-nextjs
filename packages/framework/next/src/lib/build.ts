@@ -23,11 +23,9 @@ const isBlank = (v: unknown): boolean => typeof v !== 'string' || v.trim() === '
  *     post-stream: a `TypeError` there reaches a server log and nothing else.
  *     That is precisely the blind spot this synchronous validation exists to
  *     keep config errors out of.
- *   • `!previewMode` ⇒ `apiManagementConfig.baseUrl` and `appCode` are
- *     required (the sidebar data provider throws `IGRP_APP_CODE_MISSING`
- *     without one, sync or not).
- *   • `syncAccess && !previewMode` ⇒ `serviceId`, `m2mClientId` and
- *     `m2mClientSecret` must be non-blank.
+ *   • `!previewMode` ⇒ `apiManagementConfig.baseUrl` is required.
+ *   • `syncAccess && !previewMode` ⇒ `serviceId`, `m2mClientId`,
+ *     `m2mClientSecret` and `appCode` must be non-blank.
  *
  * Unknown keys pass through untouched — the schema validates, it never
  * replaces the config object.
@@ -87,14 +85,6 @@ const igrpConfigSchema = z
           'Modo de pré-visualização desativado. É necessária a configuração da gestão de acesso (baseUrl).',
       });
     }
-    if (!cfg.previewMode && isBlank(cfg.appCode)) {
-      ctx.addIssue({
-        code: 'custom',
-        path: ['appCode'],
-        message:
-          'Modo de pré-visualização desativado. É necessário um appCode não-vazio (IGRP_APP_CODE).',
-      });
-    }
     if (cfg.syncAccess && !cfg.previewMode) {
       for (const field of ['serviceId', 'm2mClientId', 'm2mClientSecret'] as const) {
         if (isBlank(cfg.apiManagementConfig?.[field])) {
@@ -104,6 +94,13 @@ const igrpConfigSchema = z
             message: `IGRP_SYNC_ACCESS=true requer apiManagementConfig.${field} não-vazio.`,
           });
         }
+      }
+      if (isBlank(cfg.appCode)) {
+        ctx.addIssue({
+          code: 'custom',
+          path: ['appCode'],
+          message: 'IGRP_SYNC_ACCESS=true requer um appCode não-vazio (IGRP_APP_CODE).',
+        });
       }
       // `igrpSyncApplication` reads `appInformation.displayName ?? .name` and
       // `.description` / `.slug` inside `after()`. Validate it here, where the
@@ -143,7 +140,7 @@ function codeForIssuePath(path: ReadonlyArray<PropertyKey>): IgrpErrorCode {
  *     mock-data functions, non-boolean flags).
  *   • `IGRP_ACCESS_MANAGEMENT_CONFIG_MISSING` — preview mode is off / sync is
  *     on and the access-management configuration is incomplete.
- *   • `IGRP_APP_CODE_MISSING` — preview mode is off and `appCode` is blank.
+ *   • `IGRP_APP_CODE_MISSING` — sync is on but `appCode` is blank.
  */
 function validateConfig(
   config: IGRPConfigArgs | null | undefined,

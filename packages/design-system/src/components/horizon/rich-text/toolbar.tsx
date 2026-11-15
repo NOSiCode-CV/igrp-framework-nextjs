@@ -146,6 +146,15 @@ function PopoverItem({ children, ...props }: React.ComponentProps<typeof Button>
   )
 }
 
+/**
+ * A bare host ("www.gov.cv") would be stored as a relative href, so it gets
+ * `https://`. A scheme, or a relative `/`, `#` or `?` reference, is kept as typed.
+ * A colon followed by a digit is a port ("intranet.gov.cv:8443"), not a scheme.
+ */
+function normalizeLinkHref(raw: string): string {
+  return /^[a-z][a-z0-9+.-]*:(?!\d)/i.test(raw) || /^[/#?]/.test(raw) ? raw : `https://${raw}`
+}
+
 function LinkPopover({
   editor,
   t,
@@ -159,20 +168,31 @@ function LinkPopover({
 }) {
   const [open, setOpen] = useState(false)
   const [url, setUrl] = useState("")
+  const [invalid, setInvalid] = useState(false)
   const inputId = useId()
 
   const onOpenChange = (next: boolean) => {
     // Seed from the link under the caret: an empty box on an existing link made
     // "Aplicar" look like a no-op.
     if (next) setUrl(href)
+    setInvalid(false)
     setOpen(next)
   }
 
   const apply = () => {
-    const next = url.trim()
-    setOpen(false)
+    const trimmed = url.trim()
     // Empty is a no-op, never a delete — removal is the explicit button.
-    if (!next) return
+    if (!trimmed) {
+      setOpen(false)
+      return
+    }
+    const next = normalizeLinkHref(trimmed)
+    // The Link extension refuses disallowed schemes; say so instead of closing silently.
+    if (!editor.can().setLink({ href: next })) {
+      setInvalid(true)
+      return
+    }
+    setOpen(false)
     if (editor.state.selection.empty && !active) {
       // Nothing selected and no link to extend: insert the URL as its own text.
       editor
@@ -208,7 +228,12 @@ function LinkPopover({
             // igrp-i18n-ignore
             placeholder="https://"
             value={url}
-            onChange={(e) => setUrl(e.target.value)}
+            aria-invalid={invalid || undefined}
+            aria-describedby={invalid ? `${inputId}-error` : undefined}
+            onChange={(e) => {
+              setUrl(e.target.value)
+              setInvalid(false)
+            }}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 e.preventDefault()
@@ -216,6 +241,11 @@ function LinkPopover({
               }
             }}
           />
+          {invalid ? (
+            <p id={`${inputId}-error`} role="alert" className="text-xs text-destructive">
+              {t.linkInvalid}
+            </p>
+          ) : null}
         </div>
         <div className="flex gap-2">
           <Button type="button" size="sm" onClick={apply}>

@@ -3,12 +3,13 @@
  *
  * ## Why this exists
  *
- * `tsup` builds this package with `splitting: false`, so every entry point
- * (`dist/config.js`, `dist/oidc.js`, …) inlines its own copy of every module it
- * imports. Next.js can also instantiate a module once per server layer. A plain
- * module-level `const cache = new Map()` therefore exists as SEVERAL
- * independent objects in one running process — one per entry chunk that pulled
- * the module in.
+ * Next.js can instantiate a module once per server layer, and a bundler that
+ * inlines shared modules per entry (this package was once built that way)
+ * gives each entry chunk (`dist/config.js`, `dist/oidc.js`, …) its own copy. A
+ * plain module-level `const cache = new Map()` can therefore exist as SEVERAL
+ * independent objects in one running process. tsdown currently emits this
+ * module as one shared chunk (`dist/_global-state-*.js`); the symbol keeps the
+ * slots shared even when it does not.
  *
  * That is not theoretical here: a template imports `withIGRPAuth` from
  * `/config` and `buildEndSessionUrl` from `/oidc`, so both chunks load. Before
@@ -21,8 +22,8 @@
  * `Symbol.for(...)` resolves to the same symbol in every copy, so a slot keyed
  * on it is genuinely process-wide.
  *
- * Keep this file side-effect-free and dependency-free; it is inlined into every
- * entry that touches it.
+ * Keep this file side-effect-free and dependency-free; every entry that touches
+ * it loads it.
  *
  * @internal
  */

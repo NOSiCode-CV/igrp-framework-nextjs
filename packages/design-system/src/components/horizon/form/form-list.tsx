@@ -368,7 +368,7 @@ function FormListLayout<TItem>({
 
         <FormListAddButton
           onAdd={onAdd}
-          disabled={addDisabled ?? disabled ?? !onAdd}
+          disabled={addDisabled || disabled || !onAdd}
           addButtonIconName={addButtonIconName}
           addButtonLabel={addButtonLabel}
           addButtonClassName={addButtonClassName}
@@ -750,7 +750,12 @@ function FormListStandaloneMode<TItem>({
   const resolvedItemKeys = useMemo(() => {
     if (itemKeys.length === items.length) return itemKeys
     const keys = itemKeys.slice(0, items.length)
-    while (keys.length < items.length) keys.push(`${groupId}-item-external-${keys.length}`)
+    // Stored keys can already hold padded ones (a remove keeps ext-1, ext-2), so skip any taken.
+    const taken = new Set(keys)
+    for (let n = keys.length; keys.length < items.length; n++) {
+      const key = `${groupId}-item-external-${n}`
+      if (!taken.has(key)) keys.push(key)
+    }
     return keys
   }, [itemKeys, items.length, groupId])
 
@@ -797,7 +802,8 @@ function FormListStandaloneMode<TItem>({
   const handleAdd = useCallback(() => {
     if (defaultItem !== undefined) {
       const newItems = [...items, defaultItem]
-      setItemKeys((prev) => [...prev, nextItemKey()])
+      // From the resolved keys: externally supplied rows only have padded keys there.
+      setItemKeys([...resolvedItemKeys, nextItemKey()])
       if (value === undefined) {
         setInternalItems(newItems)
       }
@@ -809,7 +815,7 @@ function FormListStandaloneMode<TItem>({
       }
       onChange?.(newItems)
     }
-  }, [items, defaultItem, value, onChange, allowMultipleOpen, nextItemKey])
+  }, [items, defaultItem, value, onChange, allowMultipleOpen, nextItemKey, resolvedItemKeys])
 
   const handleRemove = useCallback(
     (index: number) => {
@@ -829,7 +835,7 @@ function FormListStandaloneMode<TItem>({
         }
 
         const newItems = items.filter((_, i) => i !== index)
-        setItemKeys((prev) => prev.filter((_, i) => i !== index))
+        setItemKeys(resolvedItemKeys.filter((_, i) => i !== index))
         if (value === undefined) {
           setInternalItems(newItems)
         }
@@ -852,7 +858,18 @@ function FormListStandaloneMode<TItem>({
         }
       }
     },
-    [items, value, onChange, openItem, openItems, userOpenItem, allowEmpty, allowMultipleOpen, onItemRemove]
+    [
+      items,
+      value,
+      onChange,
+      openItem,
+      openItems,
+      userOpenItem,
+      allowEmpty,
+      allowMultipleOpen,
+      onItemRemove,
+      resolvedItemKeys,
+    ]
   )
 
   return (
@@ -890,9 +907,7 @@ function FormListStandaloneMode<TItem>({
       addButtonClassName={addButtonClassName}
       onAdd={handleAdd}
       addDisabled={defaultItem === undefined}
-      onItemChangeFactory={
-        defaultItem !== undefined ? (index) => (updatedItem: TItem) => handleItemChange(index, updatedItem) : undefined
-      }
+      onItemChangeFactory={(index) => (updatedItem: TItem) => handleItemChange(index, updatedItem)}
       ref={ref}
     />
   )

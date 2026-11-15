@@ -2,7 +2,7 @@ import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync
 import { dirname, join } from "path";
 import { fileURLToPath, URL } from "url";
 import { parse as parseYaml } from "yaml";
-import { hashSteps } from "../src/hash.js";
+import { hashPayloads, hashSteps } from "../src/hash.js";
 import { sortMigrationFiles } from "../src/migration-order.js";
 import { validateRequires } from "../src/validate-requires.js";
 import { validateSteps } from "../src/validate-steps.js";
@@ -62,6 +62,7 @@ function main() {
       steps: fm.steps,
       guideHref: file,
       contentHash,
+      payloadHash: hashPayloads(fm.steps, MIGRATIONS_DIR),
     });
     console.log(`  packed ${fm.id}`);
   }

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 import pkg from '../../package.json' with { type: 'json' };
@@ -11,17 +11,17 @@ import pkg from '../../package.json' with { type: 'json' };
  * this package's load-bearing properties exist only after bundling and are
  * therefore invisible to source review and to every other test:
  *
- * - `"use client"` on the client entry comes ONLY from a tsup `onSuccess` hook,
- *   because esbuild strips module-level directives when bundling. `src/client.ts`
+ * - `"use client"` on the client entry comes ONLY from a tsdown `onSuccess` hook,
+ *   because the bundler strips module-level directives. `src/client.ts`
  *   deliberately does not declare one, so the build is the only place the
  *   boundary exists — and this is the only thing that checks it.
  * - The Edge-safety contract is about what `dist/config.js` STATICALLY imports.
  *   `await import('next-auth')` and `import ... from 'next-auth'` look similar
  *   in source and are completely different in the bundle.
  * - The root barrel's purity is a property of the emitted chunk.
- * - `splitting: false` means shared module state is inlined per entry, so the
- *   `Symbol.for` namespace has to match across chunks for the slots in
- *   `_global-state` to actually be shared.
+ * - tsdown splits modules shared by several entries into hashed chunks
+ *   (`_global-state-*.js`). The slots in `_global-state` are only process-wide
+ *   if its namespace lives in exactly one module that every user imports.
  *
  * Two real regressions reached a green build before this existed: a stripped
  * `"use client"` directive, and per-chunk copies of the discovery cache and the
@@ -76,7 +76,7 @@ describe.skipIf(!hasDist)('dist contract', () => {
 
   it('ships .d.ts files that actually declare something', () => {
     // Existence alone is not the contract: the dts pass reads the type-check-only
-    // tsconfig (noEmit, non-composite), and when its overrides in tsup.config.ts
+    // tsconfig (noEmit, non-composite), and when its overrides in tsdown.config.ts
     // are wrong it can emit a file that declares nothing. Every consumer then
     // silently types this package as `any` while the build stays green.
     // The degenerate emit to catch is a file that exports NOTHING — empty, or
@@ -97,7 +97,7 @@ describe.skipIf(!hasDist)('dist contract', () => {
   });
 
   it('keeps the "use client" directive on the client entry', () => {
-    // The hook in tsup.config.ts is the ONLY source of this directive —
+    // The hook in tsdown.config.ts is the ONLY source of this directive —
     // src/client.ts does not declare one. If the hook breaks, or is swapped for
     // a directive-preserving plugin that finds nothing to preserve, `/client`
     // silently stops being a client boundary and only fails in a consumer's app.
@@ -143,7 +143,7 @@ describe.skipIf(!hasDist)('dist contract', () => {
     for (const match of imports) {
       const before = source.slice(Math.max(0, match.index! - 120), match.index);
       expect(before, 'unguarded import("next-auth") in config.js').toMatch(
-        /if \(process\.env\.NEXT_RUNTIME !== ["']edge["']\) \{\s*return $/,
+        /if \(process\.env\.NEXT_RUNTIME !== ["']edge["']\)\s*(?:\{\s*)?return $/,
       );
     }
   });
@@ -166,16 +166,20 @@ describe.skipIf(!hasDist)('dist contract', () => {
     }
   });
 
-  it('uses one Symbol.for namespace across chunks, so global slots are shared', () => {
-    // splitting:false inlines _global-state into every entry that imports it.
-    // The slots are only process-wide if each copy computes the same symbol.
-    const namespaces = new Set<string>();
+  it('defines the Symbol.for namespace once, and every slot user reaches it', () => {
+    // A second copy of _global-state would still share slots (Symbol.for), but
+    // one copy is the contract: each user either is it or imports it.
+    const owners = readdirSync(DIST).filter(
+      (file) => file.endsWith('.js') && read(file).includes('igrp.next-auth.'),
+    );
+    expect(owners).toHaveLength(1);
     for (const entry of ['config.js', 'oidc.js', 'providers.js', 'session-store.js']) {
-      const match = read(entry).match(/["'`](igrp\.next-auth\.)/);
-      expect(match, `${entry} has no global-state namespace`).not.toBeNull();
-      namespaces.add(match![1]);
+      const source = read(entry);
+      expect(
+        source.includes('igrp.next-auth.') || /from\s*["']\.\/_global-state-/.test(source),
+        `${entry} does not reach the global-state namespace`,
+      ).toBe(true);
     }
-    expect(namespaces.size).toBe(1);
   });
 });
 

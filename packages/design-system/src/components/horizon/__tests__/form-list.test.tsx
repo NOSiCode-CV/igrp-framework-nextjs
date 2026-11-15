@@ -18,16 +18,18 @@ function Harness({
   defaultValues,
   allowEmpty,
   inlineDefaultItem = false,
+  disabled,
 }: {
   defaultValues?: z.input<Schema>
   allowEmpty?: boolean
   inlineDefaultItem?: boolean
+  disabled?: boolean
 }) {
   const formRef = useRef<IGRPFormHandle<Schema> | null>(null)
   const [stableItem] = useState(STABLE_ITEM)
 
   return (
-    <IGRPForm schema={schema} formRef={formRef} onSubmit={() => {}} defaultValues={defaultValues}>
+    <IGRPForm schema={schema} formRef={formRef} onSubmit={() => {}} defaultValues={defaultValues} disabled={disabled}>
       <IGRPFormList
         id="anexos"
         label="Anexos"
@@ -119,5 +121,13 @@ describe("IGRPFormList seeding in form mode", () => {
     )
     await settle()
     expect(rowCount()).toBe(0)
+  })
+})
+
+describe("IGRPFormList in a disabled IGRPForm", () => {
+  it("disables the add button itself, not only through the fieldset", async () => {
+    render(<Harness disabled />)
+    await settle()
+    expect(screen.getByRole("button", { name: /Adicionar/ })).toHaveAttribute("disabled")
   })
 })

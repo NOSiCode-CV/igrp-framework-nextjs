@@ -8,4 +8,11 @@ describe("sortMigrationFiles", () => {
       "2.MIGRATIONS-x.md", "9.MIGRATIONS-x.md", "10.MIGRATIONS-x.md", "100.MIGRATIONS-x.md",
     ]);
   });
+
+  it("breaks a shared number by name, whatever order the directory listed them in", () => {
+    const a = "47.MIGRATIONS-24092026.md";
+    const b = "47.MIGRATIONS-25092026.md";
+    expect(sortMigrationFiles([b, a, "48.MIGRATIONS-x.md"])).toEqual([a, b, "48.MIGRATIONS-x.md"]);
+    expect(sortMigrationFiles([a, b])).toEqual([a, b]);
+  });
 });

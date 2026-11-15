@@ -24,6 +24,36 @@ describe("findUnpinnedDepDrift", () => {
     ]);
   });
 
+  it("flags a baseline entry the template no longer declares", () => {
+    expect(
+      findUnpinnedDepDrift({
+        templateDeps,
+        pinned: new Set(["next", "next-intl"]),
+        baseline: { typescript: "5.9.3", zod: "^4.0.0" },
+      }),
+    ).toEqual([{ dep: "zod", declared: null, baseline: "^4.0.0" }]);
+  });
+
+  it("ignores a baseline entry the template still declares but a migration now pins", () => {
+    expect(
+      findUnpinnedDepDrift({
+        templateDeps,
+        pinned: new Set(["next", "next-intl", "typescript"]),
+        baseline: { typescript: "5.9.2" },
+      }),
+    ).toEqual([]);
+  });
+
+  it("leaves a pinned dep the template dropped to the pin check", () => {
+    expect(
+      findUnpinnedDepDrift({
+        templateDeps,
+        pinned: new Set(["next", "next-intl", "zod"]),
+        baseline: { typescript: "5.9.3", zod: "^4.0.0" },
+      }),
+    ).toEqual([]);
+  });
+
   it("records only unpinned, non-workspace deps for the baseline", () => {
     expect(unpinnedDeps(templateDeps, new Set(["next"]))).toEqual({ "next-intl": "^4.14.0", typescript: "5.9.3" });
   });

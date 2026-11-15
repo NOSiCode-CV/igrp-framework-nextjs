@@ -20,7 +20,7 @@
 import { existsSync, readFileSync, readdirSync, writeFileSync } from "fs";
 import { join } from "path";
 import { parse as parseYaml } from "yaml";
-import { hashSteps } from "../src/hash.js";
+import { hashPayloads, hashSteps } from "../src/hash.js";
 import { sortMigrationFiles } from "../src/migration-order.js";
 import type { LockEntry, LockFile } from "../src/types.js";
 
@@ -31,6 +31,8 @@ export interface MigrationSummary {
   date: string;
   /** Canonical hash of the migration's steps; matches manifest `contentHash`. */
   contentHash: string;
+  /** Hash of the step payloads; matches manifest `payloadHash`. */
+  payloadHash: string;
 }
 
 export interface LockDiff {
@@ -54,11 +56,15 @@ export function isLockClean(diff: LockDiff): boolean {
 }
 
 /** Build a MigrationSummary from parsed frontmatter. */
-export function summarise(fm: { id: string; date?: string; steps: unknown }): MigrationSummary {
+export function summarise(
+  fm: { id: string; date?: string; steps: unknown },
+  migrationsDir: string,
+): MigrationSummary {
   return {
     id: fm.id,
     date: typeof fm.date === "string" ? fm.date : "",
     contentHash: hashSteps(fm.steps),
+    payloadHash: hashPayloads(fm.steps, migrationsDir),
   };
 }
 
@@ -92,6 +98,13 @@ export function diffTemplateLock(opts: {
         recorded: entry.manifestHash,
         expected: migration.contentHash,
       });
+    } else if (entry.payloadHash !== migration.payloadHash) {
+      // The template's own lock always carries payloadHash, so a missing one is drift too.
+      hashMismatch.push({
+        id: migration.id,
+        recorded: entry.payloadHash ?? "(none)",
+        expected: migration.payloadHash,
+      });
     }
   }
 
@@ -113,7 +126,7 @@ export function diffTemplateLock(opts: {
  *
  * Existing entries keep their recorded `appliedAt` and `cliVersion` — those are
  * history, and rewriting them every release would churn the diff and lose the
- * record of which CLI actually stamped each migration. Only the hash is
+ * record of which CLI actually stamped each migration. Only the hashes are
  * refreshed (a migration's steps may have been corrected in place) and missing
  * entries are appended. Entries for migrations that no longer exist are dropped.
  *
@@ -140,6 +153,7 @@ export function buildTemplateLock(opts: {
       appliedAt: prior?.appliedAt ?? isoFromDate(migration.date),
       cliVersion: prior?.cliVersion ?? cliVersion,
       manifestHash: migration.contentHash,
+      payloadHash: migration.payloadHash,
       // Only carried when there is something to carry — see the note above.
       ...(prior?.undo?.length ? { undo: prior.undo } : {}),
       ...(prior?.fileHashes && Object.keys(prior.fileHashes).length
@@ -180,7 +194,7 @@ export function loadMigrationSummaries(migrationsDir: string): MigrationSummary[
     readdirSync(migrationsDir).filter((f) => f.match(/^\d+\.MIGRATIONS.*\.md$/)),
   );
   return files.map((file) =>
-    summarise(parseFrontMatter(readFileSync(join(migrationsDir, file), "utf8"))),
+    summarise(parseFrontMatter(readFileSync(join(migrationsDir, file), "utf8")), migrationsDir),
   );
 }
 

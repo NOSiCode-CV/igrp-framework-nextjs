@@ -26,7 +26,7 @@ import {
   getLegendLayout,
   getLegendVerticalAlign,
 } from "../lib.js"
-import { useIGRPLocale } from "../../../../i18n/index.js"
+import { igrpFormatMessage, useIGRPi18n, useIGRPLocale } from "../../../../i18n/index.js"
 import { type IGRPChartProps, type RadialBarConfig } from "../types.js"
 
 /**
@@ -171,9 +171,10 @@ function IGRPRadialBarChartInner({
   showRadiusAxis = false,
   centerText = { show: false },
 }: IGRPRadialBarChartProps) {
-  const chartHeight = getChartHeight(size, data, height)
+  const chartHeight = getChartHeight(size, [], height)
   const chartWidth = getChartWidth(width)
   const locale = useIGRPLocale()
+  const i18n = useIGRPi18n()
   const formatValue = React.useCallback(
     (value: number) => formatChartValue(value, valueFormatter, locale),
     [valueFormatter, locale]
@@ -227,7 +228,7 @@ function IGRPRadialBarChartInner({
 
     if (bars.length === 1 && data.length > 1) {
       return data.map((entry, index) => ({
-        value: entry[nameKey] || `Item ${index + 1}`,
+        value: entry[nameKey] || igrpFormatMessage(i18n.charts.itemFallback, { index: index + 1 }),
         type: "square" as LegendType,
         color: `var(--chart-${(index % 8) + 1})`,
         payload: { ...entry, strokeDasharray: "" },
@@ -235,12 +236,12 @@ function IGRPRadialBarChartInner({
     }
 
     return bars.map((bar, index) => ({
-      value: bar.name || bar.dataKey || `Series ${index + 1}`,
+      value: bar.name || bar.dataKey,
       type: "square" as LegendType,
       color: bar.color || `var(--chart-${(index % 8) + 1})`,
       payload: { dataKey: bar.dataKey, strokeDasharray: "" },
     }))
-  }, [bars, data, nameKey, legendPosition])
+  }, [bars, data, nameKey, legendPosition, i18n])
 
   const enhancedData = React.useMemo(() => {
     return data.map((item, index) => ({

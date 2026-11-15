@@ -1,5 +1,6 @@
 "use client"
 
+import { useId } from "react"
 import { Area, AreaChart, CartesianGrid, Legend, XAxis, YAxis, ReferenceLine } from "recharts"
 
 import { cn } from "../cn.js"
@@ -9,6 +10,7 @@ import {
   ChartTooltipContent,
   ChartLegend,
   ChartLegendContent,
+  chartColorVar,
 } from "../../primitives/chart.js"
 import {
   createChartConfig,
@@ -69,8 +71,13 @@ function IGRPAreaChart({
   tooltipIndicator = "line",
   footer,
 }: IGRPAreaChartProps) {
-  const chartHeight = getChartHeight(size, data, height)
+  const chartHeight = getChartHeight(size, [], height)
   const chartWidth = getChartWidth(width)
+  // Per-instance and url()-safe: two charts sharing a dataKey, or a dataKey with spaces,
+  // must not resolve to the same (or a broken) gradient.
+  const gradientPrefix = `fill-${useId().replace(/[^A-Za-z0-9_-]/g, "")}`
+  const gradientId = (dataKey: string, index: number) =>
+    `${gradientPrefix}-${index}-${String(dataKey).replace(/[^A-Za-z0-9_-]/g, "")}`
   const locale = useIGRPLocale()
   const formatValue = (value: number) => formatChartValue(value, valueFormatter, locale)
   const hasNegativeDataValues = hasNegativeValues(
@@ -159,26 +166,29 @@ function IGRPAreaChart({
               )}
 
               <defs>
-                {areas
-                  .filter((area) => area.gradient === true)
-                  .map((area) => (
-                    <linearGradient key={`fill${area.dataKey}`} id={`fill${area.dataKey}`} x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor={`var(--color-${area.dataKey})`} stopOpacity={0.8} />
-                      <stop offset="95%" stopColor={`var(--color-${area.dataKey})`} stopOpacity={0.1} />
+                {areas.map((area, index) =>
+                  area.gradient === true ? (
+                    <linearGradient key={area.dataKey} id={gradientId(area.dataKey, index)} x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor={`var(${chartColorVar(area.dataKey)})`} stopOpacity={0.8} />
+                      <stop offset="95%" stopColor={`var(${chartColorVar(area.dataKey)})`} stopOpacity={0.1} />
                     </linearGradient>
-                  ))}
+                  ) : null
+                )}
               </defs>
 
-              {areas.map((area) =>
+              {areas.map((area, index) =>
                 area.render ? (
                   area.render({
                     key: area.dataKey,
                     dataKey: area.dataKey,
                     name: area.name || area.dataKey,
                     stackId: stacked || expanded ? (area.stackId ?? "stack1") : undefined,
-                    fill: area.gradient === true ? `url(#fill${area.dataKey})` : `var(--color-${area.dataKey})`,
-                    fillOpacity: area.fillOpacity || 0.6,
-                    stroke: `var(--color-${area.dataKey})`,
+                    fill:
+                      area.gradient === true
+                        ? `url(#${gradientId(area.dataKey, index)})`
+                        : `var(${chartColorVar(area.dataKey)})`,
+                    fillOpacity: area.fillOpacity ?? 0.6,
+                    stroke: `var(${chartColorVar(area.dataKey)})`,
                     type: area.type || "monotone",
                   })
                 ) : (
@@ -187,9 +197,13 @@ function IGRPAreaChart({
                     dataKey={area.dataKey}
                     name={area.name || area.dataKey}
                     stackId={stacked || expanded ? (area.stackId ?? "stack1") : undefined}
-                    fill={area.gradient === true ? `url(#fill${area.dataKey})` : `var(--color-${area.dataKey})`}
-                    fillOpacity={area.fillOpacity || 0.4}
-                    stroke={`var(--color-${area.dataKey})`}
+                    fill={
+                      area.gradient === true
+                        ? `url(#${gradientId(area.dataKey, index)})`
+                        : `var(${chartColorVar(area.dataKey)})`
+                    }
+                    fillOpacity={area.fillOpacity ?? 0.4}
+                    stroke={`var(${chartColorVar(area.dataKey)})`}
                     type={area.type || "monotone"}
                   />
                 )

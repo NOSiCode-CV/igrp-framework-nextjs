@@ -241,6 +241,7 @@ export const IGRP_I18N_DEFAULTS_EN: IGRPI18nStrings = {
     link: "Insert link",
     linkUrl: "URL",
     linkApply: "Apply",
+    linkInvalid: "Invalid address.",
     linkRemove: "Remove",
     table: "Table",
     tableInsert: "Insert 3×3 table",
@@ -301,5 +302,8 @@ export const IGRP_I18N_DEFAULTS_EN: IGRPI18nStrings = {
   textarea: {
     counterUsed: "Characters used:",
     counterOf: "of",
+  },
+  charts: {
+    itemFallback: "Item {index}",
   },
 }

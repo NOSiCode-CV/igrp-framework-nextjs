@@ -377,6 +377,43 @@ describe("IGRPRichTextEditor — link popover", () => {
   })
 })
 
+describe("IGRPRichTextEditor — link address", () => {
+  async function applyLink(value: string) {
+    fireEvent.click(control("Inserir hiperligação")!)
+    const input = (await screen.findByLabelText("URL")) as HTMLInputElement
+    fireEvent.change(input, { target: { value } })
+    fireEvent.click(screen.getByRole("button", { name: "Aplicar" }))
+  }
+
+  it.each([
+    ["www.gov.cv", "https://www.gov.cv"],
+    ["intranet.gov.cv:8443/x", "https://intranet.gov.cv:8443/x"],
+    ["mailto:a@b.cv", "mailto:a@b.cv"],
+    ["/docs", "/docs"],
+    ["#topo", "#topo"],
+  ])("stores %s as %s", async (typed, href) => {
+    render(<IGRPRichTextEditor label="Corpo" value="<p>site</p>" />)
+    const editor = await editorOf()
+    act(() => {
+      editor.commands.setTextSelection({ from: 1, to: 5 })
+    })
+    await applyLink(typed)
+    expect(editor.getHTML()).toContain(`href="${href}"`)
+  })
+
+  it("keeps the popover open with an error for a refused address", async () => {
+    render(<IGRPRichTextEditor label="Corpo" value="<p>site</p>" />)
+    const editor = await editorOf()
+    act(() => {
+      editor.commands.setTextSelection({ from: 1, to: 5 })
+    })
+    await applyLink("javascript:alert(1)")
+    expect(screen.getByRole("alert")).toHaveTextContent("Endereço inválido.")
+    expect(screen.getByLabelText("URL")).toBeInTheDocument()
+    expect(editor.getHTML()).not.toContain("href")
+  })
+})
+
 describe("IGRPRichTextEditor — placeholder", () => {
   const placeholderOf = (box: HTMLElement) => box.querySelector("[data-placeholder]")?.getAttribute("data-placeholder")
 

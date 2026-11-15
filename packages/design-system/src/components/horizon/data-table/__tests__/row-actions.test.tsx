@@ -74,6 +74,30 @@ describe("IGRPDataTable row actions", () => {
   })
 })
 
+describe("IGRPDataTable dropdown row actions", () => {
+  it("keeps disabled on dropdown items: no navigation, no dialog", async () => {
+    const onConfirm = vi.fn()
+    const actions: IGRPDataTableAction<Row>[] = [
+      { type: "link", label: "Ver", href: () => "/x", disabled: () => true },
+      { type: "modal", label: "Editar", render: () => null },
+      { type: "alert", label: "Eliminar", title: "Eliminar?", onConfirm, disabled: (r) => r.original.id === 1 },
+    ]
+    render(<IGRPDataTable columns={columns} data={data} actions={actions} />)
+
+    await userEvent.click(screen.getByRole("button", { name: "Abrir ações" }))
+    const link = await screen.findByRole("menuitem", { name: "Ver" })
+    expect(link).toHaveAttribute("aria-disabled", "true")
+    expect(link).not.toHaveAttribute("href")
+    const remove = screen.getByRole("menuitem", { name: "Eliminar" })
+    expect(remove).toHaveAttribute("aria-disabled", "true")
+    expect(screen.getByRole("menuitem", { name: "Editar" })).not.toHaveAttribute("aria-disabled")
+
+    await userEvent.click(remove, { pointerEventsCheck: 0 })
+    expect(screen.queryByRole("alertdialog")).not.toBeInTheDocument()
+    expect(onConfirm).not.toHaveBeenCalled()
+  })
+})
+
 describe("IGRPDataTable pagination config", () => {
   it("starts at pagination.defaultPageSize", () => {
     const many: Row[] = Array.from({ length: 12 }, (_, i) => ({ id: i, name: `Linha ${i}` }))

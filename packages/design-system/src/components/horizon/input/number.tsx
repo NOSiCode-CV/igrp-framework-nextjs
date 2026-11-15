@@ -575,7 +575,8 @@ function IGRPInputNumber({
       control={formContext.control}
       // No `?? ""`: `z.number()` rejects "". An untouched empty field falls
       // through to the form-level default (usually undefined) and a cleared one
-      // writes null, so an optional number needs `z.number().nullish()`.
+      // writes null, so an optional number needs `z.number().nullish()`. Never
+      // `z.coerce.number()`: it turns null into 0, so a cleared required field passes.
       defaultValue={defaultValue}
       render={({ field, fieldState }) => (
         <FormNumberInput

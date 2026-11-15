@@ -18,7 +18,7 @@ import {
   getLegendLayout,
   getLegendVerticalAlign,
 } from "./lib.js"
-import { useIGRPLocale } from "../../../i18n/index.js"
+import { igrpFormatMessage, useIGRPi18n, useIGRPLocale } from "../../../i18n/index.js"
 
 /**
  * Props for the IGRPPieChart component.
@@ -61,9 +61,10 @@ function IGRPPieChartInner({
 }: IGRPPieChartProps) {
   const [activeIndex, setActiveIndex] = useState(-1)
 
-  const chartHeight = getChartHeight(size, data, height)
+  const chartHeight = getChartHeight(size, [], height)
   const chartWidth = getChartWidth(width)
   const locale = useIGRPLocale()
+  const i18n = useIGRPi18n()
   const formatValue = (value: number) => formatChartValue(value, valueFormatter, locale)
   const chartConfig = createChartConfig(pies)
 
@@ -82,7 +83,7 @@ function IGRPPieChartInner({
 
     if (pies.length === 1) {
       return data.map((entry, index) => ({
-        value: entry[nameKey] || `Item ${index + 1}`,
+        value: entry[nameKey] || igrpFormatMessage(i18n.charts.itemFallback, { index: index + 1 }),
         type: "square" as LegendType,
         color: pies[0]?.color || `var(--chart-${(index % 8) + 1})`,
         payload: { ...entry, strokeDasharray: "" },
@@ -90,12 +91,12 @@ function IGRPPieChartInner({
     }
 
     return pies.map((pie, index) => ({
-      value: pie.name || pie.dataKey || `Series ${index + 1}`,
+      value: pie.name || pie.dataKey,
       type: "square" as LegendType,
       color: pie.color || `var(--chart-${(index % 8) + 1})`,
       payload: { dataKey: pie.dataKey, strokeDasharray: "" },
     }))
-  }, [pies, data, nameKey, legendPosition])
+  }, [pies, data, nameKey, legendPosition, i18n])
 
   const renderActiveShape = (props: PieSectorDataItem) => {
     const { cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill } = props
@@ -232,14 +233,14 @@ function IGRPPieChartInner({
                   data={data}
                   dataKey={pie.dataKey}
                   nameKey={nameKey}
-                  cx={pie.cx || "50%"}
-                  cy={pie.cy || "50%"}
+                  cx={pie.cx ?? "50%"}
+                  cy={pie.cy ?? "50%"}
                   innerRadius={pie.innerRadius || 0}
                   outerRadius={pie.outerRadius}
                   paddingAngle={pie.paddingAngle || 0}
                   cornerRadius={pie.cornerRadius || 0}
-                  startAngle={pie.startAngle || 0}
-                  endAngle={pie.endAngle || 360}
+                  startAngle={pie.startAngle ?? 0}
+                  endAngle={pie.endAngle ?? 360}
                   activeShape={pie.activeShape ? renderActiveShape : undefined}
                   onMouseEnter={interactive ? (_, index) => setActiveIndex(index) : undefined}
                   onMouseLeave={interactive ? () => setActiveIndex(-1) : undefined}

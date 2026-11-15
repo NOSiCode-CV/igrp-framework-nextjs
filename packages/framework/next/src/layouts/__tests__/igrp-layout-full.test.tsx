@@ -25,6 +25,15 @@ const HeaderDataProvider = (p: unknown) => ({ __marker: 'header', p });
 const SidebarDataProvider = (p: unknown) => ({ __marker: 'sidebar', p });
 vi.mock('../providers/header-data-provider.js', () => ({ HeaderDataProvider }));
 vi.mock('../providers/sidebar-data-provider.js', () => ({ SidebarDataProvider }));
+let sidebarCookie: string | undefined;
+vi.mock('next/headers', () => ({
+  cookies: async () => ({
+    get: (name: string) =>
+      name === 'sidebar_state' && sidebarCookie !== undefined
+        ? { value: sidebarCookie }
+        : undefined,
+  }),
+}));
 vi.mock('../../i18n/server/resolve.js', () => ({ igrpResolveLocale: async () => 'en' }));
 
 const { IGRPLayoutFull } = await import('../igrp-layout-full.js');
@@ -56,7 +65,10 @@ const config = (overrides: Record<string, unknown> = {}) =>
     ...overrides,
   }) as never;
 
-beforeEach(() => vi.clearAllMocks());
+beforeEach(() => {
+  vi.clearAllMocks();
+  sidebarCookie = undefined;
+});
 
 describe('IGRPLayoutFull wiring', () => {
   it('passes apiManagementConfig.timeout to both providers', async () => {
@@ -94,7 +106,23 @@ describe('IGRPLayoutFull wiring', () => {
     expect(el.props.sidebar).toBeUndefined();
   });
 
-  it('honours defaultSidebarOpen, defaulting to true', async () => {
+  it('restores the sidebar open state from the sidebar_state cookie', async () => {
+    sidebarCookie = 'false';
+    const closed = await IGRPLayoutFull({ children: null, config: config() });
+    expect(closed.props.defaultOpen).toBe(false);
+
+    sidebarCookie = 'true';
+    const open = await IGRPLayoutFull({ children: null, config: config() });
+    expect(open.props.defaultOpen).toBe(true);
+  });
+
+  it('lets an explicit defaultSidebarOpen override the cookie', async () => {
+    sidebarCookie = 'false';
+    const el = await IGRPLayoutFull({ children: null, config: config(), defaultSidebarOpen: true });
+    expect(el.props.defaultOpen).toBe(true);
+  });
+
+  it('honours defaultSidebarOpen, defaulting to true without a cookie', async () => {
     const open = await IGRPLayoutFull({ children: null, config: config() });
     expect(open.props.defaultOpen).toBe(true);
 

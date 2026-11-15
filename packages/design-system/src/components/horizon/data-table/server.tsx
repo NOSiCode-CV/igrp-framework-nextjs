@@ -162,8 +162,9 @@ function IGRPServerDataTable<TData, TValue>({
         )}
       </div>
 
+      {/* On totalElements, not data: an empty last page (after a delete) must keep the way back. */}
       {enablePagination &&
-        data.length > 0 &&
+        pagination.totalElements > 0 &&
         (paginationType === "numeric" ? (
           <IGRPDataTablePaginationNumeric
             table={table}

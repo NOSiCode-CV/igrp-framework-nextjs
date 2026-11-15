@@ -46,6 +46,7 @@ function IGRPDataTableHeaderSortToggle<T>({
     <div className={cn(className)} {...props}>
       {canSort ? (
         <Button
+          type="button"
           variant="ghost"
           onClick={(e) => column.toggleSorting(undefined, e.shiftKey)}
           className={cn("px-0 py-0 has-[>svg]:px-0 data-[state=open]:bg-accent")}

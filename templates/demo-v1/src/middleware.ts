@@ -123,11 +123,15 @@ function isPublicPath(pathname: string): boolean {
   if (PUBLIC_PREFIXES.some((p) => pathname.startsWith(p))) return true;
   if (STATIC_PREFIXES.some((p) => pathname.startsWith(p))) return true;
   // Static assets by extension only, the same list as the matcher below. A
-  // dotted route such as `/users/john.doe` or `/api/users/john.doe` is NOT
-  // public: it must go through the token check. Kept for consumers who widen
-  // the matcher. Last segment only: on the full path, dots before a later "/"
-  // make the regex O(n²).
-  return STATIC_ASSET_RE.test(pathname.slice(pathname.lastIndexOf("/") + 1));
+  // dotted route such as `/users/john.doe` is NOT public: it must go through
+  // the token check. `/api/*` never counts as an asset, because the matcher
+  // sends every API route here, `/api/reports/2026.pdf` included. Kept for
+  // consumers who widen the matcher. Last segment only: on the full path, dots
+  // before a later "/" make the regex O(n²).
+  return (
+    !pathname.startsWith("/api/") &&
+    STATIC_ASSET_RE.test(pathname.slice(pathname.lastIndexOf("/") + 1))
+  );
 }
 
 const STATIC_ASSET_RE =

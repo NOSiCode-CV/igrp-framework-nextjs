@@ -1,5 +1,6 @@
 import { getManifest } from "../manifest.js";
 import { readLock } from "../lock.js";
+import { isStale, staleCause } from "../hash.js";
 
 export function status(appRoot: string) {
   const manifest = getManifest();
@@ -13,7 +14,7 @@ export function status(appRoot: string) {
     const entry = appliedById.get(m.id);
     // An applied migration whose steps were corrected in place after release:
     // this app has the OLD result and nothing else would ever say so.
-    const stale = entry !== undefined && entry.manifestHash !== m.contentHash;
+    const stale = isStale(entry, m);
     const state = stale ? "! changed" : entry ? "✓ applied" : "• pending";
     const ver = m.targetFrameworkVersion ? ` (→ ${m.targetFrameworkVersion})` : "";
     console.log(`  ${state}  ${m.id}${ver}`);
@@ -27,18 +28,20 @@ export function status(appRoot: string) {
     console.log(`  ? unknown  ${a.id} (applied by CLI ${a.cliVersion})`);
   }
 
-  const changed = manifest.migrations.filter((m) => {
-    const e = appliedById.get(m.id);
-    return e !== undefined && e.manifestHash !== m.contentHash;
-  });
+  const changed = manifest.migrations.filter((m) => isStale(appliedById.get(m.id), m));
 
   const pending = manifest.migrations.filter((m) => !appliedIds.has(m.id));
   const unknownNote = unknown.length > 0 ? ` (${unknown.length} from a newer CLI)` : "";
   console.log(`\n${lock.applied.length} applied${unknownNote}, ${pending.length} pending\n`);
   if (changed.length > 0) {
     console.log(`! ${changed.length} applied migration(s) changed after they were applied:`);
-    for (const m of changed) console.log(`    ${m.id}`);
+    const payloadOnly = changed.filter((m) => staleCause(appliedById.get(m.id), m) === "payload");
+    for (const m of changed) console.log(`    ${m.id}${payloadOnly.includes(m) ? " (payload files only)" : ""}`);
     console.log("  Check the guide for what changed — re-applying is a manual step.");
+    if (payloadOnly.length > 0) {
+      console.log("  For a payload-only change, do not roll back (it will refuse): remove the");
+      console.log("  migration's entry from .igrp-migrations-lock.json and run apply again.");
+    }
     console.log("");
   }
   if (unknown.length > 0) {

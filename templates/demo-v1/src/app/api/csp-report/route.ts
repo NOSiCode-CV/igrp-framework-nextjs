@@ -10,6 +10,7 @@ export async function POST(request: Request) {
   if (!length || length > MAX_REPORT_BYTES) {
     return new Response(null, { status: 413 });
   }
-  console.warn("[csp-report]", await request.text());
+  // Quoted, so a body with newlines can't forge extra log lines.
+  console.warn("[csp-report]", JSON.stringify(await request.text()));
   return new Response(null, { status: 204 });
 }

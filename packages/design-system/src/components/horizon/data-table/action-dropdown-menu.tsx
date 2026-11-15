@@ -73,6 +73,7 @@ function IGRPDataTableDropdownMenuAlert({
   showIcon = true,
   iconPlacement = "start",
   classNameItem,
+  disabled,
 }: IGRPDataTableDropdownMenuDialogProps) {
   const i18n = useIGRPi18n()
   const [open, setOpen] = useState(false)
@@ -98,6 +99,7 @@ function IGRPDataTableDropdownMenuAlert({
           icon={icon}
           labelTrigger={labelTrigger}
           classNameItem={classNameItem}
+          disabled={disabled}
         />
       </AlertDialogTrigger>
       <AlertDialogContent className={cn("max-w-md", className)}>
@@ -142,6 +144,7 @@ function IGRPDataTableDropdownMenuLink({
   showIcon = false,
   classNameItem,
   variant = "default",
+  disabled,
 }: IGRPDataTableDropdownMenuLinkProps) {
   const iconClass = iconPlacement === "end" ? "flex-row-reverse" : ""
   const customClss = cn("flex w-full items-center gap-2", iconClass, classNameItem)
@@ -153,7 +156,8 @@ function IGRPDataTableDropdownMenuLink({
     </>
   )
 
-  if (href) {
+  // A disabled item renders without the anchor: Radix blocks select, not the link's own navigation.
+  if (href && !disabled) {
     return (
       <DropdownMenuItem onSelect={(e) => e.preventDefault()} asChild variant={variant}>
         <Link href={href} className={customClss}>
@@ -167,6 +171,7 @@ function IGRPDataTableDropdownMenuLink({
     <DropdownMenuItem
       className={customClss}
       variant={variant}
+      disabled={disabled}
       onSelect={() => {
         if (!action) return
         action()
@@ -188,6 +193,7 @@ function IGRPDataTableDropdownMenuCustom({
   showIcon = false,
   classNameItem,
   variant,
+  disabled,
 }: IGRPDataTableDropdownMenuCustomProps) {
   const iconClass = iconPlacement === "end" ? "flex-row-reverse" : ""
 
@@ -204,6 +210,7 @@ function IGRPDataTableDropdownMenuCustom({
       className={cn("flex w-full items-center gap-2", iconClass, classNameItem)}
       onSelect={handlerAction}
       variant={variant}
+      disabled={disabled}
     >
       {showIcon && <IGRPIcon iconName={icon} className={cn("text-muted-foreground", iconClassName)} />}
       <span>{labelTrigger}</span>
@@ -217,6 +224,7 @@ interface IGRPDataTableDropdownMenuItemProps
     Pick<IGRPDataTableDropdownMenuDialogProps, "icon" | "labelTrigger" | "iconClassName"> {
   onClick?: () => void
   classNameItem?: string
+  disabled?: boolean
 }
 
 function IGRPDataTableDropdownMenuItem({
@@ -228,12 +236,15 @@ function IGRPDataTableDropdownMenuItem({
   onClick,
   classNameItem,
   variant,
+  disabled,
 }: IGRPDataTableDropdownMenuItemProps) {
   const iconClass = iconPlacement === "end" ? "flex-row-reverse" : ""
 
   return (
     <DropdownMenuItem
-      onClick={onClick}
+      // The dialog trigger's onClick reaches here through Slot; disabled must not open it.
+      onClick={disabled ? undefined : onClick}
+      disabled={disabled}
       className={cn("flex w-full items-center gap-2", iconClass, classNameItem)}
       onSelect={(e) => {
         e.preventDefault()
@@ -255,6 +266,7 @@ function IGRPDataTableDropdownMenuModal({
   iconPlacement = "start",
   classNameItem,
   children,
+  disabled,
   ...dialogProps
 }: IGRPDataTableDropdownMenuDialogProps) {
   const [open, setOpen] = useState(false)
@@ -270,6 +282,7 @@ function IGRPDataTableDropdownMenuModal({
           icon={icon}
           labelTrigger={labelTrigger}
           classNameItem={classNameItem}
+          disabled={disabled}
         />
       </DialogTrigger>
       <IGRPDataTableModalContent {...dialogProps} close={close}>
@@ -283,11 +296,22 @@ function IGRPDataTableDropdownMenuModal({
  * Dropdown menu item for a `custom` row action: the node itself becomes the menu item
  * (its own `onClick` runs on select). Text or fragments are wrapped in a plain item.
  */
-function IGRPDataTableDropdownMenuNode({ node }: { node?: ReactNode; labelTrigger?: string }) {
+function IGRPDataTableDropdownMenuNode({
+  node,
+  disabled,
+}: {
+  node?: ReactNode
+  labelTrigger?: string
+  disabled?: boolean
+}) {
   if (isValidElement(node)) {
-    return <DropdownMenuItem asChild>{node}</DropdownMenuItem>
+    return (
+      <DropdownMenuItem asChild disabled={disabled}>
+        {node}
+      </DropdownMenuItem>
+    )
   }
-  return <DropdownMenuItem>{node}</DropdownMenuItem>
+  return <DropdownMenuItem disabled={disabled}>{node}</DropdownMenuItem>
 }
 
 type IGRPDataTableActionDropdown =
@@ -315,7 +339,7 @@ type IGRPDataTableActionDropdown =
   | {
       id?: string
       component: typeof IGRPDataTableDropdownMenuNode
-      props: { node?: ReactNode; labelTrigger?: string }
+      props: { node?: ReactNode; labelTrigger?: string; disabled?: boolean }
     }
 
 type IGRPDataTableDropdownMenuProps = {

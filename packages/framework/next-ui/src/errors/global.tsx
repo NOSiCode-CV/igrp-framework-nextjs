@@ -98,6 +98,7 @@ function IGRPGlobalError({
           <h1 className={cn('text-2xl font-bold tracking-tight text-foreground')}>{title}</h1>
           <p className={cn('mb-4 text-base text-muted-foreground')}>{description}</p>
 
+          {/* AppError digests are `<id>|<message>`: the reference is the id. */}
           {error.digest && (
             <div
               className={cn(
@@ -107,7 +108,9 @@ function IGRPGlobalError({
             >
               <p className={cn('text-xs text-muted-foreground')}>
                 {labels.errorRef}{' '}
-                <code className={cn('rounded bg-muted px-1 py-0.5')}>{error.digest}</code>
+                <code className={cn('rounded bg-muted px-1 py-0.5')}>
+                  {error.digest.split('|', 1)[0]}
+                </code>
               </p>
             </div>
           )}

@@ -46,6 +46,11 @@ const FORMAT_LABELS: Record<ColorFormat, string> = {
   oklch: "OKLCH",
 }
 
+// While the field is empty the native picker holds this instead of the last colour, so
+// confirming that colour is a change the browser reports and the pick gets written.
+// shortcut: confirming this exact near-black untouched still writes nothing; no event exists for "OK unchanged".
+const EMPTY_PICKER_HEX = "#000001" // igrp-i18n-ignore
+
 const ALL_FORMATS: ColorFormat[] = ["hex", "rgb", "hsl", "oklch"]
 
 /** Shared input props this component has no slot for — they must not reach the DOM. */
@@ -144,7 +149,9 @@ function ColorField({
   if (parsedHex !== null && parsedHex !== lastValidHex) setLastValidHex(parsedHex)
 
   const hexValue = parsedHex ?? lastValidHex
-  const text = draft ?? (sourceInvalid ? source : hexToFormat(hexValue, format))
+  // No value (an unset or cleared form field) shows an empty swatch, not black or the last colour.
+  const empty = !source
+  const text = draft ?? (empty ? "" : sourceInvalid ? source : hexToFormat(hexValue, format))
   const invalid = hasError || sourceInvalid || ariaInvalid === true
 
   const emit = (next: string) => {
@@ -193,7 +200,7 @@ function ColorField({
             ref={pickerRef}
             id={controlId}
             className="absolute inset-0 size-full cursor-pointer opacity-0 disabled:cursor-not-allowed"
-            value={hexValue}
+            value={empty ? EMPTY_PICKER_HEX : hexValue}
             onChange={(e) => emit(hexToFormat(e.target.value, format))}
             onBlur={onBlur}
             disabled={disabled}
@@ -201,7 +208,11 @@ function ColorField({
             aria-invalid={invalid || undefined}
             aria-describedby={describedByIds}
           />
-          <div className="pointer-events-none absolute inset-0 rounded-md" style={{ backgroundColor: hexValue }} />
+          <div
+            className="pointer-events-none absolute inset-0 rounded-md"
+            data-empty={empty || undefined}
+            style={empty ? undefined : { backgroundColor: hexValue }}
+          />
         </div>
 
         {showFormatValue && (
@@ -244,7 +255,7 @@ function ColorField({
                           key={fmt}
                           onSelect={() => {
                             setPickedFormat(fmt)
-                            emit(hexToFormat(hexValue, fmt))
+                            if (!empty) emit(hexToFormat(hexValue, fmt))
                           }}
                         >
                           {FORMAT_LABELS[fmt]}
@@ -324,7 +335,8 @@ function IGRPInputColor({
         {(field, fieldState) => (
           <ColorField
             {...shared}
-            value={field.value}
+            // Never undefined: the field owns the value, so an unset one must not fall back to the internal default.
+            value={field.value ?? ""}
             onChange={(display) => {
               field.onChange(display)
               onChange?.(display)

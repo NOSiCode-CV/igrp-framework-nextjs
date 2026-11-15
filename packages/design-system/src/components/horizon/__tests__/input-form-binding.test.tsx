@@ -184,3 +184,59 @@ describe("Horizon inputs hand field.ref to a focusable element (focus on first i
     })
   })
 })
+
+describe("Horizon string inputs write an empty string when cleared", () => {
+  it("IGRPInputPhone", async () => {
+    render(
+      <Harness defaultValues={{ f: "+351912345678" }}>
+        <IGRPInputPhone name="f" label="F" />
+      </Harness>
+    )
+    await userEvent.clear(screen.getByLabelText("F"))
+    await waitFor(() => expect(values().f).toBe(""))
+  })
+})
+
+describe("IGRPInputUrl", () => {
+  it("writes an empty string for an empty address, not a bare protocol", async () => {
+    render(
+      <Harness defaultValues={{ f: "https://nosi.cv" }}>
+        <IGRPInputUrl name="f" label="F" />
+      </Harness>
+    )
+    await userEvent.clear(screen.getByLabelText("F"))
+    expect(values().f).toBe("")
+  })
+
+  it.each(["HTTPS://nosi.cv", "Https://nosi.cv"])("reads a %s paste case-insensitively", async (pasted) => {
+    render(
+      <Harness defaultValues={{ f: "" }}>
+        <IGRPInputUrl name="f" label="F" />
+      </Harness>
+    )
+    await userEvent.click(screen.getByLabelText("F"))
+    await userEvent.paste(pasted)
+    expect(values().f).toBe("https://nosi.cv")
+    expect(screen.getByLabelText("F")).toHaveValue("nosi.cv")
+  })
+
+  it("takes a pasted protocol instead of prefixing another", async () => {
+    render(
+      <Harness defaultValues={{ f: "" }}>
+        <IGRPInputUrl name="f" label="F" />
+      </Harness>
+    )
+    await userEvent.click(screen.getByLabelText("F"))
+    await userEvent.paste("http://nosi.cv")
+    expect(values().f).toBe("http://nosi.cv")
+    expect(screen.getByLabelText("F")).toHaveValue("nosi.cv")
+    expect(screen.getByRole("combobox", { name: "Protocolo" })).toHaveTextContent("http://")
+  })
+
+  it("standalone reports an empty string for an empty address", async () => {
+    const onChange = vi.fn()
+    render(<IGRPInputUrl name="u" label="U" defaultValue="https://a.cv" onChange={onChange} />)
+    await userEvent.clear(screen.getByLabelText("U"))
+    expect(onChange).toHaveBeenLastCalledWith("")
+  })
+})

@@ -125,7 +125,10 @@ function IGRPTemplateCommandSearch({
         {/* Palette-only spacing. The input wrapper and InputGroup take no
             className from `CommandInput`, so they are reached through their
             `data-slot`s; the item gap goes on cmdk's `[cmdk-group-items]` list. */}
-        <Command className="p-2 **:data-[slot=command-input-wrapper]:pb-2 **:data-[slot=input-group]:h-10!">
+        <Command
+          filter={filterByKeywords}
+          className="p-2 **:data-[slot=command-input-wrapper]:pb-2 **:data-[slot=input-group]:h-10!"
+        >
           <CommandInput placeholder={labels.placeholder} />
           <CommandList className="max-h-96 scroll-py-2">
             <CommandEmpty>{labels.empty}</CommandEmpty>
@@ -161,6 +164,19 @@ function IGRPTemplateCommandSearch({
       </CommandDialog>
     </>
   );
+}
+
+const fold = (text: string) => text.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase();
+
+/**
+ * cmdk scores `value` too; ours is a unique id/index, so match the keywords only.
+ * cmdk's own `commandScore` is not exported, so: every search token must occur in
+ * some keyword word ("rel con" finds "Relatórios Contabilísticos").
+ */
+function filterByKeywords(_value: string, search: string, keywords?: string[]): number {
+  const words = fold((keywords ?? []).join(' ')).split(/\s+/);
+  const tokens = fold(search).split(/\s+/).filter(Boolean);
+  return tokens.every((token) => words.some((word) => word.includes(token))) ? 1 : 0;
 }
 
 export { IGRPTemplateCommandSearch, type IGRPTemplateCommandSearchProps };

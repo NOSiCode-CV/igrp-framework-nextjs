@@ -80,7 +80,9 @@ function IGRPInputUrl({
 
   const extractUrlParts = useCallback(
     (url: string) => {
-      const protocolMatch = protocols.find((p) => url.startsWith(String(p.value)))
+      // Case-insensitive ("HTTPS://" is https://); the stored protocol is the option's spelling.
+      const lower = url.toLowerCase()
+      const protocolMatch = protocols.find((p) => lower.startsWith(String(p.value).toLowerCase()))
       if (protocolMatch) {
         return {
           protocol: protocolMatch.value,
@@ -100,22 +102,27 @@ function IGRPInputUrl({
   const [localProtocol, setLocalProtocol] = useState(() => String(initialParts.protocol))
   const [localAddress, setLocalAddress] = useState(() => initialParts.address)
 
-  const displayProtocol = !formContext && value !== undefined ? String(extractUrlParts(value).protocol) : localProtocol
+  const displayProtocol = !formContext && value ? String(extractUrlParts(value).protocol) : localProtocol
   const displayAddress = !formContext && value !== undefined ? extractUrlParts(value).address : localAddress
 
-  const combineUrl = (protocol: string, address: string) => {
-    return `${protocol}${address}`
+  // A protocol typed or pasted into the address wins over the select, and an
+  // empty address is an empty URL, not a bare "https://".
+  const resolveUrl = (protocol: string, address: string) => {
+    const typed = extractUrlParts(address)
+    const resolved = typed.address !== address ? String(typed.protocol) : protocol
+    return { protocol: resolved, address: typed.address, url: typed.address ? `${resolved}${typed.address}` : "" }
   }
 
   const handleStandaloneProtocolChange = (newProtocol: string) => {
-    if (value === undefined) setLocalProtocol(newProtocol)
-    onChange?.(combineUrl(newProtocol, displayAddress))
+    setLocalProtocol(newProtocol)
+    onChange?.(resolveUrl(newProtocol, displayAddress).url)
   }
 
   const handleStandaloneAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newAddress = e.target.value
-    if (value === undefined) setLocalAddress(newAddress)
-    onChange?.(combineUrl(displayProtocol, newAddress))
+    const next = resolveUrl(displayProtocol, e.target.value)
+    setLocalProtocol(next.protocol)
+    if (value === undefined) setLocalAddress(next.address)
+    onChange?.(next.url)
   }
 
   if (!formContext) {
@@ -177,20 +184,23 @@ function IGRPInputUrl({
       control={formContext.control}
       defaultValue={defaultValue || ""}
       render={({ field, fieldState }) => {
-        const { protocol: fieldProtocol, address: fieldAddress } = extractUrlParts(field.value || "")
+        const parts = extractUrlParts(field.value || "")
+        // An empty field keeps the protocol last picked instead of snapping back to the default.
+        const fieldProtocol = field.value ? String(parts.protocol) : localProtocol
+        const fieldAddress = parts.address
 
-        const handleProtocolChange = (newProtocol: string) => {
-          const newValue = combineUrl(newProtocol, fieldAddress)
-          field.onChange(newValue)
-          onChange?.(newValue)
+        // An empty URL is "": undefined would make useWatch bring the default back,
+        // and null fails z.string() schemas.
+        const commit = (next: ReturnType<typeof resolveUrl>) => {
+          setLocalProtocol(next.protocol)
+          field.onChange(next.url)
+          onChange?.(next.url)
         }
 
-        const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-          const newAddress = e.target.value
-          const newValue = combineUrl(String(fieldProtocol), newAddress)
-          field.onChange(newValue)
-          onChange?.(newValue)
-        }
+        const handleProtocolChange = (newProtocol: string) => commit(resolveUrl(newProtocol, fieldAddress))
+
+        const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+          commit(resolveUrl(fieldProtocol, e.target.value))
 
         return (
           <Field className={className} data-invalid={fieldState.error || error ? true : undefined}>

@@ -118,7 +118,7 @@ export async function rollback(
     if (expected !== null && current !== null && current !== expected) edited.push(path);
   }
   if (edited.length > 0 && !opts.force) {
-    console.error(`\nCannot roll back ${id} — ${edited.length} file(s) changed since it ran:`);
+    console.error(`\nCannot roll back ${id} — ${edited.length} file(s) differ from what ${id} wrote:`);
     for (const path of edited) console.error(`  - ${path}`);
     console.error(
       "\nRolling back would delete or overwrite these changes. Commit or copy them" +
@@ -126,6 +126,8 @@ export async function rollback(
     );
     return false;
   }
+  // --force also skips the other guards, so leave a record of what it discards.
+  if (edited.length > 0) console.warn(`\n⚠ --force: discarding local changes in: ${edited.join(", ")}`);
 
   console.log(`\nRolling back ${id} (${undoSteps.length} undo step(s))\n`);
   // Undo steps must run in REVERSE apply order so multi-step touches of the

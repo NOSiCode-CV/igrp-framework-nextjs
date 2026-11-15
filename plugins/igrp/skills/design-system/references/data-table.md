@@ -117,7 +117,7 @@ A union discriminated by `type`. Every action has `label`, `icon?` and `hidden?(
 | `"modal"` | `render: (row, close) => ReactNode` | Yes. A menu item opens the dialog, and `close` works. |
 | `"custom"` | `render: (row) => ReactNode` | Yes. The returned element becomes the menu item and its `onClick` runs on select. |
 
-- **Inline vs dropdown:** up to 2 *visible* actions (after `hidden`) render as icon buttons. With 3 or more they collapse into a dropdown, where `icon` and `disabled` are ignored. This is decided per row.
+- **Inline vs dropdown:** up to 2 *visible* actions (after `hidden`) render as icon buttons. With 3 or more they collapse into a dropdown, which keeps `disabled` (a disabled link item does not navigate) and shows `icon` on link, alert and modal items (a `custom` item is the node you render). This is decided per row.
 - **`custom` in the dropdown:** return **one element** (e.g. an `IGRPButton` with `onClick`). Any overlay it opens must live outside the menu, because the menu closes on select.
 - **`modal`:** the dialog shows a cancel button, so put your own submit controls inside `render` and call `close` after saving.
 - **Default icons:** link `Eye`, alert `Trash2`, modal `Edit`.
@@ -180,7 +180,7 @@ A controlled table for server-paginated data. The caller owns the page index; th
 | `pagination: IGRPServerPaginationState` | | `{ pageIndex (0-based), pageSize, totalElements, totalPages }`. |
 | `onPaginationChange(pageIndex, pageSize)` | | Flat arguments. |
 | `pageSizeOptions` | `[5, 10, 30, 50]` | |
-| `enablePagination` | `true` | The bar shows whenever `data` has rows. |
+| `enablePagination` | `true` | The bar shows whenever `totalElements > 0`, so an empty page past the end (after a delete) still offers the way back. |
 | `paginationType` | `"simple"` | `"numeric"` for numbered pages. |
 | `isLoading` | `false` | Spinner overlay and `aria-busy`; rows stay rendered. The pagination bar stays interactive, so guard in the parent if needed. |
 | `sorting`, `onSortingChange` | | Manual sorting only when both are given; otherwise rows sort client-side within the page. |

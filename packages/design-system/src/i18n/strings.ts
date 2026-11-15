@@ -399,6 +399,8 @@ export interface IGRPI18nStrings {
     link: string
     linkUrl: string
     linkApply: string
+    /** Shown under the URL when the editor refuses it (e.g. a `javascript:` link). */
+    linkInvalid: string
     linkRemove: string
     table: string
     tableInsert: string
@@ -480,6 +482,10 @@ export interface IGRPI18nStrings {
     counterUsed: string
     /** Screen-reader-only word between the count and the limit. */
     counterOf: string
+  }
+  charts: {
+    /** Legend label of a data row without a `nameKey` value. `{index}` is replaced with its 1-based position. */
+    itemFallback: string
   }
 }
 
@@ -729,6 +735,7 @@ export const IGRP_I18N_DEFAULTS_PT: IGRPI18nStrings = {
     link: "Inserir hiperligação",
     linkUrl: "URL",
     linkApply: "Aplicar",
+    linkInvalid: "Endereço inválido.",
     linkRemove: "Remover",
     table: "Tabela",
     tableInsert: "Inserir tabela 3×3",
@@ -789,6 +796,9 @@ export const IGRP_I18N_DEFAULTS_PT: IGRPI18nStrings = {
   textarea: {
     counterUsed: "Caracteres utilizados:",
     counterOf: "de",
+  },
+  charts: {
+    itemFallback: "Item {index}",
   },
 }
 

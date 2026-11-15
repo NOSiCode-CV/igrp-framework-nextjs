@@ -146,7 +146,7 @@ function IGRPMenuNavigation({
       if (navigationContext) {
         navigationContext.scrollToSection(sectionId)
       } else {
-        const element = document.querySelector(`[data-section-id='${sectionId}']`)
+        const element = document.querySelector(`[data-section-id="${CSS.escape(sectionId)}"]`)
         if (element) {
           element.scrollIntoView({
             behavior: getScrollBehavior(),

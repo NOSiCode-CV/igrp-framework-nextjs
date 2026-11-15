@@ -48,7 +48,8 @@ export default meta;
 const basicSchema = z.object({
   name: z.string().min(2, 'Name is required'),
   email: z.email('Invalid email'),
-  age: z.coerce.number().min(1, 'Age must be at least 1'),
+  // IGRPInputNumber writes a number, or null when cleared: z.coerce.number() would turn null into 0.
+  age: z.number({ error: 'Age is required' }).min(1, 'Age must be at least 1'),
   remember: z.boolean().optional(),
   uuid: z.string().optional(),
 });
@@ -57,7 +58,8 @@ const advancedSchema = z.object({
   firstName: z.string().min(2),
   lastName: z.string().min(2),
   email: z.string().email(),
-  age: z.coerce.number().min(0),
+  // A native number input writes a string; map empty to undefined so coerce cannot turn it into 0.
+  age: z.preprocess((v) => (v === '' || v == null ? undefined : v), z.coerce.number().min(0)),
   phone: z.string().min(8),
   address: z.string().min(5),
   city: z.string().min(2),
@@ -281,9 +283,7 @@ export const BasicExternalTrigger: StoryObj = {
         >
           <BasicFields />
         </IGRPForm>
-        <Button onClick={() => formRef.current?.submit()}>
-          Submit Externally
-        </Button>
+        <Button onClick={() => formRef.current?.submit()}>Submit Externally</Button>
       </div>
     );
   },
@@ -964,8 +964,8 @@ export const FormExamples: StoryObj = {
 
 export const FormExamples2: StoryObj = {
   render: () => {
-    const formContribuinte = z.object({  
-      nomeResponsavel: z.string(),    
+    const formContribuinte = z.object({
+      nomeResponsavel: z.string(),
       dataInicioAtividade: z.date({
         message: 'Data de Início de Atividade é obrigatória',
       }),
@@ -980,9 +980,11 @@ export const FormExamples2: StoryObj = {
           validationMode='onBlur'
           onSubmit={(values) => {
             console.log('Advanced External Submit:', values);
-            alert(`Form submitted successfully! Date: ${values.dataInicioAtividade.toLocaleDateString('pt-PT')}`);
+            alert(
+              `Form submitted successfully! Date: ${values.dataInicioAtividade.toLocaleDateString('pt-PT')}`,
+            );
           }}
-          formRef={formRef}        
+          formRef={formRef}
         >
           <div className='flex flex-col gap-6'>
             <IGRPCard
@@ -1010,14 +1012,14 @@ export const FormExamples2: StoryObj = {
                     id={`nomeResponsavel`}
                     label={'Nome do Responsável'}
                     disabled={false}
-                    required={true}                    
-                  />                  
+                    required={true}
+                  />
                   <IGRPDatePickerInputSingle
-                    placeholder='Selecione uma data...'                    
-                    id="dataInicioAtividade"
+                    placeholder='Selecione uma data...'
+                    id='dataInicioAtividade'
                     label='Data de Início de Atividade'
                     disableBefore={new Date('1900-01-01')}
-                    disableAfter={new Date('2099-12-31')}                    
+                    disableAfter={new Date('2099-12-31')}
                     dateFormat={`dd/MM/yyyy`}
                     required={true}
                   />

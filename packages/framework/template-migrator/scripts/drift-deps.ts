@@ -5,7 +5,8 @@
 
 export interface UnpinnedDepDrift {
   dep: string;
-  declared: string;
+  /** Template range, or null when the template no longer declares a baselined dep at all. */
+  declared: string | null;
   /** Grandfathered range, or null when the dep is not in the baseline at all. */
   baseline: string | null;
 }
@@ -24,7 +25,13 @@ export function findUnpinnedDepDrift(opts: {
   pinned: Set<string>;
   baseline: Record<string, string>;
 }): UnpinnedDepDrift[] {
-  return Object.entries(unpinnedDeps(opts.templateDeps, opts.pinned))
-    .filter(([dep, declared]) => opts.baseline[dep] !== declared)
-    .map(([dep, declared]) => ({ dep, declared, baseline: opts.baseline[dep] ?? null }));
+  const declared = unpinnedDeps(opts.templateDeps, opts.pinned);
+  // Baseline keys the template dropped entirely are stale. One a migration now
+  // pins is still declared, just covered by the pin check instead; a pinned one
+  // the template dropped is reported by the pin check, not twice here.
+  const removed = Object.keys(opts.baseline).filter((dep) => !(dep in opts.templateDeps) && !opts.pinned.has(dep));
+  const deps = [...Object.keys(declared), ...removed].sort((a, b) => a.localeCompare(b));
+  return deps
+    .filter((dep) => opts.baseline[dep] !== declared[dep])
+    .map((dep) => ({ dep, declared: declared[dep] ?? null, baseline: opts.baseline[dep] ?? null }));
 }

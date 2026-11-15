@@ -120,7 +120,7 @@ function IGRPInputTime({
                 inputClassName
               )}
               ref={igrpMergeRefs(field.ref, ref)}
-              value={field.value}
+              value={field.value ?? ""}
               onChange={(e) => {
                 field.onChange(e)
                 handleChange(e)

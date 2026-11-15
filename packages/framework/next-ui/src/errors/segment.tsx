@@ -123,13 +123,14 @@ function IGRPSegmentError({
             <p className={cn('text-sm text-muted-foreground')}>{description}</p>
           </div>
 
+          {/* AppError digests are `<id>|<message>`: the reference is the id. */}
           {error.digest ? (
             <p className={cn('text-xs text-muted-foreground')}>
               {labels.errorRef}{' '}
               <code
                 className={cn('rounded bg-muted px-1 py-0.5 font-mono text-xs text-foreground')}
               >
-                {error.digest}
+                {error.digest.split('|', 1)[0]}
               </code>
             </p>
           ) : null}

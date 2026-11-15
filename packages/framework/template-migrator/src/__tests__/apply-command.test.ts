@@ -297,6 +297,30 @@ describe("rollback refuses to discard edits made after the migration", () => {
     expect(existsSync(join(appRoot, "src/new.ts"))).toBe(false);
     expect(readFileSync(join(appRoot, "src/a.ts"), "utf8")).toBe("ORIGINAL A\n");
   });
+
+  it("names the discarded file when --force overrides the guard", async () => {
+    writeFileAt(appRoot, "src/a.ts", "ORIGINAL A\n");
+    setEditableManifest();
+    expect(await apply(appRoot, { yes: true, payloadDir })).toBe(true);
+    writeFileAt(appRoot, "src/new.ts", "MY EDIT\n");
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    try {
+      expect(await rollback(appRoot, "50-edit-test", { force: true, payloadDir })).toBe(true);
+      expect(warn.mock.calls.map((c) => String(c[0])).join("\n")).toContain("discarding local changes in: src/new.ts");
+    } finally {
+      warn.mockRestore();
+    }
+  });
+});
+
+describe("apply --to", () => {
+  it("succeeds without work when the target is already applied", async () => {
+    writeFileAt(appRoot, "src/a.ts", "ORIGINAL A\n");
+    setEditableManifest();
+    expect(await apply(appRoot, { yes: true, payloadDir, toId: "50-edit-test" })).toBe(true);
+    expect(await apply(appRoot, { yes: true, payloadDir, toId: "50-edit-test" })).toBe(true);
+    expect(await apply(appRoot, { yes: true, payloadDir, toId: "99-missing" })).toBe(false);
+  });
 });
 
 describe("apply reports failure", () => {

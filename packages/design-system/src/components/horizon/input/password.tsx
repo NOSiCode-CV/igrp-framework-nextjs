@@ -143,7 +143,7 @@ function IGRPInputPassword({
                 error || fieldState.error ? `${fieldName}-error` : helperText ? `${fieldName}-helper` : undefined
               }
               ref={igrpMergeRefs(field.ref, ref)}
-              value={field.value}
+              value={field.value ?? ""}
               onChange={(e) => {
                 field.onChange(e)
                 onChange?.(e.target.value)

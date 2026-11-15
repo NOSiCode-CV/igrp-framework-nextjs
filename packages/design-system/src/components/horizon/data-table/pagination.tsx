@@ -88,6 +88,7 @@ function IGRPDataTablePagination<TData>({
           <PaginationContent>
             <PaginationItem>
               <Button
+                type="button"
                 size="icon"
                 variant="outline"
                 className={cn("disabled:pointer-events-none disabled:opacity-50")}
@@ -101,6 +102,7 @@ function IGRPDataTablePagination<TData>({
 
             <PaginationItem>
               <Button
+                type="button"
                 size="icon"
                 variant="outline"
                 className={cn("disabled:pointer-events-none disabled:opacity-50")}
@@ -114,6 +116,7 @@ function IGRPDataTablePagination<TData>({
 
             <PaginationItem>
               <Button
+                type="button"
                 size="icon"
                 variant="outline"
                 className={cn("disabled:pointer-events-none disabled:opacity-50")}
@@ -127,6 +130,7 @@ function IGRPDataTablePagination<TData>({
 
             <PaginationItem>
               <Button
+                type="button"
                 size="icon"
                 variant="outline"
                 className={cn("disabled:pointer-events-none disabled:opacity-50")}
@@ -174,6 +178,7 @@ function IGRPDataTablePaginationNumeric<TData>({
           <PaginationContent>
             <PaginationItem>
               <Button
+                type="button"
                 size="icon"
                 variant="outline"
                 className={cn("disabled:pointer-events-none disabled:opacity-50")}
@@ -196,6 +201,7 @@ function IGRPDataTablePaginationNumeric<TData>({
               return (
                 <PaginationItem key={page}>
                   <Button
+                    type="button"
                     size="icon"
                     variant={`${isActive ? "outline" : "ghost"}`}
                     onClick={() => table.setPageIndex(page - 1)}
@@ -215,6 +221,7 @@ function IGRPDataTablePaginationNumeric<TData>({
 
             <PaginationItem>
               <Button
+                type="button"
                 size="icon"
                 variant="outline"
                 className={cn("disabled:pointer-events-none disabled:opacity-50")}

@@ -1,3 +1,4 @@
+import { cookies } from 'next/headers';
 import { Suspense } from 'react';
 import {
   IGRPRootProvidersFull,
@@ -36,8 +37,8 @@ export type IGRPLayoutFullArgs = {
    * It cannot be read from the sidebar data source: that is fetched inside
    * `SidebarDataProvider`, behind a `<Suspense>` boundary nested in the shell
    * this value configures — the shell has to render before the data exists.
-   * Hence an explicit prop. Defaults to `true`, the value that was previously
-   * hardcoded here.
+   * Hence an explicit prop. When omitted, it is read from the `sidebar_state`
+   * cookie the design-system sidebar writes on toggle (open unless `'false'`).
    */
   readonly defaultSidebarOpen?: boolean;
   rootProviderClassName?: string;
@@ -50,7 +51,7 @@ export async function IGRPLayoutFull({
   breadcrumbs,
   breadcrumbRouteLabels,
   headerSlots,
-  defaultSidebarOpen = true,
+  defaultSidebarOpen,
   rootProviderClassName,
 }: IGRPLayoutFullArgs) {
   const { previewMode, layout, apiManagementConfig, toasterConfig } = config;
@@ -110,9 +111,13 @@ export async function IGRPLayoutFull({
     </IGRPLayoutErrorBoundary>
   );
 
+  // Must match SIDEBAR_COOKIE_NAME in the design-system sidebar primitive.
+  const sidebarOpen =
+    defaultSidebarOpen ?? (await cookies()).get('sidebar_state')?.value !== 'false';
+
   return (
     <IGRPRootProvidersFull
-      defaultOpen={defaultSidebarOpen}
+      defaultOpen={sidebarOpen}
       toasterConfig={toasterConfig}
       sidebar={sidebarSlot}
       header={headerSlot}

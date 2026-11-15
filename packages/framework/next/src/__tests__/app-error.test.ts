@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import { AppError, getDisplayableErrorMessage, parsePublicDigest } from '../app-error.js';
 
@@ -28,6 +28,17 @@ describe('getDisplayableErrorMessage', () => {
     expect(getDisplayableErrorMessage(sanitized, 'Something went wrong.').message).toBe(
       'Something went wrong.',
     );
+  });
+
+  it('shows a raw message only outside production', () => {
+    const raw = new Error('DB password rejected for host db-1');
+    expect(getDisplayableErrorMessage(raw, 'fallback').message).toBe(raw.message);
+    vi.stubEnv('NODE_ENV', 'production');
+    try {
+      expect(getDisplayableErrorMessage(raw, 'fallback').message).toBe('fallback');
+    } finally {
+      vi.unstubAllEnvs();
+    }
   });
 
   it('keeps the pt-PT fallback by default', () => {

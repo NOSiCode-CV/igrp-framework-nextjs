@@ -45,6 +45,9 @@ type SelectAction =
   | { type: "SET_OPEN"; payload: boolean }
   | { type: "RESET_SEARCH" }
 
+/** Case- and accent-insensitive form for search: "sao" matches "São Vicente". */
+const foldSearch = (text: string) => text.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase()
+
 function selectReducer(state: SelectState, action: SelectAction): SelectState {
   switch (action.type) {
     case "SET_SELECTED":
@@ -52,7 +55,8 @@ function selectReducer(state: SelectState, action: SelectAction): SelectState {
     case "SET_SEARCH":
       return { ...state, search: action.payload }
     case "SET_OPEN":
-      return { ...state, isOpen: action.payload }
+      // Closing clears the search, so a reopen after a no-match search lists every option.
+      return { ...state, isOpen: action.payload, search: action.payload ? state.search : "" }
     case "RESET_SEARCH":
       return { ...state, search: "" }
     default:
@@ -221,9 +225,9 @@ function IGRPSelect({
 
   const optionsMap = useMemo(() => new Map(options.map((opt) => [opt.value, opt])), [options])
 
-  const normalizedSearch = state.search.trim().toLowerCase()
+  const normalizedSearch = foldSearch(state.search.trim())
   const filteredOptions = useMemo(
-    () => options.filter(({ label }) => label.toLowerCase().includes(normalizedSearch)),
+    () => options.filter(({ label }) => foldSearch(label).includes(normalizedSearch)),
     [options, normalizedSearch]
   )
 
@@ -443,6 +447,7 @@ const IGRPSelectContent = memo(
     showStatus: boolean
     showGroup: boolean
   }) => {
+    const i18n = useIGRPi18n()
     const groups = useMemo(
       () => Array.from(new Set(filteredOptions.map((opt) => opt.group).filter(Boolean))),
       [filteredOptions]
@@ -451,6 +456,9 @@ const IGRPSelectContent = memo(
     return (
       <SelectContent className={cn("max-h-[300px] overflow-y-auto")}>
         {showSearch && <IGRPSelectSearch search={search} setSearch={setSearch} onResetSearch={onResetSearch} />}
+        {filteredOptions.length === 0 && (
+          <p className={cn("px-2 py-1.5 text-sm text-muted-foreground")}>{i18n.multiSelect.notFound}</p>
+        )}
         {showGroup && groups.length > 0
           ? groups.map((group) => (
               <Fragment key={group}>

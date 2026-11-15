@@ -45,12 +45,26 @@ into whatever bundle touched it. Use their subpath entries.
 > `next-auth.session-token`. With cookie isolation on (the default, see
 > "Cookies"), that name does not exist, so both report "no session". Prefer the
 > instance's `auth.getTokenFromRequest(request)`, which resolves the right name.
-> If you must use them directly, pass the names the instance built:
+> If you must call `getToken` directly, pass the name the instance built and the
+> IGRP codec (without it a store-backed cookie decodes with no `accessToken`):
 >
 > ```ts
-> getToken({ req, secret, cookieName: auth.authOptions.cookies!.sessionToken.name });
-> withAuth(handler, { cookies: auth.authOptions.cookies, secret });
+> import { decodeIGRPSessionToken } from '@igrp/framework-next-auth/session-store';
+>
+> getToken({
+>   req,
+>   secret,
+>   cookieName: auth.authOptions.cookies!.sessionToken.name,
+>   decode: decodeIGRPSessionToken,
+> });
 > ```
+>
+> `withAuth` is **not supported with a session store**. The store is Node-only,
+> so in the Edge middleware the IGRP decoder returns `null` (no session), and
+> NextAuth's plain decoder would authorize a session that was already deleted
+> from the store. Use `auth.getTokenFromRequest(request)` in middleware instead.
+> Without a store, `withAuth(handler, { cookies: auth.authOptions.cookies, secret })`
+> still works.
 
 ### Client hooks
 

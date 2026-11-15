@@ -31,6 +31,8 @@ export interface MigrationEntry {
   steps: MigrationStep[];
   guideHref: string;
   contentHash: string;
+  /** Hash of the step payloads (hashPayloads); absent in manifests packed before it existed. */
+  payloadHash?: string;
 }
 
 export interface Manifest {
@@ -45,6 +47,9 @@ export interface LockEntry {
   appliedAt: string;
   cliVersion: string;
   manifestHash: string;
+  /** The migration's `payloadHash` at apply time. Absent on entries written
+   *  before it existed; those are compared on `manifestHash` alone. */
+  payloadHash?: string;
   /**
    * Inverse steps for rollback.
    *

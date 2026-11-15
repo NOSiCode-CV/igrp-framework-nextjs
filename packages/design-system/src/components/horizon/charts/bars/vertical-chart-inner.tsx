@@ -9,6 +9,7 @@ import {
   ChartTooltipContent,
   ChartLegend,
   ChartLegendContent,
+  chartColorVar,
 } from "../../../primitives/chart.js"
 import {
   formatChartValue,
@@ -168,7 +169,7 @@ function IGRPVerticalBarChartInner({
                     dataKey: bar.dataKey,
                     name: bar.name || bar.dataKey,
                     stackId: stacked ? (bar.stackId ?? "stack1") : undefined,
-                    fill: `var(--color-${bar.dataKey})`,
+                    fill: `var(${chartColorVar(bar.dataKey)})`,
                     radius: bar.radius ?? barRadius,
                   })
                 ) : (
@@ -177,7 +178,7 @@ function IGRPVerticalBarChartInner({
                     dataKey={bar.dataKey}
                     name={bar.name || bar.dataKey}
                     stackId={stacked ? (bar.stackId ?? "stack1") : undefined}
-                    fill={`var(--color-${bar.dataKey})`}
+                    fill={`var(${chartColorVar(bar.dataKey)})`}
                     radius={bar.radius ?? barRadius}
                   />
                 )

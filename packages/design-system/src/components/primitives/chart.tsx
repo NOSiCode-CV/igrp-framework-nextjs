@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 // shadcn: 2026-06-23
 "use client"
 
@@ -54,7 +55,8 @@ function ChartContainer({
   }
 }) {
   const uniqueId = React.useId()
-  const chartId = `chart-${id ?? uniqueId.replace(/:/g, "")}`
+  // Goes into a CSS selector inside <style>: same sanitising as chartColorVar.
+  const chartId = `chart-${String(id ?? uniqueId).replace(/[^\w-]/g, "_")}`
 
   return (
     <ChartContext.Provider value={{ config }}>
@@ -76,6 +78,11 @@ function ChartContainer({
   )
 }
 
+/** IGRP: CSS custom-property name for a series key; non `[\w-]` characters become `_`. */
+function chartColorVar(key: string | number) {
+  return `--color-${String(key).replace(/[^\w-]/g, "_")}`
+}
+
 const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
   const colorConfig = Object.entries(config).filter(([, config]) => config.theme ?? config.color)
 
@@ -93,7 +100,9 @@ ${prefix} [data-chart=${id}] {
 ${colorConfig
   .map(([key, itemConfig]) => {
     const color = itemConfig.theme?.[theme as keyof typeof itemConfig.theme] ?? itemConfig.color
-    return color ? `  --color-${key}: ${color};` : null
+    // IGRP: a raw key or colour can break the custom-property name or escape the <style> tag.
+    const safeColor = color?.replace(/[<>;{}]/g, "")
+    return safeColor ? `  ${chartColorVar(key)}: ${safeColor};` : null
   })
   .join("\n")}
 }
@@ -312,4 +321,4 @@ function getPayloadConfigFromPayload(config: ChartConfig, payload: unknown, key:
   return configLabelKey in config ? config[configLabelKey] : config[key]
 }
 
-export { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent, ChartStyle }
+export { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent, ChartStyle, chartColorVar }

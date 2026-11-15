@@ -85,13 +85,21 @@ function IGRPDataTableRowActionsCell<TData>({ row, actions }: IGRPDataTableRowAc
     if (action.type === "link") {
       dropdownItems.push({
         component: IGRPDataTableDropdownMenuLink,
-        props: { labelTrigger: action.label, href: action.href(row) },
+        props: {
+          labelTrigger: action.label,
+          href: action.href(row),
+          icon: action.icon,
+          showIcon: !!action.icon,
+          disabled: action.disabled?.(row),
+        },
       })
     } else if (action.type === "alert") {
       dropdownItems.push({
         component: IGRPDataTableDropdownMenuAlert,
         props: {
           labelTrigger: action.label,
+          icon: action.icon,
+          disabled: action.disabled?.(row),
           modalTitle: action.title,
           children: action.description,
           onClickConfirm: () => action.onConfirm(row),
@@ -104,6 +112,7 @@ function IGRPDataTableRowActionsCell<TData>({ row, actions }: IGRPDataTableRowAc
         props: {
           labelTrigger: action.label,
           icon: action.icon,
+          disabled: action.disabled?.(row),
           render: (close) => capturedRender(row, close),
           showConfirm: false,
         },
@@ -111,7 +120,7 @@ function IGRPDataTableRowActionsCell<TData>({ row, actions }: IGRPDataTableRowAc
     } else if (action.type === "custom") {
       dropdownItems.push({
         component: IGRPDataTableDropdownMenuNode,
-        props: { labelTrigger: action.label, node: action.render(row) },
+        props: { labelTrigger: action.label, node: action.render(row), disabled: action.disabled?.(row) },
       })
     }
   }

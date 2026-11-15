@@ -54,6 +54,40 @@ afterEach(() => {
   rmSync(appRoot, { recursive: true, force: true });
 });
 
+describe("payloadHash", () => {
+  const withPayload = (hash: string) => ({ ...migration("84-csp", "samehashsamehash"), payloadHash: hash });
+
+  it("is not compared for a lock entry written before the field existed", () => {
+    manifestRef.current = { version: 1, cliVersion: "test", template: "demo-v1", migrations: [withPayload("newpayload000000")] };
+    writeLock(appRoot, { version: 1, template: "demo-v1", applied: [entry("84-csp", "samehashsamehash")] });
+    let ok = false;
+    capture(() => {
+      ok = check(appRoot);
+    });
+    expect(ok).toBe(true);
+  });
+
+  it("flags an entry whose recorded payloadHash differs from the manifest's", () => {
+    manifestRef.current = { version: 1, cliVersion: "test", template: "demo-v1", migrations: [withPayload("newpayload000000")] };
+    writeLock(appRoot, {
+      version: 1,
+      template: "demo-v1",
+      applied: [{ ...entry("84-csp", "samehashsamehash"), payloadHash: "oldpayload000000" }],
+    });
+    let ok = true;
+    const out = capture(() => {
+      ok = check(appRoot);
+    });
+    expect(ok).toBe(false);
+    expect(out).toContain("84-csp");
+    // Rollback's edit guard always refuses here (files differ from the NEW payload).
+    expect(out).toContain("do not roll back");
+    expect(out).toContain("remove the migration's entry");
+    expect(out).not.toContain("roll the migration");
+    expect(capture(() => status(appRoot))).toContain("do not roll back");
+  });
+});
+
 describe("an applied migration whose steps changed after it was released", () => {
   beforeEach(() => {
     manifestRef.current = {
@@ -78,6 +112,8 @@ describe("an applied migration whose steps changed after it was released", () =>
     expect(ok).toBe(false);
     expect(out).toContain("07-corrected");
     expect(out).toContain("changed since they were applied");
+    expect(out).toContain("roll the migration");
+    expect(out).not.toContain("do not roll back");
   });
 
   it("is flagged by `status` rather than shown as a clean tick", () => {

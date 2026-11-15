@@ -5,8 +5,9 @@
 ### Patch Changes
 
 - 6271fe4: `igrpBuildConfig` requires `appCode` again only when `syncAccess` is on and preview is off. An app without `IGRP_APP_CODE` gets the sidebar's own `IGRP_APP_CODE_MISSING` error instead of `global-error` on every route, `/login` included. `getDisplayableErrorMessage` no longer returns a raw `error.message` in production.
-  
+
   `IGRPLayoutFull` restores the sidebar open state from the `sidebar_state` cookie the design-system sidebar writes on toggle. An explicit `defaultSidebarOpen` still wins; with neither, the sidebar opens.
+
 - 53feae2: - Branding: a freshness cookie that changes on every request now triggers at most one refetch per 5 s per process, instead of keeping a `getGlobalConfiguration` call in flight continuously.
   - `igrpGetClaims` and the Server Action session gate now call `igrpAssertAuthBypassAllowed()` before honouring an auth bypass, so a production build with `IGRP_PREVIEW_MODE=true` or `AUTH_PROVIDER=none` fails closed even when `instrumentation.ts` does not call the guard.
   - `igrpBuildConfig` now requires a non-blank `appCode` whenever preview mode is off, not only when `syncAccess` is on, matching the sidebar's `IGRP_APP_CODE_MISSING` check.

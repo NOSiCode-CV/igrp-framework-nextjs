@@ -1,4 +1,3 @@
-/* eslint-disable react-refresh/only-export-components */
 /* shadcn: 2026-09-15 */
 
 import { cva, type VariantProps } from "class-variance-authority"

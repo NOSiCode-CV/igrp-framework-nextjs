@@ -343,6 +343,5 @@ export {
   type IGRPMenuNavigationProps,
   type IGRPMenuNavigationProviderProps,
   type IGRPMenuNavigationContextValue,
-  // eslint-disable-next-line react-refresh/only-export-components
   useIGRPMenuNavigation,
 }

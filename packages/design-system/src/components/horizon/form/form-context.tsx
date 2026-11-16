@@ -38,5 +38,4 @@ function useIGRPFormContext<TSchema extends z.ZodType>() {
   return context as IGRPFormContextValue<TSchema>
 }
 
-// eslint-disable-next-line react-refresh/only-export-components
 export { type IGRPFormContextValue, useIGRPFormContext, IGRPFormContext }

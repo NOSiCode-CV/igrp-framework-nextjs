@@ -99,6 +99,5 @@ function IGRPHeadline({
 export {
   IGRPHeadline,
   type IGRPHeadlineProps,
-  // eslint-disable-next-line react-refresh/only-export-components
   igrpHeadlineVariants,
 }

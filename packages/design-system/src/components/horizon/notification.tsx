@@ -1,8 +1,5 @@
 "use client"
 
-// IGRPNotificationVariants is the component's CVA object and part of the public API.
-/* eslint-disable react-refresh/only-export-components */
-
 import { cva, type VariantProps } from "class-variance-authority"
 import { useId, useState } from "react"
 

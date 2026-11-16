@@ -1,4 +1,3 @@
-/* eslint-disable react-refresh/only-export-components */
 "use client"
 
 import { useId } from "react"

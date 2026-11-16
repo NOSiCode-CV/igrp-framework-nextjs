@@ -133,7 +133,6 @@ function useIGRPToast<T = unknown>() {
 export {
   type IGRPPromiseToastProps,
   type PlainToastProps,
-  // eslint-disable-next-line react-refresh/only-export-components
   useIGRPToast,
   IGRPToaster,
 }

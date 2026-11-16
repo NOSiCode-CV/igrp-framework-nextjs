@@ -1,9 +1,7 @@
 "use client"
 // The hook and the provider are colocated intentionally: the React context they
 // share is module-private, so splitting them across files would require exporting
-// the context object as public API. Fast-refresh's "components only" rule doesn't
-// apply here.
-/* eslint-disable react-refresh/only-export-components */
+// the context object as public API.
 
 import { createContext, use, useMemo, type ReactNode } from "react"
 

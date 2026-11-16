@@ -5,7 +5,7 @@ import tseslint from 'typescript-eslint';
 import { defineConfig, globalIgnores } from 'eslint/config';
 
 // Base mirrors packages/design-system/eslint.config.js, minus its DS-only
-// rules (token policy, a11y, react-refresh).
+// rules (token policy, a11y).
 export default defineConfig([
   globalIgnores(['dist']),
   {

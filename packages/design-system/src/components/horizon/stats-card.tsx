@@ -1,8 +1,5 @@
 "use client"
 
-/* eslint-disable react-refresh/only-export-components */
-"use client"
-
 import { cva, type VariantProps } from "class-variance-authority"
 import { useCallback, useId } from "react"
 import Image from "next/image"

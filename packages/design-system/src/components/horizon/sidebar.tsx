@@ -55,6 +55,5 @@ export {
   IGRPSidebarMenuSub,
   IGRPSidebarMenuSubItem,
   IGRPSidebarMenuSubButton,
-  // eslint-disable-next-line react-refresh/only-export-components
   useIGRPSidebar,
 }

@@ -1,7 +1,6 @@
 "use client"
 
 // The context is shared with the data-table wrappers; exporting it here avoids a one-symbol file.
-/* eslint-disable react-refresh/only-export-components */
 
 import { createContext, use, type ReactElement, type ReactNode } from "react"
 import { Slot } from "radix-ui"

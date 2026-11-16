@@ -1,5 +1,4 @@
 /* shadcn: 2026-09-15 */
-/* eslint-disable react-refresh/only-export-components */
 
 "use client"
 

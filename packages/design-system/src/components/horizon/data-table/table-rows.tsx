@@ -140,6 +140,5 @@ export {
   type IGRPDataTableBodyRowsProps,
   IGRPDataTableHeaderRows,
   type IGRPDataTableHeaderRowsProps,
-  // eslint-disable-next-line react-refresh/only-export-components
   useIGRPDataTableRowIdWarning,
 }

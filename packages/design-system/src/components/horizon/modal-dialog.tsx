@@ -180,6 +180,5 @@ export {
   type IGRPModalDialogHeaderProps,
   IGRPModalDialogTitle,
   IGRPModalDialogTrigger,
-  // eslint-disable-next-line react-refresh/only-export-components
   igrpModalDialogContentVariants,
 }

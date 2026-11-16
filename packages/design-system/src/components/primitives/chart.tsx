@@ -1,4 +1,3 @@
-/* eslint-disable react-refresh/only-export-components */
 // shadcn: 2026-06-23
 "use client"
 

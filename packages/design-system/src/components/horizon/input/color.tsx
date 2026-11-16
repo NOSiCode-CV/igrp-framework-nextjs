@@ -48,7 +48,7 @@ const FORMAT_LABELS: Record<ColorFormat, string> = {
 
 // While the field is empty the native picker holds this instead of the last colour, so
 // confirming that colour is a change the browser reports and the pick gets written.
-// shortcut: confirming this exact near-black untouched still writes nothing; no event exists for "OK unchanged".
+// shortcut: confirming this near-black untouched writes nothing (no "OK unchanged" event), revisit if users report it.
 const EMPTY_PICKER_HEX = "#000001" // igrp-i18n-ignore
 
 const ALL_FORMATS: ColorFormat[] = ["hex", "rgb", "hsl", "oklch"]

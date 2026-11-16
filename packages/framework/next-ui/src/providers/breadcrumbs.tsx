@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, use, useEffect, useState } from 'react';
+import { createContext, use, useEffect, useLayoutEffect, useState } from 'react';
 
 import type { BreadcrumbItem } from '../templates/breadcrumbs.js';
 
@@ -8,13 +8,16 @@ type SetItems = (
   update: (current: BreadcrumbItem[] | undefined) => BreadcrumbItem[] | undefined,
 ) => void;
 
+// useLayoutEffect warns during SSR; neither runs on the server anyway.
+const useIsomorphicLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect;
+
 // Two contexts: pages that only set items never re-render when the items change.
 const ItemsContext = createContext<BreadcrumbItem[] | undefined>(undefined);
 const SetItemsContext = createContext<SetItems | null>(null);
 
 /**
  * Holds the breadcrumb trail a page declares. Mounted by `IGRPRootProvidersFull`;
- * `IGRPTemplateBreadcrumbs` prefers these items over its own props.
+ * `IGRPHeaderBreadcrumbs` prefers these items over the header's `breadcrumbs`.
  */
 export function IGRPBreadcrumbsProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<BreadcrumbItem[] | undefined>(undefined);
@@ -40,7 +43,8 @@ export function useIGRPBreadcrumbItems(): BreadcrumbItem[] | undefined {
  */
 export function useIGRPBreadcrumbs(items: BreadcrumbItem[] | undefined): void {
   const setItems = use(SetItemsContext);
-  useEffect(() => {
+  // Before paint, so the URL/layout trail does not flash on client navigation.
+  useIsomorphicLayoutEffect(() => {
     if (!setItems || !items) return;
     setItems(() => items);
     // Clear only our own trail: the next page may already have set its own.
@@ -55,6 +59,10 @@ export interface IGRPPageBreadcrumbsProps {
 
 /**
  * Renders nothing; sets the header breadcrumbs from a page.
+ *
+ * The trail is set in a layout effect, so the server render (and the HTML a
+ * full page load first paints) still shows the URL/layout trail. For crumbs
+ * that are correct in the server HTML, pass `breadcrumbs` to `IGRPLayoutHeader`.
  *
  * @example
  * <IGRPPageBreadcrumbs items={[{ label: 'Users', href: '/users' }, { label: user.name, href: `/users/${id}` }]} />

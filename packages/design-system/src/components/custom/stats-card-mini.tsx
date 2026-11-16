@@ -26,6 +26,12 @@ interface IGRPStatsCardMiniProps extends Omit<
 > {
   /** Color theme for the card (e.g. 'primary', 'success', 'destructive'). */
   variant?: IGRPColorVariants
+  /** @deprecated Ignored: the icon is always an outlined square. Will be removed in the next release. */
+  showIconBackground?: boolean
+  /** @deprecated Ignored: the icon is always an outlined square. Will be removed in the next release. */
+  showIconBorder?: boolean
+  /** @deprecated Ignored: the icon is always at the start. Will be removed in the next release. */
+  iconPlacement?: IGRPStatsCardProps["iconPlacement"]
 }
 
 /**
@@ -57,6 +63,7 @@ function IGRPStatsCardMini({
 
   return (
     <IGRPStatsCard
+      // The deprecated showIconBackground / showIconBorder / iconPlacement pass through and are overridden below.
       {...props}
       id={ref}
       className={cn(className)}

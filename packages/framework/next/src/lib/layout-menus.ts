@@ -14,8 +14,10 @@ type LayoutMenusConfig = Pick<IGRPConfigArgs, 'appCode' | 'layoutData' | 'previe
  * `layoutData.getMenus(appCode)` when supplied; otherwise the data's
  * `menuItems` in preview mode and the Access Management menus outside it.
  *
- * Cached per request and per config object, so the sidebar, the header palette
- * and an app page asking for the menus share one fetch. Outside preview mode it
+ * Cached per request by `config` object identity (`React.cache` compares
+ * arguments with `Object.is`), so the sidebar, the header palette and an app
+ * page asking for the menus share one fetch only when they pass the same config
+ * object the layout gets; an equal copy (`{ ...config }`) fetches again. Outside preview mode it
  * needs the access-client store seeded (the layout does that; a Server Action
  * calls `igrpEnsureAccessClientConfig()` first).
  */

@@ -56,6 +56,14 @@ export type IGRPLayoutHeaderArgs = IGRPHeaderLabelProps & {
   readonly className?: string;
   /** Shown while the header data loads. Defaults to `IGRPHeaderSkeleton`. */
   readonly fallback?: React.ReactNode;
+  /**
+   * Fill the built-in command palette with the layout menus. Defaults to `true`;
+   * no menu commands are built when a `slots.search` replaces the palette, or
+   * when the default header has `showSearch` off. Pass `false` for a `children`
+   * composition without `IGRPHeaderSearch`: otherwise the menus are fetched for
+   * a palette that never renders.
+   */
+  readonly paletteCommands?: boolean;
   /** Shown when the header fails. Defaults to `IGRPHeaderError`. */
   readonly errorFallback?: React.ReactNode;
   /**

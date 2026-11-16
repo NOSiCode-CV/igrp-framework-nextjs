@@ -90,7 +90,8 @@ interface IGRPTabItem {
   keepMounted?: boolean
   /**
    * Badge node, e.g. `<IGRPBadge color="info">3</IGRPBadge>`. Rendered at
-   * `badgePlacement` whether or not `showBadge` is set, and wins over `badgeContent` and friends.
+   * `badgePlacement` whether or not `showBadge` is set, and when set (`null` included,
+   * which hides it) wins over `badgeContent` and friends.
    */
   badge?: React.ReactNode
   /**

@@ -203,7 +203,7 @@ import { IGRPRichTextEditor, IGRPRichTextView } from "@igrp/igrp-framework-react
   - Item handling: `onItemRemove(item, index)` and `renderRemoveAction(...)`.
   - Header badge: `badgeValue`, `variant`, `color`, `dot`.
   - Appearance: `description`, `addButtonIconName`, `showIcon` (default true) and `iconName`.
-- **Mode:** `mode` defaults to `"form"` inside `IGRPForm` (bound by `name`) and `"standalone"` outside. In standalone mode `value` / `defaultValue` / `onChange` drive the list; pass `mode="standalone"` to keep a list local inside a form. In form mode those three are ignored and a dev warning says so. `IGRPStandaloneList` is a deprecated alias for `mode="standalone"`.
+- **Mode:** `mode` defaults to `"form"` inside `IGRPForm` (bound by `name`) and `"standalone"` outside. In standalone mode `value` / `defaultValue` / `onChange` drive the list; pass `mode="standalone"` to keep a list local inside a form. An explicit `mode="form"` outside an `IGRPForm` falls back to standalone, with a dev warning. In form mode those three are ignored and a dev warning says so. `IGRPStandaloneList` is a deprecated alias for `mode="standalone"`.
 
 ## Custom widgets: `IGRPFormField`
 

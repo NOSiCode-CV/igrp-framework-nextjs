@@ -164,4 +164,22 @@ describe("IGRPFormList mode", () => {
     expect(warn).toHaveBeenCalledWith(expect.stringContaining('mode="standalone"'))
     warn.mockRestore()
   })
+
+  it('warns in development when mode="form" has no enclosing IGRPForm, and runs standalone', async () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {})
+    render(
+      <IGRPFormList
+        id="anexos"
+        mode="form"
+        value={[STABLE_ITEM, STABLE_ITEM]}
+        renderItem={() => null}
+        computeLabel={(_, index: number) => `Doc ${index + 1}`}
+        defaultItem={STABLE_ITEM}
+      />
+    )
+    await settle()
+    expect(rowCount()).toBe(2)
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining("needs an enclosing IGRPForm"))
+    warn.mockRestore()
+  })
 })

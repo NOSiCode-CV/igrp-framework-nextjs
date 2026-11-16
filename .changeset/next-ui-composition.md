@@ -14,3 +14,9 @@ The template chrome can be composed. Old props keep working and are marked `@dep
 - Notifications: `onSelect`, `href` and controlled `open`. Menu search: controlled `query`.
 - `IGRPNestedProviders` takes `themeProps`. `IGRPTemplateToaster` holds the toaster defaults.
 - Contexts use React 19 `use()` and `<Context>`; `MenuItemLink` takes `ref` as a prop.
+
+Behaviour changes to check:
+
+- Ctrl/⌘+K is handled by the mounted `IGRPTemplateCommandSearch`, not by the provider. Apps without a palette keep the browser shortcut.
+- `IGRPTemplateCommandSearch` and `IGRPCommandPalette` accept `commands` as an array or a Promise of one.
+- Only `IGRPHeaderBreadcrumbs` follows a page-set trail; `IGRPTemplateBreadcrumbs` with explicit `items` shows those items.

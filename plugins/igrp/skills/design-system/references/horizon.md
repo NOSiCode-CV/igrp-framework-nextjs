@@ -35,8 +35,8 @@ Shared vocab: `IGRPColorRole` = `"solid" | "outline" | "soft"` (prop `variant`) 
 **`IGRPStatsCard`**: the configurable KPI tile. It has **no trend/delta prop**.
 - Content: `title`, `value`, `titleSize`, `valueSize` (up to `4xl`), `titleColored` / `valueColored`.
 - Card: `cardVariant`, `cardBorder` (radius), `cardBorderPosition: none | top | bottom | left | right`.
-- Icon: `showIcon` (default true), `iconName` (`Box`), `iconPlacement`, `iconSize: sm | md | lg | xl`, `iconVariant`, `iconAppearance: plain | soft | outline` (plain = coloured icon, soft = tinted background, outline = tinted border; all coloured by `iconVariant`), `iconShape: circle | square` (default circle).
-- Deprecated: `showIconBackground`, `iconBackground`, `showIconBorder`. Some combinations of them dropped the `iconVariant` colour; use `iconAppearance` + `iconShape`.
+- Icon: `showIcon` (default true), `iconName` (`Box`), `iconPlacement`, `iconSize: sm | md | lg | xl`, `iconVariant`, `iconAppearance: plain | soft | outline` (plain = coloured icon, soft = tinted background, outline = tinted border; all coloured by `iconVariant`), `iconShape: circle | square` (default circle; only read when `iconAppearance` is set).
+- Deprecated: `showIconBackground`, `iconBackground`, `showIconBorder`. Without `iconAppearance` they render as they always did, except the two combinations that dropped the `iconVariant` colour (a background with no shape, a shape with no background), which now get it. Use `iconAppearance` + `iconShape`.
 - Also: `image` / `imageAlt` (next/image), `itemPlacement`, and `onClick`, which makes the card a keyboard-accessible button.
 - For fixed presets see `IGRPStatsCardMini` / `IGRPStatsCardTopBorderColored` in `custom.md`.
 
@@ -68,7 +68,7 @@ Shared vocab: `IGRPColorRole` = `"solid" | "outline" | "soft"` (prop `variant`) 
 **`IGRPPageHeader`**. Props:
 - `title` (required), `description`, `variant: h1 … h6`, and `children` (the right-side actions).
 - `isSticky`.
-- Back button: `backButton={<IGRPPageHeaderBackButton url="/pedidos" />}` (any node; `useBrowserBack` or `onClick` for the other modes). The old `showBackButton`, `urlBackButton`, `iconBackButton` and `backButton*` props still work but are deprecated; `backButton` wins when set.
+- Back button: `backButton={<IGRPPageHeaderBackButton url="/pedidos" />}` (any node; `useBrowserBack` or `onClick` for the other modes). The old `showBackButton`, `urlBackButton`, `iconBackButton` and `backButton*` props still work but are deprecated; `backButton` wins when set (`backButton={null}` hides it).
 - It has no breadcrumbs (the framework chrome renders those). `IGRPPageHeaderBackButton` is also exported on its own.
 
 **`IGRPPageFooter`**: `children`, `isSticky`.
@@ -102,7 +102,7 @@ Shared vocab: `IGRPColorRole` = `"solid" | "outline" | "soft"` (prop `variant`) 
 **`IGRPAlertDialog`**: a confirm dialog. Pass `trigger` (rendered through `AlertDialogTrigger asChild`) to let it open itself, or control it with `open` / `onOpenChange`.
 - `title`, `description` (a node), `variant: IGRPColorVariants`, `iconPlacement: "start" | "center"` (`"end"` is deprecated and renders as `"start"`).
 - `actionLabel` / `cancelLabel` (i18n defaults), `onAction`, `onCancel`, `showCancel`, `showAction` (default true).
-- `onAction` may return a Promise: the dialog stays open with the action button loading (cancel, Escape and overlay disabled) until it settles, closes on resolve and stays open on reject. Report the error from `onAction`.
+- `onAction` may return a Promise: the dialog stays open with the action button loading (cancel, Escape and overlay disabled) until it settles, closes on resolve and stays open on reject. The rejection is rethrown after the button resets, so it also reaches global error reporting (`unhandledrejection`); report or handle the error inside `onAction` if that is unwanted. While pending, both buttons stay focusable (`aria-disabled`) and ignore clicks.
 - The icon follows `variant` unless you pass `iconName`.
 - Don't put `onClick` or `className` in `actionProps`; they override the built-in handler and colour.
 
@@ -122,7 +122,7 @@ For row deletes in a table, use the `alert` row action instead (`data-table.md`)
 
 **`IGRPTabs`**:
 - `items: IGRPTabItem[]`, where `IGRPTabItem = { value; label: ReactNode; content; icon?; disabled?; keepMounted?; badge?: ReactNode }`.
-- `badge` (e.g. `<IGRPBadge color="info">3</IGRPBadge>`) renders at `badgePlacement` whether or not `showBadge` is set. The `badgeContent` / `badgeVariant` / `badgeColor` / `badgeClassName` quartet is deprecated and still needs `showBadge`.
+- `badge` (e.g. `<IGRPBadge color="info">3</IGRPBadge>`) renders at `badgePlacement` whether or not `showBadge` is set, and wins over the old props when set (`null` hides it). The `badgeContent` / `badgeVariant` / `badgeColor` / `badgeClassName` quartet is deprecated and still needs `showBadge`.
 - `variant: default | outline | pills | underline | cards`, `fullWidth`, `orientation`, and `value` / `defaultValue` / `onValueChange`.
 - `showIcon` defaults to false, so set it to show the item icons.
 
@@ -135,7 +135,7 @@ For row deletes in a table, use the `alert` row action instead (`data-table.md`)
 - Pass `value` per item when titles can collide ("Passo 1" vs "Passo 2"), since they are cleaned to letters only.
 
 **`IGRPMenuNavigation`**: an **in-page section nav** that scrolls to sections; it is not the app menu.
-- `sections: { id; label: ReactNode; icon; disabled?; badge?: ReactNode }[]`, `activeSection`, `onSectionChange`, `title`, `badge` (beside the title; the `badgeContent` quartet is deprecated), `isStickyTop`.
+- `sections: { id; label: ReactNode; icon; disabled?; badge?: ReactNode }[]`, `activeSection`, `onSectionChange`, `title`, `badge` (beside the title; wins over the deprecated `badgeContent` quartet when set, `null` hides it), `isStickyTop`.
 - Wrap the nav and the sections in `IGRPMenuNavigationProvider`, and register each section with `ref={getSectionRef(id)}` from `useIGRPMenuNavigation()`. Outside the provider scrolling silently does nothing.
 - The provider owns the active section: `activeSection` / `defaultSection` / `onSectionChange` on the provider, and the nav reads it unless you pass `activeSection` to the nav. `useIGRPMenuNavigation()` also returns `activeSection` and `setActive(id)`. There is no scroll-spy: set the section yourself (e.g. from an `IntersectionObserver`).
 
@@ -163,7 +163,7 @@ For row deletes in a table, use the `alert` row action instead (`data-table.md`)
 - **`IGRPImageCropper`**: `src`, `variant: basic | circular | zoom | preview`, `onCrop(blob)` (JPEG), `cropLabel`. Cross-origin images need CORS.
 - **`IGRPPdfViewer`**: one `document: { id; title; description; author; date?; fileUrl }`, `displayMode: "modal" | "inline"`, `viewerPreference: "native" | "google" | "auto"` (default native; **`google`/`auto` send `fileUrl` to Google**, so avoid them for private documents), `inlineHeight`, `labelButtonCancel` / `labelButtonNewTab`.
 - **`IGRPVideoEmbed`**: `src` (an **embed** URL, not a watch URL) + `title` (both required), `aspectRatio`, `autoplay`, `muted`, `controls`, `loop`, `start`.
-- **`IGRPChat`**: manages its own transcript. Send through `onSend(messages) => Promise<IGRPChatMessage[]>` (resolve with the reply; a rejection shows the catalog error), or give `apiEndpoint` to POST `{ messages }` and get `{ messages }` back. Also `initialMessages`, `renderMessage(message)` (replaces the bubble content), `onAction(message)` for `type: "button"` messages (without it they render as text; a message without `type` is text), `labelDescription`.
+- **`IGRPChat`**: manages its own transcript. Send through `onSend(messages) => Promise<IGRPChatMessage[]>` (resolve with the reply; a rejection shows the catalog error), or give `apiEndpoint` to POST `{ messages }` and get `{ messages }` back. Also `initialMessages`, `renderMessage(message)` (replaces the bubble content), `onAction(message)` for `type: "button"` messages (they render as a button either way; without `onAction` the click does nothing; a message without `type` is text), `labelDescription`.
 - **`IGRPIcon`**: `iconName` + lucide props (`size` defaults to 16). Icons lazy-load, and an unknown name renders a red alert icon.
 
 `IGRPLink`, `IGRPButtonLink`, `IGRPImage`, `IGRPStatsCard` (image), `IGRPPageHeader` and `IGRPChat` import `next/*`, so they only work in Next.js apps.

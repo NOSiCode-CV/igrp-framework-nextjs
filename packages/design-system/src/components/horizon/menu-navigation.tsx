@@ -46,7 +46,10 @@ interface IGRPMenuNavigationProps {
   onSectionChange?: (sectionId: string) => void
   /** Navigation title. */
   title?: string
-  /** Badge beside the title, e.g. `<IGRPBadge color="info">Novo</IGRPBadge>`. Wins over `badgeContent` and friends. */
+  /**
+   * Badge beside the title, e.g. `<IGRPBadge color="info">Novo</IGRPBadge>`.
+   * When set (`null` included, which hides it) it wins over `badgeContent` and friends.
+   */
   badge?: React.ReactNode
   /**
    * Badge content.
@@ -245,12 +248,13 @@ function IGRPMenuNavigation({
         <CardHeader className={cn("gap-0 border-b px-4 py-3")}>
           <div className={cn("flex items-center justify-between")}>
             <CardTitle className={cn("text-sm font-medium")}>{title}</CardTitle>
-            {badge ??
-              (badgeContent && (
-                <IGRPBadge variant={badgeVariant} color={badgeColor} badgeClassName={cn(badgeClassName)}>
-                  {badgeContent}
-                </IGRPBadge>
-              ))}
+            {badge !== undefined
+              ? badge
+              : badgeContent && (
+                  <IGRPBadge variant={badgeVariant} color={badgeColor} badgeClassName={cn(badgeClassName)}>
+                    {badgeContent}
+                  </IGRPBadge>
+                )}
           </div>
         </CardHeader>
         <CardContent className={cn("p-0")}>

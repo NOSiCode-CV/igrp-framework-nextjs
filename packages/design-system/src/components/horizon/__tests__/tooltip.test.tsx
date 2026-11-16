@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest"
 import { render, screen } from "@testing-library/react"
+import { DropdownMenu } from "radix-ui"
 import userEvent from "@testing-library/user-event"
 
 import { IGRPDataTableButtonAlert } from "../data-table/action-button-icon.js"
@@ -67,5 +68,36 @@ describe("IGRPTooltip", () => {
     render(<IGRPDataTableButtonAlert labelTrigger="Eliminar" modalTitle="Eliminar?" disabled />)
     await userEvent.tab()
     expect(await screen.findByRole("tooltip")).toHaveTextContent("Eliminar")
+  })
+
+  it("keeps the focusable wrapper under a DropdownMenu trigger, which passes disabled={false}", () => {
+    render(
+      <DropdownMenu.Root>
+        <DropdownMenu.Trigger asChild>
+          <IGRPTooltip label="Sem permissão">
+            <button type="button" disabled>
+              E
+            </button>
+          </IGRPTooltip>
+        </DropdownMenu.Trigger>
+      </DropdownMenu.Root>
+    )
+    const wrapper = screen.getByRole("button", { name: "E" }).closest("[data-slot='tooltip-trigger-wrapper']")
+    expect(wrapper).toHaveAttribute("tabindex", "0")
+  })
+
+  it("does not remount the child when forwarded props appear", () => {
+    const { rerender } = render(
+      <IGRPTooltip label="Editar">
+        <button type="button">E</button>
+      </IGRPTooltip>
+    )
+    const before = screen.getByRole("button", { name: "E" })
+    rerender(
+      <IGRPTooltip label="Editar" onClick={() => {}}>
+        <button type="button">E</button>
+      </IGRPTooltip>
+    )
+    expect(screen.getByRole("button", { name: "E" })).toBe(before)
   })
 })

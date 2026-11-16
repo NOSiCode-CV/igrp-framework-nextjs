@@ -115,4 +115,15 @@ describe("IGRPDataTable pagination", () => {
     expect(screen.getByText("Row 11")).toBeInTheDocument()
     expect(onSubmit).not.toHaveBeenCalled()
   })
+
+  it("warns in development when an unpaginated client table renders more than 500 rows", () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {})
+    const many = Array.from({ length: 501 }, (_, i) => ({ id: i, name: `Row ${i}`, status: "active" }))
+    const { unmount } = render(<IGRPDataTable<Row, unknown> columns={columns} data={many} showPagination />)
+    expect(warn).not.toHaveBeenCalledWith(expect.stringContaining("every row renders"))
+    unmount()
+    render(<IGRPDataTable<Row, unknown> columns={columns} data={many} />)
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining("every row renders"))
+    warn.mockRestore()
+  })
 })

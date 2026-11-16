@@ -253,9 +253,10 @@ const ICON_SHAPE_CLASS: Record<IGRPStatsCardIconShape, string> = { circle: "roun
 
 /**
  * Maps the deprecated `showIconBackground` / `iconBackground` / `showIconBorder`
- * trio onto an appearance + shape where the intent is unambiguous. Returns
- * `undefined` for the combinations that keep the legacy cva classes (background
- * plus border, or a background with no shape).
+ * trio onto an appearance + shape, but only for the combinations whose legacy
+ * cva classes dropped the `iconVariant` colour (a background with no shape, or a
+ * shape with no background). Every other combination, defaults included, returns
+ * `undefined` and keeps the legacy cva rendering unchanged.
  */
 function resolveLegacyIconAppearance(
   showIconBackground: boolean,
@@ -263,8 +264,8 @@ function resolveLegacyIconAppearance(
   showIconBorder: boolean
 ): { appearance: IGRPStatsCardIconAppearance; shape?: IGRPStatsCardIconShape } | undefined {
   const shape = iconBackground === "rounded" ? "circle" : iconBackground === "square" ? "square" : undefined
-  if (showIconBackground) return shape && !showIconBorder ? { appearance: "soft", shape } : undefined
-  return { appearance: showIconBorder ? "outline" : "plain", shape }
+  if (showIconBackground === !shape) return { appearance: showIconBorder ? "outline" : "plain", shape }
+  return undefined
 }
 
 /** Classes for an icon appearance; `shapeClassName` is only applied to `soft` / `outline`. */

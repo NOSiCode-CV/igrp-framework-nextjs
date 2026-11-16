@@ -28,8 +28,13 @@ export const IGRP_COMMAND_SEARCH_LABELS_PT_PT: IGRPCommandSearchLabels =
   IGRP_CHROME_STRINGS_PT.commandSearch;
 
 interface IGRPTemplateCommandSearchProps {
-  /** Command items to render in the palette. When omitted, the palette shows only the empty state. */
-  commands?: IGRPCommandItem[];
+  /**
+   * Command items to render in the palette. When omitted, the palette shows only
+   * the empty state. A promise is resolved inside the lazily loaded dialog, so
+   * the trigger renders (and keeps its state) while the items stream in.
+   * Pass a stable promise: a new one on every render suspends the list again.
+   */
+  commands?: IGRPCommandItem[] | Promise<IGRPCommandItem[]>;
   /** Partial override of the chrome catalog group. Missing keys keep the catalog value. */
   labels?: Partial<IGRPCommandSearchLabels>;
 }
@@ -43,15 +48,20 @@ const IGRPCommandPalette = lazy(() =>
   loadCommandPalette().then((m) => ({ default: m.IGRPCommandPalette })),
 );
 
+// Mounted instances, newest last. Only the newest answers ⌘K, so two triggers
+// on one page (a header and a custom one) never toggle the palette twice.
+const shortcutOwners: object[] = [];
+
 function IGRPTemplateCommandSearch({
   commands = [],
   labels: labelOverrides,
 }: IGRPTemplateCommandSearchProps) {
   // With `IGRPCommandPaletteProvider` (mounted by `IGRPRootProvidersFull`) the
-  // provider owns the open state and the ⌘K listener; without one, this does.
+  // provider owns the open state; without one, this does. Either way the ⌘K
+  // listener lives here, so only a page that renders a palette claims the key.
   const palette = useOptionalIGRPCommandPalette();
   const [localOpen, setLocalOpen] = useState(false);
-  const hasProvider = palette !== null;
+  const toggleShared = palette?.actions.toggle;
   const open = palette ? palette.state.open : localOpen;
   const setOpen = (next: boolean) => {
     if (!palette) setLocalOpen(next);
@@ -72,23 +82,26 @@ function IGRPTemplateCommandSearch({
     : chrome.commandSearch;
 
   useEffect(() => {
-    if (hasProvider) return;
+    const owner = {};
+    shortcutOwners.push(owner);
     const controller = new AbortController();
 
     const down = (e: KeyboardEvent) => {
-      if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
-        e.preventDefault();
-        void loadCommandPalette();
-        setEverOpened(true);
-        setLocalOpen((prev) => !prev);
-      }
+      if (e.key !== 'k' || !(e.metaKey || e.ctrlKey)) return;
+      if (shortcutOwners[shortcutOwners.length - 1] !== owner) return;
+      e.preventDefault();
+      void loadCommandPalette();
+      setEverOpened(true);
+      if (toggleShared) toggleShared();
+      else setLocalOpen((prev) => !prev);
     };
 
     document.addEventListener('keydown', down, { signal: controller.signal });
     return () => {
       controller.abort();
+      shortcutOwners.splice(shortcutOwners.indexOf(owner), 1);
     };
-  }, [hasProvider]);
+  }, [toggleShared]);
 
   const preload = () => void loadCommandPalette();
 

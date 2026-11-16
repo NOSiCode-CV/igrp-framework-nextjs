@@ -29,8 +29,8 @@ interface IGRPPageHeaderProps extends Pick<IGRPBaseAttributes, "name"> {
   /** Stick to top when scrolling. */
   isSticky?: boolean
   /**
-   * Back button node, e.g. `<IGRPPageHeaderBackButton url="/x" />`. When set it
-   * wins over `showBackButton` and the other `backButton*` props.
+   * Back button node, e.g. `<IGRPPageHeaderBackButton url="/x" />`. When set
+   * (`null` included, which hides it) it wins over `showBackButton` and the other `backButton*` props.
    */
   backButton?: React.ReactNode
   /**
@@ -185,8 +185,9 @@ function IGRPPageHeader({
       id={ref}
     >
       <div className={cn("flex items-center gap-2", pageHeaderContentClassName)}>
-        {backButton ??
-          (showBackButton &&
+        {backButton !== undefined
+          ? backButton
+          : showBackButton &&
             renderBackButton({
               iconBackButton,
               backButtonVariant,
@@ -198,7 +199,7 @@ function IGRPPageHeader({
               urlBackButton,
               backButtonUseBrowserBack,
               backButtonOnClick,
-            }))}
+            })}
 
         <IGRPHeadline
           title={title}

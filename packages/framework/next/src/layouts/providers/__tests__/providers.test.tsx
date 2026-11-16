@@ -103,6 +103,30 @@ describe('HeaderDataProvider', () => {
     expect(props(el).paletteCommands).toBeUndefined();
   });
 
+  it('starts the menu fetch before the header data resolves', async () => {
+    let release!: (value: unknown) => void;
+    getHeaderData.mockReturnValue(new Promise((r) => (release = r)));
+    const pending = HeaderDataProvider({
+      ...base,
+      config: { ...base.config, appCode: 'APP' },
+    } as never);
+    await Promise.resolve();
+    expect(fetchMenus).toHaveBeenCalledWith('APP');
+    release({ showSearch: true });
+    await expect(props(await pending).paletteCommands).resolves.toHaveLength(1);
+  });
+
+  it('skips the palette commands with paletteCommands={false}', async () => {
+    const el = await HeaderDataProvider({
+      ...base,
+      config: { ...base.config, appCode: 'APP' },
+      paletteCommands: false,
+      children: 'CUSTOM',
+    } as never);
+    expect(props(el).paletteCommands).toBeUndefined();
+    expect(fetchMenus).not.toHaveBeenCalled();
+  });
+
   it('resolves an empty palette when the menu fetch fails', async () => {
     getHeaderData.mockResolvedValue({ showSearch: true });
     fetchMenus.mockRejectedValue(new Error('AM 500'));

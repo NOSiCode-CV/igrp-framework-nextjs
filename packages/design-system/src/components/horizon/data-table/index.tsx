@@ -74,7 +74,10 @@ interface IGRPDataTableProps<TData, TValue> {
    * recompute its row models. The compiler is off here, so the caller owns this.
    */
   data: TData[]
-  /** Show pagination controls. Without them every row renders (no client-side paging). */
+  /**
+   * Show pagination controls. Without them every row renders (no client-side paging);
+   * above 500 client-side rows a dev warning says so.
+   */
   showPagination?: boolean
   /**
    * Use numeric page selector instead of prev/next.
@@ -249,6 +252,16 @@ function IGRPDataTable<TData, TValue>({
       "IGRPDataTable: isServerSide only swaps in serverFilterComponent; without onQueryChange the rows are still paged, sorted and filtered on the client. Use IGRPServerDataTable or pass onQueryChange."
     )
   }, [isServerSide, onQueryChange])
+
+  // Client mode without pagination renders every row; `content-visibility` can't help
+  // here (containment doesn't apply to table rows), so say it instead.
+  const rendersEveryRow = !onQueryChange && !showPagination && data.length > 500
+  useEffect(() => {
+    if (process.env.NODE_ENV === "production" || !rendersEveryRow) return
+    console.warn(
+      "IGRPDataTable: showPagination is off, so every row renders (more than 500). Turn on showPagination or page on the server with onQueryChange."
+    )
+  }, [rendersEveryRow])
 
   const [state, dispatch] = useReducer(tableReducer, {
     columnFilters: [],

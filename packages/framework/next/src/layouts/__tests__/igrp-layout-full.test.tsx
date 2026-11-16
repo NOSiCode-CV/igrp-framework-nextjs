@@ -175,6 +175,36 @@ describe('IGRPLayoutFull wiring', () => {
     expect(findElement(el.props.header, HeaderDataProvider).props.headerSlots).toBe(headerSlots);
   });
 
+  it('warns in development about deprecated props a header or sidebar makes inert', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    try {
+      await IGRPLayoutFull({
+        children: null,
+        config: config(),
+        header: 'H',
+        sidebar: 'S',
+        headerSlots: { actions: 'A' },
+        breadcrumbs: [],
+        showSidebar: true,
+      });
+      expect(warn).toHaveBeenCalledTimes(2);
+      expect(warn.mock.calls[0]![0]).toMatch(/headerSlots, breadcrumbs when `header`/);
+      expect(warn.mock.calls[1]![0]).toMatch(/showSidebar when `sidebar`/);
+
+      warn.mockClear();
+      await IGRPLayoutFull({ children: null, config: config(), header: 'H', sidebar: 'S' });
+      await IGRPLayoutFull({ children: null, config: config(), headerSlots: { actions: 'A' } });
+      expect(warn).not.toHaveBeenCalled();
+
+      vi.stubEnv('NODE_ENV', 'production');
+      await IGRPLayoutFull({ children: null, config: config(), header: 'H', breadcrumbs: [] });
+      expect(warn).not.toHaveBeenCalled();
+    } finally {
+      vi.unstubAllEnvs();
+      warn.mockRestore();
+    }
+  });
+
   it('forwards toaster and contentClassName, falling back to rootProviderClassName', async () => {
     const el = await IGRPLayoutFull({
       children: null,

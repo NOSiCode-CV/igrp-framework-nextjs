@@ -19,6 +19,11 @@ describe("IGRPPageHeader backButton slot", () => {
     expect(screen.getAllByRole("link")).toHaveLength(1)
   })
 
+  it("backButton={null} hides the back button instead of falling back to the legacy props", () => {
+    render(<IGRPPageHeader title="Pedidos" backButton={null} showBackButton urlBackButton="/outra" />)
+    expect(screen.queryByRole("link")).toBeNull()
+  })
+
   it("still renders the legacy back button from showBackButton", () => {
     render(<IGRPPageHeader title="Pedidos" showBackButton urlBackButton="/outra" />)
     expect(screen.getByRole("link")).toHaveAttribute("href", "/outra")

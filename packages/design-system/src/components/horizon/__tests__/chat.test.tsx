@@ -5,7 +5,7 @@ import userEvent from "@testing-library/user-event"
 import { IGRPChat, type IGRPChatMessage } from "../chat.js"
 
 describe("IGRPChat", () => {
-  it("renders initialMessages; an untyped reply is text and a button without onAction is text", () => {
+  it("renders initialMessages; an untyped reply is text and a button without onAction is still a button", () => {
     render(
       <IGRPChat
         initialMessages={[
@@ -15,7 +15,8 @@ describe("IGRPChat", () => {
       />
     )
     expect(screen.getByText("Olá")).toBeInTheDocument()
-    expect(screen.getByText("Aceitar").tagName).toBe("P")
+    expect(screen.getByText("Olá").tagName).toBe("P")
+    expect(screen.getByRole("button", { name: "Aceitar" })).toBeInTheDocument()
   })
 
   it("routes button messages to onAction", async () => {

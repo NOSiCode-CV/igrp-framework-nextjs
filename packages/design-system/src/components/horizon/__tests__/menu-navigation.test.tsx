@@ -28,6 +28,11 @@ describe("IGRPMenuNavigation", () => {
     expect(screen.queryByText("velho")).not.toBeInTheDocument()
   })
 
+  it("badge={null} hides the badge instead of falling back to badgeContent", () => {
+    render(<IGRPMenuNavigation sections={sections} title="Secções" badge={null} badgeContent="velho" />)
+    expect(screen.queryByText("velho")).not.toBeInTheDocument()
+  })
+
   it("shares the active section through the provider", async () => {
     const onSectionChange = vi.fn()
     render(

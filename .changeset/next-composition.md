@@ -9,3 +9,5 @@ Layout composition. Old props keep working and are marked `@deprecated`.
 - `layoutData` can supply `getMenus`, `getUser` and `getApps`. When it does, the layout uses them and does not branch on preview mode. `igrpGetLayoutMenus(config)` returns the same menus for app code.
 - `IGRPRootLayoutProviders` renders what `IGRPRootLayout` puts inside `<body>`, for apps that own their `<html>`. `IGRPRootLayout` takes `bodyClassName` and `themeProps`.
 - `IGRPLayoutBlank` takes `toaster`.
+
+`IGRPLayoutHeader` takes `paletteCommands={false}` to skip building the palette from the menus. `IGRPLayoutFull` warns in development when `header` is given together with the deprecated `headerSlots`, `breadcrumbs` or `breadcrumbRouteLabels` (or `sidebar` with `showSidebar`), which are then ignored.

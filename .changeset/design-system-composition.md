@@ -15,3 +15,12 @@ Composition fixes. Old props keep working and are marked `@deprecated`.
 - `IGRPChat`: `onSend` adapter, `initialMessages`, `renderMessage` and `onAction`. Replies without a `type` render as text instead of an empty bubble.
 - `IGRPMultiStepForm`: controlled `step`/`onStepChange`.
 - Horizon contexts use React 19 `use()` and `<Context>`.
+
+Behaviour changes to check:
+
+- An `IGRPAlertDialog` whose `onAction` returns a Promise stays open, with the action loading, until the promise settles. On reject it stays open and the error is rethrown. While pending, both buttons are `aria-disabled` and keep focus.
+- `IGRPDataTable` without `showPagination` renders every row in client mode, where it used to stop at 50. It warns in development above 500 rows.
+- `badge={null}` (tabs, menu navigation) and `backButton={null}` (page header) hide the element instead of falling back to the deprecated props.
+- `IGRPTooltip` always wraps its child in a `Slot`, and a disabled child keeps its focusable fallback even under a trigger that passes `disabled={false}`.
+- Lazy chart skeletons take the chart's `size`, `height` and `width` instead of a 16:9 box.
+- `IGRPStatsCard` without `iconAppearance` renders as before, except that a background without a shape, or a shape without a background, now colours the icon by `iconVariant`.

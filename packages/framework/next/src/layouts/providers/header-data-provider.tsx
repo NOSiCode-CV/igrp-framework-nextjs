@@ -42,6 +42,8 @@ export type HeaderDataProviderProps = IGRPHeaderLabelProps & {
   className?: string;
   /** A composition of `IGRPHeader*` parts, rendered instead of the default header. */
   children?: React.ReactNode;
+  /** `false` skips the palette's menu commands; see `IGRPLayoutHeaderArgs`. */
+  paletteCommands?: boolean;
 };
 
 /**
@@ -65,6 +67,7 @@ export async function HeaderDataProvider({
   fallbackLogo,
   className,
   children,
+  paletteCommands: withPaletteCommands = true,
   ...labels
 }: HeaderDataProviderProps) {
   const { previewMode } = config;
@@ -82,6 +85,13 @@ export async function HeaderDataProvider({
   // `layoutData.getUser` replaces the user source in both modes; without it,
   // preview keeps the data's own `user` and production asks Access Management.
   const getUser = layoutData.getUser ?? (previewMode ? undefined : fetchCurrentUser);
+
+  // The built-in palette gets the menu commands unless a search slot replaces
+  // it. Started before the header awaits so the menu fetch (cached, shared with
+  // the sidebar) overlaps them, and handed over as a promise so it never delays
+  // the header; the palette streams them in. It never rejects, so an unused one
+  // (`showSearch` off) is harmless.
+  const palette = withPaletteCommands && !headerSlots?.search ? paletteCommands(config) : undefined;
 
   let headerData: IGRPHeaderDataArgs;
   if (!getUser) {
@@ -106,17 +116,14 @@ export async function HeaderDataProvider({
     }
   }
 
-  // The built-in palette gets the menu commands unless a search slot replaces
-  // it. Passed as a promise so the menu fetch (shared with the sidebar) never
-  // delays the header; the palette streams them in.
-  const wantsPalette = !headerSlots?.search && (Boolean(children) || headerData.showSearch);
+  const wantsPalette = Boolean(children) || headerData.showSearch;
 
   return (
     <IGRPHeaderDataProvider
       data={headerData}
       breadcrumbs={breadcrumbs}
       breadcrumbRouteLabels={breadcrumbRouteLabels}
-      paletteCommands={wantsPalette ? paletteCommands(config) : undefined}
+      paletteCommands={wantsPalette ? palette : undefined}
       fallbackLogo={fallbackLogo}
       {...labels}
     >

@@ -37,11 +37,16 @@ interface IGRPTooltipProps {
   sideOffset?: number
   /** Used only when no IGRPTooltipProvider is in scope. Default 0. */
   delayDuration?: number
-  /** Classes for the tooltip content. */
+  /**
+   * Classes for the tooltip content. When `IGRPTooltip` is itself the child of an
+   * `asChild` parent (e.g. `<DialogTrigger asChild>`), a `className` set on that
+   * parent is merged in here too, so style the control directly instead.
+   */
   className?: string
   /**
    * Set when the trigger is disabled but the child element doesn't carry `disabled` itself,
-   * e.g. a DialogTrigger wrapping a disabled button. Defaults to the child's own `disabled` prop.
+   * e.g. a DialogTrigger wrapping a disabled button. `false` never overrides the child's
+   * own `disabled` (an `asChild` parent such as `DropdownMenuTrigger` always passes it).
    */
   disabled?: boolean
 }
@@ -65,11 +70,12 @@ function IGRPTooltip({
   const hasProvider = use(IGRPTooltipContext)
 
   // Props from an `asChild` parent (e.g. a dialog trigger's onClick and ref) belong to the control, not the span.
-  const control = Object.keys(slotProps).length > 0 ? <Slot.Root {...slotProps}>{children}</Slot.Root> : children
+  // Always through Slot so the element type doesn't flip when such props appear (that would remount the child).
+  const control = <Slot.Root {...slotProps}>{children}</Slot.Root>
 
   if (!label) return control
 
-  const disabled = Boolean(disabledProp ?? (children.props as { disabled?: boolean }).disabled)
+  const disabled = Boolean(disabledProp || (children.props as { disabled?: boolean }).disabled)
 
   const tooltipNode = (
     <Tooltip>

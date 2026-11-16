@@ -23,7 +23,7 @@ interface IGRPChatMessage {
   content: string
   /**
    * Content type for rendering. Unset renders as text; `"button"` renders a button
-   * only when `IGRPChat` has `onAction`, otherwise text.
+   * whose click calls `IGRPChat`'s `onAction` (a no-op without it).
    */
   type?: "text" | "image" | "link" | "button"
   /** ISO timestamp. */
@@ -52,7 +52,7 @@ interface IGRPChatProps {
   initialMessages?: IGRPChatMessage[]
   /** Renders a message's bubble content in place of the built-in text/image/link/button renderers. */
   renderMessage?: (message: IGRPChatMessage) => React.ReactNode
-  /** Called when the user clicks a `type: "button"` message. Without it those messages render as text. */
+  /** Called when the user clicks a `type: "button"` message. Without it the button does nothing. */
   onAction?: (message: IGRPChatMessage) => void
   /** Placeholder text when there are no messages. */
   labelDescription?: string
@@ -205,10 +205,9 @@ function IGRPChat({
         </a>
       )
     }
-    if (message.type === "button" && onAction) {
-      return <IGRPButton onClick={() => onAction(message)}>{message.content}</IGRPButton>
+    if (message.type === "button") {
+      return <IGRPButton onClick={onAction ? () => onAction(message) : undefined}>{message.content}</IGRPButton>
     }
-    // Text, an unset type, or a button with nowhere to send the click.
     return <p>{message.content}</p>
   }
 

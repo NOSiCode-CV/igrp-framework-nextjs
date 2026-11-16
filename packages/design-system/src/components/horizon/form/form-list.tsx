@@ -76,6 +76,8 @@ interface IGRPFormListProps<TItem>
    * `"form"` binds to the enclosing `IGRPForm` by `name`; `"standalone"` keeps the
    * items in this component (`value` / `defaultValue` / `onChange`), even inside a
    * form. Defaults to `"form"` inside `IGRPForm`, `"standalone"` outside it.
+   * An explicit `"form"` outside an `IGRPForm` has no form to bind to, so it falls
+   * back to standalone (with a dev warning).
    */
   mode?: "form" | "standalone"
   /** Controlled items. Standalone mode only — ignored (with a dev warning) in form mode. */
@@ -419,6 +421,14 @@ function IGRPFormList<TItem>({
       `IGRPFormList "${groupId}": value/defaultValue/onChange are ignored inside IGRPForm, which owns the items. Pass mode="standalone" to drive the list yourself.`
     )
   }, [isFormMode, hasStandaloneProps, groupId])
+
+  const formModeWithoutForm = mode === "form" && !formContext
+  useEffect(() => {
+    if (process.env.NODE_ENV === "production" || !formModeWithoutForm) return
+    console.warn(
+      `IGRPFormList "${groupId}": mode="form" needs an enclosing IGRPForm; running standalone (value/defaultValue/onChange).`
+    )
+  }, [formModeWithoutForm, groupId])
 
   const shared = { ...rest, groupId, iconName, showIcon, dot }
 

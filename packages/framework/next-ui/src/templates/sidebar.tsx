@@ -48,9 +48,7 @@ export function IGRPSidebarDataProvider({
   children,
 }: IGRPSidebarDataProviderProps) {
   const parent = use(SidebarDataContext);
-  const content = (
-    <SidebarDataContext value={data ?? parent}>{children}</SidebarDataContext>
-  );
+  const content = <SidebarDataContext value={data ?? parent}>{children}</SidebarDataContext>;
   if (!menuLabels && !navUserLabels) return content;
   const overrides: IGRPChromeStringsOverrides = { menus: menuLabels, navUser: navUserLabels };
   return <IGRPChromeI18nProvider overrides={overrides}>{content}</IGRPChromeI18nProvider>;
@@ -83,7 +81,10 @@ export function IGRPSidebarAppSwitcher() {
   );
 }
 
-/** The menu tree. `showSearch` defaults to the data's `showMenuSearch`. */
+/**
+ * The menu tree. `showSearch` defaults to the sidebar provider's data
+ * (`showMenuSearch`); a value here overrides it.
+ */
 export function IGRPSidebarMenus({ showSearch }: { showSearch?: boolean }) {
   const data = useIGRPSidebarData();
   return (
@@ -101,7 +102,10 @@ export function IGRPSidebarUser({
 }: {
   /** Extra menu entries (`IGRPNavUserItem`), before sign-out. */
   items?: React.ReactNode;
-  /** Show the menu's Notifications entry. Defaults to the data's `showNotifications`. */
+  /**
+   * Show the menu's Notifications entry. Defaults to the sidebar provider's
+   * data (`showNotifications`); a value here overrides it.
+   */
   showNotifications?: boolean;
 }) {
   const data = useIGRPSidebarData();

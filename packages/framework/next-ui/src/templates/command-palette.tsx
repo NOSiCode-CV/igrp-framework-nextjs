@@ -1,6 +1,6 @@
 'use client';
 
-import { Fragment } from 'react';
+import { Fragment, Suspense, use } from 'react';
 import {
   IGRPIcon,
   Command,
@@ -19,7 +19,8 @@ import type { IGRPCommandItem } from './command-search.js';
 interface IGRPCommandPaletteProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  commands: IGRPCommandItem[];
+  /** A promise is resolved here, behind the dialog's own Suspense boundary. */
+  commands: IGRPCommandItem[] | Promise<IGRPCommandItem[]>;
   labels: IGRPCommandSearchLabels;
 }
 
@@ -33,15 +34,6 @@ function IGRPCommandPalette({ open, onOpenChange, commands, labels }: IGRPComman
     onOpenChange(false);
     command();
   };
-
-  // Group commands by their `group` field. Items without a group are collected under undefined.
-  const grouped = commands.reduce<Map<string | undefined, IGRPCommandItem[]>>((acc, item) => {
-    const key = item.group;
-    const list = acc.get(key) ?? [];
-    list.push(item);
-    acc.set(key, list);
-    return acc;
-  }, new Map());
 
   return (
     <CommandDialog
@@ -64,37 +56,72 @@ function IGRPCommandPalette({ open, onOpenChange, commands, labels }: IGRPComman
         <CommandInput placeholder={labels.placeholder} />
         <CommandList className="max-h-96 scroll-py-2">
           <CommandEmpty>{labels.empty}</CommandEmpty>
-          {Array.from(grouped.entries()).map(([group, items], groupIndex) => (
-            <Fragment key={group ?? 'ungrouped'}>
-              {groupIndex > 0 && <CommandSeparator className="my-2" />}
-              <CommandGroup
-                className="**:[[cmdk-group-heading]]:px-3 **:[[cmdk-group-heading]]:pb-2 **:[[cmdk-group-items]]:flex **:[[cmdk-group-items]]:flex-col **:[[cmdk-group-items]]:gap-1"
-                heading={group}
-              >
-                {items.map((item, index) => {
-                  // cmdk selects by `value` (the label by default), so duplicate labels
-                  // highlighted together and Enter ran the first; filter on `keywords`.
-                  const value = item.id ?? `${group ?? ''}/${item.label}/${index}`;
-                  return (
-                    <CommandItem
-                      key={value}
-                      value={value}
-                      keywords={[item.label, group ?? '']}
-                      className="cursor-pointer gap-3 px-3 py-2.5"
-                      onSelect={() => runCommand(item.onSelect)}
-                    >
-                      {item.icon && <IGRPIcon iconName={item.icon} />}
-                      <span>{item.label}</span>
-                    </CommandItem>
-                  );
-                })}
-              </CommandGroup>
-            </Fragment>
-          ))}
+          {Array.isArray(commands) ? (
+            <PaletteGroups commands={commands} onRun={runCommand} />
+          ) : (
+            <Suspense fallback={null}>
+              <AwaitedPaletteGroups commands={commands} onRun={runCommand} />
+            </Suspense>
+          )}
         </CommandList>
       </Command>
     </CommandDialog>
   );
+}
+
+interface PaletteGroupsProps {
+  commands: IGRPCommandItem[];
+  onRun: (command: () => unknown) => void;
+}
+
+function PaletteGroups({ commands, onRun }: PaletteGroupsProps) {
+  // Group commands by their `group` field. Items without a group are collected under undefined.
+  const grouped = commands.reduce<Map<string | undefined, IGRPCommandItem[]>>((acc, item) => {
+    const key = item.group;
+    const list = acc.get(key) ?? [];
+    list.push(item);
+    acc.set(key, list);
+    return acc;
+  }, new Map());
+
+  return (
+    <>
+      {Array.from(grouped.entries()).map(([group, items], groupIndex) => (
+        <Fragment key={group ?? 'ungrouped'}>
+          {groupIndex > 0 && <CommandSeparator className="my-2" />}
+          <CommandGroup
+            className="**:[[cmdk-group-heading]]:px-3 **:[[cmdk-group-heading]]:pb-2 **:[[cmdk-group-items]]:flex **:[[cmdk-group-items]]:flex-col **:[[cmdk-group-items]]:gap-1"
+            heading={group}
+          >
+            {items.map((item, index) => {
+              // cmdk selects by `value` (the label by default), so duplicate labels
+              // highlighted together and Enter ran the first; filter on `keywords`.
+              const value = item.id ?? `${group ?? ''}/${item.label}/${index}`;
+              return (
+                <CommandItem
+                  key={value}
+                  value={value}
+                  keywords={[item.label, group ?? '']}
+                  className="cursor-pointer gap-3 px-3 py-2.5"
+                  onSelect={() => onRun(item.onSelect)}
+                >
+                  {item.icon && <IGRPIcon iconName={item.icon} />}
+                  <span>{item.label}</span>
+                </CommandItem>
+              );
+            })}
+          </CommandGroup>
+        </Fragment>
+      ))}
+    </>
+  );
+}
+
+function AwaitedPaletteGroups({
+  commands,
+  onRun,
+}: Omit<PaletteGroupsProps, 'commands'> & { commands: Promise<IGRPCommandItem[]> }) {
+  return <PaletteGroups commands={use(commands)} onRun={onRun} />;
 }
 
 const fold = (text: string) => text.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase();

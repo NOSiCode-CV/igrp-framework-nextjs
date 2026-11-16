@@ -4,8 +4,10 @@ import { createRoot, type Root } from 'react-dom/client';
 import { renderToString } from 'react-dom/server';
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 
+// Stable, like Next's: the header search memoizes its palette items on it.
+const router = vi.hoisted(() => ({ push: () => {}, refresh: () => {} }));
 vi.mock('next/navigation', () => ({
-  useRouter: () => ({ push: vi.fn(), refresh: vi.fn() }),
+  useRouter: () => router,
   useSelectedLayoutSegments: () => ['url-segment'],
   usePathname: () => '/',
 }));
@@ -13,8 +15,13 @@ vi.mock('next/navigation', () => ({
 const { SidebarProvider, TooltipProvider } =
   await import('@igrp/igrp-framework-react-design-system');
 const { IGRPTemplateHeader } = await import('../header.js');
-const { IGRPHeaderDataProvider, IGRPHeaderTitle, IGRPHeaderUser } =
-  await import('../header-parts.js');
+const {
+  IGRPHeaderBreadcrumbs,
+  IGRPHeaderDataProvider,
+  IGRPHeaderSearch,
+  IGRPHeaderTitle,
+  IGRPHeaderUser,
+} = await import('../header-parts.js');
 const { IGRPRootProvidersFull } = await import('../../providers/root-full.js');
 const { IGRPTemplateBreadcrumbs } = await import('../breadcrumbs.js');
 const { IGRPBreadcrumbsProvider, IGRPPageBreadcrumbs } =
@@ -168,12 +175,16 @@ describe('IGRPChromeI18nProvider overrides', () => {
 });
 
 describe('page breadcrumbs', () => {
-  it('prefer the page trail, then fall back to the prop when the page unmounts', () => {
+  const PAGE_ITEMS = [{ label: 'FromPage', href: '/pg' }];
+
+  it('win over the header trail in IGRPHeaderBreadcrumbs, which returns when the page unmounts', () => {
     function Harness() {
       const [page, setPage] = useState(true);
       return (
         <IGRPBreadcrumbsProvider>
-          <IGRPTemplateBreadcrumbs items={[{ label: 'FromProp', href: '/p' }]} />
+          <IGRPHeaderDataProvider breadcrumbs={[{ label: 'FromHeader', href: '/h' }]}>
+            <IGRPHeaderBreadcrumbs />
+          </IGRPHeaderDataProvider>
           {page && <IGRPPageBreadcrumbs items={PAGE_ITEMS} />}
           <button type="button" onClick={() => setPage(false)}>
             leave
@@ -181,14 +192,27 @@ describe('page breadcrumbs', () => {
         </IGRPBreadcrumbsProvider>
       );
     }
-    const PAGE_ITEMS = [{ label: 'FromPage', href: '/pg' }];
     const host = mount(<Harness />);
     expect(host.textContent).toContain('FromPage');
     act(() => host.querySelector('button')!.click());
+    expect(host.textContent).toContain('FromHeader');
+    expect(host.textContent).not.toContain('FromPage');
+  });
+
+  it('never override the explicit items of an IGRPTemplateBreadcrumbs', () => {
+    const host = mount(
+      <IGRPBreadcrumbsProvider>
+        <IGRPTemplateBreadcrumbs items={[{ label: 'FromProp', href: '/p' }]} />
+        <IGRPPageBreadcrumbs items={PAGE_ITEMS} />
+      </IGRPBreadcrumbsProvider>,
+    );
     expect(host.textContent).toContain('FromProp');
     expect(host.textContent).not.toContain('FromPage');
   });
 });
+
+const ctrlK = () => new KeyboardEvent('keydown', { key: 'k', ctrlKey: true, cancelable: true });
+const paletteInputs = () => document.body.querySelectorAll('[data-slot="command-input"]');
 
 describe('IGRPCommandPaletteProvider', () => {
   function Opener() {
@@ -200,32 +224,128 @@ describe('IGRPCommandPaletteProvider', () => {
     );
   }
 
-  it('owns one ⌘K listener and lets any component open the palette', async () => {
+  it('leaves Ctrl+K to the browser when no palette is rendered', async () => {
+    mount(
+      <IGRPCommandPaletteProvider>
+        <Opener />
+      </IGRPCommandPaletteProvider>,
+    );
+    const event = ctrlK();
+    await act(async () => {
+      document.dispatchEvent(event);
+    });
+    expect(event.defaultPrevented).toBe(false);
+  });
+
+  it('is toggled by the search on ⌘K and opened by any component', async () => {
     mount(
       <IGRPCommandPaletteProvider>
         <IGRPTemplateCommandSearch commands={[]} />
         <Opener />
       </IGRPCommandPaletteProvider>,
     );
-    const input = () => document.body.querySelector('[data-slot="command-input"]');
-    expect(input()).toBeNull();
+    expect(paletteInputs()).toHaveLength(0);
 
-    // A second listener in the search would toggle it straight back closed.
+    const event = ctrlK();
     await act(async () => {
-      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', ctrlKey: true }));
+      document.dispatchEvent(event);
     });
-    expect(input()).not.toBeNull();
+    expect(event.defaultPrevented).toBe(true);
+    expect(paletteInputs()).toHaveLength(1);
 
     await act(async () => {
-      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', ctrlKey: true }));
+      document.dispatchEvent(ctrlK());
     });
     await act(async () => {
       (document.querySelector('[data-testid="opener"]') as HTMLButtonElement).click();
     });
-    expect(input()).not.toBeNull();
+    expect(paletteInputs()).toHaveLength(1);
+  });
+
+  it('is toggled once when two searches are mounted', async () => {
+    mount(
+      <IGRPCommandPaletteProvider>
+        <IGRPTemplateCommandSearch commands={[]} />
+        <IGRPTemplateCommandSearch commands={[]} />
+      </IGRPCommandPaletteProvider>,
+    );
+    await act(async () => {
+      document.dispatchEvent(ctrlK());
+    });
+    // A double toggle would leave it closed. (Both instances render the shared
+    // open state, so each mounts its dialog: one input per instance.)
+    expect(paletteInputs().length).toBeGreaterThan(0);
   });
 
   it('useIGRPCommandPalette throws outside the provider', () => {
     expect(() => renderToString(<Opener />)).toThrow(/IGRPCommandPaletteProvider/);
+  });
+});
+
+describe('IGRPTemplateCommandSearch without a provider', () => {
+  it('opens one palette when two are mounted', async () => {
+    mount(
+      <>
+        <IGRPTemplateCommandSearch commands={[]} />
+        <IGRPTemplateCommandSearch commands={[]} />
+      </>,
+    );
+    await act(async () => {
+      document.dispatchEvent(ctrlK());
+    });
+    expect(paletteInputs()).toHaveLength(1);
+  });
+});
+
+describe('IGRPHeaderSearch', () => {
+  it('keeps one trigger, open, while streamed palette commands arrive', async () => {
+    let resolve!: (commands: { id: string; label: string; href: string }[]) => void;
+    const commands = new Promise<{ id: string; label: string; href: string }[]>((r) => {
+      resolve = r;
+    });
+    const host = mount(
+      <IGRPCommandPaletteProvider>
+        <IGRPHeaderDataProvider paletteCommands={commands}>
+          <IGRPHeaderSearch />
+        </IGRPHeaderDataProvider>
+      </IGRPCommandPaletteProvider>,
+    );
+    const trigger = host.querySelector('button');
+    expect(trigger).not.toBeNull();
+
+    await act(async () => {
+      document.dispatchEvent(ctrlK());
+    });
+    expect(paletteInputs()).toHaveLength(1);
+
+    await act(async () => {
+      resolve([{ id: 'A', label: 'Alpha', href: '/alpha' }]);
+    });
+    expect(host.querySelector('button')).toBe(trigger);
+    expect(paletteInputs()).toHaveLength(1);
+    const items = [...document.body.querySelectorAll('[data-slot="command-item"]')];
+    expect(items.map((el) => el.textContent)).toEqual(['Alpha']);
+  });
+
+  it('lists commands from an RSC-style thenable whose then() returns undefined', async () => {
+    const resolved = [{ id: 'B', label: 'Beta', href: '/beta' }];
+    // Mirrors React Flight's chunk: `then` registers callbacks and returns nothing.
+    const thenable = {
+      then(onFulfilled: (value: typeof resolved) => void) {
+        onFulfilled(resolved);
+      },
+    } as unknown as Promise<typeof resolved>;
+    mount(
+      <IGRPCommandPaletteProvider>
+        <IGRPHeaderDataProvider paletteCommands={thenable}>
+          <IGRPHeaderSearch />
+        </IGRPHeaderDataProvider>
+      </IGRPCommandPaletteProvider>,
+    );
+    await act(async () => {
+      document.dispatchEvent(ctrlK());
+    });
+    const items = [...document.body.querySelectorAll('[data-slot="command-item"]')];
+    expect(items.map((el) => el.textContent)).toEqual(['Beta']);
   });
 });

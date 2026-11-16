@@ -18,6 +18,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "../primitives/alert-dialog.js"
+import { Spinner } from "../primitives/spinner.js"
 import { IGRPButton } from "./button.js"
 import { IGRPIcon, type IGRPIconName } from "./icon/index.js"
 import { useIGRPi18n } from "../../i18n/index.js"
@@ -134,6 +135,10 @@ function IGRPAlertDialog({
   }
 
   const handleAction = (event: React.MouseEvent<HTMLButtonElement>) => {
+    if (pending) {
+      event.preventDefault()
+      return
+    }
     const result = onAction?.()
     if (!result || typeof (result as Promise<unknown>).then !== "function") return
     // AlertDialogAction closes on click unless the default is prevented.
@@ -144,13 +149,25 @@ function IGRPAlertDialog({
         setPending(false)
         commitOpen(false)
       },
-      () => setPending(false)
+      (error: unknown) => {
+        setPending(false)
+        // Rethrow so the rejection still reaches global error reporting.
+        throw error
+      }
     )
   }
 
-  const handleCancel = () => {
+  const handleCancel = (event: React.MouseEvent<HTMLButtonElement>) => {
+    if (pending) {
+      event.preventDefault()
+      return
+    }
     if (onCancel) onCancel()
   }
+
+  // While pending, buttons stay focusable (aria-disabled, not native `disabled`) so
+  // keyboard focus isn't dropped to <body>; the handlers above ignore their clicks.
+  const pendingClassName = pending && "cursor-wait opacity-50"
 
   return (
     <Slot.Root id={ref}>
@@ -190,13 +207,32 @@ function IGRPAlertDialog({
                 className={cn("mt-3", iconPlacement === "center" && "flex-col sm:flex-row", footerClassName)}
               >
                 {showCancel && (
-                  <AlertDialogCancel onClick={handleCancel} disabled={pending} {...cancelProps}>
+                  <AlertDialogCancel
+                    onClick={handleCancel}
+                    aria-disabled={pending || undefined}
+                    {...cancelProps}
+                    className={cn(cancelProps?.className, pendingClassName)}
+                  >
                     {cancelLabel ?? i18n.alertDialog.cancel}
                   </AlertDialogCancel>
                 )}
                 {showAction && (
-                  <AlertDialogAction asChild onClick={handleAction} className={actionClassName} {...actionProps}>
-                    <IGRPButton loading={pending}>{actionLabel ?? i18n.alertDialog.action}</IGRPButton>
+                  <AlertDialogAction
+                    asChild
+                    onClick={handleAction}
+                    {...actionProps}
+                    className={cn(actionClassName, pendingClassName)}
+                  >
+                    <IGRPButton aria-disabled={pending || undefined}>
+                      {pending ? (
+                        <>
+                          <Spinner data-icon="inline-start" aria-hidden="true" />
+                          {i18n.button.loadingText}
+                        </>
+                      ) : (
+                        (actionLabel ?? i18n.alertDialog.action)
+                      )}
+                    </IGRPButton>
                   </AlertDialogAction>
                 )}
               </AlertDialogFooter>

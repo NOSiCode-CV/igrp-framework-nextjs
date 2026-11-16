@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, Suspense, use } from 'react';
+import { createContext, use, useMemo } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -15,6 +15,7 @@ import {
   type IGRPChromeStringsOverrides,
 } from '../i18n/context.js';
 import { withBasePath } from '../lib/utils.js';
+import { useIGRPBreadcrumbItems } from '../providers/breadcrumbs.js';
 import { useIGRPHasSidebar } from '../providers/shell.js';
 import {
   type BreadcrumbItem,
@@ -251,24 +252,29 @@ export function IGRPHeaderTitle({ className, children }: DivProps) {
   );
 }
 
-/** Breadcrumbs, fed from the header context (props win). */
+/**
+ * Breadcrumbs, fed from the header context (props win). A trail a page declares
+ * with `IGRPPageBreadcrumbs` / `useIGRPBreadcrumbs` takes precedence over the
+ * context's `breadcrumbs`.
+ */
 export function IGRPHeaderBreadcrumbs(props: IGRPTemplateBreadcrumbsProps) {
   const { breadcrumbs, breadcrumbRouteLabels } = useIGRPHeaderData();
+  const pageItems = useIGRPBreadcrumbItems();
   return (
-    <IGRPTemplateBreadcrumbs items={breadcrumbs} routeLabels={breadcrumbRouteLabels} {...props} />
+    <IGRPTemplateBreadcrumbs
+      items={pageItems ?? breadcrumbs}
+      routeLabels={breadcrumbRouteLabels}
+      {...props}
+    />
   );
 }
 
-/** The palette with serializable commands; navigation handlers are built here, on the client. */
-function PaletteSearch({
-  commands,
-  labels,
-}: {
-  commands: IGRPPaletteCommand[];
-  labels?: Partial<IGRPCommandSearchLabels>;
-}) {
-  const router = useRouter();
-  const items: IGRPCommandItem[] = commands.map((command) => ({
+/** Palette items from serializable commands; navigation handlers are built here, on the client. */
+function toCommandItems(
+  commands: IGRPPaletteCommand[],
+  router: ReturnType<typeof useRouter>,
+): IGRPCommandItem[] {
+  return commands.map((command) => ({
     id: command.id,
     label: command.label,
     icon: command.icon,
@@ -279,36 +285,26 @@ function PaletteSearch({
       else router.push(command.href);
     },
   }));
-  return <IGRPTemplateCommandSearch commands={items} labels={labels} />;
-}
-
-function AwaitedPaletteSearch({
-  commands,
-  labels,
-}: {
-  commands: Promise<IGRPPaletteCommand[]>;
-  labels?: Partial<IGRPCommandSearchLabels>;
-}) {
-  return <PaletteSearch commands={use(commands)} labels={labels} />;
 }
 
 /**
  * The command palette trigger. Uses the context's client `commands` when set,
- * else its `paletteCommands` (streamed in when they arrive as a promise).
+ * else its `paletteCommands`. A promise is resolved inside the palette dialog,
+ * so the trigger is one instance throughout and keeps its state while the menus
+ * stream in.
  */
 export function IGRPHeaderSearch({ labels }: { labels?: Partial<IGRPCommandSearchLabels> }) {
   const { commands, paletteCommands } = useIGRPHeaderData();
-  if (commands || !paletteCommands) {
-    return <IGRPTemplateCommandSearch commands={commands} labels={labels} />;
-  }
-  if (Array.isArray(paletteCommands)) {
-    return <PaletteSearch commands={paletteCommands} labels={labels} />;
-  }
-  return (
-    <Suspense fallback={<IGRPTemplateCommandSearch labels={labels} />}>
-      <AwaitedPaletteSearch commands={paletteCommands} labels={labels} />
-    </Suspense>
-  );
+  const router = useRouter();
+  // Memoized on the promise: a new derived promise per render would re-suspend the list.
+  const items = useMemo(() => {
+    if (commands || !paletteCommands) return commands;
+    return Array.isArray(paletteCommands)
+      ? toCommandItems(paletteCommands, router)
+      : // Promise.resolve: an RSC-streamed thenable's `then` returns undefined instead of a new promise.
+        Promise.resolve(paletteCommands).then((resolved) => toCommandItems(resolved, router));
+  }, [commands, paletteCommands, router]);
+  return <IGRPTemplateCommandSearch commands={items} labels={labels} />;
 }
 
 /** Settings link (`settingsUrl`, default `/settings`). */
@@ -345,7 +341,11 @@ export function IGRPHeaderModeSwitcher() {
 export interface IGRPHeaderUserProps {
   /** Extra menu entries (`IGRPNavUserItem`), before sign-out. */
   items?: React.ReactNode;
-  /** Show the menu's Notifications entry. Defaults to `true`. */
+  /**
+   * Show the menu's Notifications entry. Defaults to `true`: unlike the sidebar
+   * parts, this does not read the header data's `showNotifications` (in a
+   * composition a part shows by being included). A value here overrides it.
+   */
   showNotifications?: boolean;
 }
 

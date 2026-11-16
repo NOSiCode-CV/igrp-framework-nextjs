@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, use, useEffect, useState } from 'react';
+import { createContext, use, useState } from 'react';
 
 export interface IGRPCommandPaletteValue {
   state: { open: boolean };
@@ -10,36 +10,22 @@ export interface IGRPCommandPaletteValue {
 const CommandPaletteContext = createContext<IGRPCommandPaletteValue | null>(null);
 
 /**
- * Owns the command palette's open state and the single ⌘K / Ctrl+K listener.
- * Mounted by `IGRPRootProvidersFull`, so any component under the layout can
- * open the palette with `useIGRPCommandPalette()`.
+ * Owns the command palette's open state. Mounted by `IGRPRootProvidersFull`, so
+ * any component under the layout can open the palette with
+ * `useIGRPCommandPalette()`. It installs no keyboard listener: the ⌘K / Ctrl+K
+ * shortcut belongs to `IGRPTemplateCommandSearch`, so an app without a built-in
+ * palette keeps the browser's own Ctrl+K.
  */
 export function IGRPCommandPaletteProvider({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(false);
+  // Stable across renders, so a listener keyed on `toggle` is not re-installed on every open.
+  const [actions] = useState<IGRPCommandPaletteValue['actions']>(() => ({
+    open: () => setOpen(true),
+    close: () => setOpen(false),
+    toggle: () => setOpen((prev) => !prev),
+  }));
 
-  useEffect(() => {
-    const controller = new AbortController();
-    document.addEventListener(
-      'keydown',
-      (e: KeyboardEvent) => {
-        if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
-          e.preventDefault();
-          setOpen((prev) => !prev);
-        }
-      },
-      { signal: controller.signal },
-    );
-    return () => controller.abort();
-  }, []);
-
-  const value: IGRPCommandPaletteValue = {
-    state: { open },
-    actions: {
-      open: () => setOpen(true),
-      close: () => setOpen(false),
-      toggle: () => setOpen((prev) => !prev),
-    },
-  };
+  const value: IGRPCommandPaletteValue = { state: { open }, actions };
 
   return <CommandPaletteContext value={value}>{children}</CommandPaletteContext>;
 }

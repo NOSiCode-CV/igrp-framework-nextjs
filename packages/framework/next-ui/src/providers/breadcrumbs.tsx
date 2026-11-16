@@ -1,15 +1,12 @@
 'use client';
 
-import { createContext, use, useEffect, useLayoutEffect, useState } from 'react';
+import { createContext, use, useLayoutEffect, useState } from 'react';
 
 import type { BreadcrumbItem } from '../templates/breadcrumbs.js';
 
 type SetItems = (
   update: (current: BreadcrumbItem[] | undefined) => BreadcrumbItem[] | undefined,
 ) => void;
-
-// useLayoutEffect warns during SSR; neither runs on the server anyway.
-const useIsomorphicLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect;
 
 // Two contexts: pages that only set items never re-render when the items change.
 const ItemsContext = createContext<BreadcrumbItem[] | undefined>(undefined);
@@ -44,7 +41,7 @@ export function useIGRPBreadcrumbItems(): BreadcrumbItem[] | undefined {
 export function useIGRPBreadcrumbs(items: BreadcrumbItem[] | undefined): void {
   const setItems = use(SetItemsContext);
   // Before paint, so the URL/layout trail does not flash on client navigation.
-  useIsomorphicLayoutEffect(() => {
+  useLayoutEffect(() => {
     if (!setItems || !items) return;
     setItems(() => items);
     // Clear only our own trail: the next page may already have set its own.

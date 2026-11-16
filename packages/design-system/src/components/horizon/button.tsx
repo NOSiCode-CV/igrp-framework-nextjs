@@ -27,7 +27,7 @@ interface IGRPButtonProps
   children?: ReactNode
   /** Render as child component (Radix composition). */
   asChild?: boolean
-  /** Show loading spinner and disable interaction. */
+  /** Show loading spinner and ignore clicks; the button stays focusable (`aria-disabled`). */
   loading?: boolean
   /** Accessible text shown during loading state. */
   loadingText?: string
@@ -66,6 +66,13 @@ function IGRPButton({
 
   const spinnerSizeClassName = igrpSpinnerSizeClassName(size)
 
+  // Loading keeps the button focusable (aria-disabled, not native `disabled`, which
+  // drops focus to <body>); cancelling the click also blocks implicit form submit.
+  const loadingProps = loading && {
+    "aria-disabled": true as const,
+    onClick: (event: React.MouseEvent<HTMLButtonElement>) => event.preventDefault(),
+  }
+
   if (isIconOnlySize(size)) {
     const hasAccessibleName = Boolean(props["aria-label"] || props["aria-labelledby"])
     if (process.env.NODE_ENV !== "production" && !hasAccessibleName) {
@@ -78,8 +85,9 @@ function IGRPButton({
       <Button
         aria-label={!hasAccessibleName ? iconName : undefined}
         {...igrpOmitNonDomProps(props)}
-        className={cn(loading && "cursor-wait", className)}
-        disabled={disabled || loading}
+        {...loadingProps}
+        className={cn(loading && "cursor-wait opacity-50", className)}
+        disabled={disabled}
         type={type}
         id={ref}
       >
@@ -114,8 +122,9 @@ function IGRPButton({
   return (
     <Button
       {...igrpOmitNonDomProps(props)}
-      className={cn("relative", loading && "cursor-wait", className)}
-      disabled={disabled || loading}
+      {...loadingProps}
+      className={cn("relative", loading && "cursor-wait opacity-50", className)}
+      disabled={disabled}
       type={type}
       id={ref}
     >

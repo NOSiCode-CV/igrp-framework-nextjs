@@ -56,13 +56,9 @@ function IGRPCommandPalette({ open, onOpenChange, commands, labels }: IGRPComman
         <CommandInput placeholder={labels.placeholder} />
         <CommandList className="max-h-96 scroll-py-2">
           <CommandEmpty>{labels.empty}</CommandEmpty>
-          {Array.isArray(commands) ? (
+          <Suspense fallback={null}>
             <PaletteGroups commands={commands} onRun={runCommand} />
-          ) : (
-            <Suspense fallback={null}>
-              <AwaitedPaletteGroups commands={commands} onRun={runCommand} />
-            </Suspense>
-          )}
+          </Suspense>
         </CommandList>
       </Command>
     </CommandDialog>
@@ -70,13 +66,15 @@ function IGRPCommandPalette({ open, onOpenChange, commands, labels }: IGRPComman
 }
 
 interface PaletteGroupsProps {
-  commands: IGRPCommandItem[];
+  commands: IGRPCommandPaletteProps['commands'];
   onRun: (command: () => unknown) => void;
 }
 
 function PaletteGroups({ commands, onRun }: PaletteGroupsProps) {
+  // An array never suspends; a promise suspends to the boundary above.
+  const list = Array.isArray(commands) ? commands : use(commands);
   // Group commands by their `group` field. Items without a group are collected under undefined.
-  const grouped = commands.reduce<Map<string | undefined, IGRPCommandItem[]>>((acc, item) => {
+  const grouped = list.reduce<Map<string | undefined, IGRPCommandItem[]>>((acc, item) => {
     const key = item.group;
     const list = acc.get(key) ?? [];
     list.push(item);
@@ -115,13 +113,6 @@ function PaletteGroups({ commands, onRun }: PaletteGroupsProps) {
       ))}
     </>
   );
-}
-
-function AwaitedPaletteGroups({
-  commands,
-  onRun,
-}: Omit<PaletteGroupsProps, 'commands'> & { commands: Promise<IGRPCommandItem[]> }) {
-  return <PaletteGroups commands={use(commands)} onRun={onRun} />;
 }
 
 const fold = (text: string) => text.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase();

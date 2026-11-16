@@ -90,10 +90,13 @@ describe("IGRPLookupField", () => {
     expect(input.getAttribute("aria-describedby")).toBe(screen.getByText("Ajuda").id)
   })
 
-  it("loading disables the button and shows a spinner in place of the icon", () => {
-    render(<IGRPLookupField {...base} onLookup={vi.fn()} loading />)
+  it("loading disables the button and shows a spinner in place of the icon", async () => {
+    const onLookup = vi.fn()
+    render(<IGRPLookupField {...base} onLookup={onLookup} loading />)
     const button = screen.getByRole("button", { name: "Pesquisar NIF" })
-    expect(button).toBeDisabled()
+    expect(button).toHaveAttribute("aria-disabled", "true")
+    await userEvent.click(button)
+    expect(onLookup).not.toHaveBeenCalled()
     expect(button.querySelector('[data-slot="spinner"]')).not.toBeNull()
   })
 

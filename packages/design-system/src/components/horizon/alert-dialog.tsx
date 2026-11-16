@@ -18,7 +18,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "../primitives/alert-dialog.js"
-import { Spinner } from "../primitives/spinner.js"
 import { IGRPButton } from "./button.js"
 import { IGRPIcon, type IGRPIconName } from "./icon/index.js"
 import { useIGRPi18n } from "../../i18n/index.js"
@@ -165,8 +164,8 @@ function IGRPAlertDialog({
     if (onCancel) onCancel()
   }
 
-  // While pending, buttons stay focusable (aria-disabled, not native `disabled`) so
-  // keyboard focus isn't dropped to <body>; the handlers above ignore their clicks.
+  // While pending, cancel stays focusable (aria-disabled, not native `disabled`) so
+  // keyboard focus isn't dropped to <body>; `IGRPButton loading` does the same for the action.
   const pendingClassName = pending && "cursor-wait opacity-50"
 
   return (
@@ -221,18 +220,9 @@ function IGRPAlertDialog({
                     asChild
                     onClick={handleAction}
                     {...actionProps}
-                    className={cn(actionClassName, pendingClassName)}
+                    className={actionClassName}
                   >
-                    <IGRPButton aria-disabled={pending || undefined}>
-                      {pending ? (
-                        <>
-                          <Spinner data-icon="inline-start" aria-hidden="true" />
-                          {i18n.button.loadingText}
-                        </>
-                      ) : (
-                        (actionLabel ?? i18n.alertDialog.action)
-                      )}
-                    </IGRPButton>
+                    <IGRPButton loading={pending}>{actionLabel ?? i18n.alertDialog.action}</IGRPButton>
                   </AlertDialogAction>
                 )}
               </AlertDialogFooter>

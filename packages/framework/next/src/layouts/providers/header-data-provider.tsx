@@ -116,14 +116,12 @@ export async function HeaderDataProvider({
     }
   }
 
-  const wantsPalette = Boolean(children) || headerData.showSearch;
-
   return (
     <IGRPHeaderDataProvider
       data={headerData}
       breadcrumbs={breadcrumbs}
       breadcrumbRouteLabels={breadcrumbRouteLabels}
-      paletteCommands={wantsPalette ? palette : undefined}
+      paletteCommands={children || headerData.showSearch ? palette : undefined}
       fallbackLogo={fallbackLogo}
       {...labels}
     >

@@ -31,11 +31,12 @@ export const IGRPDataTableDateRangeFilterFn: FilterFn<any> = (row, columnId, fil
 type ResolvedDateRange = { igrpResolvedRange: true; start?: Date; end?: Date }
 
 /** Parses the bounds once per filter change; `end` is exclusive (the day after `to`). */
-function resolveDateRange(value: any): ResolvedDateRange {
-  if (value?.igrpResolvedRange) return value
-  const start = value?.from ? toLocalDate(value.from) : undefined
+function resolveDateRange(value: unknown): ResolvedDateRange {
+  if ((value as ResolvedDateRange | undefined)?.igrpResolvedRange) return value as ResolvedDateRange
+  const range = value as { from?: unknown; to?: unknown } | undefined
+  const start = range?.from ? toLocalDate(range.from) : undefined
   if (!start || !isValidDate(start)) return { igrpResolvedRange: true }
-  const end = toLocalDate(value.to)
+  const end = toLocalDate(range?.to)
   return {
     igrpResolvedRange: true,
     start: startOfDay(start),

@@ -3,6 +3,7 @@
 "use no memo"
 
 import { type Row } from "@tanstack/react-table"
+import { TZDate } from "@date-fns/tz"
 import { format } from "date-fns"
 
 import { cn } from "../cn.js"
@@ -182,10 +183,12 @@ function IGRPDataTableCellDate({ date, language, dateOptions, dateFormat }: IGRP
   if (Number.isNaN(d.getTime())) return null
   // V8 rolls "2026-02-31" over to March instead of rejecting it.
   if (dateOnly && d.toISOString().slice(0, 10) !== date) return null
-  // shortcut: date-fns formats timestamps in the runtime zone, upgrade to @date-fns/tz if a dateFormat cell must show times across zones
-  if (dateFormat)
-    return <span>{format(dateOnly ? parseLocalDate(date) : d, dateFormat, { locale: igrpDateFnsLocale(locale) })}</span>
   const timeZone = dateOnly ? "UTC" : (dateOptions?.timeZone ?? tz)
+  if (dateFormat) {
+    // date-fns formats in the runtime zone; a TZDate makes it format in the provider's zone like Intl does.
+    const value = dateOnly ? parseLocalDate(date) : timeZone ? new TZDate(d, timeZone) : d
+    return <span>{format(value, dateFormat, { locale: igrpDateFnsLocale(locale) })}</span>
+  }
   return <span>{igrpDateTimeFormat(language ?? locale, { ...dateOptions, timeZone }).format(d)}</span>
 }
 

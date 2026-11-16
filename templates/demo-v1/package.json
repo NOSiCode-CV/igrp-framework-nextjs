@@ -22,6 +22,7 @@
     "lint": "biome check --write",
     "lint:i18n": "igrp-i18n check-catalogs src/i18n/messages --default pt && igrp-i18n check-literals src/components src/i18n \"src/app/(igrp)/page.tsx\" src/config \"src/app/(auth)\" src/app/not-found.tsx src/app/layout.tsx src/app/global-error.tsx src/app/error.tsx \"src/app/(igrp)/error.tsx\" \"src/app/(igrp)/layout.tsx\"",
     "format": "biome format --write",
+    "test": "vitest run",
     "publish:template": "pwsh -ExecutionPolicy Bypass -File ./create-template/create-zip-template.ps1"
   },
   "dependencies": {
@@ -44,13 +45,14 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.6.4",
-    "@igrp/framework-next-types": "workspace:*",
     "@igrp/framework-next-i18n": "workspace:*",
+    "@igrp/framework-next-types": "workspace:*",
     "@tailwindcss/postcss": "4.3.4",
     "@types/node": "26.6.6",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
     "tailwindcss": "4.3.4",
-    "typescript": "5.9.3"
+    "typescript": "5.9.3",
+    "vitest": "5.1.0"
   }
 }

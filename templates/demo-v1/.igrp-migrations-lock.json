@@ -645,6 +645,13 @@
       "cliVersion": "0.2.0-beta.26",
       "manifestHash": "19fbab74ed331bf9",
       "payloadHash": "9946c8690fef1073"
+    },
+    {
+      "id": "92-lucide-1-and-auth-bypass-tests",
+      "appliedAt": "2026-11-16T00:00:00.000Z",
+      "cliVersion": "0.2.0-beta.26",
+      "manifestHash": "7b02abc5bc97b01a",
+      "payloadHash": "8dae5f0db89fb61f"
     }
   ]
 }

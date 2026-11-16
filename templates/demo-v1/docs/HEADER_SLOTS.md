@@ -306,7 +306,8 @@ slots={{ search: MySearch }}      // ❌ a function cannot be serialized
 
 **The same rule applies to props you pass into a slot.**
 `IGRPCommandItem.onSelect` is a callback, so a server module cannot build it.
-Pass plain data from the server and build the handlers in a client component.
+A server module can build items with `href` (and `external` for a new tab)
+instead: the palette navigates there itself.
 
 **Navigate with the router, not `window.open`.** `router.push()` applies
 `basePath` (`NEXT_PUBLIC_BASE_PATH`); `window.open()` does not, so an internal

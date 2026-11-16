@@ -51,4 +51,13 @@ describe("IGRPDataTableCellDate time zone", () => {
     const { container } = render(<IGRPDataTableCellDate date="2026-10-20" dateFormat="dd/MM/yyyy" />)
     expect(container).toHaveTextContent("20/10/2026")
   })
+
+  it("dateFormat path formats a timestamp in the provider time zone", () => {
+    const { container } = render(
+      <IGRPI18nProvider locale="pt-CV" timeZone="Asia/Tokyo">
+        <IGRPDataTableCellDate date="2026-10-12T23:30:00Z" dateFormat="dd/MM/yyyy HH:mm" />
+      </IGRPI18nProvider>
+    )
+    expect(container).toHaveTextContent("13/10/2026 08:30")
+  })
 })

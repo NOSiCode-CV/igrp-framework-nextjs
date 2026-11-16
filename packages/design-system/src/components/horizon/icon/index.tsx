@@ -21,7 +21,12 @@ interface IGRPIconProps extends Omit<LucideProps, "ref"> {
   id?: string
 }
 
-type IconLoader = () => Promise<{ __iconNode: IconNode; default: { displayName?: string } }>
+// lucide 0.x icon modules export `__iconNode`; 1.x exports `__iconData` with the node inside.
+type IconLoader = () => Promise<{
+  __iconNode?: IconNode
+  __iconData?: { node: IconNode }
+  default: { displayName?: string }
+}>
 
 /** What a loaded icon needs to render through lucide's static `Icon`. */
 type LoadedIcon = { iconNode: IconNode; className: string }
@@ -100,7 +105,7 @@ function loadIcon(key: string): Promise<LoadedIcon> {
       const displayName = mod.default.displayName ?? key
       // Deduped, as lucide's mergeClasses does — the two usually coincide.
       const classes = new Set([`lucide-${toKebabCase(displayName)}`, `lucide-${key}`])
-      const icon = { iconNode: mod.__iconNode, className: [...classes].join(" ") }
+      const icon = { iconNode: mod.__iconNode ?? mod.__iconData?.node ?? [], className: [...classes].join(" ") }
       loadedIcons.set(key, icon)
       for (const listener of listenersByKey.get(key) ?? []) listener()
       return icon

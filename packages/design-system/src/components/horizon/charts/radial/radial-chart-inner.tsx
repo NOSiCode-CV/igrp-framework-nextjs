@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 
 import React from "react"
@@ -108,7 +107,7 @@ function RadialChartTooltipContent({
   nameKey,
   formatValue,
 }: {
-  payload: ReadonlyArray<{ payload?: any; value?: unknown }>
+  payload: ReadonlyArray<{ payload?: Record<string, unknown>; value?: unknown }>
   nameKey: string
   formatValue: (v: number) => string
 }) {
@@ -116,8 +115,8 @@ function RadialChartTooltipContent({
   const item = payload[0]?.payload
   const value = payload[0]?.value
   if (!item) return null
-  const name = item[nameKey]
-  const fill = item._fill
+  const name = String(item[nameKey] ?? "")
+  const fill = item._fill as string | undefined
   return (
     <div className={cn("rounded-lg border bg-background p-2 shadow-md")}>
       <div className={cn("flex flex-col gap-1")}>
@@ -251,7 +250,7 @@ function IGRPRadialBarChartInner({
   }, [data, bars])
 
   const tooltipContent = React.useCallback(
-    (props: { active?: boolean; payload?: ReadonlyArray<{ payload?: any; value?: unknown }> }) => {
+    (props: { active?: boolean; payload?: ReadonlyArray<{ payload?: Record<string, unknown>; value?: unknown }> }) => {
       if (!props.active || !props.payload || !props.payload.length) return null
       return <RadialChartTooltipContent payload={props.payload} nameKey={nameKey} formatValue={formatValue} />
     },
@@ -259,7 +258,7 @@ function IGRPRadialBarChartInner({
   )
 
   const centerLabelContent = React.useCallback(
-    (props: any) =>
+    (props: { viewBox?: Record<string, unknown> }) =>
       props?.viewBox ? (
         <CenterLabelContent formattedTotal={formattedTotal} label={centerText.label} viewBox={props.viewBox} />
       ) : null,

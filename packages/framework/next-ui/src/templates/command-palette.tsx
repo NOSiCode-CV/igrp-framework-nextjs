@@ -1,6 +1,7 @@
 'use client';
 
 import { Fragment, Suspense, use } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   IGRPIcon,
   Command,
@@ -30,9 +31,13 @@ interface IGRPCommandPaletteProps {
  * module on hover/focus/⌘K and mounts it after the first open.
  */
 function IGRPCommandPalette({ open, onOpenChange, commands, labels }: IGRPCommandPaletteProps) {
-  const runCommand = (command: () => unknown) => {
+  const router = useRouter();
+  const runCommand = (item: IGRPCommandItem) => {
     onOpenChange(false);
-    command();
+    if (item.onSelect) item.onSelect();
+    // router.push applies basePath; window.open is only for other origins / new tabs.
+    else if (item.href && item.external) window.open(item.href, '_blank', 'noopener,noreferrer');
+    else if (item.href) router.push(item.href);
   };
 
   return (
@@ -67,7 +72,7 @@ function IGRPCommandPalette({ open, onOpenChange, commands, labels }: IGRPComman
 
 interface PaletteGroupsProps {
   commands: IGRPCommandPaletteProps['commands'];
-  onRun: (command: () => unknown) => void;
+  onRun: (item: IGRPCommandItem) => void;
 }
 
 function PaletteGroups({ commands, onRun }: PaletteGroupsProps) {
@@ -101,7 +106,7 @@ function PaletteGroups({ commands, onRun }: PaletteGroupsProps) {
                   value={value}
                   keywords={[item.label, group ?? '']}
                   className="cursor-pointer gap-3 px-3 py-2.5"
-                  onSelect={() => onRun(item.onSelect)}
+                  onSelect={() => onRun(item)}
                 >
                   {item.icon && <IGRPIcon iconName={item.icon} />}
                   <span>{item.label}</span>

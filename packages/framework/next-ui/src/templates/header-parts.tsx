@@ -1,9 +1,8 @@
 'use client';
 
-import { createContext, use, useMemo } from 'react';
+import { createContext, use } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import type { IGRPHeaderDataArgs } from '@igrp/framework-next-types';
 import { cn, IGRPIcon, SidebarTrigger } from '@igrp/igrp-framework-react-design-system';
 
@@ -269,24 +268,6 @@ export function IGRPHeaderBreadcrumbs(props: IGRPTemplateBreadcrumbsProps) {
   );
 }
 
-/** Palette items from serializable commands; navigation handlers are built here, on the client. */
-function toCommandItems(
-  commands: IGRPPaletteCommand[],
-  router: ReturnType<typeof useRouter>,
-): IGRPCommandItem[] {
-  return commands.map((command) => ({
-    id: command.id,
-    label: command.label,
-    icon: command.icon,
-    group: command.group,
-    onSelect: () => {
-      // router.push applies basePath; window.open is only for other origins / new tabs.
-      if (command.external) window.open(command.href, '_blank', 'noopener,noreferrer');
-      else router.push(command.href);
-    },
-  }));
-}
-
 /**
  * The command palette trigger. Uses the context's client `commands` when set,
  * else its `paletteCommands`. A promise is resolved inside the palette dialog,
@@ -295,16 +276,8 @@ function toCommandItems(
  */
 export function IGRPHeaderSearch({ labels }: { labels?: Partial<IGRPCommandSearchLabels> }) {
   const { commands, paletteCommands } = useIGRPHeaderData();
-  const router = useRouter();
-  // Memoized on the promise: a new derived promise per render would re-suspend the list.
-  const items = useMemo(() => {
-    if (commands || !paletteCommands) return commands;
-    return Array.isArray(paletteCommands)
-      ? toCommandItems(paletteCommands, router)
-      : // Promise.resolve: an RSC-streamed thenable's `then` returns undefined instead of a new promise.
-        Promise.resolve(paletteCommands).then((resolved) => toCommandItems(resolved, router));
-  }, [commands, paletteCommands, router]);
-  return <IGRPTemplateCommandSearch commands={items} labels={labels} />;
+  // Palette commands are `href` items, so the server's promise goes to the palette as is.
+  return <IGRPTemplateCommandSearch commands={commands ?? paletteCommands} labels={labels} />;
 }
 
 /** Settings link (`settingsUrl`, default `/settings`). */

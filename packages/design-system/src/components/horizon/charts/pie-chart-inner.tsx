@@ -1,7 +1,16 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 
-import { Pie, PieChart, Sector, Cell, Label, Legend, type LegendType } from "recharts"
+import {
+  Pie,
+  PieChart,
+  Sector,
+  Cell,
+  Label,
+  Legend,
+  type LabelProps,
+  type LegendType,
+  type PieLabelRenderProps,
+} from "recharts"
 import type { PieSectorDataItem } from "recharts/types/polar/Pie"
 import React, { useState, type SVGAttributes } from "react"
 
@@ -126,8 +135,8 @@ function IGRPPieChartInner({
     )
   }
 
-  const renderCustomLabel = (props: any) => {
-    const { cx, cy, midAngle, innerRadius, outerRadius, value, name, percent, labelType, labelPosition } = props
+  const renderCustomLabel = (props: PieLabelRenderProps & Pick<PieConfig, "labelType" | "labelPosition">) => {
+    const { cx, cy, midAngle = 0, innerRadius, outerRadius, value, name, percent, labelType, labelPosition } = props
 
     if (!cx || !cy) return null
 
@@ -168,7 +177,7 @@ function IGRPPieChartInner({
     )
   }
 
-  const renderCenterLabel = ({ viewBox }: any) => {
+  const renderCenterLabel = ({ viewBox }: LabelProps) => {
     if (!centerLabel.show || !viewBox || !("cx" in viewBox)) return null
 
     return (

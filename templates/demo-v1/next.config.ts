@@ -53,15 +53,21 @@ const toAliasPath = (file: string) =>
 // Dev only: lucide's map has one `import()` per icon (~1,950), which Turbopack
 // turns into ~1,950 client + server chunks with sourcemaps — minutes of first
 // compile on Windows. Serve every icon from ONE lazy chunk instead, keeping the
-// map's shape (key → loader of `{ default, __iconNode }`) that IGRPIcon reads.
+// map's shape (key → loader of the icon module) that IGRPIcon reads.
 // Production keeps the real per-icon map. Regenerated on every `next dev` so
 // it always matches the installed lucide version.
 const writeDevLucideIconMap = () => {
   const outDir = path.join(appDir, "node_modules/.cache/lucide-dev-icons");
-  const source = readFileSync(
-    path.join(lucideDir, "dist/esm/dynamicIconImports.js"),
-    "utf8",
-  );
+  // lucide 0.x ships `.js` here, 1.x `.mjs`.
+  const mapFile = ["dynamicIconImports.js", "dynamicIconImports.mjs"]
+    .map((file) => path.join(lucideDir, "dist/esm", file))
+    .find((file) => existsSync(file));
+  if (!mapFile) {
+    throw new Error(
+      "lucide dynamicIconImports not found; update writeDevLucideIconMap in next.config.ts",
+    );
+  }
+  const source = readFileSync(mapFile, "utf8");
   const entries = [
     ...source.matchAll(/"([^"]+)": \(\) => import\('\.\/icons\/([^']+)'\)/g),
   ];

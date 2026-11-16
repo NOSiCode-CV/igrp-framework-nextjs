@@ -116,6 +116,8 @@ verify_framework:
         - packages/framework/next-ui/**/*
         - packages/framework/next/**/*
         - packages/framework/next-i18n/**/*
+        - templates/demo-v1/src/**/*
+        - templates/demo-v1/vitest.config.mts
         # Shared build config (Babel/React Compiler, check-dist).
         - scripts/**/*
         - pnpm-lock.yaml
@@ -131,6 +133,8 @@ verify_framework:
     - pnpm --filter "@igrp/framework-next..." --filter @igrp/framework-next-i18n run typecheck
     - pnpm --filter "@igrp/framework-next..." --filter @igrp/framework-next-i18n run lint
     - pnpm --filter "@igrp/framework-next..." --filter @igrp/framework-next-i18n run test
+    # The template's auth-bypass tests run against the framework built above.
+    - pnpm --filter @igrp/framework-next-template test
 
 # The Storybook visual suite is the design system's only UI regression gate — there
 # is no root-level unit test suite. It silently died on 2026-06-25 when Storybook

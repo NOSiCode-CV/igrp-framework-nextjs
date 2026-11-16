@@ -15,6 +15,9 @@ import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
  * with the bug present.
  */
 
+const push = vi.fn();
+vi.mock('next/navigation', () => ({ useRouter: () => ({ push }) }));
+
 const { IGRPTemplateCommandSearch } = await import('../command-search.js');
 // Warm the lazy palette's module so React.lazy settles within one act() flush.
 await import('../command-palette.js');
@@ -147,6 +150,29 @@ describe('IGRPTemplateCommandSearch', () => {
     // Each token matches a word on its own, as cmdk's fuzzy scoring allowed.
     type('rel con');
     expect(visible()).toEqual(['Relatórios Contabilísticos']);
+  });
+
+  it('navigates to an href item, or opens an external one in a new tab', async () => {
+    const open = vi.spyOn(window, 'open').mockImplementation(() => null);
+    push.mockClear();
+    mount(
+      <IGRPTemplateCommandSearch
+        commands={Promise.resolve([
+          { id: 'in', label: 'Clientes', href: '/clientes' },
+          { id: 'out', label: 'Portal', href: 'https://example.org', external: true },
+        ])}
+      />,
+    );
+    await pressCtrlK();
+    const items = () => document.body.querySelectorAll<HTMLElement>('[data-slot="command-item"]');
+    act(() => items()[0]!.click());
+    expect(push).toHaveBeenCalledWith('/clientes');
+
+    await pressCtrlK();
+    act(() => items()[1]!.click());
+    expect(open).toHaveBeenCalledWith('https://example.org', '_blank', 'noopener,noreferrer');
+    expect(push).toHaveBeenCalledTimes(1);
+    open.mockRestore();
   });
 
   it('opens with no commands and shows the pt-PT empty state', async () => {

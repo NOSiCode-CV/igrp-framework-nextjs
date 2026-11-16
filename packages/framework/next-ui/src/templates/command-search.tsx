@@ -17,8 +17,15 @@ export interface IGRPCommandItem {
   icon?: string;
   /** Group heading the item appears under. Items without a group are shown ungrouped. */
   group?: string;
-  /** Called when the user selects this item. */
-  onSelect: () => void;
+  /** Called when the user selects this item. Give this or `href`. */
+  onSelect?: () => void;
+  /**
+   * Navigated to when the user selects this item (client-side, basePath applied),
+   * unless `onSelect` is given. Plain data, so a server component can build the item.
+   */
+  href?: string;
+  /** With `href`: open in a new tab instead of navigating in place. */
+  external?: boolean;
 }
 
 export type { IGRPCommandSearchLabels };

@@ -34,7 +34,7 @@ export function igrpIsExternalUrl(url?: string): boolean {
 /** Ensures URL has leading slash or full protocol. Relative paths get / prefix. */
 export function igrpNormalizeUrl(url: string): string {
   if (!url) return ""
-  if (url.startsWith("http://") || url.startsWith("https://")) return url
+  if (/^https?:\/\//i.test(url)) return url
   if (url.startsWith("/")) return url
   return `/${url}`
 }

@@ -41,7 +41,7 @@
     "lint": "eslint .",
     "check:contract": "tsc -p tsconfig.contract.json",
     "check:barrel": "node scripts/check-barrel.mjs",
-    "check:dist": "node scripts/check-dist.mjs"
+    "check:dist": "node ../../../scripts/check-dist.mjs"
   },
   "peerDependencies": {
     "next-auth": "^4.24.0",

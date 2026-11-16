@@ -38,6 +38,7 @@ export const IGRP_MESSAGES_EN: IGRPFrameworkMessages = {
     },
     actions: {
       SESSION_INVALID: 'Your session is invalid or has expired.',
+      AUTH_BYPASSED: 'Access Management is not available in preview mode.',
       MENUS_LOAD_FAILED: 'Could not load the menus.',
       USER_LOAD_FAILED: 'Could not load the user details.',
       APPS_LOAD_FAILED: 'Could not load the applications.',

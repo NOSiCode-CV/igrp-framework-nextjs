@@ -1,4 +1,4 @@
-import { copyFileSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "fs";
+import { copyFileSync, existsSync, mkdirSync, readFileSync, rmSync, statSync, writeFileSync } from "fs";
 import { dirname, join, resolve, sep } from "path";
 import { fileURLToPath } from "url";
 import type { EnvKeySpec, MigrationStep } from "./types.js";
@@ -37,11 +37,23 @@ function detectEol(content: string): string {
   return content.includes("\r\n") ? "\r\n" : "\n";
 }
 
+/** An env line without its indent or a shell-style `export ` prefix. */
+function envLineBody(line: string): string {
+  return line.trimStart().replace(/^export\s+/, "");
+}
+
 function envHasKey(content: string, key: string): boolean {
   return content.split(/\r?\n/).some((line) => {
-    const t = line.trimStart();
+    const t = envLineBody(line);
     return t.startsWith(`${key}=`) || t.startsWith(`${key} =`);
   });
+}
+
+/** Rewrite a package.json only when its data changed, keeping the file's own indent. */
+function writeManifest(pkgPath: string, raw: string, pkg: unknown): void {
+  if (JSON.stringify(JSON.parse(raw)) === JSON.stringify(pkg)) return;
+  const indent = /^[ \t]+(?=")/m.exec(raw)?.[0] ?? 2;
+  writeFileSync(pkgPath, `${JSON.stringify(pkg, null, indent)}\n`, "utf8");
 }
 
 /**
@@ -119,7 +131,13 @@ export function executeStep(
     case "file.delete": {
       const target = join(appRoot, step.path);
       assertInsideAppRoot(appRoot, target);
-      if (existsSync(target)) rmSync(target, { recursive: true, force: true });
+      // Nothing deleted, nothing to restore: a placeholder here could never be satisfied.
+      if (!existsSync(target)) return { type: "file.delete", path: step.path };
+      // Undo captures file contents only, so a recursive delete could never be reversed.
+      if (statSync(target).isDirectory()) {
+        throw new Error(`file.delete refuses a directory (path: ${step.path}); delete its files one by one.`);
+      }
+      rmSync(target, { force: true });
       return { type: "file.create", path: step.path, from: "__undo__" };
     }
     case "env.add": {
@@ -163,7 +181,7 @@ export function executeStep(
       const drop = new Set<number>();
 
       lines.forEach((line, i) => {
-        const t = line.trimStart();
+        const t = envLineBody(line);
         const hit = step.keys.find((k) => t.startsWith(`${k}=`) || t.startsWith(`${k} =`));
         if (!hit) return;
         drop.add(i);
@@ -217,7 +235,8 @@ export function executeStep(
     case "deps.bump": {
       const pkgPath = join(appRoot, step.manifest);
       assertInsideAppRoot(appRoot, pkgPath);
-      const pkg = JSON.parse(readFileSync(pkgPath, "utf8"));
+      const raw = readFileSync(pkgPath, "utf8");
+      const pkg = JSON.parse(raw);
       const prevRanges: Record<string, string> = {};
       const skipped: string[] = [];
       const ahead: string[] = [];
@@ -244,7 +263,7 @@ export function executeStep(
           skipped.push(`${dep}@${version}`);
         }
       }
-      writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + "\n", "utf8");
+      writeManifest(pkgPath, raw, pkg);
       if (skipped.length > 0) {
         console.warn(
           `  ⚠ ${step.manifest}: not declared by this app, so NOT bumped: ${skipped.join(", ")}\n` +
@@ -264,7 +283,8 @@ export function executeStep(
       // channels silently diverged. `check:drift` fails on exactly that.
       const pkgPath = join(appRoot, step.manifest);
       assertInsideAppRoot(appRoot, pkgPath);
-      const pkg = JSON.parse(readFileSync(pkgPath, "utf8"));
+      const raw = readFileSync(pkgPath, "utf8");
+      const pkg = JSON.parse(raw);
       // Capture which FIELD each dep came from so the undo restores it to the
       // same place — putting a devDependency back under `dependencies` would
       // quietly change what ships in a production install.
@@ -284,7 +304,7 @@ export function executeStep(
           absent.push(dep);
         }
       }
-      writeFileSync(pkgPath, `${JSON.stringify(pkg, null, 2)}\n`, "utf8");
+      writeManifest(pkgPath, raw, pkg);
       if (absent.length > 0) {
         console.warn(
           `  ⚠ ${step.manifest}: not declared by this app, so nothing to remove: ${absent.join(", ")}`,
@@ -298,7 +318,8 @@ export function executeStep(
       // matches the ordering npm/pnpm write, rather than appending to the end.
       const pkgPath = join(appRoot, step.manifest);
       assertInsideAppRoot(appRoot, pkgPath);
-      const pkg = JSON.parse(readFileSync(pkgPath, "utf8"));
+      const raw = readFileSync(pkgPath, "utf8");
+      const pkg = JSON.parse(raw);
       const touched = new Set<string>();
       const added: string[] = [];
       const kept: string[] = [];
@@ -320,7 +341,7 @@ export function executeStep(
           Object.entries(pkg[field] as Record<string, string>).sort(([a], [b]) => a.localeCompare(b)),
         );
       }
-      writeFileSync(pkgPath, `${JSON.stringify(pkg, null, 2)}\n`, "utf8");
+      writeManifest(pkgPath, raw, pkg);
       if (kept.length > 0) {
         console.warn(`  ⚠ ${step.manifest}: already declared by this app, range kept: ${kept.join(", ")}`);
       }

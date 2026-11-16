@@ -49,7 +49,11 @@ function HighlightedName({ text, query }: { text: string; query: string }) {
   );
 }
 
-function buildResults(sections: Section[], query: string, pathname: string): SearchResult[] {
+function buildResults(
+  sections: Section[],
+  query: string,
+  activeHref: string | null,
+): SearchResult[] {
   const q = query.toLowerCase();
   const results: SearchResult[] = [];
 
@@ -67,7 +71,7 @@ function buildResults(sections: Section[], query: string, pathname: string): Sea
             href: resolveHref(node.item),
             isAnchor: resolveAnchorTag(node.item),
             target: node.item.target,
-            isActive: isItemActive(node.item, pathname),
+            isActive: isItemActive(node.item, activeHref),
           });
         }
       } else {
@@ -81,7 +85,7 @@ function buildResults(sections: Section[], query: string, pathname: string): Sea
               href: resolveHref(child.item),
               isAnchor: resolveAnchorTag(child.item),
               target: child.item.target,
-              isActive: isItemActive(child.item, pathname),
+              isActive: isItemActive(child.item, activeHref),
             });
           }
         }
@@ -95,14 +99,14 @@ function buildResults(sections: Section[], query: string, pathname: string): Sea
 interface SearchResultsProps {
   sections: Section[];
   query: string;
-  pathname: string;
+  activeHref: string | null;
   labels: IGRPMenuLabels;
 }
 
-export function SearchResults({ sections, query, pathname, labels }: SearchResultsProps) {
+export function SearchResults({ sections, query, activeHref, labels }: SearchResultsProps) {
   const results = useMemo(
-    () => buildResults(sections, query, pathname),
-    [sections, query, pathname],
+    () => buildResults(sections, query, activeHref),
+    [sections, query, activeHref],
   );
 
   if (results.length === 0) {

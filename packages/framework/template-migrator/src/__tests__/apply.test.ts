@@ -489,3 +489,20 @@ describe("executeStep: deps.remove / deps.restore", () => {
     expect(JSON.parse(readAppFile("package.json")).dependencies).toEqual({ cn: "0.3.0" });
   });
 });
+
+describe("deps steps leave package.json formatting alone", () => {
+  const TABBED = '{\n\t"name": "app",\n\t"dependencies": {\n\t\t"a": "1.0.0"\n\t}\n}\n';
+
+  it("does not rewrite the file when nothing changed", () => {
+    writeAppFile("package.json", TABBED);
+    executeStep({ type: "deps.bump", manifest: "package.json", ranges: { a: "1.0.0" } }, appRoot);
+    executeStep({ type: "deps.remove", manifest: "package.json", deps: ["absent"] }, appRoot);
+    expect(readAppFile("package.json")).toBe(TABBED);
+  });
+
+  it("keeps the file's indent when a range does change", () => {
+    writeAppFile("package.json", TABBED);
+    executeStep({ type: "deps.bump", manifest: "package.json", ranges: { a: "2.0.0" } }, appRoot);
+    expect(readAppFile("package.json")).toBe(TABBED.replace("1.0.0", "2.0.0"));
+  });
+});

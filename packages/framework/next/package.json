@@ -24,7 +24,7 @@
   "scripts": {
     "dev": "tsc --watch",
     "clean": "pnpm clean:packages && pnpm clean:dist",
-    "check:dist": "node scripts/check-dist.mjs",
+    "check:dist": "node ../../../scripts/check-dist.mjs",
     "clean:dist": "rimraf dist tsconfig.tsbuildinfo tsconfig.build.tsbuildinfo",
     "clean:packages": "rimraf node_modules",
     "build": "pnpm format && pnpm build:reactcompiler",

@@ -340,15 +340,8 @@ function warnRecoveryStoreFailure(operation: 'get' | 'set' | 'delete', error: un
   );
 }
 
-/**
- * Returns a rotated token previously cached by {@link refreshOidcAccessToken}
- * for the given (now-consumed) refresh token, or null if absent/expired. Pure
- * peek — no deletion-on-read (both an RSC read and the persisting poll may
- * need the same entry before one persists; it self-evicts by TTL). A store
- * failure degrades to a cache miss: the recovery path must never take a
- * session read down with it.
- */
-export async function getRecoveredToken(refreshToken: string | undefined): Promise<JWT | null> {
+/** Single-hop store read. A store failure degrades to a cache miss. */
+async function peekRecoveredToken(refreshToken: string | undefined): Promise<JWT | null> {
   if (!refreshToken) return null;
   try {
     return await recoveryStoreSlot().store.get(refreshToken);
@@ -356,6 +349,37 @@ export async function getRecoveredToken(refreshToken: string | undefined): Promi
     warnRecoveryStoreFailure('get', error);
     return null;
   }
+}
+
+/** Upper bound on rotations followed by {@link getRecoveredToken}. */
+const MAX_RECOVERY_HOPS = 5;
+
+/**
+ * Returns the NEWEST rotated token cached by {@link refreshOidcAccessToken}
+ * that descends from the given (now-consumed) refresh token, or null if absent
+ * or expired. Entries are keyed by the consumed token (RT0→T1, RT1→T2), and
+ * several rotations can happen before any cookie is persisted (each RSC render
+ * can rotate), so the chain is followed — stopping at the first single hop
+ * would hand back RT1, already spent, and replaying it revokes the grant.
+ * Bounded and cycle-guarded against a misbehaving shared store.
+ *
+ * Pure peek — no deletion-on-read (both an RSC read and the persisting poll may
+ * need the same entry before one persists; it self-evicts by TTL). A store
+ * failure degrades to a cache miss: the recovery path must never take a
+ * session read down with it.
+ */
+export async function getRecoveredToken(refreshToken: string | undefined): Promise<JWT | null> {
+  let current = await peekRecoveredToken(refreshToken);
+  const seen = new Set([refreshToken]);
+  for (let hop = 1; hop < MAX_RECOVERY_HOPS && isUsableRecoveredToken(current); hop++) {
+    const nextKey = current.refreshToken;
+    if (!nextKey || seen.has(nextKey)) break;
+    seen.add(nextKey);
+    const next = await peekRecoveredToken(nextKey);
+    if (!isUsableRecoveredToken(next)) break;
+    current = next;
+  }
+  return current;
 }
 
 /**
@@ -517,6 +541,21 @@ async function performRefresh(
   // current JSESSIONID's hashed session id, sees mismatch, and redirects
   // without invalidating the session. `buildScopeString` is the same function
   // the authorization request uses, so `openid` is guaranteed either way.
+  // Never present a refresh token another read already rotated: the IdP sees
+  // reuse and revokes the grant. Adopt the newest rotation if its access token
+  // is still valid, otherwise spend ITS refresh token instead.
+  const live = await getRecoveredToken(token.refreshToken);
+  if (
+    isUsableRecoveredToken(live) &&
+    live.refreshToken &&
+    live.refreshToken !== token.refreshToken
+  ) {
+    if (typeof live.expiresAt === 'number' && Date.now() < live.expiresAt) {
+      return { status: 'recovered', token: live };
+    }
+    token = { ...token, refreshToken: live.refreshToken };
+  }
+
   const body = new URLSearchParams({
     grant_type: 'refresh_token',
     refresh_token: token.refreshToken,

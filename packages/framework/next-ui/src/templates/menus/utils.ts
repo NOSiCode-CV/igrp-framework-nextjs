@@ -8,7 +8,8 @@ export type Section = { key: string; label?: string; nodes: TreeNode[] };
 
 export function resolveHref(item: IGRPMenuItemArgs): string {
   if (item.pageSlug) {
-    return item.pageSlug.startsWith('/') ? item.pageSlug : `/${item.pageSlug}`;
+    // Strip every leading slash/backslash: `//host` or `/\host` would be a cross-origin link.
+    return `/${item.pageSlug.replace(/^[/\\]+/, '')}`;
   }
   if (item.url) return igrpNormalizeUrl(item.url);
   return '#';
@@ -38,8 +39,8 @@ export function resolveAnchorTag(item: IGRPMenuItemArgs): boolean {
 }
 
 /**
- * Active-state match for a menu item against the current pathname.
- * Uses prefix matching: an item is active on its own route and any child route.
+ * Prefix match of a menu item against the current pathname: an item matches its
+ * own route and any child route.
  *
  * NOTE: callers pass the value of next/navigation `usePathname()`, which is the
  * route SOURCE path. `basePath` is handled (Next strips it), but apps that add
@@ -47,10 +48,35 @@ export function resolveAnchorTag(item: IGRPMenuItemArgs): boolean {
  * URL. If that ever applies, migrate the sidebar to `useSelectedLayoutSegments()`
  * (router-state based, rewrite-immune) — the same hook breadcrumbs.tsx already uses.
  */
-export function isItemActive(item: IGRPMenuItemArgs, pathname: string): boolean {
+function matchesPathname(item: IGRPMenuItemArgs, pathname: string): boolean {
   const href = resolveHref(item);
   if (resolveAnchorTag(item) || href === '#') return false;
   return pathname === href || pathname.startsWith(href + '/');
+}
+
+/**
+ * The ONE href the sidebar highlights for `pathname`: the longest matching one.
+ * Prefix matching per item made `/admin` and `/admin/users` both current on
+ * `/admin/users` (two `aria-current="page"`, two folders auto-opened).
+ */
+export function findActiveHref(sections: Section[], pathname: string): string | null {
+  let best: string | null = null;
+  for (const section of sections) {
+    for (const node of section.nodes) {
+      for (const leaf of node.kind === 'folder' ? node.children : [node]) {
+        const href = resolveHref(leaf.item);
+        if (matchesPathname(leaf.item, pathname) && (best === null || href.length > best.length)) {
+          best = href;
+        }
+      }
+    }
+  }
+  return best;
+}
+
+/** Whether `item` is the entry `findActiveHref` picked. */
+export function isItemActive(item: IGRPMenuItemArgs, activeHref: string | null): boolean {
+  return activeHref !== null && !resolveAnchorTag(item) && resolveHref(item) === activeHref;
 }
 
 /**
@@ -103,17 +129,28 @@ export function buildMenuSections(menus: IGRPMenuItemArgs[]): Section[] {
   const byPosition = (a: IGRPMenuItemArgs, b: IGRPMenuItemArgs) =>
     (a.position ?? 0) - (b.position ?? 0);
 
-  const active = menus.filter((m) => m.status === 'ACTIVE').sort(byPosition);
+  // Codes come from EVERY item: a child of an inactive parent must not be
+  // mistaken for an orphan and promoted to the top level.
+  const byCode = new Map(menus.map((m) => [m.code, m]));
+  const hasParent = (item: IGRPMenuItemArgs) =>
+    !!item.parentCode && item.parentCode !== item.code && byCode.has(item.parentCode);
+
+  /** ACTIVE, and so is every ancestor present in the data (an inactive folder hides its subtree). */
+  const isVisible = (item: IGRPMenuItemArgs, seen = new Set<string>()): boolean => {
+    if (item.status !== 'ACTIVE') return false;
+    if (!hasParent(item) || seen.has(item.code)) return true;
+    seen.add(item.code);
+    return isVisible(byCode.get(item.parentCode!)!, seen);
+  };
+
+  const active = menus.filter((m) => isVisible(m)).sort(byPosition);
   if (active.length === 0) return [];
 
-  const codeSet = new Set(active.map((m) => m.code).filter(Boolean));
   const topLevel: IGRPMenuItemArgs[] = [];
   const childrenMap = new Map<string, IGRPMenuItemArgs[]>();
 
   for (const item of active) {
-    const isTopLevel =
-      !item.parentCode || item.parentCode === item.code || !codeSet.has(item.parentCode);
-    if (isTopLevel) {
+    if (!hasParent(item)) {
       topLevel.push(item);
     } else {
       const list = childrenMap.get(item.parentCode!) ?? [];
@@ -147,7 +184,8 @@ export function buildMenuSections(menus: IGRPMenuItemArgs[]): Section[] {
   };
 
   const toNode = (item: IGRPMenuItemArgs): TreeNode => {
-    if (item.type === 'FOLDER') {
+    // A GROUP nested below the top level renders like a FOLDER; as a leaf its subtree vanished.
+    if (isContainer(item)) {
       return { kind: 'folder', item, children: collectLeaves(item.code, new Set()) };
     }
     return { kind: 'leaf', item };

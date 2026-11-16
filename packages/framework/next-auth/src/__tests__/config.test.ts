@@ -597,8 +597,20 @@ describe('withIGRPAuth — getLoginRedirectUrl', () => {
     );
   });
 
-  it('prefers an explicit NEXT_PUBLIC_BASE_PATH from the injected env', async () => {
+  it('prefers the NEXTAUTH_URL path over a disagreeing NEXT_PUBLIC_BASE_PATH, as post-login does', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
     const instance = await getInstance({ NEXT_PUBLIC_BASE_PATH: '/other' });
+    expect(instance.getLoginRedirectUrl({ url: 'http://localhost:3000/x' }).pathname).toBe(
+      '/apps/template/login',
+    );
+    warn.mockRestore();
+  });
+
+  it('uses NEXT_PUBLIC_BASE_PATH from the injected env when NEXTAUTH_URL has no path', async () => {
+    const instance = await getInstance({
+      NEXTAUTH_URL: 'http://localhost:3000/api/auth',
+      NEXT_PUBLIC_BASE_PATH: '/other',
+    });
     expect(instance.getLoginRedirectUrl({ url: 'http://localhost:3000/x' }).pathname).toBe(
       '/other/login',
     );

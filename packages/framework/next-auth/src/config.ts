@@ -978,7 +978,8 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
       warnedBasePathMismatch = true;
       console.warn(
         `[withIGRPAuth] NEXTAUTH_URL implies basePath "${fromNextAuthUrl}" but NEXT_PUBLIC_BASE_PATH ` +
-          `is "${fromEnv}". Using "${fromNextAuthUrl}" for post-login redirects — make them agree.`,
+          `is "${fromEnv}". Using "${fromNextAuthUrl}" for login, post-login and logout redirects — ` +
+          'make them agree (NEXT_PUBLIC_BASE_PATH still scopes the auth cookie names).',
       );
     }
     return fromNextAuthUrl || fromEnv;
@@ -1546,7 +1547,9 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
   }
 
   function resolveAppUrl(path: string, request: { url: string }): URL {
-    const explicitBasePath = env.NEXT_PUBLIC_BASE_PATH ?? process.env.NEXT_PUBLIC_BASE_PATH ?? '';
+    // Same basePath rule as the post-login/logout redirects, or login and
+    // logout land in different apps when the two env vars disagree.
+    const basePath = resolveAppBasePath();
     const relative = path.startsWith('/') ? path : `/${path}`;
 
     // NEXTAUTH_URL_INTERNAL is a server-to-server origin and must never end up
@@ -1556,18 +1559,13 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
     const configuredBase = stripAuthApiSuffix(env.NEXTAUTH_URL ?? '');
     if (configuredBase) {
       try {
-        const base = new URL(configuredBase);
-        // When NEXT_PUBLIC_BASE_PATH is unset, recover the basePath from
-        // NEXTAUTH_URL's own path — `new URL('/login', 'https://h/app')`
-        // would otherwise resolve to `https://h/login` and drop it.
-        const prefix = explicitBasePath || base.pathname.replace(/\/+$/, '');
-        return new URL(`${prefix}${relative}`, base.origin);
+        return new URL(`${basePath}${relative}`, new URL(configuredBase).origin);
       } catch {
         // Malformed NEXTAUTH_URL — fall through to the request origin.
       }
     }
 
-    return new URL(`${explicitBasePath}${relative}`, request.url);
+    return new URL(`${basePath}${relative}`, request.url);
   }
 
   function getLoginRedirectUrl(request: { url: string }): URL {

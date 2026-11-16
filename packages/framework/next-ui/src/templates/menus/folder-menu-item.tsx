@@ -23,13 +23,13 @@ import { SubLeafLink } from './sub-leaf-link.js';
 
 interface FolderMenuItemProps {
   node: FolderNode;
-  pathname: string;
+  activeHref: string | null;
   labels: IGRPMenuLabels;
 }
 
-export function FolderMenuItem({ node, pathname, labels }: FolderMenuItemProps) {
+export function FolderMenuItem({ node, activeHref, labels }: FolderMenuItemProps) {
   const { item, children } = node;
-  const hasActiveChild = children.some((child) => isItemActive(child.item, pathname));
+  const hasActiveChild = children.some((child) => isItemActive(child.item, activeHref));
 
   // CONTROLLED, not `defaultOpen`. The sidebar is a persistent shell, so a
   // folder mounts once for the whole session; `defaultOpen` is read on that one
@@ -76,7 +76,7 @@ export function FolderMenuItem({ node, pathname, labels }: FolderMenuItemProps) 
               key={`dd-${child.item.id ?? child.item.code}`}
               node={child}
               variant="dropdown"
-              pathname={pathname}
+              activeHref={activeHref}
               labels={labels}
             />
           ))}
@@ -120,7 +120,7 @@ export function FolderMenuItem({ node, pathname, labels }: FolderMenuItemProps) 
                 key={`col-${child.item.id ?? child.item.code}`}
                 node={child}
                 variant="collapsible"
-                pathname={pathname}
+                activeHref={activeHref}
                 labels={labels}
               />
             ))}

@@ -47,12 +47,15 @@ function IGRPTemplateAppSwitcher({
 
   const activeApp = useMemo(() => {
     if (!apps || apps.length === 0) return undefined;
-    return appCode ? apps.find((item) => item.code === appCode) : apps[0];
+    if (!appCode) return apps[0];
+    // `igrpBuildConfig` uppercases `appCode`; the AM may return the code in any case.
+    const code = appCode.toUpperCase();
+    return apps.find((item) => item.code?.toUpperCase() === code);
   }, [apps, appCode]);
 
   const listApps = useMemo(() => {
-    if (!apps || !activeApp) return [];
-    return apps.filter((item) => item.id !== activeApp.id);
+    if (!apps) return [];
+    return apps.filter((item) => item !== activeApp);
   }, [apps, activeApp]);
 
   const getAppUrl = (app: IGRPApplicationArgs): string => {
@@ -71,10 +74,43 @@ function IGRPTemplateAppSwitcher({
   const arrowClassName =
     'ml-auto size-4 shrink-0 -translate-x-1 opacity-0 transition-[opacity,translate] group-hover/dropdown-menu-item:translate-x-0 group-hover/dropdown-menu-item:opacity-100 group-focus/dropdown-menu-item:translate-x-0 group-focus/dropdown-menu-item:opacity-100 motion-reduce:transition-none';
 
+  const triggerContent = activeApp ? (
+    <>
+      <div className={cn('flex aspect-square size-8 items-center justify-center rounded-lg')}>
+        <IGRPTemplateImage
+          src={activeApp.picture}
+          alt={activeApp.name}
+          width={32}
+          height={32}
+          className={cn('h-full w-full rounded-lg object-cover')}
+          priority
+          fallback={<IGRPIcon iconName="GalleryVerticalEnd" />}
+        />
+      </div>
+      <div className={cn('grid flex-1 text-left text-sm leading-tight')}>
+        <span className={cn('truncate font-medium')}>{activeApp.name}</span>
+        <span className={cn('truncate text-xs')}>{activeApp.description || ''}</span>
+      </div>
+      <IGRPIcon iconName="ChevronsUpDown" className={cn('ml-auto')} />
+    </>
+  ) : (
+    <>
+      <div className={cn('flex aspect-square size-8 items-center justify-center rounded-lg')}>
+        <IGRPIcon iconName="Command" />
+      </div>
+      <div className={cn('grid flex-1 text-left text-sm leading-tight')}>
+        <span className={cn('truncate font-medium')}>{unknownText}</span>
+        <span className={cn('truncate text-xs')}>{unknownText}</span>
+      </div>
+      <IGRPIcon iconName="ChevronsUpDown" className={cn('ml-auto')} />
+    </>
+  );
+
   return (
     <SidebarMenu>
       <SidebarMenuItem>
-        {activeApp ? (
+        {/* An unknown `appCode` must not lock the user out of the other apps and the app center. */}
+        {listApps.length > 0 || appCenterUrl ? (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <SidebarMenuButton
@@ -83,24 +119,7 @@ function IGRPTemplateAppSwitcher({
                   'data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground',
                 )}
               >
-                <div
-                  className={cn('flex aspect-square size-8 items-center justify-center rounded-lg')}
-                >
-                  <IGRPTemplateImage
-                    src={activeApp.picture}
-                    alt={activeApp.name}
-                    width={32}
-                    height={32}
-                    className={cn('h-full w-full rounded-lg object-cover')}
-                    priority
-                    fallback={<IGRPIcon iconName="GalleryVerticalEnd" />}
-                  />
-                </div>
-                <div className={cn('grid flex-1 text-left text-sm leading-tight')}>
-                  <span className={cn('truncate font-medium')}>{activeApp.name}</span>
-                  <span className={cn('truncate text-xs')}>{activeApp.description || ''}</span>
-                </div>
-                <IGRPIcon iconName="ChevronsUpDown" className={cn('ml-auto')} />
+                {triggerContent}
               </SidebarMenuButton>
             </DropdownMenuTrigger>
             <DropdownMenuContent
@@ -168,14 +187,7 @@ function IGRPTemplateAppSwitcher({
               'data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground',
             )}
           >
-            <div className={cn('flex aspect-square size-8 items-center justify-center rounded-lg')}>
-              <IGRPIcon iconName="Command" />
-            </div>
-            <div className={cn('grid flex-1 text-left text-sm leading-tight')}>
-              <span className={cn('truncate font-medium')}>{unknownText}</span>
-              <span className={cn('truncate text-xs')}>{unknownText}</span>
-            </div>
-            <IGRPIcon iconName="ChevronsUpDown" className={cn('ml-auto')} />
+            {triggerContent}
           </SidebarMenuButton>
         )}
       </SidebarMenuItem>

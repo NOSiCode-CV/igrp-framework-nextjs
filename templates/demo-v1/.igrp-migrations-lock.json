@@ -617,6 +617,13 @@
       "cliVersion": "0.2.0-beta.26",
       "manifestHash": "49abdaa8840c202a",
       "payloadHash": "e3b0c44298fc1c14"
+    },
+    {
+      "id": "88-logout-no-silent-resignin",
+      "appliedAt": "2026-11-16T00:00:00.000Z",
+      "cliVersion": "0.2.0-beta.26",
+      "manifestHash": "a2231755c0c3f434",
+      "payloadHash": "45060b565f69b51f"
     }
   ]
 }

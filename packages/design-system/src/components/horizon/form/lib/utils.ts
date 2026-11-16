@@ -21,8 +21,9 @@ function appendValue(formData: FormData, key: string, value: unknown) {
 /**
  * Converts form values to FormData for multipart/form-data submissions.
  * Top-level keys only. `File`/`Blob` values, `FileList`s and arrays append one entry per
- * item under the same key; dates become ISO strings; nested objects become JSON;
- * `null`/`undefined` are skipped.
+ * item under the same key; dates become ISO strings; nested objects become JSON.
+ * A cleared field (`null`) and an empty array are sent as `""` so the server sees the clear;
+ * `undefined` is skipped.
  */
 export const convertValuesToFormData = <TSchema extends z.ZodTypeAny>(values: z.infer<TSchema>): FormData => {
   const formData = new FormData()
@@ -33,8 +34,12 @@ export const convertValuesToFormData = <TSchema extends z.ZodTypeAny>(values: z.
 
   Object.entries(values).forEach(([key, value]) => {
     const isFileList = typeof FileList !== "undefined" && value instanceof FileList
-    if (Array.isArray(value) || isFileList) {
-      Array.from(value as ArrayLike<unknown>).forEach((item) => appendValue(formData, key, item))
+    if (value === null) {
+      formData.append(key, "")
+    } else if (Array.isArray(value) || isFileList) {
+      const items = Array.from(value as ArrayLike<unknown>)
+      if (items.length === 0) formData.append(key, "")
+      items.forEach((item) => appendValue(formData, key, item))
     } else {
       appendValue(formData, key, value)
     }

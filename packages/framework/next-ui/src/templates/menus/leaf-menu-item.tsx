@@ -20,15 +20,15 @@ import { MenuItemLink } from './menu-item-link.js';
 
 interface LeafMenuItemProps {
   node: LeafNode;
-  pathname: string;
+  activeHref: string | null;
   labels: IGRPMenuLabels;
 }
 
-export function LeafMenuItem({ node, pathname, labels }: LeafMenuItemProps) {
+export function LeafMenuItem({ node, activeHref, labels }: LeafMenuItemProps) {
   const { item } = node;
   const href = resolveHref(item);
   const isAnchor = resolveAnchorTag(item);
-  const isActive = isItemActive(item, pathname);
+  const isActive = isItemActive(item, activeHref);
 
   return (
     <SidebarMenuItem>

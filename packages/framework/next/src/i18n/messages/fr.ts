@@ -38,6 +38,7 @@ export const IGRP_MESSAGES_FR: IGRPFrameworkMessages = {
     },
     actions: {
       SESSION_INVALID: 'Votre session est invalide ou a expiré.',
+      AUTH_BYPASSED: "Access Management n'est pas disponible en mode aperçu.",
       MENUS_LOAD_FAILED: 'Impossible de charger les menus.',
       USER_LOAD_FAILED: "Impossible de charger les données de l'utilisateur.",
       APPS_LOAD_FAILED: 'Impossible de charger les applications.',

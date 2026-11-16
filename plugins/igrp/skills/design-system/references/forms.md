@@ -232,7 +232,7 @@ The cleanest way is to pass the typed values object to a server action that vali
 - Arrays of primitives append one entry each.
 - Nested objects and list rows become JSON strings.
 - Booleans become `"true"` / `"false"`.
-- `null` / `undefined` are skipped.
+- A cleared field (`null`) and an empty array are sent as `""`, so the server can tell "cleared" from "not sent"; `undefined` is skipped.
 - **Dates go through `toISOString()`, which is an instant in UTC.** A date-only value at local midnight reads as the previous day in UTC+ zones, so format it yourself (`"yyyy-MM-dd"`) when the backend wants a calendar day.
 
 ## Calendars vs date pickers

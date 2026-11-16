@@ -10,6 +10,21 @@ import { dirname, join } from "path";
 import { assertInsideAppRoot, executeStep } from "./apply.js";
 import type { MigrationStep } from "./types.js";
 
+// Text payloads stay plain so existing locks/journals read unchanged; a NUL
+// lead-in cannot open a payload older CLIs wrote from a real source file.
+const BINARY_PAYLOAD = "\u0000base64:";
+
+/** Store file bytes as an undo payload: UTF-8 text when lossless, else marked base64. */
+export function encodeUndoPayload(bytes: Buffer): string {
+  const text = bytes.toString("utf8");
+  if (Buffer.from(text, "utf8").equals(bytes) && !text.startsWith(BINARY_PAYLOAD)) return text;
+  return BINARY_PAYLOAD + bytes.toString("base64");
+}
+
+export function decodeUndoPayload(payload: string): string | Buffer {
+  return payload.startsWith(BINARY_PAYLOAD) ? Buffer.from(payload.slice(BINARY_PAYLOAD.length), "base64") : payload;
+}
+
 /** An undo step that can only be satisfied from a stored payload. */
 export function isPlaceholderUndo(step: MigrationStep): boolean {
   const s = step as { from?: unknown; patch?: unknown };
@@ -55,7 +70,7 @@ export function unwindSteps(
         // lock/journal file on disk, which can be hand-edited or badly merged.
         assertInsideAppRoot(appRoot, dest);
         mkdirSync(dirname(dest), { recursive: true });
-        writeFileSync(dest, content, "utf8");
+        writeFileSync(dest, decodeUndoPayload(content));
       } else {
         executeStep(undo, appRoot, payloadDir, true);
       }

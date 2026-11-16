@@ -9,6 +9,7 @@ import { useTranslations } from "next-intl";
 import { getLogoutUrl, markHostLogout } from "@/actions/igrp/auth";
 import { markLogoutPending } from "@/lib/logout-pending";
 import { reportError } from "@/lib/report-error";
+import { markSilentSsoTried } from "@/lib/silent-sso";
 
 // Module-scoped guard so a remount of this page (e.g. provider re-renders that
 // briefly null out the subtree) cannot kick off a SECOND signOut. A `useRef`
@@ -72,6 +73,9 @@ export default function LogoutPage() {
     const hardNavigate = (url: string) => {
       if (settled) return;
       settled = true;
+      // The IdP session may still be alive on this path; without the guard,
+      // /login's silent sign-in (prompt=none) would sign the user straight back in.
+      markSilentSsoTried();
       // Hard navigation rather than `router.replace`: logout must tear down
       // every client cache/provider that still holds the now-dead session.
       //

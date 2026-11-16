@@ -33,6 +33,7 @@ import {
   readFileSync,
   rmSync,
   statSync,
+  writeFileSync,
 } from 'fs';
 import path, { join, relative, resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -42,6 +43,9 @@ const ROOT = resolve(__dirname, '..');
 const SOURCE = join(ROOT, '.agents', 'skills');
 const TARGET = join(ROOT, '.claude', 'skills');
 const LOCKFILE = join(ROOT, 'skills-lock.json');
+// What this script bridged last time. Only those are pruned: `.claude/skills/` is
+// gitignored, so a developer's own skill there has no other copy.
+const MANIFEST = join(TARGET, '.bridged-skills.json');
 
 /** Skills listed in skills-lock.json are the ones bridged into .claude/skills. */
 function lockedSkills() {
@@ -49,7 +53,22 @@ function lockedSkills() {
     console.error(`skills-lock.json not found at ${relative(ROOT, LOCKFILE)}`);
     process.exit(1);
   }
-  return Object.keys(JSON.parse(readFileSync(LOCKFILE, 'utf8')).skills ?? {});
+  const names = Object.keys(JSON.parse(readFileSync(LOCKFILE, 'utf8')).skills ?? {});
+  // Names become paths that get rmSync'd; a separator or `..` would reach outside TARGET.
+  const bad = names.filter((n) => !n || n === '.' || n === '..' || /[\\/]/.test(n));
+  if (bad.length) {
+    console.error(`skills-lock.json has invalid skill names: ${bad.join(', ')}`);
+    process.exit(1);
+  }
+  return names;
+}
+
+function previouslyBridged() {
+  try {
+    return JSON.parse(readFileSync(MANIFEST, 'utf8'));
+  } catch {
+    return [];
+  }
 }
 
 /** Flatten a directory into a sorted list of [relativePath, contents] pairs. */
@@ -115,13 +134,15 @@ for (const skill of skills) {
   }
 }
 
-// Drop bridged skills that are no longer in the lockfile.
-const orphans = existsSync(TARGET)
-  ? readdirSync(TARGET).filter((entry) => !skills.includes(entry))
-  : [];
+// Drop skills this script bridged earlier that are no longer in the lockfile.
+const orphans = previouslyBridged().filter(
+  (entry) => !skills.includes(entry) && existsSync(join(TARGET, entry)),
+);
 
-for (const orphan of orphans) {
-  if (!check) rmSync(join(TARGET, orphan), { recursive: true, force: true });
+if (!check) {
+  for (const orphan of orphans) rmSync(join(TARGET, orphan), { recursive: true, force: true });
+  mkdirSync(TARGET, { recursive: true });
+  writeFileSync(MANIFEST, `${JSON.stringify(skills, null, 2)}\n`);
 }
 
 const changes = [

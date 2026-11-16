@@ -393,6 +393,66 @@ describe('refreshOidcAccessToken — rotation recovery cache', () => {
     }
   });
 
+  it('follows a two-rotation chain to the newest token, and never re-presents a spent one', async () => {
+    const posted: string[] = [];
+    let n = 0;
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (url: string, init?: { body?: URLSearchParams }) => {
+        if (url === DISCOVERY_URL)
+          return { ok: true, status: 200, json: async () => MOCK_DISCOVERY };
+        posted.push(init!.body!.get('refresh_token')!);
+        n++;
+        return {
+          ok: true,
+          status: 200,
+          json: async () => ({
+            access_token: `at-${n}`,
+            refresh_token: `rt-${n}`,
+            expires_in: 60,
+          }),
+        };
+      }),
+    );
+    const { refreshOidcAccessToken, getRecoveredToken } = await import('../oidc');
+
+    // Two RSC rotations, neither persisted: rt-0 → rt-1 → rt-2.
+    await refreshOidcAccessToken(makeToken({ refreshToken: 'rt-0' }), VALID_ENV);
+    await refreshOidcAccessToken(makeToken({ refreshToken: 'rt-1' }), VALID_ENV);
+
+    // The cookie still holds rt-0: recovery must land on rt-2, not the spent rt-1.
+    const recovered = await getRecoveredToken('rt-0');
+    expect(recovered?.refreshToken).toBe('rt-2');
+    expect(recovered?.accessToken).toBe('at-2');
+
+    // A refresh handed the stale rt-0 adopts rt-2 while its access token is valid…
+    const adopted = await refreshOidcAccessToken(makeToken({ refreshToken: 'rt-0' }), VALID_ENV);
+    expect(adopted.refreshToken).toBe('rt-2');
+    expect(posted).toEqual(['rt-0', 'rt-1']);
+
+    // …and once it has expired, spends the live rt-2, never the spent rt-0/rt-1.
+    const later = Date.now() + 5 * 60_000; // past the 60s access token, inside the recovery TTL
+    const now = vi.spyOn(Date, 'now').mockReturnValue(later);
+    try {
+      const result = await refreshOidcAccessToken(makeToken({ refreshToken: 'rt-0' }), VALID_ENV);
+      expect(posted).toEqual(['rt-0', 'rt-1', 'rt-2']);
+      expect(result.refreshToken).toBe('rt-3');
+    } finally {
+      now.mockRestore();
+    }
+  });
+
+  it('getRecoveredToken stops on a cycle in the store', async () => {
+    const { configureOidcTokenRecoveryStore, getRecoveredToken } = await import('../oidc');
+    const a = makeToken({ refreshToken: 'rt-b', accessToken: 'at-a' });
+    const b = makeToken({ refreshToken: 'rt-a', accessToken: 'at-b' });
+    const get = vi.fn(async (key: string) => (key === 'rt-a' ? a : key === 'rt-b' ? b : null));
+    configureOidcTokenRecoveryStore({ get, set: vi.fn(async () => {}) });
+
+    expect(await getRecoveredToken('rt-a')).toEqual(b);
+    expect(get).toHaveBeenCalledTimes(2);
+  });
+
   it('getRecoveredToken returns null for an unknown or missing token', async () => {
     const { getRecoveredToken } = await import('../oidc');
     expect(await getRecoveredToken('never-seen')).toBeNull();
@@ -588,13 +648,18 @@ describe('configureOidcTokenRecoveryStore', () => {
       accessToken: 'at-from-pod-a',
       expiresAt: Date.now() + 180_000,
     });
+    // The rotation lands only AFTER the pre-POST peek: the first read misses.
+    let oldRtReads = 0;
     configureOidcTokenRecoveryStore({
-      get: vi.fn(async (key: string) => (key === 'old-rt' ? rotatedElsewhere : null)),
+      get: vi.fn(async (key: string) =>
+        key === 'old-rt' && oldRtReads++ > 0 ? rotatedElsewhere : null,
+      ),
       set: vi.fn(async () => {}),
     });
 
     const result = await refreshOidcAccessToken(makeToken({ refreshToken: 'old-rt' }), VALID_ENV);
 
+    expect(oldRtReads).toBe(2);
     expect(result.error).toBeUndefined();
     expect(result.accessToken).toBe('at-from-pod-a');
     expect(result.refreshToken).toBe('new-rt-from-pod-a');

@@ -32,6 +32,9 @@ vi.mock('../../lib/permissions.js', () => ({
   isIgrpAuthBypass,
 }));
 
+const igrpGetAccessClientConfig = vi.fn(() => ({ baseUrl: '', token: '' }));
+vi.mock('../../lib/api-config.js', () => ({ igrpGetAccessClientConfig }));
+
 const actions = await import('../index.js');
 
 beforeEach(() => {
@@ -69,8 +72,21 @@ describe('server actions refuse before contacting Access Management', () => {
     expect(igrpEnsureAccessClientConfig).toHaveBeenCalledTimes(1);
   });
 
-  it('skips the gate entirely when auth is bypassed', async () => {
+  it('refuses quietly in bypass when no AM credentials are configured', async () => {
     isIgrpAuthBypass.mockReturnValue(true);
+    const error = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    expect(await actions.fetchMenusAction('APP')).toMatchObject({
+      ok: false,
+      code: 'AUTH_BYPASSED',
+    });
+    expect(fetchMenus).not.toHaveBeenCalled();
+    expect(error).not.toHaveBeenCalled();
+  });
+
+  it('skips the gate when auth is bypassed and AM credentials are configured', async () => {
+    isIgrpAuthBypass.mockReturnValue(true);
+    igrpGetAccessClientConfig.mockReturnValueOnce({ baseUrl: 'http://am', token: 'AT' });
     fetchCurrentUser.mockResolvedValue({ id: 1 });
 
     expect(await actions.fetchCurrentUserAction()).toEqual({ ok: true, data: { id: 1 } });

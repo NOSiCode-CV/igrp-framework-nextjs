@@ -112,7 +112,7 @@ describe("apply captures undo payloads (TM-1 phase 2a)", () => {
     expect(entry.undoPayloads).toEqual({ "src/twice.ts": "TRUE ORIGINAL\n" });
   });
 
-  it("directory delete does not abort apply", async () => {
+  it("refuses a directory delete, since its contents could never be restored", async () => {
     writeFileAt(appRoot, "src/dead-dir/file.txt", "x\n");
 
     manifestRef.current = {
@@ -132,14 +132,63 @@ describe("apply captures undo payloads (TM-1 phase 2a)", () => {
       ],
     };
 
-    await apply(appRoot, { yes: true, payloadDir });
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    expect(await apply(appRoot, { yes: true, payloadDir })).toBe(false);
 
-    // directory removed, migration recorded
-    expect(existsSync(join(appRoot, "src/dead-dir"))).toBe(false);
-    const lock = readLock(appRoot);
-    expect(lock.applied).toHaveLength(1);
-    // directories are not captured as undo payloads (text files only)
-    expect(lock.applied[0].undoPayloads?.["src/dead-dir"]).toBeUndefined();
+    expect(readFileSync(join(appRoot, "src/dead-dir/file.txt"), "utf8")).toBe("x\n");
+    expect(readLock(appRoot).applied).toHaveLength(0);
+    expect(existsSync(join(appRoot, ".igrp-migration-journal.json"))).toBe(false);
+  });
+
+  it("deleting an absent file records an idempotent undo, so rollback succeeds", async () => {
+    manifestRef.current = {
+      version: 1,
+      cliVersion: "test",
+      template: "demo-v1",
+      migrations: [
+        {
+          id: "13-absent-delete",
+          date: "2026-06-10",
+          requires: [],
+          targetFrameworkVersion: null,
+          guideHref: "13.MIGRATIONS-10062026.md",
+          contentHash: "deadbeefdeadbeef",
+          steps: [{ type: "file.delete", path: "src/never-there.ts" }],
+        },
+      ],
+    };
+
+    expect(await apply(appRoot, { yes: true, payloadDir })).toBe(true);
+    expect(readLock(appRoot).applied[0].undo).toEqual([{ type: "file.delete", path: "src/never-there.ts" }]);
+    expect(await rollback(appRoot, "13-absent-delete")).toBe(true);
+    expect(readLock(appRoot).applied).toHaveLength(0);
+  });
+
+  it("round-trips a binary file through apply and rollback byte for byte", async () => {
+    const png = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0xff, 0xfe, 0x00, 0x80]);
+    mkdirSync(join(appRoot, "public"), { recursive: true });
+    writeFileSync(join(appRoot, "public/logo.png"), png);
+    writeFileAt(payloadDir, "14/public/logo.png", "NEW LOGO");
+    manifestRef.current = {
+      version: 1,
+      cliVersion: "test",
+      template: "demo-v1",
+      migrations: [
+        {
+          id: "14-binary",
+          date: "2026-06-10",
+          requires: [],
+          targetFrameworkVersion: null,
+          guideHref: "14.MIGRATIONS-10062026.md",
+          contentHash: "deadbeefdeadbeef",
+          steps: [{ type: "file.write", mode: "replace", path: "public/logo.png", from: "14/public/logo.png" }],
+        },
+      ],
+    };
+
+    expect(await apply(appRoot, { yes: true, payloadDir })).toBe(true);
+    expect(await rollback(appRoot, "14-binary", { payloadDir })).toBe(true);
+    expect(readFileSync(join(appRoot, "public/logo.png")).equals(png)).toBe(true);
   });
 });
 

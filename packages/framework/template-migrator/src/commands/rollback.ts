@@ -1,15 +1,11 @@
-import { existsSync, mkdirSync, writeFileSync } from "fs";
-import { join, dirname } from "path";
+import { existsSync } from "fs";
+import { join } from "path";
 import { getManifest } from "../manifest.js";
 import { readLock, writeLock } from "../lock.js";
-import { assertInsideAppRoot, executeStep, resolvePayload } from "../apply.js";
+import { resolvePayload } from "../apply.js";
 import { hashFileIgnoringEol } from "../hash.js";
+import { isPlaceholderUndo, unwindSteps } from "../unwind.js";
 import type { MigrationStep } from "../types.js";
-
-function isPlaceholder(step: MigrationStep): boolean {
-  const s = step as Record<string, unknown>;
-  return s.from === "__undo__" || s.patch === "__undo__";
-}
 
 function stepPath(step: MigrationStep): string | undefined {
   const s = step as Record<string, unknown>;
@@ -77,7 +73,7 @@ export async function rollback(
   // A placeholder undo step is only restorable if apply stored the prior
   // content in undoPayloads (newer CLI versions do — see commands/apply.ts).
   const unrestorable = undoSteps.filter((step) => {
-    if (!isPlaceholder(step)) return false;
+    if (!isPlaceholderUndo(step)) return false;
     const p = stepPath(step);
     return p === undefined || entry.undoPayloads?.[p] === undefined;
   });
@@ -128,38 +124,26 @@ export async function rollback(
   }
   // --force also skips the other guards, so leave a record of what it discards.
   if (edited.length > 0) console.warn(`\n⚠ --force: discarding local changes in: ${edited.join(", ")}`);
+  if (unrestorable.length > 0) {
+    console.warn(`\n⚠ --force: NOT restored (restore manually): ${unrestorable.map((s) => stepPath(s) ?? s.type).join(", ")}`);
+  }
 
   console.log(`\nRolling back ${id} (${undoSteps.length} undo step(s))\n`);
-  // Undo steps must run in REVERSE apply order so multi-step touches of the
-  // same path unwind correctly (e.g. delete-then-recreate: first remove the
-  // recreated file, then restore the original).
-  // Note: rollback is not atomic — a crash mid-loop leaves the lock entry in
-  // place, and re-running rollback is safe because restores are idempotent
-  // overwrites/deletes and payloads persist in the lock until the final write.
-  for (const step of [...undoSteps].reverse()) {
-    const pathKey =
-      stepPath(step) ??
-      (step as Record<string, unknown>).file ??
-      (step as Record<string, unknown>).manifest;
-    console.log(`  undo ${step.type}  ${pathKey}`);
-    if (isPlaceholder(step)) {
-      const p = stepPath(step);
-      const content = p !== undefined ? entry.undoPayloads?.[p] : undefined;
-      if (p !== undefined && content !== undefined) {
-        const dest = join(appRoot, p);
-        // Same guard `executeStep` applies — this branch writes directly, and
-        // the path comes from the app's own lock file.
-        assertInsideAppRoot(appRoot, dest);
-        mkdirSync(dirname(dest), { recursive: true });
-        writeFileSync(dest, content, "utf8");
-        console.log("    restored from stored undo payload");
-      } else {
-        // Only reachable under --force (the refusal gate catches this otherwise)
-        console.log("    (undo payload not stored — manual restoration required)");
-      }
-      continue;
-    }
-    executeStep(step, appRoot, opts.payloadDir, true);
+  // Not atomic: on a failure the lock entry stays, and re-running is safe
+  // because restores are idempotent and payloads persist in the lock.
+  // Unrestorable placeholders are only left here under --force, which skips them.
+  const { reverted, failures } = unwindSteps(
+    undoSteps.filter((step) => !unrestorable.includes(step)),
+    entry.undoPayloads ?? {},
+    appRoot,
+    opts.payloadDir,
+  );
+  console.log(`  reverted ${reverted} step(s)`);
+  if (failures.length > 0) {
+    for (const failure of failures) console.error(`  ✗ ${failure}`);
+    console.error(`\n✗ ${id} was only partly rolled back and stays recorded as applied.`);
+    console.error("  Fix the cause (or restore the listed paths from git) and re-run rollback.\n");
+    return false;
   }
   lock.applied.splice(idx, 1);
   writeLock(appRoot, lock);

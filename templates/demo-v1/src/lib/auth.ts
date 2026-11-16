@@ -1,6 +1,7 @@
 import { igrpSetAccessClientConfig } from "@igrp/framework-next";
 import { isIgrpError } from "@igrp/framework-next/errors";
 import { assertAuthProviderEnv } from "@igrp/framework-next-auth/providers";
+import { isNextControlFlowError } from "@igrp/framework-next-auth/runtime";
 
 import { auth } from "@/lib/auth-instance";
 import { reportError } from "@/lib/report-error";
@@ -21,17 +22,8 @@ export { auth, PREVIEW_SESSION_STUB } from "@/lib/auth-instance";
 export async function serverSession() {
   const apiManagement = process.env.IGRP_ACCESS_MANAGEMENT_API || "";
 
-  if (!process.env.NEXTAUTH_SECRET) {
-    console.warn(
-      "NEXTAUTH_SECRET is not set. This is required for production.",
-    );
-    if (process.env.NODE_ENV === "production") {
-      // Hard fail in prod — we will not masquerade as "no session". Bubbles
-      // to the nearest App Router `error.tsx`.
-      throw new Error("NEXTAUTH_SECRET must be set in production");
-    }
-  }
-
+  // A missing NEXTAUTH_SECRET is checked by the framework: auth.serverSession()
+  // throws IGRPAuthConfigError (AUTH_SECRET_MISSING) in production.
   // Env/provider misconfiguration is a setup problem, not a "no session"
   // condition — let typed framework errors propagate so the boundary can
   // render a real diagnosis rather than silently redirecting to login.
@@ -77,12 +69,7 @@ export async function serverSession() {
     // prerender. This is control flow, not an error — re-throw so Next marks
     // the route dynamic. Swallowing it both masks the bailout as "no session"
     // and floods the error reporter at build time.
-    if (
-      error instanceof Error &&
-      (error as { digest?: string }).digest === "DYNAMIC_SERVER_USAGE"
-    ) {
-      throw error;
-    }
+    if (isNextControlFlowError(error)) throw error;
 
     // Only swallow the "no session / cookie decode failed" branch. Typed
     // IgrpError instances and IGRPAuthConfigError indicate config-level problems

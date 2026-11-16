@@ -89,3 +89,21 @@ describe("env round-trip fidelity", () => {
     expect(undo.type === "env.add" && undo.keys.TOKEN.default).toBe("a=b=c");
   });
 });
+
+describe("env keys written with a shell `export` prefix", () => {
+  it("env.add does not append a duplicate that would override the exported value", () => {
+    write("export API_URL=https://real\n");
+    const undo = executeStep(
+      { type: "env.add", file: ENV, keys: { API_URL: { doc: "API" } } } as MigrationStep,
+      appRoot,
+    );
+    expect(read()).toBe("export API_URL=https://real\n");
+    expect(undo).toEqual({ type: "env.remove", file: ENV, keys: [] });
+  });
+
+  it("env.remove removes an exported key", () => {
+    write("KEPT=1\nexport GONE=2\nOTHER=3\n");
+    remove("GONE");
+    expect(read()).toBe("KEPT=1\nOTHER=3\n");
+  });
+});

@@ -69,9 +69,8 @@ export interface LockEntry {
    * time for steps whose undo would otherwise be an unrestorable `__undo__`
    * placeholder (file.write over an existing file, file.delete). Absent on
    * lock entries written by older CLI versions. Payload contents are stored
-   * as UTF-8 text; binary files are not supported for undo capture
-   * (executeStep itself copies binary fine — only rollback restoration is
-   * text-only). First capture wins when a migration touches the same path
+   * as UTF-8 text, or as marked base64 for binary files (see
+   * encodeUndoPayload in unwind.ts). First capture wins when a migration touches the same path
    * more than once — the first snapshot is the true pre-migration content.
    */
   undoPayloads?: Record<string, string>;

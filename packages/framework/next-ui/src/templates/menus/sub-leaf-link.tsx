@@ -22,15 +22,15 @@ import { MenuItemLink } from './menu-item-link.js';
 interface SubLeafLinkProps {
   node: LeafNode;
   variant: 'dropdown' | 'collapsible';
-  pathname: string;
+  activeHref: string | null;
   labels: IGRPMenuLabels;
 }
 
-export function SubLeafLink({ node, variant, pathname, labels }: SubLeafLinkProps) {
+export function SubLeafLink({ node, variant, activeHref, labels }: SubLeafLinkProps) {
   const { item } = node;
   const href = resolveHref(item);
   const isAnchor = resolveAnchorTag(item);
-  const isActive = isItemActive(item, pathname);
+  const isActive = isItemActive(item, activeHref);
 
   const inner = (
     <MenuItemLink

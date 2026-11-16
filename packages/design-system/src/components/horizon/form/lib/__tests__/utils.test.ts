@@ -16,7 +16,7 @@ describe("convertValuesToFormData", () => {
     expect(fd.getAll("list").map((f) => (f as File).name)).toEqual(["a.txt", "b.txt"])
   })
 
-  it("serialises nested objects and list rows as JSON, primitives as strings, and skips nullish", () => {
+  it("serialises nested objects and list rows as JSON, primitives as strings, and skips undefined", () => {
     const fd = convertValuesToFormData({
       address: { city: "Praia" },
       contacts: [{ name: "Ana" }],
@@ -30,7 +30,13 @@ describe("convertValuesToFormData", () => {
     expect(fd.getAll("contacts")).toEqual(['{"name":"Ana"}'])
     expect(fd.getAll("tags")).toEqual(["x", "y"])
     expect(fd.get("active")).toBe("false")
-    expect(fd.has("empty")).toBe(false)
+    expect(fd.get("empty")).toBe("")
     expect(fd.has("missing")).toBe(false)
+  })
+
+  it("sends an emptied multi-value field as one empty entry so the clear reaches the server", () => {
+    const fd = convertValuesToFormData({ tags: [] })
+
+    expect(fd.getAll("tags")).toEqual([""])
   })
 })

@@ -11,7 +11,7 @@ import {
   SidebarGroupContent,
 } from '@igrp/igrp-framework-react-design-system';
 
-import { buildMenuSections } from './utils.js';
+import { buildMenuSections, findActiveHref } from './utils.js';
 import { useIGRPChromeI18n } from '../../i18n/context.js';
 import { resolveMenuLabels, type IGRPMenuLabels } from './labels.js';
 import { SectionGroup } from './section-group.js';
@@ -38,6 +38,7 @@ export function IGRPTemplateMenus({
   const pathname = usePathname();
   const [query, setQuery] = useState('');
   const sections = useMemo(() => buildMenuSections(menus), [menus]);
+  const activeHref = useMemo(() => findActiveHref(sections, pathname), [sections, pathname]);
   const chrome = useIGRPChromeI18n();
   const labels = useMemo(
     () => ({
@@ -132,7 +133,7 @@ export function IGRPTemplateMenus({
         <SearchResults
           sections={sections}
           query={trimmedQuery}
-          pathname={pathname}
+          activeHref={activeHref}
           labels={labels}
         />
       ) : (
@@ -140,7 +141,7 @@ export function IGRPTemplateMenus({
           <SectionGroup
             key={`grp-${section.key}`}
             section={section}
-            pathname={pathname}
+            activeHref={activeHref}
             labels={labels}
           />
         ))

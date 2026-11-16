@@ -37,6 +37,7 @@ export const IGRP_MESSAGES_PT = {
     },
     actions: {
       SESSION_INVALID: 'Sessão inválida ou expirada.',
+      AUTH_BYPASSED: 'Access Management indisponível no modo de pré-visualização.',
       MENUS_LOAD_FAILED: 'Não foi possível carregar os menus.',
       USER_LOAD_FAILED: 'Não foi possível carregar os dados do utilizador.',
       APPS_LOAD_FAILED: 'Não foi possível carregar as aplicações.',

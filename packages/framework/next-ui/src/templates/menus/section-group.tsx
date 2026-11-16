@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import {
   cn,
   IGRPIcon,
@@ -9,6 +10,7 @@ import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarMenu,
+  useIGRPSidebar,
 } from '@igrp/igrp-framework-react-design-system';
 
 import type { Section } from './utils.js';
@@ -18,11 +20,16 @@ import { LeafMenuItem } from './leaf-menu-item.js';
 
 interface SectionGroupProps {
   section: Section;
-  pathname: string;
+  activeHref: string | null;
   labels: IGRPMenuLabels;
 }
 
-export function SectionGroup({ section, pathname, labels }: SectionGroupProps) {
+export function SectionGroup({ section, activeHref, labels }: SectionGroupProps) {
+  const [open, setOpen] = useState(true);
+  const { state, isMobile } = useIGRPSidebar();
+  // Icon mode hides the trigger, so a collapsed section would have no way back; show its items there.
+  // Not via CSS: Tailwind v4 preflight's `[hidden] { display: none !important }` beats any utility.
+  const iconMode = state === 'collapsed' && !isMobile;
   const menuContent = (
     <SidebarGroupContent>
       <SidebarMenu>
@@ -31,14 +38,14 @@ export function SectionGroup({ section, pathname, labels }: SectionGroupProps) {
             <FolderMenuItem
               key={`folder-${node.item.id ?? node.item.code}`}
               node={node}
-              pathname={pathname}
+              activeHref={activeHref}
               labels={labels}
             />
           ) : (
             <LeafMenuItem
               key={`leaf-${node.item.id ?? node.item.code}`}
               node={node}
-              pathname={pathname}
+              activeHref={activeHref}
               labels={labels}
             />
           ),
@@ -50,7 +57,11 @@ export function SectionGroup({ section, pathname, labels }: SectionGroupProps) {
   if (section.label) {
     return (
       <SidebarGroup>
-        <Collapsible defaultOpen className="group/collapsible-group">
+        <Collapsible
+          open={open || iconMode}
+          onOpenChange={setOpen}
+          className="group/collapsible-group"
+        >
           <CollapsibleTrigger
             className={cn(
               'group/section-trigger flex h-8 w-full cursor-pointer items-center rounded-md px-2',

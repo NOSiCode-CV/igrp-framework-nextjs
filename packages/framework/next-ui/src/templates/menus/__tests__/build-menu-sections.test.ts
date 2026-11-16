@@ -1,7 +1,13 @@
 import { describe, it, expect } from 'vitest';
 import type { IGRPMenuItemArgs } from '@igrp/framework-next-types';
 
-import { buildMenuSections, isItemActive, resolveAnchorTag, resolveHref } from '../utils.js';
+import {
+  buildMenuSections,
+  findActiveHref,
+  isItemActive,
+  resolveAnchorTag,
+  resolveHref,
+} from '../utils.js';
 
 function item(partial: Partial<IGRPMenuItemArgs> & { code: string }): IGRPMenuItemArgs {
   return {
@@ -72,20 +78,73 @@ describe('buildMenuSections', () => {
   it('drops inactive items', () => {
     expect(buildMenuSections([item({ code: 'a', status: 'INACTIVE', pageSlug: 'a' })])).toEqual([]);
   });
+
+  /** Regression: children of an INACTIVE folder were promoted to top-level links. */
+  it('hides the whole subtree of an inactive ancestor', () => {
+    const sections = buildMenuSections([
+      item({ code: 'ADMIN', type: 'FOLDER', status: 'INACTIVE' }),
+      item({ code: 'users', parentCode: 'ADMIN', pageSlug: 'users' }),
+      item({ code: 'sub', type: 'FOLDER', parentCode: 'ADMIN' }),
+      item({ code: 'deep', parentCode: 'sub', pageSlug: 'deep' }),
+      item({ code: 'home', pageSlug: 'home' }),
+    ]);
+    expect(sections.flatMap((s) => s.nodes.map((n) => n.item.code))).toEqual(['home']);
+  });
+
+  it('still promotes a child whose parent is absent from the data', () => {
+    const sections = buildMenuSections([
+      item({ code: 'orphan', parentCode: 'gone', pageSlug: 'o' }),
+    ]);
+    expect(sections[0]!.nodes.map((n) => n.item.code)).toEqual(['orphan']);
+  });
+
+  /** Regression: a GROUP inside a GROUP rendered as a `#` leaf and its subtree vanished. */
+  it('renders a nested GROUP as a folder with its leaves', () => {
+    const sections = buildMenuSections([
+      item({ code: 'g', type: 'GROUP', name: 'Grupo' }),
+      item({ code: 'inner', type: 'GROUP', parentCode: 'g' }),
+      item({ code: 'leaf', parentCode: 'inner', pageSlug: 'leaf' }),
+    ]);
+    const node = sections[0]!.nodes[0]!;
+    expect(node.kind).toBe('folder');
+    expect(node.kind === 'folder' && node.children.map((c) => c.item.code)).toEqual(['leaf']);
+  });
 });
 
-describe('isItemActive', () => {
+describe('resolveHref', () => {
+  it('never yields a protocol-relative href from a pageSlug', () => {
+    expect(resolveHref(item({ code: 'a', pageSlug: '//evil.example' }))).toBe('/evil.example');
+    expect(resolveHref(item({ code: 'b', pageSlug: '/\\evil.example' }))).toBe('/evil.example');
+    expect(resolveHref(item({ code: 'c', pageSlug: '/users' }))).toBe('/users');
+  });
+});
+
+describe('findActiveHref / isItemActive', () => {
   const page = item({ code: 'u', pageSlug: 'users' });
+  const active = (menus: IGRPMenuItemArgs[], pathname: string) =>
+    findActiveHref(buildMenuSections(menus), pathname);
 
   it('matches the route and its children, not a sibling with a shared prefix', () => {
     expect(resolveHref(page)).toBe('/users');
-    expect(isItemActive(page, '/users')).toBe(true);
-    expect(isItemActive(page, '/users/42')).toBe(true);
-    expect(isItemActive(page, '/users-admin')).toBe(false);
+    expect(active([page], '/users')).toBe('/users');
+    expect(active([page], '/users/42')).toBe('/users');
+    expect(active([page], '/users-admin')).toBeNull();
+  });
+
+  /** Regression: `/admin` and `/admin/users` were both current on `/admin/users`. */
+  it('picks only the longest matching href', () => {
+    const admin = item({ code: 'admin', pageSlug: 'admin' });
+    const f = item({ code: 'f', type: 'FOLDER' });
+    const users = item({ code: 'users', parentCode: 'f', pageSlug: 'admin/users' });
+    const href = active([admin, f, users], '/admin/users/7');
+    expect(href).toBe('/admin/users');
+    expect(isItemActive(users, href)).toBe(true);
+    expect(isItemActive(admin, href)).toBe(false);
   });
 
   it('never marks an external link active', () => {
     const external = item({ code: 'e', url: 'https://example.com' });
+    expect(active([external], 'https://example.com')).toBeNull();
     expect(isItemActive(external, 'https://example.com')).toBe(false);
   });
 });

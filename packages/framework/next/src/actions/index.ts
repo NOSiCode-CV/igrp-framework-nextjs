@@ -6,6 +6,7 @@ import { fetchAppByCode, fetchAppsByUser } from '../hooks/use-applications.js';
 import { fetchMenus } from '../hooks/use-menus.js';
 import { fetchCurrentUser } from '../hooks/use-user.js';
 import { igrpGetAccessClient } from '../lib/api-client.js';
+import { igrpGetAccessClientConfig } from '../lib/api-config.js';
 import {
   igrpAssertAuthBypassAllowed,
   igrpEnsureAccessClientConfig,
@@ -20,6 +21,7 @@ import { logger } from '../logger.js';
  */
 export type IGRPActionErrorCode =
   | 'SESSION_INVALID'
+  | 'AUTH_BYPASSED'
   | 'MENUS_LOAD_FAILED'
   | 'USER_LOAD_FAILED'
   | 'APPS_LOAD_FAILED'
@@ -59,7 +61,15 @@ let warnedNoSession = false;
 async function requireSession(): Promise<Extract<ActionResult<never>, { ok: false }> | null> {
   if (isIgrpAuthBypass()) {
     igrpAssertAuthBypassAllowed();
-    return null;
+    // Bypass has no session, so normally no AM credentials: refuse quietly instead
+    // of letting the client throw and log an error on every call.
+    const { baseUrl, token } = igrpGetAccessClientConfig();
+    if (baseUrl && token) return null;
+    return {
+      ok: false,
+      error: 'Access Management indisponível no modo de pré-visualização.',
+      code: 'AUTH_BYPASSED',
+    };
   }
   const { token } = await igrpEnsureAccessClientConfig();
   if (token) return null;

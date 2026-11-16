@@ -24,6 +24,8 @@
   },
   "auth": {
     "signingOut": "Déconnexion en cours...",
+    "confirmSignOut": "Voulez-vous vous déconnecter ?",
+    "signOut": "Se déconnecter",
     "pleaseWait": "Veuillez patienter..."
   },
   "home": {

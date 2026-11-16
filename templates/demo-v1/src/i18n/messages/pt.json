@@ -24,6 +24,8 @@
   },
   "auth": {
     "signingOut": "A terminar sessão...",
+    "confirmSignOut": "Pretende terminar a sessão?",
+    "signOut": "Terminar sessão",
     "pleaseWait": "Aguarde..."
   },
   "home": {

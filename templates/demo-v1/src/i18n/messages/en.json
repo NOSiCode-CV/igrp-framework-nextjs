@@ -24,6 +24,8 @@
   },
   "auth": {
     "signingOut": "Signing out...",
+    "confirmSignOut": "Do you want to sign out?",
+    "signOut": "Sign out",
     "pleaseWait": "Please wait..."
   },
   "home": {

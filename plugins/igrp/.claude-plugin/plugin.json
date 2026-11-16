@@ -5,8 +5,8 @@
     "name": "NOSi IGRP Framework Team",
     "email": "framework@nosi.cv"
   },
-  "homepage": "http://git.nosi.cv/igrp-3_0/igrp-framework-frontend/igrp-framework-nextjs/-/tree/dev/plugins/igrp",
-  "repository": "http://git.nosi.cv/igrp-3_0/igrp-framework-frontend/igrp-framework-nextjs",
+  "homepage": "https://git.nosi.cv/igrp-3_0/igrp-framework-frontend/igrp-framework-nextjs/-/tree/dev/plugins/igrp",
+  "repository": "https://git.nosi.cv/igrp-3_0/igrp-framework-frontend/igrp-framework-nextjs",
   "license": "UNLICENSED",
   "keywords": ["igrp", "nosi", "design-system", "react", "nextjs", "shadcn", "tailwind"]
 }

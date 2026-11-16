@@ -24,14 +24,14 @@ Future skills (e.g. `framework-next`, `next-auth`) will live under the same plug
 
 ```sh
 # Inside Claude Code (one-time per developer):
-/plugin marketplace add http://git.nosi.cv/igrp-3_0/igrp-framework-frontend/igrp-framework-nextjs
+/plugin marketplace add https://git.nosi.cv/igrp-3_0/igrp-framework-frontend/igrp-framework-nextjs
 /plugin install igrp@nosi
 ```
 
 Or scripted (non-interactive):
 
 ```sh
-claude plugin marketplace add http://git.nosi.cv/igrp-3_0/igrp-framework-frontend/igrp-framework-nextjs
+claude plugin marketplace add https://git.nosi.cv/igrp-3_0/igrp-framework-frontend/igrp-framework-nextjs
 claude plugin install igrp@nosi
 ```
 
@@ -55,7 +55,7 @@ To make the marketplace available to anyone who trusts your project folder, add 
     "nosi": {
       "source": {
         "source": "url",
-        "url": "http://git.nosi.cv/igrp-3_0/igrp-framework-frontend/igrp-framework-nextjs.git"
+        "url": "https://git.nosi.cv/igrp-3_0/igrp-framework-frontend/igrp-framework-nextjs.git"
       }
     }
   },
@@ -73,6 +73,8 @@ If `git.nosi.cv` requires auth for clones, ensure your local git credential help
 # Gitea / GitLab-compatible:
 export GITLAB_TOKEN=glpat_xxxxxxxxxxxx
 ```
+
+Use a personal access token scoped to `read_repository` only.
 
 See the Claude Code [private-repo plugin docs](https://code.claude.com/docs/en/plugin-marketplaces#private-repositories) for the full list of supported providers.
 

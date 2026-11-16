@@ -2,12 +2,6 @@
 
 TanStack Table v8 under the hood. Use it for tables that sort, filter, page, expand or have row actions. For a static display table, `IGRPTable` (`horizon.md`) is lighter.
 
-Row selection can't be read or controlled yet (`packages/design-system/KNOWN-ISSUES.md`).
-
-Row selection can't be read or controlled yet (`packages/design-system/KNOWN-ISSUES.md`).
-
-Row selection can't be read or controlled yet (`packages/design-system/KNOWN-ISSUES.md`).
-
 Import the TanStack types from the DS (`ColumnDef`, `Row`, `Column`, `SortingState`, …), not from `@tanstack/react-table`.
 
 ## Example
@@ -104,9 +98,27 @@ export function UsersTable({ data, onDelete }: { data: User[]; onDelete: (u: Use
 | `getRowCanExpand`, `renderSubComponent` | `() => false` | Row expansion. Pair it with `IGRPDataTableCellExpander`. |
 | `getRowId` | row index | Stable row id (`(row) => row.id`). Pass it whenever you use `renderSubComponent`: by index, expanded state follows the position when `data` is reordered (refetch, server paging or sorting) and opens a different record. Dev warning otherwise. |
 | `notFoundLabel` | i18n `dataTable.notFound` | |
+| `rowSelection`, `onRowSelectionChange` | internal | Controlled selection in TanStack's shape (`{ [rowId]: true }`, updater callback); `useState`'s setter fits. See Row selection. |
+| `onSelectionChange` | | `(rows: TData[]) => void` with the selected rows' data on every change (not on mount). |
 | `className`, `filterClassName`, `tableClassName`, `tableHeaderClassName`, `tableBodyClassName`, `paginationClassName`, `id` | | |
 
-**Row selection can't be read or controlled.** The checkbox and switch cells only toggle internal state, so don't build bulk actions on them. Hold your own selected-ids state with `IGRPCheckbox` in a display column instead.
+### Row selection
+
+Put `IGRPDataTableHeaderRowsSelect` in a display column's `header` and `IGRPDataTableCellCheckbox` (or `IGRPDataTableCellSwitch`) in its `cell`. Select-all toggles the **current page** only. Pass `getRowId` so selection keys are record ids, not row positions.
+
+```tsx
+const [selection, setSelection] = useState<RowSelectionState>({})
+<IGRPDataTable
+  columns={columns}
+  data={rows}
+  getRowId={(row) => row.id}
+  rowSelection={selection}
+  onRowSelectionChange={setSelection}
+  onSelectionChange={(selected) => setBulkTargets(selected)}
+/>
+```
+
+Use `onSelectionChange` alone when you only need to read the selection.
 
 ## Row actions: `IGRPDataTableAction<T>`
 
@@ -135,7 +147,7 @@ A union discriminated by `type`. Every action has `label`, `icon?` and `hidden?(
 | `IGRPDataTableCellLink` | `IGRPLink` props (`href`, `children`, …). |
 | `IGRPDataTableCellTooltip` | `text`, `side`, `align`. It renders the text truncated with a tooltip; it doesn't wrap children. |
 | `IGRPDataTableCellExpander` | `row`, `label?`. Renders nothing when the row can't expand. |
-| `IGRPDataTableCellCheckbox` / `IGRPDataTableCellSwitch` | `row` + primitive props. Internal selection only (see above). |
+| `IGRPDataTableCellCheckbox` / `IGRPDataTableCellSwitch` | `row` + primitive props. See Row selection. |
 
 ## Filters
 

@@ -135,7 +135,7 @@ function IGRPDataTableHeaderRowsSelect<T>({
   return (
     <Checkbox
       checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")}
-      onCheckedChange={(value) => table.toggleAllRowsSelected?.(!!value)}
+      onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
       aria-label={i18n.dataTable.selectAll}
       className={className}
       {...props}

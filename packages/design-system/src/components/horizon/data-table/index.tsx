@@ -16,6 +16,7 @@ import {
   getGroupedRowModel,
   getPaginationRowModel,
   getSortedRowModel,
+  type OnChangeFn,
   type PaginationState,
   type RowSelectionState,
   type SortingState,
@@ -157,6 +158,19 @@ interface IGRPDataTableProps<TData, TValue> {
   pagination?: IGRPDataTablePaginationConfig
   /** Column sizing. "auto" fits content; "fixed" honours ColumnDef.size. Default "auto". */
   layout?: IGRPDataTableLayout
+  /**
+   * Selected rows, keyed by row id (TanStack's `RowSelectionState`). Pass it with
+   * `onRowSelectionChange` to control the selection. Pair it with `getRowId` so the
+   * keys survive `data` being reordered or replaced.
+   */
+  rowSelection?: RowSelectionState
+  /** Called with TanStack's updater when the selection changes, controlled or not. */
+  onRowSelectionChange?: OnChangeFn<RowSelectionState>
+  /**
+   * Called with the selected rows' data whenever the selection changes. The latest
+   * callback is used, so an inline function does not refire it.
+   */
+  onSelectionChange?: (rows: TData[]) => void
 }
 
 type TableState = {
@@ -230,8 +244,9 @@ function IGRPDataTable<TData, TValue>({
   serverFilterComponent,
   toolbar,
   notFoundLabel,
-  // rowSelection,
-  // onRowSelectionChange,
+  rowSelection: rowSelectionProp,
+  onRowSelectionChange,
+  onSelectionChange,
   getRowCanExpand = () => false,
   renderSubComponent,
   getRowId,
@@ -315,13 +330,19 @@ function IGRPDataTable<TData, TValue>({
       }),
     [state.expanded]
   )
+  const controlledSelection = rowSelectionProp !== undefined
+  const rowSelection = rowSelectionProp ?? state.rowSelection
   const setRowSelection = useCallback(
-    (updater: Updater<RowSelectionState>) =>
-      dispatch({
-        type: "rowSelection",
-        payload: typeof updater === "function" ? updater(state.rowSelection) : updater,
-      }),
-    [state.rowSelection]
+    (updater: Updater<RowSelectionState>) => {
+      if (!controlledSelection) {
+        dispatch({
+          type: "rowSelection",
+          payload: typeof updater === "function" ? updater(state.rowSelection) : updater,
+        })
+      }
+      onRowSelectionChange?.(updater)
+    },
+    [controlledSelection, state.rowSelection, onRowSelectionChange]
   )
 
   const _id = useId()
@@ -381,7 +402,7 @@ function IGRPDataTable<TData, TValue>({
     state: {
       sorting: state.sorting,
       columnVisibility: state.columnVisibility,
-      rowSelection: state.rowSelection,
+      rowSelection,
       columnFilters: state.columnFilters,
       pagination: state.pagination,
       expanded: state.expanded,
@@ -415,6 +436,19 @@ function IGRPDataTable<TData, TValue>({
   const pageSizeOptions = pagination?.pageSizeOptions ?? pageSizePagination
   const sorting = table.getState().sorting
   const columnFilters = table.getState().columnFilters
+
+  // Selected rows' data for onSelectionChange, only when the selection actually changed
+  // (not on mount, and not on StrictMode's second effect run).
+  const onSelectionChangeRef = useRef(onSelectionChange)
+  useEffect(() => {
+    onSelectionChangeRef.current = onSelectionChange
+  })
+  const lastSelection = useRef(rowSelection)
+  useEffect(() => {
+    if (lastSelection.current === rowSelection) return
+    lastSelection.current = rowSelection
+    onSelectionChangeRef.current?.(table.getSelectedRowModel().flatRows.map((row) => row.original))
+  }, [rowSelection, table])
 
   // Latest callback in a ref: an inline consumer callback must not refire the query.
   const onQueryChangeRef = useRef(onQueryChange)

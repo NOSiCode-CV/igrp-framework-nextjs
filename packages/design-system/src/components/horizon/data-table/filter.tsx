@@ -1,6 +1,8 @@
 "use client"
+// `column` keeps its identity across renders, so compiler memoization would freeze its getters.
+"use no memo"
 
-import { useCallback, useId, useMemo, useRef, useState } from "react"
+import { useCallback, useId, useMemo, useRef, useState, useTransition } from "react"
 import { type Column, type Table } from "@tanstack/react-table"
 import { cn } from "../cn.js"
 import type { IGRPOptionsProps } from "../../../types.js"
@@ -24,6 +26,7 @@ import { IGRPBadge } from "../badge.js"
 import { IGRPButton } from "../button.js"
 import { IGRPIcon, type IGRPIconName } from "../icon/index.js"
 import { igrpFormatMessage, useIGRPi18n, useIGRPLocale } from "../../../i18n/index.js"
+import { igrpDateTimeFormat } from "../../../lib/intl.js"
 
 /**
  * Base props for data table filter components.
@@ -51,7 +54,7 @@ interface IGRPDataTableFilterProps<TData> {
 }
 
 function formatDate(date: Date, locale: string): string {
-  return new Intl.DateTimeFormat(locale, {
+  return igrpDateTimeFormat(locale, {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
@@ -321,13 +324,29 @@ function IGRPDataTableFilterInput<TData>({
   const inputRef = useRef<HTMLInputElement>(null)
   const resolvedAriaLabel = ariaLabel ?? i18n.dataTable.filterLabel
 
+  // Local state keeps typing responsive; the table re-filters in a transition.
+  const columnValue = (column?.getFilterValue() ?? "") as string
+  const [value, setValue] = useState(columnValue)
+  const [lastColumnValue, setLastColumnValue] = useState(columnValue)
+  const [isPending, startTransition] = useTransition()
+  // An external change (reset, "clear filters") wins over the local text. While our own
+  // transitions are pending the column can show an older keystroke, so wait for them.
+  if (!isPending && lastColumnValue !== columnValue) {
+    setLastColumnValue(columnValue)
+    setValue(columnValue)
+  }
+  const setFilter = (next: string) => {
+    setValue(next)
+    startTransition(() => column?.setFilterValue(next))
+  }
+
   return (
     <div className={cn("relative")}>
       <Input
         placeholder={resolvedPlaceholder}
-        value={(column?.getFilterValue() ?? "") as string}
-        onChange={(e) => column?.setFilterValue(e.target.value)}
-        className={cn("peer min-w-60 ps-9", Boolean(column?.getFilterValue()) && "pe-9", className)}
+        value={value}
+        onChange={(e) => setFilter(e.target.value)}
+        className={cn("peer min-w-60 ps-9", Boolean(value) && "pe-9", className)}
         name={`text-${id}`}
         ref={inputRef}
         type="text"
@@ -340,7 +359,7 @@ function IGRPDataTableFilterInput<TData>({
       >
         <IGRPIcon iconName={iconName} className={cn("size-3")} />
       </div>
-      {Boolean(column?.getFilterValue()) && (
+      {Boolean(value) && (
         <button
           type="button"
           className={cn(
@@ -348,7 +367,7 @@ function IGRPDataTableFilterInput<TData>({
           )}
           aria-label={i18n.dataTable.clearFilter}
           onClick={() => {
-            column?.setFilterValue("")
+            setFilter("")
             if (inputRef.current) {
               inputRef.current.focus()
             }

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import { getSession, useSession } from '@igrp/framework-next-auth/client';
+import { useSession } from '@igrp/framework-next-auth/client';
 
 /**
  * Matches the auth chrome routes that handle the unauthenticated state
@@ -46,7 +46,7 @@ export type IGRPSessionWatcherProps = {
 };
 
 export function IGRPSessionWatcher({ children, checkSession }: IGRPSessionWatcherProps) {
-  const { data: session, status } = useSession();
+  const { data: session, status, update } = useSession();
   const router = useRouter();
   // `usePathname()` is already basePath-stripped by Next; it is here as a
   // DEPENDENCY, not just a value. Reading `window.location.pathname` inside the
@@ -90,16 +90,29 @@ export function IGRPSessionWatcher({ children, checkSession }: IGRPSessionWatche
   // it is tuned below the IdP access-token TTL; this timer derives the moment to refresh
   // from the token itself (`session.expiresAt`, set by the jwt/session
   // callbacks on every rotation), so correctness no longer depends on that
-  // tuning. getSession() hits /api/auth/session — a route handler, which CAN
-  // persist the rotated cookie — and broadcasts the new session to OTHER tabs
-  // (storage events don't fire in the originating tab); this tab picks up the
-  // new expiresAt on the next poll or focus refetch, which reschedules this
-  // effect. On permanent refresh failure expiresAt is unchanged, so the
-  // effect does NOT re-fire (no retry loop); the error-flag effect above
-  // routes to /logout instead. The fixed-interval poll stays on as a fallback.
+  // tuning. `update()` hits /api/auth/session — a route handler, which CAN
+  // persist the rotated cookie — and, unlike `getSession()`, puts the new
+  // session into THIS tab's context (`getSession()` only broadcast it to other
+  // tabs, so the focused tab never saw the new expiresAt and this timer never
+  // re-armed). It also broadcasts to the other tabs. `update()` with no data
+  // is a POST that reaches the jwt callback as `trigger: 'update'` with no
+  // `session`; the IGRP callback ignores that and refreshes exactly as a GET.
+  // On permanent refresh failure expiresAt is unchanged and `hasSession` does
+  // not flap through `update()`'s `loading`, so the effect does NOT re-fire
+  // (no retry loop); the error-flag effect above routes to /logout instead.
+  // The fixed-interval poll stays on as a fallback.
   const expiresAt = (session as { expiresAt?: number } | null)?.expiresAt;
+  // `update()` flips status to `loading` while it runs; with data still present
+  // that is the same session, not a new one.
+  const hasSession = status === 'authenticated' || (status === 'loading' && !!session);
+  // Latest `update`: next-auth rebuilds it on every session change and its closure
+  // bails out while `loading`, so a timer must not hold on to an old one.
+  const updateRef = useRef(update);
   useEffect(() => {
-    if (status !== 'authenticated' || typeof expiresAt !== 'number') return;
+    updateRef.current = update;
+  });
+  useEffect(() => {
+    if (!hasSession || typeof expiresAt !== 'number') return;
 
     const delay = Math.max(
       expiresAt - ADAPTIVE_REFRESH_LEAD_MS - Date.now(),
@@ -107,10 +120,34 @@ export function IGRPSessionWatcher({ children, checkSession }: IGRPSessionWatche
     );
     const timer = setTimeout(() => {
       // Errors surface through the session error flag, not here.
-      getSession().catch(() => {});
+      updateRef.current().catch(() => {});
     }, delay);
     return () => clearTimeout(timer);
-  }, [expiresAt, status]);
+  }, [expiresAt, hasSession]);
+
+  // Focus refresh with a staleness throttle. next-auth's own
+  // `refetchOnWindowFocus` refetches on EVERY tab focus; this refetches only
+  // when this tab has not synced the session for SESSION_CHECK_MIN_INTERVAL_MS.
+  // Any session change (poll, broadcast from another tab, update) counts as a sync.
+  // Gated on `expiresAt` like the timer: the preview/auth-bypass mock session has
+  // none, and its /api/auth routes only redirect.
+  const lastSyncRef = useRef(0);
+  useEffect(() => {
+    lastSyncRef.current = Date.now();
+  }, [session]);
+  const hasExpiry = typeof expiresAt === 'number';
+  useEffect(() => {
+    if (!hasSession || !hasExpiry) return;
+
+    const onVisibilityChange = () => {
+      if (document.visibilityState !== 'visible') return;
+      if (Date.now() - lastSyncRef.current < SESSION_CHECK_MIN_INTERVAL_MS) return;
+      lastSyncRef.current = Date.now();
+      updateRef.current().catch(() => {});
+    };
+    document.addEventListener('visibilitychange', onVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', onVisibilityChange);
+  }, [hasSession, hasExpiry]);
 
   // Focus check. AM's session can end while this app's tokens are still valid
   // (a logout in another app cascades, an admin kills it), and nothing here

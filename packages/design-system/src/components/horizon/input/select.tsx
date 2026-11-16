@@ -225,10 +225,12 @@ function IGRPSelect({
 
   const optionsMap = useMemo(() => new Map(options.map((opt) => [opt.value, opt])), [options])
 
+  // Folded once per `options`, not once per label per keystroke.
+  const foldedLabels = useMemo(() => options.map(({ label }) => foldSearch(label)), [options])
   const normalizedSearch = foldSearch(state.search.trim())
   const filteredOptions = useMemo(
-    () => options.filter(({ label }) => foldSearch(label).includes(normalizedSearch)),
-    [options, normalizedSearch]
+    () => options.filter((_, i) => foldedLabels[i]?.includes(normalizedSearch)),
+    [options, foldedLabels, normalizedSearch]
   )
 
   /**

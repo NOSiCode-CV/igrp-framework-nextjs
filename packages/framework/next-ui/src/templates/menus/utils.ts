@@ -80,6 +80,16 @@ export function isItemActive(item: IGRPMenuItemArgs, activeHref: string | null):
 }
 
 /**
+ * `activeHref` if `node`'s subtree holds the active entry, else `null`. Passing
+ * `null` to the other subtrees keeps their props unchanged across navigation, so
+ * the React Compiler skips re-rendering them.
+ */
+export function activeHrefWithin(node: TreeNode, activeHref: string | null): string | null {
+  const leaves = node.kind === 'folder' ? node.children : [node];
+  return leaves.some((leaf) => isItemActive(leaf.item, activeHref)) ? activeHref : null;
+}
+
+/**
  * Selected-item treatment, driven by dedicated `--sidebar-active` /
  * `--sidebar-active-foreground` tokens (defined in the design system's
  * tokens.css). Integrators recolor the highlight by overriding those tokens in

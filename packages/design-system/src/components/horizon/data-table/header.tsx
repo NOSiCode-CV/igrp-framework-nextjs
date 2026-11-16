@@ -1,4 +1,6 @@
 "use client"
+// `column`/`table` keep their identity across renders, so compiler memoization would freeze sort and selection state.
+"use no memo"
 
 import { type Column, type Table } from "@tanstack/react-table"
 import { ArrowDown, ArrowUp, ArrowUpDown, ChevronDown, ChevronsUpDown, ChevronUp } from "lucide-react"

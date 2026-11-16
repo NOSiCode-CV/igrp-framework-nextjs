@@ -5,17 +5,19 @@ import type { SessionAuthProviderId } from './providers';
 export type { NextAuthOptions, TokenSet };
 
 /**
- * IGRP session shape. Intentionally carries `accessToken` and `idToken` to the
- * client (the browser-side Access Management client reads `session.accessToken`);
- * `refreshToken` is deliberately omitted.
+ * IGRP session shape. Intentionally carries `accessToken` to the client (the
+ * browser-side Access Management client reads `session.accessToken`);
+ * `refreshToken` and `idToken` stay in the JWT (read them server-side with
+ * `getAccessToken()`).
  *
- * SECURITY: both tokens are readable over the unauthenticated-to-JS
+ * SECURITY: the access token is readable over the unauthenticated-to-JS
  * `/api/auth/session` endpoint and via `useSession()`/`getSession()`. NEVER log
  * or serialize the session object client-side, and error/telemetry pipelines
  * MUST redact it — an XSS otherwise exfiltrates a bearer token, not just a cookie.
  */
 export interface Session extends DefaultSession {
   accessToken?: string;
+  /** @deprecated No longer populated on the session; read `idToken` from the JWT (`getAccessToken()`). */
   idToken?: string;
   authProviderId?: SessionAuthProviderId;
   error?: string;

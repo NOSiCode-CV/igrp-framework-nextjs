@@ -2,7 +2,6 @@
 
 import {
   cn,
-  IGRPIcon,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -13,6 +12,14 @@ import {
   SidebarMenuItem,
   useIGRPSidebar,
 } from '@igrp/igrp-framework-react-design-system';
+import {
+  ArrowRightIcon,
+  AudioWaveformIcon,
+  ChevronsUpDownIcon,
+  CommandIcon,
+  CornerDownLeftIcon,
+  GalleryVerticalEndIcon,
+} from 'lucide-react';
 import type { IGRPApplicationArgs } from '@igrp/framework-next-types';
 import { useMemo } from 'react';
 
@@ -84,25 +91,25 @@ function IGRPTemplateAppSwitcher({
           height={32}
           className={cn('h-full w-full rounded-lg object-cover')}
           priority
-          fallback={<IGRPIcon iconName="GalleryVerticalEnd" />}
+          fallback={<GalleryVerticalEndIcon size={16} />}
         />
       </div>
       <div className={cn('grid flex-1 text-left text-sm leading-tight')}>
         <span className={cn('truncate font-medium')}>{activeApp.name}</span>
         <span className={cn('truncate text-xs')}>{activeApp.description || ''}</span>
       </div>
-      <IGRPIcon iconName="ChevronsUpDown" className={cn('ml-auto')} />
+      <ChevronsUpDownIcon size={16} className={cn('ml-auto')} />
     </>
   ) : (
     <>
       <div className={cn('flex aspect-square size-8 items-center justify-center rounded-lg')}>
-        <IGRPIcon iconName="Command" />
+        <CommandIcon size={16} />
       </div>
       <div className={cn('grid flex-1 text-left text-sm leading-tight')}>
         <span className={cn('truncate font-medium')}>{unknownText}</span>
         <span className={cn('truncate text-xs')}>{unknownText}</span>
       </div>
-      <IGRPIcon iconName="ChevronsUpDown" className={cn('ml-auto')} />
+      <ChevronsUpDownIcon size={16} className={cn('ml-auto')} />
     </>
   );
 
@@ -143,15 +150,12 @@ function IGRPTemplateAppSwitcher({
                           className={cn('h-full w-full rounded-md object-cover')}
                           priority
                           fallback={
-                            <IGRPIcon
-                              iconName="AudioWaveform"
-                              className={cn('size-3.5 shrink-0')}
-                            />
+                            <AudioWaveformIcon size={16} className={cn('size-3.5 shrink-0')} />
                           }
                         />
                       </div>
                       <span className={cn('truncate')}>{app.name}</span>
-                      <IGRPIcon iconName="ArrowRight" className={cn(arrowClassName)} />
+                      <ArrowRightIcon size={16} className={cn(arrowClassName)} />
                     </a>
                   </DropdownMenuItem>
                 ))}
@@ -169,10 +173,10 @@ function IGRPTemplateAppSwitcher({
                           'flex size-6 items-center justify-center rounded-md border bg-transparent',
                         )}
                       >
-                        <IGRPIcon iconName="CornerDownLeft" className={cn('size-3 shrink-0')} />
+                        <CornerDownLeftIcon size={16} className={cn('size-3 shrink-0')} />
                       </div>
                       <div className={cn('text-muted-foreground font-medium')}>{appCenterText}</div>
-                      <IGRPIcon iconName="ArrowRight" className={cn(arrowClassName)} />
+                      <ArrowRightIcon size={16} className={cn(arrowClassName)} />
                     </a>
                   </DropdownMenuItem>
                 </>

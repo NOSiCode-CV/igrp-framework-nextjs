@@ -9,7 +9,7 @@ vi.mock("recharts", async (importOriginal) => ({
     cloneElement(children, { width: 500, height: 300 }),
 }))
 
-import { IGRPAreaChart } from "../area.js"
+import IGRPAreaChart from "../area-chart-inner.js"
 import IGRPLineChartInner from "../line-chart-inner.js"
 import { ChartContainer } from "../../../primitives/chart.js"
 

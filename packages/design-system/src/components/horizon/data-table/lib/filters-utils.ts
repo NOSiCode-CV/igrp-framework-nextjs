@@ -16,23 +16,33 @@ import { isValidDate, toLocalDate } from "../../../../lib/calendar-utils.js"
  * @returns `true` if the row should be included (no filter or date in range), `false` otherwise
  */
 export const IGRPDataTableDateRangeFilterFn: FilterFn<any> = (row, columnId, filterValue) => {
-  if (!filterValue || !filterValue.from) return true
-  // Date-only strings are read at local midnight: `new Date("2026-08-26")` is UTC midnight,
-  // the previous evening in any UTC-N zone, which dropped the row from a range ending that day.
-  const date = toLocalDate(row.getValue(columnId))
-  const start = toLocalDate(filterValue.from)
-  const end = toLocalDate(filterValue.to)
-
+  const { start, end } = resolveDateRange(filterValue)
   // Invalid filter bound → do not filter (show all). Invalid cell date → cannot
   // be "in range", so exclude. Prevents a misformatted column silently vanishing
   // with no error.
-  if (!start || !isValidDate(start)) return true
+  if (!start) return true
+  // Date-only strings are read at local midnight: `new Date("2026-08-26")` is UTC midnight,
+  // the previous evening in any UTC-N zone, which dropped the row from a range ending that day.
+  const date = toLocalDate(row.getValue(columnId))
   if (!date || !isValidDate(date)) return false
-  if (end && isValidDate(end)) {
-    return date >= startOfDay(start) && date < addDays(startOfDay(end), 1)
-  }
-  return date >= startOfDay(start)
+  return date >= start && (!end || date < end)
 }
+
+type ResolvedDateRange = { igrpResolvedRange: true; start?: Date; end?: Date }
+
+/** Parses the bounds once per filter change; `end` is exclusive (the day after `to`). */
+function resolveDateRange(value: any): ResolvedDateRange {
+  if (value?.igrpResolvedRange) return value
+  const start = value?.from ? toLocalDate(value.from) : undefined
+  if (!start || !isValidDate(start)) return { igrpResolvedRange: true }
+  const end = toLocalDate(value.to)
+  return {
+    igrpResolvedRange: true,
+    start: startOfDay(start),
+    end: end && isValidDate(end) ? addDays(startOfDay(end), 1) : undefined,
+  }
+}
+IGRPDataTableDateRangeFilterFn.resolveFilterValue = resolveDateRange
 
 /**
  * Filter function for faceted filtering in IGRP data tables.
@@ -43,11 +53,14 @@ export const IGRPDataTableDateRangeFilterFn: FilterFn<any> = (row, columnId, fil
  * @param filterValue - An array of string values to match against
  * @returns `true` if the row should be included (no filter or value matches), `false` otherwise
  */
-export const IGRPDataTableFacetedFilterFn: FilterFn<any> = (row, columnId, filterValue: string[]) => {
-  if (!filterValue?.length) return true
-  const cellValue = row.getValue(columnId)
-  return filterValue.some((v) => String(v) === String(cellValue))
+export const IGRPDataTableFacetedFilterFn: FilterFn<any> = (row, columnId, filterValue: string[] | Set<string>) => {
+  const values = toStringSet(filterValue)
+  if (!values.size) return true
+  return values.has(String(row.getValue(columnId)))
 }
+const toStringSet = (value: unknown[] | Set<string> | undefined): Set<string> =>
+  value instanceof Set ? value : new Set((value ?? []).map(String))
+IGRPDataTableFacetedFilterFn.resolveFilterValue = toStringSet
 
 /**
  * Filter function for text filtering in IGRP data tables.

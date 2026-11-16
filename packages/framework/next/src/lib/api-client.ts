@@ -1,7 +1,30 @@
 import 'server-only';
 
+import { cache } from 'react';
 import { AccessManagementClient } from '@igrp/platform-access-management-client-ts';
 import { igrpGetAccessClientConfig } from './api-config.js';
+
+// One client per (baseUrl, token, timeout, locale) per React request; outside a
+// render (Server Actions) `cache` does not memoize and each call builds its own.
+const createAccessClient = cache(
+  (
+    baseUrl: string,
+    token: string,
+    timeout: number | undefined,
+    locale: string | undefined,
+  ): AccessManagementClient => {
+    const client = AccessManagementClient.create({
+      baseUrl,
+      timeout: timeout ?? 10_000,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        ...(locale ? { 'Accept-Language': locale } : {}),
+      },
+    });
+    guardSessionClient(client.sessions);
+    return client;
+  },
+);
 
 export function igrpGetAccessClient(): AccessManagementClient {
   const { baseUrl, token, timeout, locale } = igrpGetAccessClientConfig();
@@ -10,13 +33,7 @@ export function igrpGetAccessClient(): AccessManagementClient {
       'Access Management client is not configured. Call igrpSetAccessClientConfig() first.',
     );
   }
-  const client = AccessManagementClient.create({
-    baseUrl,
-    timeout: timeout ?? 10_000,
-    headers: { Authorization: `Bearer ${token}`, ...(locale ? { 'Accept-Language': locale } : {}) },
-  });
-  guardSessionClient(client.sessions);
-  return client;
+  return createAccessClient(baseUrl, token, timeout, locale);
 }
 
 /**

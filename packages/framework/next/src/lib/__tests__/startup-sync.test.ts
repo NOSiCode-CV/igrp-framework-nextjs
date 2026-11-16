@@ -6,7 +6,8 @@ vi.mock('../sync-menus.js', () => ({ igrpSyncMenus: vi.fn() }));
 vi.mock('../sync-permissions.js', () => ({ igrpSyncPermissions: vi.fn() }));
 vi.mock('../sync-routes.js', () => ({ igrpSyncRoutes: vi.fn() }));
 
-const { igrpStartupSync, igrpResetStartupSync } = await import('../startup-sync.js');
+const { igrpStartupSync, igrpResetStartupSync, igrpStartupSyncDone } =
+  await import('../startup-sync.js');
 
 const plan = {
   client: {} as never,
@@ -33,6 +34,16 @@ describe('igrpStartupSync', () => {
     await igrpStartupSync(plan);
     await igrpStartupSync(plan);
     expect(syncApplication).toHaveBeenCalledTimes(1);
+  });
+
+  it('reports done only after a successful sync', async () => {
+    syncApplication.mockRejectedValueOnce(new Error('AM down'));
+    await igrpStartupSync(plan);
+    expect(igrpStartupSyncDone()).toBe(false);
+
+    vi.spyOn(Date, 'now').mockReturnValue(Date.now() + 61_000);
+    await igrpStartupSync(plan);
+    expect(igrpStartupSyncDone()).toBe(true);
   });
 
   // `IGRPRootLayout` schedules this via after() on EVERY request. Resetting the

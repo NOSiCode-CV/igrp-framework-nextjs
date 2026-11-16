@@ -11,10 +11,10 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-  IGRPIcon,
   igrpFormatMessage,
   useIGRPLocale,
 } from '@igrp/igrp-framework-react-design-system';
+import { BellIcon } from 'lucide-react';
 
 import { useIGRPChromeI18n } from '../i18n/context.js';
 import { IGRP_CHROME_STRINGS_PT, type IGRPNotificationsLabels } from '../i18n/strings.js';
@@ -89,7 +89,7 @@ function IGRPTemplateNotifications({
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="icon" className="size-6 relative">
-          <IGRPIcon iconName="Bell" strokeWidth={2} />
+          <BellIcon size={16} strokeWidth={2} />
           {unreadCount > 0 && (
             // The badge is a fixed 14px circle, so a three-digit count would
             // overflow it. Cap the glyph; the exact figure stays in the

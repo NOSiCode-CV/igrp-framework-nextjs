@@ -7,19 +7,6 @@ vi.mock('@igrp/platform-access-management-client-ts', () => ({
   },
 }));
 
-// React.cache uses request scope in RSC renders. In tests (no request scope)
-// we mock it as a zero-arg memoize so set-then-read works within a test.
-vi.mock('react', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('react')>();
-  return {
-    ...actual,
-    cache: <T extends (...args: never[]) => unknown>(fn: T): T => {
-      const result = fn();
-      return (() => result) as T;
-    },
-  };
-});
-
 // Dynamic imports AFTER vi.mock so both mocks are in place when modules initialise.
 const { igrpGetAccessClient } = await import('../api-client.js');
 const { igrpSetAccessClientConfig, igrpResetAccessClientConfig } = await import('../api-config.js');

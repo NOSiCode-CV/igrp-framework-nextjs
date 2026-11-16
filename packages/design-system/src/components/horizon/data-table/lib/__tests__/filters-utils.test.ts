@@ -2,7 +2,7 @@
 process.env.TZ = "Atlantic/Cape_Verde" // UTC-1
 
 import { describe, it, expect } from "vitest"
-import { IGRPDataTableDateRangeFilterFn } from "../filters-utils.js"
+import { IGRPDataTableDateRangeFilterFn, IGRPDataTableFacetedFilterFn } from "../filters-utils.js"
 
 const row = (v: unknown) => ({ getValue: () => v }) as never
 const noMeta = () => {}
@@ -37,5 +37,24 @@ describe("IGRPDataTableDateRangeFilterFn outside UTC", () => {
     const filter = { from: new Date(2026, 7, 26), to: new Date(2026, 7, 31) }
     expect(IGRPDataTableDateRangeFilterFn(row("2026-08-31T18:30:00"), "d", filter, noMeta)).toBe(true)
     expect(IGRPDataTableDateRangeFilterFn(row(new Date(2026, 8, 1)), "d", filter, noMeta)).toBe(false)
+  })
+})
+
+describe("resolveFilterValue", () => {
+  it("date range: a resolved value filters like the raw one", () => {
+    const raw = { from: "2026-08-26", to: "2026-08-31" }
+    const resolved = IGRPDataTableDateRangeFilterFn.resolveFilterValue!(raw)
+    for (const cell of ["2026-08-26", "2026-08-31", "2026-09-01", "garbage"]) {
+      expect(IGRPDataTableDateRangeFilterFn(row(cell), "d", resolved, noMeta)).toBe(
+        IGRPDataTableDateRangeFilterFn(row(cell), "d", raw, noMeta)
+      )
+    }
+  })
+  it("faceted: matches by string value, raw array or resolved set", () => {
+    const resolved = IGRPDataTableFacetedFilterFn.resolveFilterValue!([1, "b"])
+    expect(IGRPDataTableFacetedFilterFn(row("1"), "d", resolved, noMeta)).toBe(true)
+    expect(IGRPDataTableFacetedFilterFn(row("c"), "d", resolved, noMeta)).toBe(false)
+    expect(IGRPDataTableFacetedFilterFn(row(1), "d", ["1"], noMeta)).toBe(true)
+    expect(IGRPDataTableFacetedFilterFn(row("x"), "d", [], noMeta)).toBe(true)
   })
 })

@@ -36,8 +36,18 @@ async function loadingText(name?: string): Promise<string> {
  * error boundary and a `redirect()` (which `fetchAppByCode` performs on a
  * 401/403) navigates the user away mid-suspense — both worse outcomes than
  * showing the raw code while the real page resolves.
+ *
+ * Pass `name` to skip the lookup: the fallback then paints without waiting on
+ * an Access Management round trip.
  */
-export async function IGRPGlobalLoading({ appCode }: { appCode: string }) {
+export async function IGRPGlobalLoading({
+  appCode,
+  name: knownName,
+}: {
+  appCode: string;
+  name?: string;
+}) {
+  if (knownName) return <div>{await loadingText(knownName)}</div>;
   if (!appCode || appCode === FRAMEWORK_APP_CODE) {
     return <div>{await loadingText()}</div>;
   }

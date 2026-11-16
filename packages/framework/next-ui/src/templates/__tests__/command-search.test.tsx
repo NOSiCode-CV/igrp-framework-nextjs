@@ -16,6 +16,8 @@ import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
  */
 
 const { IGRPTemplateCommandSearch } = await import('../command-search.js');
+// Warm the lazy palette's module so React.lazy settles within one act() flush.
+await import('../command-palette.js');
 
 beforeAll(() => {
   (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
@@ -50,14 +52,20 @@ function mount(ui: React.ReactNode) {
   return errors;
 }
 
-function pressCtrlK() {
-  act(() => {
+// The palette is lazy-loaded on first open, so let its chunk resolve inside act.
+async function pressCtrlK() {
+  await act(async () => {
     document.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', ctrlKey: true }));
   });
 }
 
 describe('IGRPTemplateCommandSearch', () => {
-  it('opens with Ctrl+K without throwing and renders the input and commands', () => {
+  it('does not mount the palette before the first open', () => {
+    mount(<IGRPTemplateCommandSearch commands={[]} />);
+    expect(document.body.querySelector('[data-slot="command-input"]')).toBeNull();
+  });
+
+  it('opens with Ctrl+K without throwing and renders the input and commands', async () => {
     const onSelect = vi.fn();
     const errors = mount(
       <IGRPTemplateCommandSearch
@@ -68,7 +76,7 @@ describe('IGRPTemplateCommandSearch', () => {
       />,
     );
 
-    pressCtrlK();
+    await pressCtrlK();
 
     expect(errors).toEqual([]);
     const input = document.body.querySelector<HTMLInputElement>('[data-slot="command-input"]');
@@ -80,7 +88,7 @@ describe('IGRPTemplateCommandSearch', () => {
     expect(document.body.textContent).toContain('Navegação');
   });
 
-  it('selects only one of two items that share a label', () => {
+  it('selects only one of two items that share a label', async () => {
     const first = vi.fn();
     const second = vi.fn();
     mount(
@@ -92,7 +100,7 @@ describe('IGRPTemplateCommandSearch', () => {
       />,
     );
 
-    pressCtrlK();
+    await pressCtrlK();
 
     const selected = document.body.querySelectorAll(
       '[data-slot="command-item"][data-selected="true"]',
@@ -104,7 +112,7 @@ describe('IGRPTemplateCommandSearch', () => {
     expect(first).not.toHaveBeenCalled();
   });
 
-  it('filters on the label and group only, never on the id or index in `value`', () => {
+  it('filters on the label and group only, never on the id or index in `value`', async () => {
     const onSelect = vi.fn();
     mount(
       <IGRPTemplateCommandSearch
@@ -117,7 +125,7 @@ describe('IGRPTemplateCommandSearch', () => {
         ]}
       />,
     );
-    pressCtrlK();
+    await pressCtrlK();
 
     const input = document.body.querySelector<HTMLInputElement>('[data-slot="command-input"]')!;
     const type = (text: string) =>
@@ -141,10 +149,10 @@ describe('IGRPTemplateCommandSearch', () => {
     expect(visible()).toEqual(['Relatórios Contabilísticos']);
   });
 
-  it('opens with no commands and shows the pt-PT empty state', () => {
+  it('opens with no commands and shows the pt-PT empty state', async () => {
     const errors = mount(<IGRPTemplateCommandSearch />);
 
-    pressCtrlK();
+    await pressCtrlK();
 
     expect(errors).toEqual([]);
     expect(document.body.textContent).toContain('Sem resultados.');

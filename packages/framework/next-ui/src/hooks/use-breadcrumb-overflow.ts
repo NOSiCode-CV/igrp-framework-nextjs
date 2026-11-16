@@ -16,13 +16,30 @@ import { useEffect, useRef, useState, type RefObject } from 'react';
  *
  * Pass something that changes whenever the rendered content does (the joined
  * hrefs, a route key). Re-measuring is a layout read in a rAF, not a render.
+ *
+ * `collapsed` says the caller collapses for its OWN reasons (item count,
+ * mobile). The natural width is read only while the list renders uncollapsed
+ * for the current `contentKey`, and remembered; while collapsed, a resize
+ * compares that remembered width to `clientWidth`. Re-reading `scrollWidth`
+ * from the collapsed list said "fits", which expanded it, which overflowed,
+ * which collapsed it again — a flip on every resize.
  */
 export function useBreadcrumbOverflow(
   containerRef: RefObject<HTMLElement | null>,
   contentKey: string,
+  collapsed = false,
 ): boolean {
   const [isOverflowing, setIsOverflowing] = useState(false);
   const rafRef = useRef<number | null>(null);
+  const naturalWidthRef = useRef<{ key: string; width: number } | null>(null);
+
+  // New content: render it uncollapsed once so its natural width can be read.
+  const [measuredKey, setMeasuredKey] = useState(contentKey);
+  if (measuredKey !== contentKey) {
+    setMeasuredKey(contentKey);
+    setIsOverflowing(false);
+  }
+  const expanded = !collapsed && !isOverflowing;
 
   useEffect(() => {
     const el = containerRef.current;
@@ -31,9 +48,13 @@ export function useBreadcrumbOverflow(
     const check = () => {
       if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
       rafRef.current = requestAnimationFrame(() => {
+        if (expanded) naturalWidthRef.current = { key: contentKey, width: el.scrollWidth };
+        const natural = naturalWidthRef.current;
+        // Collapsed and never seen expanded for this content: nothing to compare.
+        if (natural?.key !== contentKey) return;
         // `scrollWidth`/`clientWidth` are integers, so a sub-pixel layout can
         // report a 1px phantom overflow forever. Require a real difference.
-        setIsOverflowing(el.scrollWidth - el.clientWidth > 1);
+        setIsOverflowing(natural.width - el.clientWidth > 1);
       });
     };
 
@@ -45,7 +66,7 @@ export function useBreadcrumbOverflow(
       observer.disconnect();
       if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
     };
-  }, [containerRef, contentKey]);
+  }, [containerRef, contentKey, expanded]);
 
   return isOverflowing;
 }

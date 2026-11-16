@@ -1,6 +1,7 @@
 'use client';
 
-import { cn, IGRPIcon } from '@igrp/igrp-framework-react-design-system';
+import { cn } from '@igrp/igrp-framework-react-design-system';
+import { LoaderCircleIcon } from 'lucide-react';
 
 import { useIGRPChromeI18n } from '../i18n/context.js';
 
@@ -26,8 +27,8 @@ function IGRPTemplateLoading({ text, appCode, className }: IGRPTemplateLoadingPr
           two diverge. `role="status"` already announces that content. */}
       <div className={cn('w-full max-w-md')}>
         <div className={cn('text-center')}>
-          <IGRPIcon
-            iconName="LoaderCircle"
+          <LoaderCircleIcon
+            size={16}
             strokeWidth={1}
             className={cn('size-16 animate-spin mx-auto mb-4 text-primary')}
             aria-hidden="true"

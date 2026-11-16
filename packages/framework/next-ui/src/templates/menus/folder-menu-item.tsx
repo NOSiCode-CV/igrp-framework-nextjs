@@ -15,6 +15,7 @@ import {
   SidebarMenuItem,
   SidebarMenuSub,
 } from '@igrp/igrp-framework-react-design-system';
+import { ChevronRightIcon } from 'lucide-react';
 
 import type { FolderNode } from './utils.js';
 import { isItemActive, ACTIVE_MENU_ITEM_CLASS, ACTIVE_MENU_BAR_CLASS } from './utils.js';
@@ -76,7 +77,7 @@ export function FolderMenuItem({ node, activeHref, labels }: FolderMenuItemProps
               key={`dd-${child.item.id ?? child.item.code}`}
               node={child}
               variant="dropdown"
-              activeHref={activeHref}
+              activeHref={isItemActive(child.item, activeHref) ? activeHref : null}
               labels={labels}
             />
           ))}
@@ -104,8 +105,8 @@ export function FolderMenuItem({ node, activeHref, labels }: FolderMenuItemProps
           >
             {item.icon && <IGRPIcon iconName={item.icon} />}
             <span>{item.name}</span>
-            <IGRPIcon
-              iconName="ChevronRight"
+            <ChevronRightIcon
+              size={16}
               className={cn(
                 'ml-auto size-4 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90',
               )}
@@ -120,7 +121,7 @@ export function FolderMenuItem({ node, activeHref, labels }: FolderMenuItemProps
                 key={`col-${child.item.id ?? child.item.code}`}
                 node={child}
                 variant="collapsible"
-                activeHref={activeHref}
+                activeHref={isItemActive(child.item, activeHref) ? activeHref : null}
                 labels={labels}
               />
             ))}

@@ -6,7 +6,6 @@ import { useIGRPChromeI18n } from '../i18n/context.js';
 import Link from 'next/link';
 import { useSelectedLayoutSegments } from 'next/navigation';
 import {
-  IGRPIcon,
   Breadcrumb,
   BreadcrumbList,
   BreadcrumbItem as BreadcrumbListItem,
@@ -21,6 +20,7 @@ import {
   useIsMobile,
   cn,
 } from '@igrp/igrp-framework-react-design-system';
+import { ChevronRightIcon, HouseIcon } from 'lucide-react';
 
 /**
  * A single breadcrumb segment. Exported so server layouts can type their
@@ -133,20 +133,21 @@ function IGRPTemplateBreadcrumbs({
   // collapsed markup instead would oscillate: collapsing removes the overflow,
   // which un-collapses, which restores it.
   const contentKey = breadcrumbItems.map((item) => item.href).join('|');
-  const isOverflowing = useBreadcrumbOverflow(containerRef, contentKey);
+  const forceCollapse = breadcrumbItems.length > maxItems || isMobile;
+  const isOverflowing = useBreadcrumbOverflow(containerRef, contentKey, forceCollapse);
 
   if (breadcrumbItems.length === 0) {
     return null;
   }
 
-  const shouldCollapse = breadcrumbItems.length > maxItems || isMobile || isOverflowing;
+  const shouldCollapse = forceCollapse || isOverflowing;
   const lastItems = breadcrumbItems.slice(-itemsAfterCollapse);
   const middleItems = shouldCollapse ? breadcrumbItems.slice(0, -itemsAfterCollapse) : [];
 
   const renderBreadcrumbItem = (item: BreadcrumbItem, isLast: boolean, key: string) => (
     <Fragment key={key}>
       <BreadcrumbSeparator>
-        <IGRPIcon iconName="ChevronRight" className={cn('h-3 w-3')} strokeWidth={2} />
+        <ChevronRightIcon size={16} className={cn('h-3 w-3')} strokeWidth={2} />
       </BreadcrumbSeparator>
       <BreadcrumbListItem>
         {isLast ? (
@@ -176,7 +177,7 @@ function IGRPTemplateBreadcrumbs({
                 'text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors',
               )}
             >
-              <IGRPIcon iconName="House" className={cn('h-3 w-3')} strokeWidth={2} />
+              <HouseIcon size={16} className={cn('h-3 w-3')} strokeWidth={2} />
               <span className={cn('sr-only')}>{homeLabel ?? chrome.breadcrumbs.home}</span>
             </Link>
           </BreadcrumbLink>
@@ -185,7 +186,7 @@ function IGRPTemplateBreadcrumbs({
         {shouldCollapse && middleItems.length > 0 ? (
           <>
             <BreadcrumbSeparator>
-              <IGRPIcon iconName="ChevronRight" className={cn('h-3 w-3')} strokeWidth={2} />
+              <ChevronRightIcon size={16} className={cn('h-3 w-3')} strokeWidth={2} />
             </BreadcrumbSeparator>
             <BreadcrumbListItem>
               <DropdownMenu>

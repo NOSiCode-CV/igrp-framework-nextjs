@@ -1,17 +1,17 @@
 'use client';
 
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useDeferredValue, useMemo, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import type { IGRPMenuItemArgs } from '@igrp/framework-next-types';
 import {
   cn,
-  IGRPIcon,
   Input,
   SidebarGroup,
   SidebarGroupContent,
 } from '@igrp/igrp-framework-react-design-system';
+import { GlobeXIcon, SearchIcon, XIcon } from 'lucide-react';
 
-import { buildMenuSections, findActiveHref } from './utils.js';
+import { activeHrefWithin, buildMenuSections, findActiveHref } from './utils.js';
 import { useIGRPChromeI18n } from '../../i18n/context.js';
 import { resolveMenuLabels, type IGRPMenuLabels } from './labels.js';
 import { SectionGroup } from './section-group.js';
@@ -66,6 +66,9 @@ export function IGRPTemplateMenus({
 
   const handleClearQuery = useCallback(() => setQuery(''), []);
 
+  // Typing stays responsive on large menus: results re-filter at lower priority.
+  const deferredQuery = useDeferredValue(query.trim());
+
   if (sections.length === 0) {
     return (
       <SidebarGroup>
@@ -77,7 +80,7 @@ export function IGRPTemplateMenus({
           )}
           title={labels.emptyMenus}
         >
-          <IGRPIcon iconName="GlobeX" className={cn('size-4 shrink-0')} />
+          <GlobeXIcon size={16} className={cn('size-4 shrink-0')} />
           <span className={cn('text-xs group-data-[collapsible=icon]:hidden')}>
             {labels.emptyMenus}
           </span>
@@ -94,8 +97,8 @@ export function IGRPTemplateMenus({
         <SidebarGroup className={cn('group-data-[collapsible=icon]:hidden')}>
           <SidebarGroupContent>
             <div className={cn('relative')}>
-              <IGRPIcon
-                iconName="Search"
+              <SearchIcon
+                size={16}
                 className={cn(
                   'pointer-events-none absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground',
                 )}
@@ -121,7 +124,7 @@ export function IGRPTemplateMenus({
                     'text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
                   )}
                 >
-                  <IGRPIcon iconName="X" className={cn('size-3.5')} />
+                  <XIcon size={16} className={cn('size-3.5')} />
                 </button>
               )}
             </div>
@@ -129,10 +132,10 @@ export function IGRPTemplateMenus({
         </SidebarGroup>
       )}
 
-      {showSearch && trimmedQuery ? (
+      {showSearch && deferredQuery ? (
         <SearchResults
           sections={sections}
-          query={trimmedQuery}
+          query={deferredQuery}
           activeHref={activeHref}
           labels={labels}
         />
@@ -141,7 +144,9 @@ export function IGRPTemplateMenus({
           <SectionGroup
             key={`grp-${section.key}`}
             section={section}
-            activeHref={activeHref}
+            activeHref={
+              section.nodes.some((node) => activeHrefWithin(node, activeHref)) ? activeHref : null
+            }
             labels={labels}
           />
         ))

@@ -1,4 +1,6 @@
 "use client"
+// `row` keeps its identity across renders, so compiler memoization would freeze selection and expansion state.
+"use no memo"
 
 import { type Row } from "@tanstack/react-table"
 import { format } from "date-fns"
@@ -14,6 +16,7 @@ import { IGRPLink, type IGRPLinkProps } from "../typography/link.js"
 import { useIGRPi18n, useIGRPLocale, useIGRPTimeZone } from "../../../i18n/index.js"
 import { igrpDateFnsLocale } from "../../../i18n/date-fns-locale.js"
 import { igrpIsDateOnly, parseLocalDate } from "../../../lib/utilities.js"
+import { igrpDateTimeFormat, igrpNumberFormat } from "../../../lib/intl.js"
 
 /**
  * Props for the IGRPDataTableCellCheckbox component.
@@ -123,7 +126,7 @@ function IGRPDataTableCellAmount({
   const locale = useIGRPLocale()
   const amount = Number.parseFloat(field)
   if (Number.isNaN(amount)) return null
-  const formatted = new Intl.NumberFormat(language ?? locale, {
+  const formatted = igrpNumberFormat(language ?? locale, {
     // Intl throws on style "currency" without a currency; no currency means a plain number.
     style: formatStyle === "currency" && !currency ? "decimal" : formatStyle,
     currency,
@@ -183,7 +186,7 @@ function IGRPDataTableCellDate({ date, language, dateOptions, dateFormat }: IGRP
   if (dateFormat)
     return <span>{format(dateOnly ? parseLocalDate(date) : d, dateFormat, { locale: igrpDateFnsLocale(locale) })}</span>
   const timeZone = dateOnly ? "UTC" : (dateOptions?.timeZone ?? tz)
-  return <span>{new Intl.DateTimeFormat(language ?? locale, { ...dateOptions, timeZone }).format(d)}</span>
+  return <span>{igrpDateTimeFormat(language ?? locale, { ...dateOptions, timeZone }).format(d)}</span>
 }
 
 function IGRPDataTableCellLink({

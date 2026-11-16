@@ -92,7 +92,7 @@ export function UsersTable({ data, onDelete }: { data: User[]; onDelete: (u: Use
 | --- | --- | --- |
 | `columns`, `data` | — | Stable references. |
 | `actions?: IGRPDataTableAction<T>[]` | | Row actions. See below. |
-| `showPagination` | `false` | The footer only shows when the row count is greater than the page size. |
+| `showPagination` | `false` | The footer only shows when the row count is greater than the page size. Without it, client mode renders every row on one page. |
 | `pageSizePagination` | `[50, 100, 150, 200]` | The page-size options; the first is the initial size. `pagination={{ type, pageSizeOptions, defaultPageSize }}` is the grouped form and wins. |
 | `isNumericPagination` | `false` | Numbered pages instead of prev/next. |
 | `showFilter` / `showToggleColumn` | `false` | Turn on the filter bar / column-visibility toggle. Filters don't render without one of them. |

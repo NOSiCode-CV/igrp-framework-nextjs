@@ -6,9 +6,9 @@ import {
   Button,
   IGRP_META_THEME_COLORS,
   useIGRPMetaColor,
-  IGRPIcon,
   cn,
 } from '@igrp/igrp-framework-react-design-system';
+import { MoonIcon, SunIcon } from 'lucide-react';
 
 import { useIGRPChromeI18n } from '../i18n/context.js';
 import { IGRP_CHROME_STRINGS_PT, type IGRPModeSwitcherLabels } from '../i18n/strings.js';
@@ -31,6 +31,7 @@ function IGRPTemplateModeSwitcher({ labels: labelOverrides }: IGRPTemplateModeSw
   const { setMetaColor } = useIGRPMetaColor();
 
   // `false` on the server and during hydration, `true` after — without an effect.
+  // Only picks the action label: `resolvedTheme` is unknown until then, the icons are not.
   const mounted = useSyncExternalStore(
     subscribeNever,
     () => true,
@@ -50,22 +51,11 @@ function IGRPTemplateModeSwitcher({ labels: labelOverrides }: IGRPTemplateModeSw
     setMetaColor(next === 'dark' ? IGRP_META_THEME_COLORS.dark : IGRP_META_THEME_COLORS.light);
   }, [isDark, setTheme, setMetaColor]);
 
-  if (!mounted) {
-    return (
-      <Button
-        variant="ghost"
-        size="icon"
-        className={cn('size-6')}
-        aria-label={labels.toggle}
-        disabled
-      >
-        <div className={cn('size-4')} aria-hidden="true" />
-        <span className={cn('sr-only')}>{labels.toggle}</span>
-      </Button>
-    );
-  }
-
-  const actionLabel = isDark ? labels.switchToLight : labels.switchToDark;
+  const actionLabel = !mounted
+    ? labels.toggle
+    : isDark
+      ? labels.switchToLight
+      : labels.switchToDark;
 
   return (
     <Button
@@ -74,24 +64,25 @@ function IGRPTemplateModeSwitcher({ labels: labelOverrides }: IGRPTemplateModeSw
       className={cn('size-6 relative overflow-hidden')}
       onClick={toggleTheme}
       aria-label={actionLabel}
-      aria-pressed={isDark}
+      aria-pressed={mounted ? isDark : undefined}
     >
+      {/* Both icons always render; the `.dark` class next-themes sets before paint picks one. */}
       <div className={cn('relative size-4 flex items-center justify-center')}>
-        <IGRPIcon
-          iconName="Sun"
+        <SunIcon
+          size={16}
           strokeWidth={2}
           className={cn(
             'absolute transition-all duration-300 rotate-90 scale-0 opacity-0',
-            isDark && 'rotate-0 scale-100 opacity-100',
+            'dark:rotate-0 dark:scale-100 dark:opacity-100',
           )}
           aria-hidden="true"
         />
-        <IGRPIcon
-          iconName="Moon"
+        <MoonIcon
+          size={16}
           strokeWidth={2}
           className={cn(
             'absolute transition-all duration-300 rotate-0 scale-100 opacity-100',
-            isDark && 'rotate-90 scale-0 opacity-0',
+            'dark:rotate-90 dark:scale-0 dark:opacity-0',
           )}
           aria-hidden="true"
         />

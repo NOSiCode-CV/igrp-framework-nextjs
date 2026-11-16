@@ -17,6 +17,7 @@ import { Alert, AlertDescription, AlertTitle } from "../../primitives/alert.js"
 import { Progress } from "../../primitives/progress.js"
 import { IGRPLabel } from "../label.js"
 import { Field, FieldDescription, FieldError } from "../../primitives/field.js"
+import { igrpNumberFormat } from "../../../lib/intl.js"
 
 // ---------------------------------------------------------------------------
 // Types
@@ -236,7 +237,7 @@ function IGRPDropzoneInternal({
         : bytes < 1024 * 1024
           ? [bytes / 1024, "kilobyte"]
           : [bytes / (1024 * 1024), "megabyte"]
-    return new Intl.NumberFormat(locale, { style: "unit", unit, maximumFractionDigits: 1 }).format(value)
+    return igrpNumberFormat(locale, { style: "unit", unit, maximumFractionDigits: 1 }).format(value)
   }
 
   const formatAcceptedTypes = () => {

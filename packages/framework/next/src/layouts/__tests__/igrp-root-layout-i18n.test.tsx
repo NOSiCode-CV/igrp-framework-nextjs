@@ -13,9 +13,12 @@ const DsProvider = (p: unknown) => ({ __marker: 'ds', p });
 vi.mock('@igrp/igrp-framework-react-design-system', () => ({ IGRPI18nProvider: DsProvider }));
 const ChromeProvider = (p: unknown) => ({ __marker: 'chrome', p });
 vi.mock('next-intl/server', () => ({
-  getMessages: vi.fn(async () => ({ app: { hi: 'Salut' } })),
+  getMessages: vi.fn(async () => ({ app: { hi: 'Salut' }, other: { x: 'y' } })),
 }));
-vi.mock('../../lib/startup-sync.js', () => ({ igrpStartupSync: vi.fn() }));
+vi.mock('../../lib/startup-sync.js', () => ({
+  igrpStartupSync: vi.fn(),
+  igrpStartupSyncDone: () => false,
+}));
 vi.mock('../../lib/sync-plan.js', () => ({ planAccessManagementSync: () => null }));
 const Nested = (p: unknown) => ({ __marker: 'nested', p });
 vi.mock('@igrp/framework-next-ui', () => ({
@@ -28,7 +31,7 @@ vi.mock('@igrp/framework-next-ui', () => ({
   IGRP_CHROME_STRINGS_FR: {},
 }));
 const Intl = (p: unknown) => ({ __marker: 'intl', p });
-vi.mock('../../i18n/client/index.js', () => ({ IGRPIntlProvider: Intl }));
+vi.mock('../../i18n/client/provider.js', () => ({ IGRPIntlProvider: Intl }));
 const resolveLocale = vi.fn(async () => 'fr');
 vi.mock('../../i18n/server/resolve.js', () => ({ igrpResolveLocale: resolveLocale }));
 vi.mock('../../i18n/server/strings.js', () => ({
@@ -102,11 +105,17 @@ describe('IGRPRootLayout i18n', () => {
       locale: 'fr',
       formatLocale: 'fr-CA',
       locales: ['pt', 'en', 'fr'],
-      messages: { app: { hi: 'Salut' } },
+      messages: { app: { hi: 'Salut' }, other: { x: 'y' } },
       designSystemStrings: { ds: true },
       chromeStrings: { chrome: true },
       children: 'kids',
     });
+  });
+
+  it('with clientNamespaces sends only those namespaces to the client', async () => {
+    const i18n = igrpDefineI18n({ defaultLocale: 'pt', clientNamespaces: ['app'] });
+    const tree = await IGRPRootLayout({ config: { ...base(), i18n }, children: 'kids' });
+    expect(find(tree, Intl).props.messages).toEqual({ app: { hi: 'Salut' } });
   });
 
   it('an explicit lang prop still wins', async () => {

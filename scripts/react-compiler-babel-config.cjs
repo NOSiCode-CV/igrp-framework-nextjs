@@ -49,19 +49,16 @@ const addImportExtension = require('./babel-plugin-add-import-extension.cjs');
 const USE_CLIENT_DIRECTIVE = /^\s*(['"])use client\1\s*;?\s*$/m;
 
 /**
- * Files that create React context are left uncompiled.
+ * Every client module is compiled, context providers included. Files that
+ * called `createContext` used to be skipped, which left the providers — where a
+ * memoized `value` saves the most re-renders — and everything else in those
+ * files uncompiled for no reason the compiler needed.
  *
- * Previously this was a substring test against the whole file *path*
- * (`context`, `provider`, `index`, ...), which excluded every barrel file and
- * everything under a `providers/` directory whether or not it defined a
- * context. Testing the file contents matches the original intent without the
- * collateral damage.
- *
- * Per-file opt-out for anything else is the compiler's own `"use no memo"`
- * directive, which the source files already use where needed.
+ * The per-file opt-out is the compiler's own `"use no memo"` directive. Use it
+ * where a component reads a mutable external object whose identity never
+ * changes (TanStack `table`/`column`/`row`, react-hook-form's `form`), since
+ * memoization keyed on that object would freeze what it reads.
  */
-const CREATES_CONTEXT = /\bcreateContext\s*[<(]/;
-
 const COMPILABLE_EXTENSIONS = ['.ts', '.tsx', '.js', '.jsx'];
 
 const createReactCompilerConfig = ({ verbose = false } = {}) => ({
@@ -75,11 +72,6 @@ const createReactCompilerConfig = ({ verbose = false } = {}) => ({
     // both pointless and unsafe.
     if (!USE_CLIENT_DIRECTIVE.test(file)) {
       if (verbose) console.log('React compiler - skipping (not a client module): ' + filename);
-      return false;
-    }
-
-    if (CREATES_CONTEXT.test(file)) {
-      if (verbose) console.log('React compiler - skipping (defines React context): ' + filename);
       return false;
     }
 

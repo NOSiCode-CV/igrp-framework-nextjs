@@ -647,6 +647,19 @@ describe('withIGRPAuth — callbacks.session', () => {
 
     expect(result.user?.id).toBe('from-user');
   });
+
+  // The browser never reads it; only server-side logout does, from the JWT.
+  it('keeps idToken off the client session', async () => {
+    const withIGRPAuth = await getFactory();
+    const instance = withIGRPAuth({ env: VALID_ENV });
+    const result = (await instance.authOptions.callbacks!.session!({
+      session: { user: {}, expires: 'x' },
+      token: { sub: 's', accessToken: 'at', idToken: 'it' },
+    } as never)) as { accessToken?: string; idToken?: string };
+
+    expect(result.accessToken).toBe('at');
+    expect(result).not.toHaveProperty('idToken');
+  });
 });
 
 describe('withIGRPAuth — jwt callback rotation recovery', () => {

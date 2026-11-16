@@ -1,4 +1,5 @@
 import { IGRP_DEFAULT_LOCALE } from "../../../i18n/strings.js"
+import { igrpNumberFormat } from "../../../lib/intl.js"
 import type { ChartConfig as ShadCNChartConfig } from "../../primitives/chart.js"
 import {
   type IGRPChartDataItem,
@@ -19,7 +20,7 @@ export const formatChartValue = (
   // Compact only from 1000 up: ratios and percents (0.04, 12.5) keep their precision.
   const options: Intl.NumberFormatOptions =
     Math.abs(value) >= 1000 ? { notation: "compact", maximumFractionDigits: 1 } : { maximumFractionDigits: 2 }
-  return new Intl.NumberFormat(locale, options).format(value)
+  return igrpNumberFormat(locale, options).format(value)
 }
 
 export const getChartHeight = (

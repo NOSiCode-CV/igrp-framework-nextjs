@@ -45,6 +45,38 @@ interface IGRPChatProps {
 }
 
 /**
+ * POSTs the conversation and returns the reply, or why it failed. Never throws:
+ * a rejected fetch (offline, DNS, CORS, aborted request) used to escape as an
+ * unhandled rejection and leave the composer disabled for the rest of the session.
+ * Module scope so the component has no try/catch, which the React Compiler cannot lower.
+ */
+async function fetchChatReply(
+  apiEndpoint: string,
+  messages: IGRPChatMessage[]
+): Promise<{ messages: IGRPChatMessage[] } | { error: string }> {
+  try {
+    const response = await fetch(apiEndpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ messages }),
+    })
+    if (!response.ok) return { error: `request failed with status ${response.status}` }
+
+    const data = await response.json()
+    if (!data.messages || !Array.isArray(data.messages)) return { error: "invalid response format" }
+
+    return {
+      messages: (data.messages as IGRPChatMessage[]).map((m, i) => ({
+        ...m,
+        id: m.id ?? `msg-${Date.now()}-${i}`,
+      })),
+    }
+  } catch (error) {
+    return { error: error instanceof Error ? error.message : "request failed" }
+  }
+}
+
+/**
  * Chat interface with message list, input, and API integration.
  * Sends user messages to the endpoint and displays responses.
  */
@@ -95,37 +127,13 @@ function IGRPChat({ apiEndpoint, labelDescription: labelDescriptionProp, name, i
       ])
     }
 
-    // Every exit path has to clear `isLoading`. A rejected fetch (offline, DNS,
-    // CORS, aborted request) used to escape as an unhandled rejection and leave
-    // the composer disabled for the rest of the session.
-    try {
-      const response = await fetch(apiEndpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: [...messages, userMessage] }),
-      })
-
-      if (!response.ok) {
-        failWith(`request failed with status ${response.status}`)
-        return
-      }
-
-      const data = await response.json()
-      if (!data.messages || !Array.isArray(data.messages)) {
-        failWith("invalid response format")
-        return
-      }
-
-      const newMessages = (data.messages as IGRPChatMessage[]).map((m, i) => ({
-        ...m,
-        id: m.id ?? `msg-${Date.now()}-${i}`,
-      }))
-      setMessages((prev) => [...prev, ...newMessages])
-    } catch (error) {
-      failWith(error instanceof Error ? error.message : "request failed")
-    } finally {
-      setIsLoading(false)
+    const result = await fetchChatReply(apiEndpoint, [...messages, userMessage])
+    if ("error" in result) {
+      failWith(result.error)
+    } else {
+      setMessages((prev) => [...prev, ...result.messages])
     }
+    setIsLoading(false)
   }, [apiEndpoint, input, isLoading, messages, i18n])
 
   return (

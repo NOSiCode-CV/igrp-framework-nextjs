@@ -1,5 +1,6 @@
 import { cookies } from 'next/headers';
 import { after } from 'next/server';
+import type { AbstractIntlMessages } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import {
   IGRPBrandingStyle,
@@ -11,7 +12,7 @@ import { IGRPI18nProvider } from '@igrp/igrp-framework-react-design-system';
 
 import { igrpCheckAccessSession } from '../actions/index.js';
 import { igrpResolveRequestBranding } from '../branding/request.js';
-import { IGRPIntlProvider } from '../i18n/client/index.js';
+import { IGRPIntlProvider } from '../i18n/client/provider.js';
 import {
   IGRP_DEFAULT_FORMAT_LOCALES,
   IGRP_LOCALE_COOKIE,
@@ -25,8 +26,22 @@ import {
   igrpGetChromeStrings,
   igrpGetDesignSystemStrings,
 } from '../i18n/server/strings.js';
-import { igrpStartupSync } from '../lib/startup-sync.js';
+import { igrpStartupSync, igrpStartupSyncDone } from '../lib/startup-sync.js';
 import { planAccessManagementSync } from '../lib/sync-plan.js';
+
+/** `i18n` always stays: `IGRPLocaleSwitcher` reads it on the client. */
+function pickNamespaces(
+  messages: AbstractIntlMessages,
+  namespaces: readonly string[] | undefined,
+): AbstractIntlMessages {
+  if (!namespaces) return messages;
+  const out: AbstractIntlMessages = {};
+  for (const ns of [...namespaces, 'i18n']) {
+    const value = messages[ns];
+    if (value !== undefined) out[ns] = value;
+  }
+  return out;
+}
 
 export type IGRPRootLayoutArgs = {
   readonly children: React.ReactNode;
@@ -78,7 +93,7 @@ export async function IGRPRootLayout({ children, config, lang, nonce }: IGRPRoot
     apiManagementConfig,
   });
 
-  if (syncPlan) {
+  if (syncPlan && !igrpStartupSyncDone()) {
     // Schedule sync post-response — does not block streaming or RSC render.
     after(() => igrpStartupSync(syncPlan));
   }
@@ -87,20 +102,26 @@ export async function IGRPRootLayout({ children, config, lang, nonce }: IGRPRoot
   // registered by the app's createNextIntlPlugin) and the two framework
   // catalogs, then mount the client provider below the session/theme providers.
   const i18n = config.i18n as IGRPI18nConfig | undefined;
-  const intl = i18n
-    ? await (async () => {
-        const locale = await igrpResolveLocale(i18n);
-        return {
-          locale,
-          formatLocale: i18n.formatLocales[locale],
-          locales: i18n.locales,
-          timeZone: i18n.timeZone,
-          messages: await getMessages(),
-          designSystemStrings: igrpGetDesignSystemStrings(i18n, locale),
-          chromeStrings: igrpGetChromeStrings(i18n, locale),
-        };
-      })()
-    : undefined;
+  // Organization Brand. Off by default: with `branding.enabled` not true the
+  // resolver returns `null` before reading a cookie or making a request, and
+  // `IGRPBrandingStyle` renders nothing. Resolved alongside the locale.
+  const [intl, branding] = await Promise.all([
+    i18n
+      ? (async () => {
+          const locale = await igrpResolveLocale(i18n);
+          return {
+            locale,
+            formatLocale: i18n.formatLocales[locale],
+            locales: i18n.locales,
+            timeZone: i18n.timeZone,
+            messages: pickNamespaces(await getMessages(), i18n.clientNamespaces),
+            designSystemStrings: igrpGetDesignSystemStrings(i18n, locale),
+            chromeStrings: igrpGetChromeStrings(i18n, locale),
+          };
+        })()
+      : undefined,
+    igrpResolveRequestBranding(config),
+  ]);
   // Without config.i18n, follow the locale choice cookie on the server so the
   // design system and chrome agree with each other and never flash pt first.
   const cookieLocale = intl
@@ -117,11 +138,6 @@ export async function IGRPRootLayout({ children, config, lang, nonce }: IGRPRoot
   ) : (
     children
   );
-
-  // Organization Brand. Off by default: with `branding.enabled` not true the
-  // resolver returns `null` before reading a cookie or making a request, and
-  // `IGRPBrandingStyle` renders nothing.
-  const branding = await igrpResolveRequestBranding(config);
 
   return (
     <html lang={htmlLang} suppressHydrationWarning className={font}>

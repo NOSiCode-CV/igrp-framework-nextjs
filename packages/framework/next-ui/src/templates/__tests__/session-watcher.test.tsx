@@ -9,9 +9,10 @@ vi.mock('next/navigation', () => ({
   useRouter: () => ({ replace, push: vi.fn() }),
   usePathname: () => pathname,
 }));
+const update = vi.fn().mockResolvedValue(null);
+let expiresAt = Date.now() + 3_600_000;
 vi.mock('@igrp/framework-next-auth/client', () => ({
-  useSession: () => ({ data: { expiresAt: Date.now() + 3_600_000 }, status: 'authenticated' }),
-  getSession: vi.fn().mockResolvedValue(null),
+  useSession: () => ({ data: { expiresAt }, status: 'authenticated', update }),
 }));
 
 const { IGRPSessionWatcher, SESSION_CHECK_MIN_INTERVAL_MS } = await import('../session-watcher.js');
@@ -25,6 +26,8 @@ let container: HTMLDivElement | undefined;
 
 beforeEach(() => {
   replace.mockClear();
+  update.mockClear();
+  expiresAt = Date.now() + 3_600_000;
   pathname = '/apps/hr';
   window.history.replaceState(null, '', '/apps/hr?tab=2');
 });
@@ -102,5 +105,33 @@ describe('IGRPSessionWatcher focus check', () => {
     await refocus();
 
     expect(checkSession).not.toHaveBeenCalled();
+  });
+});
+
+describe('IGRPSessionWatcher session refresh', () => {
+  it('refreshes through update() so this tab sees the rotated session', () => {
+    vi.useFakeTimers();
+    expiresAt = Date.now() + 60_000;
+    mount();
+
+    expect(update).not.toHaveBeenCalled();
+    // Fires ADAPTIVE_REFRESH_LEAD_MS (45s) before expiry.
+    act(() => vi.advanceTimersByTime(15_000));
+    expect(update).toHaveBeenCalledTimes(1);
+  });
+
+  it('refreshes on focus only once the session is stale', async () => {
+    vi.useFakeTimers({ toFake: ['Date'] });
+    mount();
+
+    await refocus();
+    expect(update).not.toHaveBeenCalled();
+
+    vi.setSystemTime(Date.now() + SESSION_CHECK_MIN_INTERVAL_MS);
+    await refocus();
+    expect(update).toHaveBeenCalledTimes(1);
+
+    await refocus();
+    expect(update).toHaveBeenCalledTimes(1);
   });
 });

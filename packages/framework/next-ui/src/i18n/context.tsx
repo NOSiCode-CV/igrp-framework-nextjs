@@ -33,9 +33,23 @@ const subscribeNever = () => () => {};
  * would take down every chrome component, `IGRPGlobalError` included. A value
  * that cannot be decoded is used raw (and then falls back to Portuguese);
  * RFC 6265 surrounding quotes are stripped.
+ *
+ * Runs on every render of every chrome component (it is the store snapshot), so
+ * the parse is cached against the last `document.cookie` string.
  */
+let lastCookie: string | undefined;
+let lastCookieLocale = '';
 function readCookieLocale(): string {
-  const entry = document.cookie.split('; ').find((c) => c.startsWith(`${IGRP_LOCALE_COOKIE}=`));
+  const cookie = document.cookie;
+  if (cookie !== lastCookie) {
+    lastCookie = cookie;
+    lastCookieLocale = parseCookieLocale(cookie);
+  }
+  return lastCookieLocale;
+}
+
+function parseCookieLocale(cookie: string): string {
+  const entry = cookie.split('; ').find((c) => c.startsWith(`${IGRP_LOCALE_COOKIE}=`));
   if (!entry) return '';
   const raw = entry.slice(IGRP_LOCALE_COOKIE.length + 1);
   let value: string;

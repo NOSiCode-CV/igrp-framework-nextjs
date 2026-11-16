@@ -1,7 +1,7 @@
 "use client"
 "use no memo"
 
-import { useCallback, useEffect, useId, useMemo, useReducer } from "react"
+import { useCallback, useEffect, useId, useMemo, useReducer, useRef } from "react"
 import {
   type ColumnDef,
   type ColumnFiltersState,
@@ -74,7 +74,7 @@ interface IGRPDataTableProps<TData, TValue> {
    * recompute its row models. The compiler is off here, so the caller owns this.
    */
   data: TData[]
-  /** Show pagination controls. */
+  /** Show pagination controls. Without them every row renders (no client-side paging). */
   showPagination?: boolean
   /** Use numeric page selector instead of prev/next. */
   isNumericPagination?: boolean
@@ -123,11 +123,14 @@ interface IGRPDataTableProps<TData, TValue> {
   /**
    * Row actions. ≤2 actions render as inline icon buttons; >2 render as a dropdown menu.
    * Use `hidden` / `disabled` per-action callbacks to control visibility per row.
+   *
+   * @remarks Keep the array referentially stable, like `columns` (module scope or
+   * `useMemo`): a new array rebuilds the column model on every parent render.
    */
   actions?: IGRPDataTableAction<TData>[]
   /** Total row count for server-side pagination display (use with onQueryChange). */
   rowCount?: number
-  /** Called whenever pagination, sorting, or filters change. Enables server-side mode. */
+  /** Called whenever pagination, sorting, or filters change. Enables server-side mode. The latest callback is used, so an inline function does not refire it. */
   onQueryChange?: (query: IGRPDataTableQuery) => void
   /** Pagination display configuration. */
   pagination?: IGRPDataTablePaginationConfig
@@ -355,7 +358,8 @@ function IGRPDataTable<TData, TValue>({
     autoResetPageIndex: false,
     autoResetExpanded: false,
 
-    manualPagination: !!onQueryChange,
+    // No pagination UI means no way past page 1, so client-side mode renders every row.
+    manualPagination: !!onQueryChange || !showPagination,
     manualSorting: !!onQueryChange,
     manualFiltering: !!onQueryChange,
     rowCount: onQueryChange ? (rowCount ?? 0) : undefined,
@@ -373,15 +377,21 @@ function IGRPDataTable<TData, TValue>({
   const sorting = table.getState().sorting
   const columnFilters = table.getState().columnFilters
 
+  // Latest callback in a ref: an inline consumer callback must not refire the query.
+  const onQueryChangeRef = useRef(onQueryChange)
   useEffect(() => {
-    if (!onQueryChange) return
-    onQueryChange({
+    onQueryChangeRef.current = onQueryChange
+  })
+  useEffect(() => {
+    const onQuery = onQueryChangeRef.current
+    if (!onQuery) return
+    onQuery({
       page: pageIndex,
       pageSize,
       sorting: sorting.map((s) => ({ id: s.id, desc: s.desc })),
       filters: columnFilters.map((f) => ({ id: f.id, value: f.value })),
     })
-  }, [pageIndex, pageSize, sorting, columnFilters, onQueryChange])
+  }, [pageIndex, pageSize, sorting, columnFilters])
 
   const filterDescriptors = useMemo(
     () =>

@@ -16,8 +16,8 @@ import {
   useIGRPSidebar,
   IGRPUserAvatar,
   igrpGetInitials,
-  IGRPIcon,
 } from '@igrp/igrp-framework-react-design-system';
+import { BellIcon, ChevronsUpDownIcon, LogOutIcon, SettingsIcon, UserIcon } from 'lucide-react';
 
 import { useIGRPChromeI18n } from '../i18n/context.js';
 import { IGRP_CHROME_STRINGS_PT, type IGRPNavUserLabels } from '../i18n/strings.js';
@@ -98,7 +98,7 @@ function IGRPTemplateNavUser({
                     </span>
                     <span className="truncate text-xs">{user.email}</span>
                   </div>
-                  <IGRPIcon iconName="ChevronsUpDown" className="ml-auto" />
+                  <ChevronsUpDownIcon size={16} className="ml-auto" />
                 </>
               )}
             </SidebarMenuButton>
@@ -120,7 +120,7 @@ function IGRPTemplateNavUser({
 
             <DropdownMenuItem asChild className={cn(itemClassName)}>
               <Link href={userProfileUrl}>
-                <IGRPIcon iconName="User" className={iconClassName} />
+                <UserIcon size={16} className={iconClassName} />
                 <span>{labels.profile}</span>
               </Link>
             </DropdownMenuItem>
@@ -130,7 +130,7 @@ function IGRPTemplateNavUser({
               <>
                 <DropdownMenuItem asChild className={cn(itemClassName)}>
                   <Link href={notificationsUrl}>
-                    <IGRPIcon iconName="Bell" className={iconClassName} />
+                    <BellIcon size={16} className={iconClassName} />
                     <span>{labels.notifications}</span>
                   </Link>
                 </DropdownMenuItem>
@@ -141,7 +141,7 @@ function IGRPTemplateNavUser({
             {!isHeader && (
               <DropdownMenuItem asChild className={cn(itemClassName)}>
                 <Link href={settingsUrl}>
-                  <IGRPIcon iconName="Settings" className={iconClassName} />
+                  <SettingsIcon size={16} className={iconClassName} />
                   <span>{labels.settings}</span>
                 </Link>
               </DropdownMenuItem>
@@ -151,7 +151,7 @@ function IGRPTemplateNavUser({
 
             <DropdownMenuItem asChild className={cn(itemClassName)}>
               <Link href={logoutUrl}>
-                <IGRPIcon iconName="LogOut" className={iconClassName} />
+                <LogOutIcon size={16} className={iconClassName} />
                 <span>{labels.logout}</span>
               </Link>
             </DropdownMenuItem>

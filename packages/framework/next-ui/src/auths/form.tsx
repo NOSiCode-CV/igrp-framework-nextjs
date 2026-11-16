@@ -7,13 +7,8 @@ import {
   signIn,
   type AuthProviderId,
 } from '@igrp/framework-next-auth/client';
-import {
-  cn,
-  Alert,
-  AlertDescription,
-  Button,
-  IGRPIcon,
-} from '@igrp/igrp-framework-react-design-system';
+import { cn, Alert, AlertDescription, Button } from '@igrp/igrp-framework-react-design-system';
+import { AlertCircleIcon, LoaderIcon, ShieldCheckIcon } from 'lucide-react';
 import { useIGRPBranding } from '../branding/provider.js';
 import { resolveWideLogo } from '../branding/resolve.js';
 import { IGRPTemplateImage } from '../templates/template-image.js';
@@ -107,12 +102,7 @@ function IGRPAuthForm({
               role="alert"
               aria-live="polite"
             >
-              <IGRPIcon
-                iconName="AlertCircle"
-                className={cn('h-4 w-4')}
-                strokeWidth={2}
-                aria-hidden
-              />
+              <AlertCircleIcon size={16} className={cn('h-4 w-4')} strokeWidth={2} aria-hidden />
               <AlertDescription>{authError}</AlertDescription>
             </Alert>
           )}
@@ -167,8 +157,8 @@ function IGRPAuthForm({
           >
             {isLoading ? (
               <>
-                <IGRPIcon
-                  iconName="Loader"
+                <LoaderIcon
+                  size={16}
                   className={cn('mr-2 animate-spin motion-reduce:animate-none')}
                   strokeWidth={2}
                   aria-hidden
@@ -178,8 +168,8 @@ function IGRPAuthForm({
             ) : (
               <>
                 {loginButton}
-                <IGRPIcon
-                  iconName="ShieldCheck"
+                <ShieldCheckIcon
+                  size={16}
                   className={cn('mr-2 size-6')}
                   strokeWidth={2}
                   aria-hidden

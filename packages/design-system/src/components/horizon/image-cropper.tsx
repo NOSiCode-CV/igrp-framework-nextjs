@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import NextImage from "next/image"
 
 import { Button } from "../primitives/button.js"
@@ -66,6 +66,24 @@ async function getCroppedImg(
   }
 }
 
+/**
+ * Crops and hands the blob to `onCrop`; a throw from either comes back as `error`.
+ * Module scope because the React Compiler cannot lower this try/catch inside a component.
+ */
+async function cropAndDeliver(
+  src: string,
+  area: Area,
+  onCrop?: (blob: Blob) => void
+): Promise<{ blob: Blob | null } | { error: unknown }> {
+  try {
+    const blob = await getCroppedImg(src, area)
+    if (blob) onCrop?.(blob)
+    return { blob }
+  } catch (error) {
+    return { error }
+  }
+}
+
 // ─── Component ───────────────────────────────────────────────────────────────
 
 export function IGRPImageCropper({
@@ -77,7 +95,9 @@ export function IGRPImageCropper({
   className,
 }: IGRPImageCropperProps) {
   const i18n = useIGRPi18n()
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null)
+  // Only read on click: a ref, so dragging the crop area does not re-render on every pointer move.
+  const croppedAreaRef = useRef<Area | null>(null)
+  const [hasCropArea, setHasCropArea] = useState(false)
   const [zoom, setZoom] = useState(1)
   const [croppedImageUrl, setCroppedImageUrl] = useState<string | null>(null)
 
@@ -86,29 +106,28 @@ export function IGRPImageCropper({
   const isCircular = variant === "circular"
 
   const handleCropChange = useCallback((pixels: Area | null) => {
-    setCroppedAreaPixels(pixels)
+    croppedAreaRef.current = pixels
+    setHasCropArea(pixels !== null)
   }, [])
 
   const handleCrop = async () => {
-    if (!croppedAreaPixels) return
+    const area = croppedAreaRef.current
+    if (!area) return
 
-    try {
-      const blob = await getCroppedImg(src, croppedAreaPixels)
-      if (!blob) return
-
-      onCrop?.(blob)
-
-      if (showPreview) {
-        const newUrl = URL.createObjectURL(blob)
-        if (croppedImageUrl) URL.revokeObjectURL(croppedImageUrl)
-        setCroppedImageUrl(newUrl)
-      }
-    } catch (error) {
-      onError?.(error)
+    const result = await cropAndDeliver(src, area, onCrop)
+    if ("error" in result) {
+      onError?.(result.error)
       if (showPreview && croppedImageUrl) {
         URL.revokeObjectURL(croppedImageUrl)
         setCroppedImageUrl(null)
       }
+      return
+    }
+
+    if (result.blob && showPreview) {
+      const newUrl = URL.createObjectURL(result.blob)
+      if (croppedImageUrl) URL.revokeObjectURL(croppedImageUrl)
+      setCroppedImageUrl(newUrl)
     }
   }
 
@@ -154,7 +173,7 @@ export function IGRPImageCropper({
             </div>
           )}
 
-          <Button onClick={handleCrop} disabled={!croppedAreaPixels} className={cn("w-full")}>
+          <Button onClick={handleCrop} disabled={!hasCropArea} className={cn("w-full")}>
             {cropLabel ?? i18n.imageCropper.crop}
           </Button>
         </div>

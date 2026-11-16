@@ -631,6 +631,13 @@
       "cliVersion": "0.2.0-beta.26",
       "manifestHash": "005b179cce5537d1",
       "payloadHash": "b11a8c0e41b5955a"
+    },
+    {
+      "id": "90-session-focus-refetch-off",
+      "appliedAt": "2026-11-16T00:00:00.000Z",
+      "cliVersion": "0.2.0-beta.26",
+      "manifestHash": "16a1a4f935ea4020",
+      "payloadHash": "3581a634af368875"
     }
   ]
 }

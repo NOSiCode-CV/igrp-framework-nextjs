@@ -3,7 +3,8 @@
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { unstable_rethrow } from 'next/navigation';
-import { cn, IGRPButton, IGRPIcon } from '@igrp/igrp-framework-react-design-system';
+import { cn, IGRPButton } from '@igrp/igrp-framework-react-design-system';
+import { HomeIcon } from 'lucide-react';
 
 import { useIGRPChromeI18n } from '../i18n/context.js';
 import { igrpResolveErrorCopy, type IGRPErrorCopyResolver } from '../i18n/error-copy.js';
@@ -147,7 +148,7 @@ function IGRPSegmentError({
             </IGRPButton>
             <IGRPButton asChild variant="outline">
               <Link href={homeHref}>
-                <IGRPIcon iconName="Home" className={cn('mr-2 h-4 w-4')} aria-hidden="true" />
+                <HomeIcon size={16} className={cn('mr-2 h-4 w-4')} aria-hidden="true" />
                 {labels.home}
               </Link>
             </IGRPButton>

@@ -2,7 +2,7 @@
 // `useForm` returns the same object every render, so compiler memoization would freeze `children(form)`.
 "use no memo"
 
-import { useCallback, useEffect, useId, useRef, useState } from "react"
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react"
 import { type Mode, useForm, type UseFormReturn, type Resolver } from "react-hook-form"
 import { toast } from "sonner"
 import { z } from "zod"
@@ -79,8 +79,9 @@ export interface IGRPFormProps<TSchema extends AnyZod> {
   /** CSS classes for the grid wrapping form fields. */
   gridClassName?: string
   /**
-   * Form content (IGRPFormField, inputs, etc.), or a function of the form instance. The function form
-   * re-renders on `form.watch(...)` changes, so it can switch fields on a watched value.
+   * Form content (IGRPFormField, inputs, etc.), or a function of the form instance. To switch fields on a
+   * value, read it with `useWatch({ name })` in a child component: `form.watch(...)` inside this function
+   * subscribes the form root, so every keystroke in that field re-renders the whole form.
    */
   children: React.ReactNode | ((form: UseFormReturn<InputOf<TSchema>, unknown, OutputOf<TSchema>>) => React.ReactNode)
   /** HTML id attribute. */
@@ -234,8 +235,14 @@ function IGRPForm<TSchema extends AnyZod>({
     [disabled, form, handleSubmit]
   )
 
+  // The compiler is off in this file, so memoize by hand: a fresh object re-renders every consumer.
+  const contextValue = useMemo(
+    () => ({ form, isSubmitting, formError, disabled }),
+    [form, isSubmitting, formError, disabled]
+  )
+
   return (
-    <IGRPFormContext.Provider value={{ form, isSubmitting, formError, disabled }}>
+    <IGRPFormContext.Provider value={contextValue}>
       <Form {...form}>
         <form className={className} onSubmit={handleFormSubmit} noValidate id={ref}>
           {formError && (

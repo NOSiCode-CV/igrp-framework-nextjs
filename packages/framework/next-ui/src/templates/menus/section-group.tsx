@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import {
   cn,
-  IGRPIcon,
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
@@ -12,8 +11,9 @@ import {
   SidebarMenu,
   useIGRPSidebar,
 } from '@igrp/igrp-framework-react-design-system';
+import { ChevronRightIcon } from 'lucide-react';
 
-import type { Section } from './utils.js';
+import { activeHrefWithin, type Section } from './utils.js';
 import type { IGRPMenuLabels } from './labels.js';
 import { FolderMenuItem } from './folder-menu-item.js';
 import { LeafMenuItem } from './leaf-menu-item.js';
@@ -38,14 +38,14 @@ export function SectionGroup({ section, activeHref, labels }: SectionGroupProps)
             <FolderMenuItem
               key={`folder-${node.item.id ?? node.item.code}`}
               node={node}
-              activeHref={activeHref}
+              activeHref={activeHrefWithin(node, activeHref)}
               labels={labels}
             />
           ) : (
             <LeafMenuItem
               key={`leaf-${node.item.id ?? node.item.code}`}
               node={node}
-              activeHref={activeHref}
+              activeHref={activeHrefWithin(node, activeHref)}
               labels={labels}
             />
           ),
@@ -71,8 +71,8 @@ export function SectionGroup({ section, activeHref, labels }: SectionGroupProps)
             )}
           >
             {section.label}
-            <IGRPIcon
-              iconName="ChevronRight"
+            <ChevronRightIcon
+              size={16}
               className={cn(
                 'ml-auto size-3.5 shrink-0 transition-[transform,opacity] duration-200',
                 'group-data-[state=open]/collapsible-group:rotate-90',

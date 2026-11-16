@@ -18,6 +18,10 @@ function hasRegion(tag: string) {
   }
 }
 
+// Module scope: the React Compiler bails on a tagged template whose cooked and raw values differ.
+const RTL_NEXT_ICON = String.raw`rtl:**:[.rdp-button\_next>svg]:rotate-180`
+const RTL_PREVIOUS_ICON = String.raw`rtl:**:[.rdp-button\_previous>svg]:rotate-180`
+
 function Calendar({
   className,
   classNames,
@@ -47,8 +51,8 @@ function Calendar({
       showOutsideDays={showOutsideDays}
       className={cn(
         "group/calendar bg-background p-3 [--cell-radius:var(--radius-md)] [--cell-size:--spacing(8)] in-data-[slot=card-content]:bg-transparent in-data-[slot=popover-content]:bg-transparent",
-        String.raw`rtl:**:[.rdp-button\_next>svg]:rotate-180`,
-        String.raw`rtl:**:[.rdp-button\_previous>svg]:rotate-180`,
+        RTL_NEXT_ICON,
+        RTL_PREVIOUS_ICON,
         className
       )}
       captionLayout={captionLayout}

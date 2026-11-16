@@ -1,18 +1,8 @@
 'use client';
 
-import { Fragment, useCallback, useEffect, useMemo, useState, useSyncExternalStore } from 'react';
-import {
-  IGRPIcon,
-  Button,
-  Command,
-  CommandDialog,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-  CommandSeparator,
-} from '@igrp/igrp-framework-react-design-system';
+import { lazy, Suspense, useEffect, useState, useSyncExternalStore } from 'react';
+import { Button } from '@igrp/igrp-framework-react-design-system';
+import { SearchIcon } from 'lucide-react';
 
 import { useIGRPChromeI18n } from '../i18n/context.js';
 import { IGRP_CHROME_STRINGS_PT, type IGRPCommandSearchLabels } from '../i18n/strings.js';
@@ -46,11 +36,19 @@ interface IGRPTemplateCommandSearchProps {
 const subscribeNever = () => () => {};
 const readIsMac = () => /Mac|iPhone|iPad|iPod/i.test(navigator.platform || navigator.userAgent);
 
+// The dialog (cmdk + Radix dialog) loads on intent: trigger hover/focus or the first ⌘K.
+const loadCommandPalette = () => import('./command-palette.js');
+const IGRPCommandPalette = lazy(() =>
+  loadCommandPalette().then((m) => ({ default: m.IGRPCommandPalette })),
+);
+
 function IGRPTemplateCommandSearch({
   commands = [],
   labels: labelOverrides,
 }: IGRPTemplateCommandSearchProps) {
   const [open, setOpen] = useState(false);
+  // Mounted on the first open and kept, so closing still runs the dialog's own exit.
+  const [everOpened, setEverOpened] = useState(false);
   // The shortcut accepts Cmd OR Ctrl, but the hint used to read the Cmd glyph
   // everywhere. The server snapshot is `false`, so hydration matches the server
   // markup and the client re-renders with the real platform.
@@ -67,6 +65,8 @@ function IGRPTemplateCommandSearch({
     const down = (e: KeyboardEvent) => {
       if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
+        void loadCommandPalette();
+        setEverOpened(true);
         setOpen((prev) => !prev);
       }
     };
@@ -77,34 +77,23 @@ function IGRPTemplateCommandSearch({
     };
   }, []);
 
-  const runCommand = useCallback((command: () => unknown) => {
-    setOpen(false);
-    command();
-  }, []);
-
-  // Group commands by their `group` field. Items without a group are collected under undefined.
-  const grouped = useMemo(
-    () =>
-      commands.reduce<Map<string | undefined, IGRPCommandItem[]>>((acc, item) => {
-        const key = item.group;
-        const list = acc.get(key) ?? [];
-        list.push(item);
-        acc.set(key, list);
-        return acc;
-      }, new Map()),
-    [commands],
-  );
+  const preload = () => void loadCommandPalette();
 
   return (
     <>
       <Button
-        onClick={() => setOpen(true)}
+        onClick={() => {
+          setEverOpened(true);
+          setOpen(true);
+        }}
+        onPointerEnter={preload}
+        onFocus={preload}
         variant="outline"
         size="lg"
         className="justify-between focus-visible:outline-none focus-visible:ring-1 border-input px-3 shadow-none md:flex-none sm:w-40 lg:w-52"
       >
         <span className="flex items-center">
-          <IGRPIcon iconName="Search" className="mr-1 size-3" />
+          <SearchIcon size={16} className="mr-1 size-3" />
           <span>{labels.trigger}</span>
         </span>
         <kbd className="pointer-events-none select-none flex items-center gap-1 rounded border px-1 py-1 font-mono text-[10px] font-medium">
@@ -112,71 +101,18 @@ function IGRPTemplateCommandSearch({
           <span className="text-xs">{isMac ? '⌘' : 'Ctrl'}</span>K
         </kbd>
       </Button>
-      <CommandDialog
-        open={open}
-        onOpenChange={setOpen}
-        title={labels.dialogTitle}
-        description={labels.dialogDescription}
-      >
-        {/* The design system's `CommandDialog` (current shadcn shape) renders its
-            children straight into `DialogContent` — it no longer supplies the cmdk
-            root. Without this `Command`, cmdk's store context is undefined and
-            `CommandInput` throws on mount, taking the whole header down. */}
-        {/* Palette-only spacing. The input wrapper and InputGroup take no
-            className from `CommandInput`, so they are reached through their
-            `data-slot`s; the item gap goes on cmdk's `[cmdk-group-items]` list. */}
-        <Command
-          filter={filterByKeywords}
-          className="p-2 **:data-[slot=command-input-wrapper]:pb-2 **:data-[slot=input-group]:h-10!"
-        >
-          <CommandInput placeholder={labels.placeholder} />
-          <CommandList className="max-h-96 scroll-py-2">
-            <CommandEmpty>{labels.empty}</CommandEmpty>
-            {Array.from(grouped.entries()).map(([group, items], groupIndex) => (
-              <Fragment key={group ?? 'ungrouped'}>
-                {groupIndex > 0 && <CommandSeparator className="my-2" />}
-                <CommandGroup
-                  className="**:[[cmdk-group-heading]]:px-3 **:[[cmdk-group-heading]]:pb-2 **:[[cmdk-group-items]]:flex **:[[cmdk-group-items]]:flex-col **:[[cmdk-group-items]]:gap-1"
-                  heading={group}
-                >
-                  {items.map((item, index) => {
-                    // cmdk selects by `value` (the label by default), so duplicate labels
-                    // highlighted together and Enter ran the first; filter on `keywords`.
-                    const value = item.id ?? `${group ?? ''}/${item.label}/${index}`;
-                    return (
-                      <CommandItem
-                        key={value}
-                        value={value}
-                        keywords={[item.label, group ?? '']}
-                        className="cursor-pointer gap-3 px-3 py-2.5"
-                        onSelect={() => runCommand(item.onSelect)}
-                      >
-                        {item.icon && <IGRPIcon iconName={item.icon} />}
-                        <span>{item.label}</span>
-                      </CommandItem>
-                    );
-                  })}
-                </CommandGroup>
-              </Fragment>
-            ))}
-          </CommandList>
-        </Command>
-      </CommandDialog>
+      {everOpened && (
+        <Suspense fallback={null}>
+          <IGRPCommandPalette
+            open={open}
+            onOpenChange={setOpen}
+            commands={commands}
+            labels={labels}
+          />
+        </Suspense>
+      )}
     </>
   );
-}
-
-const fold = (text: string) => text.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase();
-
-/**
- * cmdk scores `value` too; ours is a unique id/index, so match the keywords only.
- * cmdk's own `commandScore` is not exported, so: every search token must occur in
- * some keyword word ("rel con" finds "Relatórios Contabilísticos").
- */
-function filterByKeywords(_value: string, search: string, keywords?: string[]): number {
-  const words = fold((keywords ?? []).join(' ')).split(/\s+/);
-  const tokens = fold(search).split(/\s+/).filter(Boolean);
-  return tokens.every((token) => words.some((word) => word.includes(token))) ? 1 : 0;
 }
 
 export { IGRPTemplateCommandSearch, type IGRPTemplateCommandSearchProps };

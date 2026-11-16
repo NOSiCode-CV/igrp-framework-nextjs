@@ -51,6 +51,19 @@ function inOptionOrder(codes: Iterable<string>, options: IGRPOptionsProps[]): st
   return [...options.map((o) => o.value).filter((v) => set.has(v)), ...[...set].filter((v) => !known.has(v))]
 }
 
+/** Options split by `group`, in first-seen group order; one unnamed group when none has a `group`. */
+function groupOptions(options: IGRPOptionsProps[]): { heading: string | undefined; options: IGRPOptionsProps[] }[] {
+  if (!options.some((o) => o.group)) return [{ heading: undefined, options }]
+  const byGroup = new Map<string, IGRPOptionsProps[]>()
+  for (const option of options) {
+    const key = option.group ?? ""
+    const group = byGroup.get(key)
+    if (group) group.push(option)
+    else byGroup.set(key, [option])
+  }
+  return [...byGroup].map(([heading, groupOptions]) => ({ heading: heading || undefined, options: groupOptions }))
+}
+
 const fill = (template: string, values: Record<string, string | number>) =>
   template.replace(/\{(\w+)\}/g, (match, key: string) => (key in values ? String(values[key]) : match))
 
@@ -147,15 +160,7 @@ function MultiSelectControl({
   const [open, setOpen] = useState(false)
 
   const optionByValue = useMemo(() => new Map(options.map((o) => [o.value, o])), [options])
-  const groups = useMemo(() => {
-    if (!options.some((o) => o.group)) return [{ heading: undefined, options }]
-    const byGroup = new Map<string, IGRPOptionsProps[]>()
-    for (const option of options) {
-      const key = option.group ?? ""
-      byGroup.set(key, [...(byGroup.get(key) ?? []), option])
-    }
-    return [...byGroup].map(([heading, groupOptions]) => ({ heading: heading || undefined, options: groupOptions }))
-  }, [options])
+  const groups = useMemo(() => groupOptions(options), [options])
 
   const selected = new Set(selection)
   const enabledValues = options.filter((o) => !o.disabled).map((o) => o.value)

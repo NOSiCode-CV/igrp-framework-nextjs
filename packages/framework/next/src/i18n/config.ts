@@ -150,6 +150,8 @@ export type IGRPI18nOverrides = Partial<
 
 export interface IGRPI18nConfig extends IGRPI18nConfigBase {
   readonly overrides?: IGRPI18nOverrides;
+  /** See {@link IGRPI18nOptions.clientNamespaces}. */
+  readonly clientNamespaces?: readonly string[];
 }
 
 export interface IGRPI18nOptions {
@@ -163,6 +165,12 @@ export interface IGRPI18nOptions {
   /** Its presence selects `session-first` resolution; resolve `false` when there is no session to write to. */
   persistLocale?: (locale: IGRPLocale) => Promise<void | boolean>;
   overrides?: IGRPI18nOverrides;
+  /**
+   * Top-level message namespaces sent to the browser by `IGRPRootLayout`.
+   * Unset (the default) sends the whole merged catalog. The framework's `i18n`
+   * namespace is always included. Server Components keep every namespace.
+   */
+  clientNamespaces?: readonly string[];
 }
 
 /** Validates and freezes the app's i18n configuration. Throws `IgrpConfigError('IGRP_I18N_CONFIG_INVALID')`. */
@@ -199,6 +207,9 @@ export function igrpDefineI18n(options: IGRPI18nOptions): IGRPI18nConfig {
     ...(options.getSessionLocale ? { getSessionLocale: options.getSessionLocale } : {}),
     ...(options.persistLocale ? { persistLocale: options.persistLocale } : {}),
     ...(options.overrides ? { overrides: options.overrides } : {}),
+    ...(options.clientNamespaces
+      ? { clientNamespaces: Object.freeze([...options.clientNamespaces]) }
+      : {}),
   });
 }
 

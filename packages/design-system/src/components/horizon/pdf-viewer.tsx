@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useCallback, useEffect, useId, useReducer, useRef, useState } from "react"
+import { useCallback, useEffect, useId, useReducer, useState } from "react"
 
 import { IGRPColors } from "../../lib/colors.js"
 import { cn } from "cn"
@@ -22,6 +22,7 @@ import { IGRPHeadline } from "./typography/headline.js"
 import { IGRPText } from "./typography/text.js"
 import { igrpFormatMessage, useIGRPi18n, useIGRPLocale, useIGRPTimeZone } from "../../i18n/index.js"
 import { igrpIsDateOnly } from "../../lib/utilities.js"
+import { igrpDateTimeFormat } from "../../lib/intl.js"
 
 /**
  * Document item shape for PDF viewer.
@@ -77,7 +78,6 @@ type PdfViewerAction =
   | { type: "ERROR" }
   | { type: "FALLBACK_TO_NATIVE" }
   | { type: "TIMEOUT"; viewerPreference: string; viewerEngine: "google" | "native" }
-  | { type: "RESET"; viewerPreference: string }
 
 function pdfViewerReducer(state: PdfViewerState, action: PdfViewerAction): PdfViewerState {
   switch (action.type) {
@@ -87,8 +87,6 @@ function pdfViewerReducer(state: PdfViewerState, action: PdfViewerAction): PdfVi
       return { ...state, frameStatus: "error" }
     case "FALLBACK_TO_NATIVE":
       return { frameStatus: "loading", viewerEngine: "native" }
-    case "RESET":
-      return getInitialPdfViewerState(action.viewerPreference)
     case "TIMEOUT":
       if (action.viewerPreference === "auto" && action.viewerEngine === "google") {
         return { frameStatus: "loading", viewerEngine: "native" }
@@ -115,7 +113,7 @@ const safeFormatDate = (date: string | Date | undefined, locale: string, timeZon
   if (Number.isNaN(parsed.getTime())) return "—"
   if (dateOnly && parsed.toISOString().slice(0, 10) !== date) return "—"
 
-  return new Intl.DateTimeFormat(locale, {
+  return igrpDateTimeFormat(locale, {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
@@ -200,7 +198,8 @@ function IGRPPdfViewer({
             clickable={displayMode === "modal"}
           />
           <IGRPPdfViewerModal
-            key={selectedDocument ? `${selectedDocument.fileUrl}-${viewerPreference}` : "closed"}
+            // A new document remounts the modal, which resets its frame state.
+            key={selectedDocument ? `${selectedDocument.id}-${selectedDocument.fileUrl}-${viewerPreference}` : "closed"}
             open={isModalOpen}
             onClose={() => setIsModalOpen(false)}
             document={selectedDocument || null}
@@ -441,16 +440,6 @@ function IGRPPdfViewerModal({
     }
     dispatch({ type: "ERROR" })
   }, [viewerPreference, viewerEngine])
-
-  const prevDocIdRef = useRef<number | null>(null)
-  useEffect(() => {
-    if (pdfDocument && pdfDocument.id !== prevDocIdRef.current) {
-      prevDocIdRef.current = pdfDocument.id
-      dispatch({ type: "RESET", viewerPreference })
-    } else if (!pdfDocument) {
-      prevDocIdRef.current = null
-    }
-  }, [pdfDocument, viewerPreference])
 
   useEffect(() => {
     if (frameStatus !== "loading") return

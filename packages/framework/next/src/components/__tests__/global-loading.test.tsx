@@ -43,6 +43,12 @@ describe('IGRPGlobalLoading', () => {
     );
   });
 
+  it('uses a passed name without looking the app up', async () => {
+    expect(renderToStaticMarkup(await IGRPGlobalLoading({ appCode: 'crm', name: 'CRM' }))).toBe(
+      '<div>Loading CRM...</div>',
+    );
+  });
+
   it('without next-intl config, uses the built-in copy for the IGRP_LOCALE cookie', async () => {
     getTranslations.mockRejectedValue(new Error("Couldn't find next-intl config file"));
     cookieValue = 'fr';

@@ -67,6 +67,26 @@ describe('T7 — G2: session still loading', () => {
   });
 });
 
+describe('T7b — G2 after a session has settled once', () => {
+  it('keeps the last live claims while a refetch puts the session back in loading', () => {
+    const out = resolveLiveClaims({
+      seeded: SEEDED,
+      session: { status: 'loading', accessToken: ROTATED_TOKEN },
+      lastSettled: { status: 'authenticated', accessToken: ROTATED_TOKEN },
+    });
+    expect(out.status === 'ok' && out.claims.permissions).toContain('DEPT_IGRP.delete_invoice');
+  });
+
+  it('still uses the seed when no session has settled yet', () => {
+    const out = resolveLiveClaims({
+      seeded: SEEDED,
+      session: { status: 'loading' },
+      lastSettled: null,
+    });
+    expect(out).toBe(SEEDED);
+  });
+});
+
 describe('T8 — G3: non-JWT token (preview / auth bypass)', () => {
   it('leaves the super-admin mock untouched so every gate still passes', () => {
     const out = resolveLiveClaims({

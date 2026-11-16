@@ -4,7 +4,7 @@ import { createContext, useContext, useMemo, useState, type ReactNode } from 're
 import { useOptionalSession } from '@igrp/framework-next-auth/client';
 import type { IGRPClaimsState } from '@igrp/framework-next-auth/claims';
 
-import { resolveLiveClaims } from './resolve-live-claims.js';
+import { resolveLiveClaims, type LiveClaimsSession } from './resolve-live-claims.js';
 
 type PermissionsContextValue = {
   state: IGRPClaimsState;
@@ -46,13 +46,27 @@ export function IGRPSectionPermissions({
   const accessToken = (sessionCtx?.data as { accessToken?: string } | null | undefined)
     ?.accessToken;
 
+  // Last settled session, tracked during render (no effect) so a refetch that
+  // flips `status` back to `loading` keeps gating on the live claims.
+  const [lastSettled, setLastSettled] = useState<LiveClaimsSession | null>(null);
+  if (
+    status &&
+    status !== 'loading' &&
+    (status !== lastSettled?.status || accessToken !== lastSettled?.accessToken)
+  ) {
+    setLastSettled({ status, accessToken });
+  }
+  // Only read while loading, so recording a settled session does not rebuild `live`.
+  const settledWhileLoading = status === 'loading' ? lastSettled : null;
+
   const live = useMemo(
     () =>
       resolveLiveClaims({
         seeded,
         session: status ? { status, accessToken } : null,
+        lastSettled: settledWhileLoading,
       }),
-    [seeded, status, accessToken],
+    [seeded, status, accessToken, settledWhileLoading],
   );
 
   const value = useMemo<PermissionsContextValue>(

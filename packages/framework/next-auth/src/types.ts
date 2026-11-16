@@ -40,6 +40,7 @@ import type { SessionAuthProviderId } from './providers';
 declare module 'next-auth' {
   interface Session extends DefaultSession {
     accessToken?: string;
+    /** @deprecated No longer populated on the session; read `idToken` from the JWT (`getAccessToken()`). */
     idToken?: string;
     authProviderId?: SessionAuthProviderId;
     error?: string;

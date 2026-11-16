@@ -1263,7 +1263,7 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
         return withJwtExtension(igrpToken);
       },
 
-      // SECURITY: copies accessToken + idToken onto the client session by design (the browser AM client needs accessToken); never log/serialize the session client-side. See the Session type JSDoc in session.ts.
+      // SECURITY: copies accessToken onto the client session by design (the browser AM client needs it); never log/serialize the session client-side. idToken stays in the JWT: only server-side logout reads it. See the Session type JSDoc in session.ts.
       async session(params) {
         const { session, token } = params;
         const tokenTyped = token as JWT;
@@ -1273,7 +1273,6 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
           igrpSession = {
             ...igrpSession,
             accessToken: tokenTyped.accessToken,
-            idToken: tokenTyped.idToken,
             authProviderId: tokenTyped.authProviderId,
             error: tokenTyped.error,
             expiresAt: tokenTyped.expiresAt,

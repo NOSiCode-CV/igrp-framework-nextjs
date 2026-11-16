@@ -256,10 +256,12 @@ describe("IGRPMultiSelect — structure and behaviour", () => {
     const grouped = [
       { label: "Alpha", value: "a", group: "Letras" },
       { label: "Um", value: "1", group: "Números" },
+      { label: "Beta", value: "b", group: "Letras" },
     ]
     const { unmount } = render(<IGRPMultiSelect options={grouped} value={[]} />)
     await user.click(trigger())
-    expect(screen.getByText("Letras")).toBeInTheDocument()
+    const letras = within(screen.getByRole("group", { name: "Letras" })).getAllByRole("option")
+    expect(letras.map((o) => o.textContent)).toEqual(["Alpha", "Beta"])
     expect(screen.getByText("Números")).toBeInTheDocument()
     unmount()
 

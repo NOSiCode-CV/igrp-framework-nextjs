@@ -1,6 +1,10 @@
 // packages/framework/next/src/layouts/providers/sidebar-data-provider.tsx
 import { unstable_rethrow } from 'next/navigation';
-import type { IGRPConfigArgs } from '@igrp/framework-next-types';
+import type {
+  IGRPApplicationArgs,
+  IGRPConfigArgs,
+  IGRPMenuItemArgs,
+} from '@igrp/framework-next-types';
 import { IGRPTemplateSidebar } from '@igrp/framework-next-ui';
 
 import { IgrpLayoutDataError } from '../../errors.js';
@@ -9,6 +13,33 @@ import { igrpResolveLayoutDataSource } from '../../lib/layout-data-source.js';
 import { fetchAppsByUser } from '../../hooks/use-applications.js';
 import { fetchMenus } from '../../hooks/use-menus.js';
 import { fetchCurrentUser } from '../../hooks/use-user.js';
+
+// The sidebar is a client component, so every field here is serialized into the
+// RSC payload. Keep only what next-ui's menus and app switcher read; the
+// required-but-unread array fields are emptied rather than sent.
+function toSidebarMenu(m: IGRPMenuItemArgs): IGRPMenuItemArgs {
+  const { id, name, code, type, position, icon, status, target, url, pageSlug, parentCode } = m;
+  return {
+    id,
+    name,
+    code,
+    type,
+    position,
+    icon,
+    status,
+    target,
+    url,
+    pageSlug,
+    parentCode,
+    applicationCode: m.applicationCode,
+    roles: [],
+  };
+}
+
+function toSidebarApp(a: IGRPApplicationArgs): IGRPApplicationArgs {
+  const { id, code, name, description, status, type, picture, slug, url } = a;
+  return { id, code, name, description, status, type, picture, slug, url, departments: [] };
+}
 
 type SidebarDataProviderProps = {
   config: Pick<IGRPConfigArgs, 'appCode' | 'layoutData' | 'previewMode'>;
@@ -42,10 +73,8 @@ export async function SidebarDataProvider({
     });
   }
 
-  const sidebarData = await layoutData.getSidebarData();
-
   if (previewMode) {
-    return <IGRPTemplateSidebar data={sidebarData} />;
+    return <IGRPTemplateSidebar data={await layoutData.getSidebarData()} />;
   }
 
   if (!appCode) {
@@ -54,6 +83,12 @@ export async function SidebarDataProvider({
       '[igrp-layout]: Código da aplicação não encontrada.',
     );
   }
+
+  // Started alongside the AM calls, but awaited outside their try so its
+  // failures still propagate unwrapped, as before.
+  const sidebarDataPromise = layoutData.getSidebarData();
+  // Observed now so a rejection while the AM calls are pending is not reported unhandled.
+  sidebarDataPromise.catch(() => {});
 
   // Wrapped so the boundary's `onError` reporter gets a stable `code` instead
   // of a bare transport error. `unstable_rethrow` FIRST: these helpers call
@@ -77,13 +112,15 @@ export async function SidebarDataProvider({
     );
   }
 
+  const sidebarData = await sidebarDataPromise;
+
   return (
     <IGRPTemplateSidebar
       data={{
         ...sidebarData,
         user: user ?? undefined,
-        menuItems,
-        apps,
+        menuItems: menuItems.map(toSidebarMenu),
+        apps: apps.map(toSidebarApp),
         appCode,
         // No `showPreviewMode`: the field was removed from `next-types` because
         // nothing read it. A preview-mode badge, if wanted, belongs on an

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { Button, cn, igrpFormatMessage } from '@igrp/igrp-framework-react-design-system';
 
@@ -37,6 +37,11 @@ function IGRPAuthCarousel({
 }: IGRPAuthCarouselProps) {
   const chrome = useIGRPChromeI18n();
   const [currentIndex, setCurrentIndex] = useState(0);
+  const regionRef = useRef<HTMLDivElement>(null);
+  // Slides shown so far. Only these and the next one get an <Image>, so the
+  // login page no longer downloads every slide up front.
+  const [visited, setVisited] = useState<ReadonlySet<number>>(() => new Set([0]));
+  if (!visited.has(currentIndex)) setVisited(new Set(visited).add(currentIndex));
 
   useEffect(() => {
     const prefersReducedMotion =
@@ -45,6 +50,9 @@ function IGRPAuthCarousel({
     if (prefersReducedMotion || carouselItems.length <= 1) return;
 
     const interval = setInterval(() => {
+      // Skip ticks in a background tab or while the carousel is `display: none`
+      // (`hidden md:block` on small screens), so it never cycles unseen.
+      if (document.hidden || regionRef.current?.offsetParent === null) return;
       setCurrentIndex((prevIndex) => (prevIndex + 1) % carouselItems.length);
     }, intervalTime);
     return () => clearInterval(interval);
@@ -56,6 +64,7 @@ function IGRPAuthCarousel({
 
   return (
     <div
+      ref={regionRef}
       className={cn('relative h-full w-full overflow-hidden bg-muted')}
       role="region"
       aria-roledescription="carousel"
@@ -64,6 +73,8 @@ function IGRPAuthCarousel({
       <div className={cn('relative h-full')}>
         {carouselItems.map((item, index) => {
           const isCurrent = index === currentIndex;
+          const shouldLoad =
+            visited.has(index) || index === (currentIndex + 1) % carouselItems.length;
           return (
             <div
               // Index, not `item.image`: slides are positional and never
@@ -83,20 +94,22 @@ function IGRPAuthCarousel({
                 isCurrent ? 'opacity-100' : 'opacity-0 pointer-events-none',
               )}
             >
-              <Image
-                src={withBasePath(item.image)}
-                alt={item.title}
-                fill
-                // Not `priority`: that emits an unconditional preload, so
-                // viewports where the carousel is hidden (`hidden md:block` in
-                // the stock login page) still download the first slide. Lazy
-                // images inside `display: none` are never fetched; where the
-                // carousel shows, the first slide is in view and loads at once,
-                // with `fetchPriority` keeping it ahead of the rest as the LCP.
-                fetchPriority={index === 0 ? 'high' : 'auto'}
-                className={cn('object-cover')}
-                sizes={sizes}
-              />
+              {shouldLoad && (
+                <Image
+                  src={withBasePath(item.image)}
+                  alt={item.title}
+                  fill
+                  // Not `priority`: that emits an unconditional preload, so
+                  // viewports where the carousel is hidden (`hidden md:block` in
+                  // the stock login page) still download the first slide. Lazy
+                  // images inside `display: none` are never fetched; where the
+                  // carousel shows, the first slide is in view and loads at once,
+                  // with `fetchPriority` keeping it ahead of the rest as the LCP.
+                  fetchPriority={index === 0 ? 'high' : 'auto'}
+                  className={cn('object-cover')}
+                  sizes={sizes}
+                />
+              )}
 
               {/* Fixed light-on-dark contrast: this caption sits over an arbitrary
                 photo, so theme-inverting semantic tokens would harm readability. */}

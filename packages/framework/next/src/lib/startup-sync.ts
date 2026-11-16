@@ -32,10 +32,19 @@ let retryNotBefore = 0;
 /** Cooldown between sync attempts after a failure. */
 const RETRY_COOLDOWN_MS = 60_000;
 
-/** Test seam — drops the mutex and the cooldown. */
+/** Set once a sync has completed; never unset outside the test seam. */
+let syncDone = false;
+
+/** Test seam — drops the mutex, the cooldown and the completed flag. */
 export function igrpResetStartupSync(): void {
   syncPromise = null;
   retryNotBefore = 0;
+  syncDone = false;
+}
+
+/** Whether a sync has completed in this process, so the layout can stop scheduling `after()` work. */
+export function igrpStartupSyncDone(): boolean {
+  return syncDone;
 }
 
 /**
@@ -89,6 +98,7 @@ export async function igrpStartupSync(plan: IGRPAccessManagementSyncPlan): Promi
         }),
       ]);
 
+      syncDone = true;
       console.info('Access Management sync completed.');
     } catch (e) {
       // Reset so a later request can attempt a retry — but not the very next

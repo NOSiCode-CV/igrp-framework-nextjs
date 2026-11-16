@@ -15,6 +15,11 @@ export interface ResolveLiveClaimsArgs {
   seeded: IGRPClaimsState;
   /** next-auth session context, or `null` when no provider is mounted. */
   session: LiveClaimsSession | null;
+  /**
+   * The last session seen in a settled (non-`loading`) state. While `session`
+   * is loading again (a refetch or `update()`), claims resolve from this one.
+   */
+  lastSettled?: LiveClaimsSession | null;
 }
 
 /** A JWT has exactly three dot-separated, non-empty parts. */
@@ -40,8 +45,11 @@ function isJwtShaped(token: string): boolean {
  *   *throws* without a provider; `IGRPSectionPermissions` works standalone
  *   today and must keep working.
  * - **G2 — loading.** Mirroring the server exactly would blank every gated
- *   control for a frame on each page load. An error state is entered only when
- *   a token is genuinely present and fails to decode.
+ *   control for a frame on each page load. The seed is used only until a
+ *   session has settled once; after that a refetch (`loading` again) keeps
+ *   the last live claims, or gates flicker back to the login-time seed. An
+ *   error state is entered only when a token is genuinely present and fails
+ *   to decode.
  * - **G3 — non-JWT token.** In auth-bypass/preview mode the "token" is the
  *   literal string `preview-token`. Decoding it would fail, G2 would classify
  *   that as a real failure, and **every gate in preview mode would flip to
@@ -49,11 +57,19 @@ function isJwtShaped(token: string): boolean {
  *   `{ isSuperAdmin: true, permissions: [] }` shape, which a real super admin
  *   holding no direct permissions would trip.
  */
-export function resolveLiveClaims({ seeded, session }: ResolveLiveClaimsArgs): IGRPClaimsState {
+export function resolveLiveClaims({
+  seeded,
+  session,
+  lastSettled,
+}: ResolveLiveClaimsArgs): IGRPClaimsState {
   // G1
   if (!session) return seeded;
   // G2
-  if (session.status === 'loading') return seeded;
+  if (session.status === 'loading') {
+    return lastSettled && lastSettled.status !== 'loading'
+      ? resolveLiveClaims({ seeded, session: lastSettled })
+      : seeded;
+  }
   // G3
   const token = session.accessToken;
   if (!token || !isJwtShaped(token)) return seeded;

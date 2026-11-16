@@ -1,4 +1,6 @@
 "use client"
+// `table` keeps its identity across renders, so compiler memoization would freeze `getState()`.
+"use no memo"
 
 import { useCallback } from "react"
 import { type Table } from "@tanstack/react-table"

@@ -1,9 +1,8 @@
 "use client"
 
-import { useId, useMemo, useState, useSyncExternalStore } from "react"
+import { lazy, Suspense, useId, useMemo, useState, useSyncExternalStore } from "react"
 import { useFormContext, Controller } from "react-hook-form"
 import * as RPNInput from "react-phone-number-input"
-import flags from "react-phone-number-input/flags"
 
 import { cn } from "../cn.js"
 import { useIGRPi18n, useIGRPLocale } from "../../../i18n/index.js"
@@ -112,11 +111,31 @@ function CountrySelect({ disabled, value, onChange, options }: CountrySelectProp
   )
 }
 
+// Every country's flag is ~58 KB gzipped: load the set when a phone input first renders, not with the bundle.
+const LazyFlag = lazy(() =>
+  import("react-phone-number-input/flags").then(({ default: flags }) => ({
+    default: function Flag({ country, countryName }: RPNInput.FlagProps) {
+      const CountryFlag = flags[country]
+      return CountryFlag ? (
+        <CountryFlag title={countryName} />
+      ) : (
+        <IGRPIcon iconName="Phone" size={16} aria-hidden="true" />
+      )
+    },
+  }))
+)
+
 function FlagComponent({ country, countryName }: RPNInput.FlagProps) {
-  const Flag = flags[country]
   return (
     <span className={cn("w-5 overflow-hidden rounded-sm")}>
-      {Flag ? <Flag title={countryName} /> : <IGRPIcon iconName="Phone" size={16} aria-hidden="true" />}
+      {country ? (
+        // Same 3:2 box as a flag, so the selector does not shift when the set arrives.
+        <Suspense fallback={<span className={cn("block aspect-[3/2] w-5")} />}>
+          <LazyFlag country={country} countryName={countryName} />
+        </Suspense>
+      ) : (
+        <IGRPIcon iconName="Phone" size={16} aria-hidden="true" />
+      )}
     </span>
   )
 }

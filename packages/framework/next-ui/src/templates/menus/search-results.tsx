@@ -10,6 +10,7 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
 } from '@igrp/igrp-framework-react-design-system';
+import { SearchXIcon } from 'lucide-react';
 
 import type { Section } from './utils.js';
 import {
@@ -119,7 +120,7 @@ export function SearchResults({ sections, query, activeHref, labels }: SearchRes
               'text-muted-foreground',
             )}
           >
-            <IGRPIcon iconName="SearchX" className={cn('size-5 shrink-0')} />
+            <SearchXIcon size={16} className={cn('size-5 shrink-0')} />
             <p className={cn('text-xs')}>{formatMenuLabel(labels.noResults, { query })}</p>
           </div>
         </SidebarGroupContent>

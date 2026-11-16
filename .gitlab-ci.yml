@@ -99,6 +99,39 @@ check_i18n:
     # No hardcoded UI strings in the framework packages either; allowlist non-language literals with `igrp-i18n-ignore`.
     - pnpm lint:i18n:framework
 
+# Each framework package's typecheck, lint and Vitest suite otherwise ran only
+# inside its `release` script, so a regression merged into development surfaced
+# at publish time. Same full, credential-free install as test_storybook.
+# `build:framework` first: packages resolve their workspace dependencies through
+# package "exports", which point at the gitignored dist/.
+verify_framework:
+  stage: verify
+  image: node:22
+  services: []
+  rules:
+    - changes:
+        - packages/framework/next-auth/**/*
+        - packages/framework/next-types/**/*
+        - packages/design-system/**/*
+        - packages/framework/next-ui/**/*
+        - packages/framework/next/**/*
+        - packages/framework/next-i18n/**/*
+        # Shared build config (Babel/React Compiler, check-dist).
+        - scripts/**/*
+        - pnpm-lock.yaml
+        - package.json
+      when: always
+  before_script:
+    - corepack enable
+    - pnpm install --frozen-lockfile
+  script:
+    - pnpm build:framework
+    # `@igrp/framework-next...` = next plus every workspace package it depends on
+    # (next-ui, design-system, next-types, next-auth); next-types has no `test`.
+    - pnpm --filter "@igrp/framework-next..." --filter @igrp/framework-next-i18n run typecheck
+    - pnpm --filter "@igrp/framework-next..." --filter @igrp/framework-next-i18n run lint
+    - pnpm --filter "@igrp/framework-next..." --filter @igrp/framework-next-i18n run test
+
 # The Storybook visual suite is the design system's only UI regression gate — there
 # is no root-level unit test suite. It silently died on 2026-06-25 when Storybook
 # went to 10.x (`@storybook/test-runner` crashed during setup, so *zero* tests ran

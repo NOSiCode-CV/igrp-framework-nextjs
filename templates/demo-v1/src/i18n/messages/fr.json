@@ -40,12 +40,12 @@
       "failed": "Copiez manuellement"
     },
     "intro": {
-      "failing": "L'application répond, mais {count, plural, one {une couche nécessite} other {# couches nécessitent}} votre attention. Voyez ci-dessous ce qui a échoué pour cette requête.",
+      "error": "L'application répond, mais {count, plural, one {une couche nécessite} other {# couches nécessitent}} votre attention. Voyez ci-dessous ce qui a échoué pour cette requête.",
       "preview": "L'application répond en mode aperçu : sans vraie connexion et avec des menus d'exemple.",
       "ok": "L'application répond. Cette requête a traversé toutes les couches ci-dessous."
     },
     "status": {
-      "failing": "Attention requise",
+      "error": "Attention requise",
       "preview": "En aperçu",
       "ok": "Opérationnel"
     },
@@ -53,7 +53,7 @@
     "code": "Code",
     "requestPath": {
       "title": "Le parcours de cette requête",
-      "failing": "{failing} sur {total} {failing, plural, one {couche nécessite} other {couches nécessitent}} votre attention",
+      "error": "{failing} sur {total} {failing, plural, one {couche nécessite} other {couches nécessitent}} votre attention",
       "preview": "Mode aperçu : authentification et données simulées",
       "ok": "{total} sur {total} couches actives"
     },

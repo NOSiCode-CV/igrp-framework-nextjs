@@ -1,19 +1,26 @@
 'use client';
 
 import type { IGRPConfigArgs } from '@igrp/framework-next-types';
-import {
-  cn,
-  IGRPToaster,
-  SidebarInset,
-  SidebarProvider,
-} from '@igrp/igrp-framework-react-design-system';
+import { cn, SidebarInset, SidebarProvider } from '@igrp/igrp-framework-react-design-system';
+
+import { IGRPBreadcrumbsProvider } from './breadcrumbs.js';
+import { IGRPCommandPaletteProvider } from './command-palette.js';
+import { IGRPShellProvider } from './shell.js';
+import { IGRPTemplateToaster } from './toaster.js';
 
 export type IGRPRootProvidersFullProps = {
   sidebar?: React.ReactNode;
   header: React.ReactNode;
   defaultOpen?: boolean;
+  /**
+   * @deprecated Pass `toaster={<IGRPTemplateToaster {...config} />}` instead.
+   * Still used when `toaster` is omitted.
+   */
   toasterConfig?: IGRPConfigArgs['toasterConfig'];
+  /** The toaster element; `null` renders none. Defaults to `IGRPTemplateToaster` with `toasterConfig`. */
+  toaster?: React.ReactNode | null;
   children: React.ReactNode;
+  /** Class of the content wrapper around `children` (merged over `p-4`). */
   className?: string;
 };
 
@@ -22,57 +29,39 @@ export function IGRPRootProvidersFull({
   header,
   defaultOpen,
   toasterConfig,
+  toaster,
   children,
   className,
 }: IGRPRootProvidersFullProps) {
-  // `closeButton` is destructured explicitly rather than swept in by a trailing
-  // `{...toasterConfig}` spread. That spread put `showToaster` — a framework
-  // flag with no meaning to sonner — onto the toaster, and re-applied every raw
-  // value AFTER the defaults resolved, so an explicit `position: undefined`
-  // silently beat the 'bottom-right' default.
-  const {
-    showToaster = true,
-    position = 'bottom-right',
-    theme = 'system',
-    richColors = true,
-    expand = false,
-    duration = 5000,
-    closeButton,
-  } = toasterConfig ?? {};
+  const toasterNode = toaster === undefined ? <IGRPTemplateToaster {...toasterConfig} /> : toaster;
+  const hasSidebar = Boolean(sidebar);
 
-  const toaster = showToaster && (
-    <IGRPToaster
-      position={position}
-      theme={theme}
-      richColors={richColors}
-      expand={expand}
-      duration={duration}
-      closeButton={closeButton}
-    />
-  );
-
-  if (!sidebar) {
-    return (
-      // SidebarProvider is required even without a visible sidebar because
-      // IGRPTemplateNavUser (and SidebarMenuButton) call useIGRPSidebar() unconditionally.
-      <SidebarProvider defaultOpen={defaultOpen}>
-        <div className="flex min-h-screen flex-col w-full">
-          {header}
-          <div className={cn('p-4', className)}>{children}</div>
-          {toaster}
-        </div>
-      </SidebarProvider>
-    );
-  }
-
-  return (
-    <SidebarProvider defaultOpen={defaultOpen}>
+  const shell = hasSidebar ? (
+    <>
       <div className="z-45">{sidebar}</div>
       <SidebarInset className="min-w-0">
         {header}
         <div className={cn('p-4', className)}>{children}</div>
-        {toaster}
+        {toasterNode}
       </SidebarInset>
+    </>
+  ) : (
+    <div className="flex min-h-screen flex-col w-full">
+      {header}
+      <div className={cn('p-4', className)}>{children}</div>
+      {toasterNode}
+    </div>
+  );
+
+  return (
+    // SidebarProvider is required even without a visible sidebar because
+    // IGRPTemplateNavUser (and SidebarMenuButton) call useIGRPSidebar() unconditionally.
+    <SidebarProvider defaultOpen={defaultOpen}>
+      <IGRPShellProvider hasSidebar={hasSidebar}>
+        <IGRPCommandPaletteProvider>
+          <IGRPBreadcrumbsProvider>{shell}</IGRPBreadcrumbsProvider>
+        </IGRPCommandPaletteProvider>
+      </IGRPShellProvider>
     </SidebarProvider>
   );
 }

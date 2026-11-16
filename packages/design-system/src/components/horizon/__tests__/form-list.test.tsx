@@ -1,5 +1,5 @@
 import { StrictMode, useRef, useState } from "react"
-import { describe, expect, it } from "vitest"
+import { describe, expect, it, vi } from "vitest"
 import { render, screen, act } from "@testing-library/react"
 import { z } from "zod"
 
@@ -129,5 +129,39 @@ describe("IGRPFormList in a disabled IGRPForm", () => {
     render(<Harness disabled />)
     await settle()
     expect(screen.getByRole("button", { name: /Adicionar/ })).toHaveAttribute("disabled")
+  })
+})
+
+describe("IGRPFormList mode", () => {
+  function InForm({ mode, onChange }: { mode?: "form" | "standalone"; onChange?: (items: unknown[]) => void }) {
+    const formRef = useRef<IGRPFormHandle<Schema> | null>(null)
+    return (
+      <IGRPForm schema={schema} formRef={formRef} onSubmit={() => {}}>
+        <IGRPFormList
+          id="anexos"
+          mode={mode}
+          value={[STABLE_ITEM, STABLE_ITEM, STABLE_ITEM]}
+          onChange={onChange}
+          renderItem={() => null}
+          computeLabel={(_, index: number) => `Doc ${index + 1}`}
+          defaultItem={STABLE_ITEM}
+        />
+      </IGRPForm>
+    )
+  }
+
+  it('honours value inside IGRPForm when mode="standalone"', async () => {
+    render(<InForm mode="standalone" />)
+    await settle()
+    expect(rowCount()).toBe(3)
+  })
+
+  it("warns in development when value/onChange are passed in form mode", async () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {})
+    render(<InForm onChange={() => {}} />)
+    await settle()
+    expect(rowCount()).toBe(1)
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining('mode="standalone"'))
+    warn.mockRestore()
   })
 })

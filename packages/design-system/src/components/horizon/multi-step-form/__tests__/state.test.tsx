@@ -274,3 +274,41 @@ it("useIGRPMultiStepForm throws outside the provider", () => {
   expect(() => render(<Probe />)).toThrow(/within IGRPMultiStepForm/)
   spy.mockRestore()
 })
+
+describe("controlled step", () => {
+  function Controlled({ onStepChange }: { onStepChange?: (next: number, prev: number) => void }) {
+    const [step, setStep] = useState(2)
+    return (
+      <IGRPMultiStepForm
+        steps={steps3}
+        step={step}
+        onStepChange={(next, prev) => {
+          onStepChange?.(next, prev)
+          setStep(next)
+        }}
+      >
+        <Probe />
+        <button onClick={() => setStep(3)}>external3</button>
+      </IGRPMultiStepForm>
+    )
+  }
+
+  it("starts on step, reports navigation and follows the parent", async () => {
+    const onStepChange = vi.fn()
+    render(<Controlled onStepChange={onStepChange} />)
+    expect(idx()).toBe("2")
+    await click("prev")
+    expect(onStepChange).toHaveBeenCalledWith(1, 2)
+    expect(idx()).toBe("1")
+    await click("external3")
+    expect(idx()).toBe("3")
+  })
+
+  it("does not move without the parent updating step", async () => {
+    const onStepChange = vi.fn()
+    setup({ step: 2, onStepChange })
+    await click("prev")
+    expect(onStepChange).toHaveBeenCalledWith(1, 2)
+    expect(idx()).toBe("2")
+  })
+})

@@ -242,7 +242,7 @@ function IGRPForm<TSchema extends AnyZod>({
   )
 
   return (
-    <IGRPFormContext.Provider value={contextValue}>
+    <IGRPFormContext value={contextValue}>
       <Form {...form}>
         <form className={className} onSubmit={handleFormSubmit} noValidate id={ref}>
           {formError && (
@@ -259,7 +259,7 @@ function IGRPForm<TSchema extends AnyZod>({
           </FieldSet>
         </form>
       </Form>
-    </IGRPFormContext.Provider>
+    </IGRPFormContext>
   )
 }
 

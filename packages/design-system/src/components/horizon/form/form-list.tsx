@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useContext, useEffect, useId, useMemo, useRef, useState } from "react"
+import { useCallback, use, useEffect, useId, useMemo, useRef, useState } from "react"
 import { useFieldArray, useWatch } from "react-hook-form"
 
 import { cn } from "../cn.js"
@@ -72,8 +72,17 @@ interface IGRPFormListProps<TItem>
   /** Called when an item is removed. */
   onItemRemove?: (item: TItem, index: number) => void
 
+  /**
+   * `"form"` binds to the enclosing `IGRPForm` by `name`; `"standalone"` keeps the
+   * items in this component (`value` / `defaultValue` / `onChange`), even inside a
+   * form. Defaults to `"form"` inside `IGRPForm`, `"standalone"` outside it.
+   */
+  mode?: "form" | "standalone"
+  /** Controlled items. Standalone mode only — ignored (with a dev warning) in form mode. */
   value?: TItem[]
+  /** Initial items when uncontrolled. Standalone mode only. */
   defaultValue?: TItem[]
+  /** Called with the new items. Standalone mode only — ignored (with a dev warning) in form mode. */
   onChange?: (items: TItem[]) => void
 }
 
@@ -380,115 +389,42 @@ function FormListLayout<TItem>({
 
 /**
  * Dynamic list of items with add/remove, accordion UI, and optional form integration.
- * Use inside IGRPForm for form mode, or with value/onChange for standalone.
+ * Inside `IGRPForm` it binds to the form by `name` (form mode); outside it is
+ * driven by `value` / `defaultValue` / `onChange` (standalone mode). Pass
+ * `mode="standalone"` to keep a list local to the component inside a form.
  */
 function IGRPFormList<TItem>({
   id,
   name,
-  defaultItem,
-  description,
-  renderItem,
-  computeLabel,
-  badgeValue,
-  className,
-  cardHeaderClassName,
-  cardContentClassName,
-  label,
-  labelClassName,
+  mode,
   iconName = "",
-  iconClassName,
-  iconSize,
   showIcon = true,
   dot = false,
-  variant,
-  color,
-  badgeClassName,
-  addButtonLabel,
-  addButtonIconName = "Plus",
-  addButtonClassName,
-  allowEmpty = false,
-  allowMultipleOpen = false,
-  renderRemoveAction,
-  onItemRemove,
   value,
   defaultValue,
   onChange,
-  ref,
+  ...rest
 }: IGRPFormListProps<TItem> & { ref?: React.Ref<HTMLDivElement> }) {
   const _id = useId()
   const groupId = name ?? id ?? _id
 
-  const formContext = useContext(IGRPFormContext)
-  const isFormMode = !!formContext
+  const formContext = use(IGRPFormContext)
+  // Form mode needs the react-hook-form context, so an explicit `mode="form"` outside a form still runs standalone.
+  const isFormMode = (mode ?? (formContext ? "form" : "standalone")) === "form" && !!formContext
+  const hasStandaloneProps = value !== undefined || defaultValue !== undefined || onChange !== undefined
 
-  if (isFormMode) {
-    return (
-      <FormListFormMode
-        groupId={groupId}
-        defaultItem={defaultItem}
-        description={description}
-        renderItem={renderItem}
-        computeLabel={computeLabel}
-        badgeValue={badgeValue}
-        className={className}
-        cardHeaderClassName={cardHeaderClassName}
-        cardContentClassName={cardContentClassName}
-        label={label}
-        labelClassName={labelClassName}
-        iconName={iconName}
-        iconClassName={iconClassName}
-        iconSize={iconSize}
-        showIcon={showIcon}
-        dot={dot}
-        variant={variant}
-        color={color}
-        badgeClassName={badgeClassName}
-        addButtonLabel={addButtonLabel}
-        addButtonIconName={addButtonIconName}
-        addButtonClassName={addButtonClassName}
-        allowEmpty={allowEmpty}
-        allowMultipleOpen={allowMultipleOpen}
-        renderRemoveAction={renderRemoveAction}
-        onItemRemove={onItemRemove}
-        ref={ref}
-      />
+  useEffect(() => {
+    if (process.env.NODE_ENV === "production" || !isFormMode || !hasStandaloneProps) return
+    console.warn(
+      `IGRPFormList "${groupId}": value/defaultValue/onChange are ignored inside IGRPForm, which owns the items. Pass mode="standalone" to drive the list yourself.`
     )
-  }
+  }, [isFormMode, hasStandaloneProps, groupId])
 
-  return (
-    <FormListStandaloneMode
-      groupId={groupId}
-      defaultItem={defaultItem}
-      description={description}
-      renderItem={renderItem}
-      computeLabel={computeLabel}
-      badgeValue={badgeValue}
-      className={className}
-      cardHeaderClassName={cardHeaderClassName}
-      cardContentClassName={cardContentClassName}
-      label={label}
-      labelClassName={labelClassName}
-      iconName={iconName}
-      iconClassName={iconClassName}
-      iconSize={iconSize}
-      showIcon={showIcon}
-      dot={dot}
-      variant={variant}
-      color={color}
-      badgeClassName={badgeClassName}
-      addButtonLabel={addButtonLabel}
-      addButtonIconName={addButtonIconName}
-      addButtonClassName={addButtonClassName}
-      allowEmpty={allowEmpty}
-      allowMultipleOpen={allowMultipleOpen}
-      renderRemoveAction={renderRemoveAction}
-      onItemRemove={onItemRemove}
-      value={value}
-      defaultValue={defaultValue}
-      onChange={onChange}
-      ref={ref}
-    />
-  )
+  const shared = { ...rest, groupId, iconName, showIcon, dot }
+
+  if (isFormMode) return <FormListFormMode {...shared} />
+
+  return <FormListStandaloneMode {...shared} value={value} defaultValue={defaultValue} onChange={onChange} />
 }
 
 /** @internal Form list when used inside IGRPForm (useFieldArray). */
@@ -520,11 +456,11 @@ function FormListFormMode<TItem>({
   renderRemoveAction,
   onItemRemove,
   ref,
-}: Omit<IGRPFormListProps<TItem>, "value" | "defaultValue" | "onChange" | "id" | "name"> & {
+}: Omit<IGRPFormListProps<TItem>, "value" | "defaultValue" | "onChange" | "id" | "name" | "mode"> & {
   groupId: string
   ref?: React.Ref<HTMLDivElement>
 }) {
-  const formContext = useContext(IGRPFormContext)
+  const formContext = use(IGRPFormContext)
   const disabled = formContext?.disabled
   const form = formContext?.form
 
@@ -720,7 +656,7 @@ function FormListStandaloneMode<TItem>({
   defaultValue,
   onChange,
   ref,
-}: Omit<IGRPFormListProps<TItem>, "name" | "id"> & {
+}: Omit<IGRPFormListProps<TItem>, "name" | "id" | "mode"> & {
   groupId: string
   ref?: React.Ref<HTMLDivElement>
 }) {
@@ -917,9 +853,12 @@ IGRPFormList.displayName = "IGRPFormList"
 
 /**
  * Props for the IGRPStandaloneList component.
- * @deprecated Use `IGRPFormListProps`. Will be removed in the next release.
+ * @deprecated Use `IGRPFormListProps` with `mode="standalone"`.
  */
-interface IGRPStandaloneListProps<TItem> extends Omit<IGRPFormListProps<TItem>, "name" | "defaultItem" | "renderItem"> {
+interface IGRPStandaloneListProps<TItem> extends Omit<
+  IGRPFormListProps<TItem>,
+  "name" | "defaultItem" | "renderItem" | "mode"
+> {
   /** Default item for new entries. */
   defaultItem: TItem
   /** Render function for each item. */
@@ -930,7 +869,8 @@ const noopItemChange = () => {}
 
 /**
  * Standalone dynamic list — always standalone, even inside `IGRPForm`.
- * @deprecated Use `IGRPFormList` with `value` / `onChange` (outside `IGRPForm`). Will be removed in the next release.
+ * Equivalent to `<IGRPFormList mode="standalone" />`.
+ * @deprecated Use `<IGRPFormList mode="standalone" />`.
  */
 function IGRPStandaloneList<TItem>({
   id,

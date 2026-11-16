@@ -21,7 +21,10 @@ interface IGRPChatMessage {
   role: "user" | "assistant" | "system"
   /** Message content (text or URL depending on type). */
   content: string
-  /** Content type for rendering. */
+  /**
+   * Content type for rendering. Unset renders as text; `"button"` renders a button
+   * only when `IGRPChat` has `onAction`, otherwise text.
+   */
   type?: "text" | "image" | "link" | "button"
   /** ISO timestamp. */
   timestamp?: string
@@ -34,8 +37,23 @@ interface IGRPChatMessage {
  * @see IGRPChat
  */
 interface IGRPChatProps {
-  /** API endpoint for POST requests (receives messages, returns new messages). */
-  apiEndpoint: string
+  /**
+   * API endpoint for POST requests: receives `{ messages }`, returns `{ messages }`.
+   * Used when `onSend` is not given.
+   */
+  apiEndpoint?: string
+  /**
+   * Sends the conversation (including the new user message) and resolves with the
+   * reply messages. Replaces the default POST to `apiEndpoint`. A rejection shows
+   * the catalog error message in the transcript.
+   */
+  onSend?: (messages: IGRPChatMessage[]) => Promise<IGRPChatMessage[]>
+  /** Messages shown when the chat mounts. */
+  initialMessages?: IGRPChatMessage[]
+  /** Renders a message's bubble content in place of the built-in text/image/link/button renderers. */
+  renderMessage?: (message: IGRPChatMessage) => React.ReactNode
+  /** Called when the user clicks a `type: "button"` message. Without it those messages render as text. */
+  onAction?: (message: IGRPChatMessage) => void
   /** Placeholder text when there are no messages. */
   labelDescription?: string
   /** HTML name attribute. */
@@ -65,25 +83,53 @@ async function fetchChatReply(
     const data = await response.json()
     if (!data.messages || !Array.isArray(data.messages)) return { error: "invalid response format" }
 
-    return {
-      messages: (data.messages as IGRPChatMessage[]).map((m, i) => ({
-        ...m,
-        id: m.id ?? `msg-${Date.now()}-${i}`,
-      })),
-    }
+    return { messages: withIds(data.messages as IGRPChatMessage[]) }
   } catch (error) {
     return { error: error instanceof Error ? error.message : "request failed" }
   }
 }
 
+const withIds = (messages: IGRPChatMessage[]) =>
+  messages.map((m, i) => ({ ...m, id: m.id ?? `msg-${Date.now()}-${i}` }))
+
+/**
+ * Runs the `onSend` adapter, or the default POST to `apiEndpoint`. Never throws,
+ * like `fetchChatReply`; module scope for the same React Compiler reason.
+ */
+async function requestChatReply(
+  onSend: IGRPChatProps["onSend"],
+  apiEndpoint: string | undefined,
+  messages: IGRPChatMessage[]
+): Promise<{ messages: IGRPChatMessage[] } | { error: string }> {
+  if (!onSend) {
+    return apiEndpoint ? fetchChatReply(apiEndpoint, messages) : { error: "no onSend or apiEndpoint configured" }
+  }
+  try {
+    const reply = await onSend(messages)
+    if (!Array.isArray(reply)) return { error: "onSend did not resolve to an array" }
+    return { messages: withIds(reply) }
+  } catch (error) {
+    return { error: error instanceof Error ? error.message : "onSend failed" }
+  }
+}
+
 /**
  * Chat interface with message list, input, and API integration.
- * Sends user messages to the endpoint and displays responses.
+ * Sends user messages through `onSend` (or to `apiEndpoint`) and displays responses.
  */
-function IGRPChat({ apiEndpoint, labelDescription: labelDescriptionProp, name, id }: IGRPChatProps) {
+function IGRPChat({
+  apiEndpoint,
+  onSend,
+  initialMessages,
+  renderMessage,
+  onAction,
+  labelDescription: labelDescriptionProp,
+  name,
+  id,
+}: IGRPChatProps) {
   const i18n = useIGRPi18n()
   const labelDescription = labelDescriptionProp ?? i18n.chat.description
-  const [messages, setMessages] = useState<IGRPChatMessage[]>([])
+  const [messages, setMessages] = useState<IGRPChatMessage[]>(() => withIds(initialMessages ?? []))
   const [input, setInput] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement | null>(null)
@@ -127,14 +173,44 @@ function IGRPChat({ apiEndpoint, labelDescription: labelDescriptionProp, name, i
       ])
     }
 
-    const result = await fetchChatReply(apiEndpoint, [...messages, userMessage])
+    const result = await requestChatReply(onSend, apiEndpoint, [...messages, userMessage])
     if ("error" in result) {
       failWith(result.error)
     } else {
       setMessages((prev) => [...prev, ...result.messages])
     }
     setIsLoading(false)
-  }, [apiEndpoint, input, isLoading, messages, i18n])
+  }, [apiEndpoint, onSend, input, isLoading, messages, i18n])
+
+  const renderContent = (message: IGRPChatMessage) => {
+    if (renderMessage) return renderMessage(message)
+    if (message.type === "image") {
+      return (
+        <div className={cn("relative aspect-video min-h-[120px] w-full max-w-full")}>
+          <Image
+            src={message.content}
+            alt={i18n.chat.sentContent}
+            fill
+            sizes="(max-width: 768px) 80vw, 400px"
+            className={cn("rounded object-contain")}
+            unoptimized
+          />
+        </div>
+      )
+    }
+    if (message.type === "link") {
+      return (
+        <a href={message.content} className={cn("text-primary underline")} target="_blank" rel="noopener noreferrer">
+          {message.content}
+        </a>
+      )
+    }
+    if (message.type === "button" && onAction) {
+      return <IGRPButton onClick={() => onAction(message)}>{message.content}</IGRPButton>
+    }
+    // Text, an unset type, or a button with nowhere to send the click.
+    return <p>{message.content}</p>
+  }
 
   return (
     <div className={cn("flex h-full flex-col")} id={ref}>
@@ -159,32 +235,7 @@ function IGRPChat({ apiEndpoint, labelDescription: labelDescriptionProp, name, i
                 )}
               </div>
 
-              <div className={cn("max-w-[80%] rounded-lg bg-muted px-4 py-2")}>
-                {message.type === "text" && <p>{message.content} </p>}
-                {message.type === "image" && (
-                  <div className={cn("relative aspect-video min-h-[120px] w-full max-w-full")}>
-                    <Image
-                      src={message.content}
-                      alt={i18n.chat.sentContent}
-                      fill
-                      sizes="(max-width: 768px) 80vw, 400px"
-                      className={cn("rounded object-contain")}
-                      unoptimized
-                    />
-                  </div>
-                )}
-                {message.type === "link" && (
-                  <a
-                    href={message.content}
-                    className={cn("text-primary underline")}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {message.content}
-                  </a>
-                )}
-                {message.type === "button" && <IGRPButton>{message.content}</IGRPButton>}
-              </div>
+              <div className={cn("max-w-[80%] rounded-lg bg-muted px-4 py-2")}>{renderContent(message)}</div>
             </div>
           ))}
           <div ref={messagesEndRef} />

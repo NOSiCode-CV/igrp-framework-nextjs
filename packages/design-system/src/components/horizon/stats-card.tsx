@@ -244,6 +244,44 @@ const igrpStstaCardIconVariants = cva("flex shrink-0 items-center justify-center
   },
 })
 
+/** Icon container treatment. Every appearance colours the icon by `iconVariant`. */
+type IGRPStatsCardIconAppearance = "plain" | "soft" | "outline"
+/** Icon container shape (ignored by the `plain` appearance). */
+type IGRPStatsCardIconShape = "circle" | "square"
+
+const ICON_SHAPE_CLASS: Record<IGRPStatsCardIconShape, string> = { circle: "rounded-full", square: "rounded-md" }
+
+/**
+ * Maps the deprecated `showIconBackground` / `iconBackground` / `showIconBorder`
+ * trio onto an appearance + shape where the intent is unambiguous. Returns
+ * `undefined` for the combinations that keep the legacy cva classes (background
+ * plus border, or a background with no shape).
+ */
+function resolveLegacyIconAppearance(
+  showIconBackground: boolean,
+  iconBackground: VariantProps<typeof igrpStstaCardIconVariants>["background"],
+  showIconBorder: boolean
+): { appearance: IGRPStatsCardIconAppearance; shape?: IGRPStatsCardIconShape } | undefined {
+  const shape = iconBackground === "rounded" ? "circle" : iconBackground === "square" ? "square" : undefined
+  if (showIconBackground) return shape && !showIconBorder ? { appearance: "soft", shape } : undefined
+  return { appearance: showIconBorder ? "outline" : "plain", shape }
+}
+
+/** Classes for an icon appearance; `shapeClassName` is only applied to `soft` / `outline`. */
+function igrpStatsCardIconAppearanceClassName(
+  appearance: IGRPStatsCardIconAppearance,
+  variant: IGRPColorVariants,
+  shapeClassName?: string
+) {
+  const colors = IGRPColors.outline[variant]
+  return cn(
+    colors.text,
+    appearance === "soft" && colors.bgCardIcon,
+    appearance === "outline" && "border border-current/20",
+    appearance !== "plain" && shapeClassName
+  )
+}
+
 /**
  * Props for the IGRPStatsCard component.
  * @see IGRPStatsCard
@@ -278,12 +316,29 @@ interface IGRPStatsCardProps
   cardBorderPosition?: VariantProps<typeof igrpStatsCardVariants>["borderPosition"]
   /** Color theme for border and icon. */
   cardVariant?: IGRPColorVariants
-  /** Show background behind icon. */
+  /**
+   * Show background behind icon.
+   * @deprecated Use `iconAppearance="soft"`. Some combinations with `iconBackground` / `showIconBorder` dropped the `iconVariant` colour.
+   */
   showIconBackground?: boolean
-  /** Icon background shape. */
+  /**
+   * Icon background shape.
+   * @deprecated Use `iconShape` (`"rounded"` → `"circle"`, `"square"` → `"square"`).
+   */
   iconBackground?: VariantProps<typeof igrpStstaCardIconVariants>["background"]
-  /** Show border around icon. */
+  /**
+   * Show border around icon.
+   * @deprecated Use `iconAppearance="outline"`.
+   */
   showIconBorder?: boolean
+  /**
+   * Icon container treatment: `plain` (coloured icon only), `soft` (tinted
+   * background) or `outline` (tinted border). Always coloured by `iconVariant`.
+   * When set, the deprecated `showIconBackground` / `iconBackground` / `showIconBorder` are ignored.
+   */
+  iconAppearance?: IGRPStatsCardIconAppearance
+  /** Icon container shape for `soft` / `outline`. Default `"circle"`. */
+  iconShape?: IGRPStatsCardIconShape
   /** Icon color variant. */
   iconVariant?: IGRPColorVariants
   /** Layout: title/value at start or end. */
@@ -312,6 +367,8 @@ function IGRPStatsCard({
   showIconBackground = false,
   iconBackground = "none",
   showIconBorder = false,
+  iconAppearance,
+  iconShape,
   iconVariant = "primary",
   iconClassName,
   image,
@@ -397,6 +454,8 @@ function IGRPStatsCard({
         showIconBackground={showIconBackground}
         iconBackground={iconBackground}
         showIconBorder={showIconBorder}
+        iconAppearance={iconAppearance}
+        iconShape={iconShape}
         iconVariant={iconVariant}
         iconClassName={iconClassName}
         image={image}
@@ -418,6 +477,8 @@ interface IGRPStatsCardIconProps {
   showIconBackground: boolean
   iconBackground?: VariantProps<typeof igrpStstaCardIconVariants>["background"]
   showIconBorder: boolean
+  iconAppearance?: IGRPStatsCardIconAppearance
+  iconShape?: IGRPStatsCardIconShape
   iconVariant: IGRPColorVariants
   iconClassName?: string
 }
@@ -432,6 +493,8 @@ function IGRPStatsCardIcon({
   showIconBackground,
   iconBackground,
   showIconBorder,
+  iconAppearance,
+  iconShape,
   iconVariant,
   iconClassName,
 }: IGRPStatsCardIconProps) {
@@ -457,6 +520,10 @@ function IGRPStatsCardIcon({
       } as Record<string, string>
     )[iconSize ?? "md"] ?? "40px"
 
+  const resolved = iconAppearance
+    ? { appearance: iconAppearance, shape: iconShape ?? "circle" }
+    : resolveLegacyIconAppearance(showIconBackground, iconBackground, showIconBorder)
+
   const content = () => {
     if (image) {
       return <Image src={image} alt={imageAlt || ""} fill sizes={imageSizes} className="object-cover" unoptimized />
@@ -471,13 +538,22 @@ function IGRPStatsCardIcon({
     <div
       className={cn(
         "relative overflow-hidden",
-        igrpStstaCardIconVariants({
-          size: iconSize as VariantProps<typeof igrpStstaCardIconVariants>["size"],
-          showBackground: showIconBackground,
-          background: iconBackground,
-          backgroundBorder: showIconBorder,
-          variant: iconVariant,
-        }),
+        resolved
+          ? cn(
+              igrpStstaCardIconVariants({ size: iconSize }),
+              igrpStatsCardIconAppearanceClassName(
+                resolved.appearance,
+                iconVariant,
+                resolved.shape && ICON_SHAPE_CLASS[resolved.shape]
+              )
+            )
+          : igrpStstaCardIconVariants({
+              size: iconSize,
+              showBackground: showIconBackground,
+              background: iconBackground,
+              backgroundBorder: showIconBorder,
+              variant: iconVariant,
+            }),
         iconClassName
       )}
     >
@@ -489,6 +565,8 @@ function IGRPStatsCardIcon({
 export {
   IGRPStatsCard,
   type IGRPStatsCardProps,
+  type IGRPStatsCardIconAppearance,
+  type IGRPStatsCardIconShape,
   igrpStatsCardVariants,
   igrpStatsCardTitleVariants,
   igrpStatsCardValueVariants,

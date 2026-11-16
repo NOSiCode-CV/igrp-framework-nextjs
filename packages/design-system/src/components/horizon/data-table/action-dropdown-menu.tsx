@@ -7,18 +7,6 @@ import { cn } from "../cn.js"
 import { type IGRPPlacementProps } from "../../../types.js"
 
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "../../primitives/alert-dialog.js"
-
-import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -26,6 +14,7 @@ import {
 } from "../../primitives/dropdown-menu.js"
 import { buttonVariants } from "../../primitives/button.js"
 import { Dialog, DialogTrigger } from "../../primitives/dialog.js"
+import { IGRPAlertDialog } from "../alert-dialog.js"
 import { IGRPDataTableModalContent } from "./action-button-icon.js"
 import { IGRPIcon, type IGRPIconName } from "../icon/index.js"
 import { type IGRPDataTableDialogProps, type IGRPDataTableLinkProps } from "./row-actions.js"
@@ -75,23 +64,9 @@ function IGRPDataTableDropdownMenuAlert({
   classNameItem,
   disabled,
 }: IGRPDataTableDropdownMenuDialogProps) {
-  const i18n = useIGRPi18n()
-  const [open, setOpen] = useState(false)
-
-  const handleConfirm = () => {
-    if (onClickConfirm) {
-      onClickConfirm()
-    }
-    setOpen(false)
-  }
-
-  const handleCancel = () => {
-    setOpen(false)
-  }
-
   return (
-    <AlertDialog open={open} onOpenChange={setOpen}>
-      <AlertDialogTrigger asChild>
+    <IGRPAlertDialog
+      trigger={
         <IGRPDataTableDropdownMenuItem
           showIcon={showIcon}
           iconPlacement={iconPlacement}
@@ -101,35 +76,23 @@ function IGRPDataTableDropdownMenuAlert({
           classNameItem={classNameItem}
           disabled={disabled}
         />
-      </AlertDialogTrigger>
-      <AlertDialogContent className={cn("max-w-md", className)}>
-        <AlertDialogHeader>
-          <AlertDialogTitle>{modalTitle}</AlertDialogTitle>
-          {children && <AlertDialogDescription>{children}</AlertDialogDescription>}
-        </AlertDialogHeader>
-
-        {(showCancel || showConfirm) && (
-          <AlertDialogFooter>
-            {showCancel && (
-              <AlertDialogCancel
-                onClick={handleCancel}
-                className={cn(buttonVariants({ variant: variantCancel }), classNameCancel)}
-              >
-                {labelCancel ?? i18n.alertDialog.cancel}
-              </AlertDialogCancel>
-            )}
-            {showConfirm && (
-              <AlertDialogAction
-                onClick={handleConfirm}
-                className={cn(buttonVariants({ variant: variantConfirm }), classNameConfirm)}
-              >
-                {labelConfirm ?? i18n.alertDialog.action}
-              </AlertDialogAction>
-            )}
-          </AlertDialogFooter>
-        )}
-      </AlertDialogContent>
-    </AlertDialog>
+      }
+      className={cn("max-w-md", className)}
+      showIcon={false}
+      title={modalTitle}
+      description={children}
+      // A dialog with neither button could only be dismissed with Escape, so cancel always stays.
+      showCancel={showCancel || !showConfirm}
+      cancelLabel={labelCancel}
+      cancelProps={{ className: cn(buttonVariants({ variant: variantCancel }), classNameCancel) }}
+      showAction={showConfirm}
+      actionLabel={labelConfirm}
+      // Fire-and-forget keeps today's close-on-click, even for an async onClickConfirm.
+      onAction={() => {
+        onClickConfirm?.()
+      }}
+      actionProps={{ className: cn(buttonVariants({ variant: variantConfirm }), classNameConfirm) }}
+    />
   )
 }
 

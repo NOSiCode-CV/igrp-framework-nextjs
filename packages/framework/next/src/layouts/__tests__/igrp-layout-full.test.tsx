@@ -152,4 +152,45 @@ describe('IGRPLayoutFull wiring', () => {
     expect(setConfig).toHaveBeenCalledWith({ token: 'AT', baseUrl: 'http://am' });
     expect(findElement(el.props.header, HeaderDataProvider).props.locale).toBeUndefined();
   });
+
+  it('uses a supplied header and sidebar instead of the defaults', async () => {
+    const el = await IGRPLayoutFull({
+      children: null,
+      config: config(),
+      header: 'H',
+      sidebar: 'S',
+    });
+    expect(el.props.header).toBe('H');
+    expect(el.props.sidebar).toBe('S');
+  });
+
+  it('renders no sidebar for sidebar={null}, even with showSidebar', async () => {
+    const el = await IGRPLayoutFull({ children: null, config: config(), sidebar: null });
+    expect(el.props.sidebar).toBeUndefined();
+  });
+
+  it('forwards the deprecated header props into the default header', async () => {
+    const headerSlots = { actions: 'A' };
+    const el = await IGRPLayoutFull({ children: null, config: config(), headerSlots });
+    expect(findElement(el.props.header, HeaderDataProvider).props.headerSlots).toBe(headerSlots);
+  });
+
+  it('forwards toaster and contentClassName, falling back to rootProviderClassName', async () => {
+    const el = await IGRPLayoutFull({
+      children: null,
+      config: config(),
+      toaster: null,
+      contentClassName: 'c',
+      rootProviderClassName: 'r',
+    });
+    expect(el.props.toaster).toBeNull();
+    expect(el.props.className).toBe('c');
+    const old = await IGRPLayoutFull({
+      children: null,
+      config: config(),
+      rootProviderClassName: 'r',
+    });
+    expect(old.props.className).toBe('r');
+    expect(old.props.toaster).toBeUndefined();
+  });
 });

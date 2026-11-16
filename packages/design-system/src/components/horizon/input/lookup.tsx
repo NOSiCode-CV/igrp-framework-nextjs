@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo, useRef } from "react"
+import { useEffect, useMemo, useRef } from "react"
 import { Controller, get, useFormContext, useFormState, useWatch } from "react-hook-form"
 
 import { igrpChainHandlers, igrpMergeRefs } from "../../../lib/form-binding.js"
@@ -247,6 +247,13 @@ function BoundLookupField(props: IGRPLookupFieldProps) {
  */
 function IGRPLookupField(props: IGRPLookupFieldProps) {
   const formContext = useFormContext()
+  const ignoredValue = !!formContext && props.value !== undefined
+
+  useEffect(() => {
+    if (process.env.NODE_ENV === "production" || !ignoredValue) return
+    console.warn(`IGRPLookupField "${props.name}": value is ignored inside IGRPForm, which owns the field value.`)
+  }, [ignoredValue, props.name])
+
   if (formContext) return <BoundLookupField {...props} />
   return (
     <LookupView

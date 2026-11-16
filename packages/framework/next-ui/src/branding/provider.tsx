@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, type ReactNode, useContext } from 'react';
+import { createContext, type ReactNode, use } from 'react';
 
 import type { IGRPBranding } from '@igrp/framework-next-types';
 
@@ -14,10 +14,10 @@ export function IGRPBrandingProvider({
   branding: IGRPBranding | null;
   children: ReactNode;
 }) {
-  return <BrandingContext.Provider value={branding}>{children}</BrandingContext.Provider>;
+  return <BrandingContext value={branding}>{children}</BrandingContext>;
 }
 
 /** The current Brand, or `null` when outside a provider or none is set. Never throws. */
 export function useIGRPBranding(): IGRPBranding | null {
-  return useContext(BrandingContext);
+  return use(BrandingContext);
 }

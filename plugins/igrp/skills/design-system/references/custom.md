@@ -28,11 +28,11 @@ A compact KPI tile: a title, a coloured value and an icon.
 | --- | --- | --- |
 | `title` | `string` | |
 | `value` | `string \| number` | |
-| `variant` | `IGRPColorVariants` = `"primary"` | Colours the value and the icon border. |
+| `variant` | `IGRPColorVariants` = `"primary"` | Colours the value and the icon (outlined square, `iconAppearance="outline"`). |
 | `iconName`, `showIcon`, `iconSize` | | Pass-through from `IGRPStatsCard`. |
 | `titleSize`, `valueSize`, `titleColored`, `valueColored`, `itemPlacement`, `image`, `imageAlt`, `onClick`, `*ClassName` | | Pass-through. |
 
-The icon-background, icon-border and `iconPlacement` props type-check but **are overridden internally**, so setting them does nothing. There are no `label`, `delta` or `trend` props. Render a trend yourself next to the card.
+The card and icon styling props (`cardVariant`, `cardBorder`, `cardBorderPosition`, `iconAppearance`, `iconShape`, `iconVariant`, `iconPlacement` and the deprecated `showIconBackground` / `iconBackground` / `showIconBorder`) are fixed by the preset and not accepted. There are no `label`, `delta` or `trend` props. Render a trend yourself next to the card.
 
 ```tsx
 <IGRPStatsCardMini title="Utilizadores ativos" value={1284} variant="success" iconName="Users" />

@@ -57,11 +57,54 @@ export {
   type IGRPCommandSearchLabels,
 } from './templates/command-search.js';
 
-export { IGRPTemplateHeader, type IGRPHeaderSlots } from './templates/header.js';
+export {
+  IGRPTemplateHeader,
+  type IGRPHeaderSlots,
+  type IGRPTemplateHeaderProps,
+} from './templates/header.js';
+
+// Header parts. Flat names, not `IGRPHeader.Root`: a server component cannot
+// dot into a client module (Next rejects property access on a client reference).
+export {
+  IGRPHeaderDataProvider,
+  useIGRPHeaderData,
+  IGRPHeaderRoot,
+  IGRPHeaderStart,
+  IGRPHeaderEnd,
+  IGRPHeaderSidebarTrigger,
+  IGRPHeaderLogo,
+  IGRPHeaderTitle,
+  IGRPHeaderBreadcrumbs,
+  IGRPHeaderSearch,
+  IGRPHeaderSettings,
+  IGRPHeaderNotifications,
+  IGRPHeaderModeSwitcher,
+  IGRPHeaderUser,
+  type IGRPHeaderContextValue,
+  type IGRPHeaderDataProviderProps,
+  type IGRPHeaderLabelProps,
+  type IGRPHeaderUserProps,
+} from './templates/header-parts.js';
+
+export {
+  igrpMenusToPaletteCommands,
+  type IGRPPaletteCommand,
+} from './templates/menus/palette-commands.js';
 
 export { IGRPTemplateImage, type IGRPTemplateImageProps } from './templates/template-image.js';
 
-export { IGRPTemplateSidebar, type IGRPTemplateSidebarProps } from './templates/sidebar.js';
+export {
+  IGRPTemplateSidebar,
+  IGRPSidebarDataProvider,
+  useIGRPSidebarData,
+  IGRPSidebarRoot,
+  IGRPSidebarAppSwitcher,
+  IGRPSidebarMenus,
+  IGRPSidebarUser,
+  type IGRPTemplateSidebarProps,
+  type IGRPSidebarDataProviderProps,
+  type IGRPSidebarLabelProps,
+} from './templates/sidebar.js';
 
 export { IGRPTemplateLoading, type IGRPTemplateLoadingProps } from './templates/loading.js';
 
@@ -82,6 +125,9 @@ export {
 
 export {
   IGRPTemplateNavUser,
+  IGRPNavUser,
+  IGRPNavUserItem,
+  type IGRPNavUserItemProps,
   IGRP_NAV_USER_LABELS_PT_PT,
   type IGRPTemplateNavUserProps,
   type IGRPNavUserLabels,
@@ -104,7 +150,12 @@ export {
 
 // i18n (chrome catalog)
 
-export { IGRPChromeI18nProvider, useIGRPChromeI18n } from './i18n/context.js';
+export {
+  IGRPChromeI18nProvider,
+  useIGRPChromeI18n,
+  igrpMergeChromeStrings,
+  type IGRPChromeStringsOverrides,
+} from './i18n/context.js';
 export { igrpChromeStringsFor } from './i18n/catalogs.js';
 export { IGRP_LOCALE_COOKIE } from './i18n/cookie.js';
 export { igrpResolveErrorCopy, type IGRPErrorCopyResolver } from './i18n/error-copy.js';
@@ -124,6 +175,21 @@ export { IGRPThemeProvider } from './providers/theme.js';
 export { IGRPNestedProviders, type IGRPNestedProvidersArgs } from './providers/nested.js';
 
 export { IGRPRootProvidersFull, type IGRPRootProvidersFullProps } from './providers/root-full.js';
+
+export { IGRPTemplateToaster, type IGRPTemplateToasterProps } from './providers/toaster.js';
+
+export {
+  IGRPCommandPaletteProvider,
+  useIGRPCommandPalette,
+  type IGRPCommandPaletteValue,
+} from './providers/command-palette.js';
+
+export {
+  IGRPBreadcrumbsProvider,
+  IGRPPageBreadcrumbs,
+  useIGRPBreadcrumbs,
+  type IGRPPageBreadcrumbsProps,
+} from './providers/breadcrumbs.js';
 
 export {
   IGRPRootProvidersBlank,
@@ -160,3 +226,20 @@ export {
 } from './branding/index.js';
 export { IGRPBrandingStyle } from './branding/style.js';
 export { IGRPBrandingProvider, useIGRPBranding } from './branding/provider.js';
+
+export {
+  IGRPAuthFormRoot,
+  IGRPAuthFormBody,
+  IGRPAuthFormLogo,
+  IGRPAuthFormHeading,
+  IGRPAuthFormError,
+  IGRPAuthFormSignInButton,
+  IGRPAuthFormFooter,
+  type IGRPAuthFormRootProps,
+  type IGRPAuthFormBodyProps,
+  type IGRPAuthFormLogoProps,
+  type IGRPAuthFormHeadingProps,
+  type IGRPAuthFormSignInButtonProps,
+  type IGRPAuthFormFooterProps,
+} from './auths/form.js';
+export { type IGRPTemplateNotification } from './templates/notifications.js';

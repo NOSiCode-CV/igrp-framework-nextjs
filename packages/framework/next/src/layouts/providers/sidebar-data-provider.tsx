@@ -4,14 +4,16 @@ import type {
   IGRPApplicationArgs,
   IGRPConfigArgs,
   IGRPMenuItemArgs,
+  IGRPSidebarDataArgs,
 } from '@igrp/framework-next-types';
-import { IGRPTemplateSidebar } from '@igrp/framework-next-ui';
+import { IGRPSidebarDataProvider, IGRPTemplateSidebar } from '@igrp/framework-next-ui';
+import type { IGRPSidebarLabelProps } from '@igrp/framework-next-ui';
 
 import { IgrpLayoutDataError } from '../../errors.js';
 import { igrpSetAccessClientConfig } from '../../lib/api-config.js';
 import { igrpResolveLayoutDataSource } from '../../lib/layout-data-source.js';
 import { fetchAppsByUser } from '../../hooks/use-applications.js';
-import { fetchMenus } from '../../hooks/use-menus.js';
+import { igrpGetLayoutMenus } from '../../lib/layout-menus.js';
 import { fetchCurrentUser } from '../../hooks/use-user.js';
 
 // The sidebar is a client component, so every field here is serialized into the
@@ -41,7 +43,7 @@ function toSidebarApp(a: IGRPApplicationArgs): IGRPApplicationArgs {
   return { id, code, name, description, status, type, picture, slug, url, departments: [] };
 }
 
-type SidebarDataProviderProps = {
+export type SidebarDataProviderProps = IGRPSidebarLabelProps & {
   config: Pick<IGRPConfigArgs, 'appCode' | 'layoutData' | 'previewMode'>;
   // See header-data-provider.tsx: re-applied here rather than relied on from
   // the caller's AsyncLocalStorage context, since this component also renders
@@ -52,6 +54,8 @@ type SidebarDataProviderProps = {
   timeout?: number;
   /** Base locale for `Accept-Language`; see igrp-layout-full.tsx. */
   locale?: string;
+  /** A composition of `IGRPSidebar*` parts, rendered instead of the default sidebar. */
+  children?: React.ReactNode;
 };
 
 export async function SidebarDataProvider({
@@ -60,6 +64,9 @@ export async function SidebarDataProvider({
   baseUrl,
   timeout,
   locale,
+  menuLabels,
+  navUserLabels,
+  children,
 }: SidebarDataProviderProps) {
   const { appCode, previewMode } = config;
   const layoutData = igrpResolveLayoutDataSource(config);
@@ -73,34 +80,46 @@ export async function SidebarDataProvider({
     });
   }
 
-  if (previewMode) {
-    return <IGRPTemplateSidebar data={await layoutData.getSidebarData()} />;
+  const render = (data: IGRPSidebarDataArgs) => (
+    <IGRPSidebarDataProvider data={data} menuLabels={menuLabels} navUserLabels={navUserLabels}>
+      {children ?? <IGRPTemplateSidebar />}
+    </IGRPSidebarDataProvider>
+  );
+
+  // Each `layoutData.get*` method replaces that data's source in both modes.
+  // Without it, preview keeps the authored sidebar data and production asks
+  // Access Management.
+  const loadMenus = Boolean(layoutData.getMenus) || !previewMode;
+  const getUser = layoutData.getUser ?? (previewMode ? undefined : fetchCurrentUser);
+  const getApps = layoutData.getApps ?? (previewMode ? undefined : fetchAppsByUser);
+
+  if (!loadMenus && !getUser && !getApps) {
+    return render(await layoutData.getSidebarData());
   }
 
-  if (!appCode) {
+  if (!previewMode && !layoutData.getMenus && !appCode) {
     throw new IgrpLayoutDataError(
       'IGRP_APP_CODE_MISSING',
       '[igrp-layout]: Código da aplicação não encontrada.',
     );
   }
 
-  // Started alongside the AM calls, but awaited outside their try so its
+  // Started alongside the other calls, but awaited outside their try so its
   // failures still propagate unwrapped, as before.
   const sidebarDataPromise = layoutData.getSidebarData();
-  // Observed now so a rejection while the AM calls are pending is not reported unhandled.
+  // Observed now so a rejection while the other calls are pending is not reported unhandled.
   sidebarDataPromise.catch(() => {});
 
   // Wrapped so the boundary's `onError` reporter gets a stable `code` instead
   // of a bare transport error. `unstable_rethrow` FIRST: these helpers call
   // `redirect('/login')` on a 401/403, which signals by throwing, and wrapping
-  // that would turn "send the user to login" into "render the sidebar error" —
-  // the same defect `IGRPLayoutErrorBoundary` was just fixed for.
+  // that would turn "send the user to login" into "render the sidebar error".
   let menuItems, user, apps;
   try {
     [menuItems, user, apps] = await Promise.all([
-      fetchMenus(appCode),
-      fetchCurrentUser(),
-      fetchAppsByUser(),
+      loadMenus ? igrpGetLayoutMenus(config) : undefined,
+      getUser?.(),
+      getApps?.(),
     ]);
   } catch (error) {
     unstable_rethrow(error);
@@ -114,18 +133,14 @@ export async function SidebarDataProvider({
 
   const sidebarData = await sidebarDataPromise;
 
-  return (
-    <IGRPTemplateSidebar
-      data={{
-        ...sidebarData,
-        user: user ?? undefined,
-        menuItems: menuItems.map(toSidebarMenu),
-        apps: apps.map(toSidebarApp),
-        appCode,
-        // No `showPreviewMode`: the field was removed from `next-types` because
-        // nothing read it. A preview-mode badge, if wanted, belongs on an
-        // explicit `IGRPTemplateSidebar` prop.
-      }}
-    />
-  );
+  return render({
+    ...sidebarData,
+    ...(getUser && { user: user ?? undefined }),
+    ...(menuItems && { menuItems: menuItems.map(toSidebarMenu) }),
+    ...(apps && { apps: apps.map(toSidebarApp) }),
+    ...(!previewMode && { appCode }),
+    // No `showPreviewMode`: the field was removed from `next-types` because
+    // nothing read it. A preview-mode badge, if wanted, belongs on an
+    // explicit `IGRPTemplateSidebar` prop.
+  });
 }

@@ -40,12 +40,12 @@
       "failed": "Copie manualmente"
     },
     "intro": {
-      "failing": "A aplicação está a responder, mas {count, plural, one {uma camada precisa} other {# camadas precisam}} de atenção. Veja abaixo o que falhou neste pedido.",
+      "error": "A aplicação está a responder, mas {count, plural, one {uma camada precisa} other {# camadas precisam}} de atenção. Veja abaixo o que falhou neste pedido.",
       "preview": "A aplicação está a responder em modo de pré-visualização: sem login real e com menus de exemplo.",
       "ok": "A aplicação está a responder. Este pedido passou por todas as camadas abaixo."
     },
     "status": {
-      "failing": "Requer atenção",
+      "error": "Requer atenção",
       "preview": "Em pré-visualização",
       "ok": "Operacional"
     },
@@ -53,7 +53,7 @@
     "code": "Código",
     "requestPath": {
       "title": "O caminho deste pedido",
-      "failing": "{failing} de {total} {failing, plural, one {camada requer} other {camadas requerem}} atenção",
+      "error": "{failing} de {total} {failing, plural, one {camada requer} other {camadas requerem}} atenção",
       "preview": "Modo de pré-visualização: autenticação e dados simulados",
       "ok": "{total} de {total} camadas ativas"
     },

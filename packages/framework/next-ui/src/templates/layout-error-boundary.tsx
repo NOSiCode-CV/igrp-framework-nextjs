@@ -1,6 +1,6 @@
 'use client';
 
-import { Component, createContext, useContext, type ErrorInfo, type ReactNode } from 'react';
+import { Component, createContext, use, type ErrorInfo, type ReactNode } from 'react';
 import { unstable_rethrow } from 'next/navigation';
 
 interface Props {
@@ -32,7 +32,7 @@ interface State {
 const IGRPLayoutErrorResetContext = createContext<(() => void) | null>(null);
 
 function useIGRPLayoutErrorReset() {
-  return useContext(IGRPLayoutErrorResetContext);
+  return use(IGRPLayoutErrorResetContext);
 }
 
 /**
@@ -77,9 +77,9 @@ export class IGRPLayoutErrorBoundary extends Component<Props, State> {
   override render() {
     if (this.state.hasError) {
       return (
-        <IGRPLayoutErrorResetContext.Provider value={this.reset}>
+        <IGRPLayoutErrorResetContext value={this.reset}>
           {this.props.fallback}
-        </IGRPLayoutErrorResetContext.Provider>
+        </IGRPLayoutErrorResetContext>
       );
     }
 

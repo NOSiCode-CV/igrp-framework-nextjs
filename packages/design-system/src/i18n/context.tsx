@@ -5,7 +5,7 @@
 // apply here.
 /* eslint-disable react-refresh/only-export-components */
 
-import { createContext, useContext, useMemo, type ReactNode } from "react"
+import { createContext, use, useMemo, type ReactNode } from "react"
 
 import { igrpMergeI18nStrings } from "./merge.js"
 import {
@@ -61,17 +61,17 @@ function IGRPI18nProvider({
   const merged = useMemo(() => igrpMergeI18nStrings(base, strings), [base, strings])
 
   return (
-    <IGRPLocaleContext.Provider value={locale}>
-      <IGRPTimeZoneContext.Provider value={timeZone}>
-        <IGRPI18nContext.Provider value={merged}>{children}</IGRPI18nContext.Provider>
-      </IGRPTimeZoneContext.Provider>
-    </IGRPLocaleContext.Provider>
+    <IGRPLocaleContext value={locale}>
+      <IGRPTimeZoneContext value={timeZone}>
+        <IGRPI18nContext value={merged}>{children}</IGRPI18nContext>
+      </IGRPTimeZoneContext>
+    </IGRPLocaleContext>
   )
 }
 
 /** Read the resolved IGRP string catalog. Returns the Portuguese defaults if no provider is mounted. */
 function useIGRPi18n(): IGRPI18nStrings {
-  return useContext(IGRPI18nContext)
+  return use(IGRPI18nContext)
 }
 
 /**
@@ -79,12 +79,12 @@ function useIGRPi18n(): IGRPI18nStrings {
  * if no provider is mounted — never `undefined`, so SSR and client agree.
  */
 function useIGRPLocale(): string {
-  return useContext(IGRPLocaleContext)
+  return use(IGRPLocaleContext)
 }
 
 /** Read the IANA time zone for `Intl` date formatting. `undefined` means the runtime zone. */
 function useIGRPTimeZone(): string | undefined {
-  return useContext(IGRPTimeZoneContext)
+  return use(IGRPTimeZoneContext)
 }
 
 /** Substitutes `{token}` placeholders in a catalog string. */

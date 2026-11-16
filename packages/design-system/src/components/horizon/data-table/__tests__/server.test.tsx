@@ -266,3 +266,18 @@ describe("IGRPServerDataTable", () => {
     expect(screen.queryByRole("status")).toBeNull()
   })
 })
+
+describe("IGRPServerDataTable toolbar", () => {
+  it("renders the toolbar slot", () => {
+    render(
+      <IGRPServerDataTable
+        columns={columns}
+        data={page(2)}
+        pagination={p()}
+        onPaginationChange={noop}
+        toolbar={<button type="button">Exportar</button>}
+      />
+    )
+    expect(screen.getByRole("button", { name: "Exportar" })).toBeInTheDocument()
+  })
+})

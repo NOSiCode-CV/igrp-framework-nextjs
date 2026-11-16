@@ -5,6 +5,7 @@ import { Button } from '@igrp/igrp-framework-react-design-system';
 import { SearchIcon } from 'lucide-react';
 
 import { useIGRPChromeI18n } from '../i18n/context.js';
+import { useOptionalIGRPCommandPalette } from '../providers/command-palette.js';
 import { IGRP_CHROME_STRINGS_PT, type IGRPCommandSearchLabels } from '../i18n/strings.js';
 
 export interface IGRPCommandItem {
@@ -46,9 +47,20 @@ function IGRPTemplateCommandSearch({
   commands = [],
   labels: labelOverrides,
 }: IGRPTemplateCommandSearchProps) {
-  const [open, setOpen] = useState(false);
+  // With `IGRPCommandPaletteProvider` (mounted by `IGRPRootProvidersFull`) the
+  // provider owns the open state and the ⌘K listener; without one, this does.
+  const palette = useOptionalIGRPCommandPalette();
+  const [localOpen, setLocalOpen] = useState(false);
+  const hasProvider = palette !== null;
+  const open = palette ? palette.state.open : localOpen;
+  const setOpen = (next: boolean) => {
+    if (!palette) setLocalOpen(next);
+    else if (next) palette.actions.open();
+    else palette.actions.close();
+  };
   // Mounted on the first open and kept, so closing still runs the dialog's own exit.
   const [everOpened, setEverOpened] = useState(false);
+  if (open && !everOpened) setEverOpened(true);
   // The shortcut accepts Cmd OR Ctrl, but the hint used to read the Cmd glyph
   // everywhere. The server snapshot is `false`, so hydration matches the server
   // markup and the client re-renders with the real platform.
@@ -60,6 +72,7 @@ function IGRPTemplateCommandSearch({
     : chrome.commandSearch;
 
   useEffect(() => {
+    if (hasProvider) return;
     const controller = new AbortController();
 
     const down = (e: KeyboardEvent) => {
@@ -67,7 +80,7 @@ function IGRPTemplateCommandSearch({
         e.preventDefault();
         void loadCommandPalette();
         setEverOpened(true);
-        setOpen((prev) => !prev);
+        setLocalOpen((prev) => !prev);
       }
     };
 
@@ -75,7 +88,7 @@ function IGRPTemplateCommandSearch({
     return () => {
       controller.abort();
     };
-  }, []);
+  }, [hasProvider]);
 
   const preload = () => void loadCommandPalette();
 

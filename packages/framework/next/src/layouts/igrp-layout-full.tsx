@@ -1,34 +1,46 @@
 import { cookies } from 'next/headers';
-import { Suspense } from 'react';
 import {
   IGRPRootProvidersFull,
-  IGRPLayoutErrorBoundary,
-  IGRPHeaderSkeleton,
-  IGRPSidebarSkeleton,
-  IGRPHeaderError,
-  IGRPSidebarError,
   type BreadcrumbItem,
   type IGRPHeaderSlots,
 } from '@igrp/framework-next-ui';
 import type { IGRPConfigArgs } from '@igrp/framework-next-types';
 
-import type { IGRPI18nConfig } from '../i18n/config.js';
-import { igrpResolveLocale } from '../i18n/server/resolve.js';
 import { igrpSetAccessClientConfig } from '../lib/api-config.js';
-import { HeaderDataProvider } from './providers/header-data-provider.js';
-import { SidebarDataProvider } from './providers/sidebar-data-provider.js';
+import { layoutHeader, layoutSidebar, resolveLayoutAccess } from './igrp-layout-chrome.js';
 
 export type IGRPLayoutFullArgs = {
   readonly children: React.ReactNode;
   readonly config: IGRPConfigArgs;
+  /**
+   * The header. Defaults to `<IGRPLayoutHeader config={config} />` built from
+   * the deprecated header props below. Pass your own `IGRPLayoutHeader` to set
+   * slots, labels, fallbacks or a parts composition.
+   */
+  readonly header?: React.ReactNode;
+  /**
+   * The sidebar. Defaults to `<IGRPLayoutSidebar config={config} />`; `null`
+   * renders no sidebar (and hides the header's sidebar trigger).
+   */
+  readonly sidebar?: React.ReactNode | null;
+  /**
+   * The toaster element; `null` renders none. Defaults to
+   * `IGRPTemplateToaster` with `config.toasterConfig`.
+   */
+  readonly toaster?: React.ReactNode | null;
+  /** Class of the wrapper around `children` (merged over `p-4`). */
+  readonly contentClassName?: string;
+  /** @deprecated Pass `sidebar={null}` instead. Ignored when `sidebar` is given. */
   readonly showSidebar?: boolean;
+  /** @deprecated Pass `breadcrumbs` to `IGRPLayoutHeader`, or render `<IGRPPageBreadcrumbs>` in the page. */
   readonly breadcrumbs?: BreadcrumbItem[];
+  /** @deprecated Pass `breadcrumbRouteLabels` to `IGRPLayoutHeader`. */
   readonly breadcrumbRouteLabels?: Record<string, string>;
   /**
-   * Consumer-injected header content. The framework still fetches and owns all
-   * header data (user, logo, breadcrumbs, sidebar trigger) — a slot only decides
-   * what renders in its position. Slots must be elements, not components: they
-   * cross the Server→Client boundary into IGRPTemplateHeader.
+   * Consumer-injected header content. Slots must be elements, not components:
+   * they cross the Server→Client boundary into the header.
+   *
+   * @deprecated Pass `slots` to `IGRPLayoutHeader` (as `header`).
    */
   readonly headerSlots?: IGRPHeaderSlots;
   /**
@@ -41,12 +53,17 @@ export type IGRPLayoutFullArgs = {
    * cookie the design-system sidebar writes on toggle (open unless `'false'`).
    */
   readonly defaultSidebarOpen?: boolean;
+  /** @deprecated Use `contentClassName`. */
   rootProviderClassName?: string;
 };
 
 export async function IGRPLayoutFull({
   children,
   config,
+  header,
+  sidebar,
+  toaster,
+  contentClassName,
   showSidebar = true,
   breadcrumbs,
   breadcrumbRouteLabels,
@@ -54,62 +71,28 @@ export async function IGRPLayoutFull({
   defaultSidebarOpen,
   rootProviderClassName,
 }: IGRPLayoutFullArgs) {
-  const { previewMode, layout, apiManagementConfig, toasterConfig } = config;
-  const { session } = layout;
+  const { previewMode, toasterConfig } = config;
+  const access = await resolveLayoutAccess(config);
 
-  const accessToken = session?.accessToken || '';
-  const accessBaseUrl = apiManagementConfig?.baseUrl || '';
-  // Threaded explicitly: `igrpSetAccessClientConfig` only defaults `timeout`
-  // when it CREATES the store, so omitting it here left every read-path client
-  // on the 10s default and made `apiManagementConfig.timeout` dead config.
-  const accessTimeout = apiManagementConfig?.timeout;
-  // Base locale for `Accept-Language` on framework API calls (menus, user).
-  const locale = config.i18n ? await igrpResolveLocale(config.i18n as IGRPI18nConfig) : undefined;
-
-  if (!previewMode && accessBaseUrl) {
+  if (!previewMode && access.baseUrl) {
     igrpSetAccessClientConfig({
-      token: accessToken,
-      baseUrl: accessBaseUrl,
-      ...(accessTimeout !== undefined ? { timeout: accessTimeout } : {}),
-      ...(locale ? { locale } : {}),
+      token: access.token,
+      baseUrl: access.baseUrl,
+      ...(access.timeout !== undefined ? { timeout: access.timeout } : {}),
+      ...(access.locale ? { locale: access.locale } : {}),
     });
   }
 
-  // token/baseUrl are also passed explicitly to the two providers below —
-  // each renders inside its own <Suspense> boundary, which resumes on a later
-  // tick that doesn't reliably inherit the AsyncLocalStorage store seeded by
-  // `igrpSetAccessClientConfig` above. They re-apply it themselves.
-  const sidebarSlot = showSidebar ? (
-    <IGRPLayoutErrorBoundary fallback={<IGRPSidebarError />}>
-      <Suspense fallback={<IGRPSidebarSkeleton />}>
-        <SidebarDataProvider
-          config={config}
-          token={accessToken}
-          baseUrl={accessBaseUrl}
-          timeout={accessTimeout}
-          locale={locale}
-        />
-      </Suspense>
-    </IGRPLayoutErrorBoundary>
-  ) : undefined;
+  const sidebarNode =
+    sidebar !== undefined
+      ? (sidebar ?? undefined)
+      : showSidebar
+        ? layoutSidebar({ config }, access)
+        : undefined;
 
-  const headerSlot = (
-    <IGRPLayoutErrorBoundary fallback={<IGRPHeaderError />}>
-      <Suspense fallback={<IGRPHeaderSkeleton />}>
-        <HeaderDataProvider
-          config={config}
-          token={accessToken}
-          baseUrl={accessBaseUrl}
-          timeout={accessTimeout}
-          locale={locale}
-          showSidebar={showSidebar}
-          breadcrumbs={breadcrumbs}
-          breadcrumbRouteLabels={breadcrumbRouteLabels}
-          headerSlots={headerSlots}
-        />
-      </Suspense>
-    </IGRPLayoutErrorBoundary>
-  );
+  const headerNode =
+    header ??
+    layoutHeader({ config, slots: headerSlots, breadcrumbs, breadcrumbRouteLabels }, access);
 
   // Must match SIDEBAR_COOKIE_NAME in the design-system sidebar primitive.
   const sidebarOpen =
@@ -119,9 +102,10 @@ export async function IGRPLayoutFull({
     <IGRPRootProvidersFull
       defaultOpen={sidebarOpen}
       toasterConfig={toasterConfig}
-      sidebar={sidebarSlot}
-      header={headerSlot}
-      className={rootProviderClassName}
+      toaster={toaster}
+      sidebar={sidebarNode}
+      header={headerNode}
+      className={contentClassName ?? rootProviderClassName}
     >
       {children}
     </IGRPRootProvidersFull>

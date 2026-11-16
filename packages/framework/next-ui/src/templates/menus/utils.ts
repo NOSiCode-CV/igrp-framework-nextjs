@@ -29,7 +29,7 @@ export function resolveHref(item: IGRPMenuItemArgs): string {
  * scheme or protocol-relative prefix means "leave the app", which is the same
  * answer on both sides of hydration.
  */
-function isAbsoluteUrl(url: string): boolean {
+export function isAbsoluteUrl(url: string): boolean {
   return /^(?:[a-z][a-z0-9+.-]*:)?\/\//i.test(url);
 }
 

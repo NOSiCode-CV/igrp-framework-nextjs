@@ -1,7 +1,10 @@
 import { cache } from "react";
 
 import { igrpBuildConfig } from "@igrp/framework-next";
-import type { IGRPConfigClient } from "@igrp/framework-next-types";
+import type {
+  IGRPConfigClient,
+  IGRPLayoutDataSource,
+} from "@igrp/framework-next-types";
 
 import { i18n } from "@/i18n";
 import { fontVariables } from "@/lib/fonts";
@@ -15,6 +18,46 @@ import { getPermissions } from "./lib/config/get-permissions";
 import { getPackageJson } from "./lib/config/get-pkj";
 import { getRoutes } from "./lib/config/get-routes";
 import { getSessionArgs } from "./lib/config/get-session-args";
+
+/**
+ * Header and sidebar configuration, used in both modes. The framework fetches
+ * the user, menus and apps itself outside preview mode; see
+ * `IGRPLayoutDataSource` for which fields it overrides.
+ */
+const liveLayoutData: IGRPLayoutDataSource = {
+  getHeaderData: async () => ({
+    userProfileUrl: process.env.NEXT_PUBLIC_IGRP_PROFILE_URL || "",
+    notificationsUrl: process.env.NEXT_PUBLIC_IGRP_NOTIFICATION_URL || "",
+    showBreadcrumb: true,
+    showSearch: true,
+    showNotifications: true,
+    showUser: true,
+    showThemeSwitcher: true,
+    showIGRPSidebarTrigger: true,
+    showIGRPHeaderTitle: false,
+    showIGRPHeaderLogo: true,
+    showSettings: true,
+    settingsUrl: process.env.NEXT_PUBLIC_IGRP_SETTINGS_URL || "",
+  }),
+  getSidebarData: async () => ({
+    showAppSwitcher: true,
+    appCenterUrl: process.env.NEXT_IGRP_APP_CENTER_URL || "",
+    showMenuSearch: true,
+    showNotifications: true,
+  }),
+};
+
+/**
+ * Under auth bypass there is no Access Management to ask, so the same
+ * configuration is served with the `src/temp` mocks standing in for the user,
+ * menus and apps.
+ */
+const previewLayoutData: IGRPLayoutDataSource = {
+  ...liveLayoutData,
+  getMenus: async () => getMockMenus().mockMenus,
+  getUser: async () => getMockUser().mockUser,
+  getApps: async () => getMockApps().mockApps,
+};
 
 /**
  * Annotated with `IGRPConfigClient` so the whole config object is type-checked
@@ -37,41 +80,7 @@ const buildConfig: IGRPConfigClient = (config) => {
     branding: { enabled: process.env.IGRP_BRANDING_ENABLED === "true" },
     appInformation: getPackageJson(),
     i18n,
-    layoutData: {
-      getHeaderData: async () => {
-        const user = bypass ? getMockUser().mockUser : undefined;
-        return {
-          user: user,
-          userProfileUrl: process.env.NEXT_PUBLIC_IGRP_PROFILE_URL || "",
-          notificationsUrl: process.env.NEXT_PUBLIC_IGRP_NOTIFICATION_URL || "",
-          showBreadcrumb: true,
-          showSearch: true,
-          showNotifications: true,
-          showUser: true,
-          showThemeSwitcher: true,
-          showIGRPSidebarTrigger: true,
-          showIGRPHeaderTitle: false,
-          showIGRPHeaderLogo: true,
-          showSettings: true,
-          settingsUrl: process.env.NEXT_PUBLIC_IGRP_SETTINGS_URL || "",
-        };
-      },
-      getSidebarData: async () => {
-        const user = bypass ? getMockUser().mockUser : undefined;
-        const menu = bypass ? getMockMenus().mockMenus : undefined;
-        const apps = bypass ? getMockApps().mockApps : undefined;
-        return {
-          menuItems: menu ?? [],
-          user: user,
-          defaultOpen: true,
-          showAppSwitcher: true,
-          apps: apps ?? [],
-          appCenterUrl: process.env.NEXT_IGRP_APP_CENTER_URL || "",
-          showMenuSearch: true,
-          showNotifications: true,
-        };
-      },
-    },
+    layoutData: bypass ? previewLayoutData : liveLayoutData,
     font: fontVariables,
 
     layout: {

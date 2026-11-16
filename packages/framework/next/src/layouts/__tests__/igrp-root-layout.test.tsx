@@ -18,7 +18,7 @@ vi.mock('@igrp/framework-next-ui', () => ({
 
 import { IGRPBrandingStyle, IGRPNestedProviders } from '@igrp/framework-next-ui';
 
-const { IGRPRootLayout } = await import('../igrp-root-layout.js');
+const { IGRPRootLayout, IGRPRootLayoutProviders } = await import('../igrp-root-layout.js');
 
 const config = (overrides: Record<string, unknown> = {}) =>
   ({
@@ -90,5 +90,23 @@ describe('IGRPRootLayout organization branding', () => {
     const tree = await IGRPRootLayout({ children: null, config: config() });
     const body = JSON.stringify(tree);
     expect(body).not.toContain('theme-blue');
+  });
+
+  it('forwards themeProps and appends bodyClassName', async () => {
+    const themeProps = { defaultTheme: 'dark' };
+    const tree = await IGRPRootLayout({
+      children: null,
+      config: config(),
+      themeProps,
+      bodyClassName: 'extra',
+    });
+    expect(find(tree, IGRPNestedProviders)?.props.themeProps).toBe(themeProps);
+    expect(tree.props.children.props.className).toContain('antialiased extra');
+  });
+
+  it('IGRPRootLayoutProviders renders the provider stack without <html>/<body>', async () => {
+    const tree: any = await IGRPRootLayoutProviders({ children: 'kid', config: config() });
+    expect(tree.type).not.toBe('html');
+    expect(find(tree, IGRPNestedProviders)?.props.children).toBe('kid');
   });
 });

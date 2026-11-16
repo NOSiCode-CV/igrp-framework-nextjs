@@ -32,11 +32,24 @@ interface IGRPStepProcessProps {
   title: string
   /** Optional step description. */
   description?: string
-  /** Whether the step is completed. */
-  isCompleted: boolean
-  /** Whether the step is currently active. */
-  isActive: boolean
+  /** Progress of the step. Wins over `isCompleted`. */
+  status?: "pending" | "completed"
+  /** Whether the step can be selected. Wins over `isActive`. */
+  disabled?: boolean
+  /**
+   * Whether the step is completed.
+   * @deprecated Use `status: "completed"`.
+   */
+  isCompleted?: boolean
+  /**
+   * Whether the step can be selected (it never meant "current" — that is `currentStep`).
+   * @deprecated Use `disabled` (`isActive: false` → `disabled: true`).
+   */
+  isActive?: boolean
 }
+
+const isStepCompleted = (s: IGRPStepProcessProps) => (s.status ? s.status === "completed" : !!s.isCompleted)
+const isStepDisabled = (s: IGRPStepProcessProps) => s.disabled ?? s.isActive === false
 
 /**
  * Props for the IGRPStepperProcess component.
@@ -49,8 +62,8 @@ interface IGRPStepperProcessProps {
   isLoading?: boolean
   /** Currently active step number. */
   currentStep: number
-  /** Render function for step content; receives current step number. */
-  children: (step: number) => React.ReactNode
+  /** Step content: a node, or a render function that receives the current step number. */
+  children: React.ReactNode | ((step: number) => React.ReactNode)
   /** HTML id attribute. */
   id?: string
   /** Called when user selects a different step. */
@@ -137,7 +150,7 @@ function IGRPStepperProcess({
       return matchingStep.step
     }
 
-    const activeStep = steps.find((s) => s.isActive)
+    const activeStep = steps.find((s) => !isStepDisabled(s))
     if (activeStep) {
       return activeStep.step
     }
@@ -221,7 +234,10 @@ function IGRPStepperProcess({
                 role="navigation"
                 aria-label={i18n.stepper.processSteps}
               >
-                {steps.map(({ step, stepKey, title, isCompleted, isActive }, index) => {
+                {steps.map((stepData, index) => {
+                  const { step, stepKey, title } = stepData
+                  const isCompleted = isStepCompleted(stepData)
+                  const isDisabled = isStepDisabled(stepData)
                   const isFirst = index === 0
                   const isLast = index === steps.length - 1
 
@@ -230,8 +246,8 @@ function IGRPStepperProcess({
                       key={stepKey ?? step}
                       step={step}
                       completed={isCompleted}
-                      disabled={!isActive}
-                      aria-current={isActive ? "step" : undefined}
+                      disabled={isDisabled}
+                      aria-current={validCurrentStep === step ? "step" : undefined}
                       className={cn(getStepperItemClassName(), stepperItemsClassName)}
                       loading={isLoading && validCurrentStep === step}
                       style={getStepOffsetStyle(isFirst, isLast)}
@@ -254,7 +270,7 @@ function IGRPStepperProcess({
                           className={cn(
                             "flex items-center justify-center bg-transparent text-center hover:bg-transparent",
                             "w-34 text-[10px] shadow-none",
-                            (isActive || isCompleted) && "text-background hover:text-background"
+                            (!isDisabled || isCompleted) && "text-background hover:text-background"
                           )}
                           size="xs"
                         >
@@ -316,7 +332,7 @@ function IGRPStepperProcess({
             </Button>
           </div>
         </div>
-        {children(validCurrentStep)}
+        {typeof children === "function" ? children(validCurrentStep) : children}
       </div>
     </IGRPTooltipProvider>
   )

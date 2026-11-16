@@ -1,12 +1,12 @@
 "use client"
 
-import { useId } from "react"
+import { useId, useState } from "react"
 import { Slot } from "radix-ui"
 
 import { IGRPColors, type IGRPColorVariants } from "../../lib/colors.js"
 import { igrpAlertIconMappings } from "../../lib/utilities.js"
 import { cn } from "cn"
-import { type IGRPBaseAttributes, type IGRPPlacementProps } from "../../types.js"
+import { type IGRPBaseAttributes } from "../../types.js"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -16,7 +16,9 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
+  AlertDialogTrigger,
 } from "../primitives/alert-dialog.js"
+import { IGRPButton } from "./button.js"
 import { IGRPIcon, type IGRPIconName } from "./icon/index.js"
 import { useIGRPi18n } from "../../i18n/index.js"
 
@@ -24,8 +26,15 @@ import { useIGRPi18n } from "../../i18n/index.js"
  * Props for the IGRPAlertDialog component.
  * @see IGRPAlertDialog
  */
-interface IGRPAlertDialogProps extends Omit<IGRPBaseAttributes, "ref"> {
-  /** Whether the dialog is open. */
+interface IGRPAlertDialogProps extends Omit<IGRPBaseAttributes, "ref" | "iconPlacement"> {
+  /**
+   * Icon position: beside the text (`"start"`, default) or above it (`"center"`).
+   * `"end"` is deprecated and renders as `"start"`.
+   */
+  iconPlacement?: "start" | "center" | "end"
+  /** Element that opens the dialog (rendered through `AlertDialogTrigger asChild`), e.g. an `IGRPButton`. */
+  trigger?: React.ReactNode
+  /** Whether the dialog is open (controlled). Leave unset with `trigger` to let the dialog manage itself. */
   open?: boolean
   /** Called when open state changes. */
   onOpenChange?: (open: boolean) => void
@@ -37,8 +46,8 @@ interface IGRPAlertDialogProps extends Omit<IGRPBaseAttributes, "ref"> {
   title?: string
   /** CSS classes for the title. */
   titleClassName?: string
-  /** Dialog description. */
-  description?: string
+  /** Dialog description (announced as the dialog's accessible description). */
+  description?: React.ReactNode
   /** CSS classes for the description. */
   descriptionClassName?: string
   /** Additional content. */
@@ -49,12 +58,18 @@ interface IGRPAlertDialogProps extends Omit<IGRPBaseAttributes, "ref"> {
   actionLabel?: string
   /** Label for the cancel button. */
   cancelLabel?: string
-  /** Called when the action button is clicked. */
-  onAction?: () => void
+  /**
+   * Called when the action button is clicked. Return a Promise to keep the dialog
+   * open with the action button loading until it settles: it closes on resolve and
+   * stays open on reject (report the error from `onAction`).
+   */
+  onAction?: () => void | Promise<unknown>
   /** Called when the cancel button is clicked. */
   onCancel?: () => void
   /** Whether to show the cancel button. */
   showCancel?: boolean
+  /** Whether to show the action button. Default `true`. */
+  showAction?: boolean
   /** Props passed to the action button. */
   actionProps?: Partial<React.ComponentProps<typeof AlertDialogAction>>
   /** Props passed to the cancel button. */
@@ -74,7 +89,8 @@ function IGRPAlertDialog({
   className,
   showIcon = true,
   iconName,
-  iconPlacement = "start",
+  iconPlacement: iconPlacementProp = "start",
+  trigger,
   title,
   titleClassName,
   description,
@@ -86,6 +102,7 @@ function IGRPAlertDialog({
   onAction,
   onCancel,
   showCancel = true,
+  showAction = true,
   actionProps,
   cancelProps,
   name,
@@ -100,19 +117,45 @@ function IGRPAlertDialog({
   const strongColors = IGRPColors.solid[variant]
   const actionClassName = actionProps ? actionProps.className : `${strongColors.bg} hover:${strongColors.bg}`
 
-  const handleAction = () => {
-    if (onAction) onAction()
-    if (onOpenChange) onOpenChange(false)
+  const iconPlacement = iconPlacementProp === "center" ? "center" : "start"
+  const [internalOpen, setInternalOpen] = useState(false)
+  const [pending, setPending] = useState(false)
+  const isOpen = open ?? internalOpen
+
+  const commitOpen = (next: boolean) => {
+    if (open === undefined) setInternalOpen(next)
+    onOpenChange?.(next)
+  }
+
+  // Escape, overlay and cancel can't close the dialog while an async action runs.
+  const handleOpenChange = (next: boolean) => {
+    if (!next && pending) return
+    commitOpen(next)
+  }
+
+  const handleAction = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const result = onAction?.()
+    if (!result || typeof (result as Promise<unknown>).then !== "function") return
+    // AlertDialogAction closes on click unless the default is prevented.
+    event.preventDefault()
+    setPending(true)
+    ;(result as Promise<unknown>).then(
+      () => {
+        setPending(false)
+        commitOpen(false)
+      },
+      () => setPending(false)
+    )
   }
 
   const handleCancel = () => {
     if (onCancel) onCancel()
-    if (onOpenChange) onOpenChange(false)
   }
 
   return (
     <Slot.Root id={ref}>
-      <AlertDialog open={open} onOpenChange={onOpenChange}>
+      <AlertDialog open={isOpen} onOpenChange={handleOpenChange}>
+        {trigger && <AlertDialogTrigger asChild>{trigger}</AlertDialogTrigger>}
         <AlertDialogContent className={className}>
           {showIcon && iconPlacement === "center" && (
             <div className="-mt-2 flex justify-center">
@@ -135,7 +178,8 @@ function IGRPAlertDialog({
             )}
             <div className="flex-1">
               <AlertDialogHeader className={cn(iconPlacement === "center" && "items-center")}>
-                {title && <AlertDialogTitle className={cn(titleClassName)}>{title}</AlertDialogTitle>}
+                {/* Always rendered: Radix requires a title for screen readers, even an empty one. */}
+                <AlertDialogTitle className={cn(!title && "sr-only", titleClassName)}>{title}</AlertDialogTitle>
                 {description && (
                   <AlertDialogDescription className={descriptionClassName}>{description}</AlertDialogDescription>
                 )}
@@ -146,13 +190,15 @@ function IGRPAlertDialog({
                 className={cn("mt-3", iconPlacement === "center" && "flex-col sm:flex-row", footerClassName)}
               >
                 {showCancel && (
-                  <AlertDialogCancel onClick={handleCancel} {...cancelProps}>
+                  <AlertDialogCancel onClick={handleCancel} disabled={pending} {...cancelProps}>
                     {cancelLabel ?? i18n.alertDialog.cancel}
                   </AlertDialogCancel>
                 )}
-                <AlertDialogAction onClick={handleAction} className={actionClassName} {...actionProps}>
-                  {actionLabel ?? i18n.alertDialog.action}
-                </AlertDialogAction>
+                {showAction && (
+                  <AlertDialogAction asChild onClick={handleAction} className={actionClassName} {...actionProps}>
+                    <IGRPButton loading={pending}>{actionLabel ?? i18n.alertDialog.action}</IGRPButton>
+                  </AlertDialogAction>
+                )}
               </AlertDialogFooter>
             </div>
           </div>
@@ -165,7 +211,7 @@ function IGRPAlertDialog({
 interface AlertIconProps {
   bgClass: string
   textClass: string
-  iconPlacement: IGRPPlacementProps
+  iconPlacement: "start" | "center"
   iconName: IGRPIconName | string
 }
 

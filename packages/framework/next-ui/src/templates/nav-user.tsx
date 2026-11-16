@@ -27,9 +27,45 @@ export type { IGRPNavUserLabels };
 /** @deprecated Use IGRP_CHROME_STRINGS_PT.navUser. */
 export const IGRP_NAV_USER_LABELS_PT_PT: IGRPNavUserLabels = IGRP_CHROME_STRINGS_PT.navUser;
 
+const iconClassName = 'mr-1';
+// `focus:`, not `hover:` — Radix focuses the item on pointer-over too, and the
+// DS item recolours every descendant on focus (`focus:**:text-accent-foreground`),
+// so the text override must also reach descendants or it renders dark on primary.
+const itemClassName =
+  'cursor-pointer focus:bg-primary! focus:text-primary-foreground! focus:**:text-primary-foreground!';
+
+export interface IGRPNavUserItemProps {
+  href: string;
+  /** Leading icon element, e.g. a lucide icon at `size={16}`. */
+  icon?: React.ReactNode;
+  children: React.ReactNode;
+}
+
+/** One link entry in the nav-user menu, styled like the built-in ones. Pass it through `items`. */
+function IGRPNavUserItem({ href, icon, children }: IGRPNavUserItemProps) {
+  return (
+    <DropdownMenuItem asChild className={cn(itemClassName)}>
+      <Link href={href}>
+        {icon && <span className={cn(iconClassName, 'flex')}>{icon}</span>}
+        <span>{children}</span>
+      </Link>
+    </DropdownMenuItem>
+  );
+}
+
 interface IGRPTemplateNavUserProps {
   user?: IGRPUserArgs;
+  /**
+   * Where the menu sits. `header`: avatar-only trigger, opens downward, no
+   * settings entry (the header has its own settings link). `sidebar`: name and
+   * email beside the avatar, opens away from the rail. Defaults to `sidebar`.
+   */
+  variant?: 'header' | 'sidebar';
+  /** @deprecated Use `variant="header"`. */
   isHeader?: boolean;
+  /** Profile entry destination. Defaults to `/profile`. */
+  profileUrl?: string;
+  /** @deprecated Use `profileUrl`. */
   userProfileUrl?: string;
   notificationsUrl?: string;
   settingsUrl?: string;
@@ -38,23 +74,34 @@ interface IGRPTemplateNavUserProps {
    * session watcher also targets for a clean IdP single-logout.
    */
   logoutUrl?: string;
+  /** Show the link-only Notifications entry. Defaults to `true`. */
   showNotifications?: boolean;
+  /**
+   * Extra entries, rendered after the built-in ones and before sign-out. Use
+   * `IGRPNavUserItem` to match the built-in look.
+   */
+  items?: React.ReactNode;
   /** Partial override of the chrome catalog group. Missing keys keep the catalog value. */
   labels?: Partial<IGRPNavUserLabels>;
 }
 
 function IGRPTemplateNavUser({
   user,
-  isHeader = false,
-  userProfileUrl = '/profile',
+  variant,
+  isHeader: isHeaderProp = false,
+  profileUrl,
+  userProfileUrl,
   notificationsUrl = '/notifications',
   // `/settings`, matching the header's own settings link. These two defaults
   // disagreed (`/setting` here), so whichever one an app had not routed 404'd.
   settingsUrl = '/settings',
   logoutUrl = '/logout',
   showNotifications = true,
+  items,
   labels: labelOverrides,
 }: IGRPTemplateNavUserProps) {
+  const isHeader = variant ? variant === 'header' : isHeaderProp;
+  const resolvedProfileUrl = profileUrl ?? userProfileUrl ?? '/profile';
   const { isMobile } = useIGRPSidebar();
   const chrome = useIGRPChromeI18n();
 
@@ -65,13 +112,6 @@ function IGRPTemplateNavUser({
   // In the header the trigger sits at the top-right, so Radix's default
   // (bottom) is correct; in the sidebar footer it has to open away from the rail.
   const side = isHeader ? undefined : isMobile ? 'bottom' : 'right';
-
-  const iconClassName = 'mr-1';
-  // `focus:`, not `hover:` — Radix focuses the item on pointer-over too, and the
-  // DS item recolours every descendant on focus (`focus:**:text-accent-foreground`),
-  // so the text override must also reach descendants or it renders dark on primary.
-  const itemClassName =
-    'cursor-pointer focus:bg-primary! focus:text-primary-foreground! focus:**:text-primary-foreground!';
 
   return (
     <SidebarMenu>
@@ -119,7 +159,7 @@ function IGRPTemplateNavUser({
             <DropdownMenuSeparator />
 
             <DropdownMenuItem asChild className={cn(itemClassName)}>
-              <Link href={userProfileUrl}>
+              <Link href={resolvedProfileUrl}>
                 <UserIcon size={16} className={iconClassName} />
                 <span>{labels.profile}</span>
               </Link>
@@ -147,6 +187,8 @@ function IGRPTemplateNavUser({
               </DropdownMenuItem>
             )}
 
+            {items}
+
             <DropdownMenuSeparator />
 
             <DropdownMenuItem asChild className={cn(itemClassName)}>
@@ -162,4 +204,7 @@ function IGRPTemplateNavUser({
   );
 }
 
-export { IGRPTemplateNavUser, type IGRPTemplateNavUserProps };
+/** The nav-user menu. Same component as `IGRPTemplateNavUser`, named for the `variant` API. */
+const IGRPNavUser = IGRPTemplateNavUser;
+
+export { IGRPTemplateNavUser, IGRPNavUser, IGRPNavUserItem, type IGRPTemplateNavUserProps };

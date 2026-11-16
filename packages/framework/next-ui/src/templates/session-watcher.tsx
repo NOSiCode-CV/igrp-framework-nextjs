@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import { useSession } from '@igrp/framework-next-auth/client';
+import { useIGRPSession } from '@igrp/framework-next-auth/client';
 
 /**
  * Matches the auth chrome routes that handle the unauthenticated state
@@ -46,7 +46,13 @@ export type IGRPSessionWatcherProps = {
 };
 
 export function IGRPSessionWatcher({ children, checkSession }: IGRPSessionWatcherProps) {
-  const { data: session, status, update } = useSession();
+  const igrpSession = useIGRPSession();
+  // Same contract as the `useSession()` this replaced, which threw without a provider.
+  if (!igrpSession) throw new Error('IGRPSessionWatcher must be wrapped in a <SessionProvider />');
+  const {
+    state: { data: session, status, error, expiresAt },
+    actions: { update },
+  } = igrpSession;
   const router = useRouter();
   // `usePathname()` is already basePath-stripped by Next; it is here as a
   // DEPENDENCY, not just a value. Reading `window.location.pathname` inside the
@@ -66,9 +72,7 @@ export function IGRPSessionWatcher({ children, checkSession }: IGRPSessionWatche
     // clean IdP single-logout instead of leaving the broken session mounted —
     // otherwise the next access-token-bearing request 401s and surfaces in the
     // global error boundary.
-    const refreshFailed =
-      (session as { error?: string } | null)?.error === 'RefreshAccessTokenError';
-    if (refreshFailed) {
+    if (error === 'RefreshAccessTokenError') {
       router.replace('/logout');
       return;
     }
@@ -83,7 +87,7 @@ export function IGRPSessionWatcher({ children, checkSession }: IGRPSessionWatche
         ? `/login?callbackUrl=${encodeURIComponent(currentPath)}`
         : '/login';
     router.push(target);
-  }, [status, session, router, pathname]);
+  }, [status, session, error, router, pathname]);
 
   // Adaptive silent-refresh scheduler. The fixed-interval SessionProvider poll
   // (`sessionArgs.refetchInterval`; there is no env var for it) only works when
@@ -101,7 +105,6 @@ export function IGRPSessionWatcher({ children, checkSession }: IGRPSessionWatche
   // not flap through `update()`'s `loading`, so the effect does NOT re-fire
   // (no retry loop); the error-flag effect above routes to /logout instead.
   // The fixed-interval poll stays on as a fallback.
-  const expiresAt = (session as { expiresAt?: number } | null)?.expiresAt;
   // `update()` flips status to `loading` while it runs; with data still present
   // that is the same session, not a new one.
   const hasSession = status === 'authenticated' || (status === 'loading' && !!session);

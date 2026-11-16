@@ -16,12 +16,13 @@ interface IGRPStatsCardMiniProps extends Omit<
   | "cardBorder"
   | "cardBorderPosition"
   | "cardVariant"
-  | "iconShowBackground"
+  | "showIconBackground"
   | "iconBackground"
-  | "iconBackgroundBorder"
+  | "showIconBorder"
+  | "iconAppearance"
+  | "iconShape"
   | "iconVariant"
-  | "titleColor"
-  | "valueColor"
+  | "iconPlacement"
 > {
   /** Color theme for the card (e.g. 'primary', 'success', 'destructive'). */
   variant?: IGRPColorVariants
@@ -29,7 +30,7 @@ interface IGRPStatsCardMiniProps extends Omit<
 
 /**
  * Compact stats card with minimal styling and variant-based colors.
- * Uses IGRPStatsCard internally with fixed layout (no icon background, rounded icon border).
+ * Uses IGRPStatsCard internally with fixed layout (outlined square icon coloured by `variant`).
  */
 function IGRPStatsCardMini({
   title,
@@ -69,12 +70,11 @@ function IGRPStatsCardMini({
       iconName={iconName}
       image={image}
       imageAlt={imageAlt}
-      showIconBackground={false}
       iconPlacement="start"
-      iconBackground="square"
-      showIconBorder={true}
-      iconVariant="primary"
-      iconClassName={cn("border", "border-solid", "rounded-md", color.text, iconClassName)}
+      iconAppearance="outline"
+      iconShape="square"
+      iconVariant={variant}
+      iconClassName={cn(iconClassName)}
       cardBorder="rounded-xl"
       cardBorderPosition="none"
       cardVariant="primary"

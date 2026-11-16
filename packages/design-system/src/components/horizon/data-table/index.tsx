@@ -76,11 +76,21 @@ interface IGRPDataTableProps<TData, TValue> {
   data: TData[]
   /** Show pagination controls. Without them every row renders (no client-side paging). */
   showPagination?: boolean
-  /** Use numeric page selector instead of prev/next. */
+  /**
+   * Use numeric page selector instead of prev/next.
+   * @deprecated Use `pagination={{ type: "numeric" }}`.
+   */
   isNumericPagination?: boolean
-  /** Available page size options. */
+  /**
+   * Available page size options.
+   * @deprecated Use `pagination={{ pageSizeOptions }}`.
+   */
   pageSizePagination?: number[]
-  /** Use server-side filtering (requires serverFilterComponent). */
+  /**
+   * Swaps the client filters for `serverFilterComponent`. It does not page, sort or
+   * filter on the server — that is `onQueryChange`.
+   * @deprecated For server mode use `IGRPServerDataTable` (or `onQueryChange` here); for custom filter UI use `toolbar`.
+   */
   isServerSide?: boolean
   /** Show filter UI. */
   showFilter?: boolean
@@ -106,8 +116,16 @@ interface IGRPDataTableProps<TData, TValue> {
   tableBodyClassName?: string
   /** CSS classes for pagination. */
   paginationClassName?: string
-  /** Custom filter component for server-side mode. */
+  /**
+   * Custom filter component for server-side mode (only with `isServerSide`).
+   * @deprecated Use `toolbar`.
+   */
   serverFilterComponent?: React.ReactNode
+  /**
+   * Extra controls rendered in the toolbar row next to the filters (search box,
+   * custom filters, buttons). Shown with or without `showFilter`.
+   */
+  toolbar?: React.ReactNode
   /** Message when no rows match. */
   notFoundLabel?: string
   /** Whether a row can be expanded. */
@@ -207,6 +225,7 @@ function IGRPDataTable<TData, TValue>({
   tableBodyClassName,
   paginationClassName,
   serverFilterComponent,
+  toolbar,
   notFoundLabel,
   // rowSelection,
   // onRowSelectionChange,
@@ -223,6 +242,13 @@ function IGRPDataTable<TData, TValue>({
   const i18n = useIGRPi18n()
   const resolvedClearLabel = clientClearLabel ?? i18n.dataTable.clearFilters
   const resolvedNotFoundLabel = notFoundLabel ?? i18n.dataTable.notFound
+
+  useEffect(() => {
+    if (process.env.NODE_ENV === "production" || !isServerSide || onQueryChange) return
+    console.warn(
+      "IGRPDataTable: isServerSide only swaps in serverFilterComponent; without onQueryChange the rows are still paged, sorted and filtered on the client. Use IGRPServerDataTable or pass onQueryChange."
+    )
+  }, [isServerSide, onQueryChange])
 
   const [state, dispatch] = useReducer(tableReducer, {
     columnFilters: [],
@@ -407,9 +433,12 @@ function IGRPDataTable<TData, TValue>({
     [columns]
   )
 
+  // The filter block has always rendered whenever the toolbar row did (showFilter or showToggleColumn).
+  const showFilters = showFilter || showToggleColumn
+
   return (
     <div className={cn("flex flex-col gap-4", className)} id={ref}>
-      {showFilter || showToggleColumn ? (
+      {showFilters || toolbar ? (
         <div
           className={cn(
             "flex flex-col gap-3 md:flex-1 md:flex-row md:items-center md:justify-between",
@@ -417,17 +446,18 @@ function IGRPDataTable<TData, TValue>({
           )}
         >
           <div className="flex flex-col gap-2 md:flex-row">
-            {isServerSide ? (
-              serverFilterComponent
-            ) : (
-              <IGRPDataTableClientFilter
-                table={table}
-                filterList={clientFilters || []}
-                filterLabel={resolvedClearLabel}
-                onFiltersCleared={onFiltersCleared}
-              />
-            )}
-            {filterDescriptors.length > 0 && (
+            {showFilters &&
+              (isServerSide ? (
+                serverFilterComponent
+              ) : (
+                <IGRPDataTableClientFilter
+                  table={table}
+                  filterList={clientFilters || []}
+                  filterLabel={resolvedClearLabel}
+                  onFiltersCleared={onFiltersCleared}
+                />
+              ))}
+            {showFilters && filterDescriptors.length > 0 && (
               <div className={cn("flex flex-col gap-2 md:flex-row md:items-center")}>
                 {filterDescriptors.map(({ columnId, descriptor }) => {
                   const column = table.getColumn(columnId)
@@ -469,6 +499,7 @@ function IGRPDataTable<TData, TValue>({
                 })}
               </div>
             )}
+            {toolbar}
           </div>
 
           {showToggleColumn && (

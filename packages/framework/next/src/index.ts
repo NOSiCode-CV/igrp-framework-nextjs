@@ -9,15 +9,30 @@ export { IGRPGlobalLoading } from './components/global-loading.js';
 
 export { IGRPLayoutFull, type IGRPLayoutFullArgs } from './layouts/igrp-layout-full.js';
 export { IGRPLayoutBlank, type IGRPLayoutBlankArgs } from './layouts/igrp-layout-blank.js';
+export {
+  IGRPLayoutHeader,
+  IGRPLayoutSidebar,
+  type IGRPLayoutHeaderArgs,
+  type IGRPLayoutSidebarArgs,
+} from './layouts/igrp-layout-chrome.js';
 // @deprecated Use IGRPLayoutFull instead.
 
-export { IGRPRootLayout, type IGRPRootLayoutArgs } from './layouts/igrp-root-layout.js';
+export {
+  IGRPRootLayout,
+  IGRPRootLayoutProviders,
+  type IGRPRootLayoutArgs,
+  type IGRPRootLayoutProvidersArgs,
+} from './layouts/igrp-root-layout.js';
 
 export { igrpBuildConfig } from './lib/build.js';
 
 // Resolves `layoutData` (with a framework error when missing) for consumers that
 // read the layout data source themselves (e.g. a template's header search).
 export { igrpResolveLayoutDataSource } from './lib/layout-data-source.js';
+
+// The app menus from the sidebar's own source (layoutData.getMenus, preview
+// data, or Access Management), cached per request.
+export { igrpGetLayoutMenus } from './lib/layout-menus.js';
 
 export { igrpGetAccessClient } from './lib/api-client.js';
 

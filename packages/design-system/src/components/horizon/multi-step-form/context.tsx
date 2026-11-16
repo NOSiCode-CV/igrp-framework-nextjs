@@ -2,7 +2,7 @@
 
 /* eslint-disable react-refresh/only-export-components */
 
-import { createContext, useContext } from "react"
+import { createContext, use } from "react"
 
 interface IGRPWizardStep {
   key: string
@@ -30,6 +30,10 @@ interface IGRPMultiStepFormContextValue {
   goToPrevious: () => void
   goToFirstStep: () => void
   goToStep: (step: number, options?: IGRPGoToStepOptions) => Promise<boolean>
+  /**
+   * Replaces the step list until the `steps` prop changes.
+   * @deprecated Internal; pass a new `steps` array to `IGRPMultiStepForm` instead.
+   */
   setSteps: (next: IGRPWizardStep[]) => void
 }
 
@@ -47,7 +51,7 @@ const IGRPMultiStepFormBlockingContext = createContext<{
 
 /** Wizard state and navigation. Must be used within IGRPMultiStepForm. */
 function useIGRPMultiStepForm(): IGRPMultiStepFormContextValue {
-  const ctx = useContext(IGRPMultiStepFormContext)
+  const ctx = use(IGRPMultiStepFormContext)
   if (!ctx) throw new Error("useIGRPMultiStepForm must be used within IGRPMultiStepForm")
   return ctx
 }

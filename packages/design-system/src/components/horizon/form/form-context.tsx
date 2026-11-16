@@ -1,6 +1,6 @@
 "use client"
 
-import { createContext, useContext } from "react"
+import { createContext, use } from "react"
 import { type FieldValues, type UseFormReturn } from "react-hook-form"
 import { z } from "zod"
 
@@ -29,7 +29,7 @@ const IGRPFormContext = createContext<IGRPFormContextValue<any> | null>(null)
  * @throws Error if used outside FormProvider
  */
 function useIGRPFormContext<TSchema extends z.ZodType>() {
-  const context = useContext(IGRPFormContext)
+  const context = use(IGRPFormContext)
 
   if (!context) {
     throw new Error("useIGRPFormContext must be used within a FormProvider")

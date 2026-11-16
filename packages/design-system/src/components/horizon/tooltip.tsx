@@ -3,7 +3,8 @@
 // The context is shared with the data-table wrappers; exporting it here avoids a one-symbol file.
 /* eslint-disable react-refresh/only-export-components */
 
-import { createContext, useContext, type ReactElement, type ReactNode } from "react"
+import { createContext, use, type ReactElement, type ReactNode } from "react"
+import { Slot } from "radix-ui"
 
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../primitives/tooltip.js"
 
@@ -20,9 +21,9 @@ function IGRPTooltipProvider({
   delayDuration?: number
 }) {
   return (
-    <IGRPTooltipContext.Provider value>
+    <IGRPTooltipContext value>
       <TooltipProvider delayDuration={delayDuration}>{children}</TooltipProvider>
-    </IGRPTooltipContext.Provider>
+    </IGRPTooltipContext>
   )
 }
 
@@ -58,10 +59,15 @@ function IGRPTooltip({
   delayDuration = 0,
   className,
   disabled: disabledProp,
-}: IGRPTooltipProps) {
-  const hasProvider = useContext(IGRPTooltipContext)
+  ...slotProps
+}: IGRPTooltipProps &
+  Omit<React.HTMLAttributes<HTMLElement>, keyof IGRPTooltipProps> & { ref?: React.Ref<HTMLElement> }) {
+  const hasProvider = use(IGRPTooltipContext)
 
-  if (!label) return children
+  // Props from an `asChild` parent (e.g. a dialog trigger's onClick and ref) belong to the control, not the span.
+  const control = Object.keys(slotProps).length > 0 ? <Slot.Root {...slotProps}>{children}</Slot.Root> : children
+
+  if (!label) return control
 
   const disabled = Boolean(disabledProp ?? (children.props as { disabled?: boolean }).disabled)
 
@@ -74,7 +80,7 @@ function IGRPTooltip({
           // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- a disabled child can't take focus; the span stands in so keyboard users reach the tooltip
           tabIndex={disabled ? 0 : undefined}
         >
-          {children}
+          {control}
         </span>
       </TooltipTrigger>
       <TooltipContent side={side} align={align} className={className} sideOffset={sideOffset}>

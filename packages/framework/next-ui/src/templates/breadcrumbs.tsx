@@ -3,6 +3,7 @@
 import { Fragment, useMemo, useRef } from 'react';
 import { useBreadcrumbOverflow } from '../hooks/use-breadcrumb-overflow.js';
 import { useIGRPChromeI18n } from '../i18n/context.js';
+import { useIGRPBreadcrumbItems } from '../providers/breadcrumbs.js';
 import Link from 'next/link';
 import { useSelectedLayoutSegments } from 'next/navigation';
 import {
@@ -35,6 +36,7 @@ interface IGRPTemplateBreadcrumbsProps {
   className?: string;
   /**
    * Pre-resolved breadcrumb items. When provided, all URL logic is skipped.
+   * Items a page declares with `<IGRPPageBreadcrumbs>` / `useIGRPBreadcrumbs()` win over these.
    * Pass from a server component that has access to route params and can fetch
    * data. The home item is always rendered by the component — do not include it.
    */
@@ -86,7 +88,7 @@ function formatSegmentLabel(segment: string): string {
 
 function IGRPTemplateBreadcrumbs({
   className,
-  items,
+  items: itemsProp,
   routeLabels = EMPTY_ROUTE_LABELS,
   formatLabel,
   homeLabel,
@@ -96,6 +98,8 @@ function IGRPTemplateBreadcrumbs({
   itemsAfterCollapse = 1,
 }: IGRPTemplateBreadcrumbsProps) {
   const chrome = useIGRPChromeI18n();
+  // Page-declared trail first, then the explicit prop, then the URL.
+  const items = useIGRPBreadcrumbItems() ?? itemsProp;
   // Always call — hooks cannot be conditional. Ignored when items is provided.
   // Under Next `cacheComponents`/PPR this becomes a DYNAMIC read: if a consumer
   // enables it and this renders inside a statically-cached shell, wrap the

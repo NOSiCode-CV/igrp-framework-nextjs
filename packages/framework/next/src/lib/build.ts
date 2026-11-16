@@ -38,7 +38,18 @@ const layoutDataSourceSchema = (field: string) =>
     getSidebarData: z.custom<() => Promise<unknown>>(isFunction, {
       message: `${field}.getSidebarData deve ser uma função assíncrona.`,
     }),
+    getMenus: optionalAsyncFunction(`${field}.getMenus`),
+    getUser: optionalAsyncFunction(`${field}.getUser`),
+    getApps: optionalAsyncFunction(`${field}.getApps`),
   });
+
+function optionalAsyncFunction(path: string) {
+  return z
+    .custom<() => Promise<unknown>>(isFunction, {
+      message: `${path} deve ser uma função assíncrona.`,
+    })
+    .optional();
+}
 
 const igrpConfigSchema = z
   .object({

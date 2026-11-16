@@ -12,7 +12,10 @@ vi.mock('next/navigation', () => ({
 const update = vi.fn().mockResolvedValue(null);
 let expiresAt = Date.now() + 3_600_000;
 vi.mock('@igrp/framework-next-auth/client', () => ({
-  useSession: () => ({ data: { expiresAt }, status: 'authenticated', update }),
+  useIGRPSession: () => ({
+    state: { data: { expiresAt }, status: 'authenticated', expiresAt },
+    actions: { update },
+  }),
 }));
 
 const { IGRPSessionWatcher, SESSION_CHECK_MIN_INTERVAL_MS } = await import('../session-watcher.js');

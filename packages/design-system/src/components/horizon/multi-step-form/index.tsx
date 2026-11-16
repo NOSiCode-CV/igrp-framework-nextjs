@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useContext, useMemo, useRef, useState } from "react"
+import { useCallback, use, useMemo, useRef, useState } from "react"
 
 import { cn } from "../cn.js"
 import { IGRPFormContext } from "../form/form-context.js"
@@ -15,10 +15,16 @@ import { clampStepIndex, resolveStepIndex } from "./lib.js"
 
 interface IGRPMultiStepFormProps {
   steps: IGRPWizardStep[]
-  /** 1-based step to start on; changing it re-applies it. Default 1. */
+  /** 1-based step to start on; changing it re-applies it. Default 1. Ignored when `step` is set. */
   initialStep?: number
+  /**
+   * Controlled 1-based current step (clamped to the step count). Navigation then
+   * only calls `onStepChange`; the wizard moves when `step` changes.
+   */
+  step?: number
   /** Replaces the default validation (`form.trigger(step.fields)` inside an IGRPForm, otherwise true). */
   onStepValidation?: (step: IGRPWizardStep) => Promise<boolean> | boolean
+  /** Called with the step navigation moves to (and the one it left). Pair with `step` to control the wizard. */
   onStepChange?: (next: number, prev: number) => void
   className?: string
   children: React.ReactNode
@@ -28,12 +34,13 @@ interface IGRPMultiStepFormProps {
 function IGRPMultiStepForm({
   steps: stepsProp,
   initialStep = 1,
+  step: controlledStep,
   onStepValidation,
   onStepChange,
   className,
   children,
 }: IGRPMultiStepFormProps) {
-  const formCtx = useContext(IGRPFormContext)
+  const formCtx = use(IGRPFormContext)
   const form = formCtx?.form
 
   const [steps, setSteps] = useState(stepsProp)
@@ -50,7 +57,8 @@ function IGRPMultiStepForm({
   )
   const [blockingMessage, setBlockingMessage] = useState<string | null>(null)
 
-  const currentStepIndex = resolveStepIndex(steps, currentKey)
+  const currentStepIndex =
+    controlledStep !== undefined ? clampStepIndex(controlledStep, steps.length) : resolveStepIndex(steps, currentKey)
   const currentStepData = steps[currentStepIndex - 1]
 
   // A changed initialStep re-applies (a saved draft resumes at the step the backend accepted).
@@ -94,10 +102,10 @@ function IGRPMultiStepForm({
   const moveTo = useCallback(
     (next: number) => {
       if (next === currentStepIndex) return
-      setCurrentKey(steps[next - 1]?.key)
+      if (controlledStep === undefined) setCurrentKey(steps[next - 1]?.key)
       onStepChange?.(next, currentStepIndex)
     },
-    [steps, currentStepIndex, onStepChange]
+    [steps, currentStepIndex, onStepChange, controlledStep]
   )
 
   const goToStep = useCallback(
@@ -151,8 +159,8 @@ function IGRPMultiStepForm({
   const blocking = useMemo(() => ({ message: blockingMessage, report: setBlockingMessage }), [blockingMessage])
 
   return (
-    <IGRPMultiStepFormContext.Provider value={value}>
-      <IGRPMultiStepFormBlockingContext.Provider value={blocking}>
+    <IGRPMultiStepFormContext value={value}>
+      <IGRPMultiStepFormBlockingContext value={blocking}>
         {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions -- keydown only bubbles from the inputs inside; the wrapper is not itself interactive */}
         <div
           data-slot="multi-step-form"
@@ -166,8 +174,8 @@ function IGRPMultiStepForm({
         >
           {children}
         </div>
-      </IGRPMultiStepFormBlockingContext.Provider>
-    </IGRPMultiStepFormContext.Provider>
+      </IGRPMultiStepFormBlockingContext>
+    </IGRPMultiStepFormContext>
   )
 }
 

@@ -1,6 +1,6 @@
 "use client"
 
-import { useContext } from "react"
+import { use } from "react"
 
 import { igrpOmitNonDomProps } from "../../../lib/dom-props.js"
 import { cn } from "../cn.js"
@@ -33,7 +33,7 @@ function IGRPMultiStepFormHeader({
   ...props
 }: IGRPMultiStepFormHeaderProps) {
   const { steps, currentStepIndex, goToStep } = useIGRPMultiStepForm()
-  const message = useContext(IGRPMultiStepFormBlockingContext)?.message ?? null
+  const message = use(IGRPMultiStepFormBlockingContext)?.message ?? null
 
   return (
     <div

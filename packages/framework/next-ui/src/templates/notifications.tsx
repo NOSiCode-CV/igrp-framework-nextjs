@@ -20,6 +20,7 @@ import { useIGRPChromeI18n } from '../i18n/context.js';
 import { IGRP_CHROME_STRINGS_PT, type IGRPNotificationsLabels } from '../i18n/strings.js';
 import type { IGRPNotificationArgs } from '@igrp/framework-next-types';
 import Link from 'next/link';
+import { isAbsoluteUrl } from './menus/utils.js';
 
 /**
  * Renders `IGRPNotificationArgs['timestamp']`, which is an ISO 8601 string in
@@ -53,8 +54,15 @@ export type { IGRPNotificationsLabels };
 export const IGRP_NOTIFICATIONS_LABELS_PT_PT: IGRPNotificationsLabels =
   IGRP_CHROME_STRINGS_PT.notifications;
 
+/**
+ * A notification as this dropdown renders it. `href` makes the item a link:
+ * an absolute URL renders a plain `<a>`, anything else `next/link`.
+ */
+/** @deprecated Use `IGRPNotificationArgs`, which now carries `href`. */
+type IGRPTemplateNotification = IGRPNotificationArgs;
+
 interface IGRPTemplateNotificationsProps {
-  notifications: IGRPNotificationArgs[];
+  notifications: IGRPTemplateNotification[];
   notificationsUrl?: string;
   /** Called when the user clicks "mark all as read". Consumer is responsible for updating the notifications array. */
   onMarkAllRead?: () => void;
@@ -67,6 +75,11 @@ interface IGRPTemplateNotificationsProps {
   locale?: string;
   /** Partial override of the chrome catalog group. Missing keys keep the catalog value. */
   labels?: Partial<IGRPNotificationsLabels>;
+  /** Called when the user picks a notification (click or keyboard), before any `href` navigation. */
+  onSelect?: (notification: IGRPTemplateNotification) => void;
+  /** Controlled open state of the dropdown. Omit to let it own it. */
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }
 
 function IGRPTemplateNotifications({
@@ -75,6 +88,9 @@ function IGRPTemplateNotifications({
   onMarkAllRead,
   locale,
   labels: labelOverrides,
+  onSelect,
+  open,
+  onOpenChange,
 }: IGRPTemplateNotificationsProps) {
   const providerLocale = useIGRPLocale();
   const resolvedLocale = locale ?? providerLocale;
@@ -86,7 +102,7 @@ function IGRPTemplateNotifications({
   const unreadCount = notifications.filter((n) => !n.isRead).length;
 
   return (
-    <DropdownMenu>
+    <DropdownMenu open={open} onOpenChange={onOpenChange}>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="icon" className="size-6 relative">
           <BellIcon size={16} strokeWidth={2} />
@@ -122,22 +138,38 @@ function IGRPTemplateNotifications({
         <DropdownMenuSeparator />
         <DropdownMenuGroup className={cn('max-h-72 overflow-auto')}>
           {notifications.length > 0 ? (
-            notifications.map((notification) => (
-              <DropdownMenuItem
-                key={notification.id}
-                className={cn('flex flex-col items-start p-4')}
-              >
-                <div className={cn('font-medium')}>{notification.title}</div>
-                <div className={cn('text-sm text-muted-foreground')}>{notification.message}</div>
-                <time
-                  dateTime={toIsoString(notification.timestamp)}
-                  suppressHydrationWarning
-                  className={cn('text-xs text-muted-foreground mt-1')}
+            notifications.map((notification) => {
+              const body = (
+                <>
+                  <div className={cn('font-medium')}>{notification.title}</div>
+                  <div className={cn('text-sm text-muted-foreground')}>{notification.message}</div>
+                  <time
+                    dateTime={toIsoString(notification.timestamp)}
+                    suppressHydrationWarning
+                    className={cn('text-xs text-muted-foreground mt-1')}
+                  >
+                    {formatTimestamp(notification.timestamp, resolvedLocale)}
+                  </time>
+                </>
+              );
+              const { href } = notification;
+              return (
+                <DropdownMenuItem
+                  key={notification.id}
+                  className={cn('flex flex-col items-start p-4')}
+                  onSelect={onSelect ? () => onSelect(notification) : undefined}
+                  asChild={!!href}
                 >
-                  {formatTimestamp(notification.timestamp, resolvedLocale)}
-                </time>
-              </DropdownMenuItem>
-            ))
+                  {!href ? (
+                    body
+                  ) : isAbsoluteUrl(href) ? (
+                    <a href={href}>{body}</a>
+                  ) : (
+                    <Link href={href}>{body}</Link>
+                  )}
+                </DropdownMenuItem>
+              );
+            })
           ) : (
             <div className={cn('py-4 px-2 text-center text-muted-foreground')}>{labels.empty}</div>
           )}
@@ -151,4 +183,8 @@ function IGRPTemplateNotifications({
   );
 }
 
-export { IGRPTemplateNotifications, type IGRPTemplateNotificationsProps };
+export {
+  IGRPTemplateNotifications,
+  type IGRPTemplateNotification,
+  type IGRPTemplateNotificationsProps,
+};

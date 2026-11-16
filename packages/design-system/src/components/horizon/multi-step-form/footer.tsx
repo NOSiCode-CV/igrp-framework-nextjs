@@ -1,6 +1,6 @@
 "use client"
 
-import { useContext, useEffect } from "react"
+import { use, useEffect } from "react"
 import { useWatch } from "react-hook-form"
 
 import { useIGRPi18n } from "../../../i18n/index.js"
@@ -66,7 +66,7 @@ function BlockedNext({
   buttonProps: ReturnType<typeof nextButtonProps>
 }) {
   const message = blockingMessage(useWatch() as Record<string, unknown>)
-  const blocking = useContext(IGRPMultiStepFormBlockingContext)
+  const blocking = use(IGRPMultiStepFormBlockingContext)
   const report = blocking?.report
   useEffect(() => {
     report?.(message)

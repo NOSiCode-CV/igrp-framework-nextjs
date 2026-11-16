@@ -754,6 +754,8 @@ export {
   IGRPMenuNavigation,
   type IGRPMenuNavigationItem,
   type IGRPMenuNavigationProps,
+  type IGRPMenuNavigationProviderProps,
+  type IGRPMenuNavigationContextValue,
   useIGRPMenuNavigation,
 } from "./components/horizon/menu-navigation.js"
 
@@ -863,6 +865,8 @@ export {
 export {
   IGRPStatsCard,
   type IGRPStatsCardProps,
+  type IGRPStatsCardIconAppearance,
+  type IGRPStatsCardIconShape,
   igrpStatsCardVariants,
   igrpStatsCardTitleVariants,
   igrpStatsCardValueVariants,

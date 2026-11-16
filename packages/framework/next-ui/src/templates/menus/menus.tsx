@@ -27,6 +27,10 @@ export type IGRPTemplateMenuArgs = {
   navAriaLabel?: string;
   /** Partial override of the chrome catalog group. Missing keys keep the catalog value. */
   labels?: Partial<IGRPMenuLabels>;
+  /** Controlled search query. Omit to let the menu own it. */
+  query?: string;
+  /** Called with every query change (typing, clear), controlled or not. */
+  onQueryChange?: (query: string) => void;
 };
 
 export function IGRPTemplateMenus({
@@ -34,9 +38,12 @@ export function IGRPTemplateMenus({
   showSearch = false,
   navAriaLabel,
   labels: labelOverrides,
+  query: controlledQuery,
+  onQueryChange,
 }: IGRPTemplateMenuArgs) {
   const pathname = usePathname();
-  const [query, setQuery] = useState('');
+  const [internalQuery, setInternalQuery] = useState('');
+  const query = controlledQuery ?? internalQuery;
   const sections = useMemo(() => buildMenuSections(menus), [menus]);
   const activeHref = useMemo(() => findActiveHref(sections, pathname), [sections, pathname]);
   const chrome = useIGRPChromeI18n();
@@ -51,20 +58,29 @@ export function IGRPTemplateMenus({
   // Keyed off the menu CONTENT, not the array identity. `[menus]` cleared what
   // the user was typing on every render in which the caller rebuilt the array
   // — which is every render for anyone passing an inline literal, the shape the
-  // default parameter itself produces.
+  // default parameter itself produces. A controlled query is the caller's to
+  // reset: notifying it here would set parent state during render.
   const menuKey = useMemo(() => menus.map((m) => m.code).join('|'), [menus]);
   const [queryMenuKey, setQueryMenuKey] = useState(menuKey);
   if (menuKey !== queryMenuKey) {
     setQueryMenuKey(menuKey);
-    setQuery('');
+    setInternalQuery('');
   }
+
+  const setQuery = useCallback(
+    (next: string) => {
+      setInternalQuery(next);
+      onQueryChange?.(next);
+    },
+    [onQueryChange],
+  );
 
   const handleQueryChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => setQuery(e.target.value),
-    [],
+    [setQuery],
   );
 
-  const handleClearQuery = useCallback(() => setQuery(''), []);
+  const handleClearQuery = useCallback(() => setQuery(''), [setQuery]);
 
   // Typing stays responsive on large menus: results re-filter at lower priority.
   const deferredQuery = useDeferredValue(query.trim());

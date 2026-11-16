@@ -138,7 +138,7 @@ templates/demo-v1/
 │   ├── actions/igrp/
 │   │   ├── layout.ts                      # configLayout()
 │   │   └── auth.ts
-│   ├── components/                        # app-search.tsx, home-overview.tsx
+│   ├── components/                        # home-overview.tsx
 │   ├── config/                            # site, login
 │   ├── i18n/                              # next-intl setup, server actions, messages/ catalogs
 │   ├── lib/
@@ -148,7 +148,6 @@ templates/demo-v1/
 │   │   ├── utilities.ts                   # isPreviewMode, isAuthDisabled, isAuthBypass, sanitizeCallbackUrl
 │   │   ├── errors.ts, report-error.ts
 │   │   ├── fonts.ts
-│   │   ├── header-search.ts               # Command-palette data (server)
 │   │   ├── session-store.ts, silent-sso.ts, logout-pending.ts, error-copy.ts
 │   │   └── config/                        # get-base-path, get-permissions, get-pkj, get-routes, get-session-args
 │   ├── providers/                         # React Query: query-provider.tsx, query-client(.server).ts
@@ -172,7 +171,7 @@ Detailed topics live in [`docs/`](docs/):
 | --- | --- |
 | [Environment Variables](docs/ENVIRONMENT.md) | Every env var (auth, NextAuth, framework, M2M, public) + required auth-server URI registration |
 | [Architecture](docs/ARCHITECTURE.md) | How the template wires middleware, root layout, IGRP layout, and the config builder; authenticated data flow |
-| [Header Slots](docs/HEADER_SLOTS.md) | Injecting your own components into the header — replacing search, notifications or settings, and adding new actions via `headerSlots` |
+| [Header Slots](docs/HEADER_SLOTS.md) | Your own components in the header (`slots` on `IGRPLayoutHeader`), or a header and sidebar composed from the framework parts |
 | [Authentication](docs/AUTHENTICATION.md) | Centralized `withIGRPAuth` instance, `callbackUrl` sanitization, the OIDC flow, and the preview-mode / `AUTH_PROVIDER=none` bypass |
 | [Permissions](docs/PERMISSIONS.md) | Token-claims gating for pages, components, and menus — `igrpAssertAuthorize`, `<IGRPAuthorization>`, `usePermissions` |
 | [Access Management Sync](docs/ACCESS_MANAGEMENT.md) | OAuth2 `client_credentials` sync of application/resources/menus to the Access Management API |
@@ -190,7 +189,7 @@ Tailwind compiles **once here in the app**, not in the framework packages. Impor
 
 ### Header slots — quick note
 
-Render your own components in the header by passing `headerSlots` to `IGRPLayoutFull`: `start` (left, after the logo), and `search`, `settings`, `notifications` and `actions` in the right cluster. The framework still fetches and owns all header data (user, logo, breadcrumbs) — a slot only replaces what renders in its position. Slots must be **elements**, not component references, since they cross the Server→Client boundary. This template's command palette is the worked example: [`src/lib/header-search.ts`](src/lib/header-search.ts) (server data) + [`src/components/app-search.tsx`](src/components/app-search.tsx) (client handlers), wired in [`src/app/(igrp)/layout.tsx`](src/app/(igrp)/layout.tsx). Full guide in [Header Slots](docs/HEADER_SLOTS.md).
+Render your own components in the header by passing `slots` to `IGRPLayoutHeader`, given to `IGRPLayoutFull` as `header`: `start` (left, after the logo), and `search`, `settings`, `notifications` and `actions` in the right cluster. The framework still fetches and owns all header data (user, logo, breadcrumbs). A slot only replaces what renders in its position, and a supplied slot always renders. Slots must be **elements**, not component references, since they cross the Server→Client boundary. The command palette needs no slot: the framework fills it from the same menus the sidebar shows. See [`src/app/(igrp)/layout.tsx`](src/app/(igrp)/layout.tsx) and the full guide in [Header Slots](docs/HEADER_SLOTS.md).
 
 ### Permissions — quick note
 

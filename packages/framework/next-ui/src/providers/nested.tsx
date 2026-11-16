@@ -4,6 +4,7 @@ import { type Session } from '@igrp/framework-next-auth';
 import type { SessionProviderProps } from '@igrp/framework-next-auth/client';
 import type { IGRPBranding } from '@igrp/framework-next-types';
 import { TooltipProvider } from '@igrp/igrp-framework-react-design-system';
+import type { ThemeProviderProps } from 'next-themes';
 
 import { IGRPBrandingProvider } from '../branding/provider.js';
 import { type IGRPCheckSession, IGRPSessionWatcher } from '../templates/session-watcher.js';
@@ -19,6 +20,12 @@ export type IGRPNestedProvidersArgs = {
   checkSession?: IGRPCheckSession;
   /** CSP nonce for the theme boot script next-themes inlines in the HTML. */
   nonce?: string;
+  /**
+   * next-themes props merged over the defaults (`attribute="class"`,
+   * `defaultTheme="system"`, `enableSystem`, `disableTransitionOnChange`,
+   * `enableColorScheme`). `nonce` above wins over a `nonce` given here.
+   */
+  themeProps?: Partial<Omit<ThemeProviderProps, 'children'>>;
 };
 
 export function IGRPNestedProviders({
@@ -27,6 +34,7 @@ export function IGRPNestedProviders({
   sessionArgs,
   checkSession,
   nonce,
+  themeProps,
   children,
 }: IGRPNestedProvidersArgs) {
   return (
@@ -38,7 +46,8 @@ export function IGRPNestedProviders({
           enableSystem
           disableTransitionOnChange
           enableColorScheme
-          nonce={nonce}
+          {...themeProps}
+          nonce={nonce ?? themeProps?.nonce}
         >
           <IGRPBrandingProvider branding={branding}>
             <IGRPSessionWatcher checkSession={checkSession}>{children}</IGRPSessionWatcher>

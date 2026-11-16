@@ -2,40 +2,29 @@
 
 import { Suspense, useEffect } from 'react';
 import type { IGRPHeaderDataArgs } from '@igrp/framework-next-types';
-import {
-  cn,
-  IGRPIcon,
-  Separator,
-  SidebarTrigger,
-  useIGRPToast,
-} from '@igrp/igrp-framework-react-design-system';
+import { cn, Separator, useIGRPToast } from '@igrp/igrp-framework-react-design-system';
 
-import { type BreadcrumbItem, IGRPTemplateBreadcrumbs } from './breadcrumbs.js';
+import type { BreadcrumbItem } from './breadcrumbs.js';
+import type { IGRPCommandItem } from './command-search.js';
 import {
-  IGRPTemplateCommandSearch,
-  type IGRPCommandItem,
-  type IGRPCommandSearchLabels,
-} from './command-search.js';
-import { IGRPTemplateModeSwitcher, type IGRPModeSwitcherLabels } from './mode-switcher.js';
-import { IGRPTemplateNavUser, type IGRPNavUserLabels } from './nav-user.js';
-import { IGRPTemplateNotifications, type IGRPNotificationsLabels } from './notifications.js';
-import { IGRPTemplateImage } from './template-image.js';
-import { useIGRPBranding } from '../branding/provider.js';
-import { resolveHeaderLogo } from '../branding/resolve.js';
-import { useIGRPChromeI18n } from '../i18n/context.js';
-import { withBasePath } from '../lib/utils.js';
-import Image from 'next/image';
-import Link from 'next/link';
-
-/**
- * Logo used when the header data carries no logo, or its logo fails to load.
- *
- * This package publishes only `dist`, so the file is NOT shipped with it — the
- * path is a contract with the consuming app's `public/` directory. Apps that do
- * not have it should pass `fallbackLogo`, otherwise the fallback is itself a
- * broken image, which is the one case a fallback exists to prevent.
- */
-const DEFAULT_HEADER_LOGO = '/logo-no-text.png';
+  IGRPHeaderBreadcrumbs,
+  IGRPHeaderDataProvider,
+  IGRPHeaderEnd,
+  IGRPHeaderLogo,
+  IGRPHeaderModeSwitcher,
+  IGRPHeaderNotifications,
+  IGRPHeaderRoot,
+  IGRPHeaderSearch,
+  IGRPHeaderSettings,
+  IGRPHeaderSidebarTrigger,
+  IGRPHeaderStart,
+  IGRPHeaderTitle,
+  IGRPHeaderUser,
+  type IGRPHeaderLabelProps,
+  useIGRPHeaderData,
+  useOptionalIGRPHeaderData,
+} from './header-parts.js';
+import { useIGRPHasSidebar } from '../providers/shell.js';
 
 /**
  * Consumer-injected header content, positioned by the framework.
@@ -45,21 +34,18 @@ const DEFAULT_HEADER_LOGO = '/logo-no-text.png';
  * that boundary. An element may itself be produced by an async Server Component;
  * each slot renders inside its own <Suspense> so a slow one can't delay the bar.
  *
- * Gating differs by position:
- * - `search`, `notifications` and `settings` occupy positions the framework
- *   already knows about, so `showSearch`/`showNotifications`/`showSettings`
- *   still decide whether the position renders at all; the slot only replaces
- *   *what* renders there.
- * - `start` and `actions` have no flag — passing the node is the whole contract.
+ * A supplied slot always renders. `search`, `notifications` and `settings`
+ * replace a built-in position; the matching `show*` flag only decides whether
+ * the built-in renders when no slot is given. `start` and `actions` have no flag.
  */
 export type IGRPHeaderSlots = {
   /** Left region, after the logo/title and before the breadcrumbs. */
   start?: React.ReactNode;
-  /** Replaces the built-in command palette. Gated by `showSearch`. */
+  /** Replaces the built-in command palette. Renders even when `showSearch` is off. */
   search?: React.ReactNode;
-  /** Replaces the built-in notifications dropdown. Gated by `showNotifications`. */
+  /** Replaces the built-in notifications dropdown. Renders even when `showNotifications` is off. */
   notifications?: React.ReactNode;
-  /** Replaces the built-in settings link. Gated by `showSettings`. */
+  /** Replaces the built-in settings link. Renders even when `showSettings` is off. */
   settings?: React.ReactNode;
   /** Extra items in the right cluster, after notifications, before the theme switcher. */
   actions?: React.ReactNode;
@@ -75,8 +61,11 @@ function HeaderSlot({ children }: { children: React.ReactNode }) {
   return <Suspense fallback={<HeaderSlotFallback />}>{children}</Suspense>;
 }
 
-interface IGRPTemplateHeaderProps {
-  /** Optional because the component already renders nothing without it. */
+interface IGRPTemplateHeaderProps extends IGRPHeaderLabelProps {
+  /**
+   * Header data. Optional: inside `IGRPHeaderDataProvider` (which
+   * `IGRPLayoutHeader` mounts) the provider's data is used.
+   */
   data?: IGRPHeaderDataArgs;
   className?: string;
   /** Pre-resolved breadcrumb items. Forwarded to IGRPTemplateBreadcrumbs. */
@@ -88,89 +77,128 @@ interface IGRPTemplateHeaderProps {
   /**
    * Items for the built-in command palette, gated by `showSearch`.
    *
-   * Without these the palette opens empty on every ⌘K — the only way to give it
-   * contents used to be replacing it wholesale through `slots.search`.
+   * @deprecated The layout now fills the palette from the menus on the server.
+   * For other entries, render your own palette in `slots.search`. Still works,
+   * and wins over the menu commands.
    */
   commands?: IGRPCommandItem[];
   /** App-relative path to the logo used when `headerLogo` is absent or fails. */
   fallbackLogo?: string;
-  /**
-   * Accessible name of the built-in settings link. Defaults to the chrome catalog.
-   *
-   * The link renders an icon and nothing else, so without this a screen reader
-   * announces only the href.
-   */
-  settingsLabel?: string;
-  /**
-   * Partial overrides of the chrome catalog groups of the header's children.
-   *
-   * Each child owns its own catalog, but the header is how apps actually mount
-   * them — without these pass-throughs the override props existed and were
-   * unreachable.
-   */
-  navUserLabels?: Partial<IGRPNavUserLabels>;
-  commandSearchLabels?: Partial<IGRPCommandSearchLabels>;
-  notificationsLabels?: Partial<IGRPNotificationsLabels>;
-  modeSwitcherLabels?: Partial<IGRPModeSwitcherLabels>;
-  /** Screen-reader label for the breadcrumb home link. Defaults to the chrome catalog. */
-  breadcrumbHomeLabel?: string;
-  /** Screen-reader label for the collapsed-breadcrumbs menu.. Defaults to the chrome catalog. */
-  breadcrumbEllipsisLabel?: string;
 }
 
-/** One header mark; the fallback carries the same visibility class so a failed dark image never shows in light mode. */
-function HeaderLogoImage({
-  src,
-  fallbackSrc,
-  className,
-}: {
-  src: string;
-  fallbackSrc: string;
-  className?: string;
-}) {
+/** The default header layout, built from the parts and driven by the `show*` flags. */
+function HeaderDefault({ className, slots }: { className?: string; slots?: IGRPHeaderSlots }) {
+  const data = useIGRPHeaderData().data ?? {};
+  const hasSidebar = useIGRPHasSidebar();
+  const {
+    showBreadcrumb,
+    showSearch,
+    showNotifications,
+    showThemeSwitcher,
+    showUser,
+    showIGRPHeaderLogo,
+    showIGRPHeaderTitle,
+    showSettings,
+  } = data;
+  const showSidebarTrigger = Boolean(data.showIGRPSidebarTrigger && hasSidebar);
+
+  // Whether anything renders before the `start` slot. Without this, a header
+  // configured with no trigger, logo and title would open with a stray separator.
+  const hasLeadingBrand = Boolean(showSidebarTrigger || showIGRPHeaderLogo || showIGRPHeaderTitle);
+
+  // A custom notifications slot replaces the framework's dropdown, so nav-user's
+  // link-only Notifications entry has to go too — otherwise the header offers two
+  // inconsistent entry points, one of which the consumer's component doesn't own.
+  const hasCustomNotifications = Boolean(slots?.notifications);
+
   return (
-    <IGRPTemplateImage
-      src={src}
-      // igrp-i18n-ignore: brand name
-      alt="IGRP"
-      width={40}
-      height={40}
-      className={cn('object-contain size-10', className)}
-      priority
-      fallback={
-        <Image
-          src={fallbackSrc}
-          // igrp-i18n-ignore: brand name
-          alt="IGRP"
-          width={40}
-          height={40}
-          className={cn('object-contain size-10', className)}
-          priority
-        />
-      }
-    />
+    <IGRPHeaderRoot className={className}>
+      <IGRPHeaderStart>
+        {showSidebarTrigger && <IGRPHeaderSidebarTrigger />}
+        {(showIGRPHeaderLogo || showIGRPHeaderTitle) && (
+          <div className="flex items-center gap-2">
+            {showIGRPHeaderLogo && <IGRPHeaderLogo />}
+            {showIGRPHeaderTitle && <IGRPHeaderTitle />}
+          </div>
+        )}
+
+        {slots?.start && (
+          <>
+            {hasLeadingBrand && (
+              <Separator
+                orientation="vertical"
+                className={cn('mr-2 data-[orientation=vertical]:h-4')}
+              />
+            )}
+            <HeaderSlot>{slots.start}</HeaderSlot>
+          </>
+        )}
+
+        {showBreadcrumb && (
+          <>
+            <Separator
+              orientation="vertical"
+              className={cn('mr-2 data-[orientation=vertical]:h-4')}
+            />
+            <IGRPHeaderBreadcrumbs />
+          </>
+        )}
+      </IGRPHeaderStart>
+      <IGRPHeaderEnd>
+        {slots?.search ? (
+          <HeaderSlot>{slots.search}</HeaderSlot>
+        ) : (
+          showSearch && <IGRPHeaderSearch />
+        )}
+
+        {slots?.settings ? (
+          <HeaderSlot>{slots.settings}</HeaderSlot>
+        ) : (
+          showSettings && <IGRPHeaderSettings />
+        )}
+
+        {hasCustomNotifications ? (
+          // No `hidden md:block` wrapper here, unlike the built-in: the
+          // framework hides its own bell on small screens because nav-user
+          // carries the mobile entry — and that entry is suppressed when a
+          // custom slot is injected. Hiding this too would leave small screens
+          // with no notifications at all.
+          <HeaderSlot>{slots?.notifications}</HeaderSlot>
+        ) : (
+          showNotifications && <IGRPHeaderNotifications />
+        )}
+
+        {slots?.actions && <HeaderSlot>{slots.actions}</HeaderSlot>}
+
+        {showThemeSwitcher && <IGRPHeaderModeSwitcher />}
+
+        {showUser && (
+          // Unset flag stays `undefined` (the menu's default, on), as before.
+          <IGRPHeaderUser showNotifications={showNotifications && !hasCustomNotifications} />
+        )}
+      </IGRPHeaderEnd>
+    </IGRPHeaderRoot>
   );
 }
 
+/**
+ * The framework header: the default composition of the `IGRPHeader*` parts.
+ * For a custom layout, compose the parts yourself inside
+ * `IGRPHeaderDataProvider`, or pass them as `children` of `IGRPLayoutHeader`.
+ */
 function IGRPTemplateHeader({
-  data,
+  data: dataProp,
   className,
   breadcrumbs,
   breadcrumbRouteLabels,
   slots,
   commands,
-  fallbackLogo = DEFAULT_HEADER_LOGO,
-  settingsLabel,
-  navUserLabels,
-  commandSearchLabels,
-  notificationsLabels,
-  modeSwitcherLabels,
-  breadcrumbHomeLabel,
-  breadcrumbEllipsisLabel,
+  fallbackLogo,
+  ...labels
 }: IGRPTemplateHeaderProps) {
   const { igrpToast } = useIGRPToast();
-  const chrome = useIGRPChromeI18n();
-  const branding = useIGRPBranding();
+  const inherited = useOptionalIGRPHeaderData()?.data;
+  const data = dataProp ?? inherited;
 
   // Warn (dev) + toast when no header data is configured. This MUST run in an
   // effect, not during render — calling igrpToast() during render updates the
@@ -194,163 +222,18 @@ function IGRPTemplateHeader({
 
   if (!data) return null;
 
-  const {
-    user,
-    showBreadcrumb,
-    showSearch,
-    showNotifications,
-    showThemeSwitcher,
-    showUser,
-    showIGRPSidebarTrigger,
-    showIGRPHeaderLogo,
-    showIGRPHeaderTitle,
-    headerLogo,
-    showSettings,
-    settingsUrl,
-    settingsIcon,
-    notifications,
-  } = data;
-  // An unset env reaches us as "", which as an href reloads the page; the
-  // child components default only on undefined.
-  const userProfileUrl = data.userProfileUrl || undefined;
-  const notificationsUrl = data.notificationsUrl || undefined;
-
-  // Brand header mark first, then the app's `headerLogo`, then the fallback.
-  const logo = resolveHeaderLogo({
-    branding,
-    headerLogo,
-    fallback: withBasePath(fallbackLogo),
-  });
-
-  // Whether anything renders before the `start` slot. Without this, a header
-  // configured with no trigger, logo and title would open with a stray separator.
-  const hasLeadingBrand = Boolean(
-    showIGRPSidebarTrigger || showIGRPHeaderLogo || showIGRPHeaderTitle,
-  );
-
-  // A custom notifications slot replaces the framework's dropdown, so nav-user's
-  // link-only Notifications entry has to go too — otherwise the header offers two
-  // inconsistent entry points, one of which the consumer's component doesn't own.
-  const hasCustomNotifications = Boolean(slots?.notifications);
-
   return (
-    <div
-      className={cn(
-        'bg-background sticky top-0 inset-x-0 isolate z-40 border-b flex items-center justify-between gap-2 px-4 py-2 min-w-0',
-        className,
-      )}
+    <IGRPHeaderDataProvider
+      data={dataProp}
+      breadcrumbs={breadcrumbs}
+      breadcrumbRouteLabels={breadcrumbRouteLabels}
+      commands={commands}
+      fallbackLogo={fallbackLogo}
+      {...labels}
     >
-      <div className="flex items-center gap-2 h-12 min-w-0">
-        {showIGRPSidebarTrigger && <SidebarTrigger className="-ml-1" />}
-        {(showIGRPHeaderLogo || showIGRPHeaderTitle) && (
-          <div className="flex items-center gap-2">
-            {showIGRPHeaderLogo && (
-              <div className="size-10 rounded-lg overflow-hidden flex items-center justify-center">
-                <HeaderLogoImage
-                  src={logo.light}
-                  fallbackSrc={withBasePath(fallbackLogo)}
-                  className={logo.dark ? 'dark:hidden' : undefined}
-                />
-                {logo.dark && (
-                  <HeaderLogoImage
-                    src={logo.dark}
-                    fallbackSrc={withBasePath(fallbackLogo)}
-                    className="hidden dark:block"
-                  />
-                )}
-              </div>
-            )}
-            {showIGRPHeaderTitle && (
-              // igrp-i18n-ignore: brand name
-              <span className="text-base font-semibold">iGRP</span>
-            )}
-          </div>
-        )}
-
-        {slots?.start && (
-          <>
-            {hasLeadingBrand && (
-              <Separator
-                orientation="vertical"
-                className={cn('mr-2 data-[orientation=vertical]:h-4')}
-              />
-            )}
-            <HeaderSlot>{slots.start}</HeaderSlot>
-          </>
-        )}
-
-        {showBreadcrumb && (
-          <>
-            <Separator
-              orientation="vertical"
-              className={cn('mr-2 data-[orientation=vertical]:h-4')}
-            />
-            <IGRPTemplateBreadcrumbs
-              items={breadcrumbs}
-              routeLabels={breadcrumbRouteLabels}
-              homeLabel={breadcrumbHomeLabel}
-              ellipsisLabel={breadcrumbEllipsisLabel}
-            />
-          </>
-        )}
-      </div>
-      <div className={cn('flex items-center gap-2 shrink-0')}>
-        {showSearch &&
-          (slots?.search ? (
-            <HeaderSlot>{slots.search}</HeaderSlot>
-          ) : (
-            <IGRPTemplateCommandSearch commands={commands} labels={commandSearchLabels} />
-          ))}
-
-        {showSettings &&
-          (slots?.settings ? (
-            <HeaderSlot>{slots.settings}</HeaderSlot>
-          ) : (
-            // `aria-label` IS the accessible name here — it overrides element
-            // content, so an additional sr-only span would never be announced.
-            <Link
-              href={settingsUrl || '/settings'}
-              aria-label={settingsLabel ?? chrome.header.settings}
-            >
-              <IGRPIcon iconName={settingsIcon ?? 'Settings'} aria-hidden="true" />
-            </Link>
-          ))}
-
-        {showNotifications &&
-          (hasCustomNotifications ? (
-            // No `hidden md:block` wrapper here, unlike the built-in below: the
-            // framework hides its own bell on small screens because nav-user
-            // carries the mobile entry — and that entry is suppressed when a
-            // custom slot is injected. Hiding this too would leave small screens
-            // with no notifications at all.
-            <HeaderSlot>{slots?.notifications}</HeaderSlot>
-          ) : (
-            <span className={cn('hidden md:block')}>
-              <IGRPTemplateNotifications
-                notifications={notifications || []}
-                notificationsUrl={notificationsUrl}
-                labels={notificationsLabels}
-              />
-            </span>
-          ))}
-
-        {slots?.actions && <HeaderSlot>{slots.actions}</HeaderSlot>}
-
-        {showThemeSwitcher && <IGRPTemplateModeSwitcher labels={modeSwitcherLabels} />}
-
-        {showUser && (
-          <IGRPTemplateNavUser
-            user={user}
-            isHeader={true}
-            userProfileUrl={userProfileUrl}
-            notificationsUrl={notificationsUrl}
-            showNotifications={showNotifications && !hasCustomNotifications}
-            labels={navUserLabels}
-          />
-        )}
-      </div>
-    </div>
+      <HeaderDefault className={className} slots={slots} />
+    </IGRPHeaderDataProvider>
   );
 }
 
-export { IGRPTemplateHeader };
+export { IGRPTemplateHeader, type IGRPTemplateHeaderProps };

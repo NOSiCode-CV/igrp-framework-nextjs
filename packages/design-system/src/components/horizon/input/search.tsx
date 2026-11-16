@@ -20,7 +20,10 @@ import { Field, FieldError } from "../../primitives/field.js"
  * Props for the IGRPInputSearch component.
  * @see IGRPInputSearch
  */
-interface IGRPInputSearchProps extends Omit<IGRPInputProps, "value" | "defaultValue"> {
+interface IGRPInputSearchProps extends Omit<
+  IGRPInputProps,
+  "value" | "defaultValue" | "iconName" | "showIcon" | "iconPlacement"
+> {
   /** Controlled search value. */
   value?: string
   /** Default search value. */
@@ -29,11 +32,50 @@ interface IGRPInputSearchProps extends Omit<IGRPInputProps, "value" | "defaultVa
   onSearch?: (value: string) => void
   /** Called when input value changes. */
   setValueChange?: (value: string) => void
-  /** Show icon at start of input. */
+  /**
+   * Leading adornment. A node replaces the search icon; `false` removes it.
+   * When set, `showStartIcon` / `startIcon` are ignored.
+   */
+  startAdornment?: ReactNode | false
+  /**
+   * Trailing submit control. A node replaces the default submit button; `false`
+   * removes it. When set, `showSubmitButton` and the `submit*` props are ignored.
+   */
+  submit?: ReactNode | false
+  /**
+   * Debounce `onSearch` while typing, by this many ms; `false` (default) only
+   * searches on Enter / submit. Wins over `isDebounce` / `debounceMs`.
+   */
+  debounce?: number | false
+  /**
+   * Ignored: the input has no icon of its own. Use `startAdornment`.
+   * @deprecated No effect.
+   */
+  iconName?: IGRPIconName | string
+  /**
+   * Shows the icon on the default submit button.
+   * @deprecated Use `submit` to render your own submit control.
+   */
+  showIcon?: boolean
+  /**
+   * Icon position on the default submit button.
+   * @deprecated Use `submit` to render your own submit control.
+   */
+  iconPlacement?: IGRPInputProps["iconPlacement"]
+  /**
+   * Show icon at start of input.
+   * @deprecated Use `startAdornment` (`false` to hide).
+   */
   showStartIcon?: boolean
-  /** Icon name for start icon. */
+  /**
+   * Icon name for start icon.
+   * @deprecated Use `startAdornment={<IGRPIcon iconName="…" />}`.
+   */
   startIcon?: IGRPIconName | string
-  /** Show submit button. */
+  /**
+   * Show submit button.
+   * @deprecated Use `submit` (`false` to hide).
+   */
   showSubmitButton?: boolean
   /** Icon for submit button. */
   submitIcon?: IGRPIconName | string
@@ -41,9 +83,15 @@ interface IGRPInputSearchProps extends Omit<IGRPInputProps, "value" | "defaultVa
   submitButtonLabel?: string
   /** CSS classes for submit button. */
   submitButtonClassName?: string
-  /** Enable debounce for onSearch. */
+  /**
+   * Enable debounce for onSearch.
+   * @deprecated Use `debounce={ms}`.
+   */
   isDebounce?: boolean
-  /** Debounce delay in ms. */
+  /**
+   * Debounce delay in ms.
+   * @deprecated Use `debounce={ms}`.
+   */
   debounceMs?: number
   /** Submit button variant. */
   submitVariant?: VariantProps<typeof IGRPButton>["variant"]
@@ -58,6 +106,8 @@ interface IGRPInputSearchProps extends Omit<IGRPInputProps, "value" | "defaultVa
  */
 function SearchInputDecoration({
   inputNode,
+  startAdornment,
+  submit,
   showStartIcon,
   startIcon,
   showSubmitButton,
@@ -73,6 +123,8 @@ function SearchInputDecoration({
   disabled,
 }: {
   inputNode: ReactNode
+  startAdornment?: ReactNode | false
+  submit?: ReactNode | false
   showStartIcon: boolean
   startIcon: IGRPIconName | string
   showSubmitButton: boolean
@@ -89,32 +141,36 @@ function SearchInputDecoration({
 }) {
   return (
     <InputGroup>
-      {showStartIcon && (
-        <InputGroupAddon align="inline-start">
-          <IGRPIcon iconName={startIcon} aria-hidden="true" />
-        </InputGroupAddon>
-      )}
+      {startAdornment !== undefined
+        ? startAdornment !== false && <InputGroupAddon align="inline-start">{startAdornment}</InputGroupAddon>
+        : showStartIcon && (
+            <InputGroupAddon align="inline-start">
+              <IGRPIcon iconName={startIcon} aria-hidden="true" />
+            </InputGroupAddon>
+          )}
 
       {inputNode}
 
-      {showSubmitButton && (
-        <InputGroupAddon align="inline-end">
-          <IGRPButton
-            className={cn(submitButtonClassName)}
-            aria-label={submitButtonLabel}
-            type="button"
-            onClick={() => onSearch?.(value)}
-            disabled={disabled}
-            showIcon={showIcon}
-            iconName={submitIcon}
-            variant={submitVariant}
-            loading={loading}
-            iconPlacement={iconPlacement}
-          >
-            {submitButtonLabel}
-          </IGRPButton>
-        </InputGroupAddon>
-      )}
+      {submit !== undefined
+        ? submit !== false && <InputGroupAddon align="inline-end">{submit}</InputGroupAddon>
+        : showSubmitButton && (
+            <InputGroupAddon align="inline-end">
+              <IGRPButton
+                className={cn(submitButtonClassName)}
+                aria-label={submitButtonLabel}
+                type="button"
+                onClick={() => onSearch?.(value)}
+                disabled={disabled}
+                showIcon={showIcon}
+                iconName={submitIcon}
+                variant={submitVariant}
+                loading={loading}
+                iconPlacement={iconPlacement}
+              >
+                {submitButtonLabel}
+              </IGRPButton>
+            </InputGroupAddon>
+          )}
     </InputGroup>
   )
 }
@@ -180,6 +236,9 @@ function IGRPInputSearch({
   submitButtonClassName,
   debounceMs = 2000,
   isDebounce = false,
+  debounce,
+  startAdornment,
+  submit,
   showIcon = true,
   iconPlacement,
   submitVariant = "ghost",
@@ -191,16 +250,17 @@ function IGRPInputSearch({
 
   const formContext = useFormContext()
   const [localValue, setLocalValue] = useState(controlledValue ?? defaultValue)
-  const debouncedSearch = useDebouncedCallback(onSearch, debounceMs)
+  const debounceDelay = debounce !== undefined ? debounce : isDebounce ? debounceMs : false
+  const debouncedSearch = useDebouncedCallback(onSearch, debounceDelay === false ? 0 : debounceDelay)
   const displayValue = controlledValue !== undefined ? controlledValue : localValue
 
   const handleInputChange = useCallback(
     (value: string) => {
       if (controlledValue === undefined) setLocalValue(value)
       setValueChange?.(value)
-      if (isDebounce) debouncedSearch(value)
+      if (debounceDelay !== false) debouncedSearch(value)
     },
-    [controlledValue, debouncedSearch, isDebounce, setValueChange]
+    [controlledValue, debouncedSearch, debounceDelay, setValueChange]
   )
 
   // InputGroup owns the border, focus ring, addon padding and aria-invalid
@@ -208,6 +268,8 @@ function IGRPInputSearch({
   const inputClassName = cn(className)
 
   const decorationProps = {
+    startAdornment,
+    submit,
     showStartIcon,
     startIcon,
     showSubmitButton,

@@ -57,6 +57,8 @@ interface IGRPServerDataTableProps<TData, TValue> {
   renderSubComponent?: (row: Row<TData>) => ReactElement | undefined
   /** Empty-state text. Defaults to the catalog string. */
   notFoundLabel?: string
+  /** Controls rendered above the table (search box, filters, buttons). */
+  toolbar?: React.ReactNode
   id?: string
   className?: string
   tableClassName?: string
@@ -84,6 +86,7 @@ function IGRPServerDataTable<TData, TValue>({
   getRowCanExpand = noExpand,
   renderSubComponent,
   notFoundLabel,
+  toolbar,
   id,
   className,
   tableClassName,
@@ -135,6 +138,7 @@ function IGRPServerDataTable<TData, TValue>({
 
   return (
     <div id={id} className={cn("flex flex-col gap-4", className)}>
+      {toolbar && <div className="flex flex-col gap-2 md:flex-row md:items-center">{toolbar}</div>}
       <div className="relative overflow-hidden rounded-md border" aria-busy={isLoading || undefined}>
         <Table className={cn(igrpDataTableTableClassName(layout), tableClassName)}>
           <TableHeader className={tableHeaderClassName}>

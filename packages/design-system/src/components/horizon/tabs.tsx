@@ -77,7 +77,7 @@ interface IGRPTabItem {
   /** Tab value (unique id). */
   value: string
   /** Tab label. May be empty for icon-only tabs, which then need `ariaLabel`. */
-  label: string
+  label: React.ReactNode
   /** Accessible name for the tab. Required when `label` is empty; it replaces the visible content (icon, label, badge) in the accessible name. */
   ariaLabel?: string
   /** Tab icon. */
@@ -88,13 +88,30 @@ interface IGRPTabItem {
   disabled?: boolean
   /** Keep the panel mounted (hidden) while inactive, preserving form and component state across tab switches. */
   keepMounted?: boolean
-  /** Badge content. */
+  /**
+   * Badge node, e.g. `<IGRPBadge color="info">3</IGRPBadge>`. Rendered at
+   * `badgePlacement` whether or not `showBadge` is set, and wins over `badgeContent` and friends.
+   */
+  badge?: React.ReactNode
+  /**
+   * Badge content (needs `showBadge`).
+   * @deprecated Use `badge`.
+   */
   badgeContent?: string | number
-  /** Badge variant. */
+  /**
+   * Badge variant.
+   * @deprecated Use `badge`.
+   */
   badgeVariant?: IGRPColorRole
-  /** Badge color. */
+  /**
+   * Badge color.
+   * @deprecated Use `badge`.
+   */
   badgeColor?: IGRPColorVariants
-  /** CSS classes for the badge. */
+  /**
+   * CSS classes for the badge.
+   * @deprecated Use `badge`.
+   */
   badgeClassName?: string
   /** Additional CSS classes for this tab's trigger. */
   className?: string
@@ -315,7 +332,9 @@ function IGRPTabs({
   const endLabel = scrollState.rtl ? i18n.tabs.scrollLeft : i18n.tabs.scrollRight
 
   const renderBadge = (item: IGRPTabItem, placement: "start" | "end") =>
-    showBadge && item.badgeContent !== undefined && badgePlacement === placement ? (
+    badgePlacement !== placement ? null : item.badge !== undefined ? (
+      item.badge
+    ) : showBadge && item.badgeContent !== undefined ? (
       <IGRPBadge variant={item.badgeVariant} color={item.badgeColor} badgeClassName={item.badgeClassName}>
         {item.badgeContent}
       </IGRPBadge>
@@ -386,7 +405,7 @@ function IGRPTabs({
 
                 {showIcon && item.icon && iconPlacement !== "end" && <IGRPIcon iconName={item.icon} />}
 
-                {item.label && <span>{item.label}</span>}
+                {item.label !== undefined && item.label !== null && item.label !== "" && <span>{item.label}</span>}
 
                 {showIcon && item.icon && iconPlacement === "end" && <IGRPIcon iconName={item.icon} />}
 

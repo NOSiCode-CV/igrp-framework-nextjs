@@ -38,3 +38,38 @@ describe("IGRPInputSearch", () => {
     expect(screen.getByText("Too short")).toBeInTheDocument()
   })
 })
+
+describe("IGRPInputSearch slots and debounce", () => {
+  it("renders startAdornment and submit nodes in place of the defaults", () => {
+    render(
+      <IGRPInputSearch
+        name="q"
+        label="Search"
+        submitButtonLabel="Go"
+        startAdornment={<span>NIF</span>}
+        submit={<button type="button">Procurar</button>}
+      />
+    )
+    expect(screen.getByText("NIF")).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Procurar" })).toBeInTheDocument()
+    expect(screen.queryByRole("button", { name: "Go" })).not.toBeInTheDocument()
+  })
+
+  it("removes both adornments with false", () => {
+    const { container } = render(<IGRPInputSearch name="q" label="Search" startAdornment={false} submit={false} />)
+    expect(screen.queryByRole("button")).not.toBeInTheDocument()
+    expect(container.querySelector("svg")).toBeNull()
+  })
+
+  it("debounces onSearch with debounce={ms}", async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true })
+    const onSearch = vi.fn()
+    render(<IGRPInputSearch name="q" label="Search" onSearch={onSearch} debounce={300} submit={false} />)
+    await userEvent.type(screen.getByLabelText("Search"), "abc")
+    expect(onSearch).not.toHaveBeenCalled()
+    vi.advanceTimersByTime(300)
+    expect(onSearch).toHaveBeenCalledOnce()
+    expect(onSearch).toHaveBeenCalledWith("abc")
+    vi.useRealTimers()
+  })
+})

@@ -28,27 +28,65 @@ interface IGRPPageHeaderProps extends Pick<IGRPBaseAttributes, "name"> {
   children?: React.ReactNode
   /** Stick to top when scrolling. */
   isSticky?: boolean
-  /** Show back button. */
+  /**
+   * Back button node, e.g. `<IGRPPageHeaderBackButton url="/x" />`. When set it
+   * wins over `showBackButton` and the other `backButton*` props.
+   */
+  backButton?: React.ReactNode
+  /**
+   * Show back button.
+   * @deprecated Use `backButton`.
+   */
   showBackButton?: boolean
-  /** URL for back button (link mode). */
+  /**
+   * URL for back button (link mode).
+   * @deprecated Use `backButton`.
+   */
   urlBackButton?: string
-  /** Back button icon. */
+  /**
+   * Back button icon.
+   * @deprecated Use `backButton`.
+   */
   iconBackButton?: IGRPIconName | string
-  /** Back button variant. */
+  /**
+   * Back button variant.
+   * @deprecated Use `backButton`.
+   */
   backButtonVariant?: React.ComponentProps<typeof IGRPPageHeaderBackButton>["variant"]
-  /** Back button size. */
+  /**
+   * Back button size.
+   * @deprecated Use `backButton`.
+   */
   backButtonSize?: React.ComponentProps<typeof IGRPPageHeaderBackButton>["size"]
-  /** Back button aria-label. */
+  /**
+   * Back button aria-label.
+   * @deprecated Use `backButton`.
+   */
   backButtonAriaLabel?: string
-  /** Show text on back button. */
+  /**
+   * Show text on back button.
+   * @deprecated Use `backButton`.
+   */
   backButtonShowText?: boolean
-  /** Back button text. */
+  /**
+   * Back button text.
+   * @deprecated Use `backButton`.
+   */
   backButtonText?: string
-  /** CSS classes for back button. */
+  /**
+   * CSS classes for back button.
+   * @deprecated Use `backButton`.
+   */
   backButtonClassName?: string
-  /** Use browser history back. */
+  /**
+   * Use browser history back.
+   * @deprecated Use `backButton`.
+   */
   backButtonUseBrowserBack?: boolean
-  /** Custom back button click handler. */
+  /**
+   * Custom back button click handler.
+   * @deprecated Use `backButton`.
+   */
   backButtonOnClick?: React.ComponentProps<typeof IGRPPageHeaderBackButton>["onClick"]
   /** HTML id attribute. */
   id?: string
@@ -120,6 +158,7 @@ function IGRPPageHeader({
   name,
   id,
   isSticky,
+  backButton,
   showBackButton,
   urlBackButton,
   iconBackButton,
@@ -146,19 +185,20 @@ function IGRPPageHeader({
       id={ref}
     >
       <div className={cn("flex items-center gap-2", pageHeaderContentClassName)}>
-        {showBackButton &&
-          renderBackButton({
-            iconBackButton,
-            backButtonVariant,
-            backButtonSize,
-            backButtonAriaLabel,
-            backButtonShowText,
-            backButtonText,
-            backButtonClassName,
-            urlBackButton,
-            backButtonUseBrowserBack,
-            backButtonOnClick,
-          })}
+        {backButton ??
+          (showBackButton &&
+            renderBackButton({
+              iconBackButton,
+              backButtonVariant,
+              backButtonSize,
+              backButtonAriaLabel,
+              backButtonShowText,
+              backButtonText,
+              backButtonClassName,
+              urlBackButton,
+              backButtonUseBrowserBack,
+              backButtonOnClick,
+            }))}
 
         <IGRPHeadline
           title={title}

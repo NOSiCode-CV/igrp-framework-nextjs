@@ -4,17 +4,6 @@ import { useCallback, useState, type ReactElement } from "react"
 import Link from "next/link"
 
 import { cn } from "../cn.js"
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "../../primitives/alert-dialog.js"
 import { Button, buttonVariants } from "../../primitives/button.js"
 import {
   Dialog,
@@ -26,6 +15,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../../primitives/dialog.js"
+import { IGRPAlertDialog } from "../alert-dialog.js"
 import { IGRPButton } from "../button.js"
 import { IGRPIcon } from "../icon/index.js"
 import { igrpModalDialogContentVariants } from "../modal-dialog.js"
@@ -33,7 +23,10 @@ import { IGRPTooltip } from "../tooltip.js"
 import { type IGRPDataTableDialogProps, type IGRPDataTableLinkProps } from "./row-actions.js"
 import { useIGRPi18n } from "../../../i18n/index.js"
 
-/** @internal Wraps action button with tooltip when label is provided. */
+/**
+ * @internal Wraps action button with tooltip when label is provided. Extra props
+ * (from an `asChild` dialog trigger) are forwarded to the button.
+ */
 function IGRPDataTableActionTooltip({
   label,
   children,
@@ -43,6 +36,7 @@ function IGRPDataTableActionTooltip({
   tooltipSideOffset = 6,
   tooltipDelayDuration = 0,
   disabled,
+  ...slotProps
 }: {
   label?: string
   disabled?: boolean
@@ -62,6 +56,7 @@ function IGRPDataTableActionTooltip({
       sideOffset={tooltipSideOffset}
       delayDuration={tooltipDelayDuration}
       disabled={disabled}
+      {...slotProps}
     >
       {children}
     </IGRPTooltip>
@@ -94,7 +89,6 @@ function IGRPDataTableButtonAlert({
   tooltipSideOffset,
   tooltipDelayDuration,
 }: IGRPDataTableDialogProps) {
-  const i18n = useIGRPi18n()
   const tooltipProps = {
     label: labelTrigger,
     tooltipSide,
@@ -106,9 +100,9 @@ function IGRPDataTableButtonAlert({
   }
 
   return (
-    <AlertDialog>
-      <IGRPDataTableActionTooltip {...tooltipProps}>
-        <AlertDialogTrigger asChild>
+    <IGRPAlertDialog
+      trigger={
+        <IGRPDataTableActionTooltip {...tooltipProps}>
           <IGRPButton
             variant={variant}
             size="icon-sm"
@@ -118,35 +112,24 @@ function IGRPDataTableButtonAlert({
             aria-label={labelTrigger}
             disabled={disabled}
           />
-        </AlertDialogTrigger>
-      </IGRPDataTableActionTooltip>
-      <AlertDialogContent className={className}>
-        <AlertDialogHeader>
-          <AlertDialogTitle>{modalTitle}</AlertDialogTitle>
-          {children && <AlertDialogDescription>{children}</AlertDialogDescription>}
-        </AlertDialogHeader>
-
-        {(showCancel || showConfirm) && (
-          <AlertDialogFooter>
-            {showCancel && (
-              <AlertDialogCancel
-                className={cn(buttonVariants({ variant: variantCancel }), "cursor-pointer", classNameCancel)}
-              >
-                {labelCancel ?? i18n.alertDialog.cancel}
-              </AlertDialogCancel>
-            )}
-            {showConfirm && (
-              <AlertDialogAction
-                onClick={onClickConfirm}
-                className={cn(buttonVariants({ variant: variantConfirm }), "cursor-pointer", classNameConfirm)}
-              >
-                {labelConfirm ?? i18n.alertDialog.action}
-              </AlertDialogAction>
-            )}
-          </AlertDialogFooter>
-        )}
-      </AlertDialogContent>
-    </AlertDialog>
+        </IGRPDataTableActionTooltip>
+      }
+      className={className}
+      showIcon={false}
+      title={modalTitle}
+      description={children}
+      // A dialog with neither button could only be dismissed with Escape, so cancel always stays.
+      showCancel={showCancel || !showConfirm}
+      cancelLabel={labelCancel}
+      cancelProps={{ className: cn(buttonVariants({ variant: variantCancel }), "cursor-pointer", classNameCancel) }}
+      showAction={showConfirm}
+      actionLabel={labelConfirm}
+      // Fire-and-forget keeps today's close-on-click, even for an async onClickConfirm.
+      onAction={() => {
+        onClickConfirm?.()
+      }}
+      actionProps={{ className: cn(buttonVariants({ variant: variantConfirm }), "cursor-pointer", classNameConfirm) }}
+    />
   )
 }
 

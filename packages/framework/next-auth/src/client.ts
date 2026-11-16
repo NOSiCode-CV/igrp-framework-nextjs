@@ -75,21 +75,81 @@ export { SessionContext } from 'next-auth/react';
  * "unauthenticated". Callers must treat those two differently: a component that
  * gates on permissions has to keep its server-seeded answer in the `null` case
  * rather than denying.
- *
- * The `useContext` call is unconditional (a hook must never be conditional) —
- * the fallback context exists only to give it something to read when next-auth
- * did not create its own.
  */
 export function useOptionalSession(): {
-  status: 'loading' | 'authenticated' | 'unauthenticated';
+  status: IGRPSessionStatus;
   data: Session | null;
+} | null {
+  const ctx = useSessionContextValue();
+  return ctx && { status: ctx.status, data: ctx.data };
+}
+
+export type IGRPSessionStatus = 'loading' | 'authenticated' | 'unauthenticated';
+
+/** What {@link useIGRPSession} reads from the session, typed from the IGRP `Session`. */
+export type IGRPSessionState = {
+  status: IGRPSessionStatus;
+  /** The whole session; its identity changes on every refetch, which some effects key on. */
+  data: Session | null;
+  accessToken: string | undefined;
+  expiresAt: number | undefined;
+  error: string | undefined;
+};
+
+export type IGRPSessionActions = {
+  /** next-auth's `update()`: refetches (or, with data, updates) the session in this tab and broadcasts it. */
+  update: (data?: unknown) => Promise<Session | null>;
+};
+
+export type IGRPSessionValue = { state: IGRPSessionState; actions: IGRPSessionActions };
+
+/**
+ * Typed session access: `{ state, actions }` with the IGRP session fields
+ * already narrowed, so call sites stop casting `useSession().data`.
+ *
+ * Like {@link useOptionalSession}, returns `null` when no `SessionProvider` is
+ * mounted — "cannot tell", not "unauthenticated".
+ */
+export function useIGRPSession(): IGRPSessionValue | null {
+  const ctx = useSessionContextValue();
+  if (!ctx) return null;
+  const { status, data, update } = ctx;
+  return {
+    state: {
+      status,
+      data,
+      accessToken: data?.accessToken,
+      expiresAt: data?.expiresAt,
+      error: data?.error,
+    },
+    actions: { update },
+  };
+}
+
+/**
+ * The provider's value, or `null` without one. The `useContext` call is
+ * unconditional (a hook must never be conditional) — the fallback context
+ * exists only to give it something to read when next-auth did not create its own.
+ */
+function useSessionContextValue(): {
+  status: IGRPSessionStatus;
+  data: Session | null;
+  update: IGRPSessionActions['update'];
 } | null {
   const ctx = useContext(
     (SessionContextRef ?? FallbackSessionContext) as typeof FallbackSessionContext,
   );
   if (!ctx || typeof ctx !== 'object' || !('status' in ctx)) return null;
-  const typed = ctx as { status: 'loading' | 'authenticated' | 'unauthenticated'; data?: unknown };
-  return { status: typed.status, data: (typed.data ?? null) as Session | null };
+  const typed = ctx as {
+    status: IGRPSessionStatus;
+    data?: unknown;
+    update: IGRPSessionActions['update'];
+  };
+  return {
+    status: typed.status,
+    data: (typed.data ?? null) as Session | null,
+    update: typed.update,
+  };
 }
 
 // Force-logout on `session.error === 'RefreshAccessTokenError'` is owned

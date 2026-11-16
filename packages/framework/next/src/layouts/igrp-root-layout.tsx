@@ -6,6 +6,7 @@ import {
   IGRPBrandingStyle,
   IGRPChromeI18nProvider,
   IGRPNestedProviders,
+  type IGRPNestedProvidersArgs,
 } from '@igrp/framework-next-ui';
 import type { IGRPConfigArgs } from '@igrp/framework-next-types';
 import { IGRPI18nProvider } from '@igrp/igrp-framework-react-design-system';
@@ -43,24 +44,39 @@ function pickNamespaces(
   return out;
 }
 
-export type IGRPRootLayoutArgs = {
+export type IGRPRootLayoutProvidersArgs = {
   readonly children: React.ReactNode;
   readonly config: IGRPConfigArgs;
-  /**
-   * BCP-47 language of the document (`<html lang>`). Defaults to the i18n
-   * format locale when `config.i18n` is set, else `"pt"`.
-   */
-  readonly lang?: string;
   /**
    * CSP nonce of this request, for the inline theme boot script. A prop, not a
    * `headers()` read here, so apps without a nonce-based CSP stay as they are.
    */
   readonly nonce?: string;
+  /** next-themes props merged over the framework defaults. */
+  readonly themeProps?: IGRPNestedProvidersArgs['themeProps'];
 };
 
-export async function IGRPRootLayout({ children, config, lang, nonce }: IGRPRootLayoutArgs) {
+export type IGRPRootLayoutArgs = IGRPRootLayoutProvidersArgs & {
+  /**
+   * BCP-47 language of the document (`<html lang>`). Defaults to the i18n
+   * format locale when `config.i18n` is set, else `"pt"`.
+   */
+  readonly lang?: string;
+  /** Classes appended to the `<body>` defaults (no Tailwind merge: use `!` to beat one). */
+  readonly bodyClassName?: string;
+};
+
+/**
+ * The root providers plus the document language they resolved. Shared by
+ * `IGRPRootLayoutProviders` and `IGRPRootLayout`, so the layout resolves once.
+ */
+async function buildRootProviders({
+  children,
+  config,
+  nonce,
+  themeProps,
+}: IGRPRootLayoutProvidersArgs) {
   const {
-    font,
     layout,
     sessionArgs,
     syncAccess,
@@ -127,8 +143,8 @@ export async function IGRPRootLayout({ children, config, lang, nonce }: IGRPRoot
   const cookieLocale = intl
     ? undefined
     : igrpNormalizeLocale((await cookies()).get(IGRP_LOCALE_COOKIE)?.value);
-  const htmlLang =
-    lang ?? intl?.formatLocale ?? (cookieLocale ? IGRP_DEFAULT_FORMAT_LOCALES[cookieLocale] : 'pt');
+  const defaultLang =
+    intl?.formatLocale ?? (cookieLocale ? IGRP_DEFAULT_FORMAT_LOCALES[cookieLocale] : 'pt');
   const content = intl ? (
     <IGRPIntlProvider {...intl}>{children}</IGRPIntlProvider>
   ) : cookieLocale ? (
@@ -139,20 +155,47 @@ export async function IGRPRootLayout({ children, config, lang, nonce }: IGRPRoot
     children
   );
 
-  return (
-    <html lang={htmlLang} suppressHydrationWarning className={font}>
-      <body className="bg-background overscroll-none h-screen font-sans antialiased">
+  return {
+    lang: defaultLang,
+    node: (
+      <>
         <IGRPBrandingStyle branding={branding} />
         <IGRPNestedProviders
           session={session}
           branding={branding}
           sessionArgs={sessionArgs}
           nonce={nonce}
+          themeProps={themeProps}
           // No AM to ask in preview mode.
           checkSession={previewMode ? undefined : igrpCheckAccessSession}
         >
           {content}
         </IGRPNestedProviders>
+      </>
+    ),
+  };
+}
+
+/**
+ * Everything `IGRPRootLayout` mounts inside `<body>`: startup sync
+ * scheduling, organization branding, the locale catalogs and the provider
+ * stack. For apps that render their own `<html>` and `<body>`.
+ */
+export async function IGRPRootLayoutProviders(props: IGRPRootLayoutProvidersArgs) {
+  return (await buildRootProviders(props)).node;
+}
+
+export async function IGRPRootLayout({ lang, bodyClassName, ...props }: IGRPRootLayoutArgs) {
+  const { lang: defaultLang, node } = await buildRootProviders(props);
+
+  return (
+    <html lang={lang ?? defaultLang} suppressHydrationWarning className={props.config.font}>
+      <body
+        className={['bg-background overscroll-none h-screen font-sans antialiased', bodyClassName]
+          .filter(Boolean)
+          .join(' ')}
+      >
+        {node}
       </body>
     </html>
   );

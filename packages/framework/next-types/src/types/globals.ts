@@ -1,3 +1,4 @@
+import type { IGRPApplicationArgs, IGRPMenuItemArgs, IGRPUserArgs } from './access-management.js';
 import type { IGRPHeaderDataArgs } from './header.js';
 import type { IGRPSidebarDataArgs } from './sidebar.js';
 
@@ -13,8 +14,24 @@ import type { IGRPSidebarDataArgs } from './sidebar.js';
  *
  * | Returned by            | Overridden in production                              | Live in production                                                                               |
  * | ---------------------- | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
- * | `getHeaderData()`      | `user`, `showIGRPSidebarTrigger`                       | every other `show*` flag, `settingsUrl`, `settingsIcon`, `notificationsUrl`, `userProfileUrl`, `headerLogo` |
- * | `getSidebarData()`     | `user`, `menuItems`, `apps`, `appCode`                  | `defaultOpen`, `showAppSwitcher`, `appCenterUrl`, `showMenuSearch`, `showNotifications`          |
+ * | `getHeaderData()`      | `user`                                                | every `show*` flag, `settingsUrl`, `settingsIcon`, `notificationsUrl`, `userProfileUrl`, `logoutUrl`, `headerLogo` |
+ * | `getSidebarData()`     | `user`, `menuItems`, `apps`, `appCode`                  | `showAppSwitcher`, `appCenterUrl`, `showMenuSearch`, `showNotifications`, the four `*Url` fields |
+ *
+ * (`showIGRPSidebarTrigger` is honoured only when the layout renders a sidebar.)
+ *
+ * The three optional methods replace the framework's own source for one piece
+ * of data, in both modes. When one is supplied the providers call it and do not
+ * branch on `previewMode` for that data:
+ *
+ * | Method              | Replaces in production         | Replaces in preview                    |
+ * | ------------------- | ------------------------------ | -------------------------------------- |
+ * | `getMenus(appCode)` | the Access Management menus    | `getSidebarData().menuItems`           |
+ * | `getUser()`         | the Access Management user     | `getHeaderData().user` / `getSidebarData().user` |
+ * | `getApps()`         | the Access Management apps     | `getSidebarData().apps`                |
+ *
+ * `getMenus` also feeds the header command palette (`igrpGetLayoutMenus`).
+ * A typical preview source supplies all three with mock data, and a live source
+ * supplies none.
  *
  * So returning a stub from these "because it's only mock data" silently drops
  * the entire header and sidebar configuration in production — no error, no type
@@ -25,6 +42,12 @@ import type { IGRPSidebarDataArgs } from './sidebar.js';
 export interface IGRPLayoutDataSource {
   getHeaderData: () => Promise<IGRPHeaderDataArgs>;
   getSidebarData: () => Promise<IGRPSidebarDataArgs>;
+  /** Menus for `appCode`, instead of Access Management / `menuItems`. */
+  getMenus?: (appCode: string) => Promise<IGRPMenuItemArgs[]>;
+  /** The signed-in user, instead of Access Management / the data's `user`. */
+  getUser?: () => Promise<IGRPUserArgs | null | undefined>;
+  /** The user's applications, instead of Access Management / the data's `apps`. */
+  getApps?: () => Promise<IGRPApplicationArgs[]>;
 }
 
 export type IGRPToasterPosition =

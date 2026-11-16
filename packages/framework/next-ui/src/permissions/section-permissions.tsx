@@ -1,13 +1,17 @@
 'use client';
 
-import { createContext, useContext, useMemo, useState, type ReactNode } from 'react';
-import { useOptionalSession } from '@igrp/framework-next-auth/client';
+import { createContext, use, useMemo, useState, type ReactNode } from 'react';
+import { useIGRPSession } from '@igrp/framework-next-auth/client';
 import type { IGRPClaimsState } from '@igrp/framework-next-auth/claims';
 
 import { resolveLiveClaims, type LiveClaimsSession } from './resolve-live-claims.js';
 
 type PermissionsContextValue = {
   state: IGRPClaimsState;
+  /**
+   * @deprecated Nothing consumes it and it is not a supported way to change
+   * claims; it will be removed. Claims follow the session — refresh it instead.
+   */
   setState: (next: IGRPClaimsState) => void;
 };
 
@@ -22,15 +26,14 @@ const PermissionsContext = createContext<PermissionsContextValue | null>(null);
  * — see `resolveLiveClaims` for the three guards (no provider / loading /
  * non-JWT token) and why each is required.
  *
- * The session is read through `useOptionalSession()` from
+ * The session is read through `useIGRPSession()` from
  * `@igrp/framework-next-auth/client`, NOT `useSession()`, which throws without
  * a provider — this component works standalone today and must keep working.
  * That helper lives behind the auth package's client entry rather than here so
  * this package does not reach into `next-auth/react` directly.
  *
- * `setState` sets an explicit override that wins over both the seed and the
- * live decode. It is the seam for a future active-role switch; nothing consumes
- * it today.
+ * `setState` (deprecated) sets an explicit override that wins over both the
+ * seed and the live decode; nothing consumes it.
  */
 export function IGRPSectionPermissions({
   state: seeded,
@@ -41,10 +44,9 @@ export function IGRPSectionPermissions({
 }) {
   const [override, setOverride] = useState<IGRPClaimsState | null>(null);
 
-  const sessionCtx = useOptionalSession();
-  const status = sessionCtx?.status;
-  const accessToken = (sessionCtx?.data as { accessToken?: string } | null | undefined)
-    ?.accessToken;
+  const session = useIGRPSession();
+  const status = session?.state.status;
+  const accessToken = session?.state.accessToken;
 
   // Last settled session, tracked during render (no effect) so a refetch that
   // flips `status` back to `loading` keeps gating on the live claims.
@@ -74,11 +76,11 @@ export function IGRPSectionPermissions({
     [override, live],
   );
 
-  return <PermissionsContext.Provider value={value}>{children}</PermissionsContext.Provider>;
+  return <PermissionsContext value={value}>{children}</PermissionsContext>;
 }
 
 export function usePermissionsContext(): PermissionsContextValue {
-  const ctx = useContext(PermissionsContext);
+  const ctx = use(PermissionsContext);
   if (!ctx) {
     throw new Error('usePermissions must be used within <IGRPSectionPermissions>');
   }

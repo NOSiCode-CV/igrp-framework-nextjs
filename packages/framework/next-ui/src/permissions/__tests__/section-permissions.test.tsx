@@ -6,7 +6,11 @@ import type { IGRPClaimsState } from '@igrp/framework-next-auth/claims';
 
 let session: { status: string; data: { accessToken?: string } | null } | null = null;
 vi.mock('@igrp/framework-next-auth/client', () => ({
-  useOptionalSession: () => session,
+  useIGRPSession: () =>
+    session && {
+      state: { status: session.status, data: session.data, accessToken: session.data?.accessToken },
+      actions: { update: vi.fn() },
+    },
 }));
 
 const { IGRPSectionPermissions, usePermissionsContext } = await import('../section-permissions.js');

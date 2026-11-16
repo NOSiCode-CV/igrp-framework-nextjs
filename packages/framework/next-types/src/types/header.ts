@@ -40,6 +40,8 @@ export interface IGRPHeaderDataArgs {
   showSettings?: boolean;
   settingsUrl?: string;
   settingsIcon?: string;
+  /** Sign-out entry of the header user menu. Defaults to `/logout`. */
+  logoutUrl?: string;
 }
 
 export interface IGRPNotificationArgs {
@@ -47,6 +49,8 @@ export interface IGRPNotificationArgs {
   title: string;
   message: string;
   type: 'info' | 'warning' | 'error' | 'success';
+  /** Where selecting the notification goes. Absolute URLs open as a plain link. */
+  href?: string;
   /**
    * When the notification was raised.
    *

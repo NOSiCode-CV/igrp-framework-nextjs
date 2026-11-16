@@ -5,6 +5,8 @@ import userEvent from "@testing-library/user-event"
 import { IGRPDataTable } from "../index.js"
 import { createIGRPColumnHelper } from "../column-helper.js"
 import type { IGRPDataTableAction } from "../types.js"
+import { IGRPDataTableButtonAlert } from "../action-button-icon.js"
+import { IGRPDataTableDropdownMenu, IGRPDataTableDropdownMenuAlert } from "../action-dropdown-menu.js"
 
 type Row = { id: number; name: string }
 
@@ -112,5 +114,62 @@ describe("IGRPDataTable pagination config", () => {
 
     expect(screen.getByText("Linha 4")).toBeInTheDocument()
     expect(screen.queryByText("Linha 5")).not.toBeInTheDocument()
+  })
+})
+
+describe("IGRPDataTableButtonAlert / IGRPDataTableDropdownMenuAlert", () => {
+  it("confirms through IGRPAlertDialog and closes", async () => {
+    const onConfirm = vi.fn()
+    render(<IGRPDataTableButtonAlert labelTrigger="Eliminar" modalTitle="Eliminar?" onClickConfirm={onConfirm} />)
+    await userEvent.click(screen.getByRole("button", { name: "Eliminar" }))
+    await userEvent.click(await screen.findByRole("button", { name: "Continuar" }))
+    expect(onConfirm).toHaveBeenCalledOnce()
+    expect(screen.queryByRole("alertdialog")).not.toBeInTheDocument()
+  })
+
+  it("keeps the cancel button when both buttons are hidden", async () => {
+    render(
+      <IGRPDataTableButtonAlert labelTrigger="Eliminar" modalTitle="Eliminar?" showCancel={false} showConfirm={false} />
+    )
+    await userEvent.click(screen.getByRole("button", { name: "Eliminar" }))
+    expect(await screen.findByRole("button", { name: "Cancelar" })).toBeInTheDocument()
+    expect(screen.queryByRole("button", { name: "Continuar" })).not.toBeInTheDocument()
+  })
+
+  it("hides only the confirm button when showConfirm is false", async () => {
+    render(
+      <IGRPDataTableDropdownMenu
+        items={[
+          {
+            component: IGRPDataTableDropdownMenuAlert,
+            props: { labelTrigger: "Eliminar", modalTitle: "Eliminar?", showConfirm: false },
+          },
+        ]}
+      />
+    )
+    await userEvent.click(screen.getByRole("button", { name: "Abrir ações" }))
+    await userEvent.click(await screen.findByRole("menuitem", { name: "Eliminar" }))
+    expect(await screen.findByRole("button", { name: "Cancelar" })).toBeInTheDocument()
+    expect(screen.queryByRole("button", { name: "Continuar" })).not.toBeInTheDocument()
+  })
+})
+
+describe("IGRPDataTable toolbar", () => {
+  it("renders the toolbar slot without showFilter, and next to the filters with it", () => {
+    const { rerender } = render(
+      <IGRPDataTable columns={columns} data={data} toolbar={<button type="button">Exportar</button>} />
+    )
+    expect(screen.getByRole("button", { name: "Exportar" })).toBeInTheDocument()
+    rerender(
+      <IGRPDataTable columns={columns} data={data} showFilter toolbar={<button type="button">Exportar</button>} />
+    )
+    expect(screen.getByRole("button", { name: "Exportar" })).toBeInTheDocument()
+  })
+
+  it("warns in development when isServerSide is set without onQueryChange", () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {})
+    render(<IGRPDataTable columns={columns} data={data} isServerSide />)
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining("IGRPServerDataTable"))
+    warn.mockRestore()
   })
 })

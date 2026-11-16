@@ -93,12 +93,14 @@ export function UsersTable({ data, onDelete }: { data: User[]; onDelete: (u: Use
 | `columns`, `data` | — | Stable references. |
 | `actions?: IGRPDataTableAction<T>[]` | | Row actions. See below. |
 | `showPagination` | `false` | The footer only shows when the row count is greater than the page size. Without it, client mode renders every row on one page. |
-| `pageSizePagination` | `[50, 100, 150, 200]` | The page-size options; the first is the initial size. `pagination={{ type, pageSizeOptions, defaultPageSize }}` is the grouped form and wins. |
-| `isNumericPagination` | `false` | Numbered pages instead of prev/next. |
+| `pagination` | | `{ type: "simple" \| "numeric", pageSizeOptions, defaultPageSize }`. Default options `[50, 100, 150, 200]`; the first is the initial size unless `defaultPageSize` is set. |
+| `pageSizePagination`, `isNumericPagination` | | **Deprecated**: use `pagination.pageSizeOptions` / `pagination.type: "numeric"`. |
+| `toolbar` | | A node rendered in the toolbar row next to the filters (search box, custom filters, buttons). Shown with or without `showFilter`. |
 | `showFilter` / `showToggleColumn` | `false` | Turn on the filter bar / column-visibility toggle. Filters don't render without one of them. |
 | `clientFilters`, `clientClearLabel`, `onFiltersCleared` | | Custom filter UI (see Filters). |
 | `layout` | `"auto"` | `"fixed"` adds `table-fixed` and honours `ColumnDef.size`. See Column layout. |
-| `onQueryChange`, `rowCount`, `isServerSide`, `serverFilterComponent` | | Server mode (see below). |
+| `onQueryChange`, `rowCount` | | Server mode (see below). |
+| `isServerSide`, `serverFilterComponent` | | **Deprecated**: they only swap the filter UI. Use `IGRPServerDataTable` (or `onQueryChange`) for server mode and `toolbar` for custom filter UI. A dev warning fires for `isServerSide` without `onQueryChange`. |
 | `getRowCanExpand`, `renderSubComponent` | `() => false` | Row expansion. Pair it with `IGRPDataTableCellExpander`. |
 | `getRowId` | row index | Stable row id (`(row) => row.id`). Pass it whenever you use `renderSubComponent`: by index, expanded state follows the position when `data` is reordered (refetch, server paging or sorting) and opens a different record. Dev warning otherwise. |
 | `notFoundLabel` | i18n `dataTable.notFound` | |
@@ -156,7 +158,7 @@ Without the matching `filterFn`, faceted and date filters silently match nothing
 
 ## Server-side mode
 
-**Setting `onQueryChange` is what makes the table manual.** It turns on manual pagination, sorting and filtering, and enables `rowCount`. `isServerSide` only swaps the `clientFilters` UI for `serverFilterComponent`.
+**Setting `onQueryChange` is what makes the table manual.** It turns on manual pagination, sorting and filtering, and enables `rowCount`. The deprecated `isServerSide` only swaps the `clientFilters` UI for `serverFilterComponent`; put your own filter controls in `toolbar` instead.
 
 ```tsx
 const handleQuery = useCallback((q: IGRPDataTableQuery) => {
@@ -186,6 +188,7 @@ A controlled table for server-paginated data. The caller owns the page index; th
 | `sorting`, `onSortingChange` | | Manual sorting only when both are given; otherwise rows sort client-side within the page. |
 | `layout` | `"auto"` | See Column layout. |
 | `getRowId`, `getRowCanExpand`, `renderSubComponent` | | Row expansion. |
+| `toolbar` | | A node rendered above the table (search box, filters, buttons). |
 | `notFoundLabel`, `id`, `className`, `tableClassName`, `tableHeaderClassName`, `tableBodyClassName`, `paginationClassName` | | |
 
 ```tsx

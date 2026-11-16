@@ -1,6 +1,5 @@
 'use client';
 
-import { forwardRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { cn } from '@igrp/igrp-framework-react-design-system';
@@ -17,6 +16,7 @@ interface MenuItemLinkProps extends Omit<React.ComponentPropsWithoutRef<'a'>, 's
   isActive: boolean;
   target?: string;
   children: React.ReactNode;
+  ref?: React.Ref<HTMLAnchorElement>;
 }
 
 /**
@@ -29,10 +29,17 @@ interface MenuItemLinkProps extends Omit<React.ComponentPropsWithoutRef<'a'>, 's
  * render next/link. `aria-current="page"` is derived from `isActive`. The caller
  * supplies `aria-label`, `className`, and the inner icon/label content.
  */
-const MenuItemLink = forwardRef<HTMLAnchorElement, MenuItemLinkProps>(function MenuItemLink(
-  { href, isAnchor, isActive, target, children, onPointerEnter, onFocus, ...rest },
+function MenuItemLink({
+  href,
+  isAnchor,
+  isActive,
+  target,
+  children,
+  onPointerEnter,
+  onFocus,
   ref,
-) {
+  ...rest
+}: MenuItemLinkProps) {
   const router = useRouter();
   const ariaCurrent = isActive ? 'page' : undefined;
 
@@ -86,6 +93,6 @@ const MenuItemLink = forwardRef<HTMLAnchorElement, MenuItemLinkProps>(function M
       {children}
     </Link>
   );
-});
+}
 
 export { MenuItemLink, type MenuItemLinkProps };

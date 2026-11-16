@@ -136,3 +136,27 @@ describe("IGRPTabs", () => {
     expect(screen.getByRole("tab", { name: "Beta" })).toHaveFocus()
   })
 })
+
+describe("IGRPTabs label and badge nodes", () => {
+  it("renders a ReactNode label and a per-item badge that wins over badgeContent", () => {
+    render(
+      <IGRPTabs
+        items={[
+          {
+            value: "a",
+            label: <em>Alpha</em>,
+            content: null,
+            badge: <span>novo</span>,
+            badgeContent: 9,
+          },
+          { value: "b", label: "Beta", content: null, badgeContent: 2 },
+        ]}
+      />
+    )
+    expect(screen.getByRole("tab", { name: /Alpha/ }).querySelector("em")).not.toBeNull()
+    expect(screen.getByText("novo")).toBeInTheDocument()
+    expect(screen.queryByText("9")).not.toBeInTheDocument()
+    // The legacy quartet still needs showBadge.
+    expect(screen.queryByText("2")).not.toBeInTheDocument()
+  })
+})

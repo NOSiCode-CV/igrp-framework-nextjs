@@ -47,6 +47,27 @@ const STATE_TRACK: Record<HomeLayerState, string> = {
   error: "border-dashed border-destructive",
 };
 
+/** Header status pill border + text per state. */
+const STATUS_PILL: Record<HomeLayerState, string> = {
+  ok: "border-primary/40 text-primary",
+  preview: "border-border text-muted-foreground",
+  error: "border-destructive/40 text-destructive",
+};
+
+/** Header status dot per state. */
+const STATUS_DOT: Record<HomeLayerState, string> = {
+  ok: "bg-primary",
+  preview: "border-2 border-muted-foreground",
+  error: "bg-destructive",
+};
+
+/** Layer state label colour. */
+const STATE_TEXT: Record<HomeLayerState, string> = {
+  ok: "text-primary",
+  preview: "text-muted-foreground",
+  error: "text-destructive",
+};
+
 /** Lets a long file path wrap after a "/" instead of mid-segment. */
 function BreakablePath({ path }: { path: string }) {
   const segments = path.split("/");
@@ -137,6 +158,11 @@ export function HomeOverview({
 }: HomeOverviewProps) {
   const t = useTranslations("home");
   const failing = layers.filter((layer) => layer.state === "error").length;
+  // One state for the whole request: any failing layer wins over preview mode.
+  const status: HomeLayerState =
+    failing > 0 ? "error" : previewMode ? "preview" : "ok";
+  // Every variant gets every value; each message uses the ones it needs.
+  const counts = { count: failing, failing, total: layers.length };
 
   return (
     <div className="mx-auto flex w-full max-w-6xl flex-col gap-16 px-4 py-10 sm:px-6 lg:py-16">
@@ -145,39 +171,20 @@ export function HomeOverview({
           {appName}
         </h1>
         <p className="max-w-[60ch] text-lg text-pretty text-muted-foreground">
-          {failing > 0
-            ? t("intro.failing", { count: failing })
-            : previewMode
-              ? t("intro.preview")
-              : t("intro.ok")}
+          {t(`intro.${status}`, counts)}
         </p>
         <ul className="flex flex-wrap items-center gap-2 text-sm">
           <li
             className={cn(
               "inline-flex items-center gap-2 rounded-full border px-3 py-1 font-medium",
-              failing > 0
-                ? "border-destructive/40 text-destructive"
-                : previewMode
-                  ? "border-border text-muted-foreground"
-                  : "border-primary/40 text-primary",
+              STATUS_PILL[status],
             )}
           >
             <span
               aria-hidden="true"
-              className={cn(
-                "size-2 rounded-full",
-                failing > 0
-                  ? "bg-destructive"
-                  : previewMode
-                    ? "border-2 border-muted-foreground"
-                    : "bg-primary",
-              )}
+              className={cn("size-2 rounded-full", STATUS_DOT[status])}
             />
-            {failing > 0
-              ? t("status.failing")
-              : previewMode
-                ? t("status.preview")
-                : t("status.ok")}
+            {t(`status.${status}`)}
           </li>
           <li className="inline-flex items-center gap-2 rounded-full border border-border px-3 py-1 text-muted-foreground">
             {t("version")}
@@ -207,14 +214,10 @@ export function HomeOverview({
           <p
             className={cn(
               "text-sm",
-              failing > 0 ? "text-destructive" : "text-muted-foreground",
+              status === "error" ? "text-destructive" : "text-muted-foreground",
             )}
           >
-            {failing > 0
-              ? t("requestPath.failing", { failing, total: layers.length })
-              : previewMode
-                ? t("requestPath.preview")
-                : t("requestPath.ok", { total: layers.length })}
+            {t(`requestPath.${status}`, counts)}
           </p>
         </div>
 
@@ -272,11 +275,7 @@ export function HomeOverview({
                   <span
                     className={cn(
                       "text-xs font-medium",
-                      layer.state === "error"
-                        ? "text-destructive"
-                        : layer.state === "ok"
-                          ? "text-primary"
-                          : "text-muted-foreground",
+                      STATE_TEXT[layer.state],
                     )}
                   >
                     {t(`state.${layer.state}`)}

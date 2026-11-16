@@ -62,3 +62,31 @@ describe('IGRPAuthForm sign-in failure', () => {
     expect(container.textContent).not.toContain('Failed to fetch');
   });
 });
+
+describe('IGRPAuthForm compound parts', () => {
+  it('signs in with the chosen provider and disables every button while one is pending', async () => {
+    const { IGRPAuthFormRoot, IGRPAuthFormSignInButton } = await import('../form.js');
+    signIn.mockReturnValue(new Promise(() => {}));
+    container = document.createElement('div');
+    document.body.append(container);
+    root = createRoot(container);
+    act(() =>
+      root!.render(
+        <IGRPAuthFormRoot>
+          <IGRPAuthFormSignInButton>IGRP</IGRPAuthFormSignInButton>
+          <IGRPAuthFormSignInButton providerId={'other' as never} callbackUrl="/x">
+            Other
+          </IGRPAuthFormSignInButton>
+        </IGRPAuthFormRoot>,
+      ),
+    );
+    const [igrp, other] = container.querySelectorAll<HTMLButtonElement>('button[aria-busy]');
+
+    await act(async () => other!.click());
+
+    expect(signIn).toHaveBeenLastCalledWith('other', { callbackUrl: '/x' });
+    expect(igrp!.disabled).toBe(true);
+    expect(other!.getAttribute('aria-busy')).toBe('true');
+    expect(igrp!.getAttribute('aria-busy')).toBe('false');
+  });
+});

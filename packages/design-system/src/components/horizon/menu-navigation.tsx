@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef, useState, useCallback, createContext, useContext, useId } from "react"
+import { useRef, useState, useCallback, createContext, use, useId } from "react"
 
 import type { IGRPColorRole, IGRPColorVariants } from "../../lib/colors.js"
 import { cn } from "cn"
@@ -24,11 +24,13 @@ interface IGRPMenuNavigationItem {
   /** Unique section id. */
   id: string
   /** Display label. */
-  label: string
+  label: React.ReactNode
   /** Icon name. */
   icon: string
   /** Whether the item is disabled. */
   disabled?: boolean
+  /** Badge shown at the end of the item, e.g. `<IGRPBadge>3</IGRPBadge>`. */
+  badge?: React.ReactNode
 }
 
 /**
@@ -44,13 +46,27 @@ interface IGRPMenuNavigationProps {
   onSectionChange?: (sectionId: string) => void
   /** Navigation title. */
   title?: string
-  /** Badge content. */
+  /** Badge beside the title, e.g. `<IGRPBadge color="info">Novo</IGRPBadge>`. Wins over `badgeContent` and friends. */
+  badge?: React.ReactNode
+  /**
+   * Badge content.
+   * @deprecated Use `badge`.
+   */
   badgeContent?: string
-  /** Badge variant. */
+  /**
+   * Badge variant.
+   * @deprecated Use `badge`.
+   */
   badgeVariant?: IGRPColorRole
-  /** Badge color. */
+  /**
+   * Badge color.
+   * @deprecated Use `badge`.
+   */
   badgeColor?: IGRPColorVariants
-  /** CSS classes for the badge. */
+  /**
+   * CSS classes for the badge.
+   * @deprecated Use `badge`.
+   */
   badgeClassName?: string
   /** Additional CSS classes. */
   className?: string
@@ -62,17 +78,57 @@ interface IGRPMenuNavigationProps {
   id?: string
 }
 
-/** @internal */
-interface NavigationContextType {
+/**
+ * Value of the menu-navigation context, shared by `IGRPMenuNavigationProvider`,
+ * `IGRPMenuNavigation` and `useIGRPMenuNavigation`.
+ */
+interface IGRPMenuNavigationContextValue {
+  state: {
+    /** Section the navigation shows as active; `undefined` until one is chosen (the nav then shows its first section). */
+    activeSection: string | undefined
+  }
+  actions: {
+    /** Marks a section active (does not scroll). */
+    setActive: (sectionId: string) => void
+    /** Scrolls a registered section into view. */
+    scrollTo: (sectionId: string) => void
+    /** Callback ref that registers a section element: `<div ref={registerSection("dados")}>`. */
+    registerSection: (sectionId: string) => (el: HTMLDivElement | null) => void
+  }
+  /** @deprecated Use `actions.registerSection` / `actions.scrollTo`. */
   sectionRefs: React.RefObject<Record<string, HTMLDivElement | null>>
+  /** @deprecated Use `actions.scrollTo`. */
   scrollToSection: (sectionId: string) => void
+  /** @deprecated Use `actions.registerSection`. */
   getSectionRef: (sectionId: string) => (el: HTMLDivElement | null) => void
 }
 
-const NavigationContext = createContext<NavigationContextType | null>(null)
+const NavigationContext = createContext<IGRPMenuNavigationContextValue | null>(null)
 
-function IGRPMenuNavigationProvider({ children }: { children: React.ReactNode }) {
+/**
+ * Props for IGRPMenuNavigationProvider.
+ * @see IGRPMenuNavigationProvider
+ */
+interface IGRPMenuNavigationProviderProps {
+  children: React.ReactNode
+  /** Controlled active section id. */
+  activeSection?: string
+  /** Initial active section id when uncontrolled. */
+  defaultSection?: string
+  /** Called when a section becomes active. */
+  onSectionChange?: (sectionId: string) => void
+}
+
+/** Owns the active section and the section elements for `IGRPMenuNavigation` and `useIGRPMenuNavigation`. */
+function IGRPMenuNavigationProvider({
+  children,
+  activeSection: controlledActiveSection,
+  defaultSection,
+  onSectionChange,
+}: IGRPMenuNavigationProviderProps) {
   const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({})
+  const [internalActiveSection, setInternalActiveSection] = useState(defaultSection)
+  const activeSection = controlledActiveSection ?? internalActiveSection
 
   const scrollToSection = useCallback((sectionId: string) => {
     const sectionRef = sectionRefs.current[sectionId]
@@ -92,22 +148,40 @@ function IGRPMenuNavigationProvider({ children }: { children: React.ReactNode })
     []
   )
 
+  const setActive = useCallback(
+    (sectionId: string) => {
+      if (controlledActiveSection === undefined) setInternalActiveSection(sectionId)
+      onSectionChange?.(sectionId)
+    },
+    [controlledActiveSection, onSectionChange]
+  )
+
   return (
-    <NavigationContext.Provider value={{ sectionRefs, scrollToSection, getSectionRef }}>
+    <NavigationContext
+      value={{
+        state: { activeSection },
+        actions: { setActive, scrollTo: scrollToSection, registerSection: getSectionRef },
+        sectionRefs,
+        scrollToSection,
+        getSectionRef,
+      }}
+    >
       {children}
-    </NavigationContext.Provider>
+    </NavigationContext>
   )
 }
 
 /**
  * Side navigation menu with sections, active state, and scroll-to-section.
- * Use IGRPMenuNavigationProvider for scroll behavior.
+ * Inside IGRPMenuNavigationProvider it reads and writes the provider's active
+ * section (unless `activeSection` is passed here) and scrolls registered sections.
  */
 function IGRPMenuNavigation({
   sections,
   activeSection: controlledActiveSection,
   onSectionChange,
   title: titleProp,
+  badge,
   badgeContent,
   badgeVariant,
   badgeColor,
@@ -120,17 +194,18 @@ function IGRPMenuNavigation({
   const i18n = useIGRPi18n()
   const title = titleProp ?? i18n.menuNavigation.title
   const [internalActiveSection, setInternalActiveSection] = useState(sections[0]?.id || "")
-  const navigationContext = useContext(NavigationContext)
+  const navigationContext = use(NavigationContext)
 
   const _id = useId()
   const ref = id ?? _id
 
   // When uncontrolled: use internalActiveSection if still valid in sections, else first section
+  const uncontrolledSection = navigationContext?.state.activeSection ?? internalActiveSection
   const activeSection =
     controlledActiveSection ??
-    (sections.some((s) => s.id === internalActiveSection)
-      ? internalActiveSection
-      : (sections[0]?.id ?? internalActiveSection))
+    (sections.some((s) => s.id === uncontrolledSection)
+      ? uncontrolledSection
+      : (sections[0]?.id ?? uncontrolledSection))
 
   const handleSectionClick = useCallback(
     (sectionId: string) => {
@@ -141,10 +216,11 @@ function IGRPMenuNavigation({
         setInternalActiveSection(sectionId)
       }
 
+      navigationContext?.actions.setActive(sectionId)
       onSectionChange?.(sectionId)
 
       if (navigationContext) {
-        navigationContext.scrollToSection(sectionId)
+        navigationContext.actions.scrollTo(sectionId)
       } else {
         const element = document.querySelector(`[data-section-id="${CSS.escape(sectionId)}"]`)
         if (element) {
@@ -169,11 +245,12 @@ function IGRPMenuNavigation({
         <CardHeader className={cn("gap-0 border-b px-4 py-3")}>
           <div className={cn("flex items-center justify-between")}>
             <CardTitle className={cn("text-sm font-medium")}>{title}</CardTitle>
-            {badgeContent && (
-              <IGRPBadge variant={badgeVariant} color={badgeColor} badgeClassName={cn(badgeClassName)}>
-                {badgeContent}
-              </IGRPBadge>
-            )}
+            {badge ??
+              (badgeContent && (
+                <IGRPBadge variant={badgeVariant} color={badgeColor} badgeClassName={cn(badgeClassName)}>
+                  {badgeContent}
+                </IGRPBadge>
+              ))}
           </div>
         </CardHeader>
         <CardContent className={cn("p-0")}>
@@ -201,6 +278,7 @@ function IGRPMenuNavigation({
                     <IGRPIcon iconName={section.icon} className={cn("size-4 shrink-0")} aria-hidden="true" />
                     <span className={cn("truncate")}>{section.label}</span>
                   </div>
+                  {section.badge}
                   {showChevron && (
                     <IGRPIcon
                       iconName="ChevronRight"
@@ -222,7 +300,7 @@ function IGRPMenuNavigation({
 }
 
 function useIGRPMenuNavigation() {
-  const navigationContext = useContext(NavigationContext)
+  const navigationContext = use(NavigationContext)
 
   const getSectionRef = useCallback(
     (sectionId: string) => (el: HTMLDivElement | null) => {
@@ -242,14 +320,25 @@ function useIGRPMenuNavigation() {
     [navigationContext]
   )
 
-  return { getSectionRef, scrollToSection }
+  return {
+    getSectionRef,
+    scrollToSection,
+    /** Active section from the provider (`undefined` outside one). */
+    activeSection: navigationContext?.state.activeSection,
+    /** Marks a section active; no-op outside a provider. */
+    setActive: navigationContext?.actions.setActive ?? noop,
+  }
 }
+
+const noop = () => {}
 
 export {
   IGRPMenuNavigationProvider,
   IGRPMenuNavigation,
   type IGRPMenuNavigationItem,
   type IGRPMenuNavigationProps,
+  type IGRPMenuNavigationProviderProps,
+  type IGRPMenuNavigationContextValue,
   // eslint-disable-next-line react-refresh/only-export-components
   useIGRPMenuNavigation,
 }

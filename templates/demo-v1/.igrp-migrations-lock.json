@@ -638,6 +638,13 @@
       "cliVersion": "0.2.0-beta.26",
       "manifestHash": "16a1a4f935ea4020",
       "payloadHash": "3581a634af368875"
+    },
+    {
+      "id": "91-layout-composition",
+      "appliedAt": "2026-11-16T00:00:00.000Z",
+      "cliVersion": "0.2.0-beta.26",
+      "manifestHash": "19fbab74ed331bf9",
+      "payloadHash": "9946c8690fef1073"
     }
   ]
 }

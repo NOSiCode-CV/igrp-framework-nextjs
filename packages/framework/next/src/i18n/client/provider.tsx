@@ -54,11 +54,11 @@ export function IGRPIntlProvider({
       onError={igrpOnIntlError}
       getMessageFallback={igrpGetMessageFallback}
     >
-      <IGRPLocaleInfoContext.Provider value={info}>
+      <IGRPLocaleInfoContext value={info}>
         <IGRPI18nProvider strings={designSystemStrings} locale={formatLocale} timeZone={timeZone}>
           <IGRPChromeI18nProvider strings={chromeStrings}>{children}</IGRPChromeI18nProvider>
         </IGRPI18nProvider>
-      </IGRPLocaleInfoContext.Provider>
+      </IGRPLocaleInfoContext>
     </NextIntlClientProvider>
   );
 }

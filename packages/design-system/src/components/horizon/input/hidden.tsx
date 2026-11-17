@@ -4,6 +4,7 @@ import { useId } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 
 import { igrpOmitNonDomProps } from "../../../lib/dom-props.js"
+import { igrpChainHandlers, igrpMergeRefs } from "../../../lib/form-binding.js"
 import type { IGRPInputProps } from "../../../types.js"
 
 /**
@@ -49,19 +50,23 @@ function IGRPInputHidden({
     <Controller
       name={ref}
       control={formContext.control}
-      render={({ field }) => (
-        <input
-          {...domProps}
-          data-slot="input"
-          id={ref}
-          name={ref}
-          type="hidden"
-          value={field.value ?? ""}
-          onChange={field.onChange}
-          onBlur={field.onBlur}
-          ref={field.ref}
-        />
-      )}
+      render={({ field }) => {
+        // The field owns value/onChange/onBlur/ref; the caller's copies run after it.
+        const { onChange, onBlur, ref: callerRef, ...rest } = domProps
+        return (
+          <input
+            {...rest}
+            data-slot="input"
+            id={ref}
+            name={ref}
+            type="hidden"
+            value={field.value ?? ""}
+            onChange={igrpChainHandlers(field.onChange, onChange)}
+            onBlur={igrpChainHandlers(field.onBlur, onBlur)}
+            ref={igrpMergeRefs(field.ref, callerRef)}
+          />
+        )
+      }}
     />
   )
 }

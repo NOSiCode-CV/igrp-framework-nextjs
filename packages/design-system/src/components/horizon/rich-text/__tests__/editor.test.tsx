@@ -195,6 +195,30 @@ describe("IGRPRichTextEditor — readOnly and disabled", () => {
   })
 })
 
+describe("IGRPRichTextEditor — form state", () => {
+  it("is not editable inside a disabled IGRPForm", async () => {
+    const formRef = { current: null as Handle | null }
+    render(
+      <IGRPForm schema={schema} formRef={formRef} onSubmit={() => {}} defaultValues={{ corpo: "<p>x</p>" }} disabled>
+        <IGRPRichTextEditor name="corpo" label="Corpo" />
+      </IGRPForm>
+    )
+    const box = await surface()
+    await waitFor(() => expect(box).toHaveAttribute("contenteditable", "false"))
+    expect(box).toHaveAttribute("aria-disabled", "true")
+  })
+
+  it("is focused when an invalid submit lands on it", async () => {
+    const { formRef } = renderInForm({ corpo: "" })
+    const box = await surface()
+    await editorOf()
+    await act(async () => {
+      await formRef.current?.submit()
+    })
+    await waitFor(() => expect(box.contains(document.activeElement)).toBe(true))
+  })
+})
+
 describe("IGRPRichTextEditor — toolbar", () => {
   it("tracks the mark under the caret, not just document changes", async () => {
     render(<IGRPRichTextEditor label="Corpo" value="<p><strong>forte</strong> fraco</p>" />)

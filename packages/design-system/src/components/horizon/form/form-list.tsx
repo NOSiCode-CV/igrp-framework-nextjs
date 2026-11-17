@@ -1,7 +1,7 @@
 "use client"
 
 import { useCallback, use, useEffect, useId, useMemo, useRef, useState } from "react"
-import { useFieldArray, useWatch } from "react-hook-form"
+import { useFieldArray, useFormContext, useWatch } from "react-hook-form"
 
 import { cn } from "../cn.js"
 import { igrpFormatMessage, useIGRPi18n } from "../../../i18n/index.js"
@@ -75,7 +75,7 @@ interface IGRPFormListProps<TItem>
   /**
    * `"form"` binds to the enclosing `IGRPForm` by `name`; `"standalone"` keeps the
    * items in this component (`value` / `defaultValue` / `onChange`), even inside a
-   * form. Defaults to `"form"` inside `IGRPForm`, `"standalone"` outside it.
+   * form. Defaults to `"form"` inside `IGRPForm` or any react-hook-form `FormProvider`, `"standalone"` outside one.
    * An explicit `"form"` outside an `IGRPForm` has no form to bind to, so it falls
    * back to standalone (with a dev warning).
    */
@@ -410,7 +410,8 @@ function IGRPFormList<TItem>({
   const _id = useId()
   const groupId = name ?? id ?? _id
 
-  const formContext = use(IGRPFormContext)
+  // Detect the form the way every other field does: any FormProvider, not only IGRPForm.
+  const formContext = useFormContext()
   // Form mode needs the react-hook-form context, so an explicit `mode="form"` outside a form still runs standalone.
   const isFormMode = (mode ?? (formContext ? "form" : "standalone")) === "form" && !!formContext
   const hasStandaloneProps = value !== undefined || defaultValue !== undefined || onChange !== undefined
@@ -470,9 +471,9 @@ function FormListFormMode<TItem>({
   groupId: string
   ref?: React.Ref<HTMLDivElement>
 }) {
-  const formContext = use(IGRPFormContext)
-  const disabled = formContext?.disabled
-  const form = formContext?.form
+  const form = useFormContext()
+  // IGRPForm's `disabled` prop, else a plain FormProvider's `useForm({ disabled })`.
+  const disabled = use(IGRPFormContext)?.disabled ?? form.formState.disabled
 
   const { fields, append, remove } = useFieldArray({ name: groupId })
   const appendRef = useRef(append)

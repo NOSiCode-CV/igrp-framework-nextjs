@@ -81,6 +81,8 @@ export type IGRPDatePickerBaseProps = {
   disabledPicker?: boolean
   dateFormat?: string
   placeholder?: string
+  /** Error message shown in place of the form's own; it hides `helperText`. */
+  error?: string
 } & Pick<IGRPBaseAttributes, "label" | "helperText" | "labelClassName" | "name">
 
 export type IGRPSize = "sm" | "md" | "lg" | "xl"

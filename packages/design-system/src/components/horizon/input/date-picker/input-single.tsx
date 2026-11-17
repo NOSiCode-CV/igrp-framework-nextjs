@@ -24,7 +24,7 @@ import { Input } from "../../../primitives/input.js"
 import { Popover, PopoverContent, PopoverTrigger } from "../../../primitives/popover.js"
 import { type IGRPCalendarSingleProps } from "../../calendar/single.js"
 import { IGRPLabel, IGRPRequiredMark } from "../../label.js"
-import { Field, FieldDescription } from "../../../primitives/field.js"
+import { Field, FieldDescription, FieldError } from "../../../primitives/field.js"
 import { useIGRPi18n, useIGRPLocale } from "../../../../i18n/index.js"
 import { igrpDateFnsLocale } from "../../../../i18n/date-fns-locale.js"
 
@@ -226,6 +226,7 @@ function IGRPDatePickerInputSingle(allProps: IGRPDatePickerInputSingleProps) {
     label,
     labelClassName,
     helperText,
+    error,
     className,
     required = false,
     disabledPicker = false,
@@ -343,8 +344,8 @@ function IGRPDatePickerInputSingle(allProps: IGRPDatePickerInputSingleProps) {
                   />
                 </FormControl>
 
-                {helperText && !fieldState.error && <FormDescription>{helperText}</FormDescription>}
-                <FormMessage className={cn("text-xs")} />
+                {helperText && !fieldState.error && !error && <FormDescription>{helperText}</FormDescription>}
+                <FormMessage className={cn("text-xs")} message={error} />
               </FormItem>
             )
           }}
@@ -364,14 +365,15 @@ function IGRPDatePickerInputSingle(allProps: IGRPDatePickerInputSingleProps) {
         inputId={fieldName}
         value={selected}
         displayValue={draft ?? formatDateToString(selected, dateFormat, locale)}
-        ariaDescribedBy={helperText ? `${fieldName}-helper` : undefined}
+        ariaDescribedBy={error ? `${fieldName}-error` : helperText ? `${fieldName}-helper` : undefined}
         {...buildHandlers((next) => {
           setLocalDate(next ?? undefined)
           onDateChange?.(next ?? undefined)
         })}
       />
 
-      {helperText && <FieldDescription id={`${fieldName}-helper`}>{helperText}</FieldDescription>}
+      {helperText && !error && <FieldDescription id={`${fieldName}-helper`}>{helperText}</FieldDescription>}
+      {error && <FieldError id={`${fieldName}-error`}>{error}</FieldError>}
     </Field>
   )
 }

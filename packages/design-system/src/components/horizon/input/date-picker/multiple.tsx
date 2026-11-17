@@ -13,7 +13,7 @@ import { IGRPButton } from "../../button.js"
 import { IGRPLabel, IGRPRequiredMark } from "../../label.js"
 import { IGRPCalendarMultiple, type IGRPCalendarMultipleProps } from "../../calendar/multiple.js"
 import { DD_MM_YYYY } from "../../../../lib/utilities.js"
-import { Field } from "../../../primitives/field.js"
+import { Field, FieldError } from "../../../primitives/field.js"
 import { useIGRPi18n, useIGRPLocale } from "../../../../i18n/index.js"
 import { igrpDateFnsLocale } from "../../../../i18n/date-fns-locale.js"
 
@@ -178,6 +178,7 @@ function IGRPDatePickerMultiple(allProps: IGRPDatePickerMultipleProps) {
     label,
     labelClassName,
     helperText,
+    error,
     className,
     required = false,
     disabledPicker = false,
@@ -241,8 +242,8 @@ function IGRPDatePickerMultiple(allProps: IGRPDatePickerMultipleProps) {
               />
             </FormControl>
 
-            {helperText && !fieldState.error && <FormDescription>{helperText}</FormDescription>}
-            <FormMessage />
+            {helperText && !fieldState.error && !error && <FormDescription>{helperText}</FormDescription>}
+            <FormMessage message={error} />
           </FormItem>
         )}
       />
@@ -263,7 +264,7 @@ function IGRPDatePickerMultiple(allProps: IGRPDatePickerMultipleProps) {
 
       <DatePickerMultipleField
         {...fieldProps}
-        aria-describedby={helperText ? `${fieldName}-helper` : undefined}
+        aria-describedby={error ? `${fieldName}-error` : helperText ? `${fieldName}-helper` : undefined}
         value={displayDate}
         onChange={(val) => {
           setLocalDate(val)
@@ -271,11 +272,12 @@ function IGRPDatePickerMultiple(allProps: IGRPDatePickerMultipleProps) {
         }}
       />
 
-      {helperText && (
+      {helperText && !error && (
         <p id={`${fieldName}-helper`} className={cn("mt-1 text-sm text-muted-foreground")}>
           {helperText}
         </p>
       )}
+      {error && <FieldError id={`${fieldName}-error`}>{error}</FieldError>}
     </Field>
   )
 }

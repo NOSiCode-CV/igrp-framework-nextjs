@@ -75,3 +75,20 @@ describe("IGRPInputHidden renders no layout", () => {
     expect(input.hasAttribute("required")).toBe(false)
   })
 })
+
+describe("IGRPInputHidden — caller ref", () => {
+  it("keeps the caller's ref alongside the form binding", () => {
+    const callerRef = { current: null as HTMLInputElement | null }
+    function Harness() {
+      const formRef = useRef<IGRPFormHandle<typeof schema> | null>(null)
+      return (
+        <IGRPForm schema={schema} formRef={formRef} onSubmit={() => {}} defaultValues={{ token: "abc" }}>
+          <IGRPInputHidden name="token" ref={callerRef} />
+        </IGRPForm>
+      )
+    }
+    const { container } = render(<Harness />)
+    expect(callerRef.current).toBe(container.querySelector('input[name="token"]'))
+    expect(callerRef.current?.value).toBe("abc")
+  })
+})

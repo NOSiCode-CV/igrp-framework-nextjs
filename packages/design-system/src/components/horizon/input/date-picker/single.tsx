@@ -15,7 +15,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "../../../primitives/pop
 import { IGRPButton } from "../../button.js"
 import { IGRPCalendarSingle, type IGRPCalendarSingleProps } from "../../calendar/single.js"
 import { IGRPLabel, IGRPRequiredMark } from "../../label.js"
-import { Field, FieldDescription } from "../../../primitives/field.js"
+import { Field, FieldDescription, FieldError } from "../../../primitives/field.js"
 import { useIGRPi18n, useIGRPLocale } from "../../../../i18n/index.js"
 import { igrpDateFnsLocale } from "../../../../i18n/date-fns-locale.js"
 
@@ -150,6 +150,7 @@ function IGRPDatePickerSingle(allProps: IGRPDatePickerSingleProps) {
     label,
     labelClassName,
     helperText,
+    error,
     className,
     required = false,
     disabledPicker = false,
@@ -217,8 +218,8 @@ function IGRPDatePickerSingle(allProps: IGRPDatePickerSingleProps) {
                 />
               </FormControl>
 
-              {helperText && !fieldState.error && <FormDescription>{helperText}</FormDescription>}
-              <FormMessage className={cn("text-xs")} />
+              {helperText && !fieldState.error && !error && <FormDescription>{helperText}</FormDescription>}
+              <FormMessage className={cn("text-xs")} message={error} />
             </FormItem>
           )}
         />
@@ -239,7 +240,7 @@ function IGRPDatePickerSingle(allProps: IGRPDatePickerSingleProps) {
       )}
       <DatePickerSingleField
         {...fieldProps}
-        aria-describedby={helperText ? `${fieldName}-helper` : undefined}
+        aria-describedby={error ? `${fieldName}-error` : helperText ? `${fieldName}-helper` : undefined}
         value={displayDate}
         onChange={(val) => {
           setLocalDate(val)
@@ -251,7 +252,8 @@ function IGRPDatePickerSingle(allProps: IGRPDatePickerSingleProps) {
         }}
       />
 
-      {helperText && <FieldDescription id={`${fieldName}-helper`}>{helperText}</FieldDescription>}
+      {helperText && !error && <FieldDescription id={`${fieldName}-helper`}>{helperText}</FieldDescription>}
+      {error && <FieldError id={`${fieldName}-error`}>{error}</FieldError>}
     </Field>
   )
 }

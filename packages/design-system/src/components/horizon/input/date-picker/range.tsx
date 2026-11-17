@@ -16,7 +16,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "../../../primitives/pop
 import { IGRPLabel, IGRPRequiredMark } from "../../label.js"
 import { type IGRPCalendarRangeProps } from "../../calendar/range.js"
 import { DD_MM_YYYY } from "../../../../lib/utilities.js"
-import { Field } from "../../../primitives/field.js"
+import { Field, FieldError } from "../../../primitives/field.js"
 import { useIGRPi18n, useIGRPLocale } from "../../../../i18n/index.js"
 import { igrpDateFnsLocale } from "../../../../i18n/date-fns-locale.js"
 
@@ -128,6 +128,7 @@ function IGRPDatePickerRange(allProps: IGRPDatePickerRangeProps) {
     label,
     labelClassName,
     helperText,
+    error,
     className,
     required = false,
     disabledPicker = false,
@@ -189,8 +190,8 @@ function IGRPDatePickerRange(allProps: IGRPDatePickerRangeProps) {
               />
             </FormControl>
 
-            {helperText && !fieldState.error && <FormDescription>{helperText}</FormDescription>}
-            <FormMessage />
+            {helperText && !fieldState.error && !error && <FormDescription>{helperText}</FormDescription>}
+            <FormMessage message={error} />
           </FormItem>
         )}
       />
@@ -211,7 +212,7 @@ function IGRPDatePickerRange(allProps: IGRPDatePickerRangeProps) {
 
       <DatePickerRangeField
         {...fieldProps}
-        aria-describedby={helperText ? `${fieldName}-helper` : undefined}
+        aria-describedby={error ? `${fieldName}-error` : helperText ? `${fieldName}-helper` : undefined}
         value={displayDate}
         onChange={(val) => {
           setLocalDate(val)
@@ -219,11 +220,12 @@ function IGRPDatePickerRange(allProps: IGRPDatePickerRangeProps) {
         }}
       />
 
-      {helperText && (
+      {helperText && !error && (
         <p id={`${fieldName}-helper`} className={cn("mt-1 text-sm text-muted-foreground")}>
           {helperText}
         </p>
       )}
+      {error && <FieldError id={`${fieldName}-error`}>{error}</FieldError>}
     </Field>
   )
 }

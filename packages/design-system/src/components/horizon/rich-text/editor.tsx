@@ -1,13 +1,14 @@
 "use client"
 
 import { EditorContent, useEditor } from "@tiptap/react"
-import { useEffect, useId, useMemo, useRef } from "react"
+import { use, useEffect, useId, useImperativeHandle, useMemo, useRef } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 
 import { cn } from "../cn.js"
 import { useIGRPi18n } from "../../../i18n/context.js"
 import { Button } from "../../primitives/button.js"
 import { Field, FieldDescription, FieldError } from "../../primitives/field.js"
+import { IGRPFormContext } from "../form/form-context.js"
 import { IGRPLabel } from "../label.js"
 import {
   RICH_TEXT_FONT_SIZES,
@@ -85,6 +86,8 @@ interface SurfaceProps {
   fontSizes: string[]
   className?: string
   editorClassName?: string
+  /** Receives `{ focus }`, so react-hook-form can focus the editor on an invalid submit. */
+  focusRef?: React.Ref<{ focus: () => void }>
 }
 
 function RichTextField({
@@ -107,6 +110,7 @@ function RichTextField({
   fontSizes,
   className,
   editorClassName,
+  focusRef,
 }: SurfaceProps) {
   const t = useIGRPi18n().richText
   const editable = !readOnly && !disabled
@@ -159,6 +163,8 @@ function RichTextField({
     onUpdate: ({ editor: ed }) => onChangeRef.current(ed.isEmpty ? "" : ed.getHTML()),
     onBlur: () => onBlurRef.current?.(),
   })
+
+  useImperativeHandle(focusRef, () => ({ focus: () => editor?.commands.focus() }), [editor])
 
   useEffect(() => {
     if (!editor) return
@@ -258,6 +264,8 @@ function IGRPRichTextEditor({
   const _id = useId()
   const fieldName = name ?? id ?? _id
   const formContext = useFormContext()
+  // IGRPForm disables its controls through a <fieldset>, which a contenteditable ignores.
+  const formDisabled = !!use(IGRPFormContext)?.disabled
 
   const shared = {
     ...rest,
@@ -291,6 +299,9 @@ function IGRPRichTextEditor({
           key={shared.placeholder}
           {...shared}
           error={error || fieldState.error?.message}
+          // `field.disabled` covers a plain FormProvider's `useForm({ disabled })`.
+          disabled={disabled || formDisabled || !!field.disabled}
+          focusRef={field.ref}
           value={(field.value as string | undefined) ?? ""}
           onChange={(html) => {
             field.onChange(html)

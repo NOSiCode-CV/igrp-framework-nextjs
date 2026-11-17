@@ -24,7 +24,9 @@ Files outside these prefixes (templates, apps, scripts, docs, `.claude/`) are ig
 
 Look for **modified, added, and untracked** files — `git diff HEAD` covers tracked changes; `git status --short` covers untracked new files. Include both.
 
-**If no framework package files are detected:** stop and report "No framework package changes detected — nothing to release."
+**Also detect committed, pending changesets.** Every `.changeset/*.md` at the top level except `README.md` is pending; the changesets CLI (v3) moves consumed ones into `.changeset/pre/`, so files there are history, not pending. Add every package named in a pending file's frontmatter. A clean working tree with pending changesets is a normal release, not "nothing to release".
+
+**If neither source names a framework package:** stop and report "No framework package changes detected — nothing to release."
 
 ---
 
@@ -33,8 +35,10 @@ Look for **modified, added, and untracked** files — `git diff HEAD` covers tra
 For each detected package, run:
 
 ```powershell
-pnpm view <pkg> version --registry=https://sonatype.nosi.cv/repository/igrp/
+npm view <pkg> dist-tags.latest --registry=https://sonatype.nosi.cv/repository/igrp/
 ```
+
+Use `npm view`, not `pnpm view`: on some machines `pnpm view` answers 404 for every package. Read `dist-tags.latest`, since `latest` is the tag we publish to.
 
 Record each result as the **old version** for the final summary table. An empty result or 404 means the package was never published (e.g. a new package) — record the old version as `—`; that is not an error.
 
@@ -107,7 +111,7 @@ git commit -m "chore: version packages"
 
 ## Step 8 — Build affected packages (dependency order)
 
-("Affected" means detected in Step 1.)
+("Affected" means detected in Step 1, **plus** any package whose local version `pnpm version:changesets` moved ahead of the registry. With `updateInternalDependencies: "patch"` a dependent can be bumped without a changeset of its own. Every bumped package must be published, or the `workspace:*` pins in its dependents point at a version that does not exist.)
 
 Run only the build scripts for affected packages, **in this exact order** (skip any not affected):
 
@@ -144,7 +148,7 @@ Run only the release scripts for affected packages, **in the same dependency ord
 For each released package, query the registry to confirm the new version is live:
 
 ```powershell
-pnpm view <pkg> version --registry=https://sonatype.nosi.cv/repository/igrp/
+npm view <pkg> dist-tags.latest --registry=https://sonatype.nosi.cv/repository/igrp/
 ```
 
 Print a summary table:

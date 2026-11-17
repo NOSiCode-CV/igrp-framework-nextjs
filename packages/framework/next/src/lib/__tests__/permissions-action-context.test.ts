@@ -234,7 +234,9 @@ describe('igrpEnsureAccessClientConfig(seed)', () => {
     const config = await igrpEnsureAccessClientConfig({ token: 'SEEDED', locale: undefined });
     expect(getToken).not.toHaveBeenCalled();
     expect(config).toMatchObject({ token: 'SEEDED', baseUrl: 'https://am.example.test' });
-    expect(config).not.toHaveProperty('locale');
+    // Not `not.toHaveProperty`: a store left by an earlier test was reset to
+    // `locale: undefined`, so the key can exist without a value.
+    expect(config.locale).toBeUndefined();
   });
 
   it('wins over a token already in the store', async () => {

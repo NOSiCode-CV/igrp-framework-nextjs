@@ -39,8 +39,8 @@ vi.mock('react', async (i) => ({ ...(await i<typeof import('react')>()), cache: 
 vi.mock('@igrp/framework-next-auth/sanitize', () => ({ sanitizeRedirectUrl: () => '' }));
 
 const getToken = vi.fn();
-vi.mock('@igrp/framework-next-auth/jwt', () => ({
-  getToken: (...args: unknown[]) => getToken(...args),
+vi.mock('@igrp/framework-next-auth/session-store', () => ({
+  readIGRPSessionToken: (...args: unknown[]) => getToken(...args),
 }));
 
 const { fetchMenusAction } = await import('../index.js');

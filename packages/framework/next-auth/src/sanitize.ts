@@ -197,3 +197,61 @@ export function escapeHtml(unsafe: string): string {
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#039;');
 }
+
+/**
+ * Validates and normalizes a `callbackUrl` query value.
+ *
+ * Rules:
+ * - Must be a non-empty string starting with `/` (no protocol-relative URLs, no
+ *   absolute URLs to other origins — would otherwise enable open-redirect).
+ * - The basePath prefix is stripped for path comparison so `/login` and
+ *   `/<basePath>/login` are treated the same.
+ * - Anything pointing back to `/login` or `/logout` (the auth chrome itself)
+ *   is rejected — those targets cause the post-auth redirect to land back on
+ *   the login screen and accumulate a nested `callbackUrl` chain.
+ *
+ * @returns the original value when safe, otherwise `undefined` so callers can
+ * fall back to `/`.
+ */
+export function sanitizeCallbackUrl(
+  raw: unknown,
+  basePath: string = process.env.NEXT_PUBLIC_BASE_PATH ?? '',
+): string | undefined {
+  if (typeof raw !== 'string' || raw.length === 0) return undefined;
+
+  // Reject backslashes outright — some browsers/proxies normalize `\` to `/`,
+  // turning `/\evil.com` or `/\/evil.com` into a protocol-relative redirect.
+  if (raw.includes('\\')) return undefined;
+
+  // Decode once and re-validate so percent-encoded tricks can't smuggle a
+  // protocol-relative target or backslash past the checks below
+  // (e.g. `/%2F%2Fevil.com`, `/%5Cevil.com`).
+  let decoded: string;
+  try {
+    decoded = decodeURIComponent(raw);
+  } catch {
+    return undefined; // malformed percent-encoding
+  }
+  if (decoded.includes('\\')) return undefined;
+
+  // Only same-origin relative URLs — enforced on both the raw and decoded
+  // forms. Rejects `//evil.com`, `http://…`, etc.
+  if (!raw.startsWith('/') || raw.startsWith('//')) return undefined;
+  if (!decoded.startsWith('/') || decoded.startsWith('//')) return undefined;
+
+  // Normalize by stripping the configured basePath — repeatedly — so neither
+  // `/<basePath>/login` nor a double-prefixed `/<basePath>/<basePath>/login`
+  // can slip an auth-chrome target past the loop guard below.
+  let normalized = decoded;
+  if (basePath) {
+    while (normalized === basePath || normalized.startsWith(`${basePath}/`)) {
+      normalized = normalized.slice(basePath.length) || '/';
+    }
+  }
+
+  const pathOnly = normalized.split('?')[0]?.split('#')[0] ?? '';
+  if (pathOnly === '/login' || pathOnly.startsWith('/login/')) return undefined;
+  if (pathOnly === '/logout' || pathOnly.startsWith('/logout/')) return undefined;
+
+  return raw;
+}

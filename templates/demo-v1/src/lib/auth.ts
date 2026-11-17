@@ -1,4 +1,4 @@
-import { igrpSetAccessClientConfig } from "@igrp/framework-next";
+import { igrpEnsureAccessClientConfig } from "@igrp/framework-next";
 import { isIgrpError } from "@igrp/framework-next/errors";
 import { assertAuthProviderEnv } from "@igrp/framework-next-auth/providers";
 import { isNextControlFlowError } from "@igrp/framework-next-auth/runtime";
@@ -20,8 +20,6 @@ export { auth, PREVIEW_SESSION_STUB } from "@/lib/auth-instance";
  * @returns Session or null
  */
 export async function serverSession() {
-  const apiManagement = process.env.IGRP_ACCESS_MANAGEMENT_API || "";
-
   // A missing NEXTAUTH_SECRET is checked by the framework: auth.serverSession()
   // throws IGRPAuthConfigError (AUTH_SECRET_MISSING) in production.
   // Env/provider misconfiguration is a setup problem, not a "no session"
@@ -57,9 +55,8 @@ export async function serverSession() {
     // guaranteed 401 on the next access-management call instead of letting the
     // session-error redirect (onSessionExpired / IGRPSessionWatcher) run first.
     if (session !== null && !sessionError) {
-      igrpSetAccessClientConfig({
-        token: session.accessToken as string,
-        baseUrl: apiManagement,
+      await igrpEnsureAccessClientConfig({
+        token: (session.accessToken as string) ?? "",
       });
     }
 
@@ -100,14 +97,11 @@ export async function serverSession() {
 export async function getSession() {
   if (isAuthBypass()) return null;
   const session = await auth.getSession();
-  // Seed the per-request access-client config so downstream consumers in the
-  // same request (e.g. igrpGetClaims, server actions) can read the token.
-  // Mirrors serverSession(); IGRPLayoutFull also seeds later but renders after
-  // the (igrp) layout body where igrpGetClaims() runs.
+  // Seed before igrpGetClaims() runs in the (igrp) layout body: IGRPLayoutFull
+  // seeds too, but later. The base URL comes from IGRP_ACCESS_MANAGEMENT_API.
   if (session) {
-    igrpSetAccessClientConfig({
+    await igrpEnsureAccessClientConfig({
       token: (session.accessToken as string) ?? "",
-      baseUrl: process.env.IGRP_ACCESS_MANAGEMENT_API || "",
     });
   }
   return session;

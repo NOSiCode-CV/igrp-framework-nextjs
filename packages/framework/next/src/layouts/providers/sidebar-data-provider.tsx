@@ -10,7 +10,7 @@ import { IGRPSidebarDataProvider, IGRPTemplateSidebar } from '@igrp/framework-ne
 import type { IGRPSidebarLabelProps } from '@igrp/framework-next-ui';
 
 import { IgrpLayoutDataError } from '../../errors.js';
-import { igrpSetAccessClientConfig } from '../../lib/api-config.js';
+import { igrpEnsureAccessClientConfig } from '../../lib/permissions.js';
 import { igrpResolveLayoutDataSource } from '../../lib/layout-data-source.js';
 import { fetchAppsByUser } from '../../hooks/use-applications.js';
 import { igrpGetLayoutMenus } from '../../lib/layout-menus.js';
@@ -72,12 +72,7 @@ export async function SidebarDataProvider({
   const layoutData = igrpResolveLayoutDataSource(config);
 
   if (!previewMode) {
-    igrpSetAccessClientConfig({
-      token,
-      baseUrl,
-      ...(timeout !== undefined ? { timeout } : {}),
-      ...(locale ? { locale } : {}),
-    });
+    await igrpEnsureAccessClientConfig({ token, baseUrl, timeout, locale: locale || undefined });
   }
 
   const render = (data: IGRPSidebarDataArgs) => (

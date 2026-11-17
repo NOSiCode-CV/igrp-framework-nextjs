@@ -17,7 +17,7 @@ You are working inside `templates/demo-v1/` — the **canonical reference templa
 - **`NEXTAUTH_URL` must include the basePath and `/api/auth`.** With `NEXT_PUBLIC_BASE_PATH=/apps/template`, the correct value is `NEXTAUTH_URL=http://localhost:3000/apps/template/api/auth`. NextAuth treats this as the URL of its API root and derives `signin`/`callback` endpoints from it. Getting this wrong produces a login loop with a deeply nested `?callbackUrl=…?callbackUrl=…` chain.
 - **`redirect_uri` registered on the IGRP auth server must exactly match** what NextAuth builds: `<NEXTAUTH_URL>/callback/<provider-id>`. The OIDC spec requires an exact match.
 - **`post_logout_redirect_uri` must be registered on the IGRP auth server too** — same exact-match rule as `redirect_uri`, but for logout. The logout page (`(auth)/logout/page.tsx`) sends the app's login URL (`<origin><basePath>/login`, built by `buildLoginUrl()`) as `post_logout_redirect_uri` on the IdP `end_session_endpoint`. Spring Authorization Server only redirects the browser back to that URL when **both** hold: (a) it is registered byte-for-byte in the client's `postLogoutRedirectUris` (scheme, host, port, basePath, trailing slash), **and** (b) a valid `id_token_hint` is present (Spring resolves the client from the hint's `aud`, not from `client_id`). If either fails, the user is left on Spring's own "logged out" page instead of returning to `/login` — the SSO session is still terminated, but the redirect-back silently doesn't happen. The RP side already forces the `openid` scope and always sends `id_token_hint` when an `id_token` is held; confirm the IdP **re-issues `id_token` on the refresh grant** so the hint's `sid` doesn't go stale. Diagnose with the dev log line `[oidc.buildEndSessionUrl] built URL { …, hasIdTokenHint, postLogoutRedirectUri }`. See `docs/2026-06-02-spring-as-logout-redirect-report.md`.
-- **`callbackUrl` is always sanitized.** Both middleware and the login page pass user-supplied values through `sanitizeCallbackUrl()` (in `lib/utilities.ts`) to:
+- **`callbackUrl` is always sanitized.** Both middleware and the login page pass user-supplied values through `sanitizeCallbackUrl()` (`@igrp/framework-next-auth/sanitize`, re-exported from `lib/utilities.ts`) to:
   - reject scheme-relative (`//…`) and absolute URLs (open-redirect),
   - collapse `/login` and `/<basePath>/login` so we never bounce back to login,
   - drop `/logout*` targets so a successful login doesn't immediately log out.
@@ -48,8 +48,8 @@ The shadcn CLI **is** appropriate inside `packages/design-system` itself, when r
 
 ### Auth flow (no bypass)
 
-1. Request hits `middleware.ts`.
-2. Public/static paths pass through with an `x-current-path` request header.
+1. Request hits `middleware.ts`, which asks `igrpMiddlewareDecision` (`@igrp/framework-next-auth/middleware`) for `pass` or `redirect` and owns the response (CSP, security headers, stale-cookie sweep).
+2. Public/static paths pass through with an `x-current-path` request header. Extra public paths go in `PUBLIC_PATHS`.
 3. JWT extracted via `auth.getTokenFromRequest()`. Missing/expired/refresh-failed → redirect to `${BASE_PATH}/login` (sanitized callbackUrl).
 4. `/login` renders `IGRPAuthForm` from `@igrp/framework-next-ui`. The button calls `signIn('igrp-auth', { callbackUrl: safeCallbackUrl })`.
 5. NextAuth POSTs `/api/auth/signin/igrp-auth`, returns the IGRP issuer's `/oauth2/authorize` URL; browser navigates there.

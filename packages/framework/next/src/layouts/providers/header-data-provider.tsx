@@ -14,7 +14,7 @@ import type {
 } from '@igrp/framework-next-ui';
 
 import { IgrpLayoutDataError } from '../../errors.js';
-import { igrpSetAccessClientConfig } from '../../lib/api-config.js';
+import { igrpEnsureAccessClientConfig } from '../../lib/permissions.js';
 import { igrpResolveLayoutDataSource } from '../../lib/layout-data-source.js';
 import { igrpGetLayoutMenus } from '../../lib/layout-menus.js';
 import { fetchCurrentUser } from '../../hooks/use-user.js';
@@ -26,7 +26,7 @@ export type HeaderDataProviderProps = IGRPHeaderLabelProps & {
   // renders inside a <Suspense> boundary in IGRPLayoutFull, and Next.js resumes
   // Suspense-deferred Server Components on a later tick that does not reliably
   // inherit a store seeded by `enterWith()` earlier in the same render. See
-  // igrp-layout-full.tsx for the matching `igrpSetAccessClientConfig` call.
+  // `igrpEnsureAccessClientConfig` for the rule.
   token: string;
   baseUrl: string;
   /** Per-request AM client timeout; see igrp-layout-full.tsx. */
@@ -74,12 +74,7 @@ export async function HeaderDataProvider({
   const layoutData = igrpResolveLayoutDataSource(config);
 
   if (!previewMode) {
-    igrpSetAccessClientConfig({
-      token,
-      baseUrl,
-      ...(timeout !== undefined ? { timeout } : {}),
-      ...(locale ? { locale } : {}),
-    });
+    await igrpEnsureAccessClientConfig({ token, baseUrl, timeout, locale: locale || undefined });
   }
 
   // `layoutData.getUser` replaces the user source in both modes; without it,

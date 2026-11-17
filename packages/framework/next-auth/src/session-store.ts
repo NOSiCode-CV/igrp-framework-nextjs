@@ -9,10 +9,17 @@
 // Node-only code (`instrumentation.ts`), never from a module middleware loads.
 // ─────────────────────────────────────────────────────────────────────────────
 
-import { decode as nextAuthDecode, encode as nextAuthEncode } from 'next-auth/jwt';
+import { decode as nextAuthDecode, encode as nextAuthEncode, getToken } from 'next-auth/jwt';
 import type { JWTDecodeParams, JWTEncodeParams } from 'next-auth/jwt';
 
 import { globalSlot, warnOnce } from './_global-state';
+import {
+  resolveSecureCookie,
+  resolveSecureCookiesFlag,
+  SECURE_SESSION_COOKIE_BASENAME,
+  SESSION_COOKIE_BASENAME,
+  sessionCookieName,
+} from './cookies';
 import type { JWT } from './jwt';
 
 /**
@@ -351,6 +358,84 @@ export function createSessionTokenDecoder(
  * store-backed cookie returns a token without `accessToken`.
  */
 export const decodeIGRPSessionToken = createSessionTokenDecoder();
+
+/**
+ * `getToken` cookie options for THIS app's session cookie, or `null` when the
+ * jar holds none.
+ *
+ * **Decided from the cookie jar, not from configuration.** `withIGRPAuth`
+ * suffixes the cookie names with the basePath only under `cookieIsolation:
+ * 'basePath'` (its default); under `'none'` it writes the STOCK names even with
+ * a basePath. A reader without the `withIGRPAuth` instance cannot see that
+ * option, so it probes the jar in two steps. First this app's scoped name
+ * (`startsWith`, because NextAuth chunks an oversized token into `<name>.0` /
+ * `<name>.1`). Failing that, the stock name only when a cookie is EXACTLY it or
+ * `<it>.<n>`: the stock name is a prefix of every co-hosted app's cookie
+ * (`next-auth.session-token~`), and NextAuth would decode a foreign session as
+ * this app's. For the same reason the stock branch returns `keep`, so only the
+ * exact stock cookies reach `getToken` (its `SessionStore` collects every
+ * cookie that `startsWith` the name it looks for).
+ */
+function sessionCookieLookup(
+  cookieNames: string[],
+  basePath: string,
+  env: Record<string, string | undefined>,
+): { cookieName?: string; secureCookie?: boolean; keep?: (name: string) => boolean } | null {
+  // No early return for an empty basePath: a root-path app's scoped name is
+  // `next-auth.session-token~`.
+  const secureCookie = resolveSecureCookie(cookieNames, basePath);
+  const scoped = sessionCookieName(basePath, secureCookie ?? resolveSecureCookiesFlag(env));
+  if (cookieNames.some((name) => name.startsWith(scoped))) {
+    return { cookieName: scoped, ...(secureCookie !== undefined ? { secureCookie } : {}) };
+  }
+  const isStock = (name: string) =>
+    [SESSION_COOKIE_BASENAME, SECURE_SESSION_COOKIE_BASENAME].some(
+      (stock) =>
+        name === stock ||
+        (name.startsWith(`${stock}.`) && /^\d+$/.test(name.slice(stock.length + 1))),
+    );
+  if (!cookieNames.some(isStock)) return null;
+  return {
+    secureCookie: cookieNames.some(
+      (name) => isStock(name) && name.startsWith(SECURE_SESSION_COOKIE_BASENAME),
+    ),
+    keep: isStock,
+  };
+}
+
+/**
+ * Decode this app's session token from a cookie jar, without the app's
+ * `withIGRPAuth` instance: for code that only has the cookies, such as
+ * `@igrp/framework-next`'s access-token recovery in Server Actions.
+ *
+ * Reads `NEXT_PUBLIC_BASE_PATH`, `NEXTAUTH_SECRET` and the `NEXTAUTH_URL`
+ * scheme from `env`. Decodes with the registered session store, like
+ * {@link decodeIGRPSessionToken}. Returns `null` when the jar holds no session
+ * cookie of this app. Decrypts only: the `jwt` callback does not run, so the
+ * token may be expired.
+ */
+export async function readIGRPSessionToken(
+  cookies: ReadonlyArray<{ name: string; value: string }>,
+  env: Record<string, string | undefined> = process.env,
+): Promise<JWT | null> {
+  const lookup = sessionCookieLookup(
+    cookies.map((c) => c.name),
+    env.NEXT_PUBLIC_BASE_PATH ?? '',
+    env,
+  );
+  if (!lookup) return null;
+  const { keep, ...options } = lookup;
+  return (await getToken({
+    req: {
+      cookies: Object.fromEntries(
+        cookies.filter((c) => !keep || keep(c.name)).map((c) => [c.name, c.value]),
+      ),
+    } as Parameters<typeof getToken>[0]['req'],
+    secret: env.NEXTAUTH_SECRET,
+    decode: decodeIGRPSessionToken,
+    ...options,
+  })) as JWT | null;
+}
 
 /**
  * Removes a session's store entry. Called on sign-out; a no-op for a cookie

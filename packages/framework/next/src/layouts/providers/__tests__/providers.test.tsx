@@ -32,7 +32,10 @@ vi.mock('../../../hooks/use-menus.js', () => ({ fetchMenus }));
 vi.mock('../../../hooks/use-applications.js', () => ({ fetchAppsByUser }));
 
 const setConfig = vi.fn();
-vi.mock('../../../lib/api-config.js', () => ({ igrpSetAccessClientConfig: setConfig }));
+vi.mock('../../../lib/api-config.js', () => ({
+  igrpSetAccessClientConfig: setConfig,
+  igrpGetAccessClientConfig: () => ({ token: '', baseUrl: '' }),
+}));
 
 /** Real `redirect()` semantics: throws, and `unstable_rethrow` must let it out. */
 const REDIRECT = Object.assign(new Error('NEXT_REDIRECT'), {

@@ -9,13 +9,6 @@ import {
   type IGRPAccessClaims,
   type IGRPClaimsState,
 } from '@igrp/framework-next-auth/claims';
-import {
-  resolveSecureCookie,
-  resolveSecureCookiesFlag,
-  sessionCookieName,
-  SECURE_SESSION_COOKIE_BASENAME,
-  SESSION_COOKIE_BASENAME,
-} from '@igrp/framework-next-auth/cookies';
 import { isIgrpAuthBypass as isIgrpAuthBypassFromAuth } from '@igrp/framework-next-auth/providers';
 import { isNextControlFlowError } from '@igrp/framework-next-auth/runtime';
 
@@ -34,12 +27,6 @@ import { IgrpConfigError } from '../errors.js';
 
 const SUPER_ADMIN_MOCK: IGRPAccessClaims = { permissions: [], roles: [], isSuperAdmin: true };
 
-// `resolveSecureCookie` and `isNextControlFlowError` are imported from
-// @igrp/framework-next-auth rather than redefined. They used to be copied here
-// to avoid changing the root of the build chain for a few lines — but two
-// hand-synced copies of security-relevant cookie logic is the worse trade, and
-// the originals now ship behind the `/cookies` and `/runtime` entry points.
-
 /**
  * Recover the access token straight from the session cookie.
  *
@@ -54,91 +41,20 @@ const SUPER_ADMIN_MOCK: IGRPAccessClaims = { permissions: [], roles: [], isSuper
  * token and "fix" nothing. `getToken` needs only the cookies and
  * `NEXTAUTH_SECRET`.
  *
- * `next/headers` and `/jwt` are dynamically imported to keep this module's
- * static graph unchanged for every existing importer of the package root.
+ * `next/headers` and `/session-store` are dynamically imported to keep this
+ * module's static graph unchanged for every existing importer of the package
+ * root. Which cookie is this app's is next-auth's call (`readIGRPSessionToken`).
  * Returns '' on a genuine failure — the caller maps that to the error state —
  * but re-throws Next's control-flow signals (see `isNextControlFlowError`).
  */
-/**
- * The `getToken` cookie options for THIS app's session cookie, or `null` when
- * the jar holds none.
- *
- * **Decided from the cookie jar, not from configuration.** `withIGRPAuth`
- * suffixes every auth cookie name with the basePath only when `cookieIsolation`
- * is `'basePath'` (its default) — under `cookieIsolation: 'none'` it writes the
- * STOCK names even with a basePath set. It also reads the basePath from a
- * caller-supplied `env` map before falling back to `process.env`, and recovers
- * it from `NEXTAUTH_URL` when `NEXT_PUBLIC_BASE_PATH` is unset.
- *
- * This package can see none of that: the `withIGRPAuth` instance lives in the
- * app. Gating purely on `NEXT_PUBLIC_BASE_PATH` — as an earlier version of this
- * did — therefore fixed the default configuration and broke
- * `cookieIsolation: 'none'`, sending `getToken` after a suffixed name for a
- * cookie written with the stock one.
- *
- * Probing the jar sidesteps the whole question, in two steps. First this app's
- * scoped name (`startsWith`, because NextAuth chunks an oversized token into
- * `<name>.0` / `<name>.1`). Failing that, the stock name only when a cookie is
- * EXACTLY it or `<it>.<n>` — never a bare prefix match, because the stock name
- * is a prefix of every co-hosted app's cookie (`next-auth.session-token~`) and
- * NextAuth would decode a foreign session as this app's. For the same reason
- * the stock branch takes the `__Secure-` scheme only from an exact stock name
- * and returns `keep`, so the caller hands `getToken` the exact stock cookies
- * alone: its `SessionStore` collects every cookie that `startsWith` the name it
- * looks for. Neither: `null`, and the caller recovers nothing.
- */
-function sessionCookieLookup(
-  cookieNames: string[],
-): { cookieName?: string; secureCookie?: boolean; keep?: (name: string) => boolean } | null {
-  // No early return for an empty basePath: a root-path app's scoped name is
-  // `next-auth.session-token~`.
-  const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
-  const secureCookie = resolveSecureCookie(cookieNames, basePath);
-  const scoped = sessionCookieName(basePath, secureCookie ?? resolveSecureCookiesFlag(process.env));
-  if (cookieNames.some((name) => name.startsWith(scoped))) {
-    return { cookieName: scoped, ...(secureCookie !== undefined ? { secureCookie } : {}) };
-  }
-  const isStock = (name: string) =>
-    [SESSION_COOKIE_BASENAME, SECURE_SESSION_COOKIE_BASENAME].some(
-      (stock) =>
-        name === stock ||
-        (name.startsWith(`${stock}.`) && /^\d+$/.test(name.slice(stock.length + 1))),
-    );
-  if (!cookieNames.some(isStock)) return null;
-  return {
-    secureCookie: cookieNames.some(
-      (name) => isStock(name) && name.startsWith(SECURE_SESSION_COOKIE_BASENAME),
-    ),
-    keep: isStock,
-  };
-}
-
 async function recoverAccessTokenFromCookies(): Promise<string> {
   try {
-    const [{ cookies }, { getToken }, { decodeIGRPSessionToken }] = await Promise.all([
+    const [{ cookies }, { readIGRPSessionToken }] = await Promise.all([
       import('next/headers'),
-      import('@igrp/framework-next-auth/jwt'),
       import('@igrp/framework-next-auth/session-store'),
     ]);
-    const all = (await cookies()).getAll();
-    const names = all.map((c) => c.name);
-    const lookup = sessionCookieLookup(names);
-    if (!lookup) return '';
-    const { keep, ...options } = lookup;
-    const token = await getToken({
-      req: {
-        cookies: Object.fromEntries(
-          all.filter((c) => !keep || keep(c.name)).map((c) => [c.name, c.value]),
-        ),
-      } as Parameters<typeof getToken>[0]['req'],
-      secret: process.env.NEXTAUTH_SECRET,
-      // With a session store registered the cookie holds only a session id;
-      // plain decode would return a token with no `accessToken`. Without one
-      // this IS plain decode.
-      decode: decodeIGRPSessionToken,
-      ...options,
-    });
-    return (token as { accessToken?: string } | null)?.accessToken ?? '';
+    const token = await readIGRPSessionToken((await cookies()).getAll());
+    return token?.accessToken ?? '';
   } catch (error) {
     if (isNextControlFlowError(error)) throw error;
     return '';
@@ -227,21 +143,48 @@ export function igrpAssertAuthBypassAllowed(
 }
 
 /**
- * Guarantee that the per-request access-client store holds a token, recovering
- * it from the session cookie when no `AsyncLocalStorage` store was established
- * — i.e. in a Server Action or Route Handler, where the layout/DAL path that
- * normally seeds it never ran.
+ * The one way to put Access Management credentials into the per-request store.
+ *
+ * **With a `seed`** (a session the caller already holds: the layout, the data
+ * providers, the app's own `getSession`): applies it and returns. The seed wins
+ * over whatever the store held, because it came through the `jwt` callback and
+ * may be a refreshed token; a cookie-recovered one never is. `baseUrl` defaults
+ * to `IGRP_ACCESS_MANAGEMENT_API`; `undefined` fields are left alone.
+ *
+ * **Without one**: guarantees the store holds a token, recovering it from the
+ * session cookie when nothing seeded it — a Server Action or Route Handler,
+ * where the layout/DAL path never ran. Cheap once seeded.
+ *
+ * Rules that make the store reach the code that reads it, kept here only:
+ *  - The store is written synchronously, before this function's first
+ *    `await`, so it lands in the CALLER's async context (an async function body
+ *    runs in its caller's context up to its first await).
+ *  - A component that renders inside `<Suspense>` must call this itself: the
+ *    resumed render does not reliably inherit a store seeded by its parent.
+ *  - The app's `getSession` must seed before `igrpGetClaims` runs, or claims
+ *    fall back to the (unrefreshed) cookie token.
+ *  - For a credential meant for ONE call, use `igrpWithAccessClientConfig`:
+ *    this writes the request's store in place.
  *
  * Returns the resulting config; `token === ''` means no session could be
  * recovered and every downstream Access Management call will fail. Callers
  * should treat that as unauthenticated and stop, rather than issuing a request
  * with an empty bearer token against an empty base URL.
- *
- * Idempotent and cheap once seeded: a store that already carries a token is
- * returned untouched.
  */
-export async function igrpEnsureAccessClientConfig(): Promise<IGRPClientRuntimeConfig> {
+export async function igrpEnsureAccessClientConfig(
+  seed?: Pick<IGRPClientRuntimeConfig, 'token'> & Partial<IGRPClientRuntimeConfig>,
+): Promise<IGRPClientRuntimeConfig> {
   const current = igrpGetAccessClientConfig();
+  if (seed) {
+    const defined = Object.fromEntries(
+      Object.entries(seed).filter(([, value]) => value !== undefined),
+    ) as typeof seed;
+    igrpSetAccessClientConfig({
+      ...defined,
+      baseUrl: seed.baseUrl || current.baseUrl || process.env.IGRP_ACCESS_MANAGEMENT_API || '',
+    });
+    return igrpGetAccessClientConfig();
+  }
   if (current.token) return current;
 
   // No ALS store established (Server Action / Route Handler), or a store seeded

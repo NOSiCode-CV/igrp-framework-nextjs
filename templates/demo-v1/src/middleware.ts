@@ -1,12 +1,12 @@
 import { type NextRequest, NextResponse } from "next/server";
 
 import { staleAuthCookies } from "@igrp/framework-next-auth/cookies";
+import { igrpMiddlewareDecision } from "@igrp/framework-next-auth/middleware";
 
 // Edge runtime: import the instance from its Edge-safe module, NOT "@/lib/auth"
 // (which also carries Node-only session helpers — see lib/auth-instance.ts).
 import { auth } from "@/lib/auth-instance";
 import { LOGOUT_PENDING_COOKIE } from "@/lib/logout-pending";
-import { isAuthBypass, sanitizeCallbackUrl } from "@/lib/utilities";
 
 /**
  * Content-Security-Policy-Report-Only baseline. Report-only never blocks a
@@ -96,64 +96,25 @@ function withSecurityHeaders(
   return response;
 }
 
-const AUTH_UI_PREFIXES = ["/login", "/logout", "/api/auth"];
-
 // `/api/health` is the container HEALTHCHECK target (docker/*/Dockerfile). Behind
 // auth it answered 307 → /login, and `wget` followed the redirect — so the probe
 // tested the login page at the public origin (or failed outright when the
 // container cannot reach that origin) and never reached the health route.
 // `/api/csp-report` receives browser CSP reports, which are sent without cookies.
+// /login, /logout, /api/auth and static assets are public in the framework.
 const CSP_REPORT_PATH = "/api/csp-report";
-const PUBLIC_PATHS = new Set([
-  "/login",
-  "/logout",
-  "/api/auth",
-  "/api/health",
-  CSP_REPORT_PATH,
-]);
-const PUBLIC_PREFIXES = ["/login/", "/logout/", "/api/auth/"];
-const STATIC_PREFIXES = ["/_next/", "/static/", "/favicon.ico"];
+const PUBLIC_PATHS = ["/api/health", CSP_REPORT_PATH];
 
 // Build-time constant — baked in by Next.js for NEXT_PUBLIC_* vars.
 // Needed for raw URL construction in middleware where next/navigation isn't available.
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
-function isPublicPath(pathname: string): boolean {
-  if (PUBLIC_PATHS.has(pathname)) return true;
-  if (PUBLIC_PREFIXES.some((p) => pathname.startsWith(p))) return true;
-  if (STATIC_PREFIXES.some((p) => pathname.startsWith(p))) return true;
-  // Static assets by extension only, the same list as the matcher below. A
-  // dotted route such as `/users/john.doe` is NOT public: it must go through
-  // the token check. `/api/*` never counts as an asset, because the matcher
-  // sends every API route here, `/api/reports/2026.pdf` included. Kept for
-  // consumers who widen the matcher. Last segment only: on the full path, dots
-  // before a later "/" make the regex O(n²).
-  return (
-    !pathname.startsWith("/api/") &&
-    STATIC_ASSET_RE.test(pathname.slice(pathname.lastIndexOf("/") + 1))
-  );
-}
-
-const STATIC_ASSET_RE =
-  /\.(?:ico|png|jpe?g|gif|svg|webp|avif|bmp|css|js|mjs|map|json|txt|xml|webmanifest|woff2?|ttf|otf|eot|pdf|mp4|webm|mp3)$/i;
-
-function isAuthUiPath(pathname: string): boolean {
-  return AUTH_UI_PREFIXES.some(
-    (p) => pathname === p || pathname.startsWith(`${p}/`),
-  );
-}
-
 /**
  * Next.js middleware: auth check + security headers.
  *
- * Flow:
- * 1. When auth is bypassed (AUTH_PROVIDER=none or IGRP_PREVIEW_MODE=true),
- *    redirect any /login, /logout, or /api/auth/* request to / and let every
- *    other path through untouched. There is no real provider to talk to.
- * 2. Otherwise: skip auth for public/static paths.
- * 3. Extract JWT — redirect to login on failure.
- * 4. Redirect to login when token expired or refresh failed.
- * 5. Apply security headers to all passing responses.
+ * The auth decision (bypass, public paths, logout-pending backstop, token,
+ * host logout, callbackUrl) is the framework's `igrpMiddlewareDecision`; this
+ * file turns it into a response and applies the security headers and CSP.
  *
  * x-current-path is injected as a request header on every passing response so
  * server components can build a callbackUrl when they need to redirect to login.
@@ -206,75 +167,22 @@ async function handleRequest(request: NextRequest): Promise<NextResponse> {
     );
   };
 
-  // Redirects to /login with the current path as callbackUrl.
-  //
-  // Origin resolution is the framework's (`auth.resolveAppUrl`), not
+  // Redirect URLs come from the framework (`auth.resolveAppUrl`), not
   // `new URL(path, request.url)`: behind a TLS-terminating proxy `request.url`
   // carries the INTERNAL origin, so a Location built from it points the browser
-  // somewhere it cannot reach. One resolver for every redirect below.
-  const loginRedirect = (reason?: "session_ended"): NextResponse => {
-    const loginUrl = auth.getLoginRedirectUrl(request);
-    if (reason) loginUrl.searchParams.set("reason", reason);
-    // Only set callbackUrl when it's a useful destination — never `/`, never
-    // /login/* (would loop), never /logout/*.
-    const safeCallback = sanitizeCallbackUrl(currentPath, BASE_PATH);
-    if (safeCallback && safeCallback !== "/") {
-      loginUrl.searchParams.set("callbackUrl", safeCallback);
-    }
-    return withSecurityHeaders(NextResponse.redirect(loginUrl));
-  };
-
-  // Use the template's single hardened bypass predicate (handles quoted /
-  // whitespaced env values) so middleware agrees with the rest of the app.
-  if (isAuthBypass()) {
-    if (isAuthUiPath(pathname)) {
-      return withSecurityHeaders(
-        NextResponse.redirect(auth.resolveAppUrl("/", request)),
-      );
-    }
-    return nextWithPath();
-  }
-
-  if (isPublicPath(pathname)) return nextWithPath();
-
-  // Logout backstop (Option A): a `logout_pending` marker means a logout left
-  // for the IdP but the local session teardown is still owed (e.g. the IdP
-  // never redirected back). Force the user through /login — which completes the
-  // deferred signOut and clears the marker — instead of letting a still-live
-  // session back into the app. /login and /api/auth/* are already past the
-  // isPublicPath check above, so this only fires on protected routes and cannot
-  // loop. No callbackUrl: a completed logout should land on /login, not bounce
-  // back into the app.
-  if (request.cookies.has(LOGOUT_PENDING_COOKIE)) {
-    console.warn(
-      "[logout][middleware] logout_pending marker on protected route — forcing /login to complete teardown",
-      { pathname },
-    );
-    return withSecurityHeaders(
-      NextResponse.redirect(auth.getLoginRedirectUrl(request)),
-    );
-  }
-
-  let token: Awaited<ReturnType<typeof auth.getTokenFromRequest>>;
-  try {
-    token = await auth.getTokenFromRequest(request);
-  } catch (error) {
-    console.error("[Middleware] getToken failed", error, { pathname });
-    return loginRedirect();
-  }
-
-  if (!token || auth.isTokenExpiredOrFailed(token)) {
-    return loginRedirect();
-  }
-
-  // Another co-hosted app logged out after this session was issued.
-  if (auth.isEndedByHostLogout(token, request)) {
-    return loginRedirect("session_ended");
+  // somewhere it cannot reach.
+  const decision = await igrpMiddlewareDecision(request, auth, {
+    publicPaths: PUBLIC_PATHS,
+    logoutPendingCookie: LOGOUT_PENDING_COOKIE,
+    basePath: BASE_PATH,
+  });
+  if (decision.type === "redirect") {
+    return withSecurityHeaders(NextResponse.redirect(decision.url));
   }
 
   // i18n: this app is cookie-first (no `persistLocale`), so the middleware
   // leaves the IGRP_LOCALE cookie alone. A session-first app (one with a
-  // profile write-back) ends this branch with
+  // profile write-back) reads the token itself and ends with
   //   return igrpSyncLocaleCookie(request, nextWithPath(), token.locale, i18n)
   // importing from "@igrp/framework-next/i18n" (Edge-safe), never from "@/i18n".
   return nextWithPath();

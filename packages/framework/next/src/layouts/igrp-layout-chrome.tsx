@@ -30,8 +30,8 @@ export async function resolveLayoutAccess(config: IGRPConfigArgs): Promise<Layou
   return {
     token: layout.session?.accessToken || '',
     baseUrl: apiManagementConfig?.baseUrl || '',
-    // Threaded explicitly: `igrpSetAccessClientConfig` only defaults `timeout`
-    // when it CREATES the store, so omitting it left every read-path client
+    // Threaded explicitly: the store only defaults `timeout` when it is
+    // CREATED, so omitting it left every read-path client
     // on the 10s default and made `apiManagementConfig.timeout` dead config.
     timeout: apiManagementConfig?.timeout,
     // Base locale for `Accept-Language` on framework API calls (menus, user).
@@ -90,8 +90,8 @@ export type IGRPLayoutSidebarArgs = IGRPSidebarLabelProps & {
 
 // token/baseUrl are passed explicitly to each provider: each renders inside its
 // own <Suspense> boundary, which resumes on a later tick that doesn't reliably
-// inherit the AsyncLocalStorage store seeded by `igrpSetAccessClientConfig`.
-// They re-apply it themselves.
+// inherit the AsyncLocalStorage store seeded by the layout. They re-apply it
+// with `igrpEnsureAccessClientConfig`.
 
 /** The header with its error boundary and Suspense, for a resolved `access`. */
 export function layoutHeader(

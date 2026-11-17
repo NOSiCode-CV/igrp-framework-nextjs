@@ -22,8 +22,10 @@ You are working inside `packages/framework/next/` — `@igrp/framework-next`. **
 - `igrpBuildConfig` — validates the config (zod) and upper-cases `appCode`; it reads no env and swaps no data.
 - `igrpGetAccessClient`, `igrpGetAccessClientConfig` — access-management API client.
 - `igrpGetClaims`, `igrpAuthorize`, `igrpAssertAuthorize`, `isIgrpAuthBypass` — permission checks.
-- `igrpEnsureAccessClientConfig` — seeds the per-request access-client store from
-  the session cookie. **Anything reachable from a Server Action or Route Handler
+- `igrpEnsureAccessClientConfig(seed?)` — the one way to fill the per-request
+  access-client store: with a seed (a session the caller holds) it applies it;
+  without one it recovers the token from the session cookie. Its doc comment
+  holds the ordering rules (sync before the first await, re-seed under Suspense). **Anything reachable from a Server Action or Route Handler
   must call it first**: those run in a fresh async context where the store the
   layout seeds does not exist. See `src/actions/index.ts` for the gate that
   pairs with it (no recoverable session ⇒ refuse before any AM call).

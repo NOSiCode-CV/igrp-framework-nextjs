@@ -19,7 +19,10 @@ vi.mock('@igrp/framework-next-ui', () => ({
 }));
 
 const setConfig = vi.fn();
-vi.mock('../../lib/api-config.js', () => ({ igrpSetAccessClientConfig: setConfig }));
+vi.mock('../../lib/api-config.js', () => ({
+  igrpSetAccessClientConfig: setConfig,
+  igrpGetAccessClientConfig: () => ({ token: '', baseUrl: '' }),
+}));
 
 const HeaderDataProvider = (p: unknown) => ({ __marker: 'header', p });
 const SidebarDataProvider = (p: unknown) => ({ __marker: 'sidebar', p });

@@ -6,7 +6,7 @@ import {
 } from '@igrp/framework-next-ui';
 import type { IGRPConfigArgs } from '@igrp/framework-next-types';
 
-import { igrpSetAccessClientConfig } from '../lib/api-config.js';
+import { igrpEnsureAccessClientConfig } from '../lib/permissions.js';
 import { layoutHeader, layoutSidebar, resolveLayoutAccess } from './igrp-layout-chrome.js';
 
 export type IGRPLayoutFullArgs = {
@@ -89,12 +89,7 @@ export async function IGRPLayoutFull({
   const access = await resolveLayoutAccess(config);
 
   if (!previewMode && access.baseUrl) {
-    igrpSetAccessClientConfig({
-      token: access.token,
-      baseUrl: access.baseUrl,
-      ...(access.timeout !== undefined ? { timeout: access.timeout } : {}),
-      ...(access.locale ? { locale: access.locale } : {}),
-    });
+    await igrpEnsureAccessClientConfig({ ...access, locale: access.locale || undefined });
   }
 
   if (header !== undefined) {

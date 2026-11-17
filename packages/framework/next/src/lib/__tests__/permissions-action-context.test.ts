@@ -31,8 +31,8 @@ vi.mock('next/headers', () => ({
     get: (name: string) => (name === 'accept-language' ? acceptLanguage() : null),
   }),
 }));
-vi.mock('@igrp/framework-next-auth/jwt', () => ({
-  getToken: (...args: unknown[]) => getToken(...args),
+vi.mock('@igrp/framework-next-auth/session-store', () => ({
+  readIGRPSessionToken: (...args: unknown[]) => getToken(...args),
 }));
 
 const { igrpGetClaims, igrpAuthorize, igrpEnsureAccessClientConfig } =
@@ -225,5 +225,31 @@ describe('T5 — missing `org` diagnostic', () => {
     expect(warn).not.toHaveBeenCalled();
     vi.unstubAllEnvs();
     warn.mockRestore();
+  });
+});
+
+describe('igrpEnsureAccessClientConfig(seed)', () => {
+  it('applies the seed without reading the cookie, baseUrl from the env', async () => {
+    getToken.mockResolvedValue({ accessToken: 'FROM_COOKIE' });
+    const config = await igrpEnsureAccessClientConfig({ token: 'SEEDED', locale: undefined });
+    expect(getToken).not.toHaveBeenCalled();
+    expect(config).toMatchObject({ token: 'SEEDED', baseUrl: 'https://am.example.test' });
+    expect(config).not.toHaveProperty('locale');
+  });
+
+  it('wins over a token already in the store', async () => {
+    igrpSetAccessClientConfig({ token: 'OLD', baseUrl: 'http://am', locale: 'fr' });
+    await igrpEnsureAccessClientConfig({ token: 'REFRESHED' });
+    expect(igrpGetAccessClientConfig()).toMatchObject({
+      token: 'REFRESHED',
+      baseUrl: 'http://am',
+      locale: 'fr',
+    });
+  });
+
+  it('seeds the caller context synchronously, before any await', () => {
+    // Not awaited: the store must already be visible on the next line.
+    void igrpEnsureAccessClientConfig({ token: 'SYNC', baseUrl: 'http://am' });
+    expect(igrpGetAccessClientConfig().token).toBe('SYNC');
   });
 });

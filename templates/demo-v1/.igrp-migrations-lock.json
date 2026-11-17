@@ -680,6 +680,20 @@
       "cliVersion": "0.2.0-beta.27",
       "manifestHash": "10dfdfb57029bd48",
       "payloadHash": "4997fa96610ab17a"
+    },
+    {
+      "id": "97-access-client-single-entry",
+      "appliedAt": "2026-11-17T00:00:00.000Z",
+      "cliVersion": "0.2.0-beta.27",
+      "manifestHash": "2b56dbabb49f91fd",
+      "payloadHash": "e13ec1195eb33e26"
+    },
+    {
+      "id": "98-middleware-auth-decision",
+      "appliedAt": "2026-11-17T00:00:00.000Z",
+      "cliVersion": "0.2.0-beta.27",
+      "manifestHash": "b3225996a28b77bc",
+      "payloadHash": "f031f71a29fa0073"
     }
   ]
 }

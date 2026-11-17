@@ -65,6 +65,8 @@ function RichTextDocument({
     editable: false,
     // Client-only by design; without this TipTap warns under the Next.js app router.
     immediatelyRender: false,
+    // TipTap defaults to role="textbox"; read-only rendered HTML is a document, not a field.
+    editorProps: { attributes: { role: "document" } },
   })
 
   useEffect(() => {

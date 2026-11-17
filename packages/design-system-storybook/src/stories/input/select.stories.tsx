@@ -132,7 +132,7 @@ const Template: React.FC<Partial<React.ComponentProps<typeof IGRPSelect>>> = (ar
 export const Default: Story = {
   args: {
     options: mockOptions,
-    // label: 'Choose an item',
+    label: 'Choose an item',
     showGroup: true,
     showSearch: true,
     showStatus: true,

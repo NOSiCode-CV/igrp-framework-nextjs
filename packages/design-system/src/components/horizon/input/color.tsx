@@ -246,7 +246,12 @@ function ColorField({
               <InputGroupAddon align="inline-end">
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <InputGroupButton size="xs" disabled={disabled} aria-label={i18n.inputColor.formatSelectorLabel}>
+                    <InputGroupButton
+                      size="xs"
+                      disabled={disabled}
+                      // The visible format must be part of the name (WCAG 2.5.3, label in name).
+                      aria-label={`${i18n.inputColor.formatSelectorLabel}: ${formatLabel}`}
+                    >
                       {formatLabel}
                       <ChevronDown data-icon="inline-end" />
                     </InputGroupButton>

@@ -144,7 +144,9 @@ function CardOption({
                 <IGRPIcon iconName={option.icon} className="size-4" />
               </span>
             )}
-            <span className="min-w-0 flex-1 text-pretty">{option.label}</span>
+            <span id={`${itemId}-label`} className="min-w-0 flex-1 text-pretty">
+              {option.label}
+            </span>
             {option.badge && (
               <Badge variant="secondary" className="shrink-0 font-normal">
                 {option.badge}
@@ -152,12 +154,23 @@ function CardOption({
             )}
           </FieldTitle>
           {option.description && (
-            <FieldDescription className="text-xs group-data-[disabled=true]/field:opacity-50">
+            <FieldDescription
+              id={`${itemId}-description`}
+              // muted-foreground on the selected card's primary/5 tint is 4.48:1, under AA.
+              className="text-xs group-has-data-checked/field:text-foreground/80 group-data-[disabled=true]/field:opacity-50"
+            >
               {option.description}
             </FieldDescription>
           )}
         </FieldContent>
-        <RadioGroupItem value={option.value} id={itemId} disabled={disabled} />
+        {/* The wrapping <label> does not name a role="radio" button for assistive tech; point at the title. */}
+        <RadioGroupItem
+          value={option.value}
+          id={itemId}
+          disabled={disabled}
+          aria-labelledby={`${itemId}-label`}
+          aria-describedby={option.description ? `${itemId}-description` : undefined}
+        />
       </Field>
     </FieldLabel>
   )

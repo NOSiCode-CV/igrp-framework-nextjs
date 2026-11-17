@@ -73,7 +73,7 @@ describe("IGRPInputColor", () => {
     render(<IGRPInputColor name="brand" label="Cor" disabled />)
     expect(screen.getByLabelText("Cor")).toBeDisabled()
     expect(screen.getByRole("textbox", { name: /Cor/ })).toBeDisabled()
-    expect(screen.getByRole("button", { name: "Formato da cor" })).toBeDisabled()
+    expect(screen.getByRole("button", { name: /^Formato da cor/ })).toBeDisabled()
   })
 
   it("accepts a pasted value in any supported syntax", async () => {
@@ -178,10 +178,12 @@ describe("IGRPInputColor", () => {
     const onChange = vi.fn()
     render(<IGRPInputColor name="brand" label="Cor" defaultValue="#ff0000" onChange={onChange} />)
 
-    await userEvent.click(screen.getByRole("button", { name: "Formato da cor" }))
+    // The visible format is part of the name (WCAG 2.5.3).
+    await userEvent.click(screen.getByRole("button", { name: "Formato da cor: HEX" }))
     await userEvent.click(await screen.findByRole("menuitem", { name: "RGB" }))
 
     expect(onChange).toHaveBeenLastCalledWith("rgb(255, 0, 0)")
+    expect(screen.getByRole("button", { name: "Formato da cor: RGB" })).toBeInTheDocument()
   })
 
   it("forwards input props to the value field", () => {

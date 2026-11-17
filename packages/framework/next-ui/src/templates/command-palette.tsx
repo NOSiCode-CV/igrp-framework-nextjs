@@ -1,17 +1,21 @@
 'use client';
 
-import { Fragment, Suspense, use } from 'react';
+import { Fragment, Suspense, use, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   IGRPIcon,
   Command,
-  CommandDialog,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
   CommandList,
   CommandSeparator,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
 } from '@igrp/igrp-framework-react-design-system';
 
 import type { IGRPCommandSearchLabels } from '../i18n/strings.js';
@@ -40,33 +44,54 @@ function IGRPCommandPalette({ open, onOpenChange, commands, labels }: IGRPComman
     else if (item.href) router.push(item.href);
   };
 
+  // Radix returns focus only to a `DialogTrigger`, and this dialog is opened from
+  // the search button or ⌘K, so it would drop focus on <body>. Remember what had
+  // focus when it opened and return there on close.
+  const returnFocusRef = useRef<HTMLElement | null>(null);
+
+  // Same markup as the DS `CommandDialog`, which doesn't pass content props through.
   return (
-    <CommandDialog
-      open={open}
-      onOpenChange={onOpenChange}
-      title={labels.dialogTitle}
-      description={labels.dialogDescription}
-    >
-      {/* The design system's `CommandDialog` (current shadcn shape) renders its
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogHeader className="sr-only">
+        <DialogTitle>{labels.dialogTitle}</DialogTitle>
+        <DialogDescription>{labels.dialogDescription}</DialogDescription>
+      </DialogHeader>
+      <DialogContent
+        className="top-1/3 translate-y-0 overflow-hidden rounded-xl! p-0"
+        showCloseButton={false}
+        onOpenAutoFocus={() => {
+          const active = document.activeElement;
+          returnFocusRef.current =
+            active instanceof HTMLElement && active !== document.body ? active : null;
+        }}
+        onCloseAutoFocus={(event) => {
+          const target = returnFocusRef.current;
+          if (!target?.isConnected) return;
+          event.preventDefault();
+          target.focus();
+        }}
+      >
+        {/* The design system's `CommandDialog` (current shadcn shape) renders its
           children straight into `DialogContent` — it no longer supplies the cmdk
           root. Without this `Command`, cmdk's store context is undefined and
           `CommandInput` throws on mount, taking the whole header down. */}
-      {/* Palette-only spacing. The input wrapper and InputGroup take no
+        {/* Palette-only spacing. The input wrapper and InputGroup take no
           className from `CommandInput`, so they are reached through their
           `data-slot`s; the item gap goes on cmdk's `[cmdk-group-items]` list. */}
-      <Command
-        filter={filterByKeywords}
-        className="p-2 **:data-[slot=command-input-wrapper]:pb-2 **:data-[slot=input-group]:h-10!"
-      >
-        <CommandInput placeholder={labels.placeholder} />
-        <CommandList className="max-h-96 scroll-py-2">
-          <CommandEmpty>{labels.empty}</CommandEmpty>
-          <Suspense fallback={null}>
-            <PaletteGroups commands={commands} onRun={runCommand} />
-          </Suspense>
-        </CommandList>
-      </Command>
-    </CommandDialog>
+        <Command
+          filter={filterByKeywords}
+          className="p-2 **:data-[slot=command-input-wrapper]:pb-2 **:data-[slot=input-group]:h-10!"
+        >
+          <CommandInput placeholder={labels.placeholder} />
+          <CommandList className="max-h-96 scroll-py-2">
+            <CommandEmpty>{labels.empty}</CommandEmpty>
+            <Suspense fallback={null}>
+              <PaletteGroups commands={commands} onRun={runCommand} />
+            </Suspense>
+          </CommandList>
+        </Command>
+      </DialogContent>
+    </Dialog>
   );
 }
 

@@ -175,6 +175,22 @@ describe('IGRPTemplateCommandSearch', () => {
     open.mockRestore();
   });
 
+  it('returns focus to the search trigger when the palette closes', async () => {
+    mount(<IGRPTemplateCommandSearch commands={[]} />);
+    const trigger = document.body.querySelector<HTMLButtonElement>('button')!;
+    trigger.focus();
+    await act(async () => trigger.click());
+    expect(document.body.querySelector('[data-slot="command-input"]')).not.toBeNull();
+
+    await act(async () => {
+      document.activeElement!.dispatchEvent(
+        new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }),
+      );
+    });
+    await act(async () => new Promise((resolve) => setTimeout(resolve, 0)));
+    expect(document.activeElement).toBe(trigger);
+  });
+
   it('opens with no commands and shows the pt-PT empty state', async () => {
     const errors = mount(<IGRPTemplateCommandSearch />);
 

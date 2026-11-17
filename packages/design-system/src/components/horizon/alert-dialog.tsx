@@ -216,12 +216,7 @@ function IGRPAlertDialog({
                   </AlertDialogCancel>
                 )}
                 {showAction && (
-                  <AlertDialogAction
-                    asChild
-                    onClick={handleAction}
-                    {...actionProps}
-                    className={actionClassName}
-                  >
+                  <AlertDialogAction asChild onClick={handleAction} {...actionProps} className={actionClassName}>
                     <IGRPButton loading={pending}>{actionLabel ?? i18n.alertDialog.action}</IGRPButton>
                   </AlertDialogAction>
                 )}

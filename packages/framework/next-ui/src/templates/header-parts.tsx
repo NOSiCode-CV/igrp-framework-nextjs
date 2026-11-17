@@ -171,7 +171,9 @@ export function IGRPHeaderStart({ className, children }: DivProps) {
 
 /** Right cluster. */
 export function IGRPHeaderEnd({ className, children }: DivProps) {
-  return <div className={cn('ml-auto flex items-center gap-2 shrink-0', className)}>{children}</div>;
+  return (
+    <div className={cn('ml-auto flex items-center gap-2 shrink-0', className)}>{children}</div>
+  );
 }
 
 /** Sidebar collapse button. Renders nothing when the layout has no sidebar. */

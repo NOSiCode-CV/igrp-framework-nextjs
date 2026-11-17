@@ -143,8 +143,8 @@ describe('error panels', () => {
   it('announce themselves with role="alert"', () => {
     expect(renderToString(<IGRPHeaderError />)).toContain('role="alert"');
     expect(renderToString(<IGRPSidebarError />)).toContain('role="alert"');
-    expect(
-      renderToString(<IGRPSegmentError error={new Error('x')} reset={() => {}} />),
-    ).toContain('role="alert"');
+    expect(renderToString(<IGRPSegmentError error={new Error('x')} reset={() => {}} />)).toContain(
+      'role="alert"',
+    );
   });
 });

@@ -130,9 +130,4 @@ function useIGRPToast<T = unknown>() {
   return useMemo(() => ({ igrpToast, ...helpers }), [igrpToast, helpers])
 }
 
-export {
-  type IGRPPromiseToastProps,
-  type PlainToastProps,
-  useIGRPToast,
-  IGRPToaster,
-}
+export { type IGRPPromiseToastProps, type PlainToastProps, useIGRPToast, IGRPToaster }

@@ -377,7 +377,9 @@ function IGRPPdfViewerInline({
       <div className={cn("flex flex-col")}>
         <div className={cn("flex items-center justify-between")}>
           <div>
-            <HeadingTag className={cn(igrpHeadlineVariants({ variant: "h6" }), "mb-1 text-primary")}>{title}</HeadingTag>
+            <HeadingTag className={cn(igrpHeadlineVariants({ variant: "h6" }), "mb-1 text-primary")}>
+              {title}
+            </HeadingTag>
             <div className={cn("flex items-center gap-2 text-sm text-muted-foreground")}>
               <div className={cn("flex items-center gap-1 text-xs")}>
                 <IGRPIcon iconName="User" className={cn("text-primary")} />

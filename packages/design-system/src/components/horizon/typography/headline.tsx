@@ -96,8 +96,4 @@ function IGRPHeadline({
   )
 }
 
-export {
-  IGRPHeadline,
-  type IGRPHeadlineProps,
-  igrpHeadlineVariants,
-}
+export { IGRPHeadline, type IGRPHeadlineProps, igrpHeadlineVariants }

@@ -24,12 +24,7 @@ import {
 
 /** The upstream trigger hides its outline with no replacement; restore a visible focus ring. */
 function IGRPMenubarTrigger({ className, ...props }: React.ComponentProps<typeof MenubarTrigger>) {
-  return (
-    <MenubarTrigger
-      className={cn("focus-visible:ring-[3px] focus-visible:ring-ring/50", className)}
-      {...props}
-    />
-  )
+  return <MenubarTrigger className={cn("focus-visible:ring-[3px] focus-visible:ring-ring/50", className)} {...props} />
 }
 
 export {

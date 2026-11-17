@@ -23,9 +23,10 @@ let logoutStarted = false;
 // on timeout we fall back to a local-only signOut() + navigation rather than
 // waiting on the IdP redirect that may never come.
 // TRADE-OFF: if your IdP's discovery latency routinely exceeds this, every
-// logout degrades to local-only (the IdP SSO session then persists). Tune to
-// sit just above real-world discovery latency.
-const LOOKUP_TIMEOUT_MS = 3000;
+// logout degrades to local-only (the IdP SSO session then persists). It sits
+// above the server's own discovery timeout (4 s in @igrp/framework-next-auth),
+// so a slow but answering IdP still gets the redirect.
+const LOOKUP_TIMEOUT_MS = 5000;
 
 // Last-resort watchdog for a hung local signOut() on the no-IdP fallback path
 // (it is awaited while this timer is still armed). The IdP-POST path clears

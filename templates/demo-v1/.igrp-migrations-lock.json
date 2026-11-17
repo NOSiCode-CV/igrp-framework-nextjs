@@ -673,6 +673,13 @@
       "cliVersion": "0.2.0-beta.27",
       "manifestHash": "8c9b4ba7813f2d64",
       "payloadHash": "e3b0c44298fc1c14"
+    },
+    {
+      "id": "96-logout-lookup-timeout",
+      "appliedAt": "2026-11-17T00:00:00.000Z",
+      "cliVersion": "0.2.0-beta.27",
+      "manifestHash": "10dfdfb57029bd48",
+      "payloadHash": "4997fa96610ab17a"
     }
   ]
 }

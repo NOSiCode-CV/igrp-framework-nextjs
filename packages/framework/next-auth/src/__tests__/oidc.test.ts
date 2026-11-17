@@ -475,6 +475,24 @@ describe('buildEndSessionUrl', () => {
     expect(parsed.searchParams.get('client_id')).toBe('test-client');
   });
 
+  it('uses the id_token of a rotation held in the recovery store', async () => {
+    mockFetch([{ url: DISCOVERY_URL, body: MOCK_DISCOVERY }]);
+    const { buildEndSessionUrl, configureOidcTokenRecoveryStore } = await import('../oidc');
+    const rotated = makeToken({ refreshToken: 'rt-new', accessToken: 'at-new', idToken: 'id-new' });
+    configureOidcTokenRecoveryStore({
+      get: vi.fn(async (key: string) => (key === 'rt-old' ? rotated : null)),
+      set: vi.fn(async () => {}),
+    });
+
+    const url = await buildEndSessionUrl(
+      makeToken({ refreshToken: 'rt-old', idToken: 'id-old' }),
+      VALID_ENV,
+      'http://app/login',
+    );
+
+    expect(new URL(url!).searchParams.get('id_token_hint')).toBe('id-new');
+  });
+
   it('returns null when end_session_endpoint is absent from discovery', async () => {
     const { end_session_endpoint: _, ...discoveryWithout } = MOCK_DISCOVERY;
     mockFetch([{ url: DISCOVERY_URL, body: discoveryWithout }]);

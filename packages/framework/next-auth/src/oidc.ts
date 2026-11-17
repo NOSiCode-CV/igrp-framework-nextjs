@@ -979,9 +979,15 @@ export async function buildEndSessionUrl(
         'is unset/malformed) — the IdP will apply its own default after logout.',
     );
   }
-  const hasIdToken = typeof token.idToken === 'string' && token.idToken.length > 0;
-  if (hasIdToken) {
-    url.searchParams.set('id_token_hint', token.idToken as string);
+  // A rotation that ran where the cookie could not be persisted (an RSC render)
+  // left the cookie's id_token behind; the recovery store holds the live one.
+  // Same peek as the signOut event does before revoking.
+  const recovered = await getRecoveredToken(token.refreshToken);
+  const idToken = isUsableRecoveredToken(recovered)
+    ? applyRecoveredToken(token, recovered).idToken
+    : token.idToken;
+  if (typeof idToken === 'string' && idToken.length > 0) {
+    url.searchParams.set('id_token_hint', idToken);
   }
 
   return url.toString();

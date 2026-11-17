@@ -42,6 +42,7 @@ import {
   getRecoveredToken,
   isUsableRecoveredToken,
   refreshOidcAccessToken,
+  resolveTokenResponseExpiry,
   revokeOidcSession,
   UNKNOWN_EXPIRY_FALLBACK_MS,
 } from './oidc';
@@ -63,7 +64,6 @@ import {
   sessionCookieName,
 } from './cookies';
 import { isNextControlFlowError } from './runtime';
-import { accessTokenExpiresAt } from './claims';
 import { warnOnce } from './_global-state';
 
 // ─── Config Error ─────────────────────────────────────────────────────────────
@@ -744,12 +744,14 @@ function resolveInitialExpiry(
   if (typeof account.expires_at === 'number' && Number.isFinite(account.expires_at)) {
     return account.expires_at * 1000;
   }
-  if (typeof account.expires_in === 'number' && Number.isFinite(account.expires_in)) {
-    return Date.now() + account.expires_in * 1000;
-  }
-  // Opaque (non-JWT) or malformed access token → undefined → fall through.
-  const fromToken = accessTokenExpiresAt(account.access_token);
-  if (fromToken !== undefined) return fromToken;
+  // Steps 2-4 are the refresh path's resolution, shared so the two cannot drift.
+  let unknown = false;
+  const expiresAt = resolveTokenResponseExpiry(account.expires_in, account.access_token, {
+    onFallback: () => {
+      unknown = true;
+    },
+  });
+  if (!unknown) return expiresAt;
   // A provider this package does not manage has no refresh path to "correct"
   // an invented expiry: the guess would simply become the moment the session
   // dies. A GitHub token, for instance, does not expire and reports no
@@ -763,7 +765,7 @@ function resolveInitialExpiry(
     '[next-auth] jwt: the IdP returned no expires_at/expires_in and the access token carries no ' +
       `exp claim — assuming ${UNKNOWN_EXPIRY_FALLBACK_MS / 1000}s. The first refresh will correct it.`,
   );
-  return Date.now() + UNKNOWN_EXPIRY_FALLBACK_MS;
+  return expiresAt;
 }
 
 /**

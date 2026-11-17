@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest"
-import { render, screen } from "@testing-library/react"
+import { act, fireEvent, render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 
 import { IGRPInputSearch } from "../input/search.js"
@@ -61,15 +61,22 @@ describe("IGRPInputSearch slots and debounce", () => {
     expect(container.querySelector("svg")).toBeNull()
   })
 
-  it("debounces onSearch with debounce={ms}", async () => {
-    vi.useFakeTimers({ shouldAdvanceTime: true })
-    const onSearch = vi.fn()
-    render(<IGRPInputSearch name="q" label="Search" onSearch={onSearch} debounce={300} submit={false} />)
-    await userEvent.type(screen.getByLabelText("Search"), "abc")
-    expect(onSearch).not.toHaveBeenCalled()
-    vi.advanceTimersByTime(300)
-    expect(onSearch).toHaveBeenCalledOnce()
-    expect(onSearch).toHaveBeenCalledWith("abc")
-    vi.useRealTimers()
+  it("debounces onSearch with debounce={ms}", () => {
+    // Synchronous keystrokes on fake timers: no real time can leak between them.
+    vi.useFakeTimers()
+    try {
+      const onSearch = vi.fn()
+      render(<IGRPInputSearch name="q" label="Search" onSearch={onSearch} debounce={300} submit={false} />)
+      const input = screen.getByLabelText("Search")
+      for (const value of ["a", "ab", "abc"]) fireEvent.change(input, { target: { value } })
+      expect(onSearch).not.toHaveBeenCalled()
+      act(() => {
+        vi.advanceTimersByTime(300)
+      })
+      expect(onSearch).toHaveBeenCalledOnce()
+      expect(onSearch).toHaveBeenCalledWith("abc")
+    } finally {
+      vi.useRealTimers()
+    }
   })
 })

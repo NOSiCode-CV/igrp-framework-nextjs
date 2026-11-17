@@ -32,6 +32,19 @@ describe("IGRPTooltip", () => {
     expect(await screen.findByRole("tooltip")).toHaveTextContent("Editar")
   })
 
+  it("describes the focused enabled control by the tooltip", async () => {
+    render(
+      <IGRPTooltip label="Editar">
+        <button type="button">E</button>
+      </IGRPTooltip>
+    )
+    await userEvent.tab()
+    const button = screen.getByRole("button", { name: "E" })
+    expect(button).toHaveFocus()
+    const tooltip = await screen.findByRole("tooltip")
+    expect(button.getAttribute("aria-describedby")).toBe(tooltip.id)
+  })
+
   it("opens over a disabled trigger on hover and on keyboard focus", async () => {
     render(
       <IGRPTooltip label="Sem permissão">

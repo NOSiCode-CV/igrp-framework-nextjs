@@ -177,4 +177,11 @@ describe.each(["light", "dark"] as const)("tokens.css — %s", (mode) => {
       expectRatio(resolved, against, AA_NON_TEXT, `--${token} on --${bg}`)
     })
   })
+
+  // Series are the only cue for which line, bar or slice is which.
+  describe("chart series (1.4.11 — 3:1)", () => {
+    it.each([1, 2, 3, 4, 5, 6, 7, 8])("--chart-%i against --background", (n) => {
+      expectRatio(tok(`chart-${n}`).rgb, surface("background"), AA_NON_TEXT, `--chart-${n} on --background`)
+    })
+  })
 })

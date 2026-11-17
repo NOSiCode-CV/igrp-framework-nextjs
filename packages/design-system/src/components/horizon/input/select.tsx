@@ -29,7 +29,7 @@ import {
 } from "../../primitives/select.js"
 import { IGRPButton } from "../button.js"
 import { IGRPIcon } from "../icon/index.js"
-import { IGRPLabel } from "../label.js"
+import { IGRPLabel, IGRPRequiredMark } from "../label.js"
 import { Field, FieldDescription } from "../../primitives/field.js"
 import { useIGRPi18n } from "../../../i18n/index.js"
 
@@ -113,6 +113,7 @@ function IGRPSelectField({
   triggerAriaLabelledby,
   triggerAriaInvalid,
   triggerAriaDescribedBy,
+  triggerAriaRequired,
   triggerRef,
   ...selectProps
 }: {
@@ -136,6 +137,7 @@ function IGRPSelectField({
   triggerAriaLabelledby?: string
   triggerAriaInvalid?: boolean
   triggerAriaDescribedBy?: string
+  triggerAriaRequired?: boolean
   triggerRef?: React.Ref<HTMLButtonElement>
 } & Omit<React.ComponentProps<typeof Select>, "value" | "onValueChange" | "onOpenChange" | "children">) {
   return (
@@ -152,6 +154,7 @@ function IGRPSelectField({
         triggerAriaLabelledby={triggerAriaLabelledby}
         triggerAriaInvalid={triggerAriaInvalid}
         triggerAriaDescribedBy={triggerAriaDescribedBy}
+        triggerAriaRequired={triggerAriaRequired}
         triggerRef={triggerRef}
       />
       <IGRPSelectContent
@@ -172,13 +175,13 @@ function IGRPSelectField({
  * aria-invalid / aria-describedby onto the actual SelectTrigger button.
  */
 function IGRPSelectFieldWithA11y(props: React.ComponentProps<typeof IGRPSelectField>) {
-  const { error, formItemId, formMessageId } = useFormField()
+  const { formItemId, formInvalid, formDescribedBy } = useFormField()
   return (
     <IGRPSelectField
       {...props}
       triggerId={formItemId}
-      triggerAriaInvalid={!!error}
-      triggerAriaDescribedBy={error ? formMessageId : undefined}
+      triggerAriaInvalid={formInvalid}
+      triggerAriaDescribedBy={formDescribedBy}
     />
   )
 }
@@ -283,6 +286,7 @@ function IGRPSelect({
     showStatus,
     showGroup,
     className,
+    triggerAriaRequired: required,
     ...selectRootProps,
   }
 
@@ -292,13 +296,20 @@ function IGRPSelect({
         <IGRPLabel id={fieldName} className={labelClassName} required={required} label={label} />
 
         <div className={cn("relative")}>
-          <IGRPSelectField {...selectFieldProps} value={selectedValue} onChange={handleChange} triggerId={fieldName} />
+          <IGRPSelectField
+            {...selectFieldProps}
+            value={selectedValue}
+            onChange={handleChange}
+            triggerId={fieldName}
+            triggerAriaInvalid={!!error}
+            triggerAriaDescribedBy={error ? `${fieldName}-error` : helperText ? `${fieldName}-helper` : undefined}
+          />
         </div>
 
-        {helperText && !error && <FieldDescription>{helperText}</FieldDescription>}
+        {helperText && !error && <FieldDescription id={`${fieldName}-helper`}>{helperText}</FieldDescription>}
 
         {error && (
-          <p className={cn("mt-1 text-xs text-destructive")} role="alert">
+          <p id={`${fieldName}-error`} className={cn("mt-1 text-xs text-destructive")} role="alert">
             {error}
           </p>
         )}
@@ -313,11 +324,9 @@ function IGRPSelect({
       render={({ field, fieldState }) => (
         <FormItem className={cn(className)}>
           {label && (
-            <FormLabel
-              id={`${fieldName}-label`}
-              className={cn(labelClassName, required && "after:text-destructive after:content-['*']")}
-            >
+            <FormLabel id={`${fieldName}-label`} className={cn(labelClassName)}>
               {label}
+              {required && <IGRPRequiredMark />}
             </FormLabel>
           )}
           <FormControl>
@@ -340,8 +349,8 @@ function IGRPSelect({
             />
           </FormControl>
 
-          {helperText && !fieldState.error && <FormDescription>{helperText}</FormDescription>}
-          <FormMessage className={cn("text-xs")} />
+          {helperText && !fieldState.error && !error && <FormDescription>{helperText}</FormDescription>}
+          <FormMessage className={cn("text-xs")} message={error} />
         </FormItem>
       )}
     />
@@ -491,6 +500,7 @@ const IGRPSelectTrigger = ({
   triggerAriaLabelledby,
   triggerAriaInvalid,
   triggerAriaDescribedBy,
+  triggerAriaRequired,
   triggerRef,
 }: {
   value: string
@@ -504,6 +514,7 @@ const IGRPSelectTrigger = ({
   triggerAriaLabelledby?: string
   triggerAriaInvalid?: boolean
   triggerAriaDescribedBy?: string
+  triggerAriaRequired?: boolean
   triggerRef?: React.Ref<HTMLButtonElement>
 }) => (
   <SelectTrigger
@@ -512,6 +523,7 @@ const IGRPSelectTrigger = ({
     aria-labelledby={triggerAriaLabelledby}
     aria-invalid={triggerAriaInvalid || undefined}
     aria-describedby={triggerAriaDescribedBy}
+    aria-required={triggerAriaRequired || undefined}
     className={cn("w-full", className)}
   >
     <SelectValue placeholder={placeholder} className={cn("w-full")}>

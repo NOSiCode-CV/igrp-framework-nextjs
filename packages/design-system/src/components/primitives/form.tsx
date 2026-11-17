@@ -54,23 +54,45 @@ const useFormField = () => {
     throw new Error("useFormField should be used within <FormField>")
   }
 
-  const { id } = itemContext
+  const { id, parts } = itemContext
+  const formDescriptionId = `${id}-form-item-description`
+  const formMessageId = `${id}-form-item-message`
 
   return {
     id,
     name: fieldContext.name,
     formItemId: `${id}-form-item`,
-    formDescriptionId: `${id}-form-item-description`,
-    formMessageId: `${id}-form-item-message`,
+    formDescriptionId,
+    formMessageId,
+    // Only ids of elements actually rendered — a dangling IDREF is an a11y error.
+    formDescribedBy:
+      [parts?.description && formDescriptionId, parts?.message && formMessageId].filter(Boolean).join(" ") || undefined,
+    // A rendered message (RHF error or a caller-supplied one) means the control is invalid.
+    formInvalid: !!fieldState.error || !!parts?.message,
     ...fieldState,
   }
 }
 
+type FormItemPart = "description" | "message"
+
 type FormItemContextValue = {
   id: string
+  parts?: Record<FormItemPart, boolean>
+  setPart?: (part: FormItemPart, present: boolean) => void
 }
 
 const FormItemContext = React.createContext<FormItemContextValue>({} as FormItemContextValue)
+
+/** Registers a rendered description/message with its FormItem so FormControl only references existing ids. */
+function useFormItemPart(part: FormItemPart, present: boolean) {
+  const { setPart } = React.useContext(FormItemContext)
+  // Layout effect: the ids land in the same commit that renders the message, before anyone reads the DOM.
+  React.useLayoutEffect(() => {
+    if (!present || !setPart) return
+    setPart(part, true)
+    return () => setPart(part, false)
+  }, [part, present, setPart])
+}
 
 /*
  * Warning: This component is changed from the original.
@@ -78,9 +100,15 @@ const FormItemContext = React.createContext<FormItemContextValue>({} as FormItem
  */
 function FormItem({ className, ...props }: React.ComponentProps<"div">) {
   const id = React.useId()
+  const [parts, setParts] = React.useState<Record<FormItemPart, boolean>>({ description: false, message: false })
+  const setPart = React.useCallback(
+    (part: FormItemPart, present: boolean) =>
+      setParts((prev) => (prev[part] === present ? prev : { ...prev, [part]: present })),
+    []
+  )
 
   return (
-    <FormItemContext.Provider value={{ id }}>
+    <FormItemContext.Provider value={{ id, parts, setPart }}>
       <div data-slot="form-item" className={cn("flex flex-col gap-2", className)} {...props} />
     </FormItemContext.Provider>
   )
@@ -101,14 +129,14 @@ function FormLabel({ className, ...props }: React.ComponentProps<typeof Label>) 
 }
 
 function FormControl({ ...props }: React.ComponentProps<typeof Slot.Root>) {
-  const { error, formItemId, formDescriptionId, formMessageId } = useFormField()
+  const { formItemId, formDescribedBy, formInvalid } = useFormField()
 
   return (
     <Slot.Root
       data-slot="form-control"
       id={formItemId}
-      aria-describedby={!error ? `${formDescriptionId}` : `${formDescriptionId} ${formMessageId}`}
-      aria-invalid={!!error}
+      aria-describedby={formDescribedBy}
+      aria-invalid={formInvalid}
       {...props}
     />
   )
@@ -116,6 +144,7 @@ function FormControl({ ...props }: React.ComponentProps<typeof Slot.Root>) {
 
 function FormDescription({ className, ...props }: React.ComponentProps<"p">) {
   const { formDescriptionId } = useFormField()
+  useFormItemPart("description", true)
 
   return (
     <p
@@ -127,9 +156,11 @@ function FormDescription({ className, ...props }: React.ComponentProps<"p">) {
   )
 }
 
-function FormMessage({ className, ...props }: React.ComponentProps<"p">) {
+/** `message` (IGRP addition) overrides the form's own error — a caller-owned error such as `errorText`. */
+function FormMessage({ className, message, ...props }: React.ComponentProps<"p"> & { message?: string }) {
   const { error, formMessageId } = useFormField()
-  const body = error ? String(error?.message ?? "") : props.children
+  const body = message || (error ? String(error?.message ?? "") : props.children)
+  useFormItemPart("message", !!body)
 
   if (!body) {
     return null
@@ -148,4 +179,14 @@ function FormMessage({ className, ...props }: React.ComponentProps<"p">) {
   )
 }
 
-export { useFormField, Form, FormItem, FormLabel, FormControl, FormDescription, FormMessage, FormField }
+export {
+  useFormField,
+  useFormItemPart,
+  Form,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormDescription,
+  FormMessage,
+  FormField,
+}

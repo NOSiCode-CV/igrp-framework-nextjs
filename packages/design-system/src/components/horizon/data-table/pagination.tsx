@@ -206,6 +206,7 @@ function IGRPDataTablePaginationNumeric<TData>({
                     variant={`${isActive ? "outline" : "ghost"}`}
                     onClick={() => table.setPageIndex(page - 1)}
                     aria-current={isActive ? "page" : undefined}
+                    aria-label={igrpFormatMessage(i18n.dataTable.goToPage, { page })}
                   >
                     {page}
                   </Button>

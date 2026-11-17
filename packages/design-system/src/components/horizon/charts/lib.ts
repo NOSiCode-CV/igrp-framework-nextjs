@@ -88,3 +88,24 @@ export const IGRP_CHART_COLORS = [
   "var(--chart-7)",
   "var(--chart-8)",
 ]
+
+/**
+ * Text alternative for a chart: the wrapper becomes a `figure` named by the title and
+ * described by the description. Only the ids that exist are referenced.
+ */
+export const chartFigureA11y = (id: string, title?: string, description?: string) => {
+  const titleId = `${id}-title`
+  const descriptionId = `${id}-description`
+  return {
+    titleId,
+    descriptionId,
+    figure:
+      title || description
+        ? {
+            role: "figure",
+            "aria-labelledby": title ? titleId : undefined,
+            "aria-describedby": description ? descriptionId : undefined,
+          }
+        : {},
+  }
+}

@@ -10,7 +10,7 @@ import { Input } from "../../primitives/input.js"
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../../primitives/form.js"
 import { Field, FieldDescription, FieldError } from "../../primitives/field.js"
 import { IGRPIcon } from "../icon/index.js"
-import { IGRPLabel } from "../label.js"
+import { IGRPLabel, IGRPRequiredMark } from "../label.js"
 
 /**
  * Props for the IGRPInputText component.
@@ -69,10 +69,9 @@ function IGRPInputText({
         render={({ field, fieldState }) => (
           <FormItem className={className}>
             {label && (
-              <FormLabel
-                className={cn("gap-0.5", required && "after:text-destructive after:content-['*']", labelClassName)}
-              >
+              <FormLabel className={cn("gap-0.5", labelClassName)}>
                 {label}
+                {required && <IGRPRequiredMark />}
               </FormLabel>
             )}
             <div className={cn("relative")}>
@@ -102,13 +101,7 @@ function IGRPInputText({
               )}
             </div>
             {helperText && !fieldState.error && !error && <FormDescription>{helperText}</FormDescription>}
-            {error ? (
-              <p className={cn("text-xs text-destructive")} role="alert">
-                {error}
-              </p>
-            ) : (
-              <FormMessage className={cn("text-xs")} />
-            )}
+            <FormMessage className={cn("text-xs")} message={error} />
           </FormItem>
         )}
       />

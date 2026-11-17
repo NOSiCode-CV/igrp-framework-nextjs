@@ -54,6 +54,7 @@ function IGRPSwitch({
             onCheckedChange={onCheckedChange}
             aria-invalid={!!error}
             aria-describedby={error ? `${fielName}-error` : helperText ? `${fielName}-helper` : undefined}
+            aria-required={required || undefined}
             {...igrpOmitNonDomProps(props)}
           />
 

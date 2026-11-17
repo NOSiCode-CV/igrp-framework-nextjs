@@ -34,6 +34,7 @@ export const IGRP_I18N_DEFAULTS_FR: IGRPI18nStrings = {
     rowsPerPage: "Lignes par page",
     rangeOf: "sur",
     pageOf: "Page {page} sur {total}",
+    goToPage: "Page {page}",
     notAvailable: "N/D",
     minPlaceholder: "Min",
     maxPlaceholder: "Max",
@@ -144,6 +145,7 @@ export const IGRP_I18N_DEFAULTS_FR: IGRPI18nStrings = {
     scrollPrevious: "Voir les étapes précédentes",
     scrollNext: "Voir les étapes suivantes",
     step: "Étape",
+    completed: "terminé",
   },
   accordion: {
     empty: "Aucun enregistrement.",
@@ -184,6 +186,7 @@ export const IGRP_I18N_DEFAULTS_FR: IGRPI18nStrings = {
   form: {
     submissionErrorTitle: "Erreur lors de l'envoi du formulaire",
     submissionErrorFallback: "Une erreur inattendue s'est produite",
+    required: "obligatoire",
   },
   multiStepForm: {
     previous: "Précédent",

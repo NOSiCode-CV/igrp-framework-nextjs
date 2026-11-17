@@ -21,7 +21,7 @@ import {
 } from "../../primitives/field.js"
 import { RadioGroup, RadioGroupItem } from "../../primitives/radio-group.js"
 import { IGRPIcon } from "../icon/index.js"
-import { IGRPLabel } from "../label.js"
+import { IGRPLabel, IGRPRequiredMark } from "../label.js"
 
 /**
  * Option for radio group.
@@ -260,12 +260,13 @@ function RadioGroupFieldSet({
           variant="label"
           className={cn(
             "mb-0 gap-0.5",
-            required && "after:text-destructive after:content-['*']",
+
             error && "text-destructive",
             labelClassName
           )}
         >
           {label}
+          {required && <IGRPRequiredMark />}
         </FieldLegend>
       )}
 

@@ -96,6 +96,11 @@ function ComboboxField({
   onClose,
   triggerRef,
   iconName = "CornerDownRight",
+  renderChips,
+  id: slotId,
+  "aria-invalid": ariaInvalid,
+  "aria-describedby": ariaDescribedBy,
+  "aria-required": ariaRequired,
 }: {
   fieldName: string
   listId: string
@@ -125,6 +130,13 @@ function ComboboxField({
   /** react-hook-form's `field.ref`, so the trigger is focused when the field is invalid. */
   triggerRef?: React.Ref<HTMLButtonElement>
   iconName?: string
+  /** Removable chips (variant="multiple"), rendered outside the trigger: a button inside a <button> is invalid. */
+  renderChips?: (val: string | string[], handler: (v: string | string[]) => void) => React.ReactNode
+  /** `id` and the aria props below come from `FormControl` (via Slot) in form mode, or the caller standalone; they go on the trigger. */
+  id?: string
+  "aria-invalid"?: boolean
+  "aria-describedby"?: string
+  "aria-required"?: boolean
 }) {
   const i18n = useIGRPi18n()
   const onOpenChange = (next: boolean) => {
@@ -138,11 +150,14 @@ function ComboboxField({
         <PopoverTrigger asChild>
           <IGRPButton
             ref={triggerRef}
-            name={fieldName}
+            id={slotId ?? fieldName}
             variant="outline"
             role="combobox"
             aria-expanded={open}
             aria-controls={listId}
+            aria-invalid={ariaInvalid || undefined}
+            aria-describedby={ariaDescribedBy}
+            aria-required={ariaRequired || undefined}
             disabled={disabled}
             className={cn(
               "w-full max-w-full justify-between overflow-hidden border-input text-left",
@@ -187,6 +202,7 @@ function ComboboxField({
           </Command>
         </PopoverContent>
       </Popover>
+      {renderChips?.(currentValue, onChangeHandler)}
     </div>
   )
 }
@@ -286,7 +302,7 @@ function IGRPCombobox({
   const [localValue, setLocalValue] = useState<string | string[]>(() => (variant === "single" ? "" : []))
   const displayValue = value !== undefined ? value : localValue
 
-  const setSelectValue = (currentValue: string | string[], onChangeHandler?: (value: string | string[]) => void) => {
+  const setSelectValue = (currentValue: string | string[]) => {
     if (variant === "single") {
       const selected = options?.find((opt) => opt.value === currentValue)
       const labelValue = selected?.label ?? placeholder
@@ -312,6 +328,16 @@ function IGRPCombobox({
       return placeholder
     }
 
+    return (
+      <span className={cn("block min-w-0 flex-1 truncate")}>
+        {currentValue.map((val) => options?.find((opt) => opt.value === val)?.label ?? val).join(", ")}
+      </span>
+    )
+  }
+
+  const renderChips = (currentValue: string | string[], onChangeHandler?: (value: string | string[]) => void) => {
+    if (variant === "single" || !Array.isArray(currentValue) || currentValue.length === 0) return null
+
     const removeValue = (valueToRemove: string) => {
       const currentValues = currentValue as string[]
       const updatedValues = currentValues.filter((val) => val !== valueToRemove)
@@ -326,8 +352,19 @@ function IGRPCombobox({
       }
     }
 
+    // The clicked chip unmounts, which would drop focus to <body>: hand it to the next chip,
+    // else the previous one, else the trigger.
+    const moveFocusFrom = (button: HTMLElement) => {
+      const chips = button.closest<HTMLElement>("[data-slot=combobox-chips]")
+      const buttons = Array.from(chips?.querySelectorAll<HTMLElement>("button") ?? [])
+      const i = buttons.indexOf(button)
+      const target =
+        buttons[i + 1] ?? buttons[i - 1] ?? chips?.parentElement?.querySelector<HTMLElement>('[role="combobox"]')
+      target?.focus()
+    }
+
     return (
-      <div className={cn("flex flex-wrap gap-1")}>
+      <div data-slot="combobox-chips" className={cn("mt-2 flex flex-wrap gap-1")}>
         {currentValue.map((val) => {
           const selected = options?.find((opt) => opt.value === val)
           if (!selected) return null
@@ -342,17 +379,12 @@ function IGRPCombobox({
 
               <IGRPButton
                 className={cn("ml-1 size-5 rounded-full text-muted-foreground hover:text-destructive")}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    e.preventDefault()
-                    removeValue(val)
-                  }
+                onClick={(e) => {
+                  moveFocusFrom(e.currentTarget)
+                  removeValue(val)
                 }}
-                onMouseDown={(e) => {
-                  e.preventDefault()
-                  e.stopPropagation()
-                }}
-                onClick={() => removeValue(val)}
+                disabled={disabled}
+                aria-label={i18n.multiSelect.removeChip.replace("{label}", selected.label)}
                 iconName="X"
                 size="icon"
                 showIcon
@@ -414,42 +446,41 @@ function IGRPCombobox({
         control={formContext.control}
       >
         {(field) => (
-          <div className={cn("relative w-full max-w-full min-w-0")}>
-            <ComboboxField
-              fieldName={fieldName}
-              listId={listId}
-              open={open}
-              setOpen={setOpen}
-              currentValue={field.value}
-              onChangeHandler={(val) => {
-                field.onChange(val)
-                onChange?.(val)
-              }}
-              setSelectValue={setSelectValue}
-              groupedOptions={groupedOptions}
-              showGroup={showGroup}
-              showStatus={showStatus}
-              showIcon={showIcon}
-              showSearch={showSearch}
-              searchText={searchText}
-              selectLabel={selectLabel}
-              selectClassName={selectClassName}
-              disabled={disabled}
-              className={className}
-              onOptionsChangeHandler={onOptionsChangeHandler}
-              isSelected={isSelected}
-              onClose={field.onBlur}
-              triggerRef={field.ref}
-              iconName={iconName}
-            />
-          </div>
+          <ComboboxField
+            fieldName={fieldName}
+            listId={listId}
+            open={open}
+            setOpen={setOpen}
+            currentValue={field.value}
+            onChangeHandler={(val) => {
+              field.onChange(val)
+              onChange?.(val)
+            }}
+            setSelectValue={setSelectValue}
+            groupedOptions={groupedOptions}
+            showGroup={showGroup}
+            showStatus={showStatus}
+            showIcon={showIcon}
+            showSearch={showSearch}
+            searchText={searchText}
+            selectLabel={selectLabel}
+            selectClassName={selectClassName}
+            disabled={disabled}
+            className={className}
+            onOptionsChangeHandler={onOptionsChangeHandler}
+            isSelected={isSelected}
+            onClose={field.onBlur}
+            triggerRef={field.ref}
+            iconName={iconName}
+            renderChips={renderChips}
+          />
         )}
       </IGRPFormField>
     )
   }
 
   return (
-    <Field className={cn("w-full max-w-full min-w-0")} id={name}>
+    <Field className={cn("w-full max-w-full min-w-0")}>
       {label && <IGRPLabel label={label} className={labelClassName} required={required} id={fieldName} />}
 
       <ComboboxField
@@ -476,9 +507,13 @@ function IGRPCombobox({
         onOptionsChangeHandler={onOptionsChangeHandler}
         isSelected={isSelected}
         iconName={iconName}
+        renderChips={renderChips}
+        aria-invalid={!!errorText}
+        aria-describedby={errorText ? `${fieldName}-error` : helperText ? `${fieldName}-helper` : undefined}
+        aria-required={required}
       />
 
-      <IGRPFieldDescription error={errorText} helperText={helperText} />
+      <IGRPFieldDescription id={fieldName} error={errorText} helperText={helperText} />
     </Field>
   )
 }

@@ -55,6 +55,7 @@ function IGRPCheckbox({
             onCheckedChange={onCheckedChange}
             aria-invalid={!!error}
             aria-describedby={error ? `${fieldName}-error` : helperText ? `${fieldName}-helper` : undefined}
+            aria-required={required || undefined}
             {...igrpOmitNonDomProps(props)}
           />
 

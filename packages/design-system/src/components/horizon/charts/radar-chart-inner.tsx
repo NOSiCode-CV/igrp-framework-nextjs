@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 
+import { useId } from "react"
+
 import { RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Legend } from "recharts"
 import { cn } from "../cn.js"
 import {
@@ -18,6 +20,7 @@ import {
   getLegendHorizontalAlign,
   getLegendLayout,
   getLegendVerticalAlign,
+  chartFigureA11y,
 } from "./lib.js"
 import { useIGRPLocale } from "../../../i18n/index.js"
 import { type IGRPChartProps, type IGRPRadarConfig } from "./types.js"
@@ -93,12 +96,26 @@ function IGRPRadarChartInner({
   const formatValue = (value: number) => formatChartValue(value, valueFormatter, locale)
   const chartConfig = createChartConfig(radars)
 
+  const a11y = chartFigureA11y(useId(), title, description)
+
   return (
-    <div className={cn("w-full overflow-hidden", className)} style={backgroundColor ? { backgroundColor } : undefined}>
+    <div
+      className={cn("w-full overflow-hidden", className)}
+      style={backgroundColor ? { backgroundColor } : undefined}
+      {...a11y.figure}
+    >
       {(title || description) && (
         <div className={cn("pb-3")}>
-          {title && <div className={cn("text-xl font-semibold")}>{title}</div>}
-          {description && <div className={cn("text-sm text-muted-foreground")}>{description}</div>}
+          {title && (
+            <div id={a11y.titleId} className={cn("text-xl font-semibold")}>
+              {title}
+            </div>
+          )}
+          {description && (
+            <div id={a11y.descriptionId} className={cn("text-sm text-muted-foreground")}>
+              {description}
+            </div>
+          )}
         </div>
       )}
 

@@ -26,10 +26,12 @@ import { igrpDateTimeFormat, igrpNumberFormat } from "../../../lib/intl.js"
 interface IGRPDataTableCellCheckboxProps<TData> extends React.ComponentProps<typeof Checkbox> {
   /** Table row. */
   row: Row<TData>
+  /** Accessible name, e.g. "Selecionar Maria Silva", so rows are told apart. Default: "Selecionar linha". */
+  label?: string
 }
 
 /** Checkbox for row selection. */
-function IGRPDataTableCellCheckbox<TData>({ row, className, ...props }: IGRPDataTableCellCheckboxProps<TData>) {
+function IGRPDataTableCellCheckbox<TData>({ row, label, className, ...props }: IGRPDataTableCellCheckboxProps<TData>) {
   const i18n = useIGRPi18n()
 
   return (
@@ -37,7 +39,7 @@ function IGRPDataTableCellCheckbox<TData>({ row, className, ...props }: IGRPData
       checked={row.getIsSelected()}
       disabled={!row.getCanSelect()}
       onCheckedChange={(value) => row.toggleSelected(!!value)}
-      aria-label={i18n.dataTable.selectRow}
+      aria-label={label ?? i18n.dataTable.selectRow}
       className={className}
       {...props}
     />
@@ -50,10 +52,12 @@ function IGRPDataTableCellCheckbox<TData>({ row, className, ...props }: IGRPData
  */
 interface IGRPDataTableCellSwitchProps<TData> extends React.ComponentProps<typeof Switch> {
   row: Row<TData>
+  /** Accessible name, e.g. "Selecionar Maria Silva", so rows are told apart. Default: "Alternar linha". */
+  label?: string
 }
 
 /** Switch for row selection. */
-function IGRPDataTableCellSwitch<TData>({ row, className, ...props }: IGRPDataTableCellSwitchProps<TData>) {
+function IGRPDataTableCellSwitch<TData>({ row, label, className, ...props }: IGRPDataTableCellSwitchProps<TData>) {
   const i18n = useIGRPi18n()
 
   return (
@@ -61,7 +65,7 @@ function IGRPDataTableCellSwitch<TData>({ row, className, ...props }: IGRPDataTa
       checked={row.getIsSelected()}
       disabled={!row.getCanSelect()}
       onCheckedChange={(value) => row.toggleSelected(!!value)}
-      aria-label={i18n.dataTable.toggleRow}
+      aria-label={label ?? i18n.dataTable.toggleRow}
       className={className}
       {...props}
     />
@@ -92,7 +96,8 @@ function IGRPDataTableCellExpander<TData>({ row, label }: IGRPDataTableCellExpan
       className="shadow-none"
       onClick={row.getToggleExpandedHandler()}
       aria-expanded={row.getIsExpanded()}
-      aria-label={row.getIsExpanded() ? i18n.dataTable.collapseRow : i18n.dataTable.expandRow}
+      // A visible label is the name (aria-expanded carries the state); only an unlabelled expander needs one.
+      aria-label={label ? undefined : row.getIsExpanded() ? i18n.dataTable.collapseRow : i18n.dataTable.expandRow}
       size="sm"
       variant="ghost"
     >

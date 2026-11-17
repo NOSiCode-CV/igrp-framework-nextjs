@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react"
+import React, { useId } from "react"
 import {
   RadialBarChart,
   RadialBar,
@@ -24,6 +24,7 @@ import {
   getLegendHorizontalAlign,
   getLegendLayout,
   getLegendVerticalAlign,
+  chartFigureA11y,
 } from "../lib.js"
 import { igrpFormatMessage, useIGRPi18n, useIGRPLocale } from "../../../../i18n/index.js"
 import { type IGRPChartProps, type RadialBarConfig } from "../types.js"
@@ -66,12 +67,28 @@ export interface IGRPRadialBarChartProps extends Omit<IGRPChartProps, "categoryK
   }
 }
 
-function RadialChartHeader({ title, description }: { title?: string; description?: string }) {
+function RadialChartHeader({
+  title,
+  description,
+  a11y,
+}: {
+  title?: string
+  description?: string
+  a11y: ReturnType<typeof chartFigureA11y>
+}) {
   if (!title && !description) return null
   return (
     <div className={cn("pb-3")}>
-      {title && <div className={cn("text-xl font-semibold")}>{title}</div>}
-      {description && <div className={cn("text-sm text-muted-foreground")}>{description}</div>}
+      {title && (
+        <div id={a11y.titleId} className={cn("text-xl font-semibold")}>
+          {title}
+        </div>
+      )}
+      {description && (
+        <div id={a11y.descriptionId} className={cn("text-sm text-muted-foreground")}>
+          {description}
+        </div>
+      )}
     </div>
   )
 }
@@ -265,9 +282,15 @@ function IGRPRadialBarChartInner({
     [formattedTotal, centerText.label]
   )
 
+  const a11y = chartFigureA11y(useId(), title, description)
+
   return (
-    <div className={cn("w-full overflow-hidden", className)} style={backgroundColor ? { backgroundColor } : undefined}>
-      <RadialChartHeader title={title} description={description} />
+    <div
+      className={cn("w-full overflow-hidden", className)}
+      style={backgroundColor ? { backgroundColor } : undefined}
+      {...a11y.figure}
+    >
+      <RadialChartHeader title={title} description={description} a11y={a11y} />
 
       <div className={cn("overflow-hidden")}>
         <div style={{ height: chartHeight, width: chartWidth }} className={cn("w-full overflow-hidden")}>

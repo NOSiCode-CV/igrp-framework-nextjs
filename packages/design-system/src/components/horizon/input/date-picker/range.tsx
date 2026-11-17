@@ -13,7 +13,7 @@ import { Button } from "../../../primitives/button.js"
 import { Calendar } from "../../../primitives/calendar.js"
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../../../primitives/form.js"
 import { Popover, PopoverContent, PopoverTrigger } from "../../../primitives/popover.js"
-import { IGRPLabel } from "../../label.js"
+import { IGRPLabel, IGRPRequiredMark } from "../../label.js"
 import { type IGRPCalendarRangeProps } from "../../calendar/range.js"
 import { DD_MM_YYYY } from "../../../../lib/utilities.js"
 import { Field } from "../../../primitives/field.js"
@@ -30,6 +30,10 @@ function DatePickerRangeField({
   dateFormat,
   disabled,
   disabledPicker,
+  id,
+  "aria-invalid": ariaInvalid,
+  "aria-describedby": ariaDescribedBy,
+  labelId,
   triggerRef,
   onClose,
 }: {
@@ -41,6 +45,12 @@ function DatePickerRangeField({
   dateFormat: string
   disabled?: IGRPCalendarRangeProps["disabled"]
   disabledPicker?: boolean
+  /** `id` and the aria props below come from `FormControl` (via Slot) in form mode; they go on the trigger. */
+  id?: string
+  "aria-invalid"?: boolean
+  "aria-describedby"?: string
+  /** Id of the visible label: the trigger is named by it plus the displayed value. */
+  labelId?: string
   /** react-hook-form's `field.ref`, so the trigger is focused when the field is invalid. */
   triggerRef?: React.Ref<HTMLButtonElement>
   /** Called when the popover closes — form-bound fields mark themselves touched here. */
@@ -52,6 +62,7 @@ function DatePickerRangeField({
       ? `${format(value.from, dateFormat, { locale })} - ${format(value.to, dateFormat, { locale })}`
       : format(value.from, dateFormat, { locale })
     : placeholder
+  const triggerId = id ?? fieldName
 
   return (
     <Popover
@@ -62,9 +73,13 @@ function DatePickerRangeField({
       <PopoverTrigger asChild>
         <Button
           ref={triggerRef}
-          id={fieldName}
+          id={triggerId}
           variant="outline"
           disabled={disabledPicker}
+          // <label for> would replace the button text as its name; this keeps the dates read too.
+          aria-labelledby={labelId ? `${labelId} ${triggerId}-value` : undefined}
+          aria-invalid={ariaInvalid || undefined}
+          aria-describedby={ariaDescribedBy}
           className={cn("group w-full justify-start border-input shadow-xs", !value?.from && "text-muted-foreground")}
         >
           <CalendarIcon
@@ -72,13 +87,15 @@ function DatePickerRangeField({
             aria-hidden="true"
           />
 
-          <span className={cn("truncate", !value?.from && "text-muted-foreground")}>{displayText}</span>
+          <span id={`${triggerId}-value`} className={cn("truncate", !value?.from && "text-muted-foreground")}>
+            {displayText}
+          </span>
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0" align="start">
         <Calendar
           {...calendarProps}
-          id={fieldName}
+          id={`${triggerId}-calendar`}
           mode="range"
           defaultMonth={value?.from}
           selected={value}
@@ -142,6 +159,7 @@ function IGRPDatePickerRange(allProps: IGRPDatePickerRangeProps) {
     dateFormat,
     disabled,
     disabledPicker,
+    labelId: label ? `${fieldName}-label` : undefined,
   }
 
   if (formContext) {
@@ -152,8 +170,9 @@ function IGRPDatePickerRange(allProps: IGRPDatePickerRangeProps) {
         render={({ field, fieldState }) => (
           <FormItem className={className}>
             {label && (
-              <FormLabel className={cn(labelClassName, required && "after:text-destructive after:content-['*']")}>
+              <FormLabel id={`${fieldName}-label`} className={cn(labelClassName)}>
                 {label}
+                {required && <IGRPRequiredMark />}
               </FormLabel>
             )}
             <FormControl>
@@ -180,10 +199,19 @@ function IGRPDatePickerRange(allProps: IGRPDatePickerRangeProps) {
 
   return (
     <Field className={className}>
-      {label && <IGRPLabel label={label} required={required} id={name} className={labelClassName} />}
+      {label && (
+        <IGRPLabel
+          label={label}
+          required={required}
+          id={fieldName}
+          labelId={`${fieldName}-label`}
+          className={labelClassName}
+        />
+      )}
 
       <DatePickerRangeField
         {...fieldProps}
+        aria-describedby={helperText ? `${fieldName}-helper` : undefined}
         value={displayDate}
         onChange={(val) => {
           setLocalDate(val)
@@ -191,7 +219,11 @@ function IGRPDatePickerRange(allProps: IGRPDatePickerRangeProps) {
         }}
       />
 
-      {helperText && <p className={cn("mt-1 text-sm text-muted-foreground")}>{helperText}</p>}
+      {helperText && (
+        <p id={`${fieldName}-helper`} className={cn("mt-1 text-sm text-muted-foreground")}>
+          {helperText}
+        </p>
+      )}
     </Field>
   )
 }

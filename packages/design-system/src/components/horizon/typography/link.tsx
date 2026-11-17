@@ -9,6 +9,7 @@ import { IGRPColors, type IGRPColorRole, type IGRPColorVariants } from "../../..
 import { igrpColorText } from "../../../lib/colors.js"
 import { igrpIsExternalUrl } from "../../../lib/utilities.js"
 import { cn } from "../cn.js"
+import { useIGRPi18n } from "../../../i18n/index.js"
 import { igrpOmitNonDomProps } from "../../../lib/dom-props.js"
 import type { IGRPBaseAttributes, IGRPPlacementProps } from "../../../types.js"
 
@@ -110,7 +111,15 @@ function IGRPLink({
   const _id = useId()
   const ref = id ?? _id
 
+  const i18n = useIGRPi18n()
   const isExternal = igrpIsExternalUrl(href)
+  const linkTarget = isExternal ? target || "_blank" : target
+  const newTabHint = linkTarget === "_blank" && (
+    <>
+      {" "}
+      <span className="sr-only">{i18n.pdfViewer.openInNewTab}</span>
+    </>
+  )
   const colorLink = variant ? IGRPColors[variant][color].text : igrpColorText(color)
   const linkClass = cn(IGRPLinkVariants({ size, underline }), colorLink, className)
   const getIconSize = iconSize || (size === "lg" ? 20 : size === "default" ? 16 : 14)
@@ -120,7 +129,7 @@ function IGRPLink({
       <a
         href={href}
         className={linkClass}
-        target={target || "_blank"}
+        target={linkTarget}
         rel="noopener noreferrer"
         onClick={onClick}
         id={ref}
@@ -135,6 +144,7 @@ function IGRPLink({
         >
           {children}
         </IGRPLinkRender>
+        {newTabHint}
       </a>
     )
   }
@@ -145,7 +155,7 @@ function IGRPLink({
       {...igrpOmitNonDomProps(props)}
       className={linkClass}
       onClick={onClick}
-      target={target}
+      target={linkTarget}
       id={ref}
     >
       <IGRPLinkRender
@@ -157,6 +167,7 @@ function IGRPLink({
       >
         {children}
       </IGRPLinkRender>
+      {newTabHint}
     </Link>
   )
 }

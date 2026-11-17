@@ -107,7 +107,7 @@ interface IGRPAvatarProps
   size?: "sm" | "md" | "lg" | "xl" | "default" | null
   /** Image URL for the avatar. */
   src?: string
-  /** Alt text for the image. */
+  /** Alt text for the image (e.g. the person's name). Defaults to "" (decorative); pass it whenever no visible name sits beside the avatar. */
   alt?: string
   /** Fallback text (e.g. initials) when image fails to load. */
   fallback?: string
@@ -149,7 +149,7 @@ interface IGRPAvatarProps
  */
 function IGRPAvatar({
   src,
-  alt = "avatar",
+  alt = "",
   scale: scaleProp,
   size,
   rounded = "full",

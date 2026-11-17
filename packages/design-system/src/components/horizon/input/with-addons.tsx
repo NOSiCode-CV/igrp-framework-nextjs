@@ -70,7 +70,12 @@ function IGRPInputAddOn({
     <Field className={classNameGlobal}>
       {label && <IGRPLabel label={label} className={classNameLabel} id={ref} />}
 
-      <div className={cn("flex overflow-hidden rounded-md border")}>
+      {/* The embedded select/input drop their own rings, so the wrapper shows focus. */}
+      <div
+        className={cn(
+          "flex overflow-hidden rounded-md border transition-[color,box-shadow] focus-within:border-ring focus-within:ring-2 focus-within:ring-ring/50"
+        )}
+      >
         <Select value={selectValue} onValueChange={onSelectValueChange}>
           <SelectTrigger
             aria-label={optionLabel ?? i18n.inputAddons.selectOption}

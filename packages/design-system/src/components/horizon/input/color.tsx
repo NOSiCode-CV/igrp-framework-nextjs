@@ -90,6 +90,7 @@ interface ColorFieldProps {
   id?: string
   "aria-describedby"?: string
   "aria-invalid"?: boolean
+  "aria-required"?: boolean
 }
 
 /**
@@ -115,6 +116,7 @@ function ColorField({
   id,
   "aria-describedby": describedBy,
   "aria-invalid": ariaInvalid,
+  "aria-required": ariaRequired,
 }: ColorFieldProps) {
   // The caller's blur/keydown run after the field's own, never instead of them.
   const { onBlur: callerOnBlur, onKeyDown: callerOnKeyDown, ...textInputProps } = inputProps ?? {}
@@ -238,6 +240,7 @@ function ColorField({
               aria-label={`${label ?? i18n.inputColor.valueLabel} (${formatLabel})`}
               aria-invalid={invalid || undefined}
               aria-describedby={describedByIds}
+              aria-required={ariaRequired || undefined}
             />
             {lockedFormat === undefined && (
               <InputGroupAddon align="inline-end">
@@ -360,6 +363,7 @@ function IGRPInputColor({
         value={controlledValue}
         onChange={(display) => onChange?.(display)}
         hasError={!!error}
+        aria-required={required}
         aria-describedby={
           [helperText && !error ? `${fieldName}-helper` : null, error ? `${fieldName}-error` : null]
             .filter(Boolean)

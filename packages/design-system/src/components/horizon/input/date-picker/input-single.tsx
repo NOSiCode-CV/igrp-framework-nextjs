@@ -23,7 +23,7 @@ import {
 import { Input } from "../../../primitives/input.js"
 import { Popover, PopoverContent, PopoverTrigger } from "../../../primitives/popover.js"
 import { type IGRPCalendarSingleProps } from "../../calendar/single.js"
-import { IGRPLabel } from "../../label.js"
+import { IGRPLabel, IGRPRequiredMark } from "../../label.js"
 import { Field, FieldDescription } from "../../../primitives/field.js"
 import { useIGRPi18n, useIGRPLocale } from "../../../../i18n/index.js"
 import { igrpDateFnsLocale } from "../../../../i18n/date-fns-locale.js"
@@ -61,6 +61,7 @@ function DatePickerInputSingleField({
   inputMode,
   ariaInvalid,
   ariaDescribedBy,
+  ariaRequired,
   onInputChange,
   onInputBlur,
   onClear,
@@ -81,6 +82,7 @@ function DatePickerInputSingleField({
   inputMode?: "numeric"
   ariaInvalid?: boolean
   ariaDescribedBy?: string
+  ariaRequired?: boolean
   /** react-hook-form's `field.ref`, so the input is focused when the field is invalid. */
   inputRef?: React.Ref<HTMLInputElement>
   /** react-hook-form's `field.onBlur`, which marks the field touched. */
@@ -117,6 +119,7 @@ function DatePickerInputSingleField({
         maxLength={maxLength}
         aria-invalid={ariaInvalid || undefined}
         aria-describedby={ariaDescribedBy}
+        aria-required={ariaRequired || undefined}
         className={cn("bg-background", hasText ? "pr-14" : "pr-10")}
         disabled={disabledPicker}
         onChange={(e) => onInputChange(e.target.value)}
@@ -196,13 +199,13 @@ function DatePickerInputSingleField({
 function DatePickerInputSingleFieldWithA11y(
   props: Omit<React.ComponentProps<typeof DatePickerInputSingleField>, "inputId" | "ariaInvalid" | "ariaDescribedBy">
 ) {
-  const { error, formItemId, formMessageId, formDescriptionId } = useFormField()
+  const { formItemId, formInvalid, formDescribedBy } = useFormField()
   return (
     <DatePickerInputSingleField
       {...props}
       inputId={formItemId}
-      ariaInvalid={!!error}
-      ariaDescribedBy={error ? formMessageId : formDescriptionId}
+      ariaInvalid={formInvalid}
+      ariaDescribedBy={formDescribedBy}
     />
   )
 }
@@ -304,6 +307,7 @@ function IGRPDatePickerInputSingle(allProps: IGRPDatePickerInputSingleProps) {
     className,
     maxLength,
     inputMode: maxLength === undefined ? undefined : ("numeric" as const),
+    ariaRequired: required,
   }
 
   if (formContext) {
@@ -317,8 +321,9 @@ function IGRPDatePickerInputSingle(allProps: IGRPDatePickerInputSingleProps) {
             return (
               <FormItem className={inputGroupClassName}>
                 {label && (
-                  <FormLabel className={cn(labelClassName, required && "after:text-destructive after:content-['*']")}>
+                  <FormLabel className={cn(labelClassName)}>
                     {label}
+                    {required && <IGRPRequiredMark />}
                   </FormLabel>
                 )}
                 <FormControl>

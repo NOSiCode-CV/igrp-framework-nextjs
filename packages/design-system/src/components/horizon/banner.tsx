@@ -89,7 +89,7 @@ function IGRPBanner({
             target="_blank"
             rel="noopener noreferrer"
           >
-            {learnMoreLabel ?? i18n.banner.learnMore}
+            {learnMoreLabel ?? i18n.banner.learnMore} <span className="sr-only">{i18n.pdfViewer.openInNewTab}</span>
           </a>
         )}
       </p>

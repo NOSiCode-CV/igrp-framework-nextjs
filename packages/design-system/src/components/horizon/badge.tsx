@@ -71,6 +71,16 @@ function IGRPBadge({
   const isNumberOnly = typeof children === "number" && !showIcon && !iconName && !dot
   const isCircular = isIconOnly || isNumberOnly
 
+  if (
+    process.env.NODE_ENV !== "production" &&
+    !children &&
+    showIcon &&
+    !props["aria-label"] &&
+    !props["aria-labelledby"]
+  ) {
+    console.warn(`IGRPBadge: icon-only badge (iconName="${iconName}") has no accessible name. Pass an "aria-label".`)
+  }
+
   const getCircularSizeClass = () => {
     if (size === "sm") return "size-5"
     if (size === "lg") return "size-7"
@@ -91,7 +101,7 @@ function IGRPBadge({
       )}
       {...igrpOmitNonDomProps(props)}
     >
-      {dot && <div className={cn("size-1.5 rounded-full", colorClasses.bgForeground)} />}
+      {dot && <div aria-hidden="true" className={cn("size-1.5 rounded-full", colorClasses.bgForeground)} />}
 
       <div className={cn("flex items-center", children && showIcon && "gap-1")}>
         {showIcon && <IGRPIcon iconName={iconName} strokeWidth={2} />}

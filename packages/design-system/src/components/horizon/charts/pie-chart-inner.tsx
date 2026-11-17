@@ -12,7 +12,7 @@ import {
   type PieLabelRenderProps,
 } from "recharts"
 import type { PieSectorDataItem } from "recharts/types/polar/Pie"
-import React, { useState, type SVGAttributes } from "react"
+import React, { useState, type SVGAttributes, useId } from "react"
 
 import { cn } from "../cn.js"
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "../../primitives/chart.js"
@@ -26,6 +26,7 @@ import {
   getLegendHorizontalAlign,
   getLegendLayout,
   getLegendVerticalAlign,
+  chartFigureA11y,
 } from "./lib.js"
 import { igrpFormatMessage, useIGRPi18n, useIGRPLocale } from "../../../i18n/index.js"
 
@@ -198,12 +199,26 @@ function IGRPPieChartInner({
     )
   }
 
+  const a11y = chartFigureA11y(useId(), title, description)
+
   return (
-    <div className={cn("w-full overflow-hidden", className)} style={backgroundColor ? { backgroundColor } : undefined}>
+    <div
+      className={cn("w-full overflow-hidden", className)}
+      style={backgroundColor ? { backgroundColor } : undefined}
+      {...a11y.figure}
+    >
       {(title || description) && (
         <div className={cn("pb-3")}>
-          {title && <div className={cn("text-xl font-semibold")}>{title}</div>}
-          {description && <div className={cn("text-sm text-muted-foreground")}>{description}</div>}
+          {title && (
+            <div id={a11y.titleId} className={cn("text-xl font-semibold")}>
+              {title}
+            </div>
+          )}
+          {description && (
+            <div id={a11y.descriptionId} className={cn("text-sm text-muted-foreground")}>
+              {description}
+            </div>
+          )}
         </div>
       )}
 

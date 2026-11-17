@@ -13,8 +13,8 @@ import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessa
 import { IGRPButton } from "../button.js"
 import { IGRPFieldDescription } from "../field-description.js"
 import { IGRPIcon, type IGRPIconName } from "../icon/index.js"
-import { IGRPLabel } from "../label.js"
-import { Field, FieldError } from "../../primitives/field.js"
+import { IGRPLabel, IGRPRequiredMark } from "../label.js"
+import { Field } from "../../primitives/field.js"
 
 /**
  * Props for the IGRPInputSearch component.
@@ -302,8 +302,9 @@ function IGRPInputSearch({
         render={({ field, fieldState }) => (
           <FormItem className={className}>
             {label && (
-              <FormLabel className={cn("gap-0.5", required && "after:text-destructive after:content-['*']")}>
+              <FormLabel className={cn("gap-0.5")}>
                 {label}
+                {required && <IGRPRequiredMark />}
               </FormLabel>
             )}
             <SearchInputDecoration
@@ -339,7 +340,7 @@ function IGRPInputSearch({
               }
             />
             {helperText && !fieldState.error && !error && <FormDescription>{helperText}</FormDescription>}
-            {error ? <FieldError>{error}</FieldError> : <FormMessage className={cn("text-xs")} />}
+            <FormMessage className={cn("text-xs")} message={error} />
           </FormItem>
         )}
       />
@@ -361,7 +362,7 @@ function IGRPInputSearch({
             required={required}
             aria-required={required}
             aria-invalid={!!error || !!props["aria-invalid"]}
-            aria-describedby={helperText || error ? `${fieldName}-helper` : undefined}
+            aria-describedby={error ? `${fieldName}-error` : helperText ? `${fieldName}-helper` : undefined}
             className={inputClassName}
             value={displayValue}
             onChange={(e) => handleInputChange(e.target.value)}
@@ -377,7 +378,7 @@ function IGRPInputSearch({
         }
       />
 
-      <IGRPFieldDescription error={error} helperText={helperText} />
+      <IGRPFieldDescription id={fieldName} error={error} helperText={helperText} />
     </Field>
   )
 }

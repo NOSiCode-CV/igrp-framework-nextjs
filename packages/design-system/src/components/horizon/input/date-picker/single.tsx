@@ -9,20 +9,12 @@ import { toLocalDate } from "../../../../lib/calendar-utils.js"
 import { DD_MM_YYYY } from "../../../../lib/utilities.js"
 import { cn } from "../../cn.js"
 import { type IGRPDatePickerBaseProps } from "../../../../types.js"
-import {
-  useFormField,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../../../primitives/form.js"
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../../../primitives/form.js"
 import { Button } from "../../../primitives/button.js"
 import { Popover, PopoverContent, PopoverTrigger } from "../../../primitives/popover.js"
 import { IGRPButton } from "../../button.js"
 import { IGRPCalendarSingle, type IGRPCalendarSingleProps } from "../../calendar/single.js"
-import { IGRPLabel } from "../../label.js"
+import { IGRPLabel, IGRPRequiredMark } from "../../label.js"
 import { Field, FieldDescription } from "../../../primitives/field.js"
 import { useIGRPi18n, useIGRPLocale } from "../../../../i18n/index.js"
 import { igrpDateFnsLocale } from "../../../../i18n/date-fns-locale.js"
@@ -38,8 +30,10 @@ function DatePickerSingleField({
   dateFormat,
   disabled,
   disabledPicker,
-  ariaInvalid,
-  ariaDescribedBy,
+  id,
+  "aria-invalid": ariaInvalid,
+  "aria-describedby": ariaDescribedBy,
+  labelId,
   triggerRef,
   onClose,
 }: {
@@ -52,8 +46,12 @@ function DatePickerSingleField({
   dateFormat: string
   disabled?: boolean
   disabledPicker?: boolean
-  ariaInvalid?: boolean
-  ariaDescribedBy?: string
+  /** `id` and the aria props below come from `FormControl` (via Slot) in form mode; they go on the trigger. */
+  id?: string
+  "aria-invalid"?: boolean
+  "aria-describedby"?: string
+  /** Id of the visible label: the trigger is named by it plus the displayed value. */
+  labelId?: string
   /** react-hook-form's `field.ref`, so the trigger is focused when the field is invalid. */
   triggerRef?: React.Ref<HTMLButtonElement>
   /** Called when the popover closes — form-bound fields mark themselves touched here. */
@@ -64,6 +62,7 @@ function DatePickerSingleField({
   const [open, setOpen] = useState(false)
   const isDisabled = disabledPicker || disabled
   const displayText = value ? format(value, dateFormat, { locale }) : placeholder
+  const triggerId = id ?? fieldName
 
   return (
     <div className={cn("relative")}>
@@ -78,9 +77,11 @@ function DatePickerSingleField({
         <PopoverTrigger asChild>
           <Button
             ref={triggerRef}
-            id={fieldName}
+            id={triggerId}
             variant="outline"
             disabled={isDisabled}
+            // <label for> would replace the button text as its name; this keeps the date read too.
+            aria-labelledby={labelId ? `${labelId} ${triggerId}-value` : undefined}
             aria-invalid={ariaInvalid || undefined}
             aria-describedby={ariaDescribedBy}
             className={cn(
@@ -88,7 +89,9 @@ function DatePickerSingleField({
               !value && "text-muted-foreground"
             )}
           >
-            <span className={cn("truncate", !value && "text-muted-foreground")}>{displayText}</span>
+            <span id={`${triggerId}-value`} className={cn("truncate", !value && "text-muted-foreground")}>
+              {displayText}
+            </span>
             {!value && (
               <CalendarIcon
                 className="shrink-0 text-muted-foreground/80 transition-colors group-hover:text-foreground"
@@ -99,7 +102,7 @@ function DatePickerSingleField({
         </PopoverTrigger>
         <PopoverContent className={cn("w-auto p-0 shadow-none")} align="start">
           <IGRPCalendarSingle
-            id={fieldName}
+            id={`${triggerId}-calendar`}
             date={value}
             onDateChange={(next) => {
               onChange(next)
@@ -123,22 +126,6 @@ function DatePickerSingleField({
         />
       )}
     </div>
-  )
-}
-
-/**
- * @internal Wrapper rendered inside FormItem that reads the form context to wire
- * aria-invalid / aria-describedby onto the actual date Button element.
- */
-function DatePickerSingleFieldWithA11y(props: React.ComponentProps<typeof DatePickerSingleField>) {
-  const { error, formItemId, formMessageId } = useFormField()
-  return (
-    <DatePickerSingleField
-      {...props}
-      fieldName={formItemId}
-      ariaInvalid={!!error}
-      ariaDescribedBy={error ? formMessageId : undefined}
-    />
   )
 }
 
@@ -193,6 +180,7 @@ function IGRPDatePickerSingle(allProps: IGRPDatePickerSingleProps) {
     dateFormat,
     disabled: !!disabled,
     disabledPicker,
+    labelId: label ? `${fieldName}-label` : undefined,
   }
 
   if (formContext) {
@@ -204,12 +192,13 @@ function IGRPDatePickerSingle(allProps: IGRPDatePickerSingleProps) {
           render={({ field, fieldState }) => (
             <FormItem>
               {label && (
-                <FormLabel className={cn(labelClassName, required && "after:text-destructive after:content-['*']")}>
+                <FormLabel id={`${fieldName}-label`} className={cn(labelClassName)}>
                   {label}
+                  {required && <IGRPRequiredMark />}
                 </FormLabel>
               )}
               <FormControl>
-                <DatePickerSingleFieldWithA11y
+                <DatePickerSingleField
                   {...fieldProps}
                   value={toLocalDate(field.value)}
                   onChange={(val) => {
@@ -239,9 +228,18 @@ function IGRPDatePickerSingle(allProps: IGRPDatePickerSingleProps) {
 
   return (
     <Field className={className}>
-      {label && <IGRPLabel label={label} className={labelClassName} required={required} id={name} />}
+      {label && (
+        <IGRPLabel
+          label={label}
+          className={labelClassName}
+          required={required}
+          id={fieldName}
+          labelId={`${fieldName}-label`}
+        />
+      )}
       <DatePickerSingleField
         {...fieldProps}
+        aria-describedby={helperText ? `${fieldName}-helper` : undefined}
         value={displayDate}
         onChange={(val) => {
           setLocalDate(val)

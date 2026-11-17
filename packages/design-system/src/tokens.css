@@ -118,11 +118,12 @@
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
+  /* chart-4/5/8 darkened (hue kept) to hold 3:1 against --background (WCAG 1.4.11). */
+  --chart-4: oklch(0.66 0.17 84.429);
+  --chart-5: oklch(0.58 0.17 70.08);
   --chart-6: oklch(0.606 0.25 292.717);
   --chart-7: oklch(0.637 0.237 25.331);
-  --chart-8: oklch(0.768 0.233 130.85);
+  --chart-8: oklch(0.63 0.2 130.85);
   --sidebar: oklch(0.984 0.003 247.858);
   --sidebar-foreground: oklch(0.129 0.042 264.695);
   --sidebar-primary: oklch(0.208 0.042 265.755);
@@ -172,10 +173,13 @@
   --highlight: oklch(0.476 0.114 95.62);
   --highlight-foreground: oklch(0.984 0.003 247.858);
   --border: oklch(1 0 0 / 20%);
-  --input: oklch(1 0 0 / 20%);
+  /* Opaque mid-grey for WCAG 1.4.11: 3.67:1 on --background, 3.24:1 on --card;
+     primitives' bg-input/30 field fill stays subtle (~1.3:1). */
+  --input: oklch(0.52 0.02 257);
   --ring: oklch(0.551 0.027 264.364);
   --ring-invalid: color-mix(in oklch, var(--destructive) 40%, transparent);
-  --chart-1: oklch(0.488 0.243 264.376);
+  /* Lightened (hue kept) to hold 3:1 against --background. */
+  --chart-1: oklch(0.53 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
   --chart-3: oklch(0.769 0.188 70.08);
   --chart-4: oklch(0.627 0.265 303.9);

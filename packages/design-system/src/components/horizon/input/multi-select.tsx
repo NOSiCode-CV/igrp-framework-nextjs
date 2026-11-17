@@ -126,6 +126,7 @@ type ControlProps = Omit<IGRPMultiSelectProps, "name" | "label" | "helperText" |
   /** `id` and the aria props below are supplied by `FormControl` (via Slot) in form-bound mode; they go on the trigger. */
   "aria-describedby"?: string
   "aria-invalid"?: boolean
+  "aria-required"?: boolean
 }
 
 /** @internal Trigger, popover list and chips. */
@@ -154,6 +155,7 @@ function MultiSelectControl({
   popoverClassName,
   "aria-describedby": ariaDescribedBy,
   "aria-invalid": ariaInvalid,
+  "aria-required": ariaRequired,
 }: ControlProps) {
   const i18n = useIGRPi18n().multiSelect
   const listId = useId()
@@ -228,6 +230,7 @@ function MultiSelectControl({
             aria-controls={listId}
             aria-invalid={isInvalid || undefined}
             aria-describedby={ariaDescribedBy}
+            aria-required={ariaRequired || undefined}
             disabled={disabled}
             className={cn(
               "w-full min-w-0 justify-between gap-2 border-input font-normal",
@@ -434,8 +437,10 @@ function IGRPMultiSelect({
         readNow={() => selection}
         commit={commit}
         invalid={Boolean(errorText)}
+        aria-required={required || undefined}
+        aria-describedby={errorText ? `${triggerId}-error` : helperText ? `${triggerId}-helper` : undefined}
       />
-      <IGRPFieldDescription error={errorText} helperText={helperText} />
+      <IGRPFieldDescription id={triggerId} error={errorText} helperText={helperText} />
     </Field>
   )
 }

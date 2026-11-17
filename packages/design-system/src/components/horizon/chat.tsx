@@ -201,7 +201,7 @@ function IGRPChat({
     if (message.type === "link") {
       return (
         <a href={message.content} className={cn("text-primary underline")} target="_blank" rel="noopener noreferrer">
-          {message.content}
+          {message.content} <span className="sr-only">{i18n.pdfViewer.openInNewTab}</span>
         </a>
       )
     }

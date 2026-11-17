@@ -62,7 +62,7 @@ describe.each(["default", "card"] as const)("IGRPRadioGroup variant=%s — form-
     await settle()
 
     await act(() => formRef.current!.submit())
-    const group = screen.getByRole("radiogroup", { name: "Tipo de pedido" })
+    const group = screen.getByRole("radiogroup", { name: "Tipo de pedido obrigatório" })
     expect(screen.getByRole("alert")).toHaveTextContent("Obrigatório")
     expect(group).toHaveAttribute("aria-invalid", "true")
     expect(group).toHaveAccessibleDescription("Obrigatório")
@@ -79,7 +79,7 @@ describe.each(["default", "card"] as const)("IGRPRadioGroup variant=%s — form-
     await settle()
     const legend = screen.getByText("Tipo de pedido")
     expect(legend.tagName).toBe("LEGEND")
-    expect(screen.getByRole("radiogroup", { name: "Tipo de pedido" })).toBeInTheDocument()
+    expect(screen.getByRole("radiogroup", { name: "Tipo de pedido obrigatório" })).toBeInTheDocument()
   })
 
   it("a disabled option cannot be picked", async () => {

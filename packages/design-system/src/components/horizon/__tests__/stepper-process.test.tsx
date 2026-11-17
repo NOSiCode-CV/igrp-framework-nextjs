@@ -54,7 +54,7 @@ describe("IGRPStepperProcess step status", () => {
     expect(items[0]).toHaveAttribute("data-state", "completed")
     await userEvent.click(screen.getByRole("button", { name: "Decisão" }))
     expect(onStepChange).not.toHaveBeenCalled()
-    await userEvent.click(screen.getByRole("button", { name: "Pedido" }))
+    await userEvent.click(screen.getByRole("button", { name: /^Pedido/ }))
     expect(onStepChange).toHaveBeenCalledWith(1, steps[0])
   })
 })

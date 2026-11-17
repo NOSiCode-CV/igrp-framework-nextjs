@@ -2,16 +2,9 @@
 
 import type { Control, ControllerFieldState, ControllerRenderProps } from "react-hook-form"
 
-import {
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-  useFormField,
-} from "../../primitives/form.js"
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../../primitives/form.js"
 import { cn } from "../cn.js"
+import { IGRPRequiredMark } from "../label.js"
 import { type IGRPPlacementProps } from "../../../types.js"
 
 /**
@@ -51,16 +44,6 @@ interface IGRPFormFieldProps {
   isToggle?: boolean
 }
 
-/** @internal Caller-supplied error message, wired to the same id `FormControl` points `aria-describedby` at. */
-function IGRPFormFieldErrorText({ message }: { message: string }) {
-  const { formMessageId } = useFormField()
-  return (
-    <p data-slot="form-message" id={formMessageId} role="alert" className={cn("text-xs text-destructive")}>
-      {message}
-    </p>
-  )
-}
-
 /**
  * Form field wrapper integrating with react-hook-form.
  * Must be used inside IGRPFormContext. Renders label, control, helper text, and validation errors.
@@ -86,23 +69,21 @@ function IGRPFormField({
           <FormItem>
             <div className={cn("flex flex-col gap-2", isToggle && "flex-row items-center")}>
               {label && (
-                <FormLabel
-                  className={cn(
-                    labelPlacement === "end" && "order-last",
-                    "gap-0.5",
-                    required && "after:text-destructive after:content-['*']"
-                  )}
-                >
+                <FormLabel className={cn(labelPlacement === "end" && "order-last", "gap-0.5")}>
                   {label}
+                  {required && <IGRPRequiredMark />}
                 </FormLabel>
               )}
 
-              <FormControl>{typeof children === "function" ? children(field, fieldState) : children}</FormControl>
+              <FormControl aria-required={required || undefined}>
+                {typeof children === "function" ? children(field, fieldState) : children}
+              </FormControl>
             </div>
 
             {helperText && !fieldState.error && !errorText && <FormDescription>{helperText}</FormDescription>}
 
-            {errorText ? <IGRPFormFieldErrorText message={errorText} /> : <FormMessage className={cn("text-xs")} />}
+            {/* errorText replaces the form's message; FormControl then marks the control invalid and describes it. */}
+            <FormMessage className={cn("text-xs")} message={errorText} />
           </FormItem>
         </div>
       )}

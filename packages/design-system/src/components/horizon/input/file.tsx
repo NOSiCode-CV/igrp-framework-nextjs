@@ -249,10 +249,18 @@ function IGRPDropzoneInternal({
 
   return (
     <Field className={cn("gap-4", className)}>
-      {label && <IGRPLabel label={label} required={required} id={name} />}
+      {/* No `for`: the zone is named via aria-labelledby, and `for` on the hidden input would open the dialog on label click. */}
+      {label && <IGRPLabel label={label} required={required} labelId={`${name}-label`} htmlFor={undefined} />}
 
       <Card
-        {...getRootProps()}
+        {...getRootProps({
+          // react-dropzone makes the root focusable and keyboard-operable; expose it as the button it acts as.
+          role: "button",
+          "aria-labelledby": label ? `${name}-label ${name}-prompt` : `${name}-prompt`,
+          "aria-describedby": error ? `${name}-error` : helperText ? `${name}-helper` : undefined,
+          "aria-invalid": error ? true : undefined,
+          "aria-disabled": disabled || undefined,
+        })}
         className={cn(
           "cursor-pointer border-dashed transition-[color,background-color,border-color,box-shadow] duration-200",
           "hover:border-primary hover:shadow-md",
@@ -262,7 +270,8 @@ function IGRPDropzoneInternal({
           disabled && "pointer-events-none opacity-50"
         )}
       >
-        <input {...getInputProps()} name={name} />
+        {/* The zone is the control; react-dropzone's input (English "file upload" label) stays out of the a11y tree. */}
+        <input {...getInputProps({ "aria-hidden": true, "aria-label": undefined })} name={name} />
         <UploadCloud
           className={cn(
             "size-10",
@@ -271,7 +280,7 @@ function IGRPDropzoneInternal({
           )}
         />
         <div className="flex flex-col gap-1">
-          <p className="text-sm font-medium">
+          <p id={`${name}-prompt`} className="text-sm font-medium">
             {isDragActive ? (isDragReject ? dragRejectLabel : dragActiveLabel) : dropzoneLabel}
           </p>
           <p className="text-xs text-muted-foreground">

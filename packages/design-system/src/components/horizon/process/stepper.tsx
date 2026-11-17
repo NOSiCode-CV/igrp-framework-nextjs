@@ -287,12 +287,14 @@ function IGRPStepperProcess({
                                 <StepperTitle
                                   className={cn(
                                     isCompleted
-                                      ? "hidden min-w-0 truncate group-hover/step:block"
+                                      ? // sr-only, not hidden: the title is the step button's accessible name.
+                                        "sr-only min-w-0 truncate group-hover/step:not-sr-only"
                                       : "w-full min-w-0 truncate"
                                   )}
                                 >
                                   {title}
                                 </StepperTitle>
+                                {isCompleted && <span className={cn("sr-only")}>, {i18n.stepper.completed}</span>}
                               </span>
                             </TooltipTrigger>
                             <TooltipContent side="bottom">{title}</TooltipContent>

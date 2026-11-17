@@ -161,6 +161,8 @@ type NumberInputFieldProps = {
   fieldRef?: React.Ref<HTMLInputElement>
   /** react-hook-form's `field.onBlur`, which marks the field touched. */
   onFieldTouched?: () => void
+  /** Id of the rendered helper or error text. */
+  ariaDescribedBy?: string
 } & Omit<IGRPInputNumberProps, "value" | "onChange" | "label" | "helperText" | "description" | "error" | "errorMessage">
 
 /** @internal Renders the number input field with stepper buttons. */
@@ -191,6 +193,7 @@ function NumberInputField({
   getDisplayValue,
   fieldRef,
   onFieldTouched,
+  ariaDescribedBy,
   // The caller's handlers run after the component's own, never instead of them.
   onFocus,
   onBlur,
@@ -247,6 +250,8 @@ function NumberInputField({
           disabled={disabled}
           readOnly={readOnly}
           aria-invalid={!!(error || validationError || fieldError)}
+          aria-describedby={ariaDescribedBy}
+          aria-required={required || undefined}
           aria-valuenow={typeof value === "number" ? value : undefined}
           aria-valuemin={min}
           aria-valuemax={max}
@@ -348,6 +353,9 @@ function FormNumberInput({
     onValueChange?.(newValue)
   }
 
+  const { fieldName } = numberInputFieldProps
+  const showError = !!(error || fieldState.error || validationError)
+
   return (
     <div className={cn("w-full", className)}>
       <NumberInputField
@@ -357,12 +365,13 @@ function FormNumberInput({
         fieldError={!!fieldState.error}
         fieldRef={field.ref}
         onFieldTouched={field.onBlur}
+        ariaDescribedBy={showError ? `${fieldName}-error` : helperOrDescription ? `${fieldName}-helper` : undefined}
       />
-      {helperOrDescription && !error && !fieldState.error && !validationError && (
-        <FieldDescription>{helperOrDescription}</FieldDescription>
+      {helperOrDescription && !showError && (
+        <FieldDescription id={`${fieldName}-helper`}>{helperOrDescription}</FieldDescription>
       )}
-      {(error || fieldState.error || validationError) && (
-        <FieldError>{error || fieldState.error?.message || errorMessage}</FieldError>
+      {showError && (
+        <FieldError id={`${fieldName}-error`}>{error || fieldState.error?.message || errorMessage}</FieldError>
       )}
     </div>
   )
@@ -556,15 +565,20 @@ function IGRPInputNumber({
   const helperOrDescription = helperText || description
 
   if (!formContext) {
+    const showError = !!(error || validationError)
     return (
       <div className={cn("w-full", className)}>
-        <NumberInputField {...numberInputFieldProps} value={displayValue} />
+        <NumberInputField
+          {...numberInputFieldProps}
+          value={displayValue}
+          ariaDescribedBy={showError ? `${fieldName}-error` : helperOrDescription ? `${fieldName}-helper` : undefined}
+        />
 
-        {helperOrDescription && !error && !validationError && (
-          <FieldDescription>{helperOrDescription}</FieldDescription>
+        {helperOrDescription && !showError && (
+          <FieldDescription id={`${fieldName}-helper`}>{helperOrDescription}</FieldDescription>
         )}
 
-        {(error || validationError) && <FieldError>{error || resolvedErrorMessage}</FieldError>}
+        {showError && <FieldError id={`${fieldName}-error`}>{error || resolvedErrorMessage}</FieldError>}
       </div>
     )
   }

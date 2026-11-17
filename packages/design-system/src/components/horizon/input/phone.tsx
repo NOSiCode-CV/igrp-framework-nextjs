@@ -209,6 +209,7 @@ function IGRPInputPhone({
           defaultCountry={defaultCountry}
           countries={countries}
           aria-invalid={!!error || undefined}
+          aria-required={required || undefined}
           aria-describedby={
             error ? `${fieldName}-error` : description || helperText ? `${fieldName}-helper` : undefined
           }
@@ -262,6 +263,7 @@ function IGRPInputPhone({
             defaultCountry={defaultCountry}
             countries={countries}
             aria-invalid={!!fieldState.error || !!error || undefined}
+            aria-required={required || undefined}
             aria-describedby={
               error || fieldState.error
                 ? `${fieldName}-error`

@@ -7,6 +7,7 @@ import { IGRPColors, type IGRPColorRole, type IGRPColorVariants } from "../../..
 import { cn } from "../cn.js"
 import { IGRPBadge } from "../badge.js"
 import { IGRPIcon, type IGRPIconName } from "../icon/index.js"
+import { useIGRPi18n } from "../../../i18n/index.js"
 
 const igrpTextlistVariants = cva("", {
   variants: {
@@ -176,6 +177,7 @@ function IGRPTextList({
 }: IGRPTextListProps) {
   const _id = useId()
   const ref = id ?? _id
+  const i18n = useIGRPi18n()
 
   const [visibleItems, dispatchVisibleItems] = useReducer(visibleItemsReducer, new Set())
   const [collapsedItems, setCollapsedItems] = useState<Set<string | number>>(new Set())
@@ -289,7 +291,16 @@ function IGRPTextList({
           {/* Content */}
           <div className={cn("min-w-0 flex-1")}>
             <div className={cn("flex items-center gap-2")}>
-              <div className={cn("flex-1", item.variant && IGRPColors.outline[item.variant].text)}>{item.content}</div>
+              <div className={cn("flex-1", item.variant && IGRPColors.outline[item.variant].text)}>
+                {item.content}
+                {/* The strike-through is visual only; say it. */}
+                {item.completed && (
+                  <>
+                    {" "}
+                    <span className="sr-only">{i18n.stepper.completed}</span>
+                  </>
+                )}
+              </div>
 
               {/* Badge */}
               {item.badgeText && (

@@ -51,8 +51,8 @@ interface IGRPTooltipProps {
 }
 
 /**
- * Tooltip over any control. A disabled control emits no pointer or focus events, so the trigger
- * is a wrapper span, focusable only when the child is disabled.
+ * Tooltip over any control. The control is the trigger; a disabled control emits no pointer or
+ * focus events, so then a focusable wrapper span is the trigger instead.
  */
 function IGRPTooltip({
   label,
@@ -78,15 +78,17 @@ function IGRPTooltip({
 
   const tooltipNode = (
     <Tooltip>
+      {/* The trigger gets Radix's aria-describedby, so it must be the focused element: the control
+          itself, or, when the control is disabled and can't take focus, a focusable span standing in. */}
       <TooltipTrigger asChild>
-        <span
-          className="inline-flex"
-          data-slot="tooltip-trigger-wrapper"
-          // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- a disabled child can't take focus; the span stands in so keyboard users reach the tooltip
-          tabIndex={disabled ? 0 : undefined}
-        >
-          {control}
-        </span>
+        {disabled ? (
+          // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- the span stands in for the disabled control so keyboard users reach the tooltip
+          <span className="inline-flex" data-slot="tooltip-trigger-wrapper" tabIndex={0}>
+            {control}
+          </span>
+        ) : (
+          control
+        )}
       </TooltipTrigger>
       <TooltipContent side={side} align={align} className={className} sideOffset={sideOffset}>
         {label}

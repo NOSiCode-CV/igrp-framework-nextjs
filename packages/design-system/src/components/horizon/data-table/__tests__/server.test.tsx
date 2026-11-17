@@ -252,7 +252,7 @@ describe("IGRPServerDataTable", () => {
       />
     )
     expect(screen.getByRole("combobox", { name: IGRP_I18N_DEFAULTS_PT.dataTable.resultsPerPage })).toBeInTheDocument()
-    await userEvent.click(screen.getByRole("button", { name: "2" }))
+    await userEvent.click(screen.getByRole("button", { name: "Página 2" }))
     expect(onPage).toHaveBeenCalledWith(1, 10)
   })
 

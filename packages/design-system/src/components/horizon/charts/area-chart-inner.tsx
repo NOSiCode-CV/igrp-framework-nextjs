@@ -21,6 +21,7 @@ import {
   getLegendLayout,
   getLegendVerticalAlign,
   hasNegativeValues,
+  chartFigureA11y,
 } from "./lib.js"
 import { useIGRPLocale } from "../../../i18n/index.js"
 import type { IGRPAreaConfig, IGRPChartProps } from "./types.js"
@@ -86,15 +87,26 @@ function IGRPAreaChartInner({
   )
   const chartConfig = createChartConfig(areas)
 
+  const a11y = chartFigureA11y(useId(), title, description)
+
   return (
     <div
       className={cn(`w-full overflow-hidden ${className || ""}`)}
       style={backgroundColor ? { backgroundColor } : undefined}
+      {...a11y.figure}
     >
       {(title || description) && (
         <div className={cn("pb-3")}>
-          {title && <div className={cn("text-xl font-semibold")}>{title}</div>}
-          {description && <div className={cn("text-sm text-muted-foreground")}>{description}</div>}
+          {title && (
+            <div id={a11y.titleId} className={cn("text-xl font-semibold")}>
+              {title}
+            </div>
+          )}
+          {description && (
+            <div id={a11y.descriptionId} className={cn("text-sm text-muted-foreground")}>
+              {description}
+            </div>
+          )}
         </div>
       )}
 

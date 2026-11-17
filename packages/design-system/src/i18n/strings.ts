@@ -71,6 +71,8 @@ export interface IGRPI18nStrings {
     rangeOf: string
     /** Numeric pagination summary; tokens: {page}, {total}. */
     pageOf: string
+    /** aria-label of a numeric page button; token: {page}. */
+    goToPage: string
     /** Text of the not-available row sub-component. */
     notAvailable: string
     /** aria-label of the range filter minimum input; token: {label}. */
@@ -251,6 +253,8 @@ export interface IGRPI18nStrings {
     scrollNext: string
     /** Default text of the visually hidden step title. */
     step: string
+    /** Visually hidden state appended to a completed step. */
+    completed: string
   }
   accordion: {
     /** Default empty-state text of an accordion item. */
@@ -311,6 +315,8 @@ export interface IGRPI18nStrings {
     submissionErrorTitle: string
     /** Fallback global error message when the thrown error isn't an Error instance. */
     submissionErrorFallback: string
+    /** Visually hidden text after a required field's asterisk. */
+    required: string
   }
   multiStepForm: {
     /** Wizard "previous step" button label. */
@@ -528,6 +534,7 @@ export const IGRP_I18N_DEFAULTS_PT: IGRPI18nStrings = {
     rowsPerPage: "Registos por página",
     rangeOf: "de",
     pageOf: "Página {page} de {total}",
+    goToPage: "Página {page}",
     notAvailable: "N/D",
     minPlaceholder: "Mín.",
     maxPlaceholder: "Máx.",
@@ -638,6 +645,7 @@ export const IGRP_I18N_DEFAULTS_PT: IGRPI18nStrings = {
     scrollPrevious: "Ver etapas anteriores",
     scrollNext: "Ver etapas seguintes",
     step: "Passo",
+    completed: "concluído",
   },
   accordion: {
     empty: "Sem registos.",
@@ -678,6 +686,7 @@ export const IGRP_I18N_DEFAULTS_PT: IGRPI18nStrings = {
   form: {
     submissionErrorTitle: "Erro ao submeter formulário",
     submissionErrorFallback: "Ocorreu um erro inesperado",
+    required: "obrigatório",
   },
   multiStepForm: {
     previous: "Anterior",

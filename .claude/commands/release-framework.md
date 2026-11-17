@@ -141,6 +141,8 @@ Run only the release scripts for affected packages, **in the same dependency ord
 
 **HARD RULE: never use `changeset publish`, `release:all`, or `release:publish`. Always use the per-package `release` script above.**
 
+**Before the migrator's `release`:** when any framework package was bumped, the migrator's `check:drift` fails until a migration pins the new versions. Add a resync migration (a `deps.bump` step; copy the latest `*-resync-framework-next-*` migration) after the highest-numbered one, run `pnpm --filter @igrp/template-migrator sync:template-lock`, commit, then run the migrator's `release`. Template migrations that import new framework exports depend on this one landing in the same migrator release.
+
 ---
 
 ## Step 10 — Verify and report

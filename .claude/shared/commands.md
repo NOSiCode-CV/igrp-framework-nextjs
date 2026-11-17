@@ -24,6 +24,7 @@
 
 - `pnpm storybook` — port 6006
 - `pnpm test:storybook` — Playwright snapshots (Storybook must be running)
+- `pnpm test:e2e` — Playwright smoke tests (`packages/e2e`) against `templates/demo-v1` in preview mode; starts `next dev` on port 3100 itself. Needs `pnpm build:framework` first. Without `playwright install chromium`, run with `E2E_CHANNEL=msedge` (or `chrome`) to use an installed browser
 - Inside `packages/design-system-storybook`: `test-storybook:ci`, `test-storybook:update-snapshots`, `test:vitest`, `chromatic`
 
 ## Releases

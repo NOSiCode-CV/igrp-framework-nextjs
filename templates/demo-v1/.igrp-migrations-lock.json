@@ -659,6 +659,13 @@
       "cliVersion": "0.2.0-beta.26",
       "manifestHash": "52904bfdebf304aa",
       "payloadHash": "29dcb97768cf8377"
+    },
+    {
+      "id": "94-auth-flow-tests",
+      "appliedAt": "2026-11-17T00:00:00.000Z",
+      "cliVersion": "0.2.0-beta.26",
+      "manifestHash": "adf824a0fb82a0fd",
+      "payloadHash": "2a9377f725ba9506"
     }
   ]
 }

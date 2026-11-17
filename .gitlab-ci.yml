@@ -132,9 +132,40 @@ verify_framework:
     # (next-ui, design-system, next-types, next-auth); next-types has no `test`.
     - pnpm --filter "@igrp/framework-next..." --filter @igrp/framework-next-i18n run typecheck
     - pnpm --filter "@igrp/framework-next..." --filter @igrp/framework-next-i18n run lint
-    - pnpm --filter "@igrp/framework-next..." --filter @igrp/framework-next-i18n run test
-    # The template's auth-bypass tests run against the framework built above.
-    - pnpm --filter @igrp/framework-next-template test
+    # Coverage is reported (text summary in the job log), not enforced yet. It
+    # counts only the files some test imports, so an untested module is invisible.
+    - pnpm --filter "@igrp/framework-next..." --filter @igrp/framework-next-i18n run test --coverage --coverage.reporter=text-summary
+    # The template's auth and middleware tests run against the framework built above.
+    - pnpm --filter @igrp/framework-next-template test --coverage --coverage.reporter=text-summary
+
+# Browser smoke tests: demo-v1 in preview mode under `next dev` (production
+# builds refuse the auth bypass), driven by Playwright from packages/e2e. The
+# image tag must track the `playwright` version in packages/e2e/package.json.
+test_e2e:
+  stage: verify
+  image: mcr.microsoft.com/playwright:v1.64.1-jammy
+  services: []
+  rules:
+    - changes:
+        - packages/framework/**/*
+        - packages/design-system/**/*
+        - packages/e2e/**/*
+        - templates/demo-v1/**/*
+        - pnpm-lock.yaml
+      when: always
+  before_script:
+    - corepack enable
+    - pnpm install --frozen-lockfile
+    - pnpm build:framework
+  script:
+    - pnpm test:e2e
+  artifacts:
+    when: always
+    reports:
+      junit: packages/e2e/results/junit.xml
+    paths:
+      - packages/e2e/test-results/
+    expire_in: 1 week
 
 # The Storybook visual suite is the design system's only UI regression gate — there
 # is no root-level unit test suite. It silently died on 2026-06-25 when Storybook

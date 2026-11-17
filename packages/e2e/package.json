@@ -1,0 +1,14 @@
+{
+  "name": "@igrp/e2e",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Browser smoke tests for templates/demo-v1 in preview mode",
+  "type": "module",
+  "scripts": {
+    "test": "playwright test",
+    "test:ui": "playwright test --ui"
+  },
+  "devDependencies": {
+    "playwright": "1.64.1"
+  }
+}

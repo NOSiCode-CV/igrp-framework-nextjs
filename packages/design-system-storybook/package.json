@@ -21,7 +21,7 @@
     "dev": "tsc --watch",
     "storybook": "storybook dev -p 6006 --ci",
     "build-storybook": "storybook build",
-    "serve-storybook": "pnpm dlx serve storybook-static -l 6006",
+    "serve-storybook": "vite preview --outDir storybook-static --port 6006 --strictPort",
     "test-storybook": "test-storybook --url http://localhost:6006 --testTimeout 60000",
     "test-storybook:ci": "test-storybook --url http://localhost:6006 --testTimeout 60000 --ci",
     "test:vitest": "vitest run",

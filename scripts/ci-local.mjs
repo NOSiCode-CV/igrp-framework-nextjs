@@ -109,8 +109,9 @@ const jobs = {
       );
     }
     run('pnpm --filter @igrp/igrp-framework-react-design-system build');
-    console.log('\n$ pnpm --filter @igrp/igrp-framework-react-design-system-storybook storybook &');
-    const storybook = spawn('pnpm --filter @igrp/igrp-framework-react-design-system-storybook storybook --ci', {
+    run('pnpm --filter @igrp/igrp-framework-react-design-system-storybook build-storybook');
+    console.log('\n$ pnpm --filter @igrp/igrp-framework-react-design-system-storybook serve-storybook &');
+    const storybook = spawn('pnpm --filter @igrp/igrp-framework-react-design-system-storybook serve-storybook', {
       cwd: root,
       shell: true,
       stdio: 'ignore',

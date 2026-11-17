@@ -197,7 +197,11 @@ test_storybook:
     # checkout and it must be built before Storybook can compile.
     - pnpm --filter @igrp/igrp-framework-react-design-system build
   script:
-    - pnpm --filter @igrp/igrp-framework-react-design-system-storybook storybook &
+    # A static build, not `storybook dev`: the dev server compiles each story on
+    # first request, and with several workers at once the first stories ran past
+    # the 60 s test timeout.
+    - pnpm --filter @igrp/igrp-framework-react-design-system-storybook build-storybook
+    - pnpm --filter @igrp/igrp-framework-react-design-system-storybook serve-storybook &
     # Plain poll rather than `npx wait-on`: no extra package to resolve at job time.
     - for i in $(seq 1 60); do curl -sf -o /dev/null http://localhost:6006 && break; sleep 5; done
     - curl -sf -o /dev/null http://localhost:6006

@@ -4,6 +4,7 @@
 
 ### Patch Changes
 
+- Migration 95: resyncs demo-v1 to framework-next `0.2.0-beta.24`, next-auth and next-types `0.2.0-beta.11`, next-ui `0.2.0-beta.22` and the design system `0.2.0-beta.17`.
 - f338a29: Migration 89: `/logout` asks for confirmation unless the request came from the app itself, so another site can no longer sign users out of the IdP and every co-hosted app.
 - 96be066: Migration 92: `next.config.ts`'s dev icon map works with lucide-react 1.x, and the template gains Vitest with tests for the middleware and session args with the auth bypass on and off, plus `sanitizeCallbackUrl`. Adding the `test` script, and turning off Biome's formatter for `.md`/`.yml` so `pnpm lint` stops rewriting the docs, are manual steps.
 - b69b7c3: Migration 93: every template page has its own title. The root layout uses a `"%s · <app title>"` template, and login, logout and the forbidden pages set theirs from the message catalogs (new `login.pageTitle`).

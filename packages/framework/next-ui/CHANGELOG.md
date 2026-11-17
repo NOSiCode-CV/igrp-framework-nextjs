@@ -5,7 +5,7 @@
 ### Patch Changes
 
 - 1590c79: Accessibility fixes in the app chrome (WCAG 2.1 AA):
-  
+
   - `IGRPRootProvidersFull` opens with a "skip to content" link and wraps the page in a single `<main id="igrp-main-content">`; the header is no longer inside the main landmark, and the no-sidebar layout now has a `<main>` at all. New optional `skipToContentLabel` prop.
   - `IGRPHeaderRoot` renders a `<header>` and wraps at narrow widths; the search trigger is icon-only below `sm`, so the header fits at 320px.
   - The header user-menu trigger is named after the user (`navUser.menuTrigger`), not the initials.
@@ -13,22 +13,24 @@
   - Header, sidebar and segment error panels use `role="alert"`; the menu filter's result count and "no results" text use `role="status"`.
   - The collapsed-breadcrumb trigger shows a focus ring.
   - The theme switcher no longer sets `aria-pressed` alongside its label swap; app-switcher logos have empty `alt` next to the visible app name.
-  
+
   New catalog keys: `shell.skipToContent`, `navUser.menuTrigger`, `authCarousel.pause`, `authCarousel.play`.
+
 - 1590c79: - The sign-in form's heading is an `<h1>` (it was an `<h3>` and the page's only heading). It looks the same.
   - The skip link's target `<main>` scrolls clear of the sticky header instead of under it.
   - Decorative motion (the sign-in error slide-in, the global error panel transition, the menu folder chevron) is turned off under `prefers-reduced-motion`. Loading spinners keep spinning: they show that work is in progress.
 - 515f41a: Sidebar menu fixes:
-  
+
   - An inactive folder or group now hides its whole subtree. Before, its active children showed up as top-level links.
   - Only the longest matching menu entry is marked current. With `/admin` and `/admin/users`, both used to get `aria-current="page"`.
   - A group nested in a group renders as a folder. Before, it was a dead `#` link and its pages were missing from the sidebar and from search.
   - A `pageSlug` starting with `//` or `/\` no longer becomes a link to another site.
   - A collapsed labelled section stays visible in icon mode, where its toggle is hidden.
-  
+
   The app switcher matches `appCode` case-insensitively and stays usable when the current app is missing from the user's app list: it lists every app and the Applications Center link instead of rendering a disabled "Unknown" button.
+
 - a85c4b3: The template chrome can be composed. Old props keep working and are marked `@deprecated`.
-  
+
   - Header parts (`IGRPHeaderRoot`, `IGRPHeaderLogo`, `IGRPHeaderTitle`, `IGRPHeaderSearch`, `IGRPHeaderUser`, …) and sidebar parts (`IGRPSidebarRoot`, `IGRPSidebarAppSwitcher`, `IGRPSidebarMenus`, `IGRPSidebarUser`) read their data from `IGRPHeaderDataProvider` / `IGRPSidebarDataProvider`. `IGRPTemplateHeader` and `IGRPTemplateSidebar` are the default composition.
   - A header slot renders whenever it is supplied, whatever its `show*` flag.
   - The command palette fills with the app's menus by default. `IGRPCommandPaletteProvider` and `useIGRPCommandPalette()` open and close it from anywhere and own the single ⌘K listener.
@@ -39,21 +41,23 @@
   - Notifications: `onSelect`, `href` and controlled `open`. Menu search: controlled `query`.
   - `IGRPNestedProviders` takes `themeProps`. `IGRPTemplateToaster` holds the toaster defaults.
   - Contexts use React 19 `use()` and `<Context>`; `MenuItemLink` takes `ref` as a prop.
-  
+
   Behaviour changes to check:
-  
+
   - Ctrl/⌘+K is handled by the mounted `IGRPTemplateCommandSearch`, not by the provider. Apps without a palette keep the browser shortcut.
   - `IGRPTemplateCommandSearch` and `IGRPCommandPalette` accept `commands` as an array or a Promise of one.
   - Only `IGRPHeaderBreadcrumbs` follows a page-set trail; `IGRPTemplateBreadcrumbs` with explicit `items` shows those items.
+
 - 1590c79: `IGRPGlobalError` renders a `<title>` with its error heading. The replacement document `global-error` renders had no title at all.
 - 96be066: - The `lucide-react` dependency range is `^0.577.0 || ^1.0.0`, so an app on lucide 1.x shares one copy with next-ui.
   - `IGRPCommandItem` takes `href` (and `external`) as an alternative to `onSelect`: the palette navigates there itself, client-side with basePath applied, or in a new tab when `external`. `onSelect` is now optional; give one of the two. The header palette passes the server-built menu commands straight through instead of mapping them to `onSelect` handlers on the client.
 - af459de: The sidebar now highlights a menu item whose `url` carries a query string (`/users?tab=1` on `/users`) or whose `pageSlug` ends in a slash (`users/`). Both used to stay unhighlighted. When several items match, the deepest route wins; a long query string no longer counts towards it.
-  
+
   `isSafeCssValue` and `isSafeLogoUrl` return `false` for a value that is not a string, instead of throwing a `TypeError`. Their parameter type is now `unknown`.
+
 - 5bb0ab8: Closing the command palette returns focus to whatever had it when the palette opened (the search button, or the element focused before ⌘K). It used to drop focus on the page body, because Radix only restores focus to a `DialogTrigger`.
 - 8c833b6: Performance fixes for the template chrome:
-  
+
   - Fixed icons in the header, breadcrumbs, nav-user, theme toggle, menus, notifications and auth form render on the server. Before, they loaded one chunk per icon after hydration. Adds `lucide-react` as a dependency, at the design system's version.
   - The command palette (cmdk) loads on first open, and on hover or focus of the trigger, instead of on every page.
   - A navigation re-renders only the menu branches that held or now hold the active item, not the whole sidebar. Menu search is deferred while typing.
@@ -63,6 +67,7 @@
   - `IGRPSessionWatcher` refreshes with `update()`, so the tab that ran the refresh picks up the new expiry and re-arms its timer. It also refreshes when the tab becomes visible and the session is more than 60 seconds old, so apps can turn off next-auth's `refetchOnWindowFocus`.
   - The theme toggle renders its icon on the server and is clickable before hydration.
   - Breadcrumb overflow no longer flickers or stays clipped while the window is resized.
+
 - Updated dependencies [cdec6f6]
 - Updated dependencies [cdec6f6]
 - Updated dependencies [cdec6f6]

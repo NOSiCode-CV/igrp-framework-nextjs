@@ -6,22 +6,24 @@
 
 - 515f41a: In auth-bypass (preview) mode the framework server actions (`fetchMenusAction`, `fetchCurrentUserAction`, …) now return `{ ok: false, code: 'AUTH_BYPASSED' }` when no Access Management credentials are configured, instead of logging an error on every call. `IGRPActionErrorCode` gains `'AUTH_BYPASSED'`, with messages in the pt, en and fr catalogs.
 - a85c4b3: Layout composition. Old props keep working and are marked `@deprecated`.
-  
+
   - `IGRPLayoutFull` takes `header`, `sidebar` (`null` for none), `toaster` and `contentClassName`. `IGRPLayoutHeader` and `IGRPLayoutSidebar` are the server pieces to pass there, with slots, labels, fallbacks or a composition of next-ui parts. `showSidebar`, `headerSlots`, `breadcrumbs` and `breadcrumbRouteLabels` on `IGRPLayoutFull` are deprecated.
   - The header palette gets serializable commands built on the server from the menus the sidebar already fetches.
   - `layoutData` can supply `getMenus`, `getUser` and `getApps`. When it does, the layout uses them and does not branch on preview mode. `igrpGetLayoutMenus(config)` returns the same menus for app code.
   - `IGRPRootLayoutProviders` renders what `IGRPRootLayout` puts inside `<body>`, for apps that own their `<html>`. `IGRPRootLayout` takes `bodyClassName` and `themeProps`.
   - `IGRPLayoutBlank` takes `toaster`.
-  
+
   `IGRPLayoutHeader` takes `paletteCommands={false}` to skip building the palette from the menus. `IGRPLayoutFull` warns in development when `header` is given together with the deprecated `headerSlots`, `breadcrumbs` or `breadcrumbRouteLabels` (or `sidebar` with `showSidebar`), which are then ignored.
+
 - e877055: `igrpGetLayoutMenus` caches per request on `layoutData`, `appCode` and `previewMode` instead of on the config object. A page that builds its own config, or passes a copy, now shares the layout's menu fetch instead of calling `layoutData.getMenus` again.
 - 8c833b6: Performance fixes for the server layouts:
-  
+
   - The sidebar fetches `getSidebarData()` at the same time as the Access Management calls, instead of before them. The root layout resolves the locale and the branding together.
   - The sidebar client component only receives the app and menu fields it reads. Menu `roles` and app `departments` are no longer sent to the browser.
   - New optional `i18n.clientNamespaces`: when set, `IGRPRootLayout` sends only those top-level message namespaces (plus `i18n`) to the browser. When unset, the whole catalog is sent, as before.
   - `IGRPGlobalLoading` takes an optional `name`. With it, the loading fallback shows at once without an Access Management call.
   - The startup sync is no longer scheduled on every request once it has succeeded. The Access Management client is created once per request instead of once per call.
+
 - 3e0400e: `igrpResetAccessClientConfig()` now clears the stored `locale` along with the token, base URL and timeout. A kept locale made `igrpEnsureAccessClientConfig()` skip reading the request's `IGRP_LOCALE` cookie and `Accept-Language`, so the Access Management API answered in the previous locale.
 - Updated dependencies [cdec6f6]
 - Updated dependencies [cdec6f6]

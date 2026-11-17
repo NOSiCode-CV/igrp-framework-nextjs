@@ -5,15 +5,16 @@
 ### Patch Changes
 
 - cdec6f6: Accessibility fixes for charts, the process stepper, badges and the add-on input, plus token contrast (WCAG 2.1 AA).
-  
+
   - Dark `--input` is now opaque `oklch(0.52 0.02 257)` (was `oklch(1 0 0 / 20%)`, 1.73:1). Field borders reach 3.67:1 on `--background` and 3.24:1 on `--card`; the `bg-input/30` field fill stays subtle.
   - Chart series now reach 3:1 against the page background, hue unchanged. Light: `--chart-4` `oklch(0.66 0.17 84.429)`, `--chart-5` `oklch(0.58 0.17 70.08)`, `--chart-8` `oklch(0.63 0.2 130.85)`. Dark: `--chart-1` `oklch(0.53 0.243 264.376)`.
   - Area, line, bar, pie, radar and radial charts with a `title` or `description` render as `role="figure"`, named by the title and described by the description.
   - `IGRPStepperProcess`: a completed step keeps its title as the button's accessible name (visually hidden until hover) and announces "concluído" (new i18n key `stepper.completed`).
   - `IGRPBadge`: the `dot` indicator is hidden from assistive tech, and an icon-only badge without `aria-label` logs a development warning.
   - `IGRPInputAddOn`: the wrapper shows the focus ring when the embedded select or input has focus.
+
 - cdec6f6: Accessibility follow-up:
-  
+
   - Required labels render the asterisk as `aria-hidden` plus visually hidden "obrigatório" (new `form.required` key), so every labelled control announces it. Date picker triggers and the colour swatch no longer carry `aria-required`, which their roles do not support.
   - `IGRPInputFile` dropzone: the hidden file input is out of the accessibility tree and has no English `aria-label` or `id`; its label no longer opens the file dialog on click.
   - `IGRPCombobox`: removing a chip moves focus to the next chip, the previous one, or the trigger.
@@ -23,24 +24,27 @@
   - `IGRPTooltip`: an enabled control is the trigger itself, so its `aria-describedby` points at the tooltip.
   - `IGRPDataTableCellCheckbox` / `IGRPDataTableCellSwitch` take an optional `label`; `IGRPDataTableCellExpander` is named by its visible label.
   - `IGRPDataTablePaginationNumeric` page buttons are named "Página N" (new `dataTable.goToPage` key).
+
 - cdec6f6: Form controls are now announced correctly by screen readers.
-  
+
   - `IGRPCombobox` is named by its label, standalone and inside a form. Its error, helper text and required state reach the trigger button. With `variant="multiple"` the chips sit below the trigger, and each remove button is labelled "Remover {label}".
   - Date pickers (single, range, multiple) read the label and the selected date together. Standalone pickers link the label when only `id` is given. In a form, range and multiple pickers get the field's id, error and description on the trigger, and the calendar no longer reuses the trigger's id.
   - The `IGRPInputFile` dropzone is a named button, the label points at the file input, and the error is announced.
   - Caller errors (`errorText` on `IGRPFormField`, `error` on `IGRPInputText`, `IGRPSelect` and `IGRPInputSearch`) now set `aria-invalid` and are referenced by `aria-describedby`. `FormControl` only references a description or message that is actually rendered. `FormMessage` takes an optional `message` that overrides the form's own error.
   - `required` sets `aria-required` on select, combobox, multi-select, color, phone, number, every date picker, and standalone checkbox and switch.
   - Helper and error text in number, select and search inputs have ids that the control references.
+
 - 30a1530: Accessibility fixes (WCAG 2.1 AA):
-  
+
   - `IGRPMenubarTrigger` now shows a focus-visible ring.
   - Rich-text toolbar: one-shot actions (undo, redo, clear formatting, indent, outdent, horizontal rule) and the text colour, font size and special character popover triggers are plain buttons, so they no longer announce a pressed state. Bold, italic, link, table and the other formatting controls stay toggles.
   - `IGRPServerDataTable` keeps its loading status region mounted, so the loading text is announced, and puts `aria-busy` on the table.
   - `IGRPPdfViewer`: load errors are alerts, loading uses an always-mounted status region, the modal description no longer nests `div`s in a `p`, and a new `headingLevel` prop (default `h3`) sets the inline title's heading element. The title looks the same as before.
+
 - 515f41a: `convertValuesToFormData` now sends a cleared field (`null`) and an empty array as `""`, so a multipart edit form can clear a value. Before, the key was left out and the server kept the old value. `undefined` is still skipped. `igrpNormalizeUrl` matches `http://` and `https://` case-insensitively, so `HTTPS://host` is no longer turned into the in-app path `/HTTPS://host`.
 - 7085b88: `IGRPButton` keeps keyboard focus while `loading`. It uses `aria-disabled` instead of native `disabled` and cancels clicks, so `onClick` does not run and a `type="submit"` button does not submit its form, by click or by Enter in a field. `disabled` still sets native `disabled`. Tests that asserted `toBeDisabled()` on a loading button should check `aria-disabled="true"` instead. `IGRPAlertDialog` uses `IGRPButton loading` for its pending action again.
 - a85c4b3: Composition fixes. Old props keep working and are marked `@deprecated`.
-  
+
   - `IGRPFormList` takes `mode="form" | "standalone"` and warns in development when `value`/`onChange` are passed inside a form, where they are ignored. `IGRPStandaloneList` is no longer scheduled for removal.
   - `IGRPAlertDialog`: new `trigger` slot; an `onAction` that returns a Promise keeps the dialog open, with the button loading, until it settles. `iconPlacement="end"` now shows the icon at the start instead of hiding it. Data-table alert actions are built on it.
   - `IGRPDataTable` and `IGRPServerDataTable` take a `toolbar` slot. `isServerSide`, `serverFilterComponent`, `isNumericPagination` and `pageSizePagination` are deprecated.
@@ -52,27 +56,30 @@
   - `IGRPChat`: `onSend` adapter, `initialMessages`, `renderMessage` and `onAction`. Replies without a `type` render as text instead of an empty bubble.
   - `IGRPMultiStepForm`: controlled `step`/`onStepChange`.
   - Horizon contexts use React 19 `use()` and `<Context>`.
-  
+
   Behaviour changes to check:
-  
+
   - An `IGRPAlertDialog` whose `onAction` returns a Promise stays open, with the action loading, until the promise settles. On reject it stays open and the error is rethrown. While pending, both buttons are `aria-disabled` and keep focus.
   - `IGRPDataTable` without `showPagination` renders every row in client mode, where it used to stop at 50. It warns in development above 500 rows.
   - `badge={null}` (tabs, menu navigation) and `backButton={null}` (page header) hide the element instead of falling back to the deprecated props.
   - `IGRPTooltip` always wraps its child in a `Slot`, and a disabled child keeps its focusable fallback even under a trigger that passes `disabled={false}`.
   - Lazy chart skeletons take the chart's `size`, `height` and `width` instead of a 16:9 box.
   - `IGRPStatsCard` without `iconAppearance` renders as before, except that a background without a shape, or a shape without a background, now colours the icon by `iconVariant`.
+
 - 1b55409: `IGRPDataTable` row selection can be read and controlled.
-  
+
   - `rowSelection` + `onRowSelectionChange` control it in TanStack's shape (`{ [rowId]: true }` and an updater callback, so `useState`'s setter fits). `onRowSelectionChange` alone observes an uncontrolled table.
   - `onSelectionChange(rows)` receives the selected rows' data on every change, not on mount.
   - Behaviour change: `IGRPDataTableHeaderRowsSelect` now selects and clears the current page only, matching the checked state it already showed. It used to select every row across all pages.
+
 - 96be066: lucide-react 1.x is supported: the peer range is `^0.577.0 || ^1.0.0`.
-  
+
   - `IGRPIcon` reads both icon-module shapes (0.x `__iconNode`, 1.x `__iconData`). Before, every lazily loaded icon rendered empty on 1.x.
   - `IGRPIconObject` leaves out the 18 brand icons lucide 1.x removed (`Github`, `Facebook`, `Slack`, …), so a picker never offers a name that renders the unknown-icon glyph. They still render by name on 0.x.
   - `IGRPDataTableCellDate` with the deprecated `dateFormat` now formats timestamps in the `IGRPI18nProvider` time zone (or `dateOptions.timeZone`), as the `Intl` path already did, instead of the runtime zone. Adds `@date-fns/tz`.
+
 - 8c833b6: Performance fixes from a React/Next.js review, plus two data-table bugs:
-  
+
   - **Data table:** the text filter, sort arrows, expand chevron, row checkbox and switch, and the clear-filters button no longer freeze when `columns` is memoized. The React Compiler was caching TanStack getters on objects whose identity never changes; those files now opt out with `"use no memo"`.
   - **Data table:** without `showPagination`, client mode now renders every row. Before, rows after the 50th were cut off and no controls were shown to reach them. Server mode is unchanged.
   - **Data table:** typing in the text filter runs the filtering in a transition. `onQueryChange` no longer fires again when the parent passes a new inline callback. Date-range and faceted filters parse their value once per change instead of once per row.

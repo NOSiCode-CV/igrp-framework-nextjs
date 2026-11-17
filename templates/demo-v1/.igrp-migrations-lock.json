@@ -666,6 +666,13 @@
       "cliVersion": "0.2.0-beta.26",
       "manifestHash": "adf824a0fb82a0fd",
       "payloadHash": "2a9377f725ba9506"
+    },
+    {
+      "id": "95-resync-framework-next-beta24",
+      "appliedAt": "2026-11-17T00:00:00.000Z",
+      "cliVersion": "0.2.0-beta.27",
+      "manifestHash": "8c9b4ba7813f2d64",
+      "payloadHash": "e3b0c44298fc1c14"
     }
   ]
 }

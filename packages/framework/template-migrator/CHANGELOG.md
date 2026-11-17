@@ -1,5 +1,26 @@
 # @igrp/template-migrator
 
+## 0.2.0-beta.27
+
+### Patch Changes
+
+- f338a29: Migration 89: `/logout` asks for confirmation unless the request came from the app itself, so another site can no longer sign users out of the IdP and every co-hosted app.
+- 96be066: Migration 92: `next.config.ts`'s dev icon map works with lucide-react 1.x, and the template gains Vitest with tests for the middleware and session args with the auth bypass on and off, plus `sanitizeCallbackUrl`. Adding the `test` script, and turning off Biome's formatter for `.md`/`.yml` so `pnpm lint` stops rewriting the docs, are manual steps.
+- b69b7c3: Migration 93: every template page has its own title. The root layout uses a `"%s · <app title>"` template, and login, logout and the forbidden pages set theirs from the message catalogs (new `login.pageTitle`).
+- 515f41a: Migration 88: the demo-v1 logout page sets the silent sign-in guard before going to `/login`, so a local-only logout (IdP slow, unreachable or without `end_session_endpoint`) no longer signs the user straight back in. `src/lib/auth.ts` drops its duplicate `NEXTAUTH_SECRET` check and uses `isNextControlFlowError`.
+  
+  Migrator fixes:
+  
+  - `file.delete` of a file that is already gone records an undo that rolls back cleanly. Before, an interrupted run left a journal that blocked every later `apply`. Deleting a directory is refused.
+  - A failed unwind keeps the journal and says which paths to restore, instead of reporting "rolled back".
+  - The journal is written before each step, so a kill mid-step can still be recovered.
+  - Undo content for binary files is stored as base64, so rollback restores them byte for byte.
+  - `env.add` / `env.remove` recognise `export KEY=` lines.
+  - `deps.*` steps leave `package.json` untouched when nothing changes, and keep its indentation.
+  - `rollback` reports every undo step that fails and leaves the migration recorded when one does.
+- a85c4b3: Adds migration `91-layout-composition`: the template drops its own search palette (`header-search.ts`, `app-search.tsx`) now that the framework fills the default one, uses `IGRPLayoutHeader` for its header slot, picks one layout data source for preview or live, and simplifies the home page status.
+- 8c833b6: Adds migration `90-session-focus-refetch-off`. It sets `refetchOnWindowFocus: false` in `src/lib/config/get-session-args.ts`, because `IGRPSessionWatcher` now refreshes on tab focus with a 60-second throttle. Needs `@igrp/framework-next-ui` 0.2.0-beta.22 or later.
+
 ## 0.2.0-beta.26
 
 ### Patch Changes

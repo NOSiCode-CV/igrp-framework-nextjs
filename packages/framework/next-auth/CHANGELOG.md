@@ -1,5 +1,15 @@
 # @igrp/framework-next-auth
 
+## 0.2.0-beta.11
+
+### Patch Changes
+
+- 515f41a: Refresh-token recovery now follows the whole rotation chain (up to 5 hops) instead of one. In cookie mode, two rotations with no cookie write in between used to make the next request refresh with a token that was already spent: the IdP read it as reuse and ended the session, or the user was sent to `/logout` with a valid session. `performRefresh` now checks for a newer rotation before calling the IdP, and sign-out revokes the newest refresh token in the chain.
+  
+  `resolveAppUrl` (login redirect) now takes the base path from the `NEXTAUTH_URL` path first, like the post-login and post-logout redirects already did. Before, a `NEXT_PUBLIC_BASE_PATH` that disagreed with `NEXTAUTH_URL` sent login to one base path and every other redirect to the other. The mismatch warning now says which one wins.
+- 8c833b6: The client session no longer carries `idToken`. Nothing in the browser read it: logout builds `id_token_hint` from the server-side JWT. This makes every page's session payload smaller. `Session.idToken` stays on the type, marked `@deprecated`. Code outside this repo that read it from `useSession()` now gets `undefined`; read it on the server from the JWT instead.
+- a85c4b3: Adds `useIGRPSession()` to `./client`: a typed `{ state: { status, data, accessToken, expiresAt, error }, actions: { update } }`, or `null` without a provider. No more casting `useSession().data`.
+
 ## 0.2.0-beta.10
 
 ### Patch Changes

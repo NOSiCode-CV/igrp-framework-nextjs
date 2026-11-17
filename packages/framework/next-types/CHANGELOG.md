@@ -1,5 +1,15 @@
 # @igrp/framework-next-types
 
+## 0.2.0-beta.11
+
+### Patch Changes
+
+- a85c4b3: Adds optional `getMenus`, `getUser` and `getApps` to `IGRPLayoutDataSource`, URL fields (`profileUrl`, `notificationsUrl`, `settingsUrl`, `logoutUrl`) to the sidebar data, `logoutUrl` to the header data, and `href` to `IGRPNotificationArgs`.
+- Updated dependencies [515f41a]
+- Updated dependencies [8c833b6]
+- Updated dependencies [a85c4b3]
+  - @igrp/framework-next-auth@0.2.0-beta.11
+
 ## 0.2.0-beta.10
 
 ### Patch Changes

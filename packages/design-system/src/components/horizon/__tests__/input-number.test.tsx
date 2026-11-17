@@ -4,7 +4,7 @@ import userEvent from "@testing-library/user-event"
 import { FormProvider, useForm } from "react-hook-form"
 
 import { IGRPInputNumber } from "../input/number.js"
-import { IGRPI18nProvider } from "../../../i18n/index.js"
+import { IGRP_DEFAULT_LOCALE, IGRPI18nProvider } from "../../../i18n/index.js"
 
 describe("IGRPInputNumber", () => {
   it("renders with role=spinbutton and the pt-PT increment/decrement labels", () => {
@@ -92,7 +92,7 @@ describe("IGRPInputNumber", () => {
       render(<IGRPInputNumber name="price" label="Price" formatOptions={formatOptions} onChange={onChange} />)
 
       const input = screen.getByRole("spinbutton")
-      const typed = new Intl.NumberFormat(undefined, formatOptions).format(1234.56)
+      const typed = new Intl.NumberFormat(IGRP_DEFAULT_LOCALE, formatOptions).format(1234.56)
 
       await userEvent.click(input)
       await userEvent.type(input, typed)
@@ -148,7 +148,7 @@ describe("IGRPInputNumber", () => {
       expect(onChange).toHaveBeenLastCalledWith(0.3)
 
       await userEvent.tab()
-      expect(input).toHaveValue(new Intl.NumberFormat(undefined, { style: "percent" }).format(0.3))
+      expect(input).toHaveValue(new Intl.NumberFormat(IGRP_DEFAULT_LOCALE, { style: "percent" }).format(0.3))
     })
 
     it("does not clamp mid-typing, only on blur", async () => {

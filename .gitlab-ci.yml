@@ -154,6 +154,8 @@ test_e2e:
         - pnpm-lock.yaml
       when: always
   before_script:
+    # This image's Node ships without corepack (dropped from Node itself).
+    - command -v corepack || npm install -g corepack
     - corepack enable
     - pnpm install --frozen-lockfile
     - pnpm build:framework

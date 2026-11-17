@@ -219,7 +219,6 @@ build_storybook_image:
     # Default branch only: this pushes :latest and redeploys the shared Storybook.
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       changes:
-        - packages/design-system/**/*
         - packages/design-system-storybook/**/*
       when: always
   script:
@@ -236,7 +235,6 @@ deploy_storybook:
     # Default branch only: this pushes :latest and redeploys the shared Storybook.
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       changes:
-        - packages/design-system/**/*
         - packages/design-system-storybook/**/*
       when: always
   script:

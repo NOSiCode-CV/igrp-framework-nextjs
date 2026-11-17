@@ -11,7 +11,9 @@ export function IGRPSidebarError() {
 
   return (
     <div className={cn('flex flex-col items-start gap-3 p-4')}>
-      <span className={cn('text-sm text-muted-foreground')}>{layoutError.sidebar}</span>
+      <span role="alert" className={cn('text-sm text-muted-foreground')}>
+        {layoutError.sidebar}
+      </span>
       <IGRPButton
         variant="ghost"
         size="sm"

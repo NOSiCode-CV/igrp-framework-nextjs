@@ -31,6 +31,8 @@ export interface IGRPNavUserLabels {
   logout: string;
   /** Shown in place of a missing user name. */
   unknownUser: string;
+  /** Accessible name of the header user-menu trigger. `{name}` is substituted. */
+  menuTrigger: string;
 }
 
 export interface IGRPNotificationsLabels {
@@ -78,6 +80,11 @@ export interface IGRPMenuLabels {
 }
 
 export interface IGRPChromeStrings {
+  /** The page shell (`IGRPRootProvidersFull`). */
+  shell: {
+    /** Skip link to the main content. */
+    skipToContent: string;
+  };
   header: {
     /** Accessible name of the settings link. */
     settings: string;
@@ -102,6 +109,10 @@ export interface IGRPChromeStrings {
     region: string;
     /** `{index}` is substituted. */
     goToSlide: string;
+    /** Pause button of the auto-rotation (shown while playing). */
+    pause: string;
+    /** Resume button of the auto-rotation (shown while paused). */
+    play: string;
   };
   authForm: {
     /** Primary action of the login form. */
@@ -147,6 +158,7 @@ export interface IGRPChromeStrings {
 }
 
 export const IGRP_CHROME_STRINGS_PT: IGRPChromeStrings = {
+  shell: { skipToContent: 'Saltar para o conteúdo' },
   header: { settings: 'Definições' },
   navUser: {
     profile: 'Perfil',
@@ -154,6 +166,7 @@ export const IGRP_CHROME_STRINGS_PT: IGRPChromeStrings = {
     settings: 'Definições',
     logout: 'Terminar sessão',
     unknownUser: 'N/D',
+    menuTrigger: 'Menu do utilizador, {name}',
   },
   notifications: {
     title: 'Notificações',
@@ -190,7 +203,12 @@ export const IGRP_CHROME_STRINGS_PT: IGRPChromeStrings = {
     opensInNewTab: '{name} (abre num novo separador)',
   },
   loading: { text: 'Aguarde...' },
-  authCarousel: { region: 'Destaques', goToSlide: 'Ir para o destaque {index}' },
+  authCarousel: {
+    region: 'Destaques',
+    goToSlide: 'Ir para o destaque {index}',
+    pause: 'Pausar destaques',
+    play: 'Retomar destaques',
+  },
   authForm: {
     loginButton: 'Iniciar sessão',
     signInError: 'Não foi possível iniciar sessão. Tente novamente.',

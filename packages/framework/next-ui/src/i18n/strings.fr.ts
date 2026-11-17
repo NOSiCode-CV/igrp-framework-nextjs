@@ -1,6 +1,7 @@
 import type { IGRPChromeStrings } from './strings.js';
 
 export const IGRP_CHROME_STRINGS_FR: IGRPChromeStrings = {
+  shell: { skipToContent: 'Aller au contenu' },
   header: { settings: 'Paramètres' },
   navUser: {
     profile: 'Profil',
@@ -8,6 +9,7 @@ export const IGRP_CHROME_STRINGS_FR: IGRPChromeStrings = {
     settings: 'Paramètres',
     logout: 'Se déconnecter',
     unknownUser: 'N/D',
+    menuTrigger: 'Menu utilisateur, {name}',
   },
   notifications: {
     title: 'Notifications',
@@ -44,7 +46,12 @@ export const IGRP_CHROME_STRINGS_FR: IGRPChromeStrings = {
     opensInNewTab: "{name} (s'ouvre dans un nouvel onglet)",
   },
   loading: { text: 'Veuillez patienter...' },
-  authCarousel: { region: 'À la une', goToSlide: "Aller à l'élément {index}" },
+  authCarousel: {
+    region: 'À la une',
+    goToSlide: "Aller à l'élément {index}",
+    pause: 'Mettre en pause',
+    play: 'Reprendre la lecture',
+  },
   authForm: {
     loginButton: 'Se connecter',
     signInError: 'Connexion impossible. Veuillez réessayer.',

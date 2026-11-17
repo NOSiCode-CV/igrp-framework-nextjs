@@ -3,7 +3,7 @@ import { act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 import type { IGRPMenuItemArgs } from '@igrp/framework-next-types';
-import { SidebarProvider } from '@igrp/igrp-framework-react-design-system';
+import { SidebarProvider, TooltipProvider } from '@igrp/igrp-framework-react-design-system';
 
 vi.mock('next/navigation', () => ({
   usePathname: () => '/',
@@ -56,5 +56,32 @@ describe('IGRPTemplateMenus controlled query', () => {
     expect(onQueryChange).toHaveBeenCalledWith('');
     // Controlled: the menu does not clear the caller's value on its own.
     expect(input.value).toBe('alp');
+  });
+
+  it('announces the result summary in a status region that stays mounted', () => {
+    container = document.createElement('div');
+    document.body.append(container);
+    root = createRoot(container);
+    const render = (query: string) =>
+      act(() =>
+        root!.render(
+          <TooltipProvider>
+            <SidebarProvider>
+              <IGRPTemplateMenus menus={menus} showSearch query={query} />
+            </SidebarProvider>
+          </TooltipProvider>,
+        ),
+      );
+    render('');
+    const status = container.querySelector('[role="status"]');
+    expect(status?.textContent).toBe('');
+
+    render('alp');
+    expect(container.querySelector('[role="status"]')).toBe(status);
+    expect(status?.textContent).toMatch(/1/);
+
+    render('zzz');
+    expect(container.querySelector('[role="status"]')).toBe(status);
+    expect(status?.textContent).toContain('zzz');
   });
 });

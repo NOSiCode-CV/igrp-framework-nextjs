@@ -123,13 +123,14 @@ function IGRPTemplateCommandSearch({
         onFocus={preload}
         variant="outline"
         size="lg"
-        className="justify-between focus-visible:outline-none focus-visible:ring-1 border-input px-3 shadow-none md:flex-none sm:w-40 lg:w-52"
+        // Icon-only below `sm` (the label stays as its sr-only name), so the header fits at 320px.
+        className="size-10 justify-center px-0 focus-visible:outline-none focus-visible:ring-1 border-input shadow-none sm:h-10 sm:w-40 sm:justify-between sm:px-3 md:flex-none lg:w-52"
       >
         <span className="flex items-center">
-          <SearchIcon size={16} className="mr-1 size-3" />
-          <span>{labels.trigger}</span>
+          <SearchIcon size={16} className="size-4 sm:mr-1 sm:size-3" aria-hidden="true" />
+          <span className="sr-only sm:not-sr-only">{labels.trigger}</span>
         </span>
-        <kbd className="pointer-events-none select-none flex items-center gap-1 rounded border px-1 py-1 font-mono text-[10px] font-medium">
+        <kbd className="pointer-events-none select-none hidden sm:flex items-center gap-1 rounded border px-1 py-1 font-mono text-[10px] font-medium">
           {/* igrp-i18n-ignore: keyboard shortcut */}
           <span className="text-xs">{isMac ? '⌘' : 'Ctrl'}</span>K
         </kbd>

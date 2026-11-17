@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { Button, cn, igrpFormatMessage } from '@igrp/igrp-framework-react-design-system';
+import { PauseIcon, PlayIcon } from 'lucide-react';
 
 import { useIGRPChromeI18n } from '../i18n/context.js';
 import { withBasePath } from '../lib/utils.js';
@@ -20,6 +21,10 @@ interface IGRPAuthCarouselProps {
   regionLabel?: string;
   /** `aria-label` of a slide dot. `{index}` is substituted (1-based). */
   goToSlideLabel?: string;
+  /** `aria-label` of the pause button. Defaults to the chrome catalog. */
+  pauseLabel?: string;
+  /** `aria-label` of the resume button. Defaults to the chrome catalog. */
+  playLabel?: string;
   /**
    * `sizes` for every slide image. The default matches the stock auth layout:
    * the carousel fills half the viewport from `md` up and is hidden below it.
@@ -33,11 +38,18 @@ function IGRPAuthCarousel({
   intervalTime = 6000,
   regionLabel,
   goToSlideLabel,
+  pauseLabel,
+  playLabel,
   sizes = '(min-width: 768px) 50vw, 100vw',
 }: IGRPAuthCarouselProps) {
   const chrome = useIGRPChromeI18n();
   const [currentIndex, setCurrentIndex] = useState(0);
   const regionRef = useRef<HTMLDivElement>(null);
+  // WCAG 2.2.2: the user can stop the rotation, and it holds while pointer or focus is inside.
+  const [paused, setPaused] = useState(false);
+  const [hovered, setHovered] = useState(false);
+  const [focusWithin, setFocusWithin] = useState(false);
+  const stopped = paused || hovered || focusWithin;
   // Slides shown so far. Only these and the next one get an <Image>, so the
   // login page no longer downloads every slide up front.
   const [visited, setVisited] = useState<ReadonlySet<number>>(() => new Set([0]));
@@ -47,7 +59,7 @@ function IGRPAuthCarousel({
     const prefersReducedMotion =
       typeof window !== 'undefined' &&
       window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReducedMotion || carouselItems.length <= 1) return;
+    if (prefersReducedMotion || stopped || carouselItems.length <= 1) return;
 
     const interval = setInterval(() => {
       // Skip ticks in a background tab or while the carousel is `display: none`
@@ -56,7 +68,7 @@ function IGRPAuthCarousel({
       setCurrentIndex((prevIndex) => (prevIndex + 1) % carouselItems.length);
     }, intervalTime);
     return () => clearInterval(interval);
-  }, [carouselItems.length, intervalTime]);
+  }, [carouselItems.length, intervalTime, stopped]);
 
   const goToSlide = (index: number) => {
     setCurrentIndex(index);
@@ -69,6 +81,12 @@ function IGRPAuthCarousel({
       role="region"
       aria-roledescription="carousel"
       aria-label={regionLabel ?? chrome.authCarousel.region}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      onFocus={() => setFocusWithin(true)}
+      onBlur={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget)) setFocusWithin(false);
+      }}
     >
       <div className={cn('relative h-full')}>
         {carouselItems.map((item, index) => {
@@ -127,7 +145,21 @@ function IGRPAuthCarousel({
       {/* ONE set of dots for the whole carousel, outside the slides. It used to
           be nested inside each slide, so N slides rendered N x N buttons. */}
       {carouselItems.length > 1 && (
-        <div className={cn('absolute bottom-8 left-8 flex justify-start gap-2')}>
+        <div className={cn('absolute bottom-8 left-8 flex items-center justify-start gap-2')}>
+          {/* Label swap, no aria-pressed: the name says what the press does. */}
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setPaused(!paused)}
+            className={cn('size-6 text-white hover:bg-white/20 hover:text-white')}
+            aria-label={
+              paused
+                ? (playLabel ?? chrome.authCarousel.play)
+                : (pauseLabel ?? chrome.authCarousel.pause)
+            }
+          >
+            {paused ? <PlayIcon aria-hidden="true" /> : <PauseIcon aria-hidden="true" />}
+          </Button>
           {carouselItems.map((_, idx) => (
             <Button
               variant="ghost"

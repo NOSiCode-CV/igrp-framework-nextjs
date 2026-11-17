@@ -15,7 +15,7 @@ import { activeHrefWithin, buildMenuSections, findActiveHref } from './utils.js'
 import { useIGRPChromeI18n } from '../../i18n/context.js';
 import { resolveMenuLabels, type IGRPMenuLabels } from './labels.js';
 import { SectionGroup } from './section-group.js';
-import { SearchResults } from './search-results.js';
+import { buildResults, SearchResults, searchResultsSummary } from './search-results.js';
 
 export type IGRPTemplateMenuArgs = {
   menus?: IGRPMenuItemArgs[];
@@ -84,6 +84,10 @@ export function IGRPTemplateMenus({
 
   // Typing stays responsive on large menus: results re-filter at lower priority.
   const deferredQuery = useDeferredValue(query.trim());
+  const results = useMemo(
+    () => (showSearch && deferredQuery ? buildResults(sections, deferredQuery, activeHref) : null),
+    [showSearch, deferredQuery, sections, activeHref],
+  );
 
   if (sections.length === 0) {
     return (
@@ -144,17 +148,16 @@ export function IGRPTemplateMenus({
                 </button>
               )}
             </div>
+            {/* Always mounted, so screen readers announce each new summary. */}
+            <p role="status" className={cn('sr-only')}>
+              {results ? searchResultsSummary(results, deferredQuery, labels) : ''}
+            </p>
           </SidebarGroupContent>
         </SidebarGroup>
       )}
 
-      {showSearch && deferredQuery ? (
-        <SearchResults
-          sections={sections}
-          query={deferredQuery}
-          activeHref={activeHref}
-          labels={labels}
-        />
+      {results ? (
+        <SearchResults results={results} query={deferredQuery} labels={labels} />
       ) : (
         sections.map((section) => (
           <SectionGroup

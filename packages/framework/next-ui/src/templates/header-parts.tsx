@@ -150,17 +150,17 @@ function urlOrUndefined(url: string | undefined): string | undefined {
 
 type DivProps = { className?: string; children?: React.ReactNode };
 
-/** The header bar. */
+/** The header bar: the page's banner landmark. Wraps instead of overlapping on narrow screens. */
 export function IGRPHeaderRoot({ className, children }: DivProps) {
   return (
-    <div
+    <header
       className={cn(
-        'bg-background sticky top-0 inset-x-0 isolate z-40 border-b flex items-center justify-between gap-2 px-4 py-2 min-w-0',
+        'bg-background sticky top-0 inset-x-0 isolate z-40 border-b flex flex-wrap items-center justify-between gap-x-2 px-4 py-2 min-w-0',
         className,
       )}
     >
       {children}
-    </div>
+    </header>
   );
 }
 
@@ -171,7 +171,7 @@ export function IGRPHeaderStart({ className, children }: DivProps) {
 
 /** Right cluster. */
 export function IGRPHeaderEnd({ className, children }: DivProps) {
-  return <div className={cn('flex items-center gap-2 shrink-0', className)}>{children}</div>;
+  return <div className={cn('ml-auto flex items-center gap-2 shrink-0', className)}>{children}</div>;
 }
 
 /** Sidebar collapse button. Renders nothing when the layout has no sidebar. */

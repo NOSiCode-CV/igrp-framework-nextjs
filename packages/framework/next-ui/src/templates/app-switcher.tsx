@@ -86,7 +86,8 @@ function IGRPTemplateAppSwitcher({
       <div className={cn('flex aspect-square size-8 items-center justify-center rounded-lg')}>
         <IGRPTemplateImage
           src={activeApp.picture}
-          alt={activeApp.name}
+          // Decorative: the app name is the visible text beside it.
+          alt=""
           width={32}
           height={32}
           className={cn('h-full w-full rounded-lg object-cover')}
@@ -144,7 +145,7 @@ function IGRPTemplateAppSwitcher({
                       >
                         <IGRPTemplateImage
                           src={app.picture}
-                          alt={app.name}
+                          alt=""
                           width={24}
                           height={24}
                           className={cn('h-full w-full rounded-md object-cover')}

@@ -108,7 +108,7 @@ export function FolderMenuItem({ node, activeHref, labels }: FolderMenuItemProps
             <ChevronRightIcon
               size={16}
               className={cn(
-                'ml-auto size-4 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90',
+                'ml-auto size-4 transition-transform duration-200 motion-reduce:transition-none group-data-[state=open]/collapsible:rotate-90',
               )}
               strokeWidth={2}
             />

@@ -152,7 +152,9 @@ describe('header parts', () => {
         </SidebarProvider>
       </TooltipProvider>,
     );
-    expect(html).not.toContain('Ana Silva');
+    // Initials only on screen; the name reaches assistive tech through the trigger's label.
+    expect(html).not.toContain('>Ana Silva<');
+    expect(html).toContain('aria-label="Menu do utilizador, Ana Silva"');
   });
 });
 

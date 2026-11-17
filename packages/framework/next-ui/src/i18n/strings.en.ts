@@ -1,6 +1,7 @@
 import type { IGRPChromeStrings } from './strings.js';
 
 export const IGRP_CHROME_STRINGS_EN: IGRPChromeStrings = {
+  shell: { skipToContent: 'Skip to content' },
   header: { settings: 'Settings' },
   navUser: {
     profile: 'Profile',
@@ -8,6 +9,7 @@ export const IGRP_CHROME_STRINGS_EN: IGRPChromeStrings = {
     settings: 'Settings',
     logout: 'Sign out',
     unknownUser: 'N/A',
+    menuTrigger: 'User menu, {name}',
   },
   notifications: {
     title: 'Notifications',
@@ -44,7 +46,12 @@ export const IGRP_CHROME_STRINGS_EN: IGRPChromeStrings = {
     opensInNewTab: '{name} (opens in a new tab)',
   },
   loading: { text: 'Please wait...' },
-  authCarousel: { region: 'Highlights', goToSlide: 'Go to highlight {index}' },
+  authCarousel: {
+    region: 'Highlights',
+    goToSlide: 'Go to highlight {index}',
+    pause: 'Pause highlights',
+    play: 'Play highlights',
+  },
   authForm: {
     loginButton: 'Sign in',
     signInError: 'Could not sign in. Please try again.',

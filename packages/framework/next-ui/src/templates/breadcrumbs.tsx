@@ -194,7 +194,11 @@ function IGRPTemplateBreadcrumbs({
             </BreadcrumbSeparator>
             <BreadcrumbListItem>
               <DropdownMenu>
-                <DropdownMenuTrigger className={cn('flex items-center gap-1 focus:outline-none')}>
+                <DropdownMenuTrigger
+                  className={cn(
+                    'flex items-center gap-1 rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
+                  )}
+                >
                   <BreadcrumbEllipsis />
                   <span className={cn('sr-only')}>
                     {ellipsisLabel ?? chrome.breadcrumbs.ellipsis}

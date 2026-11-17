@@ -194,9 +194,10 @@ interface IGRPAuthFormHeadingProps {
 function IGRPAuthFormHeading({ title, description }: IGRPAuthFormHeadingProps) {
   return (
     <div className={cn('mt-6 text-center')}>
-      {/* `<p>` inside `<h3>` is invalid: the parser closes the heading
-          early, so the DOM React hydrates differs from the one it built. */}
-      <h3>{title}</h3>
+      {/* `<p>` inside a heading is invalid: the parser closes the heading
+          early, so the DOM React hydrates differs from the one it built.
+          The page's only heading, so it is the h1 (preflight keeps it unstyled). */}
+      <h1>{title}</h1>
       {description != null && <p>{description}</p>}
     </div>
   );
@@ -209,7 +210,7 @@ function IGRPAuthFormError() {
   return (
     <Alert
       variant="destructive"
-      className={cn('animate-in fade-in-50 slide-in-from-top-5')}
+      className={cn('animate-in fade-in-50 slide-in-from-top-5 motion-reduce:animate-none')}
       role="alert"
       aria-live="polite"
     >

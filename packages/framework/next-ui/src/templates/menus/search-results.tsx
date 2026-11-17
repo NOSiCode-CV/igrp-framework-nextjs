@@ -1,6 +1,5 @@
 'use client';
 
-import { useMemo } from 'react';
 import {
   cn,
   IGRPIcon,
@@ -23,7 +22,7 @@ import {
 import { formatMenuLabel, menuLinkAriaLabel, type IGRPMenuLabels } from './labels.js';
 import { MenuItemLink } from './menu-item-link.js';
 
-interface SearchResult {
+export interface SearchResult {
   id: string | number | undefined;
   name: string;
   icon?: string;
@@ -50,7 +49,7 @@ function HighlightedName({ text, query }: { text: string; query: string }) {
   );
 }
 
-function buildResults(
+export function buildResults(
   sections: Section[],
   query: string,
   activeHref: string | null,
@@ -97,19 +96,27 @@ function buildResults(
   return results;
 }
 
+/** The result count, or "no results", as one line of text. */
+export function searchResultsSummary(
+  results: SearchResult[],
+  query: string,
+  labels: IGRPMenuLabels,
+): string {
+  if (results.length === 0) return formatMenuLabel(labels.noResults, { query });
+  return formatMenuLabel(results.length === 1 ? labels.resultCountOne : labels.resultCountOther, {
+    count: results.length,
+  });
+}
+
 interface SearchResultsProps {
-  sections: Section[];
+  results: SearchResult[];
   query: string;
-  activeHref: string | null;
   labels: IGRPMenuLabels;
 }
 
-export function SearchResults({ sections, query, activeHref, labels }: SearchResultsProps) {
-  const results = useMemo(
-    () => buildResults(sections, query, activeHref),
-    [sections, query, activeHref],
-  );
-
+// The summary is announced by the always-mounted status region in `IGRPTemplateMenus`;
+// a region mounted together with its text is often not read.
+export function SearchResults({ results, query, labels }: SearchResultsProps) {
   if (results.length === 0) {
     return (
       <SidebarGroup>
@@ -121,7 +128,7 @@ export function SearchResults({ sections, query, activeHref, labels }: SearchRes
             )}
           >
             <SearchXIcon size={16} className={cn('size-5 shrink-0')} />
-            <p className={cn('text-xs')}>{formatMenuLabel(labels.noResults, { query })}</p>
+            <p className={cn('text-xs')}>{searchResultsSummary(results, query, labels)}</p>
           </div>
         </SidebarGroupContent>
       </SidebarGroup>
@@ -132,9 +139,7 @@ export function SearchResults({ sections, query, activeHref, labels }: SearchRes
     <SidebarGroup>
       <SidebarGroupContent>
         <p className={cn('px-2 pb-1 text-xs font-medium text-sidebar-foreground/70')}>
-          {formatMenuLabel(results.length === 1 ? labels.resultCountOne : labels.resultCountOther, {
-            count: results.length,
-          })}
+          {searchResultsSummary(results, query, labels)}
         </p>
         <SidebarMenu>
           {results.map((result) => {

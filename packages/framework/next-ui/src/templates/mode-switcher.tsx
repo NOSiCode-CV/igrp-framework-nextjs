@@ -64,7 +64,6 @@ function IGRPTemplateModeSwitcher({ labels: labelOverrides }: IGRPTemplateModeSw
       className={cn('size-6 relative overflow-hidden')}
       onClick={toggleTheme}
       aria-label={actionLabel}
-      aria-pressed={mounted ? isDark : undefined}
     >
       {/* Both icons always render; the `.dark` class next-themes sets before paint picks one. */}
       <div className={cn('relative size-4 flex items-center justify-center')}>

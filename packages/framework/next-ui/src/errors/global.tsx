@@ -95,6 +95,8 @@ function IGRPGlobalError({
             height={200}
             className={cn('mx-auto mb-2')}
           />
+          {/* React hoists it into <head>: the replacement document has no other title. */}
+          <title>{title}</title>
           <h1 className={cn('text-2xl font-bold tracking-tight text-foreground')}>{title}</h1>
           <p className={cn('mb-4 text-base text-muted-foreground')}>{description}</p>
 
@@ -102,7 +104,7 @@ function IGRPGlobalError({
           {error.digest && (
             <div
               className={cn(
-                'mx-auto max-w-xl transform overflow-hidden rounded-lg p-3 mb-4 backdrop-blur transition-all duration-500 bg-muted shadow-xs',
+                'mx-auto max-w-xl transform overflow-hidden rounded-lg p-3 mb-4 backdrop-blur transition-all duration-500 motion-reduce:transition-none bg-muted shadow-xs',
                 errorVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0',
               )}
             >

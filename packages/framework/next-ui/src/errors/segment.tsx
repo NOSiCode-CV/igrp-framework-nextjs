@@ -119,7 +119,7 @@ function IGRPSegmentError({
     <div className={cn('flex min-h-[320px] items-center justify-center p-6')}>
       <div className={cn('w-full max-w-xl rounded-lg border border-border bg-card p-6 shadow-sm')}>
         <div className={cn('space-y-4')}>
-          <div className={cn('space-y-1')}>
+          <div role="alert" className={cn('space-y-1')}>
             <h2 className={cn('text-lg font-semibold text-foreground')}>{title}</h2>
             <p className={cn('text-sm text-muted-foreground')}>{description}</p>
           </div>

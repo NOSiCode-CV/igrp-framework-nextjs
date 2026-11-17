@@ -15,6 +15,7 @@ import {
   SidebarMenuItem,
   useIGRPSidebar,
   IGRPUserAvatar,
+  igrpFormatMessage,
   igrpGetInitials,
 } from '@igrp/igrp-framework-react-design-system';
 import { BellIcon, ChevronsUpDownIcon, LogOutIcon, SettingsIcon, UserIcon } from 'lucide-react';
@@ -122,6 +123,14 @@ function IGRPTemplateNavUser({
               className="group data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
               tooltip={user.email}
               size="lg"
+              // The header trigger shows only initials; name it after the user.
+              aria-label={
+                isHeader
+                  ? igrpFormatMessage(labels.menuTrigger, {
+                      name: user.name || labels.unknownUser,
+                    })
+                  : undefined
+              }
             >
               <IGRPUserAvatar
                 image={user.picture}

@@ -121,7 +121,7 @@ pnpm format             # every workspace: Prettier in framework packages, `biom
 
 ```bash
 pnpm storybook                      # port 6006
-pnpm test:storybook                 # Playwright snapshots (Storybook must be running)
+pnpm test:storybook                 # renders every story (Storybook must be running)
 ```
 
 ### Tests

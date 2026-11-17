@@ -248,7 +248,7 @@ If you previously imported prebuilt styles:
 Visual and regression tests live in `@igrp/igrp-framework-react-design-system-storybook`:
 
 - **Storybook** — Component documentation and isolated development
-- **Snapshot tests** — HTML snapshots via `@storybook/test-runner` (Playwright)
+- **Story smoke tests** — every story rendered via `@storybook/test-runner` (Playwright)
 - **Vitest** — Interaction tests and a11y checks
 - **Chromatic** — Optional cloud-based pixel-perfect visual regression
 
@@ -257,7 +257,7 @@ From the monorepo root:
 ```bash
 cd packages/design-system-storybook
 pnpm storybook          # Start Storybook
-pnpm test-storybook     # Run snapshot regression tests (Storybook must be running)
+pnpm test-storybook     # Render every story (Storybook must be running)
 pnpm test:vitest        # Run interaction tests
 pnpm chromatic          # Chromatic visual regression (requires CHROMATIC_PROJECT_TOKEN)
 ```

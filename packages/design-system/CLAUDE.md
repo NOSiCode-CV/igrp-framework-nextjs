@@ -36,7 +36,7 @@ The plugin is distributed via the in-repo Claude Code marketplace (`.claude-plug
   the template's `.agents/rules/ui.md` documents both the current rule and that history.) `src/cn.ts` must never declare a directive or import anything that
   does; `src/server-safe-entries.test.ts` asserts that on the built output and asserts
   it inspected something. Add any future server-safe entry to `SERVER_SAFE_ENTRIES` there.
-- Visual/interaction tests live in `packages/design-system-storybook` — hand off for snapshot/a11y work.
+- Visual/interaction tests live in `packages/design-system-storybook` — hand off for story and a11y work.
 - Build: `pnpm build:ds`. Escape hatch: `pnpm --filter @igrp/igrp-framework-react-design-system build:without_reactcompiler`.
 
 ## Removed exports (do not reintroduce)

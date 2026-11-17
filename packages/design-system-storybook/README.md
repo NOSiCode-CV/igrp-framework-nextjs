@@ -10,7 +10,7 @@ Storybook resolves the design system through its `exports` map, which points at 
 pnpm build:ds
 ```
 
-The snapshot runner and Vitest browser tests drive Chromium through Playwright; install the browser once:
+The story runner and Vitest browser tests drive Chromium through Playwright; install the browser once:
 
 ```bash
 pnpm exec playwright install chromium
@@ -22,13 +22,13 @@ pnpm exec playwright install chromium
 pnpm storybook
 ```
 
-From the repo root the same commands are aliased as `pnpm storybook` and `pnpm test:storybook` (snapshot tests).
+From the repo root the same commands are aliased as `pnpm storybook` and `pnpm test:storybook` (story smoke tests).
 
 ## Visual & Regression Testing
 
-### 1. Snapshot Testing (Local)
+### 1. Story smoke tests
 
-Uses [@storybook/test-runner](https://storybook.js.org/docs/writing-tests/test-runner) with Playwright to capture HTML snapshots of each story. Compares against baselines to detect visual regressions.
+Uses [@storybook/test-runner](https://storybook.js.org/docs/writing-tests/test-runner) with Playwright to render every story, run its `play` function and its accessibility check. A story that throws, or a failing `play`, fails the run. There are no HTML snapshots: they failed on every class-name change, so a red run said nothing about whether the UI broke. Behaviour is covered by the design system's Vitest suite, and pixels by Chromatic.
 
 **Run tests** (requires Storybook running in another terminal):
 
@@ -36,25 +36,15 @@ Uses [@storybook/test-runner](https://storybook.js.org/docs/writing-tests/test-r
 # Terminal 1: Start Storybook
 pnpm storybook
 
-# Terminal 2: Run snapshot tests
+# Terminal 2: Run the story tests
 pnpm test-storybook
 ```
 
-**CI mode** (also fails when a story has no stored snapshot, instead of writing a new one):
+**CI mode:**
 
 ```bash
 pnpm test-storybook:ci
 ```
-
-**Update snapshots** (after intentional UI changes):
-
-```bash
-pnpm test-storybook:update-snapshots
-```
-
-Snapshots are stored in `__snapshots__/` — commit them to version control.
-
-Charts and Avatar stories (`SNAPSHOT_EXCLUDE_PREFIXES` in `.storybook/test-runner.ts`) are rendered as smoke tests but not HTML-snapshotted: their markup is not deterministic (sub-pixel chart widths, remote image timing). Chromatic covers them visually.
 
 ### 2. Vitest (Interaction & Accessibility)
 
@@ -96,9 +86,8 @@ For CI, add to your pipeline:
 | `storybook` | Start Storybook dev server (port 6006) |
 | `build-storybook` | Build static Storybook |
 | `serve-storybook` | Serve built Storybook locally |
-| `test-storybook` | Run snapshot regression tests |
-| `test-storybook:ci` | Run tests in CI mode (fail on diff) |
-| `test-storybook:update-snapshots` | Update snapshot baselines |
+| `test-storybook` | Render every story and run its play function and a11y check |
+| `test-storybook:ci` | Same, in CI mode |
 | `test:vitest` | Run Vitest interaction tests |
 | `test:vitest:watch` | Vitest in watch mode |
 | `chromatic` | Run Chromatic visual regression |

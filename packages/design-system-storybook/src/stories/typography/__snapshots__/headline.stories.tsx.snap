@@ -1,7 +1,0 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
-
-exports[`Components/Typography/Headline CustomClass smoke-test 1`] = `""`;
-
-exports[`Components/Typography/Headline H2Variant smoke-test 1`] = `""`;
-
-exports[`Components/Typography/Headline WithoutDescription smoke-test 1`] = `""`;

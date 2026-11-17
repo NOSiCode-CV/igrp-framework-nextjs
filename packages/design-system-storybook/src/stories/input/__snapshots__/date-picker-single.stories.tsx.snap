@@ -1,7 +1,0 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
-
-exports[`Components/Input/DatePicker/Single DatePickerErrorA11y play-test 1`] = `""`;
-
-exports[`Components/Input/DatePicker/Single Default smoke-test 1`] = `""`;
-
-exports[`Components/Input/DatePicker/Single WithForm smoke-test 1`] = `""`;

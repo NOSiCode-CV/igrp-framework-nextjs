@@ -3,64 +3,74 @@
  * closure with a fresh `timeout` binding — `clearTimeout` never had anything to
  * cancel and `onSearch` fired once per keystroke.
  */
-import { describe, expect, it, vi } from "vitest"
-import { act, render, screen } from "@testing-library/react"
-import userEvent from "@testing-library/user-event"
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
+import { act, fireEvent, render, screen } from "@testing-library/react"
 
 import { IGRPInputSearch } from "../input/search.js"
 
+// Fake timers + synchronous keystrokes: with real timers and user-event, a busy
+// machine spaced keystrokes past the debounce window and the test flaked.
 const wait = (ms: number) =>
-  act(async () => {
-    await new Promise((resolve) => setTimeout(resolve, ms))
+  act(() => {
+    vi.advanceTimersByTime(ms)
   })
 
 const searchBox = () => screen.getByRole("searchbox")
 
+/** Types `text` one character at a time, with no time passing between keystrokes. */
+const type = (text: string) => {
+  const box = searchBox() as HTMLInputElement
+  for (const ch of text) fireEvent.change(box, { target: { value: box.value + ch } })
+}
+
 describe("IGRPInputSearch debounce", () => {
-  it("collapses a burst of keystrokes into one onSearch call", async () => {
-    const user = userEvent.setup()
+  beforeEach(() => {
+    vi.useFakeTimers()
+  })
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+
+  it("collapses a burst of keystrokes into one onSearch call", () => {
     const onSearch = vi.fn()
     render(<IGRPInputSearch id="q" onSearch={onSearch} isDebounce debounceMs={80} />)
 
-    await user.type(searchBox(), "hello")
-    await wait(400)
+    type("hello")
+    wait(400)
 
     expect(onSearch.mock.calls.map((call) => call[0])).toEqual(["hello"])
-  }, 20000)
+  })
 
-  it("fires again for a second burst", async () => {
-    const user = userEvent.setup()
+  it("fires again for a second burst", () => {
     const onSearch = vi.fn()
     render(<IGRPInputSearch id="q" onSearch={onSearch} isDebounce debounceMs={60} />)
 
-    await user.type(searchBox(), "ab")
-    await wait(300)
-    await user.type(searchBox(), "cd")
-    await wait(300)
+    type("ab")
+    wait(300)
+    type("cd")
+    wait(300)
 
     expect(onSearch.mock.calls.map((call) => call[0])).toEqual(["ab", "abcd"])
-  }, 20000)
+  })
 
-  it("does not fire after unmount", async () => {
-    const user = userEvent.setup()
+  it("does not fire after unmount", () => {
     const onSearch = vi.fn()
     const { unmount } = render(<IGRPInputSearch id="q" onSearch={onSearch} isDebounce debounceMs={120} />)
 
-    await user.type(searchBox(), "abc")
+    type("abc")
     unmount()
-    await wait(400)
+    wait(400)
 
     expect(onSearch).not.toHaveBeenCalled()
-  }, 20000)
+  })
 
-  it("leaves onSearch alone when debounce is off", async () => {
-    const user = userEvent.setup()
+  it("leaves onSearch alone when debounce is off", () => {
     const onSearch = vi.fn()
     render(<IGRPInputSearch id="q" onSearch={onSearch} debounceMs={60} />)
 
-    await user.type(searchBox(), "ab")
-    await wait(200)
+    type("ab")
+    wait(200)
 
     expect(onSearch).not.toHaveBeenCalled()
-  }, 20000)
+  })
 })

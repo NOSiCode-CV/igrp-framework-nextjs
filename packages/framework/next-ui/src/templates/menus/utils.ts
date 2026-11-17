@@ -51,7 +51,17 @@ export function resolveAnchorTag(item: IGRPMenuItemArgs): boolean {
 function matchesPathname(item: IGRPMenuItemArgs, pathname: string): boolean {
   const href = resolveHref(item);
   if (resolveAnchorTag(item) || href === '#') return false;
-  return pathname === href || pathname.startsWith(href + '/');
+  const path = routePath(href);
+  return pathname === path || pathname.startsWith(path + '/');
+}
+
+/**
+ * The part of an href `usePathname()` can equal: no query or hash (the hook never
+ * returns them) and no trailing slash (`/users/` is the `/users` route).
+ */
+function routePath(href: string): string {
+  const path = href.split(/[?#]/, 1)[0]!;
+  return path.length > 1 ? path.replace(/\/+$/, '') || '/' : path;
 }
 
 /**
@@ -65,7 +75,11 @@ export function findActiveHref(sections: Section[], pathname: string): string | 
     for (const node of section.nodes) {
       for (const leaf of node.kind === 'folder' ? node.children : [node]) {
         const href = resolveHref(leaf.item);
-        if (matchesPathname(leaf.item, pathname) && (best === null || href.length > best.length)) {
+        // Longest ROUTE wins: a query string must not outrank a deeper route.
+        if (
+          matchesPathname(leaf.item, pathname) &&
+          (best === null || routePath(href).length > routePath(best).length)
+        ) {
           best = href;
         }
       }

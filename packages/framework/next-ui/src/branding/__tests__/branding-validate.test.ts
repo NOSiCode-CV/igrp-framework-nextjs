@@ -145,13 +145,11 @@ describe('wrong types', () => {
     expect(isTokenName(42 as unknown as string)).toBe(false);
   });
 
-  // Bug: exported validator calls `value.trim()` unguarded, so a JS caller passing null gets a TypeError, not `false`.
-  it.fails('isSafeCssValue answers false for null instead of throwing', () => {
+  it('isSafeCssValue answers false for null instead of throwing', () => {
     expect(isSafeCssValue(null as unknown as string)).toBe(false);
   });
 
-  // Bug: exported validator reads `url.length` unguarded, so a JS caller passing null gets a TypeError, not `false`.
-  it.fails('isSafeLogoUrl answers false for null instead of throwing', () => {
+  it('isSafeLogoUrl answers false for null instead of throwing', () => {
     expect(isSafeLogoUrl(null as unknown as string)).toBe(false);
   });
 });

@@ -34,7 +34,8 @@ export function isTokenName(name: string): boolean {
   return TOKEN_NAME.test(name);
 }
 
-export function isSafeCssValue(value: string): boolean {
+export function isSafeCssValue(value: unknown): boolean {
+  if (typeof value !== 'string') return false;
   const v = value.trim();
   return (
     v.length > 0 &&
@@ -45,7 +46,8 @@ export function isSafeCssValue(value: string): boolean {
   );
 }
 
-export function isSafeLogoUrl(url: string): boolean {
+export function isSafeLogoUrl(url: unknown): boolean {
+  if (typeof url !== 'string') return false;
   if (url.length > MAX_URL_LENGTH || /\s/.test(url)) return false;
   try {
     const parsed = new URL(url);

@@ -126,14 +126,20 @@ describe('findActiveHref', () => {
     );
   });
 
-  // Bug: utils.ts:47 compares href verbatim, so a pageSlug saved as `users/` never matches `/users`.
-  it.fails('matches an item whose pageSlug has a trailing slash', () => {
+  it('matches an item whose pageSlug has a trailing slash', () => {
     expect(activeFor([item({ code: 'u', pageSlug: 'users/' })], '/users')).toBe('/users/');
   });
 
-  // Bug: utils.ts:47 keeps the query in href, but usePathname() has none, so `/users?tab=1` is never active.
-  it.fails('matches an item whose url carries a query string', () => {
+  it('matches an item whose url carries a query string', () => {
     expect(activeFor([item({ code: 'u', url: '/users?tab=1' })], '/users')).toBe('/users?tab=1');
+  });
+
+  it('lets a deeper route outrank a shorter one that only carries a long query', () => {
+    const items = [
+      item({ code: 'u', url: '/users?tab=permissions&sort=name' }),
+      item({ code: 'l', pageSlug: 'users/list' }),
+    ];
+    expect(activeFor(items, '/users/list')).toBe('/users/list');
   });
 });
 

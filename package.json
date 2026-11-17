@@ -30,6 +30,7 @@
     "storybook": "pnpm --filter @igrp/igrp-framework-react-design-system-storybook storybook",
     "test:storybook": "pnpm --filter @igrp/igrp-framework-react-design-system-storybook test-storybook",
     "test:e2e": "pnpm --filter @igrp/e2e test",
+    "ci:local": "node scripts/ci-local.mjs",
     "dev:demo": "pnpm --filter @igrp/framework-next-template dev",
     "build:demo": "pnpm --filter @igrp/framework-next-template build",
     "start:demo": "pnpm --filter @igrp/framework-next-template start",

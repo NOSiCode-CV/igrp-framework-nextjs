@@ -5,6 +5,10 @@
 - `pnpm install:deps` — install via `dotenv-cli` (injects `.env` registry credentials)
 - `pnpm build:framework` — must run once after install before `pnpm dev:demo` works
 
+## Before pushing
+
+- `pnpm ci:local` — runs the verify-stage jobs of `.gitlab-ci.yml` locally (`drift`, `skills`, `i18n`, `verify`, `e2e`, `storybook`); `-- --only=verify,e2e` or `-- --skip=storybook` to narrow it. The Storybook job needs Playwright's Chromium (`pnpm --filter @igrp/e2e exec playwright install chromium`); e2e falls back to Edge/Chrome without it. Keep `scripts/ci-local.mjs` in step with `.gitlab-ci.yml`.
+
 ## Framework builds (ordered)
 
 - `pnpm build:framework` — full ordered build

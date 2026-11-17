@@ -154,8 +154,8 @@ test_e2e:
         - pnpm-lock.yaml
       when: always
   before_script:
-    # This image's Node ships without corepack (dropped from Node itself).
-    - command -v corepack || npm install -g corepack
+    # This image's Node ships without corepack; --force lets it replace the image's yarn shim.
+    - command -v corepack || npm install -g --force corepack
     - corepack enable
     - pnpm install --frozen-lockfile
     - pnpm build:framework
@@ -190,7 +190,7 @@ test_e2e:
 # client library disagree.
 test_storybook:
   stage: verify
-  image: mcr.microsoft.com/playwright:v1.63.0-jammy
+  image: mcr.microsoft.com/playwright:v1.64.1-jammy
   services: []
   rules:
     - changes:
@@ -198,6 +198,7 @@ test_storybook:
         - packages/design-system-storybook/**/*
       when: always
   before_script:
+    - command -v corepack || npm install -g --force corepack
     - corepack enable
     - pnpm install --frozen-lockfile
     # Storybook resolves @igrp/igrp-framework-react-design-system through its

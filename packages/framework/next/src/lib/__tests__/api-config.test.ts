@@ -49,12 +49,14 @@ describe('igrpSetAccessClientConfig / igrpGetAccessClientConfig', () => {
   });
 
   it('igrpResetAccessClientConfig restores defaults', () => {
-    igrpSetAccessClientConfig({ token: 'tok', baseUrl: 'http://api' });
+    igrpSetAccessClientConfig({ token: 'tok', baseUrl: 'http://api', locale: 'en' });
     igrpResetAccessClientConfig();
     const config = igrpGetAccessClientConfig();
     expect(config.token).toBe('');
     expect(config.baseUrl).toBe('');
     expect(config.timeout).toBe(10_000);
+    // A kept locale made the next request skip its own cookie/Accept-Language.
+    expect(config.locale).toBeUndefined();
   });
 });
 

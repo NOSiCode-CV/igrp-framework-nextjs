@@ -109,6 +109,11 @@ export function igrpWithAccessClientConfig<T>(
 export function igrpResetAccessClientConfig(): void {
   const current = storage.getStore();
   if (current) {
-    Object.assign(current, { token: '', baseUrl: '', timeout: igrpResolveDefaultTimeout() });
+    Object.assign(current, {
+      token: '',
+      baseUrl: '',
+      timeout: igrpResolveDefaultTimeout(),
+      locale: undefined,
+    });
   }
 }

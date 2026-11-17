@@ -16,6 +16,7 @@ import {
   SECURE_SESSION_COOKIE_BASENAME,
   SESSION_COOKIE_BASENAME,
 } from '@igrp/framework-next-auth/cookies';
+import { isIgrpAuthBypass as isIgrpAuthBypassFromAuth } from '@igrp/framework-next-auth/providers';
 import { isNextControlFlowError } from '@igrp/framework-next-auth/runtime';
 
 import {
@@ -190,9 +191,9 @@ function envFlag(value: string | undefined, expected: string): boolean {
   );
 }
 
-/** True when auth is bypassed (preview mode or AUTH_PROVIDER=none). */
+/** True when auth is bypassed (preview mode or AUTH_PROVIDER=none). Defined once, in next-auth. */
 export function isIgrpAuthBypass(env: Record<string, string | undefined> = process.env): boolean {
-  return envFlag(env.IGRP_PREVIEW_MODE, 'true') || envFlag(env.AUTH_PROVIDER, 'none');
+  return isIgrpAuthBypassFromAuth(env);
 }
 
 /**

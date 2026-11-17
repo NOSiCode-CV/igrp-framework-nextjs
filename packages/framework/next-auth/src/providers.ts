@@ -299,3 +299,25 @@ export function isAuthEnabled(env: AuthEnvironment): boolean {
 export function isAuthDisabled(env: AuthEnvironment): boolean {
   return !isAuthEnabled(env);
 }
+
+/** `IGRP_PREVIEW_MODE=true`, ignoring case, surrounding whitespace and quotes. */
+export function isPreviewModeEnabled(env: AuthEnvironment = process.env): boolean {
+  return (
+    env.IGRP_PREVIEW_MODE?.trim()
+      .replace(/^["']|["']$/g, '')
+      .trim()
+      .toLowerCase() === 'true'
+  );
+}
+
+/**
+ * True when the auth flow is bypassed: preview mode, or `AUTH_PROVIDER=none`.
+ * The one definition of "bypassed" — `@igrp/framework-next`'s `isIgrpAuthBypass`
+ * and the template's `isAuthBypass` delegate here, so a server action, the
+ * middleware and the session callbacks cannot disagree about it. An invalid
+ * `AUTH_PROVIDER` is "enabled", like {@link isAuthEnabled}: a typo never turns
+ * auth off.
+ */
+export function isIgrpAuthBypass(env: AuthEnvironment = process.env): boolean {
+  return isPreviewModeEnabled(env) || isAuthDisabled(env);
+}

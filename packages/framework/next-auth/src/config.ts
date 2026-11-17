@@ -31,6 +31,7 @@ import {
   createAuthProviderFromEnv,
   getAuthProviderIdFromEnv,
   isAuthDisabled as isAuthDisabledFromEnv,
+  isPreviewModeEnabled,
   isOidcManagedProviderId,
   type AuthProviderId,
   type SessionAuthProviderId,
@@ -525,10 +526,6 @@ function envFlag(value: string | undefined): boolean {
       .replace(/^["']|["']$/g, '')
       .toLowerCase() === 'true'
   );
-}
-
-function normalizePreviewMode(env: Record<string, string | undefined>): boolean {
-  return envFlag(env.IGRP_PREVIEW_MODE);
 }
 
 /**
@@ -1383,7 +1380,7 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
     events: {
       async signOut(message) {
         // Skip revocation when auth is disabled or in preview mode — no real token exists.
-        if (authIsDisabled || configError || normalizePreviewMode(env)) return;
+        if (authIsDisabled || configError || isPreviewModeEnabled(env)) return;
 
         // JWT sessions carry { token }; DB sessions carry { session }.
         // This package uses JWT sessions only, but guard defensively.
@@ -1509,7 +1506,7 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
   }
 
   function isPreviewMode(): boolean {
-    return normalizePreviewMode(env);
+    return isPreviewModeEnabled(env);
   }
 
   async function getTokenFromRequest(request: unknown): Promise<JWT | null> {

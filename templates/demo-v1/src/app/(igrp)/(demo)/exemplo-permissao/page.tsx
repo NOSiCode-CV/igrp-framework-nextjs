@@ -1,6 +1,10 @@
+import type { Metadata } from "next";
+
 import { igrpAssertAuthorize } from "@igrp/framework-next";
 
 import { ExemploActions } from "./_components/actions";
+
+export const metadata: Metadata = { title: "Exemplo de permissões" };
 
 export default async function ExemploPermissaoPage() {
   // Authoritative page gate: missing permission → forbidden() → 403.

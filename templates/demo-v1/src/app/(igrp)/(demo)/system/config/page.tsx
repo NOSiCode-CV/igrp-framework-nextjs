@@ -1,3 +1,7 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = { title: "Configuração Avançada" };
+
 // Reached via the `SYS_CONFIG` menu item (pageSlug: "system/config").
 // The menu item carries a `roles` entry, but that is metadata only — nothing
 // filters menus on it (see src/temp/menus/menus.ts).
@@ -14,7 +18,7 @@ export default function SystemConfigPage() {
         Configuração Avançada
       </h1>
       <p className="mt-2 text-muted-foreground">
-        Test page for the <code>SYS_CONFIG</code> menu (slug:{" "}
+        Página de teste do menu <code>SYS_CONFIG</code> (slug:{" "}
         <code>system/config</code>).
       </p>
     </div>

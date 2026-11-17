@@ -5,12 +5,16 @@
 // not named here: auditing which pages are gated is a grep for the call, and
 // a mention in a comment defeats it.)
 // Reached via the `ADMIN_USERS` menu item (pageSlug: "admin/users").
+import type { Metadata } from "next";
+
+export const metadata: Metadata = { title: "Utilizadores" };
+
 export default function AdminUsersPage() {
   return (
     <div className="container mx-auto p-6">
       <h1 className="text-2xl font-bold text-foreground">Utilizadores</h1>
       <p className="mt-2 text-muted-foreground">
-        Test page for the <code>ADMIN_USERS</code> menu (slug:{" "}
+        Página de teste do menu <code>ADMIN_USERS</code> (slug:{" "}
         <code>admin/users</code>).
       </p>
     </div>

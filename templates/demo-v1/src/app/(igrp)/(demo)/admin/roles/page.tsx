@@ -5,6 +5,10 @@
 // not named here: auditing which pages are gated is a grep for the call, and
 // a mention in a comment defeats it.)
 // Reached via the `ADMIN_ROLES` menu item (pageSlug: "admin/roles").
+import type { Metadata } from "next";
+
+export const metadata: Metadata = { title: "Perfis & Permissões" };
+
 export default function AdminRolesPage() {
   return (
     <div className="container mx-auto p-6">
@@ -12,7 +16,7 @@ export default function AdminRolesPage() {
         Perfis &amp; Permissões
       </h1>
       <p className="mt-2 text-muted-foreground">
-        Test page for the <code>ADMIN_ROLES</code> menu (slug:{" "}
+        Página de teste do menu <code>ADMIN_ROLES</code> (slug:{" "}
         <code>admin/roles</code>).
       </p>
     </div>

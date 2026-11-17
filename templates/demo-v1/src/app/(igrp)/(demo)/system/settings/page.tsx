@@ -1,3 +1,7 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = { title: "Definições do Sistema" };
+
 // Permission: open to all authenticated users. DEMO STUB ONLY — a real admin
 // screen MUST add the server-side page guard on its first line; see
 // docs/PERMISSIONS.md. There is no default-deny, so without that call the
@@ -12,7 +16,7 @@ export default function SystemSettingsPage() {
         Definições do Sistema
       </h1>
       <p className="mt-2 text-muted-foreground">
-        Test page for the <code>SYS_SETTINGS</code> menu (slug:{" "}
+        Página de teste do menu <code>SYS_SETTINGS</code> (slug:{" "}
         <code>system/settings</code>).
       </p>
     </div>

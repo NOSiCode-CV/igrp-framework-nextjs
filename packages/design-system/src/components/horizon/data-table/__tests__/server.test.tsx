@@ -258,12 +258,19 @@ describe("IGRPServerDataTable", () => {
 
   it("overlays the loading spinner and marks the table busy while isLoading", () => {
     const base = { columns, data: page(3), pagination: p(), onPaginationChange: noop }
-    const { rerender } = render(<IGRPServerDataTable {...base} isLoading />)
-    expect(screen.getByRole("status")).toHaveTextContent(IGRP_I18N_DEFAULTS_PT.loadingSpinner.label)
-    expect(screen.getByRole("table").closest("[aria-busy]")).toHaveAttribute("aria-busy", "true")
+    const { rerender } = render(<IGRPServerDataTable {...base} />)
+    // The live region exists before loading starts, so its text change is announced.
+    const status = screen.getByRole("status")
+    expect(status).toBeEmptyDOMElement()
+    expect(screen.getByRole("table")).not.toHaveAttribute("aria-busy")
+    rerender(<IGRPServerDataTable {...base} isLoading />)
+    expect(screen.getByRole("status")).toBe(status)
+    expect(status).toHaveTextContent(IGRP_I18N_DEFAULTS_PT.loadingSpinner.label)
+    expect(screen.getByRole("table")).toHaveAttribute("aria-busy", "true")
     expect(screen.getAllByRole("row").length).toBeGreaterThan(1)
     rerender(<IGRPServerDataTable {...base} />)
-    expect(screen.queryByRole("status")).toBeNull()
+    expect(screen.getByRole("status")).toBe(status)
+    expect(status).toBeEmptyDOMElement()
   })
 })
 

@@ -17,8 +17,8 @@ import {
 import { IGRPBadge } from "./badge.js"
 import { IGRPButton } from "./button.js"
 import { IGRPIcon } from "./icon/index.js"
-import { IGRPLoadingSpinner } from "./loading-spinner.js"
-import { IGRPHeadline } from "./typography/headline.js"
+import { Spinner } from "../primitives/spinner.js"
+import { igrpHeadlineVariants } from "./typography/headline.js"
 import { IGRPText } from "./typography/text.js"
 import { igrpFormatMessage, useIGRPi18n, useIGRPLocale, useIGRPTimeZone } from "../../i18n/index.js"
 import { igrpIsDateOnly } from "../../lib/utilities.js"
@@ -60,6 +60,8 @@ interface IGRPPdfViewerProps {
   viewerPreference?: "google" | "native" | "auto"
   /** Message shown when no pdfDocument is provided. */
   notFoundLabel?: string
+  /** Heading element for the inline document title; it keeps the h6 look at any level. */
+  headingLevel?: "h2" | "h3" | "h4" | "h5" | "h6"
   /** HTML name attribute. */
   name?: string
   /** HTML id attribute. */
@@ -141,6 +143,7 @@ function IGRPPdfViewer({
   loadTimeoutMs = 8000,
   viewerPreference = "native",
   notFoundLabel,
+  headingLevel = "h3",
   name,
   id,
   className,
@@ -183,6 +186,7 @@ function IGRPPdfViewer({
           document={pdfDocument}
           labelButtonNewTab={labelButtonNewTab}
           height={inlineHeight}
+          headingLevel={headingLevel}
           loadErrorLabel={loadErrorLabel ?? i18n.pdfViewer.loadError}
           loadTimeoutMs={loadTimeoutMs}
           viewerPreference={viewerPreference}
@@ -268,6 +272,45 @@ function IGRPPdfViewerCard({ document: pdfDocument, onView, clickable = true }: 
 }
 
 /**
+ * Loading and error overlays for the frame. The status region stays mounted so
+ * screen readers announce the loading text, and a load failure is an alert.
+ */
+function PdfFrameStatus({
+  frameStatus,
+  loadErrorLabel,
+}: {
+  frameStatus: PdfViewerState["frameStatus"]
+  loadErrorLabel?: string
+}) {
+  const i18n = useIGRPi18n()
+  return (
+    <>
+      <div role="status" aria-live="polite" className="sr-only">
+        {frameStatus === "loading" ? i18n.loadingSpinner.label : null}
+      </div>
+
+      {frameStatus === "loading" && (
+        <div className={cn("absolute inset-0 flex items-center justify-center bg-background/70")}>
+          <Spinner className="size-12 text-primary" role={undefined} aria-label={undefined} aria-hidden="true" />
+        </div>
+      )}
+
+      {frameStatus === "error" && (
+        <div
+          role="alert"
+          className={cn(
+            "absolute inset-0 flex flex-col items-center justify-center gap-2 bg-background/80 text-sm text-muted-foreground"
+          )}
+        >
+          <IGRPIcon iconName="AlertCircle" className={cn("text-destructive")} />
+          <span>{loadErrorLabel ?? i18n.pdfViewer.loadError}</span>
+        </div>
+      )}
+    </>
+  )
+}
+
+/**
  * Props for the internal IGRPPdfViewerInline component.
  */
 type IGRPPdfViewerInlineProps = {
@@ -277,6 +320,8 @@ type IGRPPdfViewerInlineProps = {
   labelButtonNewTab?: string
   /** Height of the iframe container. */
   height?: string
+  /** Heading element for the document title. */
+  headingLevel?: IGRPPdfViewerProps["headingLevel"]
   /** Message shown when the PDF fails to load. */
   loadErrorLabel?: string
   /** Timeout in ms before showing load error or switching viewer engine. */
@@ -290,6 +335,7 @@ function IGRPPdfViewerInline({
   document: pdfDocument,
   labelButtonNewTab: labelButtonNewTabProp,
   height = "50vh",
+  headingLevel: HeadingTag = "h3",
   loadErrorLabel,
   loadTimeoutMs = 8000,
   viewerPreference = "auto",
@@ -331,7 +377,7 @@ function IGRPPdfViewerInline({
       <div className={cn("flex flex-col")}>
         <div className={cn("flex items-center justify-between")}>
           <div>
-            <IGRPHeadline variant="h6" title={title} />
+            <HeadingTag className={cn(igrpHeadlineVariants({ variant: "h6" }), "mb-1 text-primary")}>{title}</HeadingTag>
             <div className={cn("flex items-center gap-2 text-sm text-muted-foreground")}>
               <div className={cn("flex items-center gap-1 text-xs")}>
                 <IGRPIcon iconName="User" className={cn("text-primary")} />
@@ -362,22 +408,7 @@ function IGRPPdfViewerInline({
         style={{ height }}
         aria-busy={frameStatus === "loading"}
       >
-        {frameStatus === "loading" && (
-          <div className={cn("absolute inset-0 flex items-center justify-center bg-background/70")}>
-            <IGRPLoadingSpinner />
-          </div>
-        )}
-
-        {frameStatus === "error" && (
-          <div
-            className={cn(
-              "absolute inset-0 flex flex-col items-center justify-center gap-2 bg-background/80 text-sm text-muted-foreground"
-            )}
-          >
-            <IGRPIcon iconName="AlertCircle" className={cn("text-destructive")} />
-            <span>{loadErrorLabel ?? i18n.pdfViewer.loadError}</span>
-          </div>
-        )}
+        <PdfFrameStatus frameStatus={frameStatus} loadErrorLabel={loadErrorLabel} />
 
         <iframe
           src={iframeSrc}
@@ -464,14 +495,16 @@ function IGRPPdfViewerModal({
       <DialogContent className={cn("flex max-h-[95vh] w-[95vw] flex-col gap-0 overflow-auto sm:max-w-6xl")}>
         <DialogHeader>
           <DialogTitle className={cn("text-xl font-semibold")}>{title}</DialogTitle>
-          <DialogDescription className={cn("mt-1 flex items-center gap-4")}>
-            <div className={cn("flex items-center gap-1")}>
-              <IGRPIcon iconName="User" className={cn("text-primary")} />
-              {author}
-            </div>
-            <div className={cn("flex items-center gap-1")}>
-              <IGRPIcon iconName="Calendar" className={cn("text-primary")} />
-              {safeFormatDate(date, locale, timeZone)}
+          <DialogDescription asChild className={cn("mt-1 flex items-center gap-4")}>
+            <div>
+              <div className={cn("flex items-center gap-1")}>
+                <IGRPIcon iconName="User" className={cn("text-primary")} />
+                {author}
+              </div>
+              <div className={cn("flex items-center gap-1")}>
+                <IGRPIcon iconName="Calendar" className={cn("text-primary")} />
+                {safeFormatDate(date, locale, timeZone)}
+              </div>
             </div>
           </DialogDescription>
         </DialogHeader>
@@ -481,22 +514,7 @@ function IGRPPdfViewerModal({
             className={cn("relative h-[60vh] w-full overflow-hidden rounded-lg bg-muted")}
             aria-busy={frameStatus === "loading"}
           >
-            {frameStatus === "loading" && (
-              <div className={cn("absolute inset-0 flex items-center justify-center bg-background/70")}>
-                <IGRPLoadingSpinner />
-              </div>
-            )}
-
-            {frameStatus === "error" && (
-              <div
-                className={cn(
-                  "absolute inset-0 flex flex-col items-center justify-center gap-2 bg-background/80 text-sm text-muted-foreground"
-                )}
-              >
-                <IGRPIcon iconName="AlertCircle" className={cn("text-destructive")} />
-                <span>{loadErrorLabel ?? i18n.pdfViewer.loadError}</span>
-              </div>
-            )}
+            <PdfFrameStatus frameStatus={frameStatus} loadErrorLabel={loadErrorLabel} />
 
             <iframe
               src={iframeSrc}

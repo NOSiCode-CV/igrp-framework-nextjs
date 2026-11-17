@@ -75,17 +75,33 @@ function ToolbarButton({
 }) {
   return (
     <WithTooltip label={label} disabled={disabled}>
-      <Toggle
-        size="sm"
-        className="size-8 p-0"
-        aria-label={label}
-        pressed={pressed ?? false}
-        disabled={disabled}
-        onMouseDown={keepCaret}
-        onPressedChange={onRun}
-      >
-        <IGRPIcon iconName={icon} />
-      </Toggle>
+      {/* Only a control with a state to report is a toggle; one-shot actions
+          (undo, indent, rule…) are plain buttons so no aria-pressed is announced. */}
+      {pressed === undefined ? (
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon-sm"
+          aria-label={label}
+          disabled={disabled}
+          onMouseDown={keepCaret}
+          onClick={onRun}
+        >
+          <IGRPIcon iconName={icon} />
+        </Button>
+      ) : (
+        <Toggle
+          size="sm"
+          className="size-8 p-0"
+          aria-label={label}
+          pressed={pressed}
+          disabled={disabled}
+          onMouseDown={keepCaret}
+          onPressedChange={onRun}
+        >
+          <IGRPIcon iconName={icon} />
+        </Toggle>
+      )}
     </WithTooltip>
   )
 }
@@ -109,25 +125,26 @@ function ToolbarPopover({
   className?: string
   children: ReactNode
 }) {
+  const face = icon ? (
+    <IGRPIcon iconName={icon} />
+  ) : (
+    <span aria-hidden className="text-sm font-medium">
+      {glyph}
+    </span>
+  )
   return (
     <Popover open={open} onOpenChange={onOpenChange}>
       <WithTooltip label={label}>
         <PopoverTrigger asChild>
-          <Toggle
-            size="sm"
-            className="size-8 p-0"
-            aria-label={label}
-            pressed={pressed ?? false}
-            onMouseDown={keepCaret}
-          >
-            {icon ? (
-              <IGRPIcon iconName={icon} />
-            ) : (
-              <span aria-hidden className="text-sm font-medium">
-                {glyph}
-              </span>
-            )}
-          </Toggle>
+          {pressed === undefined ? (
+            <Button type="button" variant="ghost" size="icon-sm" aria-label={label} onMouseDown={keepCaret}>
+              {face}
+            </Button>
+          ) : (
+            <Toggle size="sm" className="size-8 p-0" aria-label={label} pressed={pressed} onMouseDown={keepCaret}>
+              {face}
+            </Toggle>
+          )}
         </PopoverTrigger>
       </WithTooltip>
       <PopoverContent className={cn("w-64", className)} align="start">

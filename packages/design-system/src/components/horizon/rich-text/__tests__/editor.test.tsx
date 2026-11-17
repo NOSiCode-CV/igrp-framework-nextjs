@@ -209,6 +209,13 @@ describe("IGRPRichTextEditor — toolbar", () => {
     await waitFor(() => expect(control("Negrito")).toHaveAttribute("aria-pressed", "false"))
   })
 
+  it("renders one-shot actions as buttons and formatting as toggles", async () => {
+    render(<IGRPRichTextEditor label="Corpo" value="<p>texto</p>" />)
+    await editorOf()
+    expect(control("Desfazer")).not.toHaveAttribute("aria-pressed")
+    expect(control("Negrito")).toHaveAttribute("aria-pressed", "false")
+  })
+
   it("applies a mark from its control", async () => {
     render(<IGRPRichTextEditor label="Corpo" value="<p>texto</p>" />)
     const editor = await editorOf()

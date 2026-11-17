@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react"
+import { act, render, screen } from "@testing-library/react"
 import {
   flexRender,
   getCoreRowModel,
@@ -6,7 +6,7 @@ import {
   useReactTable,
   type ColumnDef,
 } from "@tanstack/react-table"
-import { describe, expect, it } from "vitest"
+import { describe, expect, it, vi } from "vitest"
 
 import { IGRPLabel } from "../label.js"
 import { IGRPTextList } from "../typography/list.js"
@@ -14,6 +14,9 @@ import { IGRPLink } from "../typography/link.js"
 import { IGRPBanner } from "../banner.js"
 import { IGRPDataTableCellCheckbox, IGRPDataTableCellExpander } from "../data-table/cell.js"
 import { IGRPDataTablePaginationNumeric } from "../data-table/pagination.js"
+import { IGRPMenubar, IGRPMenubarMenu, IGRPMenubarTrigger } from "../menubar.js"
+import { IGRPPdfViewer } from "../pdf-viewer.js"
+import { IGRP_I18N_DEFAULTS_PT } from "../../../i18n/index.js"
 
 describe("IGRPLabel required mark", () => {
   it("hides the asterisk and announces 'obrigatório' in the control's name", () => {
@@ -95,5 +98,50 @@ describe("IGRPDataTablePaginationNumeric", () => {
     render(<Table withPagination />)
     expect(screen.getByRole("button", { name: "Página 1" })).toHaveAttribute("aria-current", "page")
     expect(screen.getByRole("button", { name: "Página 2" })).not.toHaveAttribute("aria-current")
+  })
+})
+
+describe("IGRPMenubarTrigger focus", () => {
+  it("shows a focus-visible ring the primitive lacks", () => {
+    render(
+      <IGRPMenubar>
+        <IGRPMenubarMenu>
+          <IGRPMenubarTrigger>Ficheiro</IGRPMenubarTrigger>
+        </IGRPMenubarMenu>
+      </IGRPMenubar>
+    )
+    expect(screen.getByRole("menuitem", { name: "Ficheiro" })).toHaveClass(
+      "focus-visible:ring-[3px]",
+      "focus-visible:ring-ring/50"
+    )
+  })
+})
+
+describe("IGRPPdfViewer load error", () => {
+  it("announces the failure as an alert and keeps the status region mounted", () => {
+    vi.useFakeTimers()
+    try {
+      render(
+        <IGRPPdfViewer
+          displayMode="inline"
+          viewerPreference="native"
+          headingLevel="h2"
+          loadTimeoutMs={10}
+          document={{ id: 1, title: "Doc", description: "", author: "A", fileUrl: "/a.pdf" }}
+        />
+      )
+      expect(screen.getByRole("heading", { level: 2, name: "Doc" })).toBeInTheDocument()
+      const status = screen.getByRole("status")
+      expect(status).toHaveTextContent(IGRP_I18N_DEFAULTS_PT.loadingSpinner.label)
+      // React wires no onError on <iframe>; a load that never finishes times out into the error.
+      act(() => {
+        vi.advanceTimersByTime(10)
+      })
+      expect(screen.getByRole("alert")).toHaveTextContent(IGRP_I18N_DEFAULTS_PT.pdfViewer.loadError)
+      expect(screen.getByRole("status")).toBe(status)
+      expect(status).toBeEmptyDOMElement()
+    } finally {
+      vi.useRealTimers()
+    }
   })
 })

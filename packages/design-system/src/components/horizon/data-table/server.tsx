@@ -21,7 +21,7 @@ import { useIGRPi18n } from "../../../i18n/index.js"
 import { cn } from "../cn.js"
 import { Table, TableBody, TableHeader } from "../../primitives/table.js"
 import { igrpDataTableTableClassName } from "./layout.js"
-import { IGRPLoadingSpinner } from "../loading-spinner.js"
+import { Spinner } from "../../primitives/spinner.js"
 import { IGRPDataTablePagination, IGRPDataTablePaginationNumeric } from "./pagination.js"
 import { IGRPDataTableBodyRows, IGRPDataTableHeaderRows, useIGRPDataTableRowIdWarning } from "./table-rows.js"
 import type { IGRPDataTableLayout, IGRPServerPaginationState } from "./types.js"
@@ -139,8 +139,8 @@ function IGRPServerDataTable<TData, TValue>({
   return (
     <div id={id} className={cn("flex flex-col gap-4", className)}>
       {toolbar && <div className="flex flex-col gap-2 md:flex-row md:items-center">{toolbar}</div>}
-      <div className="relative overflow-hidden rounded-md border" aria-busy={isLoading || undefined}>
-        <Table className={cn(igrpDataTableTableClassName(layout), tableClassName)}>
+      <div className="relative overflow-hidden rounded-md border">
+        <Table className={cn(igrpDataTableTableClassName(layout), tableClassName)} aria-busy={isLoading || undefined}>
           <TableHeader className={tableHeaderClassName}>
             <IGRPDataTableHeaderRows table={table} layout={layout} />
           </TableHeader>
@@ -159,9 +159,13 @@ function IGRPServerDataTable<TData, TValue>({
             <tr className={cn("h-1")} />
           </tbody>
         </Table>
+        {/* Always mounted: a live region that appears with its text is often not announced. */}
+        <div role="status" aria-live="polite" className="sr-only">
+          {isLoading ? i18n.loadingSpinner.label : null}
+        </div>
         {isLoading && (
           <div className="absolute inset-0 flex items-center justify-center bg-background/60">
-            <IGRPLoadingSpinner parentClassName="h-auto" />
+            <Spinner className="size-12 text-primary" role={undefined} aria-label={undefined} aria-hidden="true" />
           </div>
         )}
       </div>

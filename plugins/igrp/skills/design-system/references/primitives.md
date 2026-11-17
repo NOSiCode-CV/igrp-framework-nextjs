@@ -35,6 +35,7 @@ Never run `npx shadcn add` in an IGRP app. If something is missing, use the DS p
 ## Rules at this layer
 
 - **Accessible names are required:** `Dialog` needs `DialogTitle`, `Sheet` needs `SheetTitle`, `Drawer` needs `DrawerTitle` and `AlertDialog` needs `AlertDialogTitle`. Hide one visually if the design has no title, but render it.
+- **`Carousel` renders `role="region"` with no name.** Pass `aria-label` (e.g. `aria-label="Destaques"`, or a string from your i18n catalog) or `aria-labelledby` pointing at a visible heading, so the landmark is announced by name.
 - **Style other elements with the CVA function** rather than copying the class list: `<Link className={buttonVariants({ variant: "outline", size: "sm" })}>`.
 - **Popovers inside a `Dialog` / `Drawer`** should pass `container` on `PopoverContent`, so focus management keeps working.
 - **Icons inside a `Button`:** a lucide icon with `data-icon="inline-start"` / `"inline-end"` gets the right padding.

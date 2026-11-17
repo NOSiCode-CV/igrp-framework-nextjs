@@ -1,6 +1,7 @@
 {
   "app": { "title": "IGRP | Modèle d'application" },
   "login": {
+    "pageTitle": "Connexion",
     "welcome": "Bienvenue sur IGRP",
     "description": "Saisissez vos identifiants pour vous connecter.",
     "copyright": "Développé par",

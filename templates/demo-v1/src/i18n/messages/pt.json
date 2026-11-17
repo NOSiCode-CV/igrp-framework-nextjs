@@ -1,6 +1,7 @@
 {
   "app": { "title": "IGRP | Template Aplicações" },
   "login": {
+    "pageTitle": "Iniciar sessão",
     "welcome": "Bem-vindo ao IGRP",
     "description": "Introduza as suas credenciais para aceder.",
     "copyright": "Desenvolvido por",

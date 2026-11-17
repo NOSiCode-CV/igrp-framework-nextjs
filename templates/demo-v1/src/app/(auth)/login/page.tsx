@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -24,6 +25,10 @@ import { SilentSignIn } from "./silent-sign-in";
 
 const { sliderPosition } = loginConfig;
 const { logo, name } = siteConfig;
+
+export async function generateMetadata(): Promise<Metadata> {
+  return { title: (await getTranslations("login"))("pageTitle") };
+}
 
 export default async function AuthPage({
   searchParams,
@@ -97,7 +102,7 @@ export default async function AuthPage({
   }));
 
   return (
-    <section className="relative flex min-h-screen flex-col md:flex-row">
+    <main className="relative flex min-h-screen flex-col md:flex-row">
       <div className="absolute top-8 right-16 z-10">
         <IGRPLocaleSwitcher action={setLocale} />
       </div>
@@ -117,6 +122,6 @@ export default async function AuthPage({
         callbackUrl={safeCallbackUrl}
         providerId={providerId}
       />
-    </section>
+    </main>
   );
 }

@@ -1,8 +1,15 @@
+import type { Metadata } from "next";
 import { headers } from "next/headers";
+
+import { getTranslations } from "next-intl/server";
 
 import { auth, serverSession } from "@/lib/auth";
 
 import { LogoutConfirm } from "./logout-confirm";
+
+export async function generateMetadata(): Promise<Metadata> {
+  return { title: (await getTranslations("auth"))("signOut") };
+}
 
 /**
  * /logout is a public GET, so any site can navigate a signed-in user here.

@@ -23,7 +23,8 @@ export async function generateMetadata(): Promise<Metadata> {
   const branding = await igrpResolveRequestBranding(config);
   const title = (await getTranslations("app"))("title");
   return {
-    title,
+    // Pages set their own title; the app name follows it.
+    title: { default: title, template: `%s · ${title}` },
     description: title,
     icons: igrpBrandingMetadata(branding, `${basePath}/logo-no-text.png`),
   };

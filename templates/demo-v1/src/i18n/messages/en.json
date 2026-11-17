@@ -1,6 +1,7 @@
 {
   "app": { "title": "IGRP | Application Template" },
   "login": {
+    "pageTitle": "Sign in",
     "welcome": "Welcome to IGRP",
     "description": "Enter your credentials to sign in.",
     "copyright": "Developed by",

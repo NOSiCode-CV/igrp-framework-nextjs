@@ -95,3 +95,13 @@ For CI, add to your pipeline:
 | `lint` | ESLint |
 | `format` | Prettier (write) |
 | `clean-all` | Remove `node_modules` |
+
+---
+
+## Contributing
+
+See [CONTRIBUTING.md](../../CONTRIBUTING.md).
+
+## License
+
+MIT — see [LICENSE](LICENSE).

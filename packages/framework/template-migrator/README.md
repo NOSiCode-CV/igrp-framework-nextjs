@@ -413,3 +413,13 @@ The journal is transient and consumer-local; it is exempt from the drift gate's 
   ```
 
 - **Smoke-test the CLI** before publishing by pointing `node` directly at `dist/cli.js` from inside a test app directory.
+
+---
+
+## Contributing
+
+See [CONTRIBUTING.md](../../../CONTRIBUTING.md).
+
+## License
+
+MIT — see [LICENSE](LICENSE).

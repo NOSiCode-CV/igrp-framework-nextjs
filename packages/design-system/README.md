@@ -4,7 +4,7 @@ IGRP Design System — React components built on Radix UI, Tailwind CSS v4, and 
 
 ## Requirements
 
-- **Node.js** ≥ 22.x
+- **Node.js** ≥ 24.22.2
 - **React** ^19.0.0
 - **Next.js** ^15.0.0
 - **Tailwind CSS** v4
@@ -304,6 +304,10 @@ There is no bundler. `build:js` runs Babel once over `src/` (strips TypeScript, 
 
 ---
 
+## Contributing
+
+See [CONTRIBUTING.md](../../CONTRIBUTING.md).
+
 ## License
 
-MIT © IGRP Labs
+MIT — see [LICENSE](LICENSE).

@@ -4,7 +4,7 @@ pnpm workspace monorepo for the IGRP Framework — a set of React/Next.js packag
 
 ## Requirements
 
-- **Node.js** ≥ 22.x
+- **Node.js** ≥ 24.22.2
 - **pnpm** 12.3.4 (pinned via `packageManager` in `package.json`; `corepack enable` picks it up)
 
 ---
@@ -187,6 +187,10 @@ Each package has its own README with setup, usage, and build details:
 
 ---
 
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the step-by-step workflow: setup, branches, changesets, template migrations, local CI and merge requests.
+
 ## License
 
-MIT © IGRP Labs / NOSi E.P.E
+MIT — see [LICENSE](LICENSE).

@@ -4,7 +4,7 @@ Shared TypeScript types for the IGRP Framework — **declaration-only**. The pub
 
 ## Requirements
 
-- **Node.js** ≥ 22
+- **Node.js** ≥ 24.22.2
 - **next-auth** ^4.24.0 (peer)
 - **react** ^19.0.0 (optional peer — needed only because `IGRPConfigArgs.sessionArgs` embeds `SessionProviderProps`, which is React-typed)
 
@@ -115,6 +115,10 @@ After any type change, run `pnpm build:framework` to catch downstream breakage.
 
 ---
 
+## Contributing
+
+See [CONTRIBUTING.md](../../../CONTRIBUTING.md).
+
 ## License
 
-MIT © IGRP Labs
+MIT — see [LICENSE](LICENSE).

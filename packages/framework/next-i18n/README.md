@@ -4,7 +4,7 @@ Catalog and literal-string checks for IGRP Next.js apps, as the `igrp-i18n` CLI 
 
 ## Requirements
 
-- **Node.js** ≥ 22
+- **Node.js** ≥ 24.22.2
 
 ## Installation
 
@@ -40,6 +40,12 @@ Both commands are also exported for programmatic use in Vitest:
 | `checkLiterals(paths, cwd?)`                              | One `file:line: finding` string per hardcoded string                          |
 | `findLiteralStrings(source, fileName?)`                   | The same findings for a single source string                                  |
 
+---
+
+## Contributing
+
+See [CONTRIBUTING.md](../../../CONTRIBUTING.md).
+
 ## License
 
-MIT © IGRP Labs
+MIT — see [LICENSE](LICENSE).

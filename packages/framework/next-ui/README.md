@@ -8,7 +8,7 @@ The components and hooks are client code, but the barrel (`src/index.ts`) delibe
 
 Peer dependencies, as declared in `package.json`:
 
-- **Node.js** >= 22
+- **Node.js** ≥ 24.22.2
 - **Next.js** ^15.5.0
 - **React** ^19.0.0 + **react-dom** ^19.0.0
 - **next-auth** ^4.24.0
@@ -194,6 +194,10 @@ If your app already imports `@igrp/igrp-framework-react-design-system/tokens` di
 
 ---
 
+## Contributing
+
+See [CONTRIBUTING.md](../../../CONTRIBUTING.md).
+
 ## License
 
-MIT © IGRP Labs
+MIT — see [LICENSE](LICENSE).

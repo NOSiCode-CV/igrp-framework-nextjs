@@ -6,7 +6,7 @@ route-protection middleware primitives.
 
 ## Requirements
 
-- **Node.js** ≥ 22
+- **Node.js** ≥ 24.22.2
 - Peers: **next** ^15.5.0, **next-auth** ^4.24.0, **react** ^19.0.0
 
 ## Installation
@@ -385,6 +385,12 @@ session.error; // "RefreshAccessTokenError" on failed refresh
 session.forceLogout; // true when refresh has failed — client should signOut()
 ```
 
+---
+
+## Contributing
+
+See [CONTRIBUTING.md](../../../CONTRIBUTING.md).
+
 ## License
 
-MIT
+MIT — see [LICENSE](LICENSE).

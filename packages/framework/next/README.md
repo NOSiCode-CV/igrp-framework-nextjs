@@ -4,7 +4,7 @@ Server-side entry point for the IGRP Framework — root and route-group layouts,
 
 ## Requirements
 
-- **Node.js** ≥ 22
+- **Node.js** ≥ 24.22.2
 - **Next.js** ^15.5.0
 - **React** ^19.0.0 + **react-dom** ^19.0.0
 - **zod** ^4.5.0 (peer)
@@ -241,6 +241,10 @@ Changes here affect only templates and apps, not other framework packages.
 
 ---
 
+## Contributing
+
+See [CONTRIBUTING.md](../../../CONTRIBUTING.md).
+
 ## License
 
-MIT © IGRP Labs
+MIT — see [LICENSE](LICENSE).

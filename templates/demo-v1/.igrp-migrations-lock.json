@@ -1,699 +1,410 @@
 {
-  "version": 1,
+  "version": 2,
   "template": "demo-v1",
-  "applied": [
-    {
-      "id": "01-preview-mode-not-found",
-      "appliedAt": "2025-11-10T00:00:00.000Z",
-      "cliVersion": "0.1.1-beta.115",
-      "manifestHash": "299eb00d42c2cb9d",
-      "payloadHash": "dbe5334283f01f85"
-    },
-    {
-      "id": "02-access-sync-config-refactor",
-      "appliedAt": "2025-12-05T00:00:00.000Z",
-      "cliVersion": "0.1.1-beta.115",
-      "manifestHash": "a147f1ef0124d7f2",
-      "payloadHash": "493635beb5c71451"
-    },
-    {
-      "id": "03-tailwind-v4-tokens",
-      "appliedAt": "2026-02-04T00:00:00.000Z",
-      "cliVersion": "0.1.1-beta.115",
-      "manifestHash": "115de6d98aae9182",
-      "payloadHash": "1339d8061470b924"
-    },
-    {
-      "id": "04-multi-auth-provider",
-      "appliedAt": "2026-04-20T00:00:00.000Z",
-      "cliVersion": "0.1.1-beta.115",
-      "manifestHash": "d506198404a1a56e",
-      "payloadHash": "58b95dd2a7268f0d"
-    },
-    {
-      "id": "05-edge-safe-auth-bypass",
-      "appliedAt": "2026-04-23T00:00:00.000Z",
-      "cliVersion": "0.1.1-beta.115",
-      "manifestHash": "5465b3ba2384f17e",
-      "payloadHash": "d4c35244ee09cd52"
-    },
-    {
-      "id": "06-error-handling-overhaul",
-      "appliedAt": "2026-04-23T00:00:00.000Z",
-      "cliVersion": "0.1.1-beta.115",
-      "manifestHash": "1b251a4000bd7131",
-      "payloadHash": "bd41e36dfc34136f"
-    },
-    {
-      "id": "07-data-access-layer",
-      "appliedAt": "2026-05-06T00:00:00.000Z",
-      "cliVersion": "0.1.0-beta.130",
-      "manifestHash": "3ab5da4bc16d576f",
-      "payloadHash": "0d7640d19d1d8ac7"
-    },
-    {
-      "id": "08-m2m-oauth2-client-credentials",
-      "appliedAt": "2026-05-21T00:00:00.000Z",
-      "cliVersion": "0.1.0-beta.130",
-      "manifestHash": "effa2a13dc7437d9",
-      "payloadHash": "afcd072045b761b1"
-    },
-    {
-      "id": "09-sync-on-code-menus",
-      "appliedAt": "2026-05-25T00:00:00.000Z",
-      "cliVersion": "0.1.0-beta.130",
-      "manifestHash": "e5f1d534226dfef5",
-      "payloadHash": "0189d67fdd6f0191"
-    },
-    {
-      "id": "10-session-refetch-and-menu-role-sync",
-      "appliedAt": "2026-06-02T00:00:00.000Z",
-      "cliVersion": "0.1.0-beta.130",
-      "manifestHash": "2fe8951c4ef8b1af",
-      "payloadHash": "cd3c2681b03a12ab"
-    },
-    {
-      "id": "11-callbackurl-hardening-and-error-copy",
-      "appliedAt": "2026-06-02T00:00:00.000Z",
-      "cliVersion": "0.1.0-beta.130",
-      "manifestHash": "9688a14cda39798d",
-      "payloadHash": "8e9aa0ce69bab6d7"
-    },
-    {
-      "id": "12-template-resync",
-      "appliedAt": "2026-06-04T00:00:00.000Z",
-      "cliVersion": "0.1.0-beta.130",
-      "manifestHash": "8e0f381e9df1df50",
-      "payloadHash": "5d8c36b7c6b31e1a"
-    },
-    {
-      "id": "13-resync-beta145",
-      "appliedAt": "2026-06-04T00:00:00.000Z",
-      "cliVersion": "0.1.0-beta.130",
-      "manifestHash": "94bab738249c2f0d",
-      "payloadHash": "2a3aa075b1980338"
-    },
-    {
-      "id": "14-deferred-logout-and-cleanup",
-      "appliedAt": "2026-06-09T00:00:00.000Z",
-      "cliVersion": "0.1.0-beta.130",
-      "manifestHash": "a54fcd0150c31d62",
-      "payloadHash": "93248eee0cfa8737"
-    },
-    {
-      "id": "15-resync-beta149",
-      "appliedAt": "2026-06-09T00:00:00.000Z",
-      "cliVersion": "0.1.0-beta.130",
-      "manifestHash": "b7c95bb649bfc7db",
-      "payloadHash": "e3b0c44298fc1c14"
-    },
-    {
-      "id": "16-resync-beta150",
-      "appliedAt": "2026-06-10T00:00:00.000Z",
-      "cliVersion": "0.1.0-beta.130",
-      "manifestHash": "340b190700c7a031",
-      "payloadHash": "e3b0c44298fc1c14"
-    },
-    {
-      "id": "17-sidebar-menu-search-config",
-      "appliedAt": "2026-06-16T00:00:00.000Z",
-      "cliVersion": "0.1.0-beta.130",
-      "manifestHash": "57627ccb90b3d406",
-      "payloadHash": "49ab8c34b81f5631"
-    },
-    {
-      "id": "18-email-scope-enable",
-      "appliedAt": "2026-06-17T00:00:00.000Z",
-      "cliVersion": "0.1.0-beta.130",
-      "manifestHash": "d46d9782319982aa",
-      "payloadHash": "31d914d9b5afcbb3"
-    },
-    {
-      "id": "19-adaptive-session-refresh",
-      "appliedAt": "2026-06-17T00:00:00.000Z",
-      "cliVersion": "0.1.0-beta.130",
-      "manifestHash": "224da98e59a72fd3",
-      "payloadHash": "0b5d4ecd42567db8"
-    },
-    {
-      "id": "20-sidebar-trigger-in-header",
-      "appliedAt": "2026-06-23T00:00:00.000Z",
-      "cliVersion": "0.1.0-beta.130",
-      "manifestHash": "55370aea174bfad6",
-      "payloadHash": "4fe37c9ce736e1d6"
-    },
-    {
-      "id": "21-template-resync-catchup",
-      "appliedAt": "2026-06-26T00:00:00.000Z",
-      "cliVersion": "0.1.0-beta.134",
-      "manifestHash": "fa00cbd4a064219d",
-      "payloadHash": "4662c110803ab411"
-    },
-    {
-      "id": "22-session-args-auth-bypass",
-      "appliedAt": "2026-06-26T00:00:00.000Z",
-      "cliVersion": "0.1.0-beta.134",
-      "manifestHash": "e1692e5e035dd3fa",
-      "payloadHash": "95318d6308f431a5"
-    },
-    {
-      "id": "23-per-request-layout-and-routes-cache",
-      "appliedAt": "2026-06-27T00:00:00.000Z",
-      "cliVersion": "0.1.0-beta.134",
-      "manifestHash": "e859df151a7ef7fc",
-      "payloadHash": "d288b1a676faaca3"
-    },
-    {
-      "id": "24-resync-beta159",
-      "appliedAt": "2026-06-30T00:00:00.000Z",
-      "cliVersion": "0.1.0-beta.134",
-      "manifestHash": "db2a98300e7da75d",
-      "payloadHash": "448eb8ef4e11b4a3"
-    },
-    {
-      "id": "25-resync-beta160",
-      "appliedAt": "2026-06-30T00:00:00.000Z",
-      "cliVersion": "0.1.0-beta.134",
-      "manifestHash": "30aef33acc9be79b",
-      "payloadHash": "dbaa44767522ef20"
-    },
-    {
-      "id": "26-catchup-untracked-and-drifted",
-      "appliedAt": "2026-06-30T00:00:00.000Z",
-      "cliVersion": "0.1.0-beta.134",
-      "manifestHash": "1e607902dc8eb1f6",
-      "payloadHash": "b8f3c5b19717e685"
-    },
-    {
-      "id": "27-csp-hsts-headers",
-      "appliedAt": "2026-07-06T00:00:00.000Z",
-      "cliVersion": "0.1.0-beta.134",
-      "manifestHash": "1877394ce0706066",
-      "payloadHash": "89a944973da2ba8d"
-    },
-    {
-      "id": "28-resync-beta165-query-provider-split",
-      "appliedAt": "2026-07-06T00:00:00.000Z",
-      "cliVersion": "0.1.0-beta.134",
-      "manifestHash": "35f20855016d8bce",
-      "payloadHash": "696229d47145970c"
-    },
-    {
-      "id": "29-permissions-catalog-sync",
-      "appliedAt": "2026-08-31T00:00:00.000Z",
-      "cliVersion": "0.1.0-beta.134",
-      "manifestHash": "91f5c658a584b08c",
-      "payloadHash": "1bd9a5eae914250e"
-    },
-    {
-      "id": "30-resync-beta167-deps",
-      "appliedAt": "2026-08-31T00:00:00.000Z",
-      "cliVersion": "0.1.0-beta.136",
-      "manifestHash": "1fc46adf391e01d2",
-      "payloadHash": "e3b0c44298fc1c14"
-    },
-    {
-      "id": "31-resync-beta168-deps",
-      "appliedAt": "2026-08-31T00:00:00.000Z",
-      "cliVersion": "0.1.0-beta.137",
-      "manifestHash": "31f1c93c8c076064",
-      "payloadHash": "e3b0c44298fc1c14"
-    },
-    {
-      "id": "32-turbopack-root-probe-and-beta169-deps",
-      "appliedAt": "2026-09-01T00:00:00.000Z",
-      "cliVersion": "0.1.0-beta.137",
-      "manifestHash": "4360e3437ed47868",
-      "payloadHash": "92d221b5d4f8bc9d"
-    },
-    {
-      "id": "33-force-dynamic-root-layout",
-      "appliedAt": "2026-09-01T00:00:00.000Z",
-      "cliVersion": "0.1.0-beta.138",
-      "manifestHash": "5f184d42b9ccfe66",
-      "payloadHash": "8c1c1b460bcc50f5"
-    },
-    {
-      "id": "34-header-slots-and-app-search",
-      "appliedAt": "2026-09-04T00:00:00.000Z",
-      "cliVersion": "0.1.0-beta.139",
-      "manifestHash": "1f19e8feb99b8a60",
-      "payloadHash": "bd01bf078bffa7a1"
-    },
-    {
-      "id": "35-framework-owned-redirect-and-refetch-ceiling",
-      "appliedAt": "2026-09-16T00:00:00.000Z",
-      "cliVersion": "0.1.0-beta.141",
-      "manifestHash": "41da7422e2519c90",
-      "payloadHash": "f1b686f5ef403405"
-    },
-    {
-      "id": "36-framework-owned-origin-resolution",
-      "appliedAt": "2026-09-18T00:00:00.000Z",
-      "cliVersion": "0.1.0-beta.141",
-      "manifestHash": "8c37fd6b3a5a98b6",
-      "payloadHash": "ed623e98c0502c7d"
-    },
-    {
-      "id": "37-cn-package-and-utils-removal",
-      "appliedAt": "2026-09-18T00:00:00.000Z",
-      "cliVersion": "0.1.0-beta.141",
-      "manifestHash": "a5c93138d0801e80",
-      "payloadHash": "cb85ca544eb04d02"
-    },
-    {
-      "id": "38-config-client-annotation",
-      "appliedAt": "2026-09-21T00:00:00.000Z",
-      "cliVersion": "0.1.0-beta.141",
-      "manifestHash": "4b086c104c4be8a7",
-      "payloadHash": "b403548294f2eae0"
-    },
-    {
-      "id": "39-layout-data-source-rename",
-      "appliedAt": "2026-09-21T00:00:00.000Z",
-      "cliVersion": "0.1.0-beta.141",
-      "manifestHash": "cf039b9358e9e31c",
-      "payloadHash": "3ccb486cae789169"
-    },
-    {
-      "id": "40-review-hardening",
-      "appliedAt": "2026-09-22T00:00:00.000Z",
-      "cliVersion": "0.1.0-beta.141",
-      "manifestHash": "1881370caacd961f",
-      "payloadHash": "d15b63aebf2fd7d1"
-    },
-    {
-      "id": "41-query-client-comment-trim",
-      "appliedAt": "2026-09-22T00:00:00.000Z",
-      "cliVersion": "0.1.0-beta.141",
-      "manifestHash": "df587cec908f3bc9",
-      "payloadHash": "018dc660570748e9"
-    },
-    {
-      "id": "42-perf-review-streaming-fonts",
-      "appliedAt": "2026-09-23T00:00:00.000Z",
-      "cliVersion": "0.1.0-beta.141",
-      "manifestHash": "26361872e1cf3a5c",
-      "payloadHash": "6760090a2726376a"
-    },
-    {
-      "id": "43-public-health-route",
-      "appliedAt": "2026-09-23T00:00:00.000Z",
-      "cliVersion": "0.1.0-beta.141",
-      "manifestHash": "090f9cd657463d86",
-      "payloadHash": "41c3fd5b0c97a48c"
-    },
-    {
-      "id": "44-edge-safe-auth-instance",
-      "appliedAt": "2026-09-23T00:00:00.000Z",
-      "cliVersion": "0.1.0-beta.141",
-      "manifestHash": "41148901ea74caa7",
-      "payloadHash": "53a19208e7adfe46"
-    },
-    {
-      "id": "45-dev-basepath-url",
-      "appliedAt": "2026-09-24T00:00:00.000Z",
-      "cliVersion": "0.1.0-beta.141",
-      "manifestHash": "64a6e5684b5bbe35",
-      "payloadHash": "3297f6d034db3059"
-    },
-    {
-      "id": "46-mock-user-framework-types",
-      "appliedAt": "2026-09-24T00:00:00.000Z",
-      "cliVersion": "0.1.0-beta.141",
-      "manifestHash": "ecfd37fe53e3f701",
-      "payloadHash": "3d22cf43cf8f1f1e"
-    },
-    {
-      "id": "47-framework-0-2-0-beta",
-      "appliedAt": "2026-09-24T00:00:00.000Z",
-      "cliVersion": "0.2.0-beta.0",
-      "manifestHash": "901abc81c06e08ec",
-      "payloadHash": "e3b0c44298fc1c14"
-    },
-    {
-      "id": "47-lucide-dynamic-icons-alias",
-      "appliedAt": "2026-09-25T00:00:00.000Z",
-      "cliVersion": "0.2.0-beta.1",
-      "manifestHash": "f20cabba5bd20cec",
-      "payloadHash": "73c4301c5353b2d0"
-    },
-    {
-      "id": "48-framework-0-2-0-beta-1",
-      "appliedAt": "2026-09-25T00:00:00.000Z",
-      "cliVersion": "0.2.0-beta.1",
-      "manifestHash": "2acc14dc60590376",
-      "payloadHash": "e3b0c44298fc1c14"
-    },
-    {
-      "id": "49-framework-0-2-0-beta-2",
-      "appliedAt": "2026-09-28T00:00:00.000Z",
-      "cliVersion": "0.2.0-beta.1",
-      "manifestHash": "86a2da0c04a869d4",
-      "payloadHash": "e3b0c44298fc1c14"
-    },
-    {
-      "id": "50-silent-sso-login",
-      "appliedAt": "2026-09-30T00:00:00.000Z",
-      "cliVersion": "0.2.0-beta.2",
-      "manifestHash": "8ffb14a634fe9d82",
-      "payloadHash": "50127a6fd684ec3e"
-    },
-    {
-      "id": "51-framework-0-2-0-beta-3",
-      "appliedAt": "2026-09-30T00:00:00.000Z",
-      "cliVersion": "0.2.0-beta.2",
-      "manifestHash": "f9b089f3e7c66966",
-      "payloadHash": "e3b0c44298fc1c14"
-    },
-    {
-      "id": "52-framework-0-2-0-beta-4",
-      "appliedAt": "2026-09-30T00:00:00.000Z",
-      "cliVersion": "0.2.0-beta.3",
-      "manifestHash": "cbec2b5b1954bb5d",
-      "payloadHash": "e3b0c44298fc1c14"
-    },
-    {
-      "id": "53-review-perf-security-fixes",
-      "appliedAt": "2026-10-09T00:00:00.000Z",
-      "cliVersion": "0.2.0-beta.3",
-      "manifestHash": "364b0b414d449d3e",
-      "payloadHash": "4015727cfda89468"
-    },
-    {
-      "id": "54-home-request-path",
-      "appliedAt": "2026-10-09T00:00:00.000Z",
-      "cliVersion": "0.2.0-beta.3",
-      "manifestHash": "39811c2580594864",
-      "payloadHash": "5a6ca7255848676f"
-    },
-    {
-      "id": "55-framework-0-2-0-beta-6",
-      "appliedAt": "2026-10-09T00:00:00.000Z",
-      "cliVersion": "0.2.0-beta.4",
-      "manifestHash": "a1a06ab719e8980b",
-      "payloadHash": "2dd693c60c32ff35"
-    },
-    {
-      "id": "56-redis-session-store",
-      "appliedAt": "2026-10-14T00:00:00.000Z",
-      "cliVersion": "0.2.0-beta.4",
-      "manifestHash": "645d8ba92c070b73",
-      "payloadHash": "042e4404a7817a91"
-    },
-    {
-      "id": "57-middleware-literal-matcher",
-      "appliedAt": "2026-10-14T00:00:00.000Z",
-      "cliVersion": "0.2.0-beta.4",
-      "manifestHash": "0a9685cbb562de76",
-      "payloadHash": "9919a81cd9547f00"
-    },
-    {
-      "id": "58-i18n",
-      "appliedAt": "2026-10-14T00:00:00.000Z",
-      "cliVersion": "0.2.0-beta.5",
-      "manifestHash": "0ae1502f7521f5a1",
-      "payloadHash": "a90763c3554e6027"
-    },
-    {
-      "id": "59-session-store-deployment-guidance",
-      "appliedAt": "2026-10-15T00:00:00.000Z",
-      "cliVersion": "0.2.0-beta.5",
-      "manifestHash": "8625b6148e8580a7",
-      "payloadHash": "bdc756faa831d541"
-    },
-    {
-      "id": "60-organization-branding",
-      "appliedAt": "2026-10-15T00:00:00.000Z",
-      "cliVersion": "0.2.0-beta.5",
-      "manifestHash": "c88ba4cdf51ced4f",
-      "payloadHash": "62951273cfebf277"
-    },
-    {
-      "id": "61-resync-app-deps",
-      "appliedAt": "2026-10-15T00:00:00.000Z",
-      "cliVersion": "0.2.0-beta.5",
-      "manifestHash": "8090fe7047506bc8",
-      "payloadHash": "e3b0c44298fc1c14"
-    },
-    {
-      "id": "62-i18n-time-zone",
-      "appliedAt": "2026-10-16T00:00:00.000Z",
-      "cliVersion": "0.2.0-beta.6",
-      "manifestHash": "27025a8b3ba10884",
-      "payloadHash": "34ffbdf2690abc7a"
-    },
-    {
-      "id": "63-i18n-review-fixes",
-      "appliedAt": "2026-10-20T00:00:00.000Z",
-      "cliVersion": "0.2.0-beta.7",
-      "manifestHash": "5816dbf06476df75",
-      "payloadHash": "5e6257319b8bdb37"
-    },
-    {
-      "id": "64-global-error-format-locale",
-      "appliedAt": "2026-10-20T00:00:00.000Z",
-      "cliVersion": "0.2.0-beta.7",
-      "manifestHash": "d187dd714d9d59bb",
-      "payloadHash": "d96752fddbe1356f"
-    },
-    {
-      "id": "65-resync-framework-beta9",
-      "appliedAt": "2026-10-20T00:00:00.000Z",
-      "cliVersion": "0.2.0-beta.7",
-      "manifestHash": "0d35f5910efa1612",
-      "payloadHash": "e3b0c44298fc1c14"
-    },
-    {
-      "id": "66-next-15-5-28",
-      "appliedAt": "2026-10-20T00:00:00.000Z",
-      "cliVersion": "0.2.0-beta.7",
-      "manifestHash": "4635e099a04f3031",
-      "payloadHash": "e3b0c44298fc1c14"
-    },
-    {
-      "id": "67-resync-framework-beta10",
-      "appliedAt": "2026-10-20T00:00:00.000Z",
-      "cliVersion": "0.2.0-beta.8",
-      "manifestHash": "f04d19b6b18f29ce",
-      "payloadHash": "e3b0c44298fc1c14"
-    },
-    {
-      "id": "68-dev-lucide-icon-map",
-      "appliedAt": "2026-10-20T00:00:00.000Z",
-      "cliVersion": "0.2.0-beta.8",
-      "manifestHash": "a6496021154f0413",
-      "payloadHash": "7120d234c51d5ad6"
-    },
-    {
-      "id": "69-resync-framework-beta11",
-      "appliedAt": "2026-10-21T00:00:00.000Z",
-      "cliVersion": "0.2.0-beta.9",
-      "manifestHash": "4599394b71c262b8",
-      "payloadHash": "785b56ec41907268"
-    },
-    {
-      "id": "70-resync-framework-beta12",
-      "appliedAt": "2026-10-21T00:00:00.000Z",
-      "cliVersion": "0.2.0-beta.10",
-      "manifestHash": "e783d26eb0368374",
-      "payloadHash": "e3b0c44298fc1c14"
-    },
-    {
-      "id": "71-auth-bypass-production-guard",
-      "appliedAt": "2026-10-21T00:00:00.000Z",
-      "cliVersion": "0.2.0-beta.11",
-      "manifestHash": "4257b517249b5a3b",
-      "payloadHash": "453b6f50f5ef67fa"
-    },
-    {
-      "id": "72-home-overview-title-size",
-      "appliedAt": "2026-10-21T00:00:00.000Z",
-      "cliVersion": "0.2.0-beta.12",
-      "manifestHash": "3d1e1951c54c4b9b",
-      "payloadHash": "28b2f95f52d10c38"
-    },
-    {
-      "id": "73-session-first-switcher-rollback-docs",
-      "appliedAt": "2026-10-22T00:00:00.000Z",
-      "cliVersion": "0.2.0-beta.13",
-      "manifestHash": "a1d339589a2cef3f",
-      "payloadHash": "4f7abd3fcbab2953"
-    },
-    {
-      "id": "74-framework-next-beta14-i18n-deps",
-      "appliedAt": "2026-10-22T00:00:00.000Z",
-      "cliVersion": "0.2.0-beta.14",
-      "manifestHash": "c4dd999f289685db",
-      "payloadHash": "e3b0c44298fc1c14"
-    },
-    {
-      "id": "75-multi-app-auth-sessions",
-      "appliedAt": "2026-10-22T00:00:00.000Z",
-      "cliVersion": "0.2.0-beta.15",
-      "manifestHash": "01175883f1b25044",
-      "payloadHash": "3ecc347e7979c730"
-    },
-    {
-      "id": "76-resync-framework-next-beta15",
-      "appliedAt": "2026-10-26T00:00:00.000Z",
-      "cliVersion": "0.2.0-beta.16",
-      "manifestHash": "a283c9a9ba7ca93e",
-      "payloadHash": "e3b0c44298fc1c14"
-    },
-    {
-      "id": "77-resync-framework-next-beta16",
-      "appliedAt": "2026-11-03T00:00:00.000Z",
-      "cliVersion": "0.2.0-beta.16",
-      "manifestHash": "5e4faf5c9d8ad32f",
-      "payloadHash": "e3b0c44298fc1c14"
-    },
-    {
-      "id": "78-resync-framework-next-beta17",
-      "appliedAt": "2026-11-04T00:00:00.000Z",
-      "cliVersion": "0.2.0-beta.17",
-      "manifestHash": "507385be9fa2f42d",
-      "payloadHash": "e3b0c44298fc1c14"
-    },
-    {
-      "id": "79-resync-framework-next-beta18",
-      "appliedAt": "2026-11-05T00:00:00.000Z",
-      "cliVersion": "0.2.0-beta.18",
-      "manifestHash": "7de5a191d4ebdecb",
-      "payloadHash": "e3b0c44298fc1c14"
-    },
-    {
-      "id": "80-resync-framework-next-beta19",
-      "appliedAt": "2026-11-05T00:00:00.000Z",
-      "cliVersion": "0.2.0-beta.19",
-      "manifestHash": "e3a9ab4e1678a819",
-      "payloadHash": "e3b0c44298fc1c14"
-    },
-    {
-      "id": "81-logout-host-marker-and-public-path-regex",
-      "appliedAt": "2026-11-05T00:00:00.000Z",
-      "cliVersion": "0.2.0-beta.21",
-      "manifestHash": "ff815ec5a95451f3",
-      "payloadHash": "d3c91995c3c8f391"
-    },
-    {
-      "id": "82-resync-framework-next-beta20",
-      "appliedAt": "2026-11-05T00:00:00.000Z",
-      "cliVersion": "0.2.0-beta.22",
-      "manifestHash": "2b29b8720e0d5f5a",
-      "payloadHash": "e3b0c44298fc1c14"
-    },
-    {
-      "id": "83-ship-template-docs",
-      "appliedAt": "2026-11-06T00:00:00.000Z",
-      "cliVersion": "0.2.0-beta.23",
-      "manifestHash": "cfc72b69ce065d20",
-      "payloadHash": "2d3554f84d785763"
-    },
-    {
-      "id": "84-csp-nonce-theme-script",
-      "appliedAt": "2026-11-10T00:00:00.000Z",
-      "cliVersion": "0.2.0-beta.24",
-      "manifestHash": "7a7fdc83f2ab8d12",
-      "payloadHash": "5e3024df8451bf03"
-    },
-    {
-      "id": "85-middleware-dotted-routes-csp-report",
-      "appliedAt": "2026-11-13T00:00:00.000Z",
-      "cliVersion": "0.2.0-beta.25",
-      "manifestHash": "b61c97af74eb3a41",
-      "payloadHash": "86c0cd6ac87b7945"
-    },
-    {
-      "id": "86-api-asset-routes-csp-log",
-      "appliedAt": "2026-11-13T00:00:00.000Z",
-      "cliVersion": "0.2.0-beta.25",
-      "manifestHash": "a76cfb0f7fc84224",
-      "payloadHash": "cfba950ef474e97f"
-    },
-    {
-      "id": "87-resync-framework-next-beta23",
-      "appliedAt": "2026-11-15T00:00:00.000Z",
-      "cliVersion": "0.2.0-beta.26",
-      "manifestHash": "49abdaa8840c202a",
-      "payloadHash": "e3b0c44298fc1c14"
-    },
-    {
-      "id": "88-logout-no-silent-resignin",
-      "appliedAt": "2026-11-16T00:00:00.000Z",
-      "cliVersion": "0.2.0-beta.26",
-      "manifestHash": "a2231755c0c3f434",
-      "payloadHash": "45060b565f69b51f"
-    },
-    {
-      "id": "89-logout-cross-site-confirm",
-      "appliedAt": "2026-11-16T00:00:00.000Z",
-      "cliVersion": "0.2.0-beta.26",
-      "manifestHash": "005b179cce5537d1",
-      "payloadHash": "b11a8c0e41b5955a"
-    },
-    {
-      "id": "90-session-focus-refetch-off",
-      "appliedAt": "2026-11-16T00:00:00.000Z",
-      "cliVersion": "0.2.0-beta.26",
-      "manifestHash": "16a1a4f935ea4020",
-      "payloadHash": "3581a634af368875"
-    },
-    {
-      "id": "91-layout-composition",
-      "appliedAt": "2026-11-16T00:00:00.000Z",
-      "cliVersion": "0.2.0-beta.26",
-      "manifestHash": "19fbab74ed331bf9",
-      "payloadHash": "9946c8690fef1073"
-    },
-    {
-      "id": "92-lucide-1-and-auth-bypass-tests",
-      "appliedAt": "2026-11-16T00:00:00.000Z",
-      "cliVersion": "0.2.0-beta.26",
-      "manifestHash": "7b02abc5bc97b01a",
-      "payloadHash": "8dae5f0db89fb61f"
-    },
-    {
-      "id": "93-page-titles",
-      "appliedAt": "2026-11-16T00:00:00.000Z",
-      "cliVersion": "0.2.0-beta.26",
-      "manifestHash": "52904bfdebf304aa",
-      "payloadHash": "29dcb97768cf8377"
-    },
-    {
-      "id": "94-auth-flow-tests",
-      "appliedAt": "2026-11-17T00:00:00.000Z",
-      "cliVersion": "0.2.0-beta.26",
-      "manifestHash": "adf824a0fb82a0fd",
-      "payloadHash": "2a9377f725ba9506"
-    },
-    {
-      "id": "95-resync-framework-next-beta24",
-      "appliedAt": "2026-11-17T00:00:00.000Z",
-      "cliVersion": "0.2.0-beta.27",
-      "manifestHash": "8c9b4ba7813f2d64",
-      "payloadHash": "e3b0c44298fc1c14"
-    },
-    {
-      "id": "96-logout-lookup-timeout",
-      "appliedAt": "2026-11-17T00:00:00.000Z",
-      "cliVersion": "0.2.0-beta.27",
-      "manifestHash": "10dfdfb57029bd48",
-      "payloadHash": "4997fa96610ab17a"
-    },
-    {
-      "id": "97-access-client-single-entry",
-      "appliedAt": "2026-11-17T00:00:00.000Z",
-      "cliVersion": "0.2.0-beta.27",
-      "manifestHash": "2b56dbabb49f91fd",
-      "payloadHash": "e13ec1195eb33e26"
-    },
-    {
-      "id": "98-middleware-auth-decision",
-      "appliedAt": "2026-11-17T00:00:00.000Z",
-      "cliVersion": "0.2.0-beta.27",
-      "manifestHash": "b3225996a28b77bc",
-      "payloadHash": "f031f71a29fa0073"
+  "applied": {
+    "0.1": {
+      "01-preview-mode-not-found": {
+        "manifestHash": "299eb00d42c2cb9d",
+        "payloadHash": "dbe5334283f01f85"
+      },
+      "02-access-sync-config-refactor": {
+        "manifestHash": "a147f1ef0124d7f2",
+        "payloadHash": "493635beb5c71451"
+      },
+      "03-tailwind-v4-tokens": {
+        "manifestHash": "115de6d98aae9182",
+        "payloadHash": "1339d8061470b924"
+      },
+      "04-multi-auth-provider": {
+        "manifestHash": "d506198404a1a56e",
+        "payloadHash": "58b95dd2a7268f0d"
+      },
+      "05-edge-safe-auth-bypass": {
+        "manifestHash": "5465b3ba2384f17e",
+        "payloadHash": "d4c35244ee09cd52"
+      },
+      "06-error-handling-overhaul": {
+        "manifestHash": "1b251a4000bd7131",
+        "payloadHash": "bd41e36dfc34136f"
+      },
+      "07-data-access-layer": {
+        "manifestHash": "3ab5da4bc16d576f",
+        "payloadHash": "0d7640d19d1d8ac7"
+      },
+      "08-m2m-oauth2-client-credentials": {
+        "manifestHash": "effa2a13dc7437d9",
+        "payloadHash": "afcd072045b761b1"
+      },
+      "09-sync-on-code-menus": {
+        "manifestHash": "e5f1d534226dfef5",
+        "payloadHash": "0189d67fdd6f0191"
+      },
+      "10-session-refetch-and-menu-role-sync": {
+        "manifestHash": "2fe8951c4ef8b1af",
+        "payloadHash": "cd3c2681b03a12ab"
+      },
+      "11-callbackurl-hardening-and-error-copy": {
+        "manifestHash": "9688a14cda39798d",
+        "payloadHash": "8e9aa0ce69bab6d7"
+      },
+      "12-template-resync": {
+        "manifestHash": "8e0f381e9df1df50",
+        "payloadHash": "5d8c36b7c6b31e1a"
+      },
+      "13-resync-beta145": {
+        "manifestHash": "94bab738249c2f0d",
+        "payloadHash": "2a3aa075b1980338"
+      },
+      "14-deferred-logout-and-cleanup": {
+        "manifestHash": "a54fcd0150c31d62",
+        "payloadHash": "93248eee0cfa8737"
+      },
+      "15-resync-beta149": {
+        "manifestHash": "b7c95bb649bfc7db",
+        "payloadHash": "e3b0c44298fc1c14"
+      },
+      "16-resync-beta150": {
+        "manifestHash": "340b190700c7a031",
+        "payloadHash": "e3b0c44298fc1c14"
+      },
+      "17-sidebar-menu-search-config": {
+        "manifestHash": "57627ccb90b3d406",
+        "payloadHash": "49ab8c34b81f5631"
+      },
+      "18-email-scope-enable": {
+        "manifestHash": "d46d9782319982aa",
+        "payloadHash": "31d914d9b5afcbb3"
+      },
+      "19-adaptive-session-refresh": {
+        "manifestHash": "224da98e59a72fd3",
+        "payloadHash": "0b5d4ecd42567db8"
+      },
+      "20-sidebar-trigger-in-header": {
+        "manifestHash": "55370aea174bfad6",
+        "payloadHash": "4fe37c9ce736e1d6"
+      },
+      "21-template-resync-catchup": {
+        "manifestHash": "fa00cbd4a064219d",
+        "payloadHash": "4662c110803ab411"
+      },
+      "22-session-args-auth-bypass": {
+        "manifestHash": "e1692e5e035dd3fa",
+        "payloadHash": "95318d6308f431a5"
+      },
+      "23-per-request-layout-and-routes-cache": {
+        "manifestHash": "e859df151a7ef7fc",
+        "payloadHash": "d288b1a676faaca3"
+      },
+      "24-resync-beta159": {
+        "manifestHash": "db2a98300e7da75d",
+        "payloadHash": "448eb8ef4e11b4a3"
+      },
+      "25-resync-beta160": {
+        "manifestHash": "30aef33acc9be79b",
+        "payloadHash": "dbaa44767522ef20"
+      },
+      "26-catchup-untracked-and-drifted": {
+        "manifestHash": "1e607902dc8eb1f6",
+        "payloadHash": "b8f3c5b19717e685"
+      },
+      "27-csp-hsts-headers": {
+        "manifestHash": "1877394ce0706066",
+        "payloadHash": "89a944973da2ba8d"
+      },
+      "28-resync-beta165-query-provider-split": {
+        "manifestHash": "35f20855016d8bce",
+        "payloadHash": "696229d47145970c"
+      },
+      "29-permissions-catalog-sync": {
+        "manifestHash": "91f5c658a584b08c",
+        "payloadHash": "1bd9a5eae914250e"
+      },
+      "30-resync-beta167-deps": {
+        "manifestHash": "1fc46adf391e01d2",
+        "payloadHash": "e3b0c44298fc1c14"
+      },
+      "31-resync-beta168-deps": {
+        "manifestHash": "31f1c93c8c076064",
+        "payloadHash": "e3b0c44298fc1c14"
+      },
+      "32-turbopack-root-probe-and-beta169-deps": {
+        "manifestHash": "4360e3437ed47868",
+        "payloadHash": "92d221b5d4f8bc9d"
+      },
+      "33-force-dynamic-root-layout": {
+        "manifestHash": "5f184d42b9ccfe66",
+        "payloadHash": "8c1c1b460bcc50f5"
+      },
+      "34-header-slots-and-app-search": {
+        "manifestHash": "1f19e8feb99b8a60",
+        "payloadHash": "bd01bf078bffa7a1"
+      },
+      "35-framework-owned-redirect-and-refetch-ceiling": {
+        "manifestHash": "41da7422e2519c90",
+        "payloadHash": "f1b686f5ef403405"
+      },
+      "36-framework-owned-origin-resolution": {
+        "manifestHash": "8c37fd6b3a5a98b6",
+        "payloadHash": "ed623e98c0502c7d"
+      },
+      "37-cn-package-and-utils-removal": {
+        "manifestHash": "a5c93138d0801e80",
+        "payloadHash": "cb85ca544eb04d02"
+      },
+      "38-config-client-annotation": {
+        "manifestHash": "4b086c104c4be8a7",
+        "payloadHash": "b403548294f2eae0"
+      },
+      "39-layout-data-source-rename": {
+        "manifestHash": "cf039b9358e9e31c",
+        "payloadHash": "3ccb486cae789169"
+      },
+      "40-review-hardening": {
+        "manifestHash": "1881370caacd961f",
+        "payloadHash": "d15b63aebf2fd7d1"
+      },
+      "41-query-client-comment-trim": {
+        "manifestHash": "df587cec908f3bc9",
+        "payloadHash": "018dc660570748e9"
+      },
+      "42-perf-review-streaming-fonts": {
+        "manifestHash": "26361872e1cf3a5c",
+        "payloadHash": "6760090a2726376a"
+      },
+      "43-public-health-route": {
+        "manifestHash": "090f9cd657463d86",
+        "payloadHash": "41c3fd5b0c97a48c"
+      },
+      "44-edge-safe-auth-instance": {
+        "manifestHash": "41148901ea74caa7",
+        "payloadHash": "53a19208e7adfe46"
+      },
+      "45-dev-basepath-url": {
+        "manifestHash": "64a6e5684b5bbe35",
+        "payloadHash": "3297f6d034db3059"
+      },
+      "46-mock-user-framework-types": {
+        "manifestHash": "ecfd37fe53e3f701",
+        "payloadHash": "3d22cf43cf8f1f1e"
+      }
+    },
+    "0.2": {
+      "47-framework-0-2-0-beta": {
+        "manifestHash": "901abc81c06e08ec",
+        "payloadHash": "e3b0c44298fc1c14"
+      },
+      "47-lucide-dynamic-icons-alias": {
+        "manifestHash": "f20cabba5bd20cec",
+        "payloadHash": "73c4301c5353b2d0"
+      },
+      "48-framework-0-2-0-beta-1": {
+        "manifestHash": "2acc14dc60590376",
+        "payloadHash": "e3b0c44298fc1c14"
+      },
+      "49-framework-0-2-0-beta-2": {
+        "manifestHash": "86a2da0c04a869d4",
+        "payloadHash": "e3b0c44298fc1c14"
+      },
+      "50-silent-sso-login": {
+        "manifestHash": "8ffb14a634fe9d82",
+        "payloadHash": "50127a6fd684ec3e"
+      },
+      "51-framework-0-2-0-beta-3": {
+        "manifestHash": "f9b089f3e7c66966",
+        "payloadHash": "e3b0c44298fc1c14"
+      },
+      "52-framework-0-2-0-beta-4": {
+        "manifestHash": "cbec2b5b1954bb5d",
+        "payloadHash": "e3b0c44298fc1c14"
+      },
+      "53-review-perf-security-fixes": {
+        "manifestHash": "364b0b414d449d3e",
+        "payloadHash": "4015727cfda89468"
+      },
+      "54-home-request-path": {
+        "manifestHash": "39811c2580594864",
+        "payloadHash": "5a6ca7255848676f"
+      },
+      "55-framework-0-2-0-beta-6": {
+        "manifestHash": "a1a06ab719e8980b",
+        "payloadHash": "2dd693c60c32ff35"
+      },
+      "56-redis-session-store": {
+        "manifestHash": "645d8ba92c070b73",
+        "payloadHash": "042e4404a7817a91"
+      },
+      "57-middleware-literal-matcher": {
+        "manifestHash": "0a9685cbb562de76",
+        "payloadHash": "9919a81cd9547f00"
+      },
+      "58-i18n": {
+        "manifestHash": "0ae1502f7521f5a1",
+        "payloadHash": "a90763c3554e6027"
+      },
+      "59-session-store-deployment-guidance": {
+        "manifestHash": "8625b6148e8580a7",
+        "payloadHash": "bdc756faa831d541"
+      },
+      "60-organization-branding": {
+        "manifestHash": "c88ba4cdf51ced4f",
+        "payloadHash": "62951273cfebf277"
+      },
+      "61-resync-app-deps": {
+        "manifestHash": "8090fe7047506bc8",
+        "payloadHash": "e3b0c44298fc1c14"
+      },
+      "62-i18n-time-zone": {
+        "manifestHash": "27025a8b3ba10884",
+        "payloadHash": "34ffbdf2690abc7a"
+      },
+      "63-i18n-review-fixes": {
+        "manifestHash": "5816dbf06476df75",
+        "payloadHash": "5e6257319b8bdb37"
+      },
+      "64-global-error-format-locale": {
+        "manifestHash": "d187dd714d9d59bb",
+        "payloadHash": "d96752fddbe1356f"
+      },
+      "65-resync-framework-beta9": {
+        "manifestHash": "0d35f5910efa1612",
+        "payloadHash": "e3b0c44298fc1c14"
+      },
+      "66-next-15-5-28": {
+        "manifestHash": "4635e099a04f3031",
+        "payloadHash": "e3b0c44298fc1c14"
+      },
+      "67-resync-framework-beta10": {
+        "manifestHash": "f04d19b6b18f29ce",
+        "payloadHash": "e3b0c44298fc1c14"
+      },
+      "68-dev-lucide-icon-map": {
+        "manifestHash": "a6496021154f0413",
+        "payloadHash": "7120d234c51d5ad6"
+      },
+      "69-resync-framework-beta11": {
+        "manifestHash": "4599394b71c262b8",
+        "payloadHash": "785b56ec41907268"
+      },
+      "70-resync-framework-beta12": {
+        "manifestHash": "e783d26eb0368374",
+        "payloadHash": "e3b0c44298fc1c14"
+      },
+      "71-auth-bypass-production-guard": {
+        "manifestHash": "4257b517249b5a3b",
+        "payloadHash": "453b6f50f5ef67fa"
+      },
+      "72-home-overview-title-size": {
+        "manifestHash": "3d1e1951c54c4b9b",
+        "payloadHash": "28b2f95f52d10c38"
+      },
+      "73-session-first-switcher-rollback-docs": {
+        "manifestHash": "a1d339589a2cef3f",
+        "payloadHash": "4f7abd3fcbab2953"
+      },
+      "74-framework-next-beta14-i18n-deps": {
+        "manifestHash": "c4dd999f289685db",
+        "payloadHash": "e3b0c44298fc1c14"
+      },
+      "75-multi-app-auth-sessions": {
+        "manifestHash": "01175883f1b25044",
+        "payloadHash": "3ecc347e7979c730"
+      },
+      "76-resync-framework-next-beta15": {
+        "manifestHash": "a283c9a9ba7ca93e",
+        "payloadHash": "e3b0c44298fc1c14"
+      },
+      "77-resync-framework-next-beta16": {
+        "manifestHash": "5e4faf5c9d8ad32f",
+        "payloadHash": "e3b0c44298fc1c14"
+      },
+      "78-resync-framework-next-beta17": {
+        "manifestHash": "507385be9fa2f42d",
+        "payloadHash": "e3b0c44298fc1c14"
+      },
+      "79-resync-framework-next-beta18": {
+        "manifestHash": "7de5a191d4ebdecb",
+        "payloadHash": "e3b0c44298fc1c14"
+      },
+      "80-resync-framework-next-beta19": {
+        "manifestHash": "e3a9ab4e1678a819",
+        "payloadHash": "e3b0c44298fc1c14"
+      },
+      "81-logout-host-marker-and-public-path-regex": {
+        "manifestHash": "ff815ec5a95451f3",
+        "payloadHash": "d3c91995c3c8f391"
+      },
+      "82-resync-framework-next-beta20": {
+        "manifestHash": "2b29b8720e0d5f5a",
+        "payloadHash": "e3b0c44298fc1c14"
+      },
+      "83-ship-template-docs": {
+        "manifestHash": "cfc72b69ce065d20",
+        "payloadHash": "2d3554f84d785763"
+      },
+      "84-csp-nonce-theme-script": {
+        "manifestHash": "7a7fdc83f2ab8d12",
+        "payloadHash": "5e3024df8451bf03"
+      },
+      "85-middleware-dotted-routes-csp-report": {
+        "manifestHash": "b61c97af74eb3a41",
+        "payloadHash": "86c0cd6ac87b7945"
+      },
+      "86-api-asset-routes-csp-log": {
+        "manifestHash": "a76cfb0f7fc84224",
+        "payloadHash": "cfba950ef474e97f"
+      },
+      "87-resync-framework-next-beta23": {
+        "manifestHash": "49abdaa8840c202a",
+        "payloadHash": "e3b0c44298fc1c14"
+      },
+      "88-logout-no-silent-resignin": {
+        "manifestHash": "a2231755c0c3f434",
+        "payloadHash": "45060b565f69b51f"
+      },
+      "89-logout-cross-site-confirm": {
+        "manifestHash": "005b179cce5537d1",
+        "payloadHash": "b11a8c0e41b5955a"
+      },
+      "90-session-focus-refetch-off": {
+        "manifestHash": "16a1a4f935ea4020",
+        "payloadHash": "3581a634af368875"
+      },
+      "91-layout-composition": {
+        "manifestHash": "19fbab74ed331bf9",
+        "payloadHash": "9946c8690fef1073"
+      },
+      "92-lucide-1-and-auth-bypass-tests": {
+        "manifestHash": "7b02abc5bc97b01a",
+        "payloadHash": "8dae5f0db89fb61f"
+      },
+      "93-page-titles": {
+        "manifestHash": "52904bfdebf304aa",
+        "payloadHash": "29dcb97768cf8377"
+      },
+      "94-auth-flow-tests": {
+        "manifestHash": "adf824a0fb82a0fd",
+        "payloadHash": "2a9377f725ba9506"
+      },
+      "95-resync-framework-next-beta24": {
+        "manifestHash": "8c9b4ba7813f2d64",
+        "payloadHash": "e3b0c44298fc1c14"
+      },
+      "96-logout-lookup-timeout": {
+        "manifestHash": "10dfdfb57029bd48",
+        "payloadHash": "4997fa96610ab17a"
+      },
+      "97-access-client-single-entry": {
+        "manifestHash": "2b56dbabb49f91fd",
+        "payloadHash": "e13ec1195eb33e26"
+      },
+      "98-middleware-auth-decision": {
+        "manifestHash": "b3225996a28b77bc",
+        "payloadHash": "f031f71a29fa0073"
+      },
+      "101-migration-guide-compact-lock": {
+        "manifestHash": "a9264ab09fec7221",
+        "payloadHash": "fa700932dd834817"
+      }
     }
-  ]
+  }
 }

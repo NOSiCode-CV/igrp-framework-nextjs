@@ -26,7 +26,6 @@ vi.mock("../apply", async (importOriginal) => {
 });
 
 import { apply } from "../commands/apply";
-import { rollback } from "../commands/rollback";
 
 let appRoot: string;
 const PKG = '{\n  "dependencies": {\n    "a": "1.0.0"\n  }\n}\n';
@@ -83,10 +82,9 @@ describe("journal is written before each step runs", () => {
     writeFileSync(journalPath(appRoot), crash!.journal, "utf8");
 
     expect(await apply(appRoot, { yes: true })).toBe(true);
-    // Recovery reverted the bump first, so the recorded baseline is the real original.
-    expect(readLock(appRoot).applied[0].undo).toEqual([
-      { type: "deps.bump", manifest: "package.json", ranges: { a: "1.0.0" } },
-    ]);
+    expect(readLock(appRoot).applied.map((a) => a.id)).toEqual(["50-journal"]);
+    expect(readPkg()).toContain('"a": "2.0.0"');
+    expect(existsSync(journalPath(appRoot))).toBe(false);
   });
 });
 
@@ -99,17 +97,5 @@ describe("in-process unwind that fails", () => {
     expect(await apply(appRoot, { yes: true, payloadDir: appRoot })).toBe(false);
     expect(existsSync(journalPath(appRoot))).toBe(true);
     expect(console.error).not.toHaveBeenCalledWith(expect.stringContaining("rolled back"));
-  });
-});
-
-describe("rollback reports unwind failures", () => {
-  it("returns false and keeps the migration recorded when an undo step fails", async () => {
-    setSteps([bump]);
-    expect(await apply(appRoot, { yes: true })).toBe(true);
-    hook.after = (_step, isUndo) => {
-      if (isUndo) throw new Error("undo boom");
-    };
-    expect(await rollback(appRoot, "50-journal")).toBe(false);
-    expect(readLock(appRoot).applied.map((a) => a.id)).toEqual(["50-journal"]);
   });
 });

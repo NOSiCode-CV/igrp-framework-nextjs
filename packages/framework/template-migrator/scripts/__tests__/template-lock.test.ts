@@ -13,19 +13,14 @@ import {
   type MigrationSummary,
 } from "../template-lock.js";
 
-function migration(id: string, date = "2026-01-01", steps: unknown = [{ type: "noop", id }]): MigrationSummary {
-  return { id, date, contentHash: hashSteps(steps), payloadHash: "p".repeat(16) };
+function migration(id: string, steps: unknown = [{ type: "noop", id }]): MigrationSummary {
+  return { id, contentHash: hashSteps(steps), payloadHash: "p".repeat(16) };
 }
 
-/**
- * A baseline entry: the four keys the template's shipped lock carries. Nothing
- * was executed against a file tree, so there is no `undo`/`fileHashes` to
- * record and the fields are absent rather than empty.
- */
+/** A lock entry: id, CLI version and hashes — all the template's lock carries. */
 function entry(m: MigrationSummary, overrides: Partial<LockEntry> = {}): LockEntry {
   return {
     id: m.id,
-    appliedAt: `${m.date}T00:00:00.000Z`,
     cliVersion: "0.1.0-beta.100",
     manifestHash: m.contentHash,
     payloadHash: m.payloadHash,
@@ -95,9 +90,9 @@ describe("diffTemplateLock", () => {
 
 describe("buildTemplateLock", () => {
   it("appends missing migrations and leaves recorded history untouched", () => {
-    const first = migration("01-a", "2025-11-10");
-    const second = migration("02-b", "2026-03-04");
-    const existing = lockOf([entry(first, { appliedAt: "2025-11-10T00:00:00.000Z", cliVersion: "0.1.1-beta.115" })]);
+    const first = migration("01-a");
+    const second = migration("02-b");
+    const existing = lockOf([entry(first, { cliVersion: "0.1.1-beta.115" })]);
 
     const built = buildTemplateLock({
       migrations: [first, second],
@@ -110,14 +105,13 @@ describe("buildTemplateLock", () => {
     expect(built.applied[0]).toEqual(existing.applied[0]);
     expect(built.applied[1]).toEqual({
       id: "02-b",
-      appliedAt: "2026-03-04T00:00:00.000Z",
       cliVersion: "0.1.0-beta.134",
       manifestHash: second.contentHash,
       payloadHash: second.payloadHash,
     });
   });
 
-  it("refreshes a stale hash without rewriting appliedAt or cliVersion", () => {
+  it("refreshes a stale hash without rewriting cliVersion", () => {
     const m = migration("01-a");
     const existing = lockOf([entry(m, { manifestHash: "0000000000000000", cliVersion: "0.1.1-beta.115" })]);
     const built = buildTemplateLock({ migrations: [m], existing, cliVersion: "0.1.0-beta.134" });
@@ -147,7 +141,7 @@ describe("buildTemplateLock", () => {
   });
 
   it("builds a complete lock from nothing", () => {
-    const migrations = [migration("01-a", "2025-11-10")];
+    const migrations = [migration("01-a")];
     const built = buildTemplateLock({ migrations, existing: null, cliVersion: "0.1.0-beta.134" });
     expect(built).toEqual({
       version: 1,
@@ -155,7 +149,6 @@ describe("buildTemplateLock", () => {
       applied: [
         {
           id: "01-a",
-          appliedAt: "2025-11-10T00:00:00.000Z",
           cliVersion: "0.1.0-beta.134",
           manifestHash: migrations[0].contentHash,
           payloadHash: migrations[0].payloadHash,
@@ -164,44 +157,10 @@ describe("buildTemplateLock", () => {
     });
   });
 
-  it("omits undo/fileHashes rather than writing them empty", () => {
-    const m = migration("01-a");
-    const built = buildTemplateLock({ migrations: [m], existing: null, cliVersion: "0.1.0-beta.134" });
-    expect(Object.keys(built.applied[0])).toEqual([
-      "id",
-      "appliedAt",
-      "cliVersion",
-      "manifestHash",
-      "payloadHash",
-    ]);
-  });
-
-  it("keeps a prior entry's real undo content — that came from an actual run", () => {
-    const m = migration("01-a");
-    const prior = entry(m, {
-      undo: [{ type: "file.delete", path: "src/added.ts" }],
-      fileHashes: { "src/added.ts": "abcd" },
-      undoPayloads: { "src/added.ts": "before" },
-    });
-    const built = buildTemplateLock({
-      migrations: [m],
-      existing: lockOf([prior]),
-      cliVersion: "0.1.0-beta.134",
-    });
-    expect(built.applied[0]).toEqual(prior);
-  });
-
   it("produces a lock that the diff then considers clean", () => {
     const migrations = [migration("01-a"), migration("02-b"), migration("03-c")];
     const built = buildTemplateLock({ migrations, existing: null, cliVersion: "0.1.0-beta.134" });
     expect(isLockClean(diffTemplateLock({ migrations, lock: built }))).toBe(true);
-  });
-
-  it("rejects a migration whose date cannot be parsed", () => {
-    const broken: MigrationSummary = { id: "01-a", date: "not-a-date", contentHash: "abc", payloadHash: "def" };
-    expect(() => buildTemplateLock({ migrations: [broken], existing: null, cliVersion: "1.0.0" })).toThrow(
-      /unparsable date/,
-    );
   });
 });
 
@@ -238,10 +197,6 @@ describe("summarise", () => {
   it("hashes steps the same way the packer stamps contentHash", () => {
     const steps = [{ type: "file.write", path: "src/middleware.ts" }];
     expect(summarise({ id: "01-a", date: "2026-01-01", steps }, ".").contentHash).toBe(hashSteps(steps));
-  });
-
-  it("tolerates frontmatter with no date", () => {
-    expect(summarise({ id: "01-a", steps: [] }, ".").date).toBe("");
   });
 
   it("changes payloadHash when a payload file is overwritten in place, not on an EOL change", () => {

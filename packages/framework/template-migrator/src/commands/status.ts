@@ -39,7 +39,7 @@ export function status(appRoot: string) {
     for (const m of changed) console.log(`    ${m.id}${payloadOnly.includes(m) ? " (payload files only)" : ""}`);
     console.log("  Check the guide for what changed — re-applying is a manual step.");
     if (payloadOnly.length > 0) {
-      console.log("  For a payload-only change, do not roll back (it will refuse): remove the");
+      console.log("  For a payload-only change, remove the");
       console.log("  migration's entry from .igrp-migrations-lock.json and run apply again.");
     }
     console.log("");

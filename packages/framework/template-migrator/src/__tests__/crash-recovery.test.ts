@@ -122,29 +122,6 @@ describe("recovery from an interrupted run", () => {
     expect(lock.applied[0].id).toBe("40-crash-test");
   });
 
-  it("records the TRUE pre-migration content as undo, not the migrated content", async () => {
-    // The whole point: without recovery the re-run captures "MIGRATED" as the
-    // original, and a later rollback silently restores the migrated state.
-    simulateInterruptedRun();
-
-    await apply(appRoot, { yes: true, payloadDir });
-
-    const entry = readLock(appRoot).applied[0];
-    expect(entry.undoPayloads?.["src/edited.ts"]).toBe("ORIGINAL\n");
-    expect(entry.undoPayloads?.["src/edited.ts"]).not.toBe("MIGRATED\n");
-  });
-
-  it("re-creates a file the interrupted run had created, via a file.delete undo", async () => {
-    simulateInterruptedRun();
-
-    await apply(appRoot, { yes: true, payloadDir });
-
-    // Recovery deleted it, then the re-applied migration created it again — so
-    // its undo is file.delete (a true create), not a content restore.
-    const entry = readLock(appRoot).applied[0];
-    expect(entry.undo).toContainEqual({ type: "file.delete", path: "src/added.ts" });
-  });
-
   it("aborts without re-applying when recovery cannot restore a path", async () => {
     writeFileAt(appRoot, "src/edited.ts", "MIGRATED\n");
     writeFileSync(

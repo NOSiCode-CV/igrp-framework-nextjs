@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { findOrphanFiles, TEMPLATE_EXEMPT_FILES, TEMPLATE_EXEMPT_PREFIXES } from "../drift-orphans.js";
+import { findOrphanFiles, isTestPath, TEMPLATE_EXEMPT_FILES, TEMPLATE_EXEMPT_PREFIXES } from "../drift-orphans.js";
 
 describe("findOrphanFiles", () => {
   it("flags a template file not managed, not baselined, not exempt", () => {
@@ -104,5 +104,25 @@ describe("findOrphanFiles", () => {
       expect(TEMPLATE_EXEMPT_PREFIXES).toContain(prefix);
     }
     expect(TEMPLATE_EXEMPT_FILES).toContain("AGENTS.md");
+  });
+});
+
+describe("isTestPath", () => {
+  it("matches __tests__ folders and *.test.ts(x), nothing else", () => {
+    expect(isTestPath("src/__tests__/middleware.test.ts")).toBe(true);
+    expect(isTestPath("src/lib/__tests__/helper.ts")).toBe(true);
+    expect(isTestPath("src/lib/foo.test.tsx")).toBe(true);
+    expect(isTestPath("src\\lib\\__tests__\\dal.ts")).toBe(true);
+    expect(isTestPath("src/lib/testing.ts")).toBe(false);
+    expect(isTestPath("vitest.config.mts")).toBe(false);
+  });
+
+  it("exempts test files from the orphan check", () => {
+    const { orphans } = findOrphanFiles({
+      templateFiles: ["src/lib/__tests__/new.test.ts", "src/x.test.ts"],
+      managedPaths: [],
+      baseline: [],
+    });
+    expect(orphans).toEqual([]);
   });
 });

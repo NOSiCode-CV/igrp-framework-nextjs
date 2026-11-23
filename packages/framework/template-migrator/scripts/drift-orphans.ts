@@ -58,8 +58,17 @@ function toPosix(p: string): string {
   return p.replace(/\\/g, "/");
 }
 
+/**
+ * Test files (`__tests__/` anywhere, or `*.test.ts(x)`). Migrations never ship
+ * them to consumers (pack.ts drops their steps), so the template may hold tests
+ * no migration manages.
+ */
+export function isTestPath(path: string): boolean {
+  return /(^|\/)__tests__\//.test(toPosix(path)) || /\.test\.tsx?$/.test(path);
+}
+
 function isExempt(path: string, prefixes: string[], files: string[]): boolean {
-  return files.includes(path) || prefixes.some((prefix) => path.startsWith(prefix));
+  return files.includes(path) || prefixes.some((prefix) => path.startsWith(prefix)) || isTestPath(path);
 }
 
 export function findOrphanFiles(opts: {

@@ -4,7 +4,6 @@ import { status } from "./commands/status.js";
 import { plan } from "./commands/plan.js";
 import { apply } from "./commands/apply.js";
 import { list } from "./commands/list.js";
-import { rollback } from "./commands/rollback.js";
 import { check } from "./commands/check.js";
 import { convert } from "./commands/convert.js";
 import { LegacyLockError } from "./types.js";
@@ -22,7 +21,6 @@ Usage:
   igrp-migrate plan [--to <id>]           Preview steps without writing
   igrp-migrate apply [--to <id>] [--yes] [--force]
                                           Apply pending migrations
-  igrp-migrate rollback <id> [--force]    Revert a single applied migration
   igrp-migrate check                      CI mode: exit 1 if migrations are pending
                                           or an applied one has since changed
   igrp-migrate convert                    Upgrade legacy .igrpmigrations/lock.json
@@ -30,10 +28,9 @@ Usage:
 Flags:
   --to <id>   Stop after this migration
   --yes, -y   Skip the per-migration confirmation prompt
-  --force     apply:    overwrite files you have modified locally
-              rollback: proceed despite missing undo content, a scaffold
-                        baseline entry, still-applied dependents, or files
-                        edited since the migration wrote them
+  --force     overwrite files you have modified locally
+
+To undo a migration, revert its commit with git.
 `;
 
 /**
@@ -70,16 +67,6 @@ async function main() {
           force: args.includes("--force"),
         }))) process.exitCode = 1;
         break;
-      case "rollback": {
-        const id = args[1];
-        if (!id || id.startsWith("-")) {
-          console.error("Usage: igrp-migrate rollback <id> [--force]");
-          process.exit(1);
-        }
-        const ok = await rollback(appRoot, id, { force: args.includes("--force") });
-        if (!ok) process.exit(1);
-        break;
-      }
       case "check":
         if (!check(appRoot)) process.exit(1);
         break;

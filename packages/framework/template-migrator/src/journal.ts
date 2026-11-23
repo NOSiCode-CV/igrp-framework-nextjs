@@ -7,11 +7,9 @@
 // files mutated with nothing recorded.
 //
 // The damage from that is not the half-applied files — most steps are
-// idempotent, so a re-run fixes them. It is that the re-run re-captures its
-// undo baseline from the ALREADY-MIGRATED files, so the lock ends up claiming
-// the migrated content is the pre-migration original. A later rollback then
-// "restores" the migrated state and reports success. Silent, and invisible to
-// the user.
+// idempotent, so a re-run fixes them. It is that the re-run starts from the
+// ALREADY-MIGRATED files and the next failure unwinds to that state, not to the
+// true original. Silent, and invisible to the user.
 //
 // This journal closes that window. It is written before the first step, updated
 // after each one, and removed only once the lock entry is safely persisted. Its

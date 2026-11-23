@@ -32,11 +32,8 @@ function migration(id: string) {
 function entry(id: string, cliVersion = "test"): LockEntry {
   return {
     id,
-    appliedAt: "2026-01-01T00:00:00.000Z",
     cliVersion,
     manifestHash: "aaaaaaaaaaaaaaaa",
-    undo: [],
-    fileHashes: {},
   };
 }
 
@@ -101,7 +98,7 @@ describe("status", () => {
 
     const out = runStatus();
 
-    expect(out).toContain("? unknown  03-from-the-future (applied by CLI 0.1.0-beta.999)");
+    expect(out).toContain("? unknown  03-from-the-future (applied by CLI 0.1)");
     expect(out).toContain("3 applied (1 from a newer CLI), 0 pending");
     expect(out).toContain("migrated by a newer @igrp/template-migrator");
   });

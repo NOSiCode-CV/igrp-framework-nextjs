@@ -61,8 +61,7 @@ export function hashPayloads(steps: unknown, migrationsDir: string): string {
  * Why an applied migration is stale: its `steps` changed, only its payload
  * files changed, or neither (null). The two need different advice — after a
  * payload-only change the app's files differ from the NEW payload by
- * definition, so rollback's edit guard always refuses; the fix is to drop the
- * lock entry and re-apply.
+ * definition; the fix is to drop the lock entry and re-apply.
  */
 export function staleCause(
   entry: { manifestHash: string; payloadHash?: string } | undefined,

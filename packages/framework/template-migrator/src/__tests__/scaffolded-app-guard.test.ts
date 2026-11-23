@@ -34,7 +34,6 @@ const migration = (id: string, steps: Manifest["migrations"][number]["steps"]) =
 /** A baseline entry, exactly as the template's shipped lock records one. */
 const baseline = (id: string): LockEntry => ({
   id,
-  appliedAt: "2026-01-01T00:00:00.000Z",
   cliVersion: "test",
   manifestHash: `hash-${id}`,
 });
@@ -59,7 +58,7 @@ beforeEach(() => {
       ]),
     ],
   };
-  // The scaffold baseline: 01 recorded as applied, with no undo and no hashes.
+  // The scaffold baseline: 01 recorded as applied.
   writeLock(appRoot, { version: 1, template: "demo-v1", applied: [baseline("01-ships-middleware")] });
   vi.spyOn(console, "log").mockImplementation(() => {});
   vi.spyOn(console, "error").mockImplementation(() => {});
@@ -110,10 +109,10 @@ describe("a freshly scaffolded app is protected too", () => {
     expect(readFileSync(join(appRoot, "src/middleware.ts"), "utf8")).toBe("UPGRADED\n");
   });
 
-  it("keeps the lock at four keys — no hashes are written back into it", async () => {
+  it("keeps the entry at id, cliVersion and manifestHash", async () => {
     await apply(appRoot, { yes: true, payloadDir });
 
     const entry = readLock(appRoot).applied.find((a) => a.id === "01-ships-middleware");
-    expect(Object.keys(entry ?? {})).toEqual(["id", "appliedAt", "cliVersion", "manifestHash"]);
+    expect(Object.keys(entry ?? {})).toEqual(["id", "cliVersion", "manifestHash"]);
   });
 });

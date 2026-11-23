@@ -6,6 +6,7 @@ import { hashPayloads, hashSteps } from "../src/hash.js";
 import { sortMigrationFiles } from "../src/migration-order.js";
 import { validateRequires } from "../src/validate-requires.js";
 import { validateSteps } from "../src/validate-steps.js";
+import { isTestPath } from "./drift-orphans.js";
 import { copyPayloads } from "./payload-copy.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -52,14 +53,18 @@ function main() {
     // `from`, or a typo'd type must fail the build, not a consumer's `apply`
     // halfway through a migration.
     validateSteps(fm.id, fm.steps);
-    normalisedTotal += copyPayloads(fm.steps, MIGRATIONS_DIR, PAYLOAD_OUT);
+    // Test files stay in the template but never reach consumers. Hashes keep
+    // covering every step, so apps that already applied 92/94 are not reported
+    // as changed.
+    const steps = fm.steps.filter((s) => typeof s.path !== "string" || !isTestPath(s.path));
+    normalisedTotal += copyPayloads(steps, MIGRATIONS_DIR, PAYLOAD_OUT);
     const contentHash = hashSteps(fm.steps);
     migrations.push({
       id: fm.id,
       date: fm.date,
       requires: fm.requires || [],
       targetFrameworkVersion: fm.targetFrameworkVersion ?? null,
-      steps: fm.steps,
+      steps,
       guideHref: file,
       contentHash,
       payloadHash: hashPayloads(fm.steps, MIGRATIONS_DIR),

@@ -37,6 +37,7 @@
     "check:drift:update-baseline": "tsx scripts/check-drift.ts --update-baseline",
     "sync:template-lock": "tsx scripts/sync-template-lock.ts",
     "test": "vitest run",
+    "test:mutation": "stryker run",
     "release": "pnpm typecheck && pnpm test && pnpm check:drift && pnpm build && pnpm publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest --no-git-checks",
     "clean": "rimraf dist"
   },

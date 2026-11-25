@@ -84,6 +84,7 @@ There is **no root `test` script** — each package runs **Vitest** on its own:
 - `test` (`vitest run`) in `design-system`, `framework-next-auth`, `framework-next-ui`, `framework-next` and `framework-next-i18n`; each one's `release` runs it (with `lint` and `typecheck`) before publishing. `framework-next-types` has no tests — its gates are `check:barrel` and `check:contract` in `build`.
 - `pnpm --filter @igrp/template-migrator test` — runs `vitest run` (migration logic). Its `release` script gates the publish on `typecheck` → `test` → `check:drift` (`tsx scripts/check-drift.ts`), the last of which fails if `templates/demo-v1` has drifted from the shipped migrations. The same three run per-MR as the `check_template_drift` job in `.gitlab-ci.yml`.
 - `packages/design-system-storybook` — `test:vitest` (component) and `test-storybook` (renders every story; Storybook must be running).
+- `test:mutation` (Stryker, `stryker.config.json`) in `framework-next-auth`, `framework-next` (`lib`, `mappers`, `actions` only), `framework-next-i18n` and `template-migrator`. Manual only, not in CI: a run takes 1–6 minutes. One file: `pnpm exec stryker run --mutate src/x.ts --force` inside the package. Mark an equivalent mutant with `// Stryker disable next-line <mutator>: <reason>`. The report is `reports/mutation/mutation.html` (git-ignored).
 
 Run a **single test**: `pnpm --filter <package> exec vitest run path/to/file.test.ts -t "test name"` (drop `run` for watch mode). The `-t` flag filters by test/describe name.
 

@@ -104,8 +104,8 @@ export const igrpAlertIconMappings: Record<IGRPColorVariants, IGRPIconName> = {
   primary: "Info",
   secondary: "Star",
   success: "CircleCheck",
-  destructive: "CircleAlert",
-  warning: "TriangleAlert",
+  destructive: "CircleExclamationPoint",
+  warning: "TriangleExclamationPoint",
   info: "Info",
   indigo: "Sparkles",
 }

@@ -53,10 +53,13 @@ function main() {
     // `from`, or a typo'd type must fail the build, not a consumer's `apply`
     // halfway through a migration.
     validateSteps(fm.id, fm.steps);
-    // Test files stay in the template but never reach consumers. Hashes keep
-    // covering every step, so apps that already applied 92/94 are not reported
-    // as changed.
-    const steps = fm.steps.filter((s) => typeof s.path !== "string" || !isTestPath(s.path));
+    // Test files stay in the template but never reach consumers: their
+    // file.create/file.write steps are dropped. A file.delete stays, so a
+    // migration can remove the test files 92/94 shipped. Hashes keep covering
+    // every step, so apps that already applied 92/94 are not reported as changed.
+    const steps = fm.steps.filter(
+      (s) => !(s.type === "file.create" || s.type === "file.write") || typeof s.path !== "string" || !isTestPath(s.path),
+    );
     normalisedTotal += copyPayloads(steps, MIGRATIONS_DIR, PAYLOAD_OUT);
     const contentHash = hashSteps(fm.steps);
     migrations.push({

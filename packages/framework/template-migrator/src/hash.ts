@@ -51,7 +51,7 @@ export function hashSteps(steps: unknown): string {
  */
 export function hashPayloads(steps: unknown, migrationsDir: string): string {
   const parts = (Array.isArray(steps) ? steps : [])
-    .map((step) => (step as Record<string, unknown>)["from"])
+    .flatMap((step) => [(step as Record<string, unknown>)["from"], (step as Record<string, unknown>)["expect"]])
     .filter((from): from is string => typeof from === "string" && !from.startsWith("__"))
     .map((from) => `${from}:${hashFileIgnoringEol(join(migrationsDir, from)) ?? "missing"}`);
   return hashContent(parts.join("\n"));

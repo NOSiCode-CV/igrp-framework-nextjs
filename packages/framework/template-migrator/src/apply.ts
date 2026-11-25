@@ -1,6 +1,8 @@
 import { copyFileSync, existsSync, mkdirSync, readFileSync, rmSync, statSync, writeFileSync } from "fs";
 import { dirname, join, resolve, sep } from "path";
 import { fileURLToPath } from "url";
+import { hashFileIgnoringEol } from "./hash.js";
+import { setPkgFields } from "./pkg-fields.js";
 import type { EnvKeySpec, MigrationStep } from "./types.js";
 
 // When bundled by tsup, import.meta.url resolves to the dist/ directory.
@@ -136,6 +138,15 @@ export function executeStep(
       // Undo captures file contents only, so a recursive delete could never be reversed.
       if (statSync(target).isDirectory()) {
         throw new Error(`file.delete refuses a directory (path: ${step.path}); delete its files one by one.`);
+      }
+      if (step.expect && !isUndo) {
+        const expected = hashFileIgnoringEol(resolvePayload(step.expect, payloadDir));
+        if (expected === null) throw new Error(`file.delete: payload not found (expect: ${step.expect}).`);
+        if (hashFileIgnoringEol(target) !== expected) {
+          console.warn(`  ⚠ ${step.path}: changed in this app, so NOT deleted. Delete it yourself if you do not need it.`);
+          // Restores the journaled copy, i.e. the file as it is now.
+          return { type: "file.write", mode: "replace", path: step.path, from: "__undo__" };
+        }
       }
       rmSync(target, { force: true });
       return { type: "file.create", path: step.path, from: "__undo__" };
@@ -311,6 +322,15 @@ export function executeStep(
         );
       }
       return { type: "deps.restore", manifest: step.manifest, removed };
+    }
+    case "pkg.set": {
+      const pkgPath = join(appRoot, step.manifest);
+      assertInsideAppRoot(appRoot, pkgPath);
+      const raw = readFileSync(pkgPath, "utf8");
+      const pkg = JSON.parse(raw);
+      const undo = setPkgFields(pkg, step.fields, step.replace);
+      writeManifest(pkgPath, raw, pkg);
+      return { type: "pkg.set", manifest: step.manifest, fields: undo.fields, replace: undo.replace };
     }
     case "deps.restore": {
       // Undo of deps.remove — re-declares each dependency in the field it came

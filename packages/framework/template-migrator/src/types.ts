@@ -7,11 +7,16 @@ export interface EnvKeySpec {
 export type MigrationStep =
   | { type: "file.create"; path: string; from: string }
   | { type: "file.write"; path: string; mode: "replace" | "patch"; from?: string; patch?: string }
-  | { type: "file.delete"; path: string }
+  // `expect`: a payload the file must still match (EOL ignored). A file the
+  // consumer changed is kept, with a warning.
+  | { type: "file.delete"; path: string; expect?: string }
   | { type: "env.add"; file: string; keys: Record<string, EnvKeySpec> }
   | { type: "env.remove"; file: string; keys: string[] }
   | { type: "deps.bump"; manifest: string; ranges: Record<string, string> }
   | { type: "deps.remove"; manifest: string; deps: string[] }
+  // package.json fields other than name/description/displayName and the deps
+  // (see pkg-fields.ts). `replace` lists object fields to replace, not merge.
+  | { type: "pkg.set"; manifest: string; fields: Record<string, unknown>; replace?: string[] }
   // Undo of deps.remove. `deps.bump` cannot serve as the inverse: it only
   // updates a dependency that is already declared and will not re-add one.
   // Carries the original field so a devDependency is restored as a

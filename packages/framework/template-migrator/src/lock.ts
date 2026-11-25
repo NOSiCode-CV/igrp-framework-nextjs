@@ -33,14 +33,18 @@ export function readLock(appRoot: string): LockFile {
   return decodeLock(parsed, p);
 }
 
-/** On-disk shape (v2): applied ids grouped by CLI release line ("0.2"), hashes only. */
-interface DiskLock {
+/**
+ * Shape written by unreleased 0.2.0-beta.28 development builds (the template's
+ * shipped lock among them): ids grouped by CLI release line, hashes only.
+ * Still read; never written.
+ */
+interface GroupedDiskLock {
   version: 2;
   template: LockFile["template"];
   applied: Record<string, Record<string, { manifestHash: string; payloadHash?: string }>>;
 }
 
-/** Parse either shape: v1 (flat array, may carry undo content) or v2 (grouped, hashes only). */
+/** Parse either shape: a flat `applied` array (written today, and by every CLI up to 0.2.0-beta.27) or the grouped one. */
 export function decodeLock(parsed: unknown, p: string): LockFile {
   const raw = parsed as { template?: LockFile["template"]; applied?: unknown } | null;
   if (raw && typeof raw === "object" && Array.isArray(raw.applied)) {
@@ -48,7 +52,7 @@ export function decodeLock(parsed: unknown, p: string): LockFile {
   }
   if (raw && typeof raw === "object" && raw.applied && typeof raw.applied === "object") {
     const applied: LockEntry[] = [];
-    for (const [cliVersion, group] of Object.entries((raw as DiskLock).applied)) {
+    for (const [cliVersion, group] of Object.entries((raw as GroupedDiskLock).applied)) {
       for (const [id, hashes] of Object.entries(group)) applied.push({ id, cliVersion, ...hashes });
     }
     return { version: 1, template: raw.template ?? "demo-v1", applied };
@@ -57,22 +61,21 @@ export function decodeLock(parsed: unknown, p: string): LockFile {
 }
 
 /**
- * Serialise to the compact v2 shape. Only what `status`/`check`/`apply` read is
- * kept: id + hashes, grouped by CLI release line. Undo content (`undo`,
- * `undoPayloads`, `fileHashes`, `appliedAt`) is dropped — storing full file
- * contents pushed consumer locks past 1 MiB (Biome's file size limit).
+ * Serialise as version 1 with a flat `applied` array, so CLIs up to
+ * 0.2.0-beta.27 can still read it (they require `applied` to be an array).
+ * Each entry keeps only what `status`/`check`/`apply` read: id, the CLI that
+ * applied it, and the hashes. Undo content (`undo`, `undoPayloads`,
+ * `fileHashes`, `appliedAt`) is dropped: full file contents pushed consumer
+ * locks past 1 MiB (Biome's file size limit).
  */
 export function encodeLock(lock: LockFile): string {
-  const applied: DiskLock["applied"] = {};
-  for (const entry of lock.applied) {
-    const line = entry.cliVersion.split(".").slice(0, 2).join(".");
-    (applied[line] ??= {})[entry.id] = {
-      manifestHash: entry.manifestHash,
-      ...(entry.payloadHash ? { payloadHash: entry.payloadHash } : {}),
-    };
-  }
-  const disk: DiskLock = { version: 2, template: lock.template, applied };
-  return JSON.stringify(disk, null, 2) + "\n";
+  const applied: LockEntry[] = lock.applied.map((entry) => ({
+    id: entry.id,
+    cliVersion: entry.cliVersion,
+    manifestHash: entry.manifestHash,
+    ...(entry.payloadHash ? { payloadHash: entry.payloadHash } : {}),
+  }));
+  return JSON.stringify({ version: 1, template: lock.template, applied }, null, 2) + "\n";
 }
 
 /**

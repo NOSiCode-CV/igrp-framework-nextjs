@@ -229,7 +229,9 @@ export async function apply(
         // Persist progress after every step — `undo`/`undoPayloads` are the same
         // objects the journal holds, so this snapshots what has run so far.
         writeJournal(appRoot, journal);
-        console.log(`  ✓ ${step.type}  ${pathKey}`);
+        // A file.delete with `expect` keeps a changed file; its undo is then a rewrite.
+        const kept = step.type === "file.delete" && undo.type === "file.write";
+        console.log(kept ? `  - kept  ${pathKey}` : `  ✓ ${step.type}  ${pathKey}`);
       }
     } catch (err) {
       console.error(`  ✗ Error: ${(err as Error).message}`);

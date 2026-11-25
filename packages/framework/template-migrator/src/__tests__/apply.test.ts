@@ -89,6 +89,60 @@ describe("executeStep: file.delete", () => {
     const step: MigrationStep = { type: "file.delete", path: "src/never-existed.ts" };
     expect(() => executeStep(step, appRoot, payloadDir)).not.toThrow();
   });
+
+  it("with expect, deletes a file that still matches the payload (EOL ignored)", () => {
+    writePayload("92/src/__tests__/a.test.ts", "it()\n");
+    writeAppFile("src/__tests__/a.test.ts", "it()\r\n");
+    const step: MigrationStep = { type: "file.delete", path: "src/__tests__/a.test.ts", expect: "payload/92/src/__tests__/a.test.ts" };
+
+    executeStep(step, appRoot, payloadDir);
+
+    expect(existsSync(join(appRoot, "src/__tests__/a.test.ts"))).toBe(false);
+  });
+
+  it("with expect, keeps a file the app changed and returns an undo that keeps it", () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    writePayload("92/src/__tests__/a.test.ts", "it()\n");
+    writeAppFile("src/__tests__/a.test.ts", "it('mine')\n");
+    const step: MigrationStep = { type: "file.delete", path: "src/__tests__/a.test.ts", expect: "payload/92/src/__tests__/a.test.ts" };
+
+    const undo = executeStep(step, appRoot, payloadDir);
+
+    expect(readAppFile("src/__tests__/a.test.ts")).toBe("it('mine')\n");
+    expect(undo).toEqual({ type: "file.write", mode: "replace", path: "src/__tests__/a.test.ts", from: "__undo__" });
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining("NOT deleted"));
+    warn.mockRestore();
+  });
+});
+
+describe("executeStep: pkg.set", () => {
+  it("merges scripts, keeps the app's own, replaces scalars, never touches name; the undo restores the file", () => {
+    const original = {
+      name: "my-app",
+      version: "1.0.0",
+      scripts: { dev: "next dev", mine: "echo mine", old: "x" },
+      dependencies: { next: "15.0.0" },
+    };
+    writeAppFile("package.json", JSON.stringify(original, null, 2) + "\n");
+    const step: MigrationStep = {
+      type: "pkg.set",
+      manifest: "package.json",
+      fields: { version: "0.2.0-beta.8", engines: { node: ">=24" }, scripts: { dev: "node scripts/dev.mjs", test: "vitest run", old: null } },
+    };
+
+    const undo = executeStep(step, appRoot, payloadDir);
+    const pkg = JSON.parse(readAppFile("package.json"));
+
+    expect(pkg).toEqual({
+      name: "my-app",
+      version: "0.2.0-beta.8",
+      scripts: { dev: "node scripts/dev.mjs", mine: "echo mine", test: "vitest run" },
+      dependencies: { next: "15.0.0" },
+      engines: { node: ">=24" },
+    });
+    executeStep(undo, appRoot, payloadDir, true);
+    expect(JSON.parse(readAppFile("package.json"))).toEqual(original);
+  });
 });
 
 describe("executeStep: env.add", () => {

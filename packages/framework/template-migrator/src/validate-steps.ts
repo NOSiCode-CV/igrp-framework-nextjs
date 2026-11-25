@@ -9,6 +9,8 @@
 // These are the same constraints `executeStep` enforces at runtime, moved to the
 // one place where failing is free.
 
+import { PKG_UNMANAGED_FIELDS } from "./pkg-fields.js";
+
 const FILE_TYPES = new Set(["file.create", "file.write", "file.delete"]);
 
 function requireString(step: Record<string, unknown>, field: string, where: string): string {
@@ -90,6 +92,7 @@ export function validateSteps(migrationId: string, steps: unknown): void {
         break;
       }
       case "file.delete":
+        if (step.expect !== undefined) requireString(step, "expect", where);
         break;
       case "env.add": {
         requireAppRelative(requireString(step, "file", where), where);
@@ -120,6 +123,19 @@ export function validateSteps(migrationId: string, steps: unknown): void {
         requireAppRelative(requireString(step, "manifest", where), where);
         requireStringArray(step, "deps", where);
         break;
+      case "pkg.set": {
+        requireAppRelative(requireString(step, "manifest", where), where);
+        const fields = requireRecord(step, "fields", where);
+        for (const field of Object.keys(fields)) {
+          if (PKG_UNMANAGED_FIELDS.includes(field)) {
+            throw new Error(
+              `${where}: pkg.set must not touch "${field}" (the app's identity, or a field the deps.* steps own).`,
+            );
+          }
+        }
+        if (step.replace !== undefined) requireStringArray(step, "replace", where);
+        break;
+      }
       case "deps.restore":
         requireAppRelative(requireString(step, "manifest", where), where);
         requireRecord(step, "removed", where);

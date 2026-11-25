@@ -168,7 +168,7 @@ Keys with a sensible default (`IGRP_SYNC_ACCESS=false`, `AUTH_PROVIDER=keycloak`
 
 After each successful migration `apply` writes `.igrp-migrations-lock.json` to your project root. **Commit this file.** It is the source of truth for which migrations your app has applied — re-running `apply` always skips completed entries.
 
-The lock keeps only each migration's id and hashes, grouped by CLI version line (`"0.1"`, `"0.2"`). It holds no file contents, so it stays small. A lock written by an older CLI is converted on the next `apply`.
+The lock keeps only each migration's id, the CLI version that applied it, and its hashes. It holds no file contents, so it stays small. A lock written by an older CLI is compacted on the next `apply`, and older CLIs can still read the compact lock.
 
 ---
 

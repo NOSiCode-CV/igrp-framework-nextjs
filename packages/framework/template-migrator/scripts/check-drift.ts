@@ -5,7 +5,8 @@ import { fileURLToPath } from "url";
 import { parse as parseYaml } from "yaml";
 import { sortMigrationFiles } from "../src/migration-order.js";
 import { findUnpinnedDepDrift, unpinnedDeps } from "./drift-deps.js";
-import { findOrphanFiles } from "./drift-orphans.js";
+import { findOrphanFiles, isTestPath } from "./drift-orphans.js";
+import { findPkgFieldDrift, foldPkgSteps } from "./drift-pkg.js";
 import {
   diffTemplateLock,
   isLockClean,
@@ -169,6 +170,8 @@ function main(): void {
   // manifest) — a migration already ships/maintains these, so the new-file
   // (orphan) check must not flag them.
   const managedPaths = new Set<string>();
+  // Every pkg.set step, in migration order, folded below into the expected fields.
+  const pkgSteps: { fields: Record<string, unknown>; replace?: string[]; migrationId: string }[] = [];
 
   for (const file of files) {
     const raw = readFileSync(join(MIGRATIONS_DIR, file), "utf8");
@@ -192,6 +195,15 @@ function main(): void {
         for (const dep of (step["deps"] as string[]) ?? []) depRanges.delete(dep);
         continue;
       }
+      if (type === "pkg.set") {
+        if (typeof step["manifest"] === "string") managedPaths.add(step["manifest"]);
+        pkgSteps.push({
+          fields: (step["fields"] as Record<string, unknown>) ?? {},
+          replace: step["replace"] as string[] | undefined,
+          migrationId: id,
+        });
+        continue;
+      }
       if (type === "deps.restore") {
         // Declares a dep (only where the app lacks it): a pin, like deps.bump.
         if (typeof step["manifest"] === "string") managedPaths.add(step["manifest"]);
@@ -205,6 +217,9 @@ function main(): void {
       const path = step["path"] as string | undefined;
       if (!path) continue; // env.add is not path-based file content
       managedPaths.add(path);
+      // Test files never ship (pack.ts drops their create/write steps), so the
+      // template may change or keep them freely.
+      if (isTestPath(path)) continue;
       if (type === "file.create") {
         finalState.set(path, { op: "present", from: step["from"] as string, migrationId: id });
       } else if (type === "file.write") {
@@ -285,6 +300,11 @@ function main(): void {
     if (dep.startsWith("@igrp/") && !depRanges.has(dep)) depUnpinned.push(declared === "workspace:*" ? dep : `${dep} (${declared})`);
   }
 
+  // --- package.json field drift ----------------------------------------------
+  // Every template package.json field except name/description/displayName and
+  // the deps must equal what the pkg.set steps leave behind.
+  const pkgDrift = findPkgFieldDrift({ template: tplPkg, expected: foldPkgSteps(pkgSteps) });
+
   // --- template lock drift --------------------------------------------------
   // The template ships .igrp-migrations-lock.json inside the zip so a freshly
   // scaffolded app opens with every migration already marked applied. If the
@@ -362,7 +382,7 @@ function main(): void {
 
   // Hard failures — block the release.
   const failed =
-    drifted.length + missingTemplate.length + missingPayload.length + depDrift.length + depMissingInTemplate.length +
+    drifted.length + pkgDrift.length + missingTemplate.length + missingPayload.length + depDrift.length + depMissingInTemplate.length +
     staleDelete.length + orphans.length + unpinnedDrift.length + (baselineMissing ? 1 : 0) + (lockDrifted ? 1 : 0);
   if (failed === 0) {
     console.log("✓ No drift: every migration-managed file and dependency pin matches the template, no unmanaged new files were found, and the shipped lock records every migration.");
@@ -375,6 +395,14 @@ function main(): void {
     console.error("");
     console.error("  → Author a new migration that re-captures these files into a fresh payload/NN/.");
     console.error("    See README.md → \"Adding a new migration\".\n");
+  }
+  if (pkgDrift.length > 0) {
+    console.error(`✗ ${pkgDrift.length} package.json field(s) changed in the template but NOT captured in a migration:`);
+    for (const d of pkgDrift) {
+      console.error(`    ${d.field}: template ${JSON.stringify(d.template)}, migrations leave ${JSON.stringify(d.expected)}`);
+    }
+    console.error("");
+    console.error("  → Add a pkg.set step (in a new migration) with the template's value. null removes a field or key.\n");
   }
   if (missingTemplate.length > 0) {
     console.error(`✗ ${missingTemplate.length} file(s) a migration ships but the template no longer has:`);

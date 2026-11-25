@@ -68,8 +68,9 @@ export function copyPayloads(
   payloadOut: string,
 ): number {
   let normalised = 0;
-  for (const step of steps) {
-    const from = step["from"];
+  // `expect` (file.delete) is a payload too: apply compares the app's file to it.
+  const sources = steps.flatMap((step) => [step["from"], step["expect"]]);
+  for (const from of sources) {
     if (typeof from === "string" && !from.startsWith("__")) {
       const src = join(migrationsDir, from);
       // Strip the leading "payload/" prefix so files land at dist/payload/NN/...

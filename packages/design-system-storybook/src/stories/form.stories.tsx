@@ -275,7 +275,7 @@ export const BasicExternalTrigger: StoryObj = {
   render: () => {
     const formRef = useRef<IGRPFormHandle<typeof basicSchema> | null>(null);
     return (
-      <div className='space-y-4 p-10'>
+      <div className='flex flex-col gap-4 p-10'>
         <IGRPForm
           schema={basicSchema}
           onSubmit={(values) => alert(`Submitted externally: ${JSON.stringify(values)}`)}
@@ -294,7 +294,7 @@ export const AdvancedExternalTrigger: StoryObj = {
   render: () => {
     const formRef = useRef<IGRPFormHandle<typeof advancedSchema>>(null);
     return (
-      <div className='space-y-4'>
+      <div className='flex flex-col gap-4'>
         <IGRPForm
           schema={advancedSchema}
           onSubmit={(values) => console.log('Advanced External Submit:', values)}
@@ -491,7 +491,7 @@ export const FormExamples: StoryObj = {
     }, [actividadesEconomicas, calculeSOATPoderado]);
 
     return (
-      <div className='space-y-4'>
+      <div className='flex flex-col gap-4'>
         <IGRPForm
           schema={formContribuinte}
           validationMode='onBlur'

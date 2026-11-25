@@ -14,6 +14,11 @@
  *      upstream on every shadcn release, so Primitives pass
  *      `allowDarkVariant: true`. Horizon and Custom compose Primitives plus
  *      tokens and never need it.
+ *   3. `space-utility` — no `space-x-*` / `space-y-*` (shadcn rule: use flex +
+ *      `gap-*`). Tailwind v4 builds them as a margin on every child but the
+ *      last, so a hidden last child (`IGRPInputHidden`) leaves a blank band.
+ *      Primitives pass `allowSpaceUtility: true`: upstream's AvatarGroup
+ *      overlaps with `-space-x-2`, which `gap` cannot express.
  *
  * This lives as a real rule rather than `no-restricted-syntax` because
  * esquery's attribute regexes drop backslash escapes and terminate on `/`,
@@ -73,6 +78,9 @@ const RAW_PALETTE = new RegExp(
 /** Any `dark:` variant, alone or chained behind others (`md:dark:hover:`). */
 const DARK_VARIANT = /(?<=^|\s)(?:[a-z0-9-]+:)*dark:/g
 
+/** e.g. `space-y-4`, `-space-x-2`, `md:space-y-reverse`. */
+const SPACE_UTILITY = /(?<=^|[\s:])-?space-[xy]-[^\s]+/g
+
 export const tokenPolicy = {
   meta: {
     type: "problem",
@@ -82,7 +90,7 @@ export const tokenPolicy = {
     schema: [
       {
         type: "object",
-        properties: { allowDarkVariant: { type: "boolean" } },
+        properties: { allowDarkVariant: { type: "boolean" }, allowSpaceUtility: { type: "boolean" } },
         additionalProperties: false,
       },
     ],
@@ -91,15 +99,23 @@ export const tokenPolicy = {
         "`{{token}}` is a raw Tailwind palette colour. Use a semantic token (bg-primary, text-destructive, bg-success…). If the role is missing, add a token to tokens.css — light block, dark block and @theme inline — rather than reaching for the palette.",
       darkVariant:
         "`{{token}}` is not allowed in the Horizon and Custom layers. Compose Primitives + semantic tokens; the tokens carry dark mode. (Primitives keep shadcn's `dark:` opacity adjustments — see CLAUDE.md.)",
+      spaceUtility:
+        "`{{token}}` is not allowed. Use flex + gap (`space-y-4` → `flex flex-col gap-4`, `space-x-2` → `flex gap-2`): in Tailwind v4 a hidden last child leaves a blank band.",
     },
   },
 
   create(context) {
     const allowDarkVariant = context.options[0]?.allowDarkVariant ?? false
+    const allowSpaceUtility = context.options[0]?.allowSpaceUtility ?? false
 
     const check = (node, text) => {
       for (const match of text.matchAll(RAW_PALETTE)) {
         context.report({ node, messageId: "rawPalette", data: { token: match[0] } })
+      }
+      if (!allowSpaceUtility) {
+        for (const match of text.matchAll(SPACE_UTILITY)) {
+          context.report({ node, messageId: "spaceUtility", data: { token: match[0] } })
+        }
       }
       if (allowDarkVariant) return
       for (const match of text.matchAll(DARK_VARIANT)) {

@@ -155,7 +155,7 @@ export const VariantShowcase: Story = {
 // Size Stories
 export const SizeVariations: Story = {
   render: () => (
-    <div className='space-y-8'>
+    <div className='flex flex-col gap-8'>
       <div>
         <h3 className='text-lg font-semibold mb-3'>Small Size</h3>
         <IGRPTextList
@@ -374,7 +374,7 @@ export const ComplexExample: Story = {
 // Spacing Variations
 export const SpacingVariations: Story = {
   render: () => (
-    <div className='space-y-8'>
+    <div className='flex flex-col gap-8'>
       <div>
         <h3 className='text-lg font-semibold mb-3'>Tight Spacing</h3>
         <IGRPTextList

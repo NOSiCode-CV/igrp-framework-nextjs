@@ -69,7 +69,7 @@ export const WithForm: Story = {
       <FormProvider {...methods}>
         <form
           onSubmit={onSubmit}
-          className='space-y-4 max-w-md p-4'
+          className='flex flex-col gap-4 max-w-md p-4'
         >
           <IGRPDatePickerInputSingle {...args} />
           <button
@@ -106,7 +106,7 @@ export const WithFormDefaultValue: Story = {
       <FormProvider {...methods}>
         <form
           onSubmit={onSubmit}
-          className='space-y-4 max-w-md p-4'
+          className='flex flex-col gap-4 max-w-md p-4'
         >
           <IGRPDatePickerInputSingle {...args} />
           <button

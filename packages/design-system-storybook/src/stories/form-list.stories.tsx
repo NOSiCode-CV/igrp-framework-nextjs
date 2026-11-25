@@ -936,7 +936,7 @@ const SeededSingleRowTemplate = () => {
             tipoDocumentoOptions.find((o) => String(o.value) === String(item?.idTipoDocumento))
               ?.label ?? `Novo Documento ${index + 1}`
           }
-          className={cn('space-y-3')}
+          className={cn('gap-3')}
         />
       </IGRPForm>
     </div>

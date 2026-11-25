@@ -84,7 +84,7 @@ function IconGalleryComponent() {
 
   return (
     <TooltipProvider>
-      <div className='p-8 space-y-4'>
+      <div className='p-8 flex flex-col gap-4'>
         <div className='flex gap-8 items-center'>
           <h3 className='font-semibold text-xl'>
             Browse Lucide Icons

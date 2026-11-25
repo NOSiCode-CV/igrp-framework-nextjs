@@ -138,7 +138,7 @@ const WithProviderTemplate: StoryFn<IGRPMenuNavigationProps> = (args) => {
               onSectionChange={setActiveSection}
             />
           </div>
-          <div className="md:col-span-2 space-y-8">
+          <div className="md:col-span-2 flex flex-col gap-8">
             {args.sections.map((section) => (
               <SectionContent
                 key={section.id}
@@ -179,7 +179,7 @@ function SectionContent({
         This is the content for the {label.toLowerCase()} section. Scroll to see the navigation
         highlight the active section.
       </p>
-      <div className="mt-4 space-y-2">
+      <div className="mt-4 flex flex-col gap-2">
         <p>Section ID: {sectionId}</p>
         <p>Status: {isActive ? 'Active' : 'Inactive'}</p>
       </div>
@@ -275,7 +275,7 @@ export const WithProvider: Story = {
 
 export const BadgeVariants: Story = {
   render: () => (
-    <div className="container my-10 mx-auto max-w-md space-y-4">
+    <div className="container my-10 mx-auto max-w-md flex flex-col gap-4">
       <IGRPMenuNavigation
         sections={defaultSections}
         title="Solid Badge"
@@ -303,7 +303,7 @@ export const BadgeVariants: Story = {
 
 export const BadgeColors: Story = {
   render: () => (
-    <div className="container my-10 mx-auto max-w-md space-y-4">
+    <div className="container my-10 mx-auto max-w-md flex flex-col gap-4">
       <IGRPMenuNavigation
         sections={defaultSections}
         title="Primary"

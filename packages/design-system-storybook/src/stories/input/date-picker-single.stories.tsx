@@ -60,7 +60,7 @@ export const WithForm: Story = {
       <FormProvider {...methods}>
         <form
           onSubmit={onSubmit}
-          className='space-y-4 max-w-md p-4'
+          className='flex flex-col gap-4 max-w-md p-4'
         >
           <IGRPDatePickerSingle {...args} />
           <button
@@ -96,7 +96,7 @@ const DatePickerErrorA11yTemplate: React.FC = () => {
       schema={DatePickerErrorA11ySchema}
       onSubmit={() => {}}
       formRef={formRef}
-      gridClassName='space-y-4 w-80'
+      gridClassName='w-80'
     >
       <IGRPDatePickerSingle
         name='birthDate'

@@ -95,7 +95,7 @@ const Template = (args: IGRPPageFooterProps) => {
                     iconName='Info'
                     className='h-4 w-4 mr-2 mt-0.5 text-blue-500'
                   />
-                  <div className='space-y-1'>
+                  <div className='flex flex-col gap-1'>
                     <h4 className='text-sm font-medium text-blue-700'>Dicas</h4>
                     <p className='text-xs text-blue-600'>
                       Preencha todos os campos obrigatórios marcados com * e utilize a navegação

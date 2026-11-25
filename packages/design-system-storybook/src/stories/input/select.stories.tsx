@@ -104,7 +104,7 @@ const Template: React.FC<Partial<React.ComponentProps<typeof IGRPSelect>>> = (ar
         schema={schema}
         onSubmit={onSubmit}
         formRef={formRef}
-        gridClassName='space-y-4 w-80'
+        gridClassName='w-80'
       >
         <IGRPSelect
           name='fruit'
@@ -173,7 +173,7 @@ const SelectErrorA11yTemplate: React.FC = () => {
       schema={schema}
       onSubmit={() => {}}
       formRef={formRef}
-      gridClassName='space-y-4 w-80'
+      gridClassName='w-80'
     >
       <IGRPSelect
         name='fruit'

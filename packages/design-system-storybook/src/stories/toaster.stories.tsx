@@ -16,7 +16,7 @@ const Template: StoryFn = () => {
     <>
       <IGRPToaster richColors />
 
-      <div className='flex flex-col gap-5 space-y-3 p-4'>
+      <div className='flex flex-col gap-8 p-4'>
         <IGRPButton onClick={() => igrpToast({ title: 'Default Toast' })}>Default</IGRPButton>
 
         <IGRPButton

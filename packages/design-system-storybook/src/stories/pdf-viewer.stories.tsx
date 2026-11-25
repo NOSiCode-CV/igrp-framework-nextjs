@@ -222,7 +222,7 @@ export const LargeHeightInline: Story = {
 // Multiple Documents Showcase
 export const MultipleDocuments: Story = {
   render: () => (
-    <div className='space-y-6'>
+    <div className='flex flex-col gap-6'>
       <div>
         <h3 className='text-lg font-semibold mb-2'>Modal Version</h3>
         <IGRPPdfViewer

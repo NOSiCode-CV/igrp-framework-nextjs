@@ -86,7 +86,7 @@ export default meta;
 type Story = StoryObj<typeof IGRPTabs>;
 
 const createTabContent = (label: string) => (
-  <div className='space-y-4'>
+  <div className='flex flex-col gap-4'>
     <h3 className='text-lg font-medium'>{label} Content</h3>
     <p>This is the content for the {label.toLowerCase()} tab.</p>
   </div>

@@ -123,7 +123,7 @@ export const WithBackButtonText: Story = {
 export const WithBackButtonVariants: Story = {
   args: { title: 'Page Title' },
   render: () => (
-    <div className='container mx-auto px-4 py-10 space-y-8'>
+    <div className='container mx-auto px-4 py-10 flex flex-col gap-8'>
       <div>
         <h3 className='text-sm font-medium mb-4 text-muted-foreground'>Outline (default)</h3>
         <IGRPPageHeader
@@ -158,7 +158,7 @@ export const WithBackButtonVariants: Story = {
 export const WithBackButtonSizes: Story = {
   args: { title: 'Page Title' },
   render: () => (
-    <div className='container mx-auto px-4 py-10 space-y-8'>
+    <div className='container mx-auto px-4 py-10 flex flex-col gap-8'>
       <div>
         <h3 className='text-sm font-medium mb-4 text-muted-foreground'>Icon (default)</h3>
         <IGRPPageHeader
@@ -262,7 +262,7 @@ export const Sticky: Story = {
 export const HeadlineVariants: Story = {
   args: { title: 'Page Title' },
   render: () => (
-    <div className='container mx-auto px-4 py-10 space-y-8'>
+    <div className='container mx-auto px-4 py-10 flex flex-col gap-8'>
       <div>
         <h3 className='text-sm font-medium mb-4 text-muted-foreground'>Default</h3>
         <IGRPPageHeader title='Page Title' description='Default variant' />

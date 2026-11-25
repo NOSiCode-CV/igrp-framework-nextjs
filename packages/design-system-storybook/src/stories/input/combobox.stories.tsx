@@ -171,7 +171,7 @@ const MultipleTemplate = (args: JSX.IntrinsicAttributes & IGRPComboboxProps) => 
       data-section-id={'vinculoLaboral'}
       className={cn()}
       >
-      <IGRPCardContent className={cn('', 'space-x-3', 'space-y-3',)}>
+      <IGRPCardContent className={cn('')}>
         <div className={cn('grid', 'grid-cols-1 ', 'md:grid-cols-2 ', 'lg:grid-cols-4 ', ' gap-4',)}>
           <IGRPCombobox
             name={`numeroContribuinte`}
@@ -305,7 +305,7 @@ const FormTemplate = (args: IGRPComboboxProps) => {
         schema={schema}
         onSubmit={onSubmit}
         formRef={formRef}
-        gridClassName='space-y-4 w-80'
+        gridClassName='w-80'
         defaultValues={{ [fieldName]: defaultValue }}
       >
         <IGRPCombobox

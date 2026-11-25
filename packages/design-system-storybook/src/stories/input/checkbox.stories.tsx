@@ -68,7 +68,7 @@ const FormTemplate: StoryFn<IGRPCheckboxProps> = (args) => {
       <FormProvider {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className='space-y-4'
+          className='flex flex-col gap-4'
         >
           <IGRPCheckbox {...args} />
 
@@ -214,7 +214,7 @@ export const WithValidation: StoryObj<IGRPCheckboxProps> = {
 //                 </div>
 //               </IGRPPageHeader>
 //             </IGRPCardHeader>
-//             <IGRPCardContent className={cn('space-x-3', 'space-y-3')}>
+//             <IGRPCardContent className={cn('')}>
 //               <div className='grid grid-cols-6 gap-4'>
 //                 <IGRPCheckbox
 //                   name="checkbox1"

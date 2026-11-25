@@ -243,7 +243,7 @@ export const WithContent: Story = {
     <AlertDialogDemo {...args}>
       <div className='border rounded-md p-4 bg-gray-50'>
         <p className='text-sm'>Additional content can be placed here:</p>
-        <ul className='list-disc list-inside text-sm mt-2 space-y-1'>
+        <ul className='list-disc list-inside text-sm mt-2 flex flex-col gap-1'>
           <li>Item one will be affected</li>
           <li>Item two will be removed</li>
           <li>Item three will be archived</li>

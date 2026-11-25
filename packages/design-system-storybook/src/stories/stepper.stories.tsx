@@ -191,7 +191,7 @@ const StepDetails = ({ step, steps }: { step: number; steps: IGRPStepProcessProp
 };
 
 const renderStepper = (args: Story['args']) => (
-  <div className="space-y-6 px-4 py-8">
+  <div className="flex flex-col gap-6 px-4 py-8">
     <IGRPStepperProcess {...args}>
       {(step) => <StepDetails step={step} steps={args!.steps ?? pipelineSteps} />}
     </IGRPStepperProcess>

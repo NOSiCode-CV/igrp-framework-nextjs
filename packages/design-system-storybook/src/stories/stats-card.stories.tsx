@@ -202,7 +202,7 @@ export const MinimalStyle: Story = {
 
 export const ItemPlacementVariants: Story = {
   render: () => (
-    <div className='space-y-6 px-4 py-12'>
+    <div className='flex flex-col gap-6 px-4 py-12'>
       <IGRPStatsCard
         title='Start / Start'
         value='1,234'

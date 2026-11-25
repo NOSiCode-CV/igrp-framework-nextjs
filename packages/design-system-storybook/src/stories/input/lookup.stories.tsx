@@ -55,7 +55,7 @@ export const PickedValue: Story = {
         <FormProvider {...form}>
           <form
             onSubmit={form.handleSubmit((data) => console.log(data))}
-            className='space-y-4'
+            className='flex flex-col gap-4'
           >
             <IGRPLookupField
               {...args}

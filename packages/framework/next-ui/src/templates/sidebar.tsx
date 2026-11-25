@@ -99,6 +99,8 @@ export function IGRPSidebarMenus({ showSearch }: { showSearch?: boolean }) {
 export function IGRPSidebarUser({
   items,
   showNotifications,
+  showProfile,
+  showSettings,
 }: {
   /** Extra menu entries (`IGRPNavUserItem`), before sign-out. */
   items?: React.ReactNode;
@@ -107,6 +109,10 @@ export function IGRPSidebarUser({
    * data (`showNotifications`); a value here overrides it.
    */
   showNotifications?: boolean;
+  /** Show the Profile entry. Defaults to the data's `showProfile`; a value here overrides it. */
+  showProfile?: boolean;
+  /** Show the Settings entry. Defaults to the data's `showSettings`; a value here overrides it. */
+  showSettings?: boolean;
 }) {
   const data = useIGRPSidebarData();
   return (
@@ -118,6 +124,8 @@ export function IGRPSidebarUser({
       settingsUrl={data?.settingsUrl || undefined}
       logoutUrl={data?.logoutUrl || undefined}
       showNotifications={showNotifications ?? data?.showNotifications}
+      showProfile={showProfile ?? data?.showProfile}
+      showSettings={showSettings ?? data?.showSettings}
       items={items}
     />
   );

@@ -401,6 +401,14 @@
         "manifestHash": "b3225996a28b77bc",
         "payloadHash": "f031f71a29fa0073"
       },
+      "99-sidebar-user-menu-urls": {
+        "manifestHash": "a03ca42fe9156315",
+        "payloadHash": "209fefb67027a46e"
+      },
+      "100-enabled-locales-env": {
+        "manifestHash": "0096d2baa690ed81",
+        "payloadHash": "325c9f26e35cdaac"
+      },
       "101-migration-guide-compact-lock": {
         "manifestHash": "a9264ab09fec7221",
         "payloadHash": "fa700932dd834817"

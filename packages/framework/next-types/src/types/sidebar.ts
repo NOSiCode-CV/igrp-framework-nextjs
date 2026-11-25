@@ -28,6 +28,10 @@ export interface IGRPSidebarDataArgs {
   appCenterUrl?: string;
   showMenuSearch?: boolean;
   showNotifications?: boolean;
+  /** Show the Profile entry of the sidebar user menu. Defaults to `true`. */
+  showProfile?: boolean;
+  /** Show the Settings entry of the sidebar user menu. Defaults to `true`. */
+  showSettings?: boolean;
   /** Profile entry of the sidebar user menu. Defaults to `/profile`. */
   profileUrl?: string;
   /** Notifications entry of the sidebar user menu. Defaults to `/notifications`. */

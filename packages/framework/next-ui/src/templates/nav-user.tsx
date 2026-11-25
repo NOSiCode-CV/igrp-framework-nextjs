@@ -77,6 +77,10 @@ interface IGRPTemplateNavUserProps {
   logoutUrl?: string;
   /** Show the link-only Notifications entry. Defaults to `true`. */
   showNotifications?: boolean;
+  /** Show the Profile entry. Defaults to `true`. */
+  showProfile?: boolean;
+  /** Show the Settings entry (sidebar variant only). Defaults to `true`. */
+  showSettings?: boolean;
   /**
    * Extra entries, rendered after the built-in ones and before sign-out. Use
    * `IGRPNavUserItem` to match the built-in look.
@@ -98,6 +102,8 @@ function IGRPTemplateNavUser({
   settingsUrl = '/settings',
   logoutUrl = '/logout',
   showNotifications = true,
+  showProfile = true,
+  showSettings = true,
   items,
   labels: labelOverrides,
 }: IGRPTemplateNavUserProps) {
@@ -167,13 +173,17 @@ function IGRPTemplateNavUser({
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
 
-            <DropdownMenuItem asChild className={cn(itemClassName)}>
-              <Link href={resolvedProfileUrl}>
-                <UserIcon size={16} className={iconClassName} />
-                <span>{labels.profile}</span>
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
+            {showProfile && (
+              <>
+                <DropdownMenuItem asChild className={cn(itemClassName)}>
+                  <Link href={resolvedProfileUrl}>
+                    <UserIcon size={16} className={iconClassName} />
+                    <span>{labels.profile}</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+              </>
+            )}
 
             {showNotifications && (
               <>
@@ -187,7 +197,7 @@ function IGRPTemplateNavUser({
               </>
             )}
 
-            {!isHeader && (
+            {!isHeader && showSettings && (
               <DropdownMenuItem asChild className={cn(itemClassName)}>
                 <Link href={settingsUrl}>
                   <SettingsIcon size={16} className={iconClassName} />

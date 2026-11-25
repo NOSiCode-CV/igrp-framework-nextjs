@@ -8,8 +8,13 @@ import {
 
 import { getLayoutConfig } from "@/lib/dal";
 
+import { parseEnabledLocales, pickDefaultLocale } from "./enabled-locales";
+
+const locales = parseEnabledLocales(process.env.IGRP_ENABLED_LOCALES);
+
 /**
- * Platform locales are fixed (pt, en, fr). The region used for formatting is
+ * Platform locales are fixed (pt, en, fr); `IGRP_ENABLED_LOCALES` picks which
+ * of them this deployment offers. The region used for formatting is
  * per deployment (`IGRP_FORMAT_LOCALES`, read here and nowhere else), as is the
  * time zone (`IGRP_TIME_ZONE`; unset keeps Atlantic/Cape_Verde, matching pt-CV,
  * so server and browser render dates alike). No
@@ -18,7 +23,8 @@ import { getLayoutConfig } from "@/lib/dal";
  * becomes session-first; see docs/I18N.md.
  */
 export const i18n = igrpDefineI18n({
-  defaultLocale: "pt",
+  defaultLocale: pickDefaultLocale(locales, "pt"),
+  locales,
   formatLocales: igrpParseFormatLocales(process.env.IGRP_FORMAT_LOCALES),
   timeZone: process.env.IGRP_TIME_ZONE || "Atlantic/Cape_Verde",
   getSessionLocale: async () => {

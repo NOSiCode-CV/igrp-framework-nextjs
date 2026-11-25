@@ -15,7 +15,7 @@ Executa o [spec](spec.md) por ondas. Cada ticket é feito numa sessão própria 
   - cada ticket numa branch `feature/ds-v4-NN-<slug>` (o slug é o do nome do ficheiro do ticket), criada a partir da `feature/ds-v4` atualizada;
   - o ticket entra na `feature/ds-v4` por merge request. A `feature/ds-v4` só entra no `development` no fim, na onda 5.
 - **Versões:** um changeset `patch` por ticket, nunca `major` nem `minor`. Não se publica no registo durante o plano.
-- **Commits:** sem trailers `Co-Authored-By`. Commit e push só quando a pessoa pedir.
+- **Commits:** commit e push só quando a pessoa pedir.
 - **Textos de interface:** todos através das traduções do framework. O `lint:i18n:framework` tem de passar.
 - **Ambiguidade:** se o canvas e o spec divergirem, pergunta-se à pessoa antes de decidir.
 - **Ticket fechado:**

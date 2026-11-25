@@ -158,9 +158,6 @@ test(next): cover the access client retry path
 ```
 
 Common types: `feat`, `fix`, `refactor`, `perf`, `test`, `docs`, `ci`, `chore`. Common scopes: `design-system`, `next-auth`, `next-types`, `next-ui`, `next`, `next-i18n`, `template`, `template-migrator`, `storybook`, `ci`.
-
-Commits are authored by the person committing. Don't add `Co-Authored-By` trailers that name an AI model or its email.
-
 ## 9. Open a merge request
 
 1. Push your branch and open an MR against `development`.

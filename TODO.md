@@ -25,7 +25,7 @@
 - https://nextjs.org/blog/next-16-3-ai-improvements
 - https://github.com/vercel-labs/next-skills
 - https://github.com/vercel/next.js/tree/canary/skills
-- maps component
+- maps component: https://www.mapcn.dev/
 - pdfcn: https://www.pdfcn.dev/
 - review marcadores web
 - editorcn: https://www.rtecn.space

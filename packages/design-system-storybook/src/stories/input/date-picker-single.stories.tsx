@@ -78,9 +78,6 @@ export const WithForm: Story = {
 /**
  * Regression story: the date picker button must carry aria-invalid="true" and
  * an aria-describedby pointing at the error message when the field is in error.
- *
- * NOTE: test:vitest runner is currently broken in this environment (pre-existing
- * "Failed to initialize projects" issue). Build gate: `pnpm build:ds`.
  */
 const DatePickerErrorA11ySchema = z.object({ birthDate: z.date({ error: 'Date is required' }) });
 

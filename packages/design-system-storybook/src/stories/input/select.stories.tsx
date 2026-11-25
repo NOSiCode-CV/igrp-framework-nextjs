@@ -155,9 +155,6 @@ export const Disabled: Story = {
  * Regression story: the SelectTrigger (combobox button) must carry
  * aria-invalid="true" and an aria-describedby pointing at the error message
  * when the field has a validation error.
- *
- * NOTE: test:vitest runner is currently broken in this environment (pre-existing
- * "Failed to initialize projects" issue). Build gate: `pnpm build:ds`.
  */
 const SelectErrorA11yTemplate: React.FC = () => {
   const schema = z.object({ fruit: z.string().min(1, 'This field is required') });

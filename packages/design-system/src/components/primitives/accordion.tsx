@@ -77,7 +77,7 @@ function AccordionContent({ className, children, ...props }: React.ComponentProp
       {/* No fixed height here: Radix measures --radix-accordion-content-height once on open, so content that grows later would be clipped. */}
       <div
         className={cn(
-          "pb-4[&_a]:underline pt-0 [&_a]:underline-offset-3 [&_a]:hover:text-foreground [&_p:not(:last-child)]:mb-4",
+          "pb-4 [&_a]:underline pt-0 [&_a]:underline-offset-3 [&_a]:hover:text-foreground [&_p:not(:last-child)]:mb-4",
           className
         )}
       >

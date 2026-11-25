@@ -619,6 +619,12 @@
       "cliVersion": "0.2.0-beta.27",
       "manifestHash": "b7f96b3b16bc96fb",
       "payloadHash": "ba535dfac45b2cd1"
+    },
+    {
+      "id": "103-types-patch-bump",
+      "cliVersion": "0.2.0-beta.27",
+      "manifestHash": "aaed3cacf40798cb",
+      "payloadHash": "e3b0c44298fc1c14"
     }
   ]
 }

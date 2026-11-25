@@ -6,6 +6,9 @@ importers:
   .:
     configDependencies: {}
     packageManagerDependencies:
+      '@pnpm/exe':
+        specifier: 12.3.4
+        version: 12.3.4
       pnpm:
         specifier: 12.3.4
         version: 12.3.4
@@ -56,6 +59,11 @@ packages:
     cpu: [x64]
     os: [win32]
 
+  '@pnpm/exe@12.3.4':
+    resolution: {integrity: sha512-Rq7JokWAyYF9IFfn8zofB/q2AgnZlmoMuH5fMHB2+Ta61I9aD7sNm+woZpx6iH+5vb38chdSoYRvOtSqlH72YQ==}
+    engines: {node: '>=18.*'}
+    hasBin: true
+
   pnpm@12.3.4:
     resolution: {integrity: sha512-lhqkH7B32joEpEHZ+OFevAyW2o73ELLrZ7+e58sGEOq9SPH9hfUc/+c4RnhfoPh8VqOocqHYk/hEZ0G1zORUVw==}
     engines: {node: '>=18.*'}
@@ -86,6 +94,17 @@ snapshots:
 
   '@pnpm/exe.win32-x64@12.3.4':
     optional: true
+
+  '@pnpm/exe@12.3.4':
+    optionalDependencies:
+      '@pnpm/exe.darwin-arm64': 12.3.4
+      '@pnpm/exe.darwin-x64': 12.3.4
+      '@pnpm/exe.linux-arm64': 12.3.4
+      '@pnpm/exe.linux-arm64-musl': 12.3.4
+      '@pnpm/exe.linux-x64': 12.3.4
+      '@pnpm/exe.linux-x64-musl': 12.3.4
+      '@pnpm/exe.win32-arm64': 12.3.4
+      '@pnpm/exe.win32-x64': 12.3.4
 
   pnpm@12.3.4:
     optionalDependencies:
@@ -491,7 +510,7 @@ importers:
         version: 0.2.0-beta.21
       next-intl:
         specifier: ^4.14.0
-        version: 4.14.9(@types/react@19.3.0)(next@15.5.29(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@26.6.6)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react@19.3.1)
+        version: 4.14.9(@types/react@19.3.1)(next@15.5.29(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@26.6.7)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react@19.3.1)
       server-only:
         specifier: ^0.0.1
         version: 0.0.1
@@ -512,14 +531,14 @@ importers:
         specifier: 10.0.1
         version: 10.0.1(eslint@10.15.0(jiti@2.7.0)(supports-color@8.1.1))
       '@types/node':
-        specifier: ^26.6.6
-        version: 26.6.6
+        specifier: ^26.6.7
+        version: 26.6.7
       '@types/react':
-        specifier: 19.3.0
-        version: 19.3.0
+        specifier: 19.3.1
+        version: 19.3.1
       '@types/react-dom':
         specifier: 19.3.0
-        version: 19.3.0(@types/react@19.3.0)
+        version: 19.3.0(@types/react@19.3.1)
       babel-plugin-react-compiler:
         specifier: 1.0.0
         version: 1.0.0
@@ -534,7 +553,7 @@ importers:
         version: 17.14.0
       next:
         specifier: 15.5.29
-        version: 15.5.29(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@26.6.6)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+        version: 15.5.29(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@26.6.7)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       prettier:
         specifier: ^3.9.9
         version: 3.9.10
@@ -555,7 +574,7 @@ importers:
         version: 8.74.0(eslint@10.15.0(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)
       vitest:
         specifier: ^5.0.4
-        version: 5.1.1(@types/node@26.6.6)(@vitest/browser-playwright@5.1.1)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.1)(jsdom@30.1.3)(vite@8.3.8(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
+        version: 5.1.1(@types/node@26.6.7)(@vitest/browser-playwright@5.1.1)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.1)(jsdom@30.1.3)(vite@8.3.8(@types/node@26.6.7)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
       zod:
         specifier: ^4.6.7
         version: 4.6.7
@@ -566,11 +585,11 @@ importers:
         specifier: 10.0.1
         version: 10.0.1(eslint@10.15.0(jiti@2.7.0)(supports-color@8.1.1))
       '@types/node':
-        specifier: ^26.6.6
-        version: 26.6.6
+        specifier: ^26.6.7
+        version: 26.6.7
       '@types/react':
-        specifier: ^19.3.0
-        version: 19.3.0
+        specifier: ^19.3.1
+        version: 19.3.1
       eslint:
         specifier: ^10.11.0
         version: 10.15.0(jiti@2.7.0)(supports-color@8.1.1)
@@ -582,10 +601,10 @@ importers:
         version: 17.14.0
       next:
         specifier: ^15.5.29
-        version: 15.5.29(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@26.6.6)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+        version: 15.5.29(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@26.6.7)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       next-auth:
         specifier: 4.24.15
-        version: 4.24.15(next@15.5.29(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@26.6.6)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+        version: 4.24.15(next@15.5.29(@types/node@26.6.7)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       prettier:
         specifier: ^3.9.9
         version: 3.9.10
@@ -606,7 +625,7 @@ importers:
         version: 8.74.0(eslint@10.15.0(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)
       vitest:
         specifier: ^5.0.4
-        version: 5.1.1(@types/node@26.6.6)(@vitest/browser-playwright@5.1.1)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.1)(jsdom@30.1.3)(vite@8.3.8(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
+        version: 5.1.1(@types/node@26.6.7)(@vitest/browser-playwright@5.1.1)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.1)(jsdom@30.1.3)(vite@8.3.8(@types/node@26.6.7)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
 
   packages/framework/next-i18n:
     dependencies:
@@ -621,8 +640,8 @@ importers:
         specifier: 10.0.1
         version: 10.0.1(eslint@10.15.0(jiti@2.7.0)(supports-color@8.1.1))
       '@types/node':
-        specifier: ^26.6.6
-        version: 26.6.6
+        specifier: ^26.6.7
+        version: 26.6.7
       eslint:
         specifier: ^10.11.0
         version: 10.15.0(jiti@2.7.0)(supports-color@8.1.1)
@@ -643,7 +662,7 @@ importers:
         version: 8.74.0(eslint@10.15.0(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)
       vitest:
         specifier: ^5.0.1
-        version: 5.1.1(@types/node@26.6.6)(@vitest/browser-playwright@5.1.1)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.1)(jsdom@30.1.3)(vite@8.3.8(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
+        version: 5.1.1(@types/node@26.6.7)(@vitest/browser-playwright@5.1.1)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.1)(jsdom@30.1.3)(vite@8.3.8(@types/node@26.6.7)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
 
   packages/framework/next-types:
     dependencies:
@@ -658,11 +677,11 @@ importers:
         specifier: ^0.2.0-beta.21
         version: 0.2.0-beta.21
       '@types/node':
-        specifier: ^26.6.6
-        version: 26.6.6
+        specifier: ^26.6.7
+        version: 26.6.7
       '@types/react':
-        specifier: 19.3.0
-        version: 19.3.0
+        specifier: 19.3.1
+        version: 19.3.1
       eslint:
         specifier: ^10.11.0
         version: 10.15.0(jiti@2.7.0)(supports-color@8.1.1)
@@ -671,7 +690,7 @@ importers:
         version: 17.14.0
       next-auth:
         specifier: 4.24.15
-        version: 4.24.15(next@15.5.29(@types/node@26.6.6)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+        version: 4.24.15(next@15.5.29(@types/node@26.6.7)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       prettier:
         specifier: ^3.9.9
         version: 3.9.10
@@ -728,14 +747,14 @@ importers:
         specifier: 10.0.1
         version: 10.0.1(eslint@10.15.0(jiti@2.7.0)(supports-color@8.1.1))
       '@types/node':
-        specifier: ^26.6.6
-        version: 26.6.6
+        specifier: ^26.6.7
+        version: 26.6.7
       '@types/react':
-        specifier: 19.3.0
-        version: 19.3.0
+        specifier: 19.3.1
+        version: 19.3.1
       '@types/react-dom':
         specifier: 19.3.0
-        version: 19.3.0(@types/react@19.3.0)
+        version: 19.3.0(@types/react@19.3.1)
       babel-plugin-react-compiler:
         specifier: 1.0.0
         version: 1.0.0
@@ -762,10 +781,10 @@ importers:
         version: 30.1.3
       next:
         specifier: 15.5.29
-        version: 15.5.29(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@26.6.6)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+        version: 15.5.29(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@26.6.7)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       next-auth:
         specifier: ^4.24.15
-        version: 4.24.15(next@15.5.29(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@26.6.6)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+        version: 4.24.15(next@15.5.29(@types/node@26.6.7)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       postcss:
         specifier: ^8.5.32
         version: 8.5.32
@@ -795,7 +814,7 @@ importers:
         version: 8.74.0(eslint@10.15.0(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)
       vitest:
         specifier: ^5.0.4
-        version: 5.1.1(@types/node@26.6.6)(@vitest/browser-playwright@5.1.1)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.1)(jsdom@30.1.3)(vite@8.3.8(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
+        version: 5.1.1(@types/node@26.6.7)(@vitest/browser-playwright@5.1.1)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.1)(jsdom@30.1.3)(vite@8.3.8(@types/node@26.6.7)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
 
   packages/framework/template-migrator:
     dependencies:
@@ -804,8 +823,8 @@ importers:
         version: 2.9.1
     devDependencies:
       '@types/node':
-        specifier: ^26.6.6
-        version: 26.6.6
+        specifier: ^26.6.7
+        version: 26.6.7
       rimraf:
         specifier: ^6.1.3
         version: 6.1.3
@@ -820,13 +839,13 @@ importers:
         version: 6.0.3
       vitest:
         specifier: ^5.0.1
-        version: 5.1.1(@types/node@26.6.6)(@vitest/browser-playwright@5.1.1)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.1)(jsdom@30.1.3)(vite@8.3.8(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
+        version: 5.1.1(@types/node@26.6.7)(@vitest/browser-playwright@5.1.1)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.1)(jsdom@30.1.3)(vite@8.3.8(@types/node@26.6.7)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
 
   templates/demo-v1:
     dependencies:
       '@hookform/resolvers':
         specifier: 5.9.1
-        version: 5.9.1(@sinclair/typebox@0.34.52)(@standard-schema/spec@1.1.0)(ajv-formats@2.1.1(ajv@8.20.0))(ajv@8.20.0)(joi@17.13.9)(react-hook-form@7.91.0(@types/react@19.3.0)(react@19.3.1))(zod@4.6.7)
+        version: 5.9.1(@sinclair/typebox@0.34.52)(@standard-schema/spec@1.1.0)(ajv-formats@2.1.1(ajv@8.20.0))(ajv@8.20.0)(joi@17.13.9)(react-hook-form@7.91.0(@types/react@19.3.1)(react@19.3.1))(zod@4.6.7)
       '@igrp/framework-next':
         specifier: workspace:*
         version: link:../../packages/framework/next
@@ -841,19 +860,19 @@ importers:
         version: link:../../packages/design-system
       '@tanstack/react-query':
         specifier: 5.105.3
-        version: 5.105.3(@types/react@19.3.0)(react@19.3.1)
+        version: 5.105.3(@types/react@19.3.1)(react@19.3.1)
       class-variance-authority:
         specifier: 0.7.1
         version: 0.7.1
       next:
         specifier: 15.5.29
-        version: 15.5.29(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@26.6.6)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+        version: 15.5.29(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@26.6.7)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       next-auth:
         specifier: 4.24.15
-        version: 4.24.15(next@15.5.29(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@26.6.6)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+        version: 4.24.15(next@15.5.29(@types/node@26.6.7)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       next-intl:
         specifier: ^4.14.0
-        version: 4.14.9(@types/react@19.3.0)(next@15.5.29(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@26.6.6)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react@19.3.1)
+        version: 4.14.9(@types/react@19.3.1)(next@15.5.29(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@26.6.7)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react@19.3.1)
       react:
         specifier: 19.3.1
         version: 19.3.1
@@ -862,7 +881,7 @@ importers:
         version: 19.3.1(react@19.3.1)
       react-hook-form:
         specifier: 7.91.0
-        version: 7.91.0(@types/react@19.3.0)(react@19.3.1)
+        version: 7.91.0(@types/react@19.3.1)(react@19.3.1)
       redis:
         specifier: 5.12.1
         version: 5.12.1
@@ -886,14 +905,14 @@ importers:
         specifier: 4.3.4
         version: 4.3.4
       '@types/node':
-        specifier: 26.6.6
-        version: 26.6.6
+        specifier: 26.6.7
+        version: 26.6.7
       '@types/react':
-        specifier: 19.3.0
-        version: 19.3.0
+        specifier: 19.3.1
+        version: 19.3.1
       '@types/react-dom':
         specifier: 19.3.0
-        version: 19.3.0(@types/react@19.3.0)
+        version: 19.3.0(@types/react@19.3.1)
       tailwindcss:
         specifier: 4.3.4
         version: 4.3.4
@@ -902,7 +921,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 5.1.0
-        version: 5.1.0(@types/node@26.6.6)(@vitest/browser-playwright@5.1.0)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(jsdom@30.1.3)(vite@8.3.8(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
+        version: 5.1.0(@types/node@26.6.7)(@vitest/browser-playwright@5.1.0)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(jsdom@30.1.3)(vite@8.3.8(@types/node@26.6.7)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
 
 packages:
 
@@ -4337,9 +4356,6 @@ packages:
     resolution: {integrity: sha512-ZI7bU42mZXXKHn/qNLEw2IrbiINU7X5+vfgdixBHkCNpYWXjKgfQ/P+uyGb5CjOLB9UcnTeg3rylQtV2hym44Q==}
     peerDependencies:
       '@types/react': ^19.3.0
-
-  '@types/react@19.3.0':
-    resolution: {integrity: sha512-N0rFCuH9YoxG9/m61l9MfpJKfmLOVU0em7ipIz6TRgSSkvReLB9vL85GB+yr8Bs5leqpvg96JSwF4ZS1s4viQg==}
 
   '@types/react@19.3.1':
     resolution: {integrity: sha512-HNTkBIm8zmHX8LUXX2vtZ/ONzehrV1J3abl2fUIiZ5qxTYRCj/z+rDeFwOltqCLl9lRdUTKWT41OLtYuFV/Arg==}
@@ -9596,10 +9612,10 @@ snapshots:
     dependencies:
       '@hapi/hoek': 9.3.0
 
-  '@hookform/resolvers@5.9.1(@sinclair/typebox@0.34.52)(@standard-schema/spec@1.1.0)(ajv-formats@2.1.1(ajv@8.20.0))(ajv@8.20.0)(joi@17.13.9)(react-hook-form@7.91.0(@types/react@19.3.0)(react@19.3.1))(zod@4.6.7)':
+  '@hookform/resolvers@5.9.1(@sinclair/typebox@0.34.52)(@standard-schema/spec@1.1.0)(ajv-formats@2.1.1(ajv@8.20.0))(ajv@8.20.0)(joi@17.13.9)(react-hook-form@7.91.0(@types/react@19.3.1)(react@19.3.1))(zod@4.6.7)':
     dependencies:
       '@standard-schema/utils': 0.3.0
-      react-hook-form: 7.91.0(@types/react@19.3.0)(react@19.3.1)
+      react-hook-form: 7.91.0(@types/react@19.3.1)(react@19.3.1)
     optionalDependencies:
       '@sinclair/typebox': 0.34.52
       '@standard-schema/spec': 1.1.0
@@ -11601,12 +11617,12 @@ snapshots:
 
   '@tanstack/query-core@5.105.3': {}
 
-  '@tanstack/react-query@5.105.3(@types/react@19.3.0)(react@19.3.1)':
+  '@tanstack/react-query@5.105.3(@types/react@19.3.1)(react@19.3.1)':
     dependencies:
       '@tanstack/query-core': 5.105.3
       react: 19.3.1
     optionalDependencies:
-      '@types/react': 19.3.0
+      '@types/react': 19.3.1
 
   '@tanstack/react-table@8.21.3(react-dom@19.3.1(react@19.3.1))(react@19.3.1)':
     dependencies:
@@ -11964,17 +11980,9 @@ snapshots:
     dependencies:
       undici-types: 8.9.0
 
-  '@types/react-dom@19.3.0(@types/react@19.3.0)':
-    dependencies:
-      '@types/react': 19.3.0
-
   '@types/react-dom@19.3.0(@types/react@19.3.1)':
     dependencies:
       '@types/react': 19.3.1
-
-  '@types/react@19.3.0':
-    dependencies:
-      csstype: 3.2.3
 
   '@types/react@19.3.1':
     dependencies:
@@ -12220,27 +12228,13 @@ snapshots:
     optionalDependencies:
       babel-plugin-react-compiler: 1.0.0
 
-  '@vitest/browser-playwright@5.1.0(playwright@1.65.1)(vite@8.3.8(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))(vitest@5.1.0)':
+  '@vitest/browser-playwright@5.1.0(playwright@1.65.1)(vite@8.3.8(@types/node@26.6.7)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))(vitest@5.1.0)':
     dependencies:
-      '@vitest/browser': 5.1.0(vite@8.3.8(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))(vitest@5.1.0)
-      '@vitest/mocker': 5.1.0(vite@8.3.8(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
+      '@vitest/browser': 5.1.0(vite@8.3.8(@types/node@26.6.7)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))(vitest@5.1.0)
+      '@vitest/mocker': 5.1.0(vite@8.3.8(@types/node@26.6.7)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
       playwright: 1.65.1
       tinyrainbow: 3.2.0
-      vitest: 5.1.0(@types/node@26.6.6)(@vitest/browser-playwright@5.1.0)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(jsdom@30.1.3)(vite@8.3.8(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
-    transitivePeerDependencies:
-      - bufferutil
-      - msw
-      - utf-8-validate
-      - vite
-    optional: true
-
-  '@vitest/browser-playwright@5.1.1(playwright@1.65.1)(vite@8.3.8(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))(vitest@5.1.1)':
-    dependencies:
-      '@vitest/browser': 5.1.1(vite@8.3.8(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))(vitest@5.1.1)
-      '@vitest/mocker': 5.1.1(vite@8.3.8(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
-      playwright: 1.65.1
-      tinyrainbow: 3.2.0
-      vitest: 5.1.1(@types/node@26.6.6)(@vitest/browser-playwright@5.1.1)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.1)(jsdom@30.1.3)(vite@8.3.8(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
+      vitest: 5.1.0(@types/node@26.6.7)(@vitest/browser-playwright@5.1.0)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(jsdom@30.1.3)(vite@8.3.8(@types/node@26.6.7)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
     transitivePeerDependencies:
       - bufferutil
       - msw
@@ -12261,17 +12255,17 @@ snapshots:
       - utf-8-validate
       - vite
 
-  '@vitest/browser@5.1.0(vite@8.3.8(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))(vitest@5.1.0)':
+  '@vitest/browser@5.1.0(vite@8.3.8(@types/node@26.6.7)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))(vitest@5.1.0)':
     dependencies:
       '@blazediff/core': 1.10.0
-      '@vitest/mocker': 5.1.0(vite@8.3.8(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
+      '@vitest/mocker': 5.1.0(vite@8.3.8(@types/node@26.6.7)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
       '@vitest/ui': 5.1.0(vitest@5.1.0)
       '@vitest/utils': 5.1.0
       magic-string: 1.4.5
       pngjs: 7.0.0
       sirv: 3.0.2
       tinyrainbow: 3.2.0
-      vitest: 5.1.0(@types/node@26.6.6)(@vitest/browser-playwright@5.1.0)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(jsdom@30.1.3)(vite@8.3.8(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
+      vitest: 5.1.0(@types/node@26.6.7)(@vitest/browser-playwright@5.1.0)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(jsdom@30.1.3)(vite@8.3.8(@types/node@26.6.7)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
       ws: 8.22.1
     transitivePeerDependencies:
       - bufferutil
@@ -12291,25 +12285,6 @@ snapshots:
       sirv: 3.0.2
       tinyrainbow: 3.2.0
       vitest: 5.1.1(@types/node@26.6.7)(@vitest/browser-playwright@5.1.1)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.1)(jsdom@31.0.1)(vite@8.3.8(@types/node@26.6.7)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
-      ws: 8.22.1
-    transitivePeerDependencies:
-      - bufferutil
-      - msw
-      - utf-8-validate
-      - vite
-    optional: true
-
-  '@vitest/browser@5.1.1(vite@8.3.8(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))(vitest@5.1.1)':
-    dependencies:
-      '@blazediff/core': 1.10.0
-      '@vitest/mocker': 5.1.1(vite@8.3.8(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
-      '@vitest/ui': 5.1.1(vitest@5.1.1)
-      '@vitest/utils': 5.1.1
-      magic-string: 1.4.5
-      pngjs: 7.0.0
-      sirv: 3.0.2
-      tinyrainbow: 3.2.0
-      vitest: 5.1.1(@types/node@26.6.6)(@vitest/browser-playwright@5.1.1)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.1)(jsdom@30.1.3)(vite@8.3.8(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
       ws: 8.22.1
     transitivePeerDependencies:
       - bufferutil
@@ -12346,9 +12321,9 @@ snapshots:
       obug: 3.0.0
       std-env: 4.3.0
       tinyrainbow: 3.2.0
-      vitest: 5.1.0(@types/node@26.6.6)(@vitest/browser-playwright@5.1.0)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(jsdom@30.1.3)(vite@8.3.8(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
+      vitest: 5.1.0(@types/node@26.6.7)(@vitest/browser-playwright@5.1.0)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(jsdom@30.1.3)(vite@8.3.8(@types/node@26.6.7)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
     optionalDependencies:
-      '@vitest/browser': 5.1.0(vite@8.3.8(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))(vitest@5.1.0)
+      '@vitest/browser': 5.1.0(vite@8.3.8(@types/node@26.6.7)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))(vitest@5.1.0)
     optional: true
 
   '@vitest/coverage-v8@5.1.0(@vitest/browser@5.1.0)(vitest@5.1.1)':
@@ -12393,15 +12368,6 @@ snapshots:
     dependencies:
       '@vitest/istanbul-lib-coverage': 2.1.0
 
-  '@vitest/mocker@5.1.0(vite@8.3.8(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))':
-    dependencies:
-      '@jridgewell/trace-mapping': 0.3.31
-      '@vitest/spy': 5.1.0
-      estree-walker: 3.0.3
-      magic-string: 1.4.5
-    optionalDependencies:
-      vite: 8.3.8(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1)
-
   '@vitest/mocker@5.1.0(vite@8.3.8(@types/node@26.6.7)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))':
     dependencies:
       '@jridgewell/trace-mapping': 0.3.31
@@ -12410,16 +12376,6 @@ snapshots:
       magic-string: 1.4.5
     optionalDependencies:
       vite: 8.3.8(@types/node@26.6.7)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1)
-    optional: true
-
-  '@vitest/mocker@5.1.1(vite@8.3.8(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))':
-    dependencies:
-      '@jridgewell/trace-mapping': 0.3.31
-      '@vitest/spy': 5.1.1
-      estree-walker: 3.0.3
-      magic-string: 1.4.5
-    optionalDependencies:
-      vite: 8.3.8(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1)
 
   '@vitest/mocker@5.1.1(vite@8.3.8(@types/node@26.6.7)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))':
     dependencies:
@@ -12459,7 +12415,7 @@ snapshots:
       pathe: 2.0.3
       sirv: 3.0.2
       tinyrainbow: 3.2.0
-      vitest: 5.1.0(@types/node@26.6.6)(@vitest/browser-playwright@5.1.0)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(jsdom@30.1.3)(vite@8.3.8(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
+      vitest: 5.1.0(@types/node@26.6.7)(@vitest/browser-playwright@5.1.0)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(jsdom@30.1.3)(vite@8.3.8(@types/node@26.6.7)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
     optional: true
 
   '@vitest/ui@5.1.0(vitest@5.1.1)':
@@ -15098,28 +15054,13 @@ snapshots:
     dependencies:
       content-type: 2.1.0
 
-  next-auth@4.24.15(next@15.5.29(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@26.6.6)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react@19.3.1):
+  next-auth@4.24.15(next@15.5.29(@types/node@26.6.7)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react@19.3.1):
     dependencies:
       '@babel/runtime': 7.29.10
       '@panva/hkdf': 1.2.1
       cookie: 0.7.2
       jose: 4.15.9
-      next: 15.5.29(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@26.6.6)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
-      oauth: 0.9.15
-      openid-client: 5.7.1
-      preact: 10.29.8(preact-render-to-string@5.2.6)
-      preact-render-to-string: 5.2.6(preact@10.29.8)
-      react: 19.3.1
-      react-dom: 19.3.1(react@19.3.1)
-      uuid: 11.1.1
-
-  next-auth@4.24.15(next@15.5.29(@types/node@26.6.6)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react@19.3.1):
-    dependencies:
-      '@babel/runtime': 7.29.10
-      '@panva/hkdf': 1.2.1
-      cookie: 0.7.2
-      jose: 4.15.9
-      next: 15.5.29(@types/node@26.6.6)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+      next: 15.5.29(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@26.6.7)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       oauth: 0.9.15
       openid-client: 5.7.1
       preact: 10.29.8(preact-render-to-string@5.2.6)
@@ -15130,7 +15071,7 @@ snapshots:
 
   next-intl-swc-plugin-extractor@4.14.9: {}
 
-  next-intl@4.14.9(@types/react@19.3.0)(next@15.5.29(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@26.6.6)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react@19.3.1):
+  next-intl@4.14.9(@types/react@19.3.1)(next@15.5.29(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@26.6.7)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react@19.3.1):
     dependencies:
       '@eloqnt/config': 0.1.1
       '@eloqnt/format-json': 0.1.0
@@ -15140,12 +15081,12 @@ snapshots:
       '@swc/core': 1.16.21
       icu-minify: 4.14.9
       negotiator: 1.1.0
-      next: 15.5.29(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@26.6.6)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+      next: 15.5.29(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@26.6.7)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       next-intl-swc-plugin-extractor: 4.14.9
       react: 19.3.1
-      use-intl: 4.14.9(@types/react@19.3.0)(react@19.3.1)
+      use-intl: 4.14.9(@types/react@19.3.1)(react@19.3.1)
     optionalDependencies:
-      '@types/react': 19.3.0
+      '@types/react': 19.3.1
     transitivePeerDependencies:
       - '@swc/helpers'
 
@@ -15153,31 +15094,6 @@ snapshots:
     dependencies:
       react: 19.3.1
       react-dom: 19.3.1(react@19.3.1)
-
-  next@15.5.29(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@26.6.6)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1):
-    dependencies:
-      '@next/env': 15.5.29
-      '@swc/helpers': 0.5.15
-      caniuse-lite: 1.0.30001820
-      postcss: 8.5.32
-      react: 19.3.1
-      react-dom: 19.3.1(react@19.3.1)
-      styled-jsx: 5.1.6(@babel/core@7.29.7(supports-color@8.1.1))(react@19.3.1)
-    optionalDependencies:
-      '@next/swc-darwin-arm64': 15.5.29
-      '@next/swc-darwin-x64': 15.5.29
-      '@next/swc-linux-arm64-gnu': 15.5.29
-      '@next/swc-linux-arm64-musl': 15.5.29
-      '@next/swc-linux-x64-gnu': 15.5.29
-      '@next/swc-linux-x64-musl': 15.5.29
-      '@next/swc-win32-arm64-msvc': 15.5.29
-      '@next/swc-win32-x64-msvc': 15.5.29
-      babel-plugin-react-compiler: 1.0.0
-      sharp: 0.35.5(@types/node@26.6.6)
-    transitivePeerDependencies:
-      - '@babel/core'
-      - '@types/node'
-      - babel-plugin-macros
 
   next@15.5.29(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@26.6.7)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1):
     dependencies:
@@ -15199,31 +15115,6 @@ snapshots:
       '@next/swc-win32-x64-msvc': 15.5.29
       babel-plugin-react-compiler: 1.0.0
       sharp: 0.35.5(@types/node@26.6.7)
-    transitivePeerDependencies:
-      - '@babel/core'
-      - '@types/node'
-      - babel-plugin-macros
-
-  next@15.5.29(@types/node@26.6.6)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1):
-    dependencies:
-      '@next/env': 15.5.29
-      '@swc/helpers': 0.5.15
-      caniuse-lite: 1.0.30001820
-      postcss: 8.5.32
-      react: 19.3.1
-      react-dom: 19.3.1(react@19.3.1)
-      styled-jsx: 5.1.6(@babel/core@7.29.7(supports-color@8.1.1))(react@19.3.1)
-    optionalDependencies:
-      '@next/swc-darwin-arm64': 15.5.29
-      '@next/swc-darwin-x64': 15.5.29
-      '@next/swc-linux-arm64-gnu': 15.5.29
-      '@next/swc-linux-arm64-musl': 15.5.29
-      '@next/swc-linux-x64-gnu': 15.5.29
-      '@next/swc-linux-x64-musl': 15.5.29
-      '@next/swc-win32-arm64-msvc': 15.5.29
-      '@next/swc-win32-x64-msvc': 15.5.29
-      babel-plugin-react-compiler: 1.0.0
-      sharp: 0.35.5(@types/node@26.6.6)
     transitivePeerDependencies:
       - '@babel/core'
       - '@types/node'
@@ -15852,11 +15743,11 @@ snapshots:
     optionalDependencies:
       '@types/react': 19.3.1
 
-  react-hook-form@7.91.0(@types/react@19.3.0)(react@19.3.1):
+  react-hook-form@7.91.0(@types/react@19.3.1)(react@19.3.1):
     dependencies:
       react: 19.3.1
     optionalDependencies:
-      '@types/react': 19.3.0
+      '@types/react': 19.3.1
 
   react-hook-form@7.92.0(@types/react@19.3.1)(react@19.3.1):
     dependencies:
@@ -16231,40 +16122,6 @@ snapshots:
     transitivePeerDependencies:
       - babel-plugin-macros
       - supports-color
-
-  sharp@0.35.5(@types/node@26.6.6):
-    dependencies:
-      '@img/colour': 1.1.0
-      detect-libc: 2.1.2
-      semver: 7.8.6
-    optionalDependencies:
-      '@img/sharp-darwin-arm64': 0.35.5
-      '@img/sharp-darwin-x64': 0.35.5
-      '@img/sharp-freebsd-wasm32': 0.35.5
-      '@img/sharp-libvips-darwin-arm64': 1.3.4
-      '@img/sharp-libvips-darwin-x64': 1.3.4
-      '@img/sharp-libvips-linux-arm': 1.3.4
-      '@img/sharp-libvips-linux-arm64': 1.3.4
-      '@img/sharp-libvips-linux-ppc64': 1.3.4
-      '@img/sharp-libvips-linux-riscv64': 1.3.4
-      '@img/sharp-libvips-linux-s390x': 1.3.4
-      '@img/sharp-libvips-linux-x64': 1.3.4
-      '@img/sharp-libvips-linuxmusl-arm64': 1.3.4
-      '@img/sharp-libvips-linuxmusl-x64': 1.3.4
-      '@img/sharp-linux-arm': 0.35.5
-      '@img/sharp-linux-arm64': 0.35.5
-      '@img/sharp-linux-ppc64': 0.35.5
-      '@img/sharp-linux-riscv64': 0.35.5
-      '@img/sharp-linux-s390x': 0.35.5
-      '@img/sharp-linux-x64': 0.35.5
-      '@img/sharp-linuxmusl-arm64': 0.35.5
-      '@img/sharp-linuxmusl-x64': 0.35.5
-      '@img/sharp-webcontainers-wasm32': 0.35.5
-      '@img/sharp-win32-arm64': 0.35.5
-      '@img/sharp-win32-ia32': 0.35.5
-      '@img/sharp-win32-x64': 0.35.5
-      '@types/node': 26.6.6
-    optional: true
 
   sharp@0.35.5(@types/node@26.6.7):
     dependencies:
@@ -16826,7 +16683,7 @@ snapshots:
     optionalDependencies:
       '@types/react': 19.3.1
 
-  use-intl@4.14.9(@types/react@19.3.0)(react@19.3.1):
+  use-intl@4.14.9(@types/react@19.3.1)(react@19.3.1):
     dependencies:
       '@formatjs/fast-memoize': 3.1.7
       '@schummar/icu-type-parser': 1.21.5
@@ -16834,7 +16691,7 @@ snapshots:
       intl-messageformat: 11.2.15
       react: 19.3.1
     optionalDependencies:
-      '@types/react': 19.3.0
+      '@types/react': 19.3.1
 
   use-sidecar@1.1.3(@types/react@19.3.1)(react@19.3.1):
     dependencies:
@@ -16920,21 +16777,6 @@ snapshots:
       - supports-color
       - typescript
 
-  vite@8.3.8(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1):
-    dependencies:
-      lightningcss: 1.33.0
-      picomatch: 4.0.7
-      postcss: 8.5.33
-      rolldown: 1.2.19
-      tinyglobby: 0.2.17
-    optionalDependencies:
-      '@types/node': 26.6.6
-      esbuild: 0.28.2
-      fsevents: 2.3.3
-      jiti: 2.7.0
-      tsx: 4.23.15
-      yaml: 2.9.1
-
   vite@8.3.8(@types/node@26.6.7)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1):
     dependencies:
       lightningcss: 1.33.0
@@ -16950,10 +16792,10 @@ snapshots:
       tsx: 4.23.15
       yaml: 2.9.1
 
-  vitest@5.1.0(@types/node@26.6.6)(@vitest/browser-playwright@5.1.0)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(jsdom@30.1.3)(vite@8.3.8(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1)):
+  vitest@5.1.0(@types/node@26.6.7)(@vitest/browser-playwright@5.1.0)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(jsdom@30.1.3)(vite@8.3.8(@types/node@26.6.7)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1)):
     dependencies:
       '@types/chai': 5.2.3
-      '@vitest/mocker': 5.1.0(vite@8.3.8(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
+      '@vitest/mocker': 5.1.0(vite@8.3.8(@types/node@26.6.7)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
       chai: 6.3.0
       es-module-lexer: 2.3.2
       expect-type: 1.4.0
@@ -16964,21 +16806,21 @@ snapshots:
       tinybench: 6.2.3
       tinyexec: 1.3.1
       tinyglobby: 0.2.17
-      vite: 8.3.8(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1)
+      vite: 8.3.8(@types/node@26.6.7)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1)
       why-is-node-running: 3.2.1
     optionalDependencies:
-      '@types/node': 26.6.6
-      '@vitest/browser-playwright': 5.1.0(playwright@1.65.1)(vite@8.3.8(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))(vitest@5.1.0)
+      '@types/node': 26.6.7
+      '@vitest/browser-playwright': 5.1.0(playwright@1.65.1)(vite@8.3.8(@types/node@26.6.7)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))(vitest@5.1.0)
       '@vitest/coverage-v8': 5.1.0(@vitest/browser@5.1.0)(vitest@5.1.0)
       '@vitest/ui': 5.1.0(vitest@5.1.0)
       jsdom: 30.1.3
     transitivePeerDependencies:
       - msw
 
-  vitest@5.1.1(@types/node@26.6.6)(@vitest/browser-playwright@5.1.1)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.1)(jsdom@30.1.3)(vite@8.3.8(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1)):
+  vitest@5.1.1(@types/node@26.6.7)(@vitest/browser-playwright@5.1.1)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.1)(jsdom@30.1.3)(vite@8.3.8(@types/node@26.6.7)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1)):
     dependencies:
       '@types/chai': 5.2.3
-      '@vitest/mocker': 5.1.1(vite@8.3.8(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
+      '@vitest/mocker': 5.1.1(vite@8.3.8(@types/node@26.6.7)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
       chai: 6.3.0
       es-module-lexer: 2.3.2
       expect-type: 1.4.0
@@ -16989,11 +16831,11 @@ snapshots:
       tinybench: 6.2.3
       tinyexec: 1.3.1
       tinyglobby: 0.2.17
-      vite: 8.3.8(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1)
+      vite: 8.3.8(@types/node@26.6.7)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1)
       why-is-node-running: 3.2.1
     optionalDependencies:
-      '@types/node': 26.6.6
-      '@vitest/browser-playwright': 5.1.1(playwright@1.65.1)(vite@8.3.8(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))(vitest@5.1.1)
+      '@types/node': 26.6.7
+      '@vitest/browser-playwright': 5.1.1(playwright@1.65.1)(vite@8.3.8(@types/node@26.6.7)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))(vitest@5.1.1)
       '@vitest/coverage-v8': 5.1.0(@vitest/browser@5.1.0)(vitest@5.1.1)
       '@vitest/ui': 5.1.1(vitest@5.1.1)
       jsdom: 30.1.3

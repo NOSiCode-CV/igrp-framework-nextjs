@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import z from 'zod';
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import {
@@ -12,6 +13,7 @@ import {
   IGRPMultiStepFormSubmit,
   type IGRPMultiStepFormHeaderProps,
   type IGRPWizardStep,
+  type IGRPFormHandle,
 } from '@igrp/igrp-framework-react-design-system';
 
 const meta: Meta<typeof IGRPMultiStepForm> = {
@@ -31,19 +33,37 @@ const steps: IGRPWizardStep[] = [
     key: 'identity',
     title: 'Identidade',
     fields: ['name'],
-    component: <IGRPInputText name='name' label='Nome' required />,
+    component: (
+      <IGRPInputText
+        name='name'
+        label='Nome'
+        required
+      />
+    ),
   },
   {
     key: 'contact',
     title: 'Contacto',
     fields: ['email'],
-    component: <IGRPInputText name='email' label='Email' required />,
+    component: (
+      <IGRPInputText
+        name='email'
+        label='Email'
+        required
+      />
+    ),
   },
   {
     key: 'address',
     title: 'Morada',
     fields: ['city'],
-    component: <IGRPInputText name='city' label='Cidade' required />,
+    component: (
+      <IGRPInputText
+        name='city'
+        label='Cidade'
+        required
+      />
+    ),
   },
 ];
 
@@ -53,25 +73,29 @@ const Wizard = ({
 }: {
   header?: IGRPMultiStepFormHeaderProps;
   wizardSteps?: IGRPWizardStep[];
-}) => (
-  <div className='max-w-xl p-4'>
-    <IGRPForm
-      schema={schema}
-      defaultValues={{ name: '', email: '', city: '' }}
-      onSubmit={(data) => console.log('Submitted:', data)}
-    >
-      <IGRPMultiStepForm steps={wizardSteps}>
-        <IGRPMultiStepFormHeader {...header} />
-        <IGRPMultiStepFormSteps />
-        <IGRPMultiStepFormFooter>
-          <IGRPMultiStepFormPrevious />
-          <IGRPMultiStepFormNext />
-          <IGRPMultiStepFormSubmit />
-        </IGRPMultiStepFormFooter>
-      </IGRPMultiStepForm>
-    </IGRPForm>
-  </div>
-);
+}) => {
+  const formRef = useRef<IGRPFormHandle<typeof schema>>(null);
+  return (
+    <div className='max-w-xl p-4'>
+      <IGRPForm
+        formRef={formRef}
+        schema={schema}
+        defaultValues={{ name: '', email: '', city: '' }}
+        onSubmit={(data) => console.log('Submitted:', data)}
+      >
+        <IGRPMultiStepForm steps={wizardSteps}>
+          <IGRPMultiStepFormHeader {...header} />
+          <IGRPMultiStepFormSteps />
+          <IGRPMultiStepFormFooter>
+            <IGRPMultiStepFormPrevious />
+            <IGRPMultiStepFormNext />
+            <IGRPMultiStepFormSubmit />
+          </IGRPMultiStepFormFooter>
+        </IGRPMultiStepForm>
+      </IGRPForm>
+    </div>
+  );
+};
 
 export const Number: StoryObj = { render: () => <Wizard header={{ variant: 'number' }} /> };
 

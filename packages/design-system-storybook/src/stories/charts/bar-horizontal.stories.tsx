@@ -288,7 +288,7 @@ export const ComparativoPeríodos: StoryObj<IGRPHorizontalBarChartProps> = {
             ))}
             <LabelList
               position='top'
-              formatter={(value: number) => (value > 0 ? `+${value}` : value)}
+              formatter={(value) => (typeof value === 'number' && value > 0 ? `+${value}` : value)}
             />
           </Bar>
         ),
@@ -306,7 +306,7 @@ export const ComparativoPeríodos: StoryObj<IGRPHorizontalBarChartProps> = {
             ))}
             <LabelList
               position='top'
-              formatter={(value: number) => (value > 0 ? `+${value}` : value)}
+              formatter={(value) => (typeof value === 'number' && value > 0 ? `+${value}` : value)}
             />
           </Bar>
         ),

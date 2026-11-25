@@ -34,7 +34,7 @@ const Template: StoryFn<IGRPInputPasswordProps> = (args) => (
 
 const FormTemplate: StoryFn<IGRPInputPasswordProps> = (args) => {
   const schema = z.object({
-    [args.name]: z
+    [args.name as string]: z
       .string()
       .min(8, 'A senha deve ter pelo menos 8 caracteres')
       .regex(/[A-Z]/, 'A senha deve conter pelo menos uma letra maiúscula')
@@ -45,7 +45,7 @@ const FormTemplate: StoryFn<IGRPInputPasswordProps> = (args) => {
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
-      [args.name]: args.defaultValue || '',
+      [args.name as string]: args.defaultValue || '',
     },
   });
 

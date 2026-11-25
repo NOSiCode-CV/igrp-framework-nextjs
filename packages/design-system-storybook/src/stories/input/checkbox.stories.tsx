@@ -46,7 +46,7 @@ const Template: StoryFn<IGRPCheckboxProps> = (args) => (
 
 const FormTemplate: StoryFn<IGRPCheckboxProps> = (args) => {
   const schema = z.object({
-    [args.name]: z.boolean().refine((val) => val === true, {
+    [args.name as string]: z.boolean().refine((val) => val === true, {
       message: 'Você precisa aceitar os termos para continuar',
     }),
   });
@@ -54,7 +54,7 @@ const FormTemplate: StoryFn<IGRPCheckboxProps> = (args) => {
   const form = useForm({
     resolver: zodResolver(schema) as any,
     defaultValues: {
-      [args.name]: args.defaultChecked || false,
+      [args.name as string]: args.defaultChecked || false,
     },
   });
 

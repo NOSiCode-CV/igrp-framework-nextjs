@@ -3,8 +3,10 @@ import { expect, userEvent, waitFor, within } from 'storybook/test';
 import {
   IGRPDataTableButtonModal,
   IGRPForm,
+  type IGRPFormHandle,
   IGRPInputText,
 } from '@igrp/igrp-framework-react-design-system';
+import { createRef } from 'react';
 import { z } from 'zod';
 
 const meta: Meta<typeof IGRPDataTableButtonModal> = {
@@ -24,8 +26,17 @@ export const WithFormBody: Story = {
     modalTitle: 'Editar utilizador',
     icon: 'Pencil',
     render: () => (
-      <IGRPForm schema={schema} defaultValues={{ name: '' }} onSubmit={() => {}} className="px-6 py-4">
-        <IGRPInputText name="name" label="Nome" />
+      <IGRPForm
+        formRef={createRef<IGRPFormHandle<typeof schema>>()}
+        schema={schema}
+        defaultValues={{ name: '' }}
+        onSubmit={() => {}}
+        className='px-6 py-4'
+      >
+        <IGRPInputText
+          name='name'
+          label='Nome'
+        />
       </IGRPForm>
     ),
   },
@@ -65,8 +76,8 @@ export const WithFragmentBody: Story = {
     icon: 'Info',
     render: () => (
       <>
-        <p className="px-6 pt-4">First paragraph.</p>
-        <p className="px-6">Second paragraph.</p>
+        <p className='px-6 pt-4'>First paragraph.</p>
+        <p className='px-6'>Second paragraph.</p>
       </>
     ),
   },

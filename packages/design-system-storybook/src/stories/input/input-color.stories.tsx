@@ -30,7 +30,7 @@ const Template: StoryFn<IGRPInputColorProps> = (args) => (
 
 const FormTemplate: StoryFn<IGRPInputColorProps> = (args) => {
   const schema = z.object({
-    [args.name]: z
+    [args.name as string]: z
       .string()
       .min(1, 'Selecione uma cor')
       .regex(/^#([0-9A-F]{6})$/i, 'Formato de cor inválido'),
@@ -39,13 +39,13 @@ const FormTemplate: StoryFn<IGRPInputColorProps> = (args) => {
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
-      [args.name]: args.defaultValue || '#000000',
+      [args.name as string]: args.defaultValue || '#000000',
     },
   });
 
   const onSubmit = (data: Record<string, string>) => {
     console.log('Formulário enviado:', data);
-    alert(`Cor selecionada: ${data[args.name]}`);
+    alert(`Cor selecionada: ${data[args.name as string]}`);
   };
 
   return (

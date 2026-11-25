@@ -143,7 +143,7 @@ const WithProviderTemplate: StoryFn<IGRPMenuNavigationProps> = (args) => {
               <SectionContent
                 key={section.id}
                 sectionId={section.id}
-                label={section.label}
+                label={String(section.label)}
                 isActive={activeSection === section.id}
               />
             ))}

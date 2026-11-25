@@ -82,7 +82,7 @@ export const WithForm: Story = {
  * NOTE: test:vitest runner is currently broken in this environment (pre-existing
  * "Failed to initialize projects" issue). Build gate: `pnpm build:ds`.
  */
-const DatePickerErrorA11ySchema = z.object({ birthDate: z.date({ required_error: 'Date is required' }) });
+const DatePickerErrorA11ySchema = z.object({ birthDate: z.date({ error: 'Date is required' }) });
 
 const DatePickerErrorA11yTemplate: React.FC = () => {
   const formRef = useRef<IGRPFormHandle<typeof DatePickerErrorA11ySchema>>(null);

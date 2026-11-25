@@ -1,5 +1,15 @@
 import { describe, it, expect } from 'vitest';
-import { sanitizePath, sanitizeRedirectUrl, stripAuthApiSuffix, stripBasePath } from '../sanitize';
+import {
+  sanitizePath,
+  sanitizeRedirectUrl,
+  sanitizeString,
+  stripAuthApiSuffix,
+  stripBasePath,
+} from '../sanitize';
+
+// Cases below were added to kill surviving mutants from `pnpm test:mutation`.
+const MAX = 2048;
+const pathOfLength = (n: number) => '/' + 'a'.repeat(n - 1);
 
 describe('sanitizeRedirectUrl — open-redirect hardening', () => {
   const ORIGIN = 'http://localhost:3000';
@@ -146,5 +156,112 @@ describe('stripBasePath', () => {
 
   it('returns the path unchanged for an empty basePath', () => {
     expect(stripBasePath('/dashboard', '')).toBe('/dashboard');
+  });
+});
+
+describe('sanitizeRedirectUrl — input guards', () => {
+  const ORIGIN = 'http://localhost:3000';
+
+  it('returns the fallback for non-string and empty input', () => {
+    expect(sanitizeRedirectUrl(null, ORIGIN, '/safe')).toBe('/safe');
+    expect(sanitizeRedirectUrl(undefined, ORIGIN, '/safe')).toBe('/safe');
+    expect(sanitizeRedirectUrl(42 as unknown as string, ORIGIN, '/safe')).toBe('/safe');
+    expect(sanitizeRedirectUrl('', ORIGIN, '/safe')).toBe('/safe');
+    expect(sanitizeRedirectUrl('', undefined, '/safe')).toBe('/safe');
+  });
+
+  it('trims surrounding whitespace', () => {
+    expect(sanitizeRedirectUrl('  /dashboard  ', ORIGIN, '/safe')).toBe('/dashboard');
+  });
+
+  it('accepts exactly the maximum length and rejects one more', () => {
+    expect(sanitizeRedirectUrl(pathOfLength(MAX), ORIGIN, '/safe')).toBe(pathOfLength(MAX));
+    expect(sanitizeRedirectUrl(pathOfLength(MAX + 1), ORIGIN, '/safe')).toBe('/safe');
+  });
+
+  it('keeps a malformed escape as literal path text', () => {
+    expect(sanitizeRedirectUrl('/%E0%A4%A', ORIGIN, '/safe')).toBe('/%E0%A4%A');
+  });
+
+  it('matches dangerous protocols only at the start', () => {
+    expect(sanitizeRedirectUrl('/search?q=data:x', ORIGIN, '/safe')).toBe('/search?q=data:x');
+  });
+
+  it('rejects a dangerous protocol even when the base uses the same scheme', () => {
+    // file: URLs have an opaque origin, so only the protocol blocklist stops this.
+    expect(sanitizeRedirectUrl('file:///etc/passwd', 'file:///app', '/safe')).toBe('/safe');
+  });
+
+  it('rejects an absolute URL when no baseOrigin is given', () => {
+    expect(sanitizeRedirectUrl('http://localhost:3000/x', undefined, '/safe')).toBe('/safe');
+  });
+});
+
+describe('sanitizeRedirectUrl — same-origin check', () => {
+  it('rejects the same host on another port', () => {
+    expect(sanitizeRedirectUrl('http://localhost:4000/x', 'http://localhost:3000', '/safe')).toBe(
+      '/safe',
+    );
+  });
+
+  it('rejects another scheme when both origins are opaque', () => {
+    expect(sanitizeRedirectUrl('foo:/x', 'bar:/y', '/safe')).toBe('/safe');
+  });
+
+  it('rejects another host when both origins are opaque', () => {
+    expect(sanitizeRedirectUrl('foo://a/x', 'foo://b/', '/safe')).toBe('/safe');
+  });
+
+  it('returns the fallback for an unparseable base', () => {
+    expect(sanitizeRedirectUrl('http://localhost:3000/x', 'not a url', '/safe')).toBe('/safe');
+  });
+});
+
+describe('sanitizePath — input guards', () => {
+  it('returns the fallback for non-string and empty input', () => {
+    expect(sanitizePath(undefined, '/f')).toBe('/f');
+    expect(sanitizePath(42 as unknown as string, '/f')).toBe('/f');
+    expect(sanitizePath('', '/f')).toBe('/f');
+  });
+
+  it('trims surrounding whitespace', () => {
+    expect(sanitizePath('  /dashboard  ')).toBe('/dashboard');
+  });
+
+  it('accepts exactly the maximum length and rejects one more', () => {
+    expect(sanitizePath(pathOfLength(MAX), '/f')).toBe(pathOfLength(MAX));
+    expect(sanitizePath(pathOfLength(MAX + 1), '/f')).toBe('/f');
+  });
+});
+
+describe('sanitizeString', () => {
+  it('returns an empty string for non-string input', () => {
+    expect(sanitizeString(null)).toBe('');
+    expect(sanitizeString(42 as unknown as string)).toBe('');
+  });
+
+  it('removes the highest C0 control character (0x1f) and keeps space (0x20)', () => {
+    expect(sanitizeString('a\x1fb c')).toBe('ab c');
+  });
+});
+
+describe('stripAuthApiSuffix — anchoring', () => {
+  it('strips several trailing slashes before the suffix check', () => {
+    expect(stripAuthApiSuffix('http://h:3000/apps/t/api/auth//')).toBe('http://h:3000/apps/t');
+  });
+
+  it('strips /api/auth only at the end', () => {
+    expect(stripAuthApiSuffix('http://h:3000/api/auth/x')).toBe('http://h:3000/api/auth/x');
+  });
+});
+
+describe('stripBasePath — prefix check', () => {
+  it('returns null when an unrelated path has a "/" at the basePath length', () => {
+    // '/other/dir' has the same length as '/apps/core'.
+    expect(stripBasePath('/other/dir/x', '/apps/core')).toBeNull();
+  });
+
+  it('returns any path unchanged for an empty basePath', () => {
+    expect(stripBasePath('?a=1', '')).toBe('?a=1');
   });
 });

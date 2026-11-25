@@ -98,7 +98,8 @@
     "build": "pnpm clean && pnpm build:js",
     "clean-all": "rimraf node_modules && rimraf dist && rimraf tsconfig.tsbuildinfo",
     "release": "pnpm lint && pnpm build && pnpm typecheck && pnpm test && pnpm publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest --no-git-checks",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:mutation": "stryker run"
   },
   "peerDependencies": {
     "next": "^15.5.0",

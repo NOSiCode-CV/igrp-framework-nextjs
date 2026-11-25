@@ -20,7 +20,7 @@ export interface IGRPSeriesConfig {
   color?: string
   /** Stack id for stacked charts. */
   stackId?: string
-  /** Custom render function. */
+  /** Custom render function. Used by the area, line and bar charts; pie, radar and radial ignore it. */
   render?: (props: any) => React.ReactNode
 }
 
@@ -80,6 +80,8 @@ export interface IGRPChartProps {
 
 /** Pie chart series config. */
 export interface PieConfig extends IGRPSeriesConfig {
+  /** @deprecated Ignored: slices are coloured per row from the chart palette, so one colour per ring would hide them. */
+  color?: string
   innerRadius?: number
   outerRadius?: number
   paddingAngle?: number
@@ -92,6 +94,7 @@ export interface PieConfig extends IGRPSeriesConfig {
   labelType?: "value" | "name" | "percent"
   labelPosition?: "inside" | "outside" | "insideLeft" | "insideRight" | "center"
   labelLine?: boolean
+  /** @deprecated Ignored: the active slice follows the pointer. Remove it from call sites. */
   activeIndex?: number
   /** Custom active shape on hover. */
   activeShape?: boolean
@@ -111,8 +114,10 @@ export interface IGRPRadarConfig extends IGRPSeriesConfig {
 /** Radial bar chart series config. */
 export interface RadialBarConfig extends IGRPSeriesConfig {
   cornerRadius?: number
+  /** @deprecated Ignored by IGRPRadialBarChart. Remove it from call sites. */
   minAngle?: number
   background?: boolean
+  /** @deprecated Ignored by IGRPRadialBarChart: set the direction with its `startAngle` / `endAngle`. */
   clockWise?: boolean
   stackId?: string
   showLabels?: boolean

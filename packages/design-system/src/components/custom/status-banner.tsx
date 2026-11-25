@@ -61,12 +61,15 @@ function IGRPStatusBanner({
       alignment="center"
       name={ref}
     >
-      <span className={cn("font-medium")}>{text}</span>
-      {badgeText && (
-        <IGRPBadge variant={badgeVariant} color={badgeColor} badgeClassName="ml-4 font-normal">
-          {badgeText}
-        </IGRPBadge>
-      )}
+      {/* IGRPAlert stacks its children; this row keeps the badge beside the text. */}
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+        <span className="font-medium">{text}</span>
+        {badgeText && (
+          <IGRPBadge variant={badgeVariant} color={badgeColor} badgeClassName="font-normal">
+            {badgeText}
+          </IGRPBadge>
+        )}
+      </div>
     </IGRPAlert>
   )
 }

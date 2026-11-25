@@ -50,7 +50,7 @@ export interface IGRPRadarChartProps extends Omit<IGRPChartProps, "categoryKey">
   radiusAxisAngle?: number
   /** Custom angle axis tick renderer. */
   customAngleAxisTick?: any
-  /** Show grid lines. */
+  /** @deprecated Ignored: use `showPolarGrid` and `showRadiusLines`. */
   showGridLines?: boolean
   /** Show radius lines. */
   showRadiusLines?: boolean
@@ -123,6 +123,7 @@ function IGRPRadarChartInner({
         <div style={{ height: chartHeight, width: chartWidth }} className={cn("w-full overflow-hidden")}>
           <ChartContainer className={cn("h-full w-full")} config={chartConfig}>
             <RadarChart
+              accessibilityLayer
               data={data}
               margin={{
                 top: 20,

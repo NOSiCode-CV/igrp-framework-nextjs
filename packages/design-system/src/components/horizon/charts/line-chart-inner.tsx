@@ -225,6 +225,9 @@ function IGRPLineChartInner({
                         offset={line.labelOffset ?? 12}
                         className={cn("fill-foreground")}
                         fontSize={12}
+                        formatter={(value: unknown) =>
+                          typeof value === "number" ? formatValue(value) : String(value ?? "")
+                        }
                       />
                     )}
                   </Line>

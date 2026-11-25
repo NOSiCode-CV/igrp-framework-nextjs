@@ -199,7 +199,7 @@ function IGRPAreaChartInner({
                       area.gradient === true
                         ? `url(#${gradientId(area.dataKey, index)})`
                         : `var(${chartColorVar(area.dataKey)})`,
-                    fillOpacity: area.fillOpacity ?? 0.6,
+                    fillOpacity: area.fillOpacity ?? 0.4,
                     stroke: `var(${chartColorVar(area.dataKey)})`,
                     type: area.type || "monotone",
                   })

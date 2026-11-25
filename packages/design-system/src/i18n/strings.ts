@@ -99,9 +99,9 @@ export interface IGRPI18nStrings {
     hidePasswordLabel: string
   }
   inputNumber: {
-    /** aria-label for the increment stepper button. */
+    /** @deprecated Unused: IGRPInputNumber no longer renders stepper buttons. */
     incrementLabel: string
-    /** aria-label for the decrement stepper button. */
+    /** @deprecated Unused: IGRPInputNumber no longer renders stepper buttons. */
     decrementLabel: string
     /** Message shown when input doesn't parse as a valid number. */
     invalidValueMessage: string

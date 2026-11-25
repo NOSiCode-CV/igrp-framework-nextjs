@@ -18,7 +18,7 @@ import { IGRPLabel, IGRPRequiredMark } from "../label.js"
  * @see IGRPInputText
  */
 interface IGRPInputTextProps extends IGRPInputProps {
-  /** Input type. Use IGRPInputPassword, IGRPInputNumber or IGRPInputUrl for a toggle, stepper or protocol picker. */
+  /** Input type. Use IGRPInputPassword, IGRPInputNumber or IGRPInputUrl for a toggle, number parsing or protocol picker. */
   type?: "text" | "email" | "number" | "url" | "tel" | "search"
   /** Validation error message (overrides form field error). */
   error?: string

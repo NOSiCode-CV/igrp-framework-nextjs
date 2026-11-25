@@ -10,8 +10,6 @@ import { useIGRPi18n, useIGRPLocale } from "../../../i18n/index.js"
 import type { IGRPInputProps } from "../../../types.js"
 import { Input } from "../../primitives/input.js"
 import { IGRPLabel } from "../label.js"
-import { Button } from "../../primitives/button.js"
-import { ChevronDown, ChevronUp } from "lucide-react"
 import { Field, FieldDescription, FieldError } from "../../primitives/field.js"
 
 /**
@@ -35,7 +33,7 @@ interface IGRPInputNumberProps extends Omit<IGRPInputProps, "onChange"> {
   min?: number
   /** Maximum value. */
   max?: number
-  /** Step for increment/decrement. @deprecated This props will be deprecated in the next maojor release. */
+  /** Step applied by the ArrowUp/ArrowDown keys. */
   step?: number
   /**
    * Called when the value changes. Receives `undefined` when the field is
@@ -140,7 +138,6 @@ type NumberInputFieldProps = {
   label?: string
   fieldName: string
   labelClassName?: string
-  isFocused: boolean
   /** Raw text being typed; `null` when the field is not being edited. */
   draft: string | null
   onFieldFocus: (val: NumberValue) => void
@@ -165,7 +162,7 @@ type NumberInputFieldProps = {
   ariaDescribedBy?: string
 } & Omit<IGRPInputNumberProps, "value" | "onChange" | "label" | "helperText" | "description" | "error" | "errorMessage">
 
-/** @internal Renders the number input field with stepper buttons. */
+/** @internal Renders the number input field. */
 function NumberInputField({
   value,
   onValueChange,
@@ -173,7 +170,7 @@ function NumberInputField({
   label,
   fieldName,
   labelClassName,
-  isFocused,
+  inputClassName,
   draft,
   onFieldFocus,
   onFieldBlur,
@@ -201,7 +198,6 @@ function NumberInputField({
   ref,
   ...inputProps
 }: NumberInputFieldProps) {
-  const i18n = useIGRPi18n()
   void _formatOptions
   // While editing, show exactly what was typed — reformatting per keystroke
   // would swallow a half-typed decimal such as "3.".
@@ -210,83 +206,44 @@ function NumberInputField({
   return (
     <Field>
       {label ? <IGRPLabel label={label} className={labelClassName} required={required} id={fieldName} /> : null}
-      <div
-        className={cn(
-          "relative inline-flex h-10 w-full items-center overflow-hidden rounded-md border border-input text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none",
-          isFocused && "border-ring ring-2 ring-ring/50",
-          (error || validationError || fieldError) && "border-destructive ring-ring-invalid",
-          disabled && "opacity-50"
-        )}
-      >
-        <Input
-          id={fieldName}
-          name={fieldName}
-          type="text"
-          ref={igrpMergeRefs(fieldRef, ref)}
-          value={displayValue}
-          onChange={(e) => onInputChange(e.target.value, onValueChange)}
-          onKeyDown={(e) => {
-            if (e.key === "ArrowUp") {
-              e.preventDefault()
-              onIncrement(value, onValueChange)
-            } else if (e.key === "ArrowDown") {
-              e.preventDefault()
-              onDecrement(value, onValueChange)
-            }
-            onKeyDown?.(e)
-          }}
-          onFocus={(e) => {
-            onFieldFocus(value)
-            onFocus?.(e)
-          }}
-          onBlur={(e) => {
-            onFieldBlur(onValueChange)
-            onFieldTouched?.()
-            onBlur?.(e)
-          }}
-          className={cn(
-            "flex-1 rounded-none border-none bg-background px-3 py-2 text-foreground tabular-nums outline-none focus-visible:ring-0 focus-visible:ring-ring/0 focus-visible:outline-none"
-          )}
-          disabled={disabled}
-          readOnly={readOnly}
-          aria-invalid={!!(error || validationError || fieldError)}
-          aria-describedby={ariaDescribedBy}
-          aria-required={required || undefined}
-          aria-valuenow={typeof value === "number" ? value : undefined}
-          aria-valuemin={min}
-          aria-valuemax={max}
-          role="spinbutton"
-          {...igrpOmitNonDomProps(inputProps)}
-        />
-        {!readOnly && (
-          <div className={cn("flex h-full flex-col border-l")}>
-            <Button
-              type="button"
-              onClick={() => onIncrement(value, onValueChange)}
-              disabled={disabled || (max !== undefined && typeof value === "number" && value >= max)}
-              className={cn(
-                "flex h-1/2 w-8 items-center justify-center rounded-none border-b bg-background text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-              )}
-              aria-label={i18n.inputNumber.incrementLabel}
-              size="icon-xs"
-            >
-              <ChevronUp />
-            </Button>
-            <Button
-              type="button"
-              onClick={() => onDecrement(value, onValueChange)}
-              disabled={disabled || (min !== undefined && typeof value === "number" && value <= min)}
-              className={cn(
-                "flex h-1/2 w-8 items-center justify-center rounded-none bg-background text-xs text-muted-foreground/80 transition-colors hover:bg-accent hover:text-foreground"
-              )}
-              aria-label={i18n.inputNumber.decrementLabel}
-              size="icon-xs"
-            >
-              <ChevronDown />
-            </Button>
-          </div>
-        )}
-      </div>
+      <Input
+        id={fieldName}
+        name={fieldName}
+        type="text"
+        ref={igrpMergeRefs(fieldRef, ref)}
+        value={displayValue}
+        onChange={(e) => onInputChange(e.target.value, onValueChange)}
+        onKeyDown={(e) => {
+          if (e.key === "ArrowUp") {
+            e.preventDefault()
+            onIncrement(value, onValueChange)
+          } else if (e.key === "ArrowDown") {
+            e.preventDefault()
+            onDecrement(value, onValueChange)
+          }
+          onKeyDown?.(e)
+        }}
+        onFocus={(e) => {
+          onFieldFocus(value)
+          onFocus?.(e)
+        }}
+        onBlur={(e) => {
+          onFieldBlur(onValueChange)
+          onFieldTouched?.()
+          onBlur?.(e)
+        }}
+        className={cn("bg-background text-sm tabular-nums", inputClassName)}
+        disabled={disabled}
+        readOnly={readOnly}
+        aria-invalid={!!(error || validationError || fieldError)}
+        aria-describedby={ariaDescribedBy}
+        aria-required={required || undefined}
+        aria-valuenow={typeof value === "number" ? value : undefined}
+        aria-valuemin={min}
+        aria-valuemax={max}
+        role="spinbutton"
+        {...igrpOmitNonDomProps(inputProps)}
+      />
     </Field>
   )
 }
@@ -378,7 +335,7 @@ function FormNumberInput({
 }
 
 /**
- * Numeric input with stepper, formatting, and min/max. Integrates with react-hook-form.
+ * Numeric input with locale formatting, min/max and arrow-key stepping. Integrates with react-hook-form.
  */
 function IGRPInputNumber({
   name,
@@ -410,7 +367,6 @@ function IGRPInputNumber({
   const fieldName = name ?? id ?? _id
 
   const [localValue, setLocalValue] = useState<NumberValue>(controlledValue ?? defaultValue ?? "")
-  const [isFocused, setIsFocused] = useState(false)
   const [validationError, setValidationError] = useState(false)
   // Raw text while the field is being edited. Kept verbatim so half-typed
   // decimals ("3.", "-", "1,2") survive until the field is left.
@@ -502,15 +458,12 @@ function IGRPInputNumber({
   }
 
   const handleFieldFocus = (currentValue: NumberValue) => {
-    setIsFocused(true)
     if (disabled || readOnly) return
     // Swap the formatted display for an editable one while the user types.
     setDraft(toEditableString(currentValue, formatOptions))
   }
 
   const handleFieldBlur = (updateFn?: (value: NumberValue) => void) => {
-    setIsFocused(false)
-
     const editedText = draft
     setDraft(null)
     if (editedText === null) return
@@ -543,7 +496,6 @@ function IGRPInputNumber({
     label,
     fieldName,
     labelClassName,
-    isFocused,
     draft,
     onFieldFocus: handleFieldFocus,
     onFieldBlur: handleFieldBlur,

@@ -4,43 +4,36 @@ import userEvent from "@testing-library/user-event"
 import { FormProvider, useForm } from "react-hook-form"
 
 import { IGRPInputNumber } from "../input/number.js"
-import { IGRP_DEFAULT_LOCALE, IGRPI18nProvider } from "../../../i18n/index.js"
+import { IGRP_DEFAULT_LOCALE } from "../../../i18n/index.js"
 
 describe("IGRPInputNumber", () => {
-  it("renders with role=spinbutton and the pt-PT increment/decrement labels", () => {
+  it("renders a spinbutton without stepper buttons", () => {
     render(<IGRPInputNumber name="qty" label="Quantity" />)
     expect(screen.getByRole("spinbutton", { name: /Quantity/ })).toBeInTheDocument()
-    expect(screen.getByRole("button", { name: "Incrementar" })).toBeInTheDocument()
-    expect(screen.getByRole("button", { name: "Decrementar" })).toBeInTheDocument()
+    expect(screen.queryByRole("button")).not.toBeInTheDocument()
   })
 
-  it("increments on stepper click and calls onChange", async () => {
+  it("applies inputClassName to the input", () => {
+    render(<IGRPInputNumber name="qty" label="Quantity" inputClassName="text-right" />)
+    expect(screen.getByRole("spinbutton")).toHaveClass("text-right")
+  })
+
+  it("increments with ArrowUp and calls onChange", async () => {
     const onChange = vi.fn()
     render(<IGRPInputNumber name="qty" label="Quantity" defaultValue={5} onChange={onChange} />)
 
-    await userEvent.click(screen.getByRole("button", { name: "Incrementar" }))
+    await userEvent.click(screen.getByRole("spinbutton"))
+    await userEvent.keyboard("{ArrowUp}")
     expect(onChange).toHaveBeenCalledWith(6)
   })
 
-  it("clamps to max on increment", async () => {
+  it("clamps to max on ArrowUp", async () => {
     const onChange = vi.fn()
     render(<IGRPInputNumber name="qty" label="Quantity" defaultValue={9} max={10} onChange={onChange} />)
 
-    await userEvent.click(screen.getByRole("button", { name: "Incrementar" }))
+    await userEvent.click(screen.getByRole("spinbutton"))
+    await userEvent.keyboard("{ArrowUp}{ArrowUp}")
     expect(onChange).toHaveBeenLastCalledWith(10)
-    await userEvent.click(screen.getByRole("button", { name: "Incrementar" }))
-    // Button is disabled at max — onChange should not fire again.
-    expect(onChange).toHaveBeenCalledTimes(1)
-  })
-
-  it("uses overridden i18n strings", () => {
-    render(
-      <IGRPI18nProvider strings={{ inputNumber: { incrementLabel: "Up", decrementLabel: "Down" } }}>
-        <IGRPInputNumber name="qty" label="Quantity" />
-      </IGRPI18nProvider>
-    )
-    expect(screen.getByRole("button", { name: "Up" })).toBeInTheDocument()
-    expect(screen.getByRole("button", { name: "Down" })).toBeInTheDocument()
   })
 
   it("exposes aria-valuemin/max for assistive tech", () => {
@@ -172,10 +165,8 @@ describe("IGRPInputNumber", () => {
     it("does not accumulate floating point drift when stepping", async () => {
       render(<IGRPInputNumber name="price" label="Price" defaultValue={12.5} step={0.01} />)
 
-      const increment = screen.getByRole("button", { name: "Incrementar" })
-      for (let i = 0; i < 5; i++) {
-        await userEvent.click(increment)
-      }
+      await userEvent.click(screen.getByRole("spinbutton"))
+      await userEvent.keyboard("{ArrowUp>5/}")
 
       expect(screen.getByRole("spinbutton")).toHaveAttribute("aria-valuenow", "12.55")
     })
@@ -184,9 +175,10 @@ describe("IGRPInputNumber", () => {
       const onChange = vi.fn()
       render(<IGRPInputNumber name="weight" label="Weight" defaultValue={1.75} step={0.25} onChange={onChange} />)
 
-      await userEvent.click(screen.getByRole("button", { name: "Incrementar" }))
+      await userEvent.click(screen.getByRole("spinbutton"))
+      await userEvent.keyboard("{ArrowUp}")
       expect(onChange).toHaveBeenLastCalledWith(2)
-      await userEvent.click(screen.getByRole("button", { name: "Incrementar" }))
+      await userEvent.keyboard("{ArrowUp}")
       expect(onChange).toHaveBeenLastCalledWith(2.25)
     })
   })

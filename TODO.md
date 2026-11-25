@@ -1,59 +1,16 @@
 # TODO
 
-## Design System
-
-- Review the input color [x]
-- Review Data-table filters 
-- fix the pagination on mobile
-- Add Switch to the DataTable as checkbox
-- Review info-card orientation horizontal and see design for this, review the colors mode [x]
-- Review the ```<TooltipProvider></TooltipProvider>``` usage
-
-## New shadcn Components
-
-Add the following components to the design system:
-
-- [ ] button-group
-- [ ] item
-- [ ] empty
-- [ ] field
-- [ ] spinner
-- [ ] input-group
-
 ## Component Updates
-
-## New Components
-
-- [ ] Progress
-- [ ] Form
-- [ ] Combobox
 
 ## Component Reviews
 
-- [ ] Charts
-- [ ] Banner status
-- [ ] IGRPColors
-
-## Research & Documentation
-
-- [ ] For number input, see: <https://base-ui.com/react/components/number-field>
-- [ ] Create API reference for the components
-- [ ] Review additional components:
-  - <https://base-ui.com/react/components/autocomplete>
-  - <https://base-ui.com/react/components/preview-card>
-
 ## Updates
-
-- [ ] Input-number: Remove the increase/decrease buttons, stay with default number input behavior, add `inputClassName` prop for UX customization in the input
-
----
 
 ## Next UI
 
 -- Get breadcrumbs via script
--- Hide notifications, profile and settings from the sidebar
-
-## Animations component see: <https://animations.dev/learn/animation-theory/the-easing-blueprint>
+-- Hide notifications, profile, switcherLocale and settings from the sidebar
+-- in the sidebar in the dropmeneu where show the profile, settings the link is not equals as the header is adding the basePath to the url, in the header is getting the /settings from the env, but in the sidebar from the same env is getting /apps/basePaths/settings NEXT_PUBLIC_IGRP_SETTINGS_URL
 
 ## V2
 
@@ -75,14 +32,6 @@ Add the following components to the design system:
 - emailcn: https://www.emailcn.run/
 - mcpcn: https://www.mcpcn.dev
 - ogimage: https://www.ogimagecn.com/
-
-
-[next-auth][debug][CHUNKING_SESSION_COOKIE] {
-  message: 'Session cookie exceeds allowed 4096 bytes.',
-  emptyCookieSize: 163,
-  valueSize: 3952,
-  chunks: [ 4096, 182 ]
-}
 
 igrp-hidden is a hidden input but still show in the html
 

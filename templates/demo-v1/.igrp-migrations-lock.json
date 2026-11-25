@@ -625,6 +625,12 @@
       "cliVersion": "0.2.0-beta.27",
       "manifestHash": "aaed3cacf40798cb",
       "payloadHash": "e3b0c44298fc1c14"
+    },
+    {
+      "id": "104-deps-patch-minor-bump",
+      "cliVersion": "0.2.0-beta.27",
+      "manifestHash": "175bd226fe1534a3",
+      "payloadHash": "e3b0c44298fc1c14"
     }
   ]
 }

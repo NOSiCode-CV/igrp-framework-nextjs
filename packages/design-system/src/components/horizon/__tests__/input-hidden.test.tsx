@@ -28,6 +28,15 @@ function FormHarness() {
   )
 }
 
+function FormWrap({ children }: { children: React.ReactNode }) {
+  const formRef = useRef<IGRPFormHandle<typeof schema> | null>(null)
+  return (
+    <IGRPForm schema={schema} formRef={formRef} onSubmit={() => {}}>
+      {children}
+    </IGRPForm>
+  )
+}
+
 describe("IGRPInputHidden renders no layout", () => {
   it("emits only the input when standalone", () => {
     const { container } = render(
@@ -66,6 +75,17 @@ describe("IGRPInputHidden renders no layout", () => {
     const input = container.querySelector("input") as HTMLInputElement
     expect(input.getAttribute("class")).toBeNull()
     expect(input.getAttribute("data-slot")).toBe("input")
+  })
+
+  it.each([
+    ["standalone", (el: React.ReactNode) => el],
+    ["inside a form", (el: React.ReactNode) => <FormWrap>{el}</FormWrap>],
+  ])("stays type=hidden when an untyped caller passes type (%s)", (_mode, wrap) => {
+    const untyped = { type: "text" } as object
+    const { container } = render(wrap(<IGRPInputHidden name="token" {...untyped} />))
+
+    const input = container.querySelector('input[name="token"]') as HTMLInputElement
+    expect(input.type).toBe("hidden")
   })
 
   it("does not emit `required`, which is not valid on a hidden input", () => {

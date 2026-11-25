@@ -43,7 +43,7 @@ function IGRPInputHidden({
   const formContext = useFormContext()
 
   if (!formContext) {
-    return <input data-slot="input" id={ref} name={ref} type="hidden" {...domProps} />
+    return <input {...domProps} data-slot="input" id={ref} name={ref} type="hidden" />
   }
 
   return (

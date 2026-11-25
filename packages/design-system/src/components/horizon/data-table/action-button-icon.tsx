@@ -291,7 +291,7 @@ function IGRPDataTableModalContent({
         className
       )}
     >
-      <DialogHeader className={cn("contents space-y-0 text-left")}>
+      <DialogHeader className={cn("contents text-left")}>
         <DialogTitle className={cn(modalTitle && "border-b px-6 py-4 text-base")}>{modalTitle}</DialogTitle>
 
         {/*

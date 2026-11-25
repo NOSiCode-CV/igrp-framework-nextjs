@@ -310,7 +310,7 @@ function IGRPDropzoneInternal({
           <AlertCircle className="size-4" />
           <AlertTitle>{rejectedAlertTitle}</AlertTitle>
           <AlertDescription>
-            <ul className="mt-2 list-disc space-y-1 pl-5 text-sm">
+            <ul className="mt-2 flex list-disc flex-col gap-1 pl-5 text-sm">
               {rejectedFiles.map((item, index) => (
                 <li key={fileKey(item.file)} className="flex items-center justify-between">
                   <span>

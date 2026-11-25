@@ -9,7 +9,7 @@ import { IGRPBadge } from "../badge.js"
 import { IGRPIcon, type IGRPIconName } from "../icon/index.js"
 import { useIGRPi18n } from "../../../i18n/index.js"
 
-const igrpTextlistVariants = cva("", {
+const igrpTextlistVariants = cva("flex flex-col", {
   variants: {
     size: {
       sm: "text-sm",
@@ -18,9 +18,9 @@ const igrpTextlistVariants = cva("", {
       xl: "text-xl",
     },
     spacing: {
-      tight: "space-y-1",
-      normal: "space-y-2",
-      loose: "space-y-4",
+      tight: "gap-1",
+      normal: "gap-2",
+      loose: "gap-4",
     },
   },
   defaultVariants: {

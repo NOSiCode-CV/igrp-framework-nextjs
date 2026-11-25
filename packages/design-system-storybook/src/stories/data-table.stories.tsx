@@ -225,6 +225,25 @@ export const WithNumericPagination: Story = {
   ),
 };
 
+export const WithSwitchSelection: Story = {
+  args: {
+    data: rows,
+    // `selection` adds its own column, so drop the hand-built checkbox one.
+    columns: columns.filter((column) => column.id !== 'select'),
+    selection: 'switch',
+  },
+  render: (args) => (
+    <div className="mx-auto w-full max-w-7xl p-4">
+      <IGRPDataTable {...args} />
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const [first] = within(canvasElement).getAllByRole('switch');
+    await userEvent.click(first!);
+    await expect(first).toHaveAttribute('aria-checked', 'true');
+  },
+};
+
 export const WithToggleColumns: Story = {
   args: {
     data: rows,

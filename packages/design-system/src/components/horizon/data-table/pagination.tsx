@@ -38,13 +38,14 @@ function IGRPDataTablePagination<TData>({
   const i18n = useIGRPi18n()
   const id = useId()
 
-  const start = table.getState().pagination.pageIndex * table.getState().pagination.pageSize + 1
+  const rowCount = table.getRowCount()
+  const start = rowCount === 0 ? 0 : table.getState().pagination.pageIndex * table.getState().pagination.pageSize + 1
   const end = table.getCanNextPage()
     ? table.getState().pagination.pageIndex * table.getState().pagination.pageSize +
       table.getState().pagination.pageSize
-    : table.getRowCount()
+    : rowCount
   return (
-    <div className={cn("flex items-center gap-6 px-2", className)}>
+    <div className={cn("flex flex-wrap items-center justify-end gap-3 px-2 sm:gap-6", className)}>
       <div className={cn("flex grow items-center justify-end gap-3")}>
         <Label htmlFor={id} className={cn("max-sm:sr-only")}>
           {i18n.dataTable.rowsPerPage}
@@ -79,14 +80,14 @@ function IGRPDataTablePagination<TData>({
           <span className={cn("text-foreground")}>
             {start}-{end}
           </span>{" "}
-          {i18n.dataTable.rangeOf} <span className={cn("text-foreground")}>{table.getRowCount().toString()}</span>
+          {i18n.dataTable.rangeOf} <span className={cn("text-foreground")}>{rowCount.toString()}</span>
         </p>
       </div>
 
       <div>
         <Pagination>
           <PaginationContent>
-            <PaginationItem>
+            <PaginationItem className="max-sm:hidden">
               <Button
                 type="button"
                 size="icon"
@@ -128,7 +129,7 @@ function IGRPDataTablePagination<TData>({
               </Button>
             </PaginationItem>
 
-            <PaginationItem>
+            <PaginationItem className="max-sm:hidden">
               <Button
                 type="button"
                 size="icon"
@@ -204,6 +205,7 @@ function IGRPDataTablePaginationNumeric<TData>({
                     type="button"
                     size="icon"
                     variant={`${isActive ? "outline" : "ghost"}`}
+                    className="max-sm:size-8"
                     onClick={() => table.setPageIndex(page - 1)}
                     aria-current={isActive ? "page" : undefined}
                     aria-label={igrpFormatMessage(i18n.dataTable.goToPage, { page })}
@@ -246,7 +248,7 @@ function IGRPDataTablePaginationNumeric<TData>({
         >
           {/* Select's root renders no element, so the name belongs on the trigger. */}
           <SelectTrigger
-            id="results-per-page"
+            id={`${id}-page-size`}
             aria-label={i18n.dataTable.resultsPerPage}
             className={cn("w-fit whitespace-nowrap")}
           >

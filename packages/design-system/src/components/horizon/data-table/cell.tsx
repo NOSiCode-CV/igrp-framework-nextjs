@@ -9,10 +9,10 @@ import { format } from "date-fns"
 import { cn } from "../cn.js"
 import { Button } from "../../primitives/button.js"
 import { Checkbox } from "../../primitives/checkbox.js"
-import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "../../primitives/tooltip.js"
 import { Switch } from "../../primitives/switch.js"
 import { IGRPBadge, type IGRPBadgeProps } from "../badge.js"
 import { IGRPIcon } from "../icon/index.js"
+import { IGRPTooltip } from "../tooltip.js"
 import { IGRPLink, type IGRPLinkProps } from "../typography/link.js"
 import { useIGRPi18n, useIGRPLocale, useIGRPTimeZone } from "../../../i18n/index.js"
 import { igrpDateFnsLocale } from "../../../i18n/date-fns-locale.js"
@@ -242,18 +242,12 @@ type IGRPDataTableCellTooltipProps = {
 /** Cell with tooltip on truncated text. */
 function IGRPDataTableCellTooltip({ text, side = "top", align = "start" }: IGRPDataTableCellTooltipProps) {
   return (
-    <TooltipProvider delayDuration={200}>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <div className={cn("cursor-help truncate whitespace-nowrap")}>
-            <span>{text}</span>
-          </div>
-        </TooltipTrigger>
-        <TooltipContent side={side} align={align} sideOffset={4} className={cn("max-w-sm")}>
-          {text}
-        </TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
+    // IGRPTooltip shares the nearest provider instead of mounting one per cell.
+    <IGRPTooltip label={text} side={side} align={align} sideOffset={4} delayDuration={200} className={cn("max-w-sm")}>
+      <div className={cn("cursor-help truncate whitespace-nowrap")}>
+        <span>{text}</span>
+      </div>
+    </IGRPTooltip>
   )
 }
 

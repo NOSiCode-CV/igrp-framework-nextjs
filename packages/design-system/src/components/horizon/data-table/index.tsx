@@ -41,16 +41,26 @@ import {
   IGRPDataTableFilterSelect,
 } from "./filter.js"
 import { IGRPDataTablePagination, IGRPDataTablePaginationNumeric } from "./pagination.js"
+import { IGRPDataTableCellCheckbox, IGRPDataTableCellSwitch } from "./cell.js"
+import { IGRPDataTableHeaderRowsSelect } from "./header.js"
 import { IGRPDataTableRowActionsCell } from "./row-actions-cell.js"
 import { IGRPDataTableBodyRows, IGRPDataTableHeaderRows, useIGRPDataTableRowIdWarning } from "./table-rows.js"
 import { IGRPDataTableToggleVisibility } from "./toggle-visibility.js"
 import { igrpDataTableTableClassName } from "./layout.js"
+import { IGRPDataTableDateRangeFilterFn, IGRPDataTableFacetedFilterFn } from "./lib/filters-utils.js"
 import type {
   IGRPDataTableAction,
+  IGRPDataTableFilterType,
   IGRPDataTableLayout,
   IGRPDataTablePaginationConfig,
   IGRPDataTableQuery,
 } from "./types.js"
+
+/** Default `filterFn` per descriptor type; a column's own `filterFn` wins. */
+const DESCRIPTOR_FILTER_FNS: Partial<Record<IGRPDataTableFilterType, typeof IGRPDataTableFacetedFilterFn>> = {
+  faceted: IGRPDataTableFacetedFilterFn,
+  date: IGRPDataTableDateRangeFilterFn,
+}
 
 /**
  * Props for the IGRPDataTable component.
@@ -171,6 +181,12 @@ interface IGRPDataTableProps<TData, TValue> {
    * callback is used, so an inline function does not refire it.
    */
   onSelectionChange?: (rows: TData[]) => void
+  /**
+   * Adds a row-selection column before `columns`: a checkbox or a switch per row, with a
+   * select-all checkbox in the header (current page only). Leave unset if `columns`
+   * already has its own selection column.
+   */
+  selection?: "checkbox" | "switch"
 }
 
 type TableState = {
@@ -247,6 +263,7 @@ function IGRPDataTable<TData, TValue>({
   rowSelection: rowSelectionProp,
   onRowSelectionChange,
   onSelectionChange,
+  selection,
   getRowCanExpand = () => false,
   renderSubComponent,
   getRowId,
@@ -370,8 +387,28 @@ function IGRPDataTable<TData, TValue>({
             }),
           ]
         : []
-    return [...columns, ...actionColumn] as ColumnDef<TData, TValue>[]
-  }, [columns, actions, tableHelper])
+    const selectionColumn = selection
+      ? [
+          tableHelper.display({
+            id: "__igrp_select__",
+            header: ({ table }) => <IGRPDataTableHeaderRowsSelect table={table} />,
+            cell: ({ row }) =>
+              selection === "switch" ? <IGRPDataTableCellSwitch row={row} /> : <IGRPDataTableCellCheckbox row={row} />,
+            enableSorting: false,
+            enableHiding: false,
+            // Same shrink-to-fit sizing as the actions column.
+            meta: { isActionsColumn: true },
+            size: selection === "switch" ? 56 : 40,
+          }),
+        ]
+      : []
+    // Faceted and date filters set an array / a { from, to } value, which TanStack's "auto" filterFn can't match.
+    const withFilterFns = (columns as IGRPAccessorColumnDef<TData>[]).map((col) => {
+      const filterFn = col.filter && !col.filterFn ? DESCRIPTOR_FILTER_FNS[col.filter.type] : undefined
+      return filterFn ? { ...col, filterFn } : col
+    })
+    return [...selectionColumn, ...withFilterFns, ...actionColumn] as ColumnDef<TData, TValue>[]
+  }, [columns, actions, selection, tableHelper])
 
   useIGRPDataTableRowIdWarning("IGRPDataTable", !!renderSubComponent, !!getRowId)
 
@@ -522,14 +559,26 @@ function IGRPDataTable<TData, TValue>({
                       )
                     case "select":
                       return (
-                        <IGRPDataTableFilterSelect key={columnId} column={column} options={descriptor.options ?? []} />
+                        <IGRPDataTableFilterSelect
+                          key={columnId}
+                          column={column}
+                          placeholder={descriptor.placeholder}
+                          options={descriptor.options ?? []}
+                        />
                       )
                     case "faceted":
                       return (
-                        <IGRPDataTableFilterFaceted key={columnId} column={column} options={descriptor.options ?? []} />
+                        <IGRPDataTableFilterFaceted
+                          key={columnId}
+                          column={column}
+                          placeholder={descriptor.placeholder}
+                          options={descriptor.options ?? []}
+                        />
                       )
                     case "date":
-                      return <IGRPDataTableFilterDate key={columnId} column={column} />
+                      return (
+                        <IGRPDataTableFilterDate key={columnId} column={column} placeholder={descriptor.placeholder} />
+                      )
                     case "range":
                       return <IGRPDataTableFilterMinMax key={columnId} column={column} />
                     case "dropdown":
@@ -537,6 +586,7 @@ function IGRPDataTable<TData, TValue>({
                         <IGRPDataTableFilterDropdown
                           key={columnId}
                           column={column}
+                          placeholder={descriptor.placeholder}
                           options={descriptor.options ?? []}
                         />
                       )

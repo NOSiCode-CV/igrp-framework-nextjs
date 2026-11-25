@@ -13,7 +13,8 @@ import { Label } from "../../primitives/label.js"
 import { Popover, PopoverContent, PopoverTrigger } from "../../primitives/popover.js"
 import { Separator } from "../../primitives/separator.js"
 import { Toggle } from "../../primitives/toggle.js"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../../primitives/tooltip.js"
+import { Tooltip, TooltipContent, TooltipTrigger } from "../../primitives/tooltip.js"
+import { IGRPTooltipProvider } from "../tooltip.js"
 import { IGRPIcon } from "../icon/index.js"
 import { RICH_TEXT_SPECIAL_CHARS, type IGRPRichTextControl } from "./controls.js"
 
@@ -601,7 +602,8 @@ function RichTextToolbar({
   const groups = GROUPS.map((group) => group.filter((c) => shown.has(c))).filter((group) => group.length > 0)
 
   return (
-    <TooltipProvider delayDuration={300}>
+    // One provider per toolbar: moving between buttons skips the delay.
+    <IGRPTooltipProvider delayDuration={300}>
       <div role="toolbar" aria-label={t.toolbar} className="flex flex-wrap items-center gap-1 border-b bg-muted/30 p-1">
         {groups.map((group, index) => (
           <Fragment key={group.join()}>
@@ -612,7 +614,7 @@ function RichTextToolbar({
           </Fragment>
         ))}
       </div>
-    </TooltipProvider>
+    </IGRPTooltipProvider>
   )
 }
 

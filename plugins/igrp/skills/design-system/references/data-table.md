@@ -100,11 +100,12 @@ export function UsersTable({ data, onDelete }: { data: User[]; onDelete: (u: Use
 | `notFoundLabel` | i18n `dataTable.notFound` | |
 | `rowSelection`, `onRowSelectionChange` | internal | Controlled selection in TanStack's shape (`{ [rowId]: true }`, updater callback); `useState`'s setter fits. See Row selection. |
 | `onSelectionChange` | | `(rows: TData[]) => void` with the selected rows' data on every change (not on mount). |
+| `selection` | | `"checkbox" \| "switch"`: adds the row-selection column. See Row selection. |
 | `className`, `filterClassName`, `tableClassName`, `tableHeaderClassName`, `tableBodyClassName`, `paginationClassName`, `id` | | |
 
 ### Row selection
 
-Put `IGRPDataTableHeaderRowsSelect` in a display column's `header` and `IGRPDataTableCellCheckbox` (or `IGRPDataTableCellSwitch`) in its `cell`. Select-all toggles the **current page** only. Pass `getRowId` so selection keys are record ids, not row positions.
+Pass `selection="checkbox"` or `selection="switch"` and `IGRPDataTable` adds the selection column before `columns`: a checkbox or switch per row, and a select-all checkbox in the header. To build it yourself, put `IGRPDataTableHeaderRowsSelect` in a display column's `header` and `IGRPDataTableCellCheckbox` (or `IGRPDataTableCellSwitch`) in its `cell`. Don't do both. Select-all toggles the **current page** only. Pass `getRowId` so selection keys are record ids, not row positions.
 
 ```tsx
 const [selection, setSelection] = useState<RowSelectionState>({})
@@ -160,11 +161,11 @@ There are two mechanisms. Neither uses `meta`.
 | `"input"` | `string` | — (or `filterFn: IGRPDataTableTextFilterFn` for case-insensitive contains) |
 | `"select"` | `string` (single; "all" clears) | `options` |
 | `"dropdown"` | `string` (**single**, searchable) | `options` |
-| `"faceted"` | `string[]` | `options` + **`filterFn: IGRPDataTableFacetedFilterFn`** |
-| `"date"` | `{ from, to }` | **`filterFn: IGRPDataTableDateRangeFilterFn`**, with ISO date strings in the cell |
+| `"faceted"` | `string[]` | `options` (`filterFn` defaults to `IGRPDataTableFacetedFilterFn`) |
+| `"date"` | `{ from, to }` | ISO date strings in the cell (`filterFn` defaults to `IGRPDataTableDateRangeFilterFn`) |
 | `"range"` | `[min, max]` | — |
 
-Without the matching `filterFn`, faceted and date filters silently match nothing or everything.
+`IGRPDataTable` sets those two defaults only for descriptor columns without their own `filterFn`. With `clientFilters` or `toolbar` filters, set the `filterFn` yourself: without it, faceted and date filters match nothing or everything.
 
 **2. `clientFilters`**: `{ columnId: keyof T; component: ({ column }) => JSX.Element }[]`. Use it for a fully custom filter control. The building blocks are exported: `IGRPDataTableFilterInput`, `…FilterSelect`, `…FilterDropdown`, `…FilterFaceted`, `…FilterDate` and `…FilterMinMax`.
 

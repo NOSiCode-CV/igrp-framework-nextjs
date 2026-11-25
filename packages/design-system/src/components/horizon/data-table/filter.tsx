@@ -145,6 +145,11 @@ function IGRPDataTableFilterDropdown<TData>({
     [column]
   )
 
+  const handleClear = useCallback(() => {
+    column?.setFilterValue(undefined)
+    setOpen(false)
+  }, [column])
+
   return (
     <div id={`dropdown-${id}`}>
       <Popover open={open} onOpenChange={setOpen}>
@@ -172,6 +177,7 @@ function IGRPDataTableFilterDropdown<TData>({
                   <CommandItem
                     key={opt.value}
                     value={opt.value.toString()}
+                    keywords={[opt.label]}
                     onSelect={(currentValue) => handleSelect(currentValue)}
                   >
                     <span className={opt.color}>{opt.label}</span>
@@ -182,6 +188,17 @@ function IGRPDataTableFilterDropdown<TData>({
                   </CommandItem>
                 ))}
               </CommandGroup>
+              {selectedValue !== undefined && (
+                <>
+                  <CommandSeparator />
+                  <CommandGroup>
+                    <CommandItem value="__igrp_clear__" forceMount onSelect={handleClear}>
+                      <IGRPIcon iconName="X" />
+                      {i18n.dataTable.clearFilter}
+                    </CommandItem>
+                  </CommandGroup>
+                </>
+              )}
             </CommandList>
           </Command>
         </PopoverContent>
@@ -243,7 +260,7 @@ function IGRPDataTableFilterFaceted<TData>({
     <div id={`faceted-${id}`}>
       <Popover>
         <PopoverTrigger asChild>
-          <Button variant="outline">
+          <Button variant="outline" size="sm">
             <IGRPIcon iconName={iconName} />
             {resolvedPlaceholder}
             {selectedValues?.size > 0 && (
@@ -262,23 +279,25 @@ function IGRPDataTableFilterFaceted<TData>({
             <CommandList>
               <CommandEmpty>{resolvedLabelSearchField}</CommandEmpty>
               <CommandGroup>
-                {options?.map((option, i) => (
+                {options?.map((option) => (
                   <CommandItem
                     key={String(option.value)}
                     value={String(option.value)}
+                    keywords={[option.label]}
                     onSelect={() => handleSelect(option.value)}
+                    aria-checked={selectedValues.has(option.value)}
                     className={cn("gap-2", className)}
                   >
+                    {/* Visual only: the item is the control. An interactive checkbox here toggled twice per click. */}
                     <Checkbox
-                      id={`${id}-${i}`}
                       checked={selectedValues.has(option.value)}
-                      onCheckedChange={() => handleSelect(option.value)}
-                      aria-label={option.label}
-                      className={cn("border-foreground data-[state=checked]:**:[svg]:!text-primary-foreground")}
+                      tabIndex={-1}
+                      aria-hidden
+                      className={cn(
+                        "pointer-events-none border-foreground data-[state=checked]:**:[svg]:!text-primary-foreground"
+                      )}
                     />
-                    <label htmlFor={`${id}-${i}`} className="flex-1 cursor-pointer">
-                      {option.label}
-                    </label>
+                    <span className="flex-1">{option.label}</span>
                     <span className="ml-auto font-mono text-xs">{facets?.get(option.value) ?? 0}</span>
                   </CommandItem>
                 ))}
@@ -442,7 +461,7 @@ function IGRPDataTableFilterSelect<TData>({
 
   return (
     <Select
-      value={columnFilterValue?.toString() ?? resolvedPlaceholder}
+      value={columnFilterValue?.toString() ?? "all"}
       onValueChange={(value) => {
         column?.setFilterValue(value === "all" ? undefined : value)
       }}

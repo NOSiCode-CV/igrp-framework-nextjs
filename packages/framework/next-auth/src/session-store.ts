@@ -143,6 +143,45 @@ export function getIGRPSessionStore(): IGRPSessionStore | null {
   return registration().store;
 }
 
+/** Reads the current request's session through the app's auth instance (runs the `jwt` callback). */
+export type IGRPServerSessionReader = () => Promise<{
+  accessToken?: unknown;
+  error?: unknown;
+} | null>;
+
+const serverSessionRegistration = () =>
+  globalSlot('serverSession', () => ({ read: null as IGRPServerSessionReader | null }));
+
+/**
+ * Registers the app's session reader, process-wide. `withIGRPAuth` calls this
+ * with its `serverSession`; pass `null` to unregister.
+ *
+ * It exists for code that has no handle on the instance, such as
+ * `@igrp/framework-next`'s permission checks. Decoding the cookie
+ * ({@link readIGRPSessionToken}) does not refresh, and during a render the
+ * cookie cannot be rewritten, so after the access token expires it would
+ * report the old token while the session read already holds the new one.
+ */
+export function registerIGRPServerSession(read: IGRPServerSessionReader | null): void {
+  serverSessionRegistration().read = read;
+}
+
+/**
+ * The access token of the current request's session, read through the
+ * registered reader (refreshing it like any session read).
+ *
+ * `undefined` when no reader is registered, so the caller can fall back to the
+ * cookie; `''` when there is no session or its refresh failed. Errors from the
+ * read propagate, Next control-flow throws included.
+ */
+export async function readIGRPServerSessionAccessToken(): Promise<string | undefined> {
+  const { read } = serverSessionRegistration();
+  if (!read) return undefined;
+  const session = await read();
+  if (!session || session.error) return '';
+  return typeof session.accessToken === 'string' ? session.accessToken : '';
+}
+
 // ─── Codec ───────────────────────────────────────────────────────────────────
 
 function storeKey(sessionId: string): string {

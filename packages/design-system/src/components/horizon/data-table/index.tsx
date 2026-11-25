@@ -1,7 +1,7 @@
 "use client"
 "use no memo"
 
-import { useCallback, useEffect, useId, useMemo, useReducer, useRef } from "react"
+import { useCallback, useEffect, useId, useMemo, useReducer, useRef, useState } from "react"
 import {
   type ColumnDef,
   type ColumnFiltersState,
@@ -349,6 +349,18 @@ function IGRPDataTable<TData, TValue>({
   )
   const controlledSelection = rowSelectionProp !== undefined
   const rowSelection = rowSelectionProp ?? state.rowSelection
+
+  // Without getRowId a selection is keyed by row index, so once the rows at those
+  // indexes change (refetch, server page, delete) it points at other records: drop it.
+  // Compared by row reference, so a parent that re-derives the same rows keeps it.
+  const [prevData, setPrevData] = useState(data)
+  if (prevData !== data) {
+    setPrevData(data)
+    const rowsChanged = prevData.length !== data.length || prevData.some((row, i) => row !== data[i])
+    if (rowsChanged && !getRowId && !controlledSelection && Object.keys(state.rowSelection).length > 0) {
+      dispatch({ type: "rowSelection", payload: {} })
+    }
+  }
   const setRowSelection = useCallback(
     (updater: Updater<RowSelectionState>) => {
       if (!controlledSelection) {
@@ -410,7 +422,12 @@ function IGRPDataTable<TData, TValue>({
     return [...selectionColumn, ...withFilterFns, ...actionColumn] as ColumnDef<TData, TValue>[]
   }, [columns, actions, selection, tableHelper])
 
-  useIGRPDataTableRowIdWarning("IGRPDataTable", !!renderSubComponent, !!getRowId)
+  useIGRPDataTableRowIdWarning(
+    "IGRPDataTable",
+    !!renderSubComponent,
+    !!getRowId,
+    !!selection || !!onSelectionChange || !!onRowSelectionChange || controlledSelection
+  )
 
   // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({

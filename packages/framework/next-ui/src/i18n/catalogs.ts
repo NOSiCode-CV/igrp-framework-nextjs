@@ -15,5 +15,6 @@ const BY_LANGUAGE: Record<string, IGRPChromeStrings> = {
  */
 export function igrpChromeStringsFor(tag: string | null | undefined): IGRPChromeStrings {
   const language = (tag ?? '').trim().toLowerCase().split(/[-_]/)[0] ?? '';
-  return BY_LANGUAGE[language] ?? IGRP_CHROME_STRINGS_PT;
+  // Own keys only: the tag comes from a cookie, and `constructor` or `__proto__` would hit Object.prototype.
+  return Object.hasOwn(BY_LANGUAGE, language) ? BY_LANGUAGE[language]! : IGRP_CHROME_STRINGS_PT;
 }

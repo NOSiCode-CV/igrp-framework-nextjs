@@ -28,18 +28,20 @@ import { IgrpConfigError } from '../errors.js';
 const SUPER_ADMIN_MOCK: IGRPAccessClaims = { permissions: [], roles: [], isSuperAdmin: true };
 
 /**
- * Recover the access token straight from the session cookie.
+ * Recover the access token when the per-request store holds none.
  *
  * Needed because the per-request token lives in an `AsyncLocalStorage` store
- * that only the layout/DAL path establishes. A Server Action or Route Handler
- * is a *fresh* async context: the store is empty, so without this the token is
- * unreachable and every permission check denies — super admins included.
+ * that only the layout/DAL path establishes, and a seed written after an
+ * `await` does not reach the caller. A Server Action or Route Handler is a
+ * *fresh* async context, and Next renders a page in parallel with its layout:
+ * without this the token is unreachable and every permission check denies.
  *
- * Deliberately NOT `getServerSession()`: that needs the app's `NextAuthOptions`
- * (unavailable here), and the `accessToken` is only copied onto the session by
- * the app's own `callbacks.session` — so it would return a session with no
- * token and "fix" nothing. `getToken` needs only the cookies and
- * `NEXTAUTH_SECRET`.
+ * First choice is the app's own session read, which `withIGRPAuth` registers
+ * (`readIGRPServerSessionAccessToken`): it runs the `jwt` callback, so an
+ * expired access token is refreshed, and in a render it shares one cached read
+ * (and one refresh) with the layout's `getSession()`. Only when no instance is
+ * registered, or the read fails, does it decode the cookie, which does not
+ * refresh: after expiry that token is stale and claims fail closed.
  *
  * `next/headers` and `/session-store` are dynamically imported to keep this
  * module's static graph unchanged for every existing importer of the package
@@ -47,12 +49,21 @@ const SUPER_ADMIN_MOCK: IGRPAccessClaims = { permissions: [], roles: [], isSuper
  * Returns '' on a genuine failure — the caller maps that to the error state —
  * but re-throws Next's control-flow signals (see `isNextControlFlowError`).
  */
-async function recoverAccessTokenFromCookies(): Promise<string> {
+async function recoverAccessToken(): Promise<string> {
   try {
-    const [{ cookies }, { readIGRPSessionToken }] = await Promise.all([
-      import('next/headers'),
-      import('@igrp/framework-next-auth/session-store'),
-    ]);
+    const [{ cookies }, { readIGRPSessionToken, readIGRPServerSessionAccessToken }] =
+      await Promise.all([
+        import('next/headers'),
+        import('@igrp/framework-next-auth/session-store'),
+      ]);
+    let fromSession: string | undefined;
+    try {
+      fromSession = await readIGRPServerSessionAccessToken();
+    } catch (error) {
+      if (isNextControlFlowError(error)) throw error;
+      // A failed session read (config error, undecodable cookie) falls back to the cookie.
+    }
+    if (fromSession !== undefined) return fromSession;
     const token = await readIGRPSessionToken((await cookies()).getAll());
     return token?.accessToken ?? '';
   } catch (error) {
@@ -202,7 +213,7 @@ export async function igrpEnsureAccessClientConfig(
   const baseUrl = current.baseUrl || process.env.IGRP_ACCESS_MANAGEMENT_API || '';
   igrpSetAccessClientConfig({ token: '', baseUrl });
 
-  const token = await recoverAccessTokenFromCookies();
+  const token = await recoverAccessToken();
   // Sequential, not Promise.all: vitest's mock registry falls through to the real
   // `next/headers` when two dynamic imports of it overlap.
   const locale = current.locale ? undefined : await recoverLocaleFromRequest();
@@ -223,9 +234,9 @@ export async function igrpEnsureAccessClientConfig(
  * state (never silently "no permissions"). Deduped per render via React.cache.
  *
  * Works in Server Actions and Route Handlers as well as renders: when no
- * `AsyncLocalStorage` store was established, the token is recovered from the
- * session cookie and the store is seeded — see
- * `recoverAccessTokenFromCookies`.
+ * `AsyncLocalStorage` store was established, the token is recovered through the
+ * app's session read (or, without one, the session cookie) and the store is
+ * seeded — see `recoverAccessToken`.
  */
 // Deduped per request — Next.js resets React's cache() boundary each request,
 // so reading process.env (via isIgrpAuthBypass) inside is per-request, not stale.
@@ -239,9 +250,9 @@ export const igrpGetClaims = cache(async function igrpGetClaims(): Promise<IGRPC
     const { token } = await igrpEnsureAccessClientConfig();
     const claims = decodeIgrpClaims(token);
 
-    // An access token recovered straight from the session cookie has NOT been
-    // through the `jwt` callback — `getToken` decrypts, it does not refresh —
-    // so it can easily be past `exp`. Honouring its permissions would mean a
+    // An access token recovered straight from the session cookie (no session
+    // reader registered, or the read failed) has NOT been through the `jwt`
+    // callback — `getToken` decrypts, it does not refresh — so it can be past `exp`. Honouring its permissions would mean a
     // revoked role keeps working until the COOKIE expires rather than the
     // token. Fail closed, distinguishably: `status: 'error'` already denies
     // everywhere, and the client session watcher is what recovers the user.

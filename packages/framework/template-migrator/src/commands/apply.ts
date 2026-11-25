@@ -54,6 +54,20 @@ export async function apply(
     // migration forever. The journal is stale, not a recovery signal.
     clearJournal(appRoot);
   } else if (pendingJournal) {
+    // Files that changed since the interrupted run wrote them (a `git checkout`,
+    // a day of edits) must not be overwritten with the pre-migration snapshot.
+    // shortcut: the path whose step was in flight at the kill has no hash yet and
+    // is restored unchecked; record a pre-step hash too if that window matters.
+    const changed = Object.entries(pendingJournal.written ?? {})
+      .filter(([path, hash]) => hashFileIgnoringEol(join(appRoot, path)) !== hash)
+      .map(([path]) => path);
+    if (changed.length > 0) {
+      console.error(`\n✗ An interrupted run of ${pendingJournal.id} left ${journalPath(appRoot)},`);
+      console.error("  but these files changed since that run wrote them, so recovery would overwrite them:");
+      for (const path of changed) console.error(`      ${path}`);
+      console.error("  If you already restored the app (e.g. from git), delete the journal and re-run.\n");
+      return false;
+    }
     console.log(`\nRecovering from an interrupted run of ${pendingJournal.id}...`);
     const { reverted, failures } = unwindSteps(
       pendingJournal.undo,
@@ -181,6 +195,7 @@ export async function apply(
     // Pre-migration contents, held only by the journal so a kill mid-step can
     // still put every touched file back.
     const journalPayloads: Record<string, string> = {};
+    const journalWritten: Record<string, string | null> = {};
     const undoSteps: MigrationStep[] = [];
     // Opened before the first step and cleared only once the lock entry is
     // persisted, so an interruption anywhere in between is recoverable.
@@ -191,6 +206,7 @@ export async function apply(
       cliVersion: manifest.cliVersion,
       undo: undoSteps,
       undoPayloads: journalPayloads,
+      written: journalWritten,
     };
     writeJournal(appRoot, journal);
     try {
@@ -214,6 +230,7 @@ export async function apply(
         writeJournal(appRoot, journal);
         const undo = executeStep(step, appRoot, opts.payloadDir);
         undoSteps[slot] = undo;
+        journalWritten[pathKey] = hashFileIgnoringEol(target);
         // Keep the in-run baseline in step with what just happened, so a second
         // migration in the SAME run is judged against this one's output.
         if (step.type === "file.create" || step.type === "file.write") {

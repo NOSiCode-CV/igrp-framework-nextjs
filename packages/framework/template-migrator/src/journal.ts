@@ -35,6 +35,13 @@ export interface Journal {
   undo: MigrationStep[];
   /** Pre-migration contents for paths whose undo is a `__undo__` placeholder. */
   undoPayloads: Record<string, string>;
+  /**
+   * EOL-insensitive hash of each path right after its last completed step
+   * (null: absent). Recovery refuses to overwrite a path that no longer matches,
+   * i.e. one the user restored or edited after the crash. Missing in journals
+   * written by CLIs before this field existed.
+   */
+  written?: Record<string, string | null>;
 }
 
 export function journalPath(appRoot: string): string {

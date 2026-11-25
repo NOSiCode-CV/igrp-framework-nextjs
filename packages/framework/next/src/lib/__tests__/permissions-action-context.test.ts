@@ -14,6 +14,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
  */
 
 const getToken = vi.fn();
+const serverSessionToken = vi.fn<() => Promise<string | undefined>>();
 const cookiesGetAll = vi.fn<() => Array<{ name: string; value: string }>>();
 const acceptLanguage = vi.fn<() => string | null>();
 
@@ -33,6 +34,7 @@ vi.mock('next/headers', () => ({
 }));
 vi.mock('@igrp/framework-next-auth/session-store', () => ({
   readIGRPSessionToken: (...args: unknown[]) => getToken(...args),
+  readIGRPServerSessionAccessToken: () => serverSessionToken(),
 }));
 
 const { igrpGetClaims, igrpAuthorize, igrpEnsureAccessClientConfig } =
@@ -60,6 +62,7 @@ const SESSION_COOKIE = { name: 'next-auth.session-token', value: 'opaque' };
 
 beforeEach(() => {
   getToken.mockReset();
+  serverSessionToken.mockReset().mockResolvedValue(undefined);
   cookiesGetAll.mockReset().mockReturnValue([SESSION_COOKIE]);
   acceptLanguage.mockReset().mockReturnValue(null);
   igrpResetAccessClientConfig();
@@ -253,5 +256,50 @@ describe('igrpEnsureAccessClientConfig(seed)', () => {
     // Not awaited: the store must already be visible on the next line.
     void igrpEnsureAccessClientConfig({ token: 'SYNC', baseUrl: 'http://am' });
     expect(igrpGetAccessClientConfig().token).toBe('SYNC');
+  });
+});
+
+describe('recovery through the registered session reader (withIGRPAuth)', () => {
+  const EXPIRED_COOKIE_TOKEN = makeJwt({
+    org: 'DEPT_IGRP',
+    permissions: ['DEPT_IGRP.manage_access'],
+    exp: Math.floor(Date.now() / 1000) - 60,
+  });
+
+  it('a layout whose seed was lost after an await reads the refreshed token, not the stale cookie', async () => {
+    getToken.mockResolvedValue({ accessToken: EXPIRED_COOKIE_TOKEN });
+    serverSessionToken.mockResolvedValue(PERMITTED_TOKEN);
+    // The template's getSession(): the seed lands after an await, so the caller never sees it.
+    async function getSession() {
+      await new Promise((resolve) => setTimeout(resolve, 1));
+      await igrpEnsureAccessClientConfig({ token: PERMITTED_TOKEN });
+    }
+    await getSession();
+    expect(igrpGetAccessClientConfig().token).not.toBe(PERMITTED_TOKEN);
+
+    const state = await igrpGetClaims();
+    expect(state.status).toBe('ok');
+    expect(getToken).not.toHaveBeenCalled();
+  });
+
+  it('denies when the session read reports no usable session, without trying the cookie', async () => {
+    getToken.mockResolvedValue({ accessToken: PERMITTED_TOKEN });
+    serverSessionToken.mockResolvedValue('');
+    expect(await igrpAuthorize('manage_access')).toBe(false);
+    expect(getToken).not.toHaveBeenCalled();
+  });
+
+  it('falls back to the cookie when the session read fails', async () => {
+    serverSessionToken.mockRejectedValue(new Error('JWE decryption failed'));
+    getToken.mockResolvedValue({ accessToken: PERMITTED_TOKEN });
+    expect(await igrpAuthorize('manage_access')).toBe(true);
+  });
+
+  it('re-throws Next control flow from the session read', async () => {
+    const bailout = Object.assign(new Error('Dynamic server usage'), {
+      digest: 'DYNAMIC_SERVER_USAGE',
+    });
+    serverSessionToken.mockRejectedValue(bailout);
+    await expect(igrpGetClaims()).rejects.toBe(bailout);
   });
 });

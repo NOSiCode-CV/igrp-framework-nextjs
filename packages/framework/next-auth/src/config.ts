@@ -54,6 +54,7 @@ import {
   DEFAULT_SESSION_MAX_AGE_S,
   deleteStoredSession,
   refreshUnderSessionLock,
+  registerIGRPServerSession,
   type IGRPSessionStore,
 } from './session-store';
 import { escapeHtml, sanitizeRedirectUrl, stripAuthApiSuffix, stripBasePath } from './sanitize';
@@ -1652,6 +1653,11 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
 
     return session;
   }
+
+  // Lets `@igrp/framework-next`'s permission checks read the token this
+  // instance just refreshed instead of the stale cookie. Last instance wins:
+  // one per app process. Not registered when there is nothing real to read.
+  if (!configError && !authIsDisabled) registerIGRPServerSession(serverSession);
 
   // ── Return ─────────────────────────────────────────────────────────────────
 

@@ -8,10 +8,6 @@
 
 ## Next UI
 
--- Get breadcrumbs via script
--- Hide notifications, profile, switcherLocale and settings from the sidebar
--- in the sidebar in the dropmeneu where show the profile, settings the link is not equals as the header is adding the basePath to the url, in the header is getting the /settings from the env, but in the sidebar from the same env is getting /apps/basePaths/settings NEXT_PUBLIC_IGRP_SETTINGS_URL
-
 ## V2
 
 - better auth

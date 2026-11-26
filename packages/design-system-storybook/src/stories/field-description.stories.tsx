@@ -3,11 +3,6 @@ import { IGRPFieldDescription, IGRPLabel, Input } from '@igrp/igrp-framework-rea
 
 const meta = {
   title: 'Components/FieldDescription',
-  // Known WCAG backlog, tracked in the design-system accessibility audit:
-  // color-contrast backlog.
-  // 'todo' reports in the Storybook UI without failing CI. Delete this once the
-  // suite is clean; every other component is gated at 'error' by preview.ts.
-  parameters: { a11y: { test: 'todo' } },
   component: IGRPFieldDescription,
   argTypes: {
     helperText: { control: 'text' },
@@ -25,7 +20,7 @@ export const HelperText: Story = {
   },
   render: (args) => (
     <div className='p-6 max-w-sm grid gap-1.5'>
-      <IGRPLabel htmlFor='email'>Email</IGRPLabel>
+      <IGRPLabel label='Email' htmlFor='email' />
       <Input id='email' type='email' placeholder='you@example.com' />
       <IGRPFieldDescription {...args} />
     </div>
@@ -39,7 +34,7 @@ export const Error: Story = {
   },
   render: (args) => (
     <div className='p-6 max-w-sm grid gap-1.5'>
-      <IGRPLabel htmlFor='email-error'>Email</IGRPLabel>
+      <IGRPLabel label='Email' htmlFor='email-error' />
       <Input id='email-error' type='email' defaultValue='not-an-email' aria-invalid />
       <IGRPFieldDescription {...args} />
     </div>
@@ -54,7 +49,7 @@ export const ErrorOverridesHelper: Story = {
   },
   render: (args) => (
     <div className='p-6 max-w-sm grid gap-1.5'>
-      <IGRPLabel htmlFor='password'>Password</IGRPLabel>
+      <IGRPLabel label='Password' htmlFor='password' />
       <Input id='password' type='password' defaultValue='123' aria-invalid />
       <IGRPFieldDescription {...args} />
     </div>

@@ -6,7 +6,7 @@ import { defineConfig, globalIgnores } from "eslint/config";
 // Base mirrors packages/design-system/eslint.config.js, minus its DS-only
 // rules (token policy, a11y).
 export default defineConfig([
-  globalIgnores(["dist"]),
+  globalIgnores(["dist", ".stryker-tmp"]), // .stryker-tmp: sandbox an interrupted Stryker run leaves behind
   {
     files: ["**/*.{ts,tsx}"],
     extends: [js.configs.recommended, tseslint.configs.recommended],

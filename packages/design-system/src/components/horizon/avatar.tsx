@@ -192,13 +192,14 @@ function IGRPAvatar({
 
       {hasStatus && status && (
         <span
+          role="img"
           className={cn(statusVariants({ scale }), colorClasses.bgForeground)}
           aria-label={igrpFormatMessage(i18n.avatar.status, { status })}
         />
       )}
 
       {showIcon && iconName && (
-        <span className={cn(iconVariants({ scale }), iconClassName)} aria-label={i18n.avatar.iconIndicator}>
+        <span role="img" className={cn(iconVariants({ scale }), iconClassName)} aria-label={i18n.avatar.iconIndicator}>
           <IGRPIcon iconName={iconName} color={iconColor} />
         </span>
       )}

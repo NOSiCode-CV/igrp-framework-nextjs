@@ -137,9 +137,8 @@ const meta = {
   parameters: {
     // Known WCAG backlog, tracked in the design-system accessibility audit:
     // color-contrast on the step indicator.
-    // 'todo' reports in the Storybook UI without failing CI. Delete this once the
-    // suite is clean; every other component is gated at 'error' by preview.ts.
-    a11y: { test: 'todo' },
+    // Only the backlog rule is off; every other rule still fails CI. Delete once fixed.
+    a11y: { test: 'error', config: { rules: [{ id: 'color-contrast', enabled: false }] } },
     layout: 'fullscreen',
   },
   argTypes: {

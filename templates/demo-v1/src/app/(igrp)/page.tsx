@@ -14,9 +14,10 @@ import { isAuthBypass } from "@/lib/utilities";
 export default async function Home() {
   const root = process.env.NEXT_PUBLIC_IGRP_APP_HOME_SLUG || "/";
 
-  // Fail fast with a typed, translatable error rather than a raw `Error`
-  // string. Caught by `(igrp)/error.tsx` → `IGRPSegmentError` → copy lookup
-  // by `code` in the framework's chrome catalog.
+  // Fail fast with a typed error rather than a raw `Error` string. Caught by
+  // `(igrp)/error.tsx`. The catalog copy for its `code` shows only in
+  // `next dev`: in production React strips `code` from a server error, so the
+  // generic copy shows and the code and message reach the server log only.
   if (!root.startsWith("/")) {
     throw new IgrpConfigError(
       "IGRP_APP_HOME_SLUG_INVALID",

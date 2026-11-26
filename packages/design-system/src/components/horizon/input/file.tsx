@@ -199,7 +199,8 @@ function IGRPDropzoneInternal({
         updateFiles([...files, ...newItems.slice(0, room)])
       } else {
         setRejectedFiles(rejected)
-        updateFiles(newItems)
+        // A drop where every file is rejected keeps the file already picked.
+        if (newItems.length > 0) updateFiles(newItems)
       }
     },
     [multiple, maxFiles, maxFilesLabel, files, updateFiles]
@@ -539,11 +540,16 @@ function IGRPInputFile({
       name={fieldName}
       control={formContext.control}
       render={({ field, fieldState }) => {
+        const fieldIsEmpty = field.value === undefined || field.value === null || field.value?.length === 0
         return (
           <Field>
             {label && <IGRPLabel label={label} className={labelClassName} required={required} id={fieldName} />}
             <Input
-              ref={igrpMergeRefs(inputRef, field.ref, ref)}
+              ref={igrpMergeRefs(inputRef, field.ref, ref, (node: HTMLInputElement | null) => {
+                // A file input is uncontrolled: after `form.reset()` it would keep showing the old
+                // name. The ref re-runs when `fieldIsEmpty` changes, so clear the DOM value then.
+                if (node && fieldIsEmpty) node.value = ""
+              })}
               id={fieldName}
               className={cn(
                 "cursor-pointer p-0 pe-3 file:me-3 file:border-0 file:border-e file:border-input file:px-4 file:py-2 file:transition-colors",

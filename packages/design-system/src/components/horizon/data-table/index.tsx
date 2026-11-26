@@ -390,7 +390,7 @@ function IGRPDataTable<TData, TValue>({
         ? [
             tableHelper.display({
               id: "__igrp_actions__",
-              header: "",
+              header: () => <span className="sr-only">{i18n.table.actions}</span>,
               cell: ({ row }) => <IGRPDataTableRowActionsCell row={row} actions={actions} />,
               enableSorting: false,
               enableHiding: false,
@@ -420,7 +420,7 @@ function IGRPDataTable<TData, TValue>({
       return filterFn ? { ...col, filterFn } : col
     })
     return [...selectionColumn, ...withFilterFns, ...actionColumn] as ColumnDef<TData, TValue>[]
-  }, [columns, actions, selection, tableHelper])
+  }, [columns, actions, selection, tableHelper, i18n.table.actions])
 
   useIGRPDataTableRowIdWarning(
     "IGRPDataTable",

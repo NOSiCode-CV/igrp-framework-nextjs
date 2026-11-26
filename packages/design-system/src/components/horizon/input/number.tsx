@@ -110,6 +110,17 @@ function countDecimals(value: number): number {
   return separator === -1 ? 0 : Math.min(10, text.length - separator - 1)
 }
 
+/** @internal The resolved `Intl.NumberFormat` options that decide how a value is rounded. */
+const ROUNDING_OPTION_KEYS = [
+  "minimumFractionDigits",
+  "maximumFractionDigits",
+  "minimumSignificantDigits",
+  "maximumSignificantDigits",
+  "roundingMode",
+  "roundingPriority",
+  "roundingIncrement",
+] as const
+
 /** @internal Rounds away binary floating point noise (12.549999999999999 -> 12.55). */
 function roundToPrecision(value: number, decimals: number): number {
   if (!Number.isFinite(value)) return value
@@ -449,6 +460,8 @@ function IGRPInputNumber({
 
     const numValue = parseInputToNumber(raw, locale, formatOptions)
     if (isNaN(numValue)) {
+      // Drop the old value: the error alone is visual, and the form would still submit it.
+      writeValue("", updateFn)
       setValidationError(true)
       return
     }
@@ -476,12 +489,37 @@ function IGRPInputNumber({
 
     const parsed = parseInputToNumber(editedText, locale, formatOptions)
     if (isNaN(parsed)) {
+      writeValue("", updateFn)
       setValidationError(true)
       return
     }
 
     setValidationError(false)
-    writeValue(roundToPrecision(constrainValue(parsed), countDecimals(parsed)), updateFn)
+    writeValue(roundToDisplayed(constrainValue(parsed)), updateFn)
+  }
+
+  /**
+   * Rounds the way the field shows the value, so "10,01 €" never saves 10.005. It reuses the
+   * display's resolved rounding options (fraction or significant digits, `roundingMode`,
+   * `roundingIncrement`) through `Intl`, not `Math.round`, which turns 1.005 into 1 while
+   * `Intl` shows 1,01. Compact, scientific and engineering notation keep the typed value:
+   * "1,2 mil" is a summary, and saving 1200 for 1234.56 would lose data.
+   */
+  const roundToDisplayed = (value: number): number => {
+    if (!formatOptions) return roundToPrecision(value, countDecimals(value))
+    const resolved = formatter.resolvedOptions()
+    if (resolved.notation !== "standard") return value
+    const rounding: Intl.NumberFormatOptions = { useGrouping: false }
+    for (const key of ROUNDING_OPTION_KEYS) {
+      if (resolved[key] !== undefined) Object.assign(rounding, { [key]: resolved[key] })
+    }
+    // Percent shows value * 100, so the stored fraction keeps two more decimals.
+    if (resolved.style === "percent" && rounding.maximumFractionDigits !== undefined) {
+      rounding.minimumFractionDigits = Math.min(20, (rounding.minimumFractionDigits ?? 0) + 2)
+      rounding.maximumFractionDigits = Math.min(20, rounding.maximumFractionDigits + 2)
+    }
+    // en-US output is what Number() parses back; it is never shown to the user.
+    return Number(new Intl.NumberFormat("en-US" /* igrp-i18n-ignore */, rounding).format(value))
   }
 
   const getDisplayValue = (value: NumberValue) => {

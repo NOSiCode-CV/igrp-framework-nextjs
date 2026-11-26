@@ -1,6 +1,7 @@
 "use client"
 
-import { useCallback, use, useMemo, useRef, useState } from "react"
+import { useCallback, use, useEffect, useMemo, useRef, useState } from "react"
+import { useFormState, type FieldValues, type UseFormReturn } from "react-hook-form"
 
 import { cn } from "../cn.js"
 import { IGRPFormContext } from "../form/form-context.js"
@@ -28,6 +29,27 @@ interface IGRPMultiStepFormProps {
   onStepChange?: (next: number, prev: number) => void
   className?: string
   children: React.ReactNode
+}
+
+/** After an invalid submit, moves to the first step with an error: other steps' fields are unmounted, so it would not show. */
+function ShowFirstErrorStep({
+  form,
+  steps,
+  moveTo,
+}: {
+  form: UseFormReturn<FieldValues>
+  steps: IGRPWizardStep[]
+  moveTo: (step: number) => void
+}) {
+  const { submitCount } = useFormState({ control: form.control })
+  const handled = useRef(submitCount)
+  useEffect(() => {
+    if (submitCount === handled.current) return
+    handled.current = submitCount
+    const index = steps.findIndex((step) => step.fields.some((f) => form.getFieldState(f).error))
+    if (index >= 0) moveTo(index + 1)
+  }, [submitCount, form, steps, moveTo])
+  return null
 }
 
 /** Wizard root: owns the current step and navigation. Compose with the step, footer and header parts. */
@@ -172,6 +194,7 @@ function IGRPMultiStepForm({
             }
           }}
         >
+          {form && <ShowFirstErrorStep form={form} steps={steps} moveTo={moveTo} />}
           {children}
         </div>
       </IGRPMultiStepFormBlockingContext>

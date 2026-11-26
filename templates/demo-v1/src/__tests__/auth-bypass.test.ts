@@ -1,5 +1,9 @@
 import { NextRequest } from "next/server";
 
+import {
+  isAuthDisabled,
+  isPreviewModeEnabled,
+} from "@igrp/framework-next-auth/providers";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 // Every auth-aware path must behave with bypass on (IGRP_PREVIEW_MODE=true or
@@ -11,6 +15,9 @@ const auth = vi.hoisted(() => ({
   getTokenFromRequest: vi.fn(async (): Promise<object | null> => null),
   isTokenExpiredOrFailed: () => false,
   isEndedByHostLogout: () => false,
+  // Like the withIGRPAuth instance: the real env predicates, read per call.
+  isPreviewMode: () => isPreviewModeEnabled(process.env),
+  isAuthDisabled: () => isAuthDisabled(process.env),
 }));
 vi.mock("@/lib/auth-instance", () => ({ auth }));
 

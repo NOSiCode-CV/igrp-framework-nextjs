@@ -59,38 +59,19 @@ function buildCspReportOnly(nonce?: string): string {
   ].join("; ");
 }
 
-/** Security headers applied to all responses in production. */
-const SECURITY_HEADERS: Record<string, string> = {
-  "X-Content-Type-Options": "nosniff",
-  "X-Frame-Options": "DENY",
-  // Deliberately "0", not "1; mode=block". The legacy XSS Auditor this header
-  // controls was removed from every current browser, and where it still exists
-  // its filtering has itself been an XSS vector (it can be abused to suppress
-  // legitimate script and to probe cross-origin content). "0" disables it
-  // explicitly, which is the current OWASP / Chrome guidance. The CSP above is
-  // still report-only, so until it is switched to enforcing, XSS defence rests
-  // on React's escaping.
-  "X-XSS-Protection": "0",
-  "Referrer-Policy": "strict-origin-when-cross-origin",
-  "Permissions-Policy":
-    "camera=(), microphone=(), geolocation=(), interest-cohort=()",
-  // Only meaningful when actually served over HTTPS, which every production
-  // deployment of this template is expected to be (behind a TLS-terminating
-  // proxy or directly). Safe to send unconditionally in the production gate
-  // below — browsers ignore it on plain HTTP.
-  "Strict-Transport-Security": "max-age=63072000; includeSubDomains",
-};
-
 const IS_PRODUCTION = process.env.NODE_ENV === "production";
 
+/**
+ * Adds the CSP in production. Only the CSP lives here because it carries a
+ * per-request nonce; the fixed security headers (X-Frame-Options, HSTS, …)
+ * are set by `next.config.ts` `headers()`, which also covers the paths this
+ * middleware's matcher skips.
+ */
 function withSecurityHeaders(
   response: NextResponse,
   csp = buildCspReportOnly(),
 ): NextResponse {
   if (IS_PRODUCTION) {
-    for (const [key, value] of Object.entries(SECURITY_HEADERS)) {
-      response.headers.set(key, value);
-    }
     response.headers.set("Content-Security-Policy-Report-Only", csp);
   }
   return response;
@@ -110,11 +91,11 @@ const PUBLIC_PATHS = ["/api/health", CSP_REPORT_PATH];
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
 /**
- * Next.js middleware: auth check + security headers.
+ * Next.js middleware: auth check + CSP.
  *
  * The auth decision (bypass, public paths, logout-pending backstop, token,
  * host logout, callbackUrl) is the framework's `igrpMiddlewareDecision`; this
- * file turns it into a response and applies the security headers and CSP.
+ * file turns it into a response and applies the CSP.
  *
  * x-current-path is injected as a request header on every passing response so
  * server components can build a callbackUrl when they need to redirect to login.
@@ -198,14 +179,17 @@ async function handleRequest(request: NextRequest): Promise<NextResponse> {
  * middleware-manifest showed `/:path*`).
  *
  * Same values as the framework default (`auth.config.matcher`). Matchers are
- * basePath-relative. Skips `/apps`, `/_next` and `favicon.ico` as whole
- * segments, and static assets by extension — not every path with a dot, so a
- * page route like `/users/john.doe` still goes through the middleware.
+ * basePath-relative. Skips `/_next` and `favicon.ico` as whole segments, and
+ * static assets by extension — not every path with a dot, so a page route like
+ * `/users/john.doe` still goes through the middleware. A route handler outside
+ * `/api` whose path ends in an asset extension (`/reports/q1.pdf`) skips it
+ * too, so it must check the session itself. The fixed security headers come
+ * from `next.config.ts` `headers()`, so they reach every path regardless.
  */
 export const config = {
   matcher: [
     "/",
-    "/((?!apps(?:/|$)|_next(?:/|$)|favicon.ico$|.*\\.(?:ico|png|jpe?g|gif|svg|webp|avif|bmp|css|js|mjs|map|json|txt|xml|webmanifest|woff2?|ttf|otf|eot|pdf|mp4|webm|mp3)$).*)",
+    "/((?!_next(?:/|$)|favicon.ico$|.*\\.(?:ico|png|jpe?g|gif|svg|webp|avif|bmp|css|js|mjs|map|json|txt|xml|webmanifest|woff2?|ttf|otf|eot|pdf|mp4|webm|mp3)$).*)",
     "/api/:path*",
   ],
 };

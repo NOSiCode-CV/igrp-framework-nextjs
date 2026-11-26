@@ -110,11 +110,11 @@ function CommandGroup({ className, ...props }: React.ComponentProps<typeof Comma
 
 function CommandSeparator({ className, ...props }: React.ComponentProps<typeof CommandPrimitive.Separator>) {
   return (
-    <CommandPrimitive.Separator
-      data-slot="command-separator"
-      className={cn("-mx-1 h-px w-auto bg-border", className)}
-      {...props}
-    />
+    // IGRP: cmdk hard-codes role="separator", which a listbox may not own (axe aria-required-children);
+    // asChild lets the decorative div override it while cmdk still hides it during a search.
+    <CommandPrimitive.Separator asChild {...props}>
+      <div data-slot="command-separator" role="none" className={cn("-mx-1 h-px w-auto bg-border", className)} />
+    </CommandPrimitive.Separator>
   )
 }
 

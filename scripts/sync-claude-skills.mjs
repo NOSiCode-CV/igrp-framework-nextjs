@@ -3,14 +3,14 @@
  * Sync vendored agent skills into `.claude/skills/`.
  *
  * `.agents/skills/` is the canonical, committed home for vendored third-party
- * skills — it is what `skills-lock.json` pins and hashes. `.claude/skills/` is
+ * skills — it is what `skills-lock.json` pins. `.claude/skills/` is
  * a generated bridge that makes those skills visible to Claude Code; it is
  * gitignored and must never be edited by hand.
  *
  * Real directory copies are used rather than symlinks on purpose: this repo is
  * developed on Windows clones with `core.symlinks=false`, where committed
  * symlinks are materialised as regular files and the bridge silently becomes a
- * second committed copy that can drift past the `skills-lock.json` hash check.
+ * second committed copy that can drift from `.agents/skills/`.
  *
  * Usage:
  *   pnpm run skills:sync                 # regenerate .claude/skills from .agents/skills
@@ -22,6 +22,9 @@
  * which checks the invariant that survives a clean checkout — every skill named
  * in skills-lock.json has a source directory. Extra directories under
  * .agents/skills/ are fine: a skill can exist without being bridged.
+ * `computedHash` is not compared: it is the upstream `skills` CLI's folder hash
+ * (sha256 over sorted relPath+bytes), which depends on checkout line endings and
+ * no longer matches the committed files of any locked skill.
  */
 
 import {

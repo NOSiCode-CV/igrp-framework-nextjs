@@ -60,7 +60,7 @@ export type IGRPPlanAccessManagementSyncArgs = {
  * obvious garbage (whitespace, special characters, oversize) early.
  */
 const SERVICE_ID_PATTERN = /^[a-z0-9][a-z0-9_-]{0,62}[a-z0-9]$/i;
-const APP_CODE_PATTERN = /^[A-Z0-9][A-Z0-9_]{0,62}[A-Z0-9]$/;
+export const APP_CODE_PATTERN = /^[A-Z0-9][A-Z0-9_]{0,62}[A-Z0-9]$/;
 
 /**
  * The AM contract for a permission `name`: `^[A-Za-z0-9._-]+$`, max 255 chars.

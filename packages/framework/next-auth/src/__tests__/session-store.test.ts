@@ -286,6 +286,37 @@ describe('session store codec — with a store', () => {
     );
   });
 
+  it('does not let a stale healthy write put back a consumed refresh token', async () => {
+    const store = createMemorySessionStore();
+    const encode = createSessionTokenEncoder({ store });
+    const decode = createSessionTokenDecoder({ store });
+    const session = await decode({
+      token: await encode({
+        token: sessionToken({ refreshToken: 'rt-1', expiresAt: 1_000 }),
+        secret: SECRET,
+      }),
+      secret: SECRET,
+    });
+
+    // Pod A refreshed rt-1 → rt-2. Pod B, which read rt-1 before, then writes.
+    await encode({
+      token: { ...session!, accessToken: 'at-2', refreshToken: 'rt-2', expiresAt: 2_000 },
+      secret: SECRET,
+    });
+    const staleCookie = await encode({ token: session!, secret: SECRET });
+    expect((await decode({ token: staleCookie, secret: SECRET }))?.refreshToken).toBe('rt-2');
+    expect(((await plainDecode({ token: staleCookie, secret: SECRET })) as JWT).expiresAt).toBe(
+      2_000,
+    );
+
+    // Pod B's own later refresh (rt-2 → rt-3) still lands.
+    await encode({
+      token: { ...session!, accessToken: 'at-3', refreshToken: 'rt-3', expiresAt: 3_000 },
+      secret: SECRET,
+    });
+    expect((await decode({ token: staleCookie, secret: SECRET }))?.refreshToken).toBe('rt-3');
+  });
+
   it('leaves a session without tokens (a provider that has none) in the cookie', async () => {
     const set = vi.fn();
     const store: IGRPSessionStore = { get: vi.fn(), set, delete: vi.fn() };

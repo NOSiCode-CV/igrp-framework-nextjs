@@ -5,9 +5,8 @@ export default {
   title: 'Components/Image',
   // Known WCAG backlog, tracked in the design-system accessibility audit:
   // image-alt backlog.
-  // 'todo' reports in the Storybook UI without failing CI. Delete this once the
-  // suite is clean; every other component is gated at 'error' by preview.ts.
-  parameters: { a11y: { test: 'todo' } },
+  // Only the backlog rule is off; every other rule still fails CI. Delete once fixed.
+  parameters: { a11y: { test: 'error', config: { rules: [{ id: 'image-alt', enabled: false }] } } },
   component: IGRPImage,
   argTypes: {
     alt: { control: 'text' },

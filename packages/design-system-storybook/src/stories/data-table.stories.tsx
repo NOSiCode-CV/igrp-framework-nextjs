@@ -132,9 +132,8 @@ const meta: Meta<typeof IGRPDataTable> = {
   parameters: {
     // Known WCAG backlog, tracked in the design-system accessibility audit:
     // button-name on icon-only row actions.
-    // 'todo' reports in the Storybook UI without failing CI. Delete this once the
-    // suite is clean; every other component is gated at 'error' by preview.ts.
-    a11y: { test: 'todo' },
+    // Only the backlog rule is off; every other rule still fails CI. Delete once fixed.
+    a11y: { test: 'error', config: { rules: [{ id: 'button-name', enabled: false }] } },
     layout: 'padded',
   },
 };
@@ -281,7 +280,8 @@ export const ServerSideFilterMode: Story = {
 const columnsWithExpand: ColumnDef<UserRow>[] = [
   {
     id: 'expand',
-    header: () => null,
+    // A header cell needs a name even when it shows nothing.
+    header: () => <span className="sr-only">Expand</span>,
     cell: ({ row }) => <IGRPDataTableCellExpander row={row} field="user" />,
     enableSorting: false,
     enableHiding: false,

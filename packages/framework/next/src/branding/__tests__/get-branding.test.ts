@@ -121,6 +121,45 @@ describe('igrpGetBranding', () => {
     expect(brand?.tokens.light).toEqual({ '--primary': 'blue' });
   });
 
+  it('still honours a save that lands while a refresh is running', async () => {
+    getGlobalConfiguration.mockResolvedValueOnce(ok('red'));
+    await igrpGetBranding({ baseUrl: BASE, token: 't' });
+    vi.setSystemTime(new Date('2026-10-13T10:06:00Z'));
+    let resolveSlow!: (v: unknown) => void;
+    getGlobalConfiguration.mockReturnValueOnce(new Promise((r) => (resolveSlow = r)));
+    await igrpGetBranding({ baseUrl: BASE, token: 't' }); // stale → background refresh
+    await vi.advanceTimersByTimeAsync(1_000);
+    const savedAt = Date.now(); // the admin saves mid-fetch
+    await vi.advanceTimersByTimeAsync(1_000);
+    resolveSlow(ok('red')); // the fetch returns the pre-save Brand
+    await vi.advanceTimersByTimeAsync(5_000);
+
+    getGlobalConfiguration.mockResolvedValueOnce(ok('green'));
+    await igrpGetBranding({ baseUrl: BASE, token: 't', savedAt });
+    expect(getGlobalConfiguration).toHaveBeenCalledTimes(3);
+  });
+
+  it('discards a fetch that was running when the entry was invalidated', async () => {
+    getGlobalConfiguration.mockResolvedValueOnce(ok('red'));
+    await igrpGetBranding({ baseUrl: BASE, token: 't' });
+    vi.setSystemTime(new Date('2026-10-13T10:06:00Z'));
+    let resolveSlow!: (v: unknown) => void;
+    getGlobalConfiguration.mockReturnValueOnce(new Promise((r) => (resolveSlow = r)));
+    await igrpGetBranding({ baseUrl: BASE, token: 't' }); // stale → background refresh
+
+    igrpInvalidateBranding(BASE);
+    getGlobalConfiguration.mockResolvedValueOnce(ok('blue'));
+    expect((await igrpGetBranding({ baseUrl: BASE, token: 't' }))?.tokens.light).toEqual({
+      '--primary': 'blue',
+    });
+    resolveSlow(ok('red'));
+    await vi.advanceTimersByTimeAsync(0);
+    expect((await igrpGetBranding({ baseUrl: BASE, token: 't' }))?.tokens.light).toEqual({
+      '--primary': 'blue',
+    });
+    expect(getGlobalConfiguration).toHaveBeenCalledTimes(3);
+  });
+
   it('makes one fetch for concurrent first requests on a cold cache', async () => {
     getGlobalConfiguration.mockResolvedValue(ok('red'));
     const [a, b] = await Promise.all([

@@ -2,11 +2,12 @@
   "name": "@igrp/e2e",
   "version": "0.0.0",
   "private": true,
-  "description": "Browser smoke tests for templates/demo-v1 in preview mode",
+  "description": "Browser smoke tests for templates/demo-v1 (preview mode, plus the login redirect with auth on)",
   "type": "module",
   "scripts": {
-    "test": "playwright test",
-    "test:ui": "playwright test --ui"
+    "test": "playwright test && playwright test -c playwright.auth.config.ts",
+    "test:ui": "playwright test --ui",
+    "test:auth": "playwright test -c playwright.auth.config.ts"
   },
   "devDependencies": {
     "playwright": "1.65.1"

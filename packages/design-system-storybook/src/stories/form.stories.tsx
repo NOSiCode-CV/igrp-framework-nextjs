@@ -35,11 +35,6 @@ import {
 
 const meta: Meta<typeof IGRPForm> = {
   title: 'Components/Form',
-  // Known WCAG backlog, tracked in the design-system accessibility audit:
-  // label backlog (error-state fixtures render unlabelled inputs).
-  // 'todo' reports in the Storybook UI without failing CI. Delete this once the
-  // suite is clean; every other component is gated at 'error' by preview.ts.
-  parameters: { a11y: { test: 'todo' } },
   component: IGRPForm,
 };
 export default meta;
@@ -749,7 +744,7 @@ export const FormExamples: StoryObj = {
                     </div>
                   </>
                 )}
-                computeLabel={(_: any, index: number) => `Item ${index}`}
+                computeLabel={(_: any, index: number) => `Actividade ${index + 1}`}
                 defaultItem={undefined}
                 badgeValue={actividadesEconomicasBadgeValue}
               />
@@ -812,7 +807,7 @@ export const FormExamples: StoryObj = {
                     </div>
                   </>
                 )}
-                computeLabel={(_: any, index: number) => `Item ${index}`}
+                computeLabel={(_: any, index: number) => `Endereço ${index + 1}`}
                 defaultItem={undefined}
               />
 
@@ -847,7 +842,7 @@ export const FormExamples: StoryObj = {
                     </div>
                   </>
                 )}
-                computeLabel={(_: any, index: number) => `Item ${index}`}
+                computeLabel={(_: any, index: number) => `Contacto ${index + 1}`}
                 className={cn('md:grid-cols-2', 'block')}
                 defaultItem={undefined}
               />
@@ -893,7 +888,7 @@ export const FormExamples: StoryObj = {
                     </div>
                   </>
                 )}
-                computeLabel={(_: any, index: number) => `Item ${index}`}
+                computeLabel={(_: any, index: number) => `Conta bancária ${index + 1}`}
                 defaultItem={undefined}
               />
 
@@ -933,7 +928,7 @@ export const FormExamples: StoryObj = {
                     </div>
                   </>
                 )}
-                computeLabel={(_: any, index: number) => `Item ${index}`}
+                computeLabel={(_: any, index: number) => `Documento ${index + 1}`}
                 defaultItem={undefined}
               />
 

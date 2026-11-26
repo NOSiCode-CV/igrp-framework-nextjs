@@ -637,6 +637,12 @@
       "cliVersion": "0.2.0-beta.27",
       "manifestHash": "0b7255ee9a996f7a",
       "payloadHash": "3d01b3bfe992e421"
+    },
+    {
+      "id": "106-audit-headers-logout-error-copy",
+      "cliVersion": "0.2.0-beta.27",
+      "manifestHash": "64fd834096cd8fa8",
+      "payloadHash": "9009f75f6a422ae9"
     }
   ]
 }

@@ -19,7 +19,10 @@ vi.mock('../../lib/startup-sync.js', () => ({
   igrpStartupSync: vi.fn(),
   igrpStartupSyncDone: () => false,
 }));
-vi.mock('../../lib/sync-plan.js', () => ({ planAccessManagementSync: () => null }));
+vi.mock('../../lib/sync-plan.js', () => ({
+  planAccessManagementSync: () => null,
+  APP_CODE_PATTERN: /^[A-Z0-9][A-Z0-9_]{0,62}[A-Z0-9]$/,
+}));
 const Nested = (p: unknown) => ({ __marker: 'nested', p });
 vi.mock('@igrp/framework-next-ui', () => ({
   IGRPNestedProviders: Nested,

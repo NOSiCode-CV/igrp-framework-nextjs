@@ -347,6 +347,9 @@ function IGRPInputSearch({
     )
   }
 
+  // The caller's handlers run after the internal ones and never replace them.
+  const { onChange: callerOnChange, onKeyDown: callerOnKeyDown, ...domProps } = igrpOmitNonDomProps(props)
+
   return (
     <Field className={className}>
       {label && <IGRPLabel label={label} required={required} id={fieldName} />}
@@ -365,15 +368,18 @@ function IGRPInputSearch({
             aria-describedby={error ? `${fieldName}-error` : helperText ? `${fieldName}-helper` : undefined}
             className={inputClassName}
             value={displayValue}
-            onChange={(e) => handleInputChange(e.target.value)}
-            onKeyDown={(e) => {
+            onChange={igrpChainHandlers(
+              (e: React.ChangeEvent<HTMLInputElement>) => handleInputChange(e.target.value),
+              callerOnChange
+            )}
+            onKeyDown={igrpChainHandlers((e: React.KeyboardEvent<HTMLInputElement>) => {
               if (e.key === "Enter") {
                 e.preventDefault()
                 onSearch?.(displayValue)
               }
-            }}
+            }, callerOnKeyDown)}
             disabled={props.disabled}
-            {...igrpOmitNonDomProps(props)}
+            {...domProps}
           />
         }
       />

@@ -32,7 +32,12 @@ export default function AuthSegmentError({
   }, [error]);
 
   const resolveAuthCopy: IGRPErrorCopyResolver = (err) => {
-    if ("code" in err) return resolvePublicErrorCopy(err);
+    // An `AppError`'s public message rides in the digest, the only part of a
+    // server error that reaches the client in production.
+    const publicCopy = resolvePublicErrorCopy(err);
+    if (publicCopy) return publicCopy;
+    // A platform code is only present on a client-thrown error.
+    if ("code" in err) return undefined;
     return { title: t("title"), description: t("description") };
   };
 

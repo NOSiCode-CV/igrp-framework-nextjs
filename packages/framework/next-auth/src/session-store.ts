@@ -274,9 +274,18 @@ export function createSessionTokenEncoder(options: CodecOptions = {}) {
       // consumed the refresh token this one tried, which is WHY this one
       // failed — and the store, unlike a cookie, is shared, so a blind write
       // would log out the session the winner just renewed.
-      if (stored.error && existingId) {
-        const current = await readStored(store, existingId, params.secret);
-        if (current && !current.error && current.refreshToken !== stored.refreshToken) {
+      // A healthy write must not either: a request that read the session before
+      // another replica refreshed it carries the old, now consumed refresh
+      // token, and writing it back makes the next refresh a replay the IdP
+      // revokes. Strictly-later expiry only, so this replica's own refresh
+      // (later than or equal to the stored one) still lands.
+      if (existingId) {
+        const current = await readStored(store, existingId, params.secret).catch(() => null);
+        if (stored.error) {
+          if (current && !current.error && current.refreshToken !== stored.refreshToken) {
+            stored = current;
+          }
+        } else if (isNewerHealthy(current, token)) {
           stored = current;
         }
       }

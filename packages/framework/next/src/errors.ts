@@ -1,18 +1,18 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // @igrp/framework-next/errors
 //
-// Typed error hierarchy for the IGRP framework. Designed so that an App Router
-// `error.tsx` / `global-error.tsx` boundary can discriminate failures in
-// PRODUCTION, where Next.js redacts `error.message` to a generic string but
-// preserves `error.name`.
+// Typed error hierarchy for the IGRP framework, so an App Router `error.tsx` /
+// `global-error.tsx` boundary can discriminate failures by `code`.
+//
+// Limit: in PRODUCTION, React passes a server-thrown error to the client as
+// `{ digest }` only — `name`, `code` and `message` do not survive. The `code`
+// checks below work for client-thrown errors, and for every error in dev.
 //
 // The contract:
 //   • Every thrown framework error is an `IgrpError` (or a subclass).
 //   • Each instance sets a machine-stable `code` string. Code strings are the
 //     key consumers translate against their own i18n map.
-//   • `this.name` is set to the class name on every subclass so that it
-//     survives the server → client serialization performed by React's error
-//     boundary. Default message strings remain Portuguese for backwards
+//   • `this.name` is set to the class name on every subclass. Default message strings remain Portuguese for backwards
 //     compatibility with existing logs, but consumers SHOULD NOT parse
 //     `error.message` — use `error.name` / `error.code` instead.
 //

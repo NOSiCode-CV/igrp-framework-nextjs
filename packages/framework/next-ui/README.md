@@ -92,15 +92,15 @@ The names below are the real exports. `src/index.ts` is the whole public surface
 
 ### i18n (chrome catalog)
 
-| Export                                                       | Purpose                                                                                                                                    |
-| ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| `IGRPChromeI18nProvider`                                     | `{ strings, children }` — supplies the chrome catalog. Mounted by `IGRPIntlProvider` (`@igrp/framework-next/i18n/client`)                  |
-| `useIGRPChromeI18n`                                          | The catalog in effect; without a provider, the one for the `IGRP_LOCALE` cookie on the client, Portuguese on the server                    |
-| `igrpChromeStringsFor(tag)`                                  | Catalog for a locale or language tag (`fr`, `fr-FR`); anything unsupported → Portuguese. Never throws                                      |
-| `IGRP_CHROME_STRINGS_PT` / `_EN` / `_FR`                     | The catalogs (`IGRPChromeStrings`)                                                                                                         |
-| `IGRP_LOCALE_COOKIE`                                         | `'IGRP_LOCALE'`                                                                                                                            |
-| `igrpResolveErrorCopy(error, { byCode, fallback }, custom?)` | Error-screen `{ title, description }`: `custom` resolver (merged), then the catalog entry for the error's `IGRP_*` `code`, then `fallback` |
-| `resolveMenuLabels(overrides?, base?)`                       | Merges partial menu labels over `base` (default `IGRP_MENU_LABELS_PT_PT`)                                                                  |
+| Export                                                       | Purpose                                                                                                                                                                                                             |
+| ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `IGRPChromeI18nProvider`                                     | `{ strings, children }` — supplies the chrome catalog. Mounted by `IGRPIntlProvider` (`@igrp/framework-next/i18n/client`)                                                                                           |
+| `useIGRPChromeI18n`                                          | The catalog in effect; without a provider, the one for the `IGRP_LOCALE` cookie on the client, Portuguese on the server                                                                                             |
+| `igrpChromeStringsFor(tag)`                                  | Catalog for a locale or language tag (`fr`, `fr-FR`); anything unsupported → Portuguese. Never throws                                                                                                               |
+| `IGRP_CHROME_STRINGS_PT` / `_EN` / `_FR`                     | The catalogs (`IGRPChromeStrings`)                                                                                                                                                                                  |
+| `IGRP_LOCALE_COOKIE`                                         | `'IGRP_LOCALE'`                                                                                                                                                                                                     |
+| `igrpResolveErrorCopy(error, { byCode, fallback }, custom?)` | Error-screen `{ title, description }`: `custom` resolver (merged), then the catalog entry for the error's `IGRP_*` `code` (client-thrown errors only: production strips `code` from server errors), then `fallback` |
+| `resolveMenuLabels(overrides?, base?)`                       | Merges partial menu labels over `base` (default `IGRP_MENU_LABELS_PT_PT`)                                                                                                                                           |
 
 ---
 

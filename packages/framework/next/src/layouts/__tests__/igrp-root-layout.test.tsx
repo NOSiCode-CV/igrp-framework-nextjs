@@ -4,7 +4,10 @@ const resolveRequestBranding = vi.fn();
 vi.mock('../../branding/request.js', () => ({
   igrpResolveRequestBranding: resolveRequestBranding,
 }));
-vi.mock('../../lib/sync-plan.js', () => ({ planAccessManagementSync: () => null }));
+vi.mock('../../lib/sync-plan.js', () => ({
+  planAccessManagementSync: () => null,
+  APP_CODE_PATTERN: /^[A-Z0-9][A-Z0-9_]{0,62}[A-Z0-9]$/,
+}));
 vi.mock('next/server', () => ({ after: () => {} }));
 vi.mock('next/headers', () => ({ cookies: async () => ({ get: () => undefined }) }));
 vi.mock('@igrp/framework-next-ui', () => ({

@@ -4,11 +4,6 @@ import { IGRPInputAddOn, type IGRPInputAddOnProps } from '@igrp/igrp-framework-r
 
 export default {
   title: 'Components/Input/With Addons',
-  // Known WCAG backlog, tracked in the design-system accessibility audit:
-  // button-name backlog.
-  // 'todo' reports in the Storybook UI without failing CI. Delete this once the
-  // suite is clean; every other component is gated at 'error' by preview.ts.
-  parameters: { a11y: { test: 'todo' } },
   component: IGRPInputAddOn,
   argTypes: {
     label: { control: 'text' },
@@ -41,9 +36,9 @@ export const Default: StoryObj<IGRPInputAddOnProps> = {
     label: 'Select an option',
     optionLabel: 'Available Options',
     options: [
-      { value: 'option1', label: 'Option 11111', color: 'text-blue-500' },
-      { value: 'option2', label: 'Option 2', color: 'text-green-500' },
-      { value: 'option3', label: 'Option 3', color: 'text-red-500' },
+      { value: 'option1', label: 'Option 11111', color: 'text-primary' },
+      { value: 'option2', label: 'Option 2', color: 'text-success' },
+      { value: 'option3', label: 'Option 3', color: 'text-destructive' },
     ],
     placeholder: 'Enter text...',
   },

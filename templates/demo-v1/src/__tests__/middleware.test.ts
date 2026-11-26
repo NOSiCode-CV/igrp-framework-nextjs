@@ -4,6 +4,10 @@ import {
   basePathCookieSuffix,
   staleAuthCookies,
 } from "@igrp/framework-next-auth/cookies";
+import {
+  isAuthDisabled,
+  isPreviewModeEnabled,
+} from "@igrp/framework-next-auth/providers";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 // Auth-off paths of the middleware that auth-bypass.test.ts doesn't pin:
@@ -17,6 +21,9 @@ const auth = vi.hoisted(() => ({
   getTokenFromRequest: vi.fn(async (): Promise<object | null> => null),
   isTokenExpiredOrFailed: vi.fn(() => false),
   isEndedByHostLogout: vi.fn(() => false),
+  // Like the withIGRPAuth instance: the real env predicates, read per call.
+  isPreviewMode: () => isPreviewModeEnabled(process.env),
+  isAuthDisabled: () => isAuthDisabled(process.env),
 }));
 vi.mock("@/lib/auth-instance", () => ({ auth }));
 
@@ -176,18 +183,16 @@ describe("security headers", () => {
       NEXT_PUBLIC_ALLOWED_DOMAINS: "cdn.test, img.test",
     };
 
-    it("sets the fixed headers on pass-through and redirect alike", async () => {
+    it("sets the CSP on pass-through and redirect alike, leaving the fixed headers to next.config", async () => {
       const { middleware } = await load(prod);
       for (const res of [
         await middleware(request("/login")),
         await middleware(request("/clientes")),
       ]) {
-        expect(res.headers.get("x-content-type-options")).toBe("nosniff");
-        expect(res.headers.get("x-frame-options")).toBe("DENY");
-        expect(res.headers.get("x-xss-protection")).toBe("0");
-        expect(res.headers.get("strict-transport-security")).toMatch(
-          /^max-age=\d+; includeSubDomains$/,
-        );
+        expect(
+          res.headers.get("content-security-policy-report-only"),
+        ).toContain("frame-ancestors 'none'");
+        expect(res.headers.get("x-frame-options")).toBeNull();
       }
     });
 

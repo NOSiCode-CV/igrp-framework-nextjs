@@ -47,16 +47,20 @@ const IN_MEMORY_MAX_ENTRIES = 5000;
 type RecoveryEntry = { result: JWT; expiresAt: number };
 
 /**
- * Default per-process store. Entries self-evict by TTL; when the map is full,
- * expired entries are swept and, failing that, the oldest insertion is dropped
- * (Map preserves insertion order). Reads never delete — both an RSC read and
- * the persisting poll may need the same entry before one of them persists it.
+ * Default per-process store. Entries leave only on expiry (or `delete`), never
+ * to make room: dropping a live entry is exactly the logout this store exists
+ * to prevent, and the TTL already bounds memory to one window of refreshes.
+ * `maxEntries` is the size that triggers the first sweep of expired entries;
+ * after each sweep the trigger doubles past the live size, so sweeps stay
+ * amortised O(1) per write. Reads never delete — both an RSC read and the
+ * persisting poll may need the same entry before one of them persists it.
  */
 export function createInMemoryTokenRecoveryStore(
   options: { maxEntries?: number } = {},
 ): IGRPTokenRecoveryStore {
   const maxEntries = options.maxEntries ?? IN_MEMORY_MAX_ENTRIES;
   const entries = new Map<string, RecoveryEntry>();
+  let sweepAt = maxEntries;
 
   function sweepExpired(now: number) {
     for (const [key, entry] of entries) {
@@ -76,13 +80,9 @@ export function createInMemoryTokenRecoveryStore(
     },
     async set(consumedRefreshToken, result, ttlMs) {
       const now = Date.now();
-      // Overwriting an existing key never grows the map — only evict for net-new keys.
-      if (!entries.has(consumedRefreshToken) && entries.size >= maxEntries) {
+      if (entries.size >= sweepAt) {
         sweepExpired(now);
-        if (entries.size >= maxEntries) {
-          const oldest = entries.keys().next().value;
-          if (oldest !== undefined) entries.delete(oldest);
-        }
+        sweepAt = Math.max(maxEntries, entries.size * 2);
       }
       entries.set(consumedRefreshToken, { result, expiresAt: now + ttlMs });
     },

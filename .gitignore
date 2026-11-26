@@ -11,6 +11,7 @@ coverage/
 **/reports/mutation/
 **/reports/stryker-incremental.json
 test-results/
+test-results-auth/
 playwright-report/
 packages/e2e/results/
 

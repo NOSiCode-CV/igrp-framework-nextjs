@@ -7,12 +7,16 @@ import { fetchMenus } from '../hooks/use-menus.js';
 import { fetchCurrentUser } from '../hooks/use-user.js';
 import { igrpGetAccessClient } from '../lib/api-client.js';
 import { igrpGetAccessClientConfig } from '../lib/api-config.js';
+import { APP_CODE_PATTERN } from '../lib/sync-plan.js';
 import {
   igrpAssertAuthBypassAllowed,
   igrpEnsureAccessClientConfig,
   isIgrpAuthBypass,
 } from '../lib/permissions.js';
 import { logger } from '../logger.js';
+
+/** Case-insensitive, like the config, which upper-cases before validating. */
+const APP_CODE_ANY_CASE = new RegExp(APP_CODE_PATTERN.source, 'i');
 
 /**
  * Machine-stable failure codes. Show users the translation, not `error` (pt-PT,
@@ -86,6 +90,11 @@ async function requireSession(): Promise<Extract<ActionResult<never>, { ok: fals
 export async function fetchMenusAction(
   appCode: string,
 ): Promise<ActionResult<Awaited<ReturnType<typeof fetchMenus>>>> {
+  // `appCode` comes from the browser and becomes a URL path segment of the AM
+  // call: `../` in it would aim the user's token at another AM endpoint.
+  if (typeof appCode !== 'string' || !APP_CODE_ANY_CASE.test(appCode)) {
+    return { ok: false, error: 'Falha ao carregar os menus.', code: 'MENUS_LOAD_FAILED' };
+  }
   const denied = await requireSession();
   if (denied) return denied;
   try {

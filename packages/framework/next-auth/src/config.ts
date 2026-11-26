@@ -148,19 +148,13 @@ const SIGNOUT_REVOCATION_BUDGET_MS = 5000;
 // template does.
 //
 // Matchers are basePath-RELATIVE: Next strips `basePath` before matching (the
-// same reason `request.nextUrl.pathname` arrives without it). So the `apps`
-// alternative excludes a top-level `/apps` *inside* the app — it does NOT
-// refer to a deployment mounted at `/apps/<name>`, and an app whose basePath
-// is `/apps/template` is matched normally. It is kept only for consumers that
-// really do have an `/apps` route; it protects nothing by itself.
+// same reason `request.nextUrl.pathname` arrives without it), so an app whose
+// basePath is `/apps/template` is matched normally. There is deliberately no
+// `apps` exclusion: it skipped a top-level `/apps` route *inside* the app,
+// which then got no auth check and no security headers.
 //
-// The reserved names are excluded as WHOLE SEGMENTS (`apps(?:/|$)`), not as
-// string prefixes: a bare `(?!apps|_next|…)` lookahead stopped after four
-// characters, so `/appstore`, `/apps-admin` and `/_nextfoo` never woke the
-// middleware at all. The `.*\..*` alternative is the usual static-asset skip
-// and also skips any PAGE route whose path contains a dot (a dynamic segment
-// capturing `john.doe`) — those routes must be protected server-side, which
-// the template does from its authenticated layout.
+// The reserved names are excluded as WHOLE SEGMENTS (`_next(?:/|$)`), not as
+// string prefixes: a bare `(?!_next|…)` lookahead also skipped `/_nextfoo`.
 //
 // Consumers that additionally filter inside the middleware body (static
 // prefixes, extension checks) are duplicating this list — harmless, but the
@@ -172,11 +166,16 @@ const SIGNOUT_REVOCATION_BUDGET_MS = 5000;
 // (`/users/john.doe`, `/releases/v1.2`), which never woke the middleware. The
 // list covers what `public/` and `next build` emit; an asset type outside it
 // merely wakes the middleware and must then be let through by the consumer.
+// The flip side: a ROUTE HANDLER outside `/api` whose path ends in one of
+// these extensions (`/reports/q1.pdf`) never wakes the middleware, so it must
+// check the session itself — or live under `/api`, which the third matcher
+// always wakes. Security headers that must reach every path
+// belong in `next.config` `headers()`, which no matcher limits.
 const STATIC_ASSET_EXTENSIONS =
   'ico|png|jpe?g|gif|svg|webp|avif|bmp|css|js|mjs|map|json|txt|xml|webmanifest|woff2?|ttf|otf|eot|pdf|mp4|webm|mp3';
 const DEFAULT_MATCHER = [
   '/',
-  `/((?!apps(?:/|$)|_next(?:/|$)|favicon.ico$|.*\\.(?:${STATIC_ASSET_EXTENSIONS})$).*)`,
+  `/((?!_next(?:/|$)|favicon.ico$|.*\\.(?:${STATIC_ASSET_EXTENSIONS})$).*)`,
   '/api/:path*',
 ];
 

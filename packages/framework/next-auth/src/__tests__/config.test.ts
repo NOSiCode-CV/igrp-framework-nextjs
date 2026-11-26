@@ -1235,10 +1235,19 @@ describe('withIGRPAuth — default matcher', () => {
     const instance = withIGRPAuth({ env: VALID_ENV });
     const re = new RegExp(`^${instance.config.matcher[1]}$`);
 
-    for (const protectedPath of ['/appstore', '/apps-admin', '/_nextfoo', '/dashboard']) {
+    // `/apps` is an ordinary route inside the app: excluding it left it with no
+    // auth check and no security headers.
+    for (const protectedPath of [
+      '/apps',
+      '/apps/x',
+      '/appstore',
+      '/apps-admin',
+      '/_nextfoo',
+      '/dashboard',
+    ]) {
       expect(re.test(protectedPath), `${protectedPath} must wake the middleware`).toBe(true);
     }
-    for (const skipped of ['/apps', '/apps/x', '/_next/static/a.js', '/favicon.ico', '/a/b.png']) {
+    for (const skipped of ['/_next', '/_next/static/a.js', '/favicon.ico', '/a/b.png']) {
       expect(re.test(skipped), `${skipped} must stay excluded`).toBe(false);
     }
   });

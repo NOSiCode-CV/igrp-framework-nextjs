@@ -9,6 +9,12 @@ export type IGRPErrorCopyResolver = (error: Error) => Partial<IGRPErrorCopy> | u
  * catalog, so returning only `{ description }` keeps the catalog title),
  * then the catalog entry for a known `IGRP_*` code carried on the error,
  * then the screen's generic pair.
+ *
+ * The `code` lookup only sees errors thrown in the browser (and every error in
+ * `next dev`). In production React sends a server-thrown error to the client
+ * as `{ digest }` alone, so its `code` is gone and the generic pair shows. To
+ * show specific copy for a server failure, carry it in the digest and read it
+ * in `custom` (the template's `AppError` + `parsePublicDigest` do this).
  */
 export function igrpResolveErrorCopy(
   error: Error,

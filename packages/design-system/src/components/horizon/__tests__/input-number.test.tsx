@@ -216,4 +216,77 @@ describe("IGRPInputNumber", () => {
     expect(onChange).toHaveBeenLastCalledWith(undefined)
     expect(input).toHaveValue("")
   })
+
+  it("saves the value rounded to the decimals the format shows", async () => {
+    let readPrice: () => unknown = () => "unset"
+    const formatOptions: Intl.NumberFormatOptions = { style: "currency", currency: "EUR" }
+    const Wrapper = () => {
+      const methods = useForm()
+      readPrice = () => methods.getValues("price")
+      return (
+        <FormProvider {...methods}>
+          <IGRPInputNumber name="price" label="Price" formatOptions={formatOptions} />
+        </FormProvider>
+      )
+    }
+    render(<Wrapper />)
+
+    await userEvent.type(screen.getByRole("spinbutton"), "1,005")
+    await userEvent.tab()
+
+    // Math.round(100.49999…) would save 1; Intl shows 1,01 €.
+    expect(readPrice()).toBe(1.01)
+  })
+
+  it.each<[string, Intl.NumberFormatOptions, string, number]>([
+    ["roundingMode", { style: "currency", currency: "EUR", roundingMode: "trunc" }, "10,009", 10],
+    [
+      "roundingIncrement",
+      { style: "currency", currency: "CHF", roundingIncrement: 5, minimumFractionDigits: 2, maximumFractionDigits: 2 },
+      "1,07",
+      1.05,
+    ],
+    ["significant digits", { maximumSignificantDigits: 3 }, "1234,5678", 1230],
+    ["percent", { style: "percent", maximumFractionDigits: 1 }, "12,345", 0.123],
+    ["compact notation (keeps the typed value)", { notation: "compact" }, "1234,56", 1234.56],
+  ])("saves what the display shows with %s", async (_case, formatOptions, typed, saved) => {
+    let readValue: () => unknown = () => "unset"
+    const Wrapper = () => {
+      const methods = useForm()
+      readValue = () => methods.getValues("amount")
+      return (
+        <FormProvider {...methods}>
+          <IGRPInputNumber name="amount" label="Amount" formatOptions={formatOptions} />
+        </FormProvider>
+      )
+    }
+    render(<Wrapper />)
+
+    await userEvent.type(screen.getByRole("spinbutton"), typed)
+    await userEvent.tab()
+
+    expect(readValue()).toBe(saved)
+  })
+
+  it("writes null on invalid text inside a form so the old value is not submitted", async () => {
+    let readQty: () => unknown = () => "unset"
+    const Wrapper = () => {
+      const methods = useForm({ defaultValues: { qty: 50 } })
+      readQty = () => methods.getValues("qty")
+      return (
+        <FormProvider {...methods}>
+          <IGRPInputNumber name="qty" label="Quantity" />
+        </FormProvider>
+      )
+    }
+    render(<Wrapper />)
+
+    const input = screen.getByRole("spinbutton")
+    await userEvent.clear(input)
+    await userEvent.type(input, "abc")
+    await userEvent.tab()
+
+    expect(readQty()).toBeNull()
+    expect(input).toHaveAttribute("aria-invalid", "true")
+  })
 })

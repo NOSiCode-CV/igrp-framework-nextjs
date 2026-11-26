@@ -73,9 +73,9 @@ Each package's build pipeline is its `scripts` block in `package.json`. Two thin
 
 ### Vendored agent skills
 
-Third-party skills live in `.agents/skills/`, pinned to their upstream source and content hash by `skills-lock.json`. `.claude/skills/` is a **generated, gitignored bridge** over that directory — run `pnpm skills:sync` after a fresh clone (or after editing `.agents/skills/` or `skills-lock.json`), or Claude Code won't load any of them. Never edit `.claude/skills/` directly; the next sync overwrites it.
+Third-party skills live in `.agents/skills/`, pinned to their upstream source by `skills-lock.json`. Nothing checks its `computedHash` values: they no longer match the committed files, so an edited vendored skill is not caught. `.claude/skills/` is a **generated, gitignored bridge** over that directory — run `pnpm skills:sync` after a fresh clone (or after editing `.agents/skills/` or `skills-lock.json`), or Claude Code won't load any of them. Never edit `.claude/skills/` directly; the next sync overwrites it.
 
-Real file copies rather than symlinks, deliberately: this repo is developed on Windows clones with `core.symlinks=false`, where a committed symlink is materialised as a regular file and the bridge silently becomes a second committed copy that drifts past the lockfile's hash check. `pnpm skills:sync:check` verifies the local bridge; CI runs `--verify-lock` instead, since a clean checkout has no bridge to compare.
+Real file copies rather than symlinks, deliberately: this repo is developed on Windows clones with `core.symlinks=false`, where a committed symlink is materialised as a regular file and the bridge silently becomes a second committed copy that drifts from `.agents/skills/`. `pnpm skills:sync:check` verifies the local bridge; CI runs `--verify-lock` instead, which only checks that every locked skill has a directory, since a clean checkout has no bridge to compare.
 
 ## Tests
 

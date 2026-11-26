@@ -631,6 +631,12 @@
       "cliVersion": "0.2.0-beta.27",
       "manifestHash": "175bd226fe1534a3",
       "payloadHash": "e3b0c44298fc1c14"
+    },
+    {
+      "id": "105-claims-token-comments",
+      "cliVersion": "0.2.0-beta.27",
+      "manifestHash": "0b7255ee9a996f7a",
+      "payloadHash": "3d01b3bfe992e421"
     }
   ]
 }

@@ -49,6 +49,8 @@ function hasTraversalSegment(decoded: string): boolean {
 /**
  * Resolves the login path relative to a base URL.
  * Falls back to "/login" if the base URL is invalid.
+ *
+ * @deprecated Unused by the framework; removed in a later release. Use `auth.getLoginRedirectUrl(request)`.
  */
 export function getLoginPath(baseUrl: string, path = '/login'): string {
   try {
@@ -155,6 +157,8 @@ export function sanitizeRedirectUrl(
  * control-character bypasses, and segment-wise `..` traversal. The traversal
  * check is deliberately segment-aware rather than a bare `includes('..')`, so
  * a legitimate path such as `/reports/q1..q2` is no longer rejected.
+ *
+ * @deprecated Unused by the framework; removed in a later release. Use `sanitizeCallbackUrl`.
  */
 export function sanitizePath(path: string | null | undefined, fallback = '/'): string {
   if (typeof path !== 'string') return fallback;
@@ -172,6 +176,8 @@ export function sanitizePath(path: string | null | undefined, fallback = '/'): s
 
 /**
  * Sanitizes a string: trims, limits length, removes control characters.
+ *
+ * @deprecated Unused by the framework; removed in a later release.
  */
 export function sanitizeString(
   value: string | null | undefined,

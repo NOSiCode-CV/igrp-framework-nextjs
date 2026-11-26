@@ -162,6 +162,7 @@ function useSessionContextValue(): {
 //
 // `forceLogoutCallbackUrl` is kept in the type signature as a no-op for
 // backwards-compatibility with existing call sites; new code should drop it.
+/** @deprecated Unused by the framework; removed in a later release. Use `useSession` or `useOptionalSession`. */
 export function useSafeSession(_options: { forceLogoutCallbackUrl?: string } = {}) {
   const { data, status, update } = useSessionBase();
   const session: Session | null = data as Session | null;

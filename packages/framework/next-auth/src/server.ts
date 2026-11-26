@@ -10,6 +10,7 @@ import { interopDefault } from './_interop';
 // webpack's Next.js 15 App Router module graph.
 const NextAuth = interopDefault(NextAuthImport);
 
+/** @deprecated Unused by the framework; removed in a later release. Use `getServerSession` and check for `null`. */
 export async function getServerSessionStrict(opts: NextAuthOptions) {
   const session = await getServerSession(opts);
   if (!session) throw new Error('Unauthorized');

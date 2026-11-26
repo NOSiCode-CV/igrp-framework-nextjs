@@ -39,6 +39,9 @@ async function loadingText(name?: string): Promise<string> {
  *
  * Pass `name` to skip the lookup: the fallback then paints without waiting on
  * an Access Management round trip.
+ *
+ * @deprecated Unused by the framework; removed in a later release. Use
+ * `IGRPTemplateLoading` from `@igrp/framework-next-ui` in `loading.tsx`.
  */
 export async function IGRPGlobalLoading({
   appCode,

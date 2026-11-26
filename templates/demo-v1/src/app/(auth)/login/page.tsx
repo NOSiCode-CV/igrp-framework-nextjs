@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 
 import { IGRPLocaleSwitcher } from "@igrp/framework-next/i18n/client";
@@ -11,6 +11,7 @@ import { getTranslations } from "next-intl/server";
 import { carouselImages, loginConfig } from "@/config/login";
 import { siteConfig } from "@/config/site";
 import { setLocale } from "@/i18n/actions";
+import { classifyLogoutEntry } from "@/lib/logout-entry";
 import { LOGOUT_PENDING_COOKIE } from "@/lib/logout-pending";
 import {
   SILENT_SSO_COOKIE,
@@ -55,8 +56,12 @@ export default async function AuthPage({
 
   const { callbackUrl, error, reason } = await searchParams;
   // AM answered 401: clear this app's session client-side, then reload /login
-  // without `reason` so silent SSO can run.
-  if (reason === "session_ended") {
+  // without `reason` so silent SSO can run. Like /logout, a link from another
+  // site does not get to end the session: it sees the normal login flow.
+  if (
+    reason === "session_ended" &&
+    classifyLogoutEntry(await headers()) !== "confirm"
+  ) {
     return <SessionEndedCompletion />;
   }
   const silentSso = cookieStore.get(SILENT_SSO_COOKIE);

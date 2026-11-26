@@ -62,8 +62,8 @@ export const auth = withIGRPAuth({
   // so withIGRPAuth keeps NextAuth's default (no `session` override).
   ...(sessionMaxAge ? { session: { maxAge: sessionMaxAge } } : {}),
   // Point NextAuth at our custom sign-in page so its internal "needs sign-in"
-  // redirects (e.g. when a future caller uses `useSession({ required: true })`
-  // or `withAuth`) land on /login instead of the framework default page.
+  // redirects (e.g. when a future caller uses `useSession({ required: true })`)
+  // land on /login instead of the framework default page.
   //
   // NextAuth uses this value verbatim as a `Location`, so it must carry the
   // basePath: a bare "/login" sent every NextAuth error redirect (including a

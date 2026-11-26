@@ -649,6 +649,12 @@
       "cliVersion": "0.2.0-beta.27",
       "manifestHash": "d523e75b3a0004a5",
       "payloadHash": "082c2ab0cc766210"
+    },
+    {
+      "id": "108-login-reason-csp-report",
+      "cliVersion": "0.2.0-beta.27",
+      "manifestHash": "a8abe72a8ae5c6a5",
+      "payloadHash": "e9d84e157adb62ce"
     }
   ]
 }

@@ -26,7 +26,9 @@ function option(args: string[], name: string): string | undefined {
 const hasUnknownFlag = (args: string[]) =>
   args.some((a) => {
     const name = a.split("=")[0]!;
-    return a.startsWith("--") && !VALUE_FLAGS.has(name) && !BOOLEAN_FLAGS.has(name);
+    return (
+      a.startsWith("--") && !VALUE_FLAGS.has(name) && !BOOLEAN_FLAGS.has(name)
+    );
   });
 
 /** Positional arguments: everything that is neither an option nor an option's value. */

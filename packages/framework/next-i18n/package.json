@@ -35,7 +35,8 @@
     "test": "vitest run",
     "test:mutation": "stryker run",
     "format": "prettier --write .",
-    "release": "pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest --no-git-checks",
+    "format:check": "prettier --check .",
+    "release": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest --no-git-checks",
     "clean": "rimraf dist",
     "clean-all": "rimraf node_modules && rimraf dist"
   },

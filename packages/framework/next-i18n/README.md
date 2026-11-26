@@ -26,19 +26,19 @@ Run from an app as `pnpm igrp-i18n check-catalogs src/i18n/messages --default pt
 
 `<dir>` holds one `<locale>.json` per locale; `<locale>.json` for `--default` is the complete catalog the others are checked against. Keys under `--framework-namespaces` (default `common,i18n,errors`) are reported as info, not errors.
 
-| Exit code | Meaning                                           |
-| --------- | ------------------------------------------------- |
-| `0`       | No errors                                         |
-| `1`       | Errors / hardcoded strings found                  |
+| Exit code | Meaning                                             |
+| --------- | --------------------------------------------------- |
+| `0`       | No errors                                           |
+| `1`       | Errors / hardcoded strings found                    |
 | `2`       | Unknown command or missing arguments (prints usage) |
 
 Both commands are also exported for programmatic use in Vitest:
 
-| Function                                                  | Returns                                                                       |
-| --------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| Function                                                                     | Returns                                                                                                        |
+| ---------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
 | `checkCatalogs({ dir, defaultLocale, frameworkNamespaces?, allowMissing? })` | `CatalogReport` — `{ errors, info, coverage }`; `coverage` is the % of default-catalog keys present per locale |
-| `checkLiterals(paths, cwd?)`                              | One `file:line: finding` string per hardcoded string                          |
-| `findLiteralStrings(source, fileName?)`                   | The same findings for a single source string                                  |
+| `checkLiterals(paths, cwd?)`                                                 | One `file:line: finding` string per hardcoded string                                                           |
+| `findLiteralStrings(source, fileName?)`                                      | The same findings for a single source string                                                                   |
 
 ---
 

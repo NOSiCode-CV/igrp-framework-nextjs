@@ -80,7 +80,11 @@ function oklchToSrgb(l: number, c: number, h: number): number[] {
 }
 
 const luminance = (rgb: number[]) => {
-  const [r, g, b] = rgb.map((v) => (v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4)) as [number, number, number]
+  const [r, g, b] = rgb.map((v) => (v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4)) as [
+    number,
+    number,
+    number,
+  ]
   return 0.2126 * r + 0.7152 * g + 0.0722 * b
 }
 
@@ -104,10 +108,13 @@ const over = (fg: number[], alpha: number, bg: number[]) => fg.map((v, i) => v *
 
 describe.each(["light", "dark"] as const)("soft text contrast (%s)", (mode) => {
   // A selected data-table row is bg-muted; soft badges add bg-<color>/5 on top (axe measured #e5efef for success).
-  it.each(["success", "warning", "destructive", "indigo"])("keeps text-%s at 4.5:1 on its /5 tint over a selected row", (name) => {
-    const fg = token(name, mode)
-    expect(contrast(fg, over(fg, 0.05, token("muted", mode)))).toBeGreaterThanOrEqual(4.5)
-  })
+  it.each(["success", "warning", "destructive", "indigo"])(
+    "keeps text-%s at 4.5:1 on its /5 tint over a selected row",
+    (name) => {
+      const fg = token(name, mode)
+      expect(contrast(fg, over(fg, 0.05, token("muted", mode)))).toBeGreaterThanOrEqual(4.5)
+    }
+  )
 
   it("keeps the destructive button's text at 4.5:1 on its own tint", () => {
     // primitives/button.tsx: bg-destructive/10, dark:bg-destructive/20.

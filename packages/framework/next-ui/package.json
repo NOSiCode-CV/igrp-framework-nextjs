@@ -37,7 +37,8 @@
     "clean:dist": "rimraf dist tsconfig.tsbuildinfo tsconfig.build.tsbuildinfo",
     "clean:packages": "rimraf node_modules",
     "format": "prettier --write .",
-    "release": "pnpm lint && pnpm format && pnpm build && pnpm typecheck && pnpm test && pnpm publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest --no-git-checks",
+    "format:check": "prettier --check .",
+    "release": "pnpm format:check && pnpm lint && pnpm build && pnpm typecheck && pnpm test && pnpm publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest --no-git-checks",
     "clean-all": "rimraf node_modules && rimraf dist && rimraf tsconfig.tsbuildinfo"
   },
   "peerDependencies": {

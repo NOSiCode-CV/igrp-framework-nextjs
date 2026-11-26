@@ -107,12 +107,13 @@
   "scripts": {
     "clean": "rimraf dist tsconfig.build.tsbuildinfo",
     "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "typecheck": "tsc -p tsconfig.json",
     "lint": "eslint .",
     "build:js": "tsdown",
     "build": "pnpm clean && pnpm build:js",
     "clean-all": "rimraf node_modules && rimraf dist && rimraf tsconfig.tsbuildinfo",
-    "release": "pnpm lint && pnpm build && pnpm typecheck && pnpm test && pnpm publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest --no-git-checks",
+    "release": "pnpm format:check && pnpm lint && pnpm build && pnpm typecheck && pnpm test && pnpm publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest --no-git-checks",
     "test": "vitest run",
     "test:mutation": "stryker run"
   },

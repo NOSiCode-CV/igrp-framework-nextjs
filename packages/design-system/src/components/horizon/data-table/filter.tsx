@@ -470,11 +470,7 @@ function IGRPDataTableFilterSelect<TData>({
         column?.setFilterValue(value === "all" ? undefined : value)
       }}
     >
-      <SelectTrigger
-        id={`${id}-select`}
-        className={cn(className)}
-        aria-label={ariaLabel ?? i18n.dataTable.filterLabel}
-      >
+      <SelectTrigger id={`${id}-select`} className={cn(className)} aria-label={ariaLabel ?? i18n.dataTable.filterLabel}>
         <SelectValue placeholder={resolvedPlaceholder} />
       </SelectTrigger>
       <SelectContent className={cn("max-h-72", className)}>

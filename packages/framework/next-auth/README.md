@@ -65,11 +65,11 @@ into whatever bundle touched it. Use their subpath entries.
 
 ### Client hooks
 
-| Export                 | Returns                                       | Notes                                                                                                                                |
-| ---------------------- | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `useSafeSession()`     | `{ session, status, update }`                 | Deprecated. `useSession()` typed as the IGRP `Session`. Throws outside a `SessionProvider`. Its `forceLogoutCallbackUrl` option is a no-op.      |
-| `useOptionalSession()` | `{ status, data } \| null`                    | Safe outside a provider: `null` means **cannot tell**, not "unauthenticated" — a permission gate must keep its server-seeded answer. |
-| `SessionContext`       | NextAuth's raw context (possibly `undefined`) | Prefer `useOptionalSession`; exported so downstream packages don't import `next-auth/react` directly.                                |
+| Export                 | Returns                                       | Notes                                                                                                                                       |
+| ---------------------- | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `useSafeSession()`     | `{ session, status, update }`                 | Deprecated. `useSession()` typed as the IGRP `Session`. Throws outside a `SessionProvider`. Its `forceLogoutCallbackUrl` option is a no-op. |
+| `useOptionalSession()` | `{ status, data } \| null`                    | Safe outside a provider: `null` means **cannot tell**, not "unauthenticated" — a permission gate must keep its server-seeded answer.        |
+| `SessionContext`       | NextAuth's raw context (possibly `undefined`) | Prefer `useOptionalSession`; exported so downstream packages don't import `next-auth/react` directly.                                       |
 
 ## Quick start
 

@@ -19,6 +19,7 @@
     "typecheck": "pnpm -r run typecheck",
     "clean": "pnpm -r run clean",
     "format": "pnpm -r run format",
+    "format:check": "pnpm -r run format:check",
     "build:next": "pnpm --filter @igrp/framework-next build",
     "build:i18n-tools": "pnpm --filter @igrp/framework-next-i18n build",
     "lint:i18n:framework": "node packages/framework/next-i18n/dist/cli.js check-literals packages/design-system/src/components packages/framework/next-ui/src packages/framework/next/src",

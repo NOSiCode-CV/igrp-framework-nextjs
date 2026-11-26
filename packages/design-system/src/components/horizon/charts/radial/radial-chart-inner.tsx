@@ -140,9 +140,13 @@ function RadialChartTooltipContent({
             {/* The first bar is coloured per row (_fill); the others carry their own series colour. */}
             <div
               className={cn("size-3 rounded-full")}
-              style={{ backgroundColor: index === 0 ? (item._fill as string | undefined) : (entry.color ?? entry.fill) }}
+              style={{
+                backgroundColor: index === 0 ? (item._fill as string | undefined) : (entry.color ?? entry.fill),
+              }}
             />
-            {payload.length > 1 && <span className={cn("text-sm text-muted-foreground")}>{String(entry.name ?? "")}</span>}
+            {payload.length > 1 && (
+              <span className={cn("text-sm text-muted-foreground")}>{String(entry.name ?? "")}</span>
+            )}
             <span className={cn("text-sm")}>{formatValue(Number(entry.value))}</span>
           </div>
         ))}

@@ -1,0 +1,9 @@
+# Shared by every framework package: their format scripts pass this file with
+# --ignore-path, because Prettier reads ignore files only from its working directory.
+**/node_modules
+**/dist
+**/coverage
+**/reports
+**/CHANGELOG.md
+*.tsbuildinfo
+pnpm-lock.yaml

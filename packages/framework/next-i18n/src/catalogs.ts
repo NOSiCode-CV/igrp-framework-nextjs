@@ -1,10 +1,6 @@
-import { existsSync, readdirSync, readFileSync } from "node:fs";
-import { basename, join } from "node:path";
-import {
-  type MessageFormatElement,
-  parse,
-  TYPE,
-} from "@formatjs/icu-messageformat-parser";
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
+import { basename, join } from 'node:path';
+import { type MessageFormatElement, parse, TYPE } from '@formatjs/icu-messageformat-parser';
 
 export interface CheckCatalogsOptions {
   /** Folder holding `<locale>.json` files. */
@@ -27,11 +23,11 @@ export interface CatalogReport {
 type Tree = { [key: string]: unknown };
 const CAMEL = /^[a-z][a-zA-Z0-9]*$/;
 
-function flatten(tree: Tree, prefix = ""): Map<string, unknown> {
+function flatten(tree: Tree, prefix = ''): Map<string, unknown> {
   const out = new Map<string, unknown>();
   for (const [key, value] of Object.entries(tree)) {
     const path = prefix ? `${prefix}.${key}` : key;
-    if (value && typeof value === "object" && !Array.isArray(value)) {
+    if (value && typeof value === 'object' && !Array.isArray(value)) {
       for (const [k, v] of flatten(value as Tree, path)) out.set(k, v);
     } else {
       out.set(path, value);
@@ -76,15 +72,13 @@ function icuArguments(message: string): string[] | undefined {
 
 /** Plural options (other than `=N`) the locale's CLDR rules never select. */
 function unselectedPluralCategories(locale: string, message: string): string[] {
-  const categoriesFor = (type: "cardinal" | "ordinal") =>
-    new Set(
-      new Intl.PluralRules(locale, { type }).resolvedOptions().pluralCategories,
-    );
+  const categoriesFor = (type: 'cardinal' | 'ordinal') =>
+    new Set(new Intl.PluralRules(locale, { type }).resolvedOptions().pluralCategories);
   let cardinal: Set<string>;
   let ordinal: Set<string>;
   try {
-    cardinal = categoriesFor("cardinal");
-    ordinal = categoriesFor("ordinal");
+    cardinal = categoriesFor('cardinal');
+    ordinal = categoriesFor('ordinal');
   } catch {
     return []; // locale tag Intl rejects; nothing to compare against
   }
@@ -92,9 +86,9 @@ function unselectedPluralCategories(locale: string, message: string): string[] {
   const visit = (elements: MessageFormatElement[]) => {
     for (const el of elements) {
       if (el.type === TYPE.plural) {
-        const categories = el.pluralType === "ordinal" ? ordinal : cardinal;
+        const categories = el.pluralType === 'ordinal' ? ordinal : cardinal;
         for (const key of Object.keys(el.options)) {
-          if (!key.startsWith("=") && !categories.has(key)) bad.add(key);
+          if (!key.startsWith('=') && !categories.has(key)) bad.add(key);
         }
       }
       if (el.type === TYPE.plural || el.type === TYPE.select) {
@@ -115,25 +109,23 @@ export function checkCatalogs(options: CheckCatalogsOptions): CatalogReport {
   const defaultFile = join(options.dir, `${options.defaultLocale}.json`);
   if (!existsSync(defaultFile)) {
     return {
-      errors: [
-        `default catalog ${options.defaultLocale}.json not found in ${options.dir}`,
-      ],
+      errors: [`default catalog ${options.defaultLocale}.json not found in ${options.dir}`],
       info,
       coverage,
     };
   }
-  const files = readdirSync(options.dir).filter((f) => f.endsWith(".json"));
+  const files = readdirSync(options.dir).filter((f) => f.endsWith('.json'));
   const catalogs = new Map<string, Map<string, unknown>>();
   for (const file of files) {
-    const locale = basename(file, ".json");
+    const locale = basename(file, '.json');
     let tree: unknown;
     try {
-      tree = JSON.parse(readFileSync(join(options.dir, file), "utf8"));
+      tree = JSON.parse(readFileSync(join(options.dir, file), 'utf8'));
     } catch (e) {
       errors.push(`${locale}: invalid JSON (${(e as Error).message})`);
       continue;
     }
-    if (!tree || typeof tree !== "object" || Array.isArray(tree)) {
+    if (!tree || typeof tree !== 'object' || Array.isArray(tree)) {
       errors.push(`${locale}: catalog root is not an object`);
       continue;
     }
@@ -146,22 +138,18 @@ export function checkCatalogs(options: CheckCatalogsOptions): CatalogReport {
   for (const [locale, flat] of catalogs) {
     for (const [key, value] of flat) {
       if (locale !== options.defaultLocale && !base.has(key)) {
-        errors.push(
-          `${locale}: orphan key "${key}" (missing from ${options.defaultLocale})`,
-        );
+        errors.push(`${locale}: orphan key "${key}" (missing from ${options.defaultLocale})`);
       }
-      if (typeof value !== "string") {
+      if (typeof value !== 'string') {
         errors.push(`${locale}: "${key}" is not a string`);
         continue;
       }
-      if (value === "" && locale !== options.defaultLocale) {
+      if (value === '' && locale !== options.defaultLocale) {
         errors.push(`${locale}: "${key}" is empty`);
       }
-      for (const segment of key.split(".")) {
+      for (const segment of key.split('.')) {
         if (!CAMEL.test(segment)) {
-          errors.push(
-            `${locale}: key segment "${segment}" is not camelCase (in "${key}")`,
-          );
+          errors.push(`${locale}: key segment "${segment}" is not camelCase (in "${key}")`);
         }
       }
       const args = icuArguments(value);
@@ -176,15 +164,14 @@ export function checkCatalogs(options: CheckCatalogsOptions): CatalogReport {
       }
       if (locale === options.defaultLocale) {
         baseArgs.set(key, args);
-        if (frameworkNamespaces.has(key.split(".")[0]!)) {
+        if (frameworkNamespaces.has(key.split('.')[0]!)) {
           info.push(`${locale}: "${key}" shadows a framework namespace`);
         }
       } else if (base.has(key)) {
-        const expected =
-          baseArgs.get(key) ?? icuArguments(String(base.get(key)));
+        const expected = baseArgs.get(key) ?? icuArguments(String(base.get(key)));
         if (expected && JSON.stringify(expected) !== JSON.stringify(args)) {
           errors.push(
-            `${locale}: arguments of "${key}" differ from ${options.defaultLocale} (${expected.join(", ")} vs ${args.join(", ")})`,
+            `${locale}: arguments of "${key}" differ from ${options.defaultLocale} (${expected.join(', ')} vs ${args.join(', ')})`,
           );
         }
       }
@@ -192,15 +179,12 @@ export function checkCatalogs(options: CheckCatalogsOptions): CatalogReport {
     if (locale !== options.defaultLocale && !options.allowMissing) {
       for (const key of base.keys()) {
         if (!flat.has(key)) {
-          errors.push(
-            `${locale}: missing key "${key}" (present in ${options.defaultLocale})`,
-          );
+          errors.push(`${locale}: missing key "${key}" (present in ${options.defaultLocale})`);
         }
       }
     }
     const present = [...base.keys()].filter((k) => flat.has(k)).length;
-    coverage[locale] =
-      base.size === 0 ? 100 : Math.round((present / base.size) * 100);
+    coverage[locale] = base.size === 0 ? 100 : Math.round((present / base.size) * 100);
   }
   return { errors, info, coverage };
 }

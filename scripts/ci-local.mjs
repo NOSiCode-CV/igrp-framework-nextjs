@@ -92,10 +92,10 @@ const jobs = {
   },
   // verify_framework
   verify: () => {
+    run(`pnpm ${FRAMEWORK} run format:check`);
     run('pnpm build:framework');
     run(`pnpm ${FRAMEWORK} run typecheck`);
     run(`pnpm ${FRAMEWORK} run lint`);
-    run(`pnpm ${FRAMEWORK} run format:check`);
     run(`pnpm ${FRAMEWORK} run test --coverage --coverage.reporter=text-summary`);
     run('pnpm --filter @igrp/framework-next-template test --coverage --coverage.reporter=text-summary');
   },

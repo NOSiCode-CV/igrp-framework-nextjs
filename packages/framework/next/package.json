@@ -32,14 +32,14 @@
     "build:js": "babel src --out-dir dist --extensions .ts,.tsx --source-maps --ignore \"src/**/__tests__,src/**/*.test.ts,src/**/*.test.tsx,src/**/*.d.ts\"",
     "build:types": "tsc -p tsconfig.build.json --emitDeclarationOnly --outDir dist",
     "build:without_reactcompiler": "pnpm clean:dist && babel src --out-dir dist --extensions .ts,.tsx --source-maps --config-file ../../../scripts/babel-config.no-react-compiler.cjs --ignore \"src/**/__tests__,src/**/*.test.ts,src/**/*.test.tsx,src/**/*.d.ts\" && pnpm build:types && pnpm check:dist",
-    "format": "prettier --write .",
+    "format": "prettier --write . --ignore-path ../../../.prettierignore --ignore-path .prettierignore",
     "release": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest --no-git-checks",
     "clean-all": "rimraf node_modules && rimraf dist && rimraf tsconfig.tsbuildinfo",
     "test": "vitest run",
     "test:mutation": "stryker run",
     "typecheck": "tsc -p tsconfig.build.json --noEmit",
     "lint": "eslint .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check . --ignore-path ../../../.prettierignore --ignore-path .prettierignore"
   },
   "peerDependencies": {
     "next": "^15.5.0",

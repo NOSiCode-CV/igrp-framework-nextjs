@@ -3,12 +3,7 @@
   "plugins": ["@stryker-mutator/vitest-runner"],
   "testRunner": "vitest",
   "vitest": { "configFile": "vitest.config.ts" },
-  "mutate": [
-    "src/**/*.ts",
-    "!src/**/__tests__/**",
-    "!src/index.ts",
-    "!src/cli.ts"
-  ],
+  "mutate": ["src/**/*.ts", "!src/**/__tests__/**", "!src/index.ts", "!src/cli.ts"],
   "reporters": ["html", "clear-text", "progress"],
   "htmlReporter": { "fileName": "reports/mutation/mutation.html" },
   "incremental": true,

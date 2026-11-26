@@ -1,4 +1,3 @@
-node_modules
 .next
 out
 public
@@ -9,8 +8,6 @@ public
 **/.svn
 **/.yarn/**
 **/build
-**/dist/**
-**/node_modules
 **/temp
 **/docs/**
 tsconfig.json

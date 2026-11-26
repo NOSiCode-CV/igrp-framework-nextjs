@@ -34,7 +34,7 @@
   "scripts": {
     "dev": "tsc --watch",
     "build": "rimraf dist tsconfig.tsbuildinfo && pnpm check:barrel && pnpm check:contract && tsc -b && pnpm check:dist",
-    "format": "prettier --write .",
+    "format": "prettier --write . --ignore-path ../../../.prettierignore --ignore-path .prettierignore",
     "release": "pnpm format:check && pnpm lint && pnpm build && pnpm publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest --no-git-checks",
     "clean-all": "rimraf node_modules && rimraf dist && rimraf tsconfig.tsbuildinfo",
     "typecheck": "tsc -p tsconfig.contract.json",
@@ -42,7 +42,7 @@
     "check:contract": "tsc -p tsconfig.contract.json",
     "check:barrel": "node scripts/check-barrel.mjs",
     "check:dist": "node ../../../scripts/check-dist.mjs",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check . --ignore-path ../../../.prettierignore --ignore-path .prettierignore"
   },
   "peerDependencies": {
     "next-auth": "^4.24.0",

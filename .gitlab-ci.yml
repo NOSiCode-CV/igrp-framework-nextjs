@@ -122,6 +122,9 @@ verify_framework:
         - templates/demo-v1/vitest.config.mts
         # Shared build config (Babel/React Compiler, check-dist).
         - scripts/**/*
+        # Shared Prettier config and ignore file.
+        - .prettierrc
+        - .prettierignore
         - pnpm-lock.yaml
         - package.json
       when: always
@@ -129,12 +132,12 @@ verify_framework:
     - corepack enable
     - pnpm install --frozen-lockfile
   script:
+    - pnpm --filter "@igrp/framework-next..." --filter @igrp/framework-next-i18n run format:check
     - pnpm build:framework
     # `@igrp/framework-next...` = next plus every workspace package it depends on
     # (next-ui, design-system, next-types, next-auth); next-types has no `test`.
     - pnpm --filter "@igrp/framework-next..." --filter @igrp/framework-next-i18n run typecheck
     - pnpm --filter "@igrp/framework-next..." --filter @igrp/framework-next-i18n run lint
-    - pnpm --filter "@igrp/framework-next..." --filter @igrp/framework-next-i18n run format:check
     # Coverage is reported (text summary in the job log), not enforced yet. It
     # counts only the files some test imports, so an untested module is invisible.
     - pnpm --filter "@igrp/framework-next..." --filter @igrp/framework-next-i18n run test --coverage --coverage.reporter=text-summary

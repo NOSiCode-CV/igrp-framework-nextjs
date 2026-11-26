@@ -1461,3 +1461,40 @@ describe('withIGRPAuth — session.maxAge', () => {
     expect(session).toMatchObject({ maxAge: 3600, updateAge: 60 });
   });
 });
+
+describe('withIGRPAuth — NEXTAUTH_URL path check', () => {
+  const BASE = { ...VALID_ENV, NEXT_PUBLIC_BASE_PATH: '/apps/template' };
+
+  async function warningsFor(env: Record<string, string | undefined>) {
+    const { resetGlobalStateForTests } = await import('../_global-state');
+    resetGlobalStateForTests();
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    (await getFactory())({ env });
+    const hits = warn.mock.calls.filter((c) => String(c[0]).includes('NEXTAUTH_URL path'));
+    warn.mockRestore();
+    return hits.map((c) => String(c[0]));
+  }
+
+  it.each([
+    ['without the basePath', 'http://localhost:3000/api/auth', '"/api/auth"'],
+    ['without /api/auth', 'http://localhost:3000/apps/template', '"/apps/template"'],
+    ['as a bare origin', 'http://localhost:3000', '"/api/auth"'],
+  ])('warns once when NEXTAUTH_URL is %s', async (_case, url, actual) => {
+    const hits = await warningsFor({ ...BASE, NEXTAUTH_URL: url });
+    expect(hits).toHaveLength(1);
+    expect(hits[0]).toContain(actual);
+    expect(hits[0]).toContain('"/apps/template/api/auth"');
+  });
+
+  it.each([
+    [
+      'basePath + /api/auth',
+      { ...BASE, NEXTAUTH_URL: 'http://localhost:3000/apps/template/api/auth/' },
+    ],
+    ['no basePath, /api/auth', { ...VALID_ENV, NEXTAUTH_URL: 'http://localhost:3000/api/auth' }],
+    ['no basePath, bare origin', { ...VALID_ENV, NEXTAUTH_URL: 'http://localhost:3000' }],
+    ['NEXTAUTH_URL unset', { ...BASE, NEXTAUTH_URL: undefined }],
+  ])('stays quiet for %s', async (_case, env) => {
+    expect(await warningsFor(env)).toHaveLength(0);
+  });
+});

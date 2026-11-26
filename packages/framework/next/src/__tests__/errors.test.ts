@@ -1,3 +1,4 @@
+import { createFlightReactServerErrorHandler } from 'next/dist/server/app-render/create-error-handler.js';
 import { describe, expect, it } from 'vitest';
 
 import {
@@ -7,6 +8,7 @@ import {
   IgrpLayoutDataError,
   isIgrpError,
 } from '../errors.js';
+import { parsePublicDigest } from '../app-error.js';
 
 describe('IgrpError hierarchy', () => {
   it.each([
@@ -71,7 +73,44 @@ describe('IgrpError hierarchy', () => {
       name: 'IgrpLayoutDataError',
       code: 'IGRP_LAYOUT_DATA_FAILED',
       context: { source: 'menus' },
+      digest: expect.stringMatching(/\|IGRP_LAYOUT_DATA_FAILED$/),
     });
+  });
+});
+
+describe('IgrpError digest', () => {
+  it('carries <id>|<code> and nothing else, so the code survives production', () => {
+    const error = new IgrpConfigError('IGRP_APP_HOME_SLUG_INVALID', 'segredo "x"', {
+      receivedValue: 'x',
+    });
+
+    expect(error.digest).toMatch(/^[a-z0-9]+-[a-z0-9]+\|IGRP_APP_HOME_SLUG_INVALID$/);
+    expect(parsePublicDigest(error.digest)).toEqual({
+      errorId: expect.any(String),
+      message: null,
+      code: 'IGRP_APP_HOME_SLUG_INVALID',
+    });
+  });
+
+  it('gives each instance its own correlation id', () => {
+    expect(new IgrpError('IGRP_CONFIG_INVALID').digest).not.toBe(
+      new IgrpError('IGRP_CONFIG_INVALID').digest,
+    );
+  });
+
+  it.each(['lower_case', 'Has space', 'IGRP-DASH', 'IGRP|PIPE', ''])(
+    'sets no digest for the non-stable code %j',
+    (code) => {
+      expect(new IgrpError(code).digest).toBeUndefined();
+    },
+  );
+
+  it("is the digest Next 15's RSC error handler sends to the client", () => {
+    // Next keeps a digest the error already has (create-error-handler.ts).
+    const error = new IgrpConfigError('IGRP_CONFIG_INVALID', 'segredo');
+    const handler = createFlightReactServerErrorHandler(false, () => {});
+
+    expect(handler(error)).toBe(error.digest);
   });
 });
 

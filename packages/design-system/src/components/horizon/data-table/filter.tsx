@@ -453,7 +453,11 @@ function IGRPDataTableFilterSelect<TData>({
   options,
   placeholder,
   className,
-}: Omit<IGRPDataTableFilterProps<TData>, "clearDates" | "placeholderMax" | "target">) {
+  ariaLabel,
+}: Omit<IGRPDataTableFilterProps<TData>, "clearDates" | "placeholderMax" | "target"> & {
+  /** Accessible label for the trigger, which shows no text until the list first opens. */
+  ariaLabel?: string
+}) {
   const i18n = useIGRPi18n()
   const resolvedPlaceholder = placeholder ?? i18n.dataTable.filterSelectPlaceholder
   const id = useId()
@@ -466,7 +470,11 @@ function IGRPDataTableFilterSelect<TData>({
         column?.setFilterValue(value === "all" ? undefined : value)
       }}
     >
-      <SelectTrigger id={`${id}-select`} className={cn(className)}>
+      <SelectTrigger
+        id={`${id}-select`}
+        className={cn(className)}
+        aria-label={ariaLabel ?? i18n.dataTable.filterLabel}
+      >
         <SelectValue placeholder={resolvedPlaceholder} />
       </SelectTrigger>
       <SelectContent className={cn("max-h-72", className)}>

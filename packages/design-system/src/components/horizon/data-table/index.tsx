@@ -581,6 +581,7 @@ function IGRPDataTable<TData, TValue>({
                           column={column}
                           placeholder={descriptor.placeholder}
                           options={descriptor.options ?? []}
+                          ariaLabel={descriptor.ariaLabel}
                         />
                       )
                     case "faceted":

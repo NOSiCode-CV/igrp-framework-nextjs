@@ -59,7 +59,7 @@ export type IGRPDataTableFilterType = "input" | "select" | "dropdown" | "faceted
 export interface IGRPDataTableFilterDescriptor {
   type: IGRPDataTableFilterType
   placeholder?: string
-  /** Accessible label for the input filter (type "input"). */
+  /** Accessible label for the input and select filters (type "input" | "select"). */
   ariaLabel?: string
   options?: { label: string; value: string }[]
   render?: (column: unknown) => ReactNode

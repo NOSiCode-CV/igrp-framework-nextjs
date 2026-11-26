@@ -130,10 +130,7 @@ const meta: Meta<typeof IGRPDataTable> = {
   title: 'Components/DataTable',
   component: IGRPDataTable,
   parameters: {
-    // Known WCAG backlog, tracked in the design-system accessibility audit:
-    // button-name on icon-only row actions.
-    // Only the backlog rule is off; every other rule still fails CI. Delete once fixed.
-    a11y: { test: 'error', config: { rules: [{ id: 'button-name', enabled: false }] } },
+    a11y: { test: 'error' },
     layout: 'padded',
   },
 };

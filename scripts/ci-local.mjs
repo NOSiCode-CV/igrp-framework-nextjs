@@ -74,7 +74,10 @@ const jobs = {
     run('pnpm --filter @igrp/template-migrator check:drift');
   },
   // check_skills_lock
-  skills: () => run('node scripts/sync-claude-skills.mjs --verify-lock'),
+  skills: () => {
+    run('node --test scripts/skill-hash.test.mjs');
+    run('node scripts/sync-claude-skills.mjs --verify-lock');
+  },
   // check_i18n
   i18n: () => {
     run('pnpm --filter @igrp/framework-next-i18n test');

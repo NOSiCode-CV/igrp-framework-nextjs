@@ -15,9 +15,9 @@ export default async function Home() {
   const root = process.env.NEXT_PUBLIC_IGRP_APP_HOME_SLUG || "/";
 
   // Fail fast with a typed error rather than a raw `Error` string. Caught by
-  // `(igrp)/error.tsx`. The catalog copy for its `code` shows only in
-  // `next dev`: in production React strips `code` from a server error, so the
-  // generic copy shows and the code and message reach the server log only.
+  // `(igrp)/error.tsx`, which shows the catalog copy for its `code`: the code
+  // reaches the client in the error's digest, in production too. The message
+  // and `receivedValue` stay in the server log.
   if (!root.startsWith("/")) {
     throw new IgrpConfigError(
       "IGRP_APP_HOME_SLUG_INVALID",

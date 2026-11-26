@@ -63,8 +63,10 @@ check_skills_lock:
         - .agents/skills/**/*
         - skills-lock.json
         - scripts/sync-claude-skills.mjs
+        - scripts/skill-hash*.mjs
       when: always
   script:
+    - node --test scripts/skill-hash.test.mjs
     - node scripts/sync-claude-skills.mjs --verify-lock
 
 # `lint:i18n` (catalog parity + hardcoded-literal scan) otherwise only ran inside

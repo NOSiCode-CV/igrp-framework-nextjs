@@ -2,12 +2,13 @@
   "name": "@igrp/e2e",
   "version": "0.0.0",
   "private": true,
-  "description": "Browser smoke tests for templates/demo-v1 (preview mode, plus the login redirect with auth on)",
+  "description": "Browser smoke tests for templates/demo-v1 (preview mode, plus the login round-trip up to the IdP with auth on)",
   "type": "module",
   "scripts": {
     "test": "playwright test && playwright test -c playwright.auth.config.ts",
     "test:ui": "playwright test --ui",
-    "test:auth": "playwright test -c playwright.auth.config.ts"
+    "test:auth": "playwright test -c playwright.auth.config.ts",
+    "test:auth:misconfig": "node scripts/auth-misconfig.mjs"
   },
   "devDependencies": {
     "playwright": "1.65.1"

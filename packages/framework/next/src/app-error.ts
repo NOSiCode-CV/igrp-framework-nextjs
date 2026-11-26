@@ -50,22 +50,44 @@ function generateErrorId(): PublicErrorId {
 }
 
 /**
- * Parses `error.digest` to extract the correlation id and user message.
+ * A machine-stable error code: upper-case letters, digits and `_`, e.g.
+ * `IGRP_APP_HOME_SLUG_INVALID`. Only a code of this shape may ride in a digest,
+ * because the digest is visible to the client.
+ */
+const PUBLIC_CODE_PATTERN = /^[A-Z][A-Z0-9_]*$/;
+
+/**
+ * Builds the digest an `IgrpError` carries: `<id>|<code>`, the same shape as an
+ * `AppError` digest with the code in the public slot. Returns `undefined` for a
+ * code that is not machine-stable, so free text never reaches the client.
+ */
+export function encodePublicCodeDigest(code: string): PublicErrorMessage | undefined {
+  return PUBLIC_CODE_PATTERN.test(code)
+    ? `${generateErrorId()}${PUBLIC_ERROR_DELIMITER}${code}`
+    : undefined;
+}
+
+/**
+ * Parses `error.digest` to extract the correlation id and the public part.
  *
- * Returns `{ errorId: null, message: null }` for any digest that was NOT set
- * by `AppError` (i.e. does not contain `PUBLIC_ERROR_DELIMITER`).
+ * The public part is a `code` when it has the shape of a machine-stable code
+ * (an `IgrpError`), else a `message` (an `AppError`). Returns all `null` for
+ * any digest that does not contain `PUBLIC_ERROR_DELIMITER` (Next's own
+ * digests and its hashes).
  */
 export function parsePublicDigest(digest: string | undefined): {
   errorId: string | null;
   message: string | null;
+  code: string | null;
 } {
   if (!digest?.includes(PUBLIC_ERROR_DELIMITER)) {
-    return { errorId: null, message: null };
+    return { errorId: null, message: null, code: null };
   }
   const idx = digest.indexOf(PUBLIC_ERROR_DELIMITER);
   const errorId = digest.slice(0, idx).trim() || null;
-  const message = digest.slice(idx + 1).trim() || null;
-  return { errorId, message };
+  const publicPart = digest.slice(idx + 1).trim() || null;
+  const code = publicPart && PUBLIC_CODE_PATTERN.test(publicPart) ? publicPart : null;
+  return { errorId, message: code ? null : publicPart, code };
 }
 
 /**

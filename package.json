@@ -40,6 +40,7 @@
     "version:changesets": "changeset version",
     "skills:sync": "node scripts/sync-claude-skills.mjs",
     "skills:sync:check": "node scripts/sync-claude-skills.mjs --check",
+    "skills:lock": "node scripts/sync-claude-skills.mjs --update-lock",
     "install:deps": "dotenv -e .env -- pnpm install",
     "template-migrations": "pnpm --filter @igrp/template-migrator build"
   },

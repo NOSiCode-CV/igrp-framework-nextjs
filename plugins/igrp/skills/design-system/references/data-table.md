@@ -154,7 +154,7 @@ A union discriminated by `type`. Every action has `label`, `icon?` and `hidden?(
 
 There are two mechanisms. Neither uses `meta`.
 
-**1. Column descriptor** (via the helper): `filter: { type, placeholder?, ariaLabel?, options?, render? }`.
+**1. Column descriptor** (via the helper): `filter: { type, placeholder?, ariaLabel?, options?, render? }`. `ariaLabel` names the `"input"` and `"select"` controls for screen readers (default "Filtrar"); set it when a table has more than one.
 
 | `type` | Writes | Column needs |
 | --- | --- | --- |

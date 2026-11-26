@@ -626,6 +626,41 @@ function warnOnShortTokenLifetime(expiresAt: number): void {
  * the variable is set, and setting it does nothing. That makes the check
  * *capable of firing correctly*, which the previous version was not.
  */
+/**
+ * Warns once when NEXTAUTH_URL's path is not `${NEXT_PUBLIC_BASE_PATH}/api/auth`.
+ *
+ * NextAuth builds the OAuth `redirect_uri` from that path, so both common
+ * mistakes pass every other check: without the basePath the IdP sends the user
+ * back outside the app (404); without `/api/auth` the callback lands on a page
+ * route, the middleware bounces it to /login, and the `callbackUrl` nests on
+ * every round. `resolveAppBasePath` can't see either (it strips `/api/auth` and
+ * falls back to NEXT_PUBLIC_BASE_PATH), so check the raw path here.
+ */
+function warnOnNextAuthUrlPath(env: Record<string, string | undefined>): void {
+  const raw = env.NEXTAUTH_URL?.trim();
+  if (!raw) return;
+  let path: string;
+  try {
+    path = new URL(raw).pathname.replace(/\/+$/, '');
+  } catch {
+    return; // A malformed URL is NextAuth's own error to report.
+  }
+  // NextAuth v4 treats an origin-only NEXTAUTH_URL as `/api/auth`.
+  const effective = path || '/api/auth';
+  const basePath = (env.NEXT_PUBLIC_BASE_PATH ?? process.env.NEXT_PUBLIC_BASE_PATH ?? '')
+    .trim()
+    .replace(/\/+$/, '');
+  const expected = `${basePath && !basePath.startsWith('/') ? `/${basePath}` : basePath}/api/auth`;
+  if (effective === expected) return;
+  warnOnce('config.nextAuthUrlPath', () =>
+    console.warn(
+      `[withIGRPAuth] NEXTAUTH_URL path is "${effective}" but must be "${expected}" ` +
+        `(NEXT_PUBLIC_BASE_PATH + /api/auth). NextAuth will send redirect_uri ` +
+        `"${effective}/callback/<provider>", so the login fails or loops with a nested callbackUrl.`,
+    ),
+  );
+}
+
 function warnOnRefetchIntervalMisconfiguration(env: Record<string, string | undefined>): void {
   const raw = env.IGRP_SESSION_REFETCH_INTERVAL?.trim();
   if (!raw) return;
@@ -949,6 +984,8 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
   if (resolveNodeEnv(env) !== 'production') {
     warnOnRefetchIntervalMisconfiguration(env);
   }
+
+  if (!authIsDisabled) warnOnNextAuthUrlPath(env);
 
   let warnedBasePathMismatch = false;
 

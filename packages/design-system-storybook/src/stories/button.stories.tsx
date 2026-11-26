@@ -10,10 +10,7 @@ import { fn } from 'storybook/test';
 
 const meta = {
   title: 'Components/Button',
-  // Known WCAG backlog, tracked in the design-system accessibility audit:
-  // color-contrast on soft/outline colour variants.
-  // Only the backlog rule is off; every other rule still fails CI. Delete once fixed.
-  parameters: { a11y: { test: 'error', config: { rules: [{ id: 'color-contrast', enabled: false }] } } },
+  parameters: { a11y: { test: 'error' } },
   component: IGRPButton,
   argTypes: {
     variant: {

@@ -1,6 +1,11 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import { AppError, getDisplayableErrorMessage, parsePublicDigest } from '../app-error.js';
+import {
+  AppError,
+  encodePublicCodeDigest,
+  getDisplayableErrorMessage,
+  parsePublicDigest,
+} from '../app-error.js';
 
 describe('AppError', () => {
   it('carries no message without a publicMessage, so the boundary shows its translated copy', () => {
@@ -13,6 +18,33 @@ describe('AppError', () => {
     expect(
       parsePublicDigest(new AppError({ publicMessage: 'Perfil indisponível.' }).digest).message,
     ).toBe('Perfil indisponível.');
+  });
+});
+
+describe('parsePublicDigest', () => {
+  it('reads a code-shaped public part as a code, free text as a message', () => {
+    expect(parsePublicDigest('k1-ab|IGRP_CONFIG_INVALID')).toEqual({
+      errorId: 'k1-ab',
+      message: null,
+      code: 'IGRP_CONFIG_INVALID',
+    });
+    expect(parsePublicDigest('k1-ab|Perfil indisponível.')).toEqual({
+      errorId: 'k1-ab',
+      message: 'Perfil indisponível.',
+      code: null,
+    });
+  });
+
+  it("returns nulls for Next's own digests", () => {
+    expect(parsePublicDigest('2384712')).toEqual({ errorId: null, message: null, code: null });
+    expect(parsePublicDigest(undefined)).toEqual({ errorId: null, message: null, code: null });
+  });
+});
+
+describe('encodePublicCodeDigest', () => {
+  it('encodes only a machine-stable code', () => {
+    expect(encodePublicCodeDigest('IGRP_X_1')).toMatch(/\|IGRP_X_1$/);
+    expect(encodePublicCodeDigest('Mensagem livre')).toBeUndefined();
   });
 });
 

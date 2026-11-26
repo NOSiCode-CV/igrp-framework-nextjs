@@ -655,6 +655,12 @@
       "cliVersion": "0.2.0-beta.27",
       "manifestHash": "a8abe72a8ae5c6a5",
       "payloadHash": "e9d84e157adb62ce"
+    },
+    {
+      "id": "109-menu-roles-reset-note",
+      "cliVersion": "0.2.0-beta.27",
+      "manifestHash": "dbf0fc57b0e7dfe4",
+      "payloadHash": "a54ced217688f9f7"
     }
   ]
 }

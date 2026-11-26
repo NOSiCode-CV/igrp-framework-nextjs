@@ -62,7 +62,7 @@ NEXT_PUBLIC_BASE_PATH=/apps/template
 | `IGRP_SYNC_ACCESS` | Sync application/resources/menus to Access Management at startup | `false` |
 | `IGRP_BRANDING_ENABLED` | Load the organization Brand (colours and logos) from Access Management at render time | `false` |
 | `IGRP_SYNC_ON_CODE_MENUS` | Push `src/temp/menus/menus.ts` to AM (overwrites AM menus). Requires sync on + preview off | `false` |
-| `IGRP_SYNC_ON_CODE_MENU_ROLES` | Forward `syncRoles` to `syncApplicationMenus` during the on-code menu push — reconcile menu↔role assignments too. Only consulted when the push runs | `true` |
+| `IGRP_SYNC_ON_CODE_MENU_ROLES` | Forward `syncRoles` to `syncApplicationMenus` during the on-code menu push — reconcile menu↔role assignments too. Only consulted when the push runs. **Every pod start resets the menu roles to the code's**, undoing role edits made in AM; set `false` once AM owns them | `true` |
 | `IGRP_SYNC_PERMISSIONS` | Push the `.igrpstudio/permissions.json` catalog to AM at startup (idempotent upsert keyed on `name`; removals are NOT deleted in AM). Requires sync on + preview off | `false` |
 
 ## Access Management M2M (required when `IGRP_SYNC_ACCESS=true`)

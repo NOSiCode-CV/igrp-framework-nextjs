@@ -81,6 +81,10 @@ function IGRPAreaChartInner({
     `${gradientPrefix}-${index}-${String(dataKey).replace(/[^A-Za-z0-9_-]/g, "")}`
   const locale = useIGRPLocale()
   const formatValue = (value: number) => formatChartValue(value, valueFormatter, locale)
+  // `expanded` stacks to shares of 1, so the axis shows percentages, not 0–1.
+  const formatAxisValue = expanded
+    ? (value: number) => new Intl.NumberFormat(locale, { style: "percent", maximumFractionDigits: 0 }).format(value)
+    : formatValue
   const hasNegativeDataValues = hasNegativeValues(
     data,
     areas.map((a) => a.dataKey)
@@ -141,7 +145,7 @@ function IGRPAreaChartInner({
                 <YAxis
                   type="number"
                   domain={valueDomain || (hasNegativeDataValues ? ["auto", "auto"] : [0, "auto"])}
-                  tickFormatter={formatValue}
+                  tickFormatter={formatAxisValue}
                   hide={hideAxis || hideYAxis}
                   stroke={axisColor}
                   tickLine={false}

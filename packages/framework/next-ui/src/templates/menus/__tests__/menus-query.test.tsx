@@ -7,6 +7,7 @@ import { SidebarProvider, TooltipProvider } from '@igrp/igrp-framework-react-des
 
 vi.mock('next/navigation', () => ({
   usePathname: () => '/',
+  useSearchParams: () => new URLSearchParams(),
   useRouter: () => ({ prefetch: vi.fn() }),
 }));
 

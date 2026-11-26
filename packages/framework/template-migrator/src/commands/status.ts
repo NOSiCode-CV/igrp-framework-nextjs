@@ -32,7 +32,8 @@ export function status(appRoot: string) {
 
   const pending = manifest.migrations.filter((m) => !appliedIds.has(m.id));
   const unknownNote = unknown.length > 0 ? ` (${unknown.length} from a newer CLI)` : "";
-  console.log(`\n${lock.applied.length} applied${unknownNote}, ${pending.length} pending\n`);
+  // Distinct ids: a lock with a duplicated entry must not count it twice.
+  console.log(`\n${appliedById.size} applied${unknownNote}, ${pending.length} pending\n`);
   if (changed.length > 0) {
     console.log(`! ${changed.length} applied migration(s) changed after they were applied:`);
     const payloadOnly = changed.filter((m) => staleCause(appliedById.get(m.id), m) === "payload");

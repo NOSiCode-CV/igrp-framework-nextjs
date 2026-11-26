@@ -82,6 +82,11 @@ const jobs = {
   i18n: () => {
     run('pnpm --filter @igrp/framework-next-i18n test');
     run('pnpm --filter @igrp/framework-next-i18n build');
+    // Re-link, as CI does: on a fresh clone the `igrp-i18n` bin target
+    // (dist/cli.js) did not exist at install time, so pnpm skipped the shim.
+    run(
+      'pnpm install --frozen-lockfile --ignore-scripts --prefer-offline --filter @igrp/framework-next-i18n --filter @igrp/framework-next-template',
+    );
     run('pnpm --filter @igrp/framework-next-template lint:i18n');
     run('pnpm lint:i18n:framework');
   },

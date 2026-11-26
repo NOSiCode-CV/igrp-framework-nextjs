@@ -76,6 +76,16 @@ describe("status", () => {
     expect(out).toContain("1 applied, 1 pending");
   });
 
+  it("counts a duplicated lock entry once", () => {
+    writeLock(appRoot, {
+      version: 1,
+      template: "demo-v1",
+      applied: [entry("01-a"), entry("01-a")],
+    });
+
+    expect(runStatus()).toContain("1 applied, 1 pending");
+  });
+
   it("reports 0 pending for a fully migrated app", () => {
     writeLock(appRoot, {
       version: 1,

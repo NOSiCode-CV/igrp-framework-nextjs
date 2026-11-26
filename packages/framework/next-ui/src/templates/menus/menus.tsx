@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useDeferredValue, useMemo, useState } from 'react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import type { IGRPMenuItemArgs } from '@igrp/framework-next-types';
 import {
   cn,
@@ -45,7 +45,11 @@ export function IGRPTemplateMenus({
   const [internalQuery, setInternalQuery] = useState('');
   const query = controlledQuery ?? internalQuery;
   const sections = useMemo(() => buildMenuSections(menus), [menus]);
-  const activeHref = useMemo(() => findActiveHref(sections, pathname), [sections, pathname]);
+  const searchParams = useSearchParams();
+  const activeHref = useMemo(
+    () => findActiveHref(sections, pathname, searchParams),
+    [sections, pathname, searchParams],
+  );
   const chrome = useIGRPChromeI18n();
   const labels = useMemo(
     () => ({

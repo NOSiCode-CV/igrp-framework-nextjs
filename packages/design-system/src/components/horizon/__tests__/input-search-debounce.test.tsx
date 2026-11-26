@@ -6,6 +6,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import { act, fireEvent, render, screen } from "@testing-library/react"
 
+import { FormProvider, useForm, type UseFormReturn } from "react-hook-form"
+
 import { IGRPInputSearch } from "../input/search.js"
 
 // Fake timers + synchronous keystrokes: with real timers and user-event, a busy
@@ -70,6 +72,38 @@ describe("IGRPInputSearch debounce", () => {
 
     type("ab")
     wait(200)
+
+    expect(onSearch).not.toHaveBeenCalled()
+  })
+
+  it("searches once when Enter is pressed during a pending debounce", () => {
+    const onSearch = vi.fn()
+    render(<IGRPInputSearch id="q" onSearch={onSearch} isDebounce debounceMs={200} />)
+
+    type("abc")
+    fireEvent.keyDown(searchBox(), { key: "Enter" })
+    wait(1000)
+
+    expect(onSearch.mock.calls.map((call) => call[0])).toEqual(["abc"])
+  })
+
+  it("drops a pending search after a form reset", () => {
+    const onSearch = vi.fn()
+    let form: UseFormReturn<{ q: string }> | undefined
+    function Harness() {
+      const methods = useForm<{ q: string }>({ defaultValues: { q: "" } })
+      form = methods
+      return (
+        <FormProvider {...methods}>
+          <IGRPInputSearch name="q" onSearch={onSearch} isDebounce debounceMs={200} />
+        </FormProvider>
+      )
+    }
+    render(<Harness />)
+
+    type("abc")
+    act(() => form!.reset())
+    wait(1000)
 
     expect(onSearch).not.toHaveBeenCalled()
   })

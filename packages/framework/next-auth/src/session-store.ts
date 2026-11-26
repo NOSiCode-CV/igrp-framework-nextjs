@@ -279,8 +279,9 @@ export function createSessionTokenEncoder(options: CodecOptions = {}) {
       // token, and writing it back makes the next refresh a replay the IdP
       // revokes. Strictly-later expiry only, so this replica's own refresh
       // (later than or equal to the stored one) still lands.
+      let current: StoredFields | null = null;
       if (existingId) {
-        const current = await readStored(store, existingId, params.secret).catch(() => null);
+        current = await readStored(store, existingId, params.secret).catch(() => null);
         if (stored.error) {
           if (current && !current.error && current.refreshToken !== stored.refreshToken) {
             stored = current;
@@ -289,7 +290,12 @@ export function createSessionTokenEncoder(options: CodecOptions = {}) {
           stored = current;
         }
       }
-      await writeStored(store, sessionId, stored, params.secret, maxAge);
+      // Every session read re-encodes the cookie. Skip the store write (one
+      // encryption and one round trip) when nothing changed and the entry still
+      // has over half its lifetime, so the TTL keeps sliding for active users.
+      if (!(current && sameStored(current, stored) && hasHalfLifeLeft(current, maxAge))) {
+        await writeStored(store, sessionId, stored, params.secret, maxAge);
+      }
     } catch (error) {
       // Keep the user signed in: a full cookie is too big for some proxies, but
       // a store outage is better answered by a large cookie than by a logout.
@@ -535,6 +541,16 @@ const sleep = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve,
  * expires later and it carries no failure. Comparing expiries (not refresh
  * tokens) also covers an IdP that does not rotate refresh tokens.
  */
+function sameStored(a: StoredFields, b: StoredFields): boolean {
+  return STORED_FIELDS.every((field) => a[field] === b[field]);
+}
+
+/** The decoded store value carries the `exp` its encode set. */
+function hasHalfLifeLeft(stored: StoredFields, maxAge: number): boolean {
+  const exp = (stored as { exp?: unknown }).exp;
+  return typeof exp === 'number' && exp - Date.now() / 1000 > maxAge / 2;
+}
+
 function isNewerHealthy(stored: StoredFields | null, token: JWT): stored is StoredFields {
   return Boolean(
     stored &&

@@ -151,6 +151,37 @@ describe('session store codec — with a store', () => {
     expect(other?.[SESSION_ID_CLAIM]).not.toBe(first?.[SESSION_ID_CLAIM]);
   });
 
+  it('skips the store write on a read that changed nothing, until half the lifetime is gone', async () => {
+    const store = createMemorySessionStore();
+    const set = vi.spyOn(store, 'set');
+    const encode = createSessionTokenEncoder({ store });
+    const decode = createSessionTokenDecoder({ store });
+    const maxAge = 3600;
+
+    const first = await decode({
+      token: await encode({ token: sessionToken(), secret: SECRET, maxAge }),
+      secret: SECRET,
+    });
+    expect(set).toHaveBeenCalledTimes(1);
+
+    // A plain session read re-encodes the same token: no write.
+    await encode({ token: first!, secret: SECRET, maxAge });
+    expect(set).toHaveBeenCalledTimes(1);
+
+    // A change (a refresh) is written.
+    await encode({ token: { ...first!, accessToken: 'at-2' }, secret: SECRET, maxAge });
+    expect(set).toHaveBeenCalledTimes(2);
+
+    // Past half the lifetime, an unchanged read writes again so the TTL slides.
+    vi.useFakeTimers({ now: Date.now() + (maxAge / 2 + 60) * 1000 });
+    try {
+      await encode({ token: { ...first!, accessToken: 'at-2' }, secret: SECRET, maxAge });
+      expect(set).toHaveBeenCalledTimes(3);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
   it('treats the stored expiry as authoritative over a stale cookie', async () => {
     // A refresh inside an RSC render updates the store but cannot rewrite the
     // cookie; the next Node read must see the refreshed expiry.

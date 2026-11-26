@@ -144,11 +144,15 @@ export function findLiteralStrings(
       USER_FACING_PROPS.has(node.name.getText(sf))
     ) {
       const init = node.initializer;
-      const texts = literalTexts(
-        init && ts.isJsxExpression(init) ? init.expression : init,
-      );
+      const inExpression = !!init && ts.isJsxExpression(init);
+      const texts = literalTexts(inExpression ? init.expression : init);
+      // JSX decodes entities in a quoted attribute (`title="&mdash;"`), as in
+      // JSX text; inside `{"…"}` they are plain characters and stay visible.
+      const letters = inExpression
+        ? (t: string) => HAS_LETTER.test(t)
+        : hasLetter;
       for (const text of texts) {
-        if (HAS_LETTER.test(text)) {
+        if (letters(text)) {
           report(node, `literal prop ${node.name.getText(sf)}="${text}"`);
         }
       }

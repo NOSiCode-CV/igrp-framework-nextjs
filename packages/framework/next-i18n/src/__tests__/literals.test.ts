@@ -45,6 +45,16 @@ describe("findLiteralStrings", () => {
     ).toEqual([]);
   });
 
+  it("accepts entities in a quoted prop, where JSX decodes them too", () => {
+    expect(
+      findLiteralStrings(`export const X = () => <span title="&mdash;" />;`),
+    ).toEqual([]);
+    // Inside an expression the entity is not decoded: the letters show.
+    expect(
+      findLiteralStrings(`export const X = () => <span title={"&mdash;"} />;`),
+    ).toHaveLength(1);
+  });
+
   it("flags next-intl formatter imports (format through the framework helpers)", () => {
     expect(
       findLiteralStrings(`import { useFormatter } from "next-intl";`),

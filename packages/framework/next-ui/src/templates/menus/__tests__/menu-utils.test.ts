@@ -50,7 +50,9 @@ describe('isAbsoluteUrl', () => {
     ['users', false],
     ['#', false],
     ['', false],
-    ['/\\example.com', false],
+    ['/\\example.com', true],
+    ['\\\\example.com', true],
+    ['https:/\\example.com', true],
   ])('%s → %s', (url, expected) => {
     expect(isAbsoluteUrl(url)).toBe(expected);
   });
@@ -58,6 +60,36 @@ describe('isAbsoluteUrl', () => {
 
 describe('findActiveHref', () => {
   const users = item({ code: 'users', pageSlug: 'users' });
+
+  it('picks the item whose query matches on the same route', () => {
+    const open = item({ code: 'o', url: '/list?status=open' });
+    const closed = item({ code: 'c', url: '/list?status=closed' });
+    const sections = buildMenuSections([open, closed]);
+    expect(findActiveHref(sections, '/list', new URLSearchParams('status=closed'))).toBe(
+      '/list?status=closed',
+    );
+    expect(findActiveHref(sections, '/list', new URLSearchParams('status=open&page=2'))).toBe(
+      '/list?status=open',
+    );
+    // No query to compare: the first item keeps winning, as before.
+    expect(findActiveHref(sections, '/list')).toBe('/list?status=open');
+  });
+
+  it('prefers an item without a query over one whose query disagrees', () => {
+    const all = item({ code: 'a', url: '/list' });
+    const closed = item({ code: 'c', url: '/list?status=closed' });
+    const sections = buildMenuSections([closed, all]);
+    expect(findActiveHref(sections, '/list', new URLSearchParams('status=open'))).toBe('/list');
+  });
+
+  it('still lets a deeper route beat a matching query', () => {
+    const q = item({ code: 'q', url: '/list?status=open' });
+    const deep = item({ code: 'd', pageSlug: 'list/42' });
+    const sections = buildMenuSections([q, deep]);
+    expect(findActiveHref(sections, '/list/42', new URLSearchParams('status=open'))).toBe(
+      '/list/42',
+    );
+  });
 
   it('returns null for an empty menu', () => {
     expect(findActiveHref([], '/users')).toBeNull();

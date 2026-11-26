@@ -141,7 +141,7 @@ function IGRPDateTimeInput({
         const handleFormInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
           const rawValue = e.target.value
 
-          if (rawValue.length >= field.value?.length) {
+          if (rawValue.length >= (field.value ?? "").length) {
             const formatted = formatDateTimeInput(rawValue)
             field.onChange(formatted)
             onChange?.(formatted)

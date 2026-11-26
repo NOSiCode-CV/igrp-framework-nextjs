@@ -20,8 +20,11 @@ const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 // otherwise (and on any failure) the app's own icon.
 export async function generateMetadata(): Promise<Metadata> {
   const config = await createConfig(await getLayoutConfig());
-  const branding = await igrpResolveRequestBranding(config);
-  const title = (await getTranslations("app"))("title");
+  const [branding, t] = await Promise.all([
+    igrpResolveRequestBranding(config),
+    getTranslations("app"),
+  ]);
+  const title = t("title");
   return {
     // Pages set their own title; the app name follows it.
     title: { default: title, template: `%s · ${title}` },

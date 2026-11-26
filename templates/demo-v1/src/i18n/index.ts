@@ -27,6 +27,11 @@ export const i18n = igrpDefineI18n({
   locales,
   formatLocales: igrpParseFormatLocales(process.env.IGRP_FORMAT_LOCALES),
   timeZone: process.env.IGRP_TIME_ZONE || "Atlantic/Cape_Verde",
+  // Only these message namespaces reach the browser (plus the framework's
+  // `i18n`); the rest stay on the server. A Client Component that calls
+  // `useTranslations("<ns>")` for any other namespace gets a MISSING_MESSAGE
+  // error, so add its namespace here, or pass the strings down as props.
+  clientNamespaces: ["auth", "errors"],
   getSessionLocale: async () => {
     // Cached per request alongside the root layout's own read. The preview
     // stub session carries no locale, so this is undefined under bypass.

@@ -106,4 +106,36 @@ describe("IGRPDataTable row selection", () => {
     rerender(<IGRPDataTable columns={columns} data={data.map((row) => ({ ...row }))} getRowId={getRowId} />)
     expect(rowBoxes()[1]).toBeChecked()
   })
+
+  it("keeps both of two selection updates made in the same event", async () => {
+    // Updaters used to resolve against the last render's state, so the second
+    // toggle overwrote the first.
+    const both: ColumnDef<Person>[] = [
+      {
+        id: "pick",
+        header: ({ table }) => (
+          <button
+            type="button"
+            onClick={() => {
+              table.getRow("p0").toggleSelected(true)
+              table.getRow("p3").toggleSelected(true)
+            }}
+          >
+            dois
+          </button>
+        ),
+        cell: ({ row }) => <IGRPDataTableCellCheckbox row={row} />,
+      },
+      { accessorKey: "name", header: "Nome" },
+    ]
+    render(<IGRPDataTable columns={both} data={data} getRowId={getRowId} />)
+
+    await userEvent.click(screen.getByRole("button", { name: "dois" }))
+    expect(screen.getAllByRole("checkbox").map((box) => box.getAttribute("data-state"))).toEqual([
+      "checked",
+      "unchecked",
+      "unchecked",
+      "checked",
+    ])
+  })
 })

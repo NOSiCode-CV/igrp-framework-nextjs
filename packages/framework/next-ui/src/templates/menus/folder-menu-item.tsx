@@ -96,7 +96,6 @@ export function FolderMenuItem({ node, activeHref, labels }: FolderMenuItemProps
           {/* Open: the active child carries the highlight, the folder only goes bold.
               Closed: the child is hidden, so the folder takes the highlight. */}
           <SidebarMenuButton
-            tooltip={item.name}
             isActive={hasActiveChild && !open}
             className={cn(
               'w-full cursor-pointer',

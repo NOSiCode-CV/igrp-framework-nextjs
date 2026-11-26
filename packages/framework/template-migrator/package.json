@@ -31,7 +31,7 @@
     "prebuild": "tsx scripts/pack.ts",
     "build:js": "tsdown",
     "build:types": "tsc -p tsconfig.build.json --emitDeclarationOnly",
-    "build": "pnpm prebuild && pnpm build:js && pnpm build:types",
+    "build": "rimraf dist && pnpm prebuild && pnpm build:js && pnpm build:types",
     "typecheck": "tsc -p scripts/tsconfig.json --noEmit",
     "check:drift": "tsx scripts/check-drift.ts",
     "check:drift:update-baseline": "tsx scripts/check-drift.ts --update-baseline",
@@ -41,16 +41,14 @@
     "release": "pnpm typecheck && pnpm test && pnpm check:drift && pnpm build && pnpm publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest --no-git-checks",
     "clean": "rimraf dist"
   },
-  "dependencies": {
-    "yaml": "2.9.1"
-  },
   "devDependencies": {
     "@types/node": "26.6.7",
     "rimraf": "6.1.4",
-    "tsx": "4.23.15",
     "tsdown": "0.23.7",
+    "tsx": "4.23.15",
     "typescript": "~6.0.3",
-    "vitest": "5.1.1"
+    "vitest": "5.1.1",
+    "yaml": "2.9.1"
   },
   "engines": {
     "node": ">=24.22.2"

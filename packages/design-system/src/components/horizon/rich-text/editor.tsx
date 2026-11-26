@@ -152,6 +152,10 @@ function RichTextField({
     [fieldName, label, error, errorId, helperText, helperId, required, disabled]
   )
 
+  // The last HTML this editor emitted: when it comes back as `value`, the sync
+  // effect skips a second whole-document `getHTML()` on every keystroke.
+  const lastEmittedRef = useRef<string | undefined>(undefined)
+
   const editor = useEditor({
     extensions,
     content: value,
@@ -160,16 +164,23 @@ function RichTextField({
     immediatelyRender: false,
     editorProps: { attributes },
     // An empty body is "", not "<p></p>", or a required rule never fails.
-    onUpdate: ({ editor: ed }) => onChangeRef.current(ed.isEmpty ? "" : ed.getHTML()),
+    onUpdate: ({ editor: ed }) => {
+      const html = ed.isEmpty ? "" : ed.getHTML()
+      lastEmittedRef.current = html
+      onChangeRef.current(html)
+    },
     onBlur: () => onBlurRef.current?.(),
   })
 
   useImperativeHandle(focusRef, () => ({ focus: () => editor?.commands.focus() }), [editor])
 
   useEffect(() => {
-    if (!editor) return
+    if (!editor || (value ?? "") === lastEmittedRef.current) return
     const current = editor.isEmpty ? "" : editor.getHTML()
     if ((value ?? "") !== current) editor.commands.setContent(value ?? "", { emitUpdate: false })
+    // The editor now holds `value`; without this, an external reset back to the
+    // last emitted HTML would be skipped above.
+    lastEmittedRef.current = value ?? ""
   }, [value, editor])
 
   /**

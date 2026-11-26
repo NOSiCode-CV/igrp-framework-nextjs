@@ -183,3 +183,55 @@ describe("IGRPFormList mode", () => {
     warn.mockRestore()
   })
 })
+
+describe("IGRPFormList live items in form mode", () => {
+  it("passes the edited item live to computeLabel without re-rendering the other items", async () => {
+    const renders: number[] = []
+    function Live() {
+      const formRef = useRef<IGRPFormHandle<Schema> | null>(null)
+      return (
+        <IGRPForm
+          schema={schema}
+          formRef={formRef}
+          onSubmit={() => {}}
+          defaultValues={{
+            anexos: [
+              { idTipoDocumento: 1, url: "a" },
+              { idTipoDocumento: 2, url: "b" },
+            ],
+          }}
+        >
+          <IGRPFormList
+            id="anexos"
+            label="Anexos"
+            allowMultipleOpen
+            renderItem={(_, index: number) => {
+              renders.push(index)
+              return <IGRPInputText name={`anexos.${index}.url`} label={`URL ${index + 1}`} />
+            }}
+            computeLabel={(item: { url?: string }) => `Doc ${item.url}`}
+            defaultItem={STABLE_ITEM}
+          />
+        </IGRPForm>
+      )
+    }
+    render(<Live />)
+    await settle()
+    expect(screen.getByText("Doc a")).toBeInTheDocument()
+
+    const { default: userEvent } = await import("@testing-library/user-event")
+    await userEvent.click(screen.getByRole("button", { name: "Doc b" }))
+    await settle()
+    expect(screen.getByLabelText("URL 2")).toBeInTheDocument()
+
+    // The first keystroke flips the form's isDirty, which re-renders the whole form once.
+    await userEvent.type(screen.getByLabelText("URL 1"), "x")
+    await settle()
+    renders.length = 0
+    await userEvent.type(screen.getByLabelText("URL 1"), "y")
+    await settle()
+
+    expect(screen.getByText("Doc axy")).toBeInTheDocument()
+    expect(renders).not.toContain(1)
+  })
+})

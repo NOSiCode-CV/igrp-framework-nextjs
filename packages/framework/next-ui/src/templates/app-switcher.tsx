@@ -92,7 +92,6 @@ function IGRPTemplateAppSwitcher({
           width={32}
           height={32}
           className={cn('h-full w-full rounded-lg object-cover')}
-          priority
           fallback={<GalleryVerticalEndIcon size={16} />}
         />
       </div>
@@ -153,7 +152,6 @@ function IGRPTemplateAppSwitcher({
                             width={24}
                             height={24}
                             className={cn('h-full w-full rounded-md object-cover')}
-                            priority
                             fallback={
                               <AudioWaveformIcon size={16} className={cn('size-3.5 shrink-0')} />
                             }

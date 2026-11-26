@@ -7,6 +7,7 @@ import {
   type ColumnFiltersState,
   createColumnHelper,
   type ExpandedState,
+  functionalUpdate,
   getCoreRowModel,
   getExpandedRowModel,
   getFacetedMinMaxValues,
@@ -198,36 +199,39 @@ type TableState = {
   rowSelection: RowSelectionState
 }
 
+// Payloads are TanStack updaters, resolved against the reducer's current state:
+// resolving them in the setter used the last render's state, so two updates in
+// one tick (a filter keystroke racing a reset) lost one.
 type TableAction =
-  | { type: "columnFilters"; payload: ColumnFiltersState }
-  | { type: "columnVisibility"; payload: VisibilityState }
-  | { type: "pagination"; payload: PaginationState }
-  | { type: "sorting"; payload: SortingState }
-  | { type: "expanded"; payload: ExpandedState }
-  | { type: "rowSelection"; payload: RowSelectionState }
+  | { type: "columnFilters"; payload: Updater<ColumnFiltersState> }
+  | { type: "columnVisibility"; payload: Updater<VisibilityState> }
+  | { type: "pagination"; payload: Updater<PaginationState> }
+  | { type: "sorting"; payload: Updater<SortingState> }
+  | { type: "expanded"; payload: Updater<ExpandedState> }
+  | { type: "rowSelection"; payload: Updater<RowSelectionState> }
 
 function tableReducer(state: TableState, action: TableAction): TableState {
   switch (action.type) {
     case "columnFilters":
       return {
         ...state,
-        columnFilters: action.payload,
+        columnFilters: functionalUpdate(action.payload, state.columnFilters),
         pagination: { ...state.pagination, pageIndex: 0 },
       }
     case "columnVisibility":
-      return { ...state, columnVisibility: action.payload }
+      return { ...state, columnVisibility: functionalUpdate(action.payload, state.columnVisibility) }
     case "pagination":
-      return { ...state, pagination: action.payload }
+      return { ...state, pagination: functionalUpdate(action.payload, state.pagination) }
     case "sorting":
       return {
         ...state,
-        sorting: action.payload,
+        sorting: functionalUpdate(action.payload, state.sorting),
         pagination: { ...state.pagination, pageIndex: 0 },
       }
     case "expanded":
-      return { ...state, expanded: action.payload }
+      return { ...state, expanded: functionalUpdate(action.payload, state.expanded) }
     case "rowSelection":
-      return { ...state, rowSelection: action.payload }
+      return { ...state, rowSelection: functionalUpdate(action.payload, state.rowSelection) }
     default:
       return state
   }
@@ -307,46 +311,6 @@ function IGRPDataTable<TData, TValue>({
     rowSelection: {},
   })
 
-  const setColumnFilters = useCallback(
-    (updater: Updater<ColumnFiltersState>) =>
-      dispatch({
-        type: "columnFilters",
-        payload: typeof updater === "function" ? updater(state.columnFilters) : updater,
-      }),
-    [state.columnFilters]
-  )
-  const setColumnVisibility = useCallback(
-    (updater: Updater<VisibilityState>) =>
-      dispatch({
-        type: "columnVisibility",
-        payload: typeof updater === "function" ? updater(state.columnVisibility) : updater,
-      }),
-    [state.columnVisibility]
-  )
-  const setPagination = useCallback(
-    (updater: Updater<PaginationState>) =>
-      dispatch({
-        type: "pagination",
-        payload: typeof updater === "function" ? updater(state.pagination) : updater,
-      }),
-    [state.pagination]
-  )
-  const setSorting = useCallback(
-    (updater: Updater<SortingState>) =>
-      dispatch({
-        type: "sorting",
-        payload: typeof updater === "function" ? updater(state.sorting) : updater,
-      }),
-    [state.sorting]
-  )
-  const setExpanded = useCallback(
-    (updater: Updater<ExpandedState>) =>
-      dispatch({
-        type: "expanded",
-        payload: typeof updater === "function" ? updater(state.expanded) : updater,
-      }),
-    [state.expanded]
-  )
   const controlledSelection = rowSelectionProp !== undefined
   const rowSelection = rowSelectionProp ?? state.rowSelection
 
@@ -364,14 +328,11 @@ function IGRPDataTable<TData, TValue>({
   const setRowSelection = useCallback(
     (updater: Updater<RowSelectionState>) => {
       if (!controlledSelection) {
-        dispatch({
-          type: "rowSelection",
-          payload: typeof updater === "function" ? updater(state.rowSelection) : updater,
-        })
+        dispatch({ type: "rowSelection", payload: updater })
       }
       onRowSelectionChange?.(updater)
     },
-    [controlledSelection, state.rowSelection, onRowSelectionChange]
+    [controlledSelection, onRowSelectionChange]
   )
 
   const _id = useId()
@@ -446,12 +407,12 @@ function IGRPDataTable<TData, TValue>({
     getRowCanExpand: getRowCanExpand,
     getRowId,
 
-    onColumnFiltersChange: setColumnFilters,
-    onColumnVisibilityChange: setColumnVisibility,
-    onExpandedChange: setExpanded,
-    onPaginationChange: setPagination,
+    onColumnFiltersChange: (payload) => dispatch({ type: "columnFilters", payload }),
+    onColumnVisibilityChange: (payload) => dispatch({ type: "columnVisibility", payload }),
+    onExpandedChange: (payload) => dispatch({ type: "expanded", payload }),
+    onPaginationChange: (payload) => dispatch({ type: "pagination", payload }),
     onRowSelectionChange: setRowSelection,
-    onSortingChange: setSorting,
+    onSortingChange: (payload) => dispatch({ type: "sorting", payload }),
 
     state: {
       sorting: state.sorting,

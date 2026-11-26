@@ -1,13 +1,7 @@
-"use client";
+import { cn, IGRPIcon } from "@igrp/igrp-framework-react-design-system";
+import { getTranslations } from "next-intl/server";
 
-import { useEffect, useState } from "react";
-
-import {
-  cn,
-  IGRPButton,
-  IGRPIcon,
-} from "@igrp/igrp-framework-react-design-system";
-import { useTranslations } from "next-intl";
+import { CopyButton } from "./copy-button";
 
 /** How one layer of the request handled this render. */
 export type HomeLayerState = "ok" | "preview" | "error";
@@ -95,47 +89,6 @@ const CODE_CHIP =
 
 const HOME_SLUG_EXAMPLE = "NEXT_PUBLIC_IGRP_APP_HOME_SLUG=/dashboard";
 
-type CopyState = "idle" | "copied" | "failed";
-
-const COPY_ICON: Record<CopyState, string> = {
-  idle: "Copy",
-  copied: "Check",
-  failed: "CircleAlert",
-};
-
-/**
- * Copies a literal value. The label confirms the copy — or, when the browser
- * refuses clipboard access, says to copy by hand — for two seconds.
- */
-function CopyButton({ value }: { value: string }) {
-  const t = useTranslations("home.copy");
-  const [state, setState] = useState<CopyState>("idle");
-
-  useEffect(() => {
-    if (state === "idle") return;
-    const timer = setTimeout(() => setState("idle"), 2000);
-    return () => clearTimeout(timer);
-  }, [state]);
-
-  return (
-    <IGRPButton
-      type="button"
-      variant="outline"
-      size="sm"
-      iconName={COPY_ICON[state]}
-      aria-live="polite"
-      onClick={() => {
-        navigator.clipboard
-          .writeText(value)
-          .then(() => setState("copied"))
-          .catch(() => setState("failed"));
-      }}
-    >
-      {t(state)}
-    </IGRPButton>
-  );
-}
-
 /** A real sequence: each step needs the one before it. Text in `home.nextSteps.*`. */
 const NEXT_STEPS = [
   { key: "feature", path: "src/app/(myapp)/_features/<module>/" },
@@ -148,15 +101,18 @@ const NEXT_STEPS = [
  * Template home page: the live path this request took through the framework,
  * then what to build next. Every value comes from the server for THIS request,
  * so a misconfigured layer shows here instead of on a later page.
+ *
+ * A Server Component: only `CopyButton` hydrates, and the `home` messages stay
+ * on the server (see `clientNamespaces` in `src/i18n/index.ts`).
  */
-export function HomeOverview({
+export async function HomeOverview({
   appName,
   appCode,
   version,
   previewMode,
   layers,
 }: HomeOverviewProps) {
-  const t = useTranslations("home");
+  const t = await getTranslations("home");
   const failing = layers.filter((layer) => layer.state === "error").length;
   // One state for the whole request: any failing layer wins over preview mode.
   const status: HomeLayerState =
@@ -382,7 +338,14 @@ export function HomeOverview({
               <BreakablePath path={HOME_SLUG_EXAMPLE} />
             </code>
             <div>
-              <CopyButton value={HOME_SLUG_EXAMPLE} />
+              <CopyButton
+                value={HOME_SLUG_EXAMPLE}
+                labels={{
+                  idle: t("copy.idle"),
+                  copied: t("copy.copied"),
+                  failed: t("copy.failed"),
+                }}
+              />
             </div>
             <p className="text-sm text-pretty text-muted-foreground">
               {t("replace.note")}

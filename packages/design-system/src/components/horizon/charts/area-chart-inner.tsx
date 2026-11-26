@@ -24,6 +24,7 @@ import {
   chartFigureA11y,
 } from "./lib.js"
 import { useIGRPLocale } from "../../../i18n/index.js"
+import { igrpNumberFormat } from "../../../lib/intl.js"
 import type { IGRPAreaConfig, IGRPChartProps } from "./types.js"
 
 const defaultLabelFormatter = (value: unknown) => (typeof value === "string" ? value : String(value))
@@ -83,7 +84,7 @@ function IGRPAreaChartInner({
   const formatValue = (value: number) => formatChartValue(value, valueFormatter, locale)
   // `expanded` stacks to shares of 1, so the axis shows percentages, not 0–1.
   const formatAxisValue = expanded
-    ? (value: number) => new Intl.NumberFormat(locale, { style: "percent", maximumFractionDigits: 0 }).format(value)
+    ? (value: number) => igrpNumberFormat(locale, { style: "percent", maximumFractionDigits: 0 }).format(value)
     : formatValue
   const hasNegativeDataValues = hasNegativeValues(
     data,

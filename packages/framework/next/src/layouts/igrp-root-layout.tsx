@@ -99,17 +99,26 @@ async function buildRootProviders({
   // anything thrown inside `after()` is post-stream and only reaches a
   // `console.error`, so developers wouldn't see config bugs until they
   // checked the server logs. See `sync-plan.ts` for the full rationale.
-  const syncPlan = planAccessManagementSync({
-    syncAccess,
-    previewMode,
-    appCode,
-    appInformation,
-    menus: apiManagementConfig?.onCodeMenus ?? [],
-    permissions: apiManagementConfig?.onCodePermissions ?? [],
-    apiManagementConfig,
-  });
+  //
+  // Once a sync has succeeded in production the plan is skipped: the config is
+  // fixed for the process and that sync proved it valid, so rebuilding it only
+  // re-ran O(catalog) validation per request. Dev keeps validating, because an
+  // edited config hot-reloads while the completed flag stays set.
+  const syncDone = igrpStartupSyncDone();
+  const syncPlan =
+    syncDone && process.env.NODE_ENV === 'production'
+      ? null
+      : planAccessManagementSync({
+          syncAccess,
+          previewMode,
+          appCode,
+          appInformation,
+          menus: apiManagementConfig?.onCodeMenus ?? [],
+          permissions: apiManagementConfig?.onCodePermissions ?? [],
+          apiManagementConfig,
+        });
 
-  if (syncPlan && !igrpStartupSyncDone()) {
+  if (syncPlan && !syncDone) {
     // Schedule sync post-response — does not block streaming or RSC render.
     after(() => igrpStartupSync(syncPlan));
   }

@@ -514,9 +514,6 @@ importers:
       '@igrp/platform-access-management-client-ts':
         specifier: 0.2.0-beta.21
         version: 0.2.0-beta.21
-      next-intl:
-        specifier: 4.16.1
-        version: 4.16.1(@types/react@19.3.1)(next@15.5.29(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@26.6.7)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react@19.3.1)
       server-only:
         specifier: 0.0.1
         version: 0.0.1
@@ -560,6 +557,9 @@ importers:
       next:
         specifier: 15.5.29
         version: 15.5.29(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@26.6.7)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+      next-intl:
+        specifier: 4.16.1
+        version: 4.16.1(@types/react@19.3.1)(next@15.5.29(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@26.6.7)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react@19.3.1)
       prettier:
         specifier: 3.10.1
         version: 3.10.1
@@ -724,15 +724,6 @@ importers:
       '@igrp/igrp-framework-react-design-system':
         specifier: workspace:*
         version: link:../../design-system
-      class-variance-authority:
-        specifier: 0.7.1
-        version: 0.7.1
-      clsx:
-        specifier: 2.1.1
-        version: 2.1.1
-      lucide-react:
-        specifier: ^0.577.0 || ^1.0.0
-        version: 1.79.0(@types/react@19.3.1)(react@19.3.1)
       next-themes:
         specifier: 0.4.6
         version: 0.4.6(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
@@ -785,6 +776,9 @@ importers:
       jsdom:
         specifier: 31.0.1
         version: 31.0.1
+      lucide-react:
+        specifier: 1.79.0
+        version: 1.79.0(@types/react@19.3.1)(react@19.3.1)
       next:
         specifier: 15.5.29
         version: 15.5.29(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@26.6.7)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
@@ -823,10 +817,6 @@ importers:
         version: 5.1.1(@types/node@26.6.7)(@vitest/browser-playwright@5.1.1)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(jsdom@31.0.1)(vite@8.3.8(@types/node@26.6.7)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
 
   packages/framework/template-migrator:
-    dependencies:
-      yaml:
-        specifier: 2.9.1
-        version: 2.9.1
     devDependencies:
       '@types/node':
         specifier: 26.6.7
@@ -846,6 +836,9 @@ importers:
       vitest:
         specifier: 5.1.1
         version: 5.1.1(@types/node@26.6.7)(@vitest/browser-playwright@5.1.1)(@vitest/coverage-v8@5.1.1)(@vitest/ui@5.1.1)(jsdom@31.0.1)(vite@8.3.8(@types/node@26.6.7)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
+      yaml:
+        specifier: 2.9.1
+        version: 2.9.1
 
   templates/demo-v1:
     dependencies:

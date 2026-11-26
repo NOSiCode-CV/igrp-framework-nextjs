@@ -1,9 +1,9 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // THIS FILE DELIBERATELY HAS NO `'use client'` DIRECTIVE.
 //
-// The shipped `dist/client.js` DOES have one — `tsup.config.ts` injects it in
+// The shipped `dist/client.js` DOES have one — `tsdown.config.ts` injects it in
 // an `onSuccess` hook after bundling. Declaring it here as well achieved
-// nothing (esbuild strips module-level directives when bundling) except a
+// nothing (the bundler strips module-level directives when bundling) except a
 // warning on every single build that reads as though the client boundary were
 // broken:
 //
@@ -24,7 +24,7 @@
 // silently server-first entry.
 // ─────────────────────────────────────────────────────────────────────────────
 
-import { createContext, useContext } from 'react';
+import { createContext, useContext, useMemo } from 'react';
 import { SessionContext as SessionContextRef, useSession as useSessionBase } from 'next-auth/react';
 import type { Session } from './session';
 
@@ -112,18 +112,27 @@ export type IGRPSessionValue = { state: IGRPSessionState; actions: IGRPSessionAc
  */
 export function useIGRPSession(): IGRPSessionValue | null {
   const ctx = useSessionContextValue();
-  if (!ctx) return null;
-  const { status, data, update } = ctx;
-  return {
-    state: {
-      status,
-      data,
-      accessToken: data?.accessToken,
-      expiresAt: data?.expiresAt,
-      error: data?.error,
-    },
-    actions: { update },
-  };
+  const status = ctx?.status;
+  const data = ctx?.data ?? null;
+  const update = ctx?.update;
+  // Stable identity while the session is unchanged, so consumers can use it as an effect dep.
+  // This package is not built with the React Compiler, hence the manual memo.
+  return useMemo(
+    () =>
+      status && update
+        ? {
+            state: {
+              status,
+              data,
+              accessToken: data?.accessToken,
+              expiresAt: data?.expiresAt,
+              error: data?.error,
+            },
+            actions: { update },
+          }
+        : null,
+    [status, data, update],
+  );
 }
 
 /**

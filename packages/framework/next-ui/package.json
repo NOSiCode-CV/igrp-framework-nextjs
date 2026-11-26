@@ -41,6 +41,7 @@
     "clean-all": "rimraf node_modules && rimraf dist && rimraf tsconfig.tsbuildinfo"
   },
   "peerDependencies": {
+    "lucide-react": "^0.577.0 || ^1.0.0",
     "next": "^15.5.0",
     "next-auth": "^4.24.0",
     "react": "^19.0.0",
@@ -50,9 +51,6 @@
     "@igrp/framework-next-auth": "workspace:*",
     "@igrp/framework-next-types": "workspace:*",
     "@igrp/igrp-framework-react-design-system": "workspace:*",
-    "class-variance-authority": "0.7.1",
-    "clsx": "2.1.1",
-    "lucide-react": "^0.577.0 || ^1.0.0",
     "next-themes": "0.4.6"
   },
   "devDependencies": {
@@ -72,6 +70,7 @@
     "eslint-plugin-react-hooks": "7.1.1",
     "globals": "17.14.0",
     "jsdom": "31.0.1",
+    "lucide-react": "1.79.0",
     "next": "15.5.29",
     "next-auth": "4.24.15",
     "postcss": "8.5.33",

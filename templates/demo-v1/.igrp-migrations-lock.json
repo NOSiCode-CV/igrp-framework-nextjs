@@ -661,6 +661,12 @@
       "cliVersion": "0.2.0-beta.27",
       "manifestHash": "dbf0fc57b0e7dfe4",
       "payloadHash": "a54ced217688f9f7"
+    },
+    {
+      "id": "110-client-messages-server-home",
+      "cliVersion": "0.2.0-beta.27",
+      "manifestHash": "8cf075ca3a787a75",
+      "payloadHash": "1fe26b6e8bb90d42"
     }
   ]
 }

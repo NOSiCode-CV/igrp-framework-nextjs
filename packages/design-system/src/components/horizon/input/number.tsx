@@ -1,11 +1,12 @@
 "use client"
 
-import { useState, useEffect, useId, useMemo, useRef } from "react"
+import { useState, useEffect, useId, useRef } from "react"
 import { useFormContext, Controller } from "react-hook-form"
 
 import { cn } from "../cn.js"
 import { igrpOmitNonDomProps } from "../../../lib/dom-props.js"
 import { igrpMergeRefs } from "../../../lib/form-binding.js"
+import { igrpNumberFormat } from "../../../lib/intl.js"
 import { useIGRPi18n, useIGRPLocale } from "../../../i18n/index.js"
 import type { IGRPInputProps } from "../../../types.js"
 import { Input } from "../../primitives/input.js"
@@ -385,10 +386,9 @@ function IGRPInputNumber({
   const formContext = useFormContext()
   const prevControlledValueRef = useRef<number | undefined>(controlledValue)
 
-  // Rebuilt only when the locale or the format options actually change. This used
-  // to be constructed on every render, and `Intl.NumberFormat` construction is
-  // expensive enough to show up in a table full of number inputs.
-  const formatter = useMemo(() => new Intl.NumberFormat(locale, formatOptions), [locale, formatOptions])
+  // Shared per locale + options value: consumers pass `formatOptions` inline, so a
+  // memo keyed on its identity rebuilt the formatter on every parent render.
+  const formatter = igrpNumberFormat(locale, formatOptions)
 
   const displayValue = !formContext && controlledValue !== undefined ? controlledValue : localValue
 
@@ -519,7 +519,7 @@ function IGRPInputNumber({
       rounding.maximumFractionDigits = Math.min(20, rounding.maximumFractionDigits + 2)
     }
     // en-US output is what Number() parses back; it is never shown to the user.
-    return Number(new Intl.NumberFormat("en-US" /* igrp-i18n-ignore */, rounding).format(value))
+    return Number(igrpNumberFormat("en-US" /* igrp-i18n-ignore */, rounding).format(value))
   }
 
   const getDisplayValue = (value: NumberValue) => {

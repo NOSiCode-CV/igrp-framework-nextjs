@@ -34,11 +34,11 @@ export default async function Home() {
 
   // Both are React-cached and already resolved by `(igrp)/layout.tsx` for this
   // request, so this costs no extra session read or token decode.
-  const [session, claimsState] = await Promise.all([
+  const [session, claimsState, t] = await Promise.all([
     verifySession(),
     igrpGetClaims(),
+    getTranslations("home.layers"),
   ]);
-  const t = await getTranslations("home.layers");
 
   const app = getPackageJson();
   const bypass = isAuthBypass();

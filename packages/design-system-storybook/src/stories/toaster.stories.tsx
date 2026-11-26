@@ -71,7 +71,7 @@ const Template: StoryFn = () => {
         <IGRPButton
           onClick={() =>
             igrpToast({
-              content: <div className='p-4 bg-blue-500 text-white rounded-lg'>🚀 Custom Toast</div>,
+              content: <div className='p-4 bg-info text-info-foreground rounded-lg'>🚀 Custom Toast</div>,
             })
           }
         >

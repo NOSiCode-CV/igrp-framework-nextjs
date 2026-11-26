@@ -241,7 +241,7 @@ export const CustomIconCentered: Story = {
 export const WithContent: Story = {
   render: (args) => (
     <AlertDialogDemo {...args}>
-      <div className='border rounded-md p-4 bg-gray-50'>
+      <div className='border rounded-md p-4 bg-muted'>
         <p className='text-sm'>Additional content can be placed here:</p>
         <ul className='list-disc list-inside text-sm mt-2 flex flex-col gap-1'>
           <li>Item one will be affected</li>
@@ -269,12 +269,12 @@ export const CustomStyles: Story = {
     showIcon: true,
     iconPlacement: 'start',
     title: 'Custom Styled Dialog',
-    titleClassName: 'text-xl font-bold text-blue-700',
+    titleClassName: 'text-xl font-bold text-info',
     description: 'This dialog has custom styling for the title and description.',
-    descriptionClassName: 'italic text-gray-600',
+    descriptionClassName: 'italic text-muted-foreground',
     actionLabel: 'Confirm',
     cancelLabel: 'Cancel',
-    className: 'border-2 border-blue-200',
+    className: 'border-2 border-info/30',
   },
 };
 
@@ -289,11 +289,11 @@ export const CustomButtons: Story = {
     actionLabel: 'Upgrade Now',
     cancelLabel: 'Maybe Later',
     actionProps: {
-      className: 'bg-indigo-600 hover:bg-indigo-700 text-white',
+      className: 'bg-indigo text-indigo-foreground hover:bg-indigo/90',
     },
     cancelProps: {
       variant: 'ghost',
-      className: 'text-gray-500',
+      className: 'text-muted-foreground',
     },
   },
 };

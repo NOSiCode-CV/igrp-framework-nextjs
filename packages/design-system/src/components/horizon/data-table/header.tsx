@@ -10,8 +10,8 @@ import { Checkbox } from "../../primitives/checkbox.js"
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../../primitives/dropdown-menu.js"
 
@@ -107,15 +107,16 @@ function IGRPDataTableHeaderSortDropdown<T>({
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
-            <DropdownMenuItem onClick={handleSortAsc} aria-label={i18n.dataTable.sortAscending}>
-              <ArrowUp className={cn("size-3.5 text-muted-foreground/70")} />
-              {i18n.dataTable.sortAscendingShort}
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={handleSortDesc} aria-label={i18n.dataTable.sortDescending}>
-              <ArrowDown className={cn("size-3.5 text-muted-foreground/70")} />
-              {i18n.dataTable.sortDescendingShort}
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
+            <DropdownMenuGroup>
+              <DropdownMenuItem onClick={handleSortAsc} aria-label={i18n.dataTable.sortAscending}>
+                <ArrowUp className={cn("size-3.5 text-muted-foreground/70")} />
+                {i18n.dataTable.sortAscendingShort}
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={handleSortDesc} aria-label={i18n.dataTable.sortDescending}>
+                <ArrowDown className={cn("size-3.5 text-muted-foreground/70")} />
+                {i18n.dataTable.sortDescendingShort}
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>
       ) : (

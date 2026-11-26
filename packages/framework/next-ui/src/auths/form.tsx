@@ -214,7 +214,7 @@ function IGRPAuthFormError() {
       role="alert"
       aria-live="polite"
     >
-      <AlertCircleIcon size={16} className={cn('h-4 w-4')} strokeWidth={2} aria-hidden />
+      <AlertCircleIcon strokeWidth={2} aria-hidden />
       <AlertDescription>{error}</AlertDescription>
     </Alert>
   );

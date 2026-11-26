@@ -159,7 +159,7 @@ export const MixedContentTypes: Story = {
     items: [
       {
         label: "Active Users",
-        content: <span className="text-2xl font-bold text-green-600">1,234</span>,
+        content: <span className="text-2xl font-bold text-success">1,234</span>,
       },
       {
         label: "Status",

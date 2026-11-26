@@ -134,7 +134,7 @@ const getDefaultIcon = (type: IGRPTextListType, iconColor?: IGRPColorVariants, i
       return (
         <IGRPIcon
           iconName="Circle"
-          className={cn(IGRPColors.outline[iconColor || "secondary"].badge, "h-1.5 w-1.5 fill-current")}
+          className={cn(IGRPColors.outline[iconColor || "secondary"].badge, "size-1.5 fill-current")}
         />
       )
     default:

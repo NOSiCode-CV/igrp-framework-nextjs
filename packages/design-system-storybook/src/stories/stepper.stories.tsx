@@ -172,11 +172,11 @@ const StepDetails = ({ step, steps }: { step: number; steps: IGRPStepProcessProp
       <div className="mt-6 grid gap-6 text-sm sm:grid-cols-3">
         <div>
           <p className="text-xs uppercase text-muted-foreground">Completed</p>
-          <p className="text-xl font-semibold text-emerald-600">{completedCount}</p>
+          <p className="text-xl font-semibold text-success">{completedCount}</p>
         </div>
         <div>
           <p className="text-xs uppercase text-muted-foreground">Remaining</p>
-          <p className="text-xl font-semibold text-blue-600">{remainingCount}</p>
+          <p className="text-xl font-semibold text-info">{remainingCount}</p>
         </div>
         <div>
           <p className="text-xs uppercase text-muted-foreground">Status</p>

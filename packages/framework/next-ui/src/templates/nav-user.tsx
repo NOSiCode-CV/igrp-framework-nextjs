@@ -6,6 +6,7 @@ import {
   cn,
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -173,49 +174,53 @@ function IGRPTemplateNavUser({
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
 
-            {showProfile && (
-              <>
+            <DropdownMenuGroup>
+              {showProfile && (
+                <>
+                  <DropdownMenuItem asChild className={cn(itemClassName)}>
+                    <Link href={resolvedProfileUrl}>
+                      <UserIcon size={16} className={iconClassName} />
+                      <span>{labels.profile}</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                </>
+              )}
+
+              {showNotifications && (
+                <>
+                  <DropdownMenuItem asChild className={cn(itemClassName)}>
+                    <Link href={notificationsUrl}>
+                      <BellIcon size={16} className={iconClassName} />
+                      <span>{labels.notifications}</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                </>
+              )}
+
+              {!isHeader && showSettings && (
                 <DropdownMenuItem asChild className={cn(itemClassName)}>
-                  <Link href={resolvedProfileUrl}>
-                    <UserIcon size={16} className={iconClassName} />
-                    <span>{labels.profile}</span>
+                  <Link href={settingsUrl}>
+                    <SettingsIcon size={16} className={iconClassName} />
+                    <span>{labels.settings}</span>
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuSeparator />
-              </>
-            )}
+              )}
 
-            {showNotifications && (
-              <>
-                <DropdownMenuItem asChild className={cn(itemClassName)}>
-                  <Link href={notificationsUrl}>
-                    <BellIcon size={16} className={iconClassName} />
-                    <span>{labels.notifications}</span>
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-              </>
-            )}
-
-            {!isHeader && showSettings && (
-              <DropdownMenuItem asChild className={cn(itemClassName)}>
-                <Link href={settingsUrl}>
-                  <SettingsIcon size={16} className={iconClassName} />
-                  <span>{labels.settings}</span>
-                </Link>
-              </DropdownMenuItem>
-            )}
-
-            {items}
+              {items}
+            </DropdownMenuGroup>
 
             <DropdownMenuSeparator />
 
-            <DropdownMenuItem asChild className={cn(itemClassName)}>
-              <Link href={logoutUrl}>
-                <LogOutIcon size={16} className={iconClassName} />
-                <span>{labels.logout}</span>
-              </Link>
-            </DropdownMenuItem>
+            <DropdownMenuGroup>
+              <DropdownMenuItem asChild className={cn(itemClassName)}>
+                <Link href={logoutUrl}>
+                  <LogOutIcon size={16} className={iconClassName} />
+                  <span>{labels.logout}</span>
+                </Link>
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>

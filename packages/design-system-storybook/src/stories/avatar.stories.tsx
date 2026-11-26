@@ -250,7 +250,7 @@ export const MultipleBadge: Story = {
 
 export const MultipleBadgeWithText: Story = {
   render: () => (
-    <div className='flex -space-x-3 rounded-full border bg-gray-100'>
+    <div className='flex -space-x-3 rounded-full border bg-muted'>
       {visibleAvatars.map((avatar, index) => (
         <IGRPAvatar
           key={index}

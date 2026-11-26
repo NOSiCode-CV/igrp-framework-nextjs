@@ -2,7 +2,7 @@
 
 import { Suspense, useEffect } from 'react';
 import type { IGRPHeaderDataArgs } from '@igrp/framework-next-types';
-import { cn, Separator, useIGRPToast } from '@igrp/igrp-framework-react-design-system';
+import { cn, Separator, Skeleton, useIGRPToast } from '@igrp/igrp-framework-react-design-system';
 
 import type { BreadcrumbItem } from './breadcrumbs.js';
 import type { IGRPCommandItem } from './command-search.js';
@@ -53,7 +53,7 @@ export type IGRPHeaderSlots = {
 
 /** Minimal icon-sized placeholder shown while an injected slot streams in. */
 function HeaderSlotFallback() {
-  return <span aria-hidden className={cn('size-6 rounded-md bg-muted animate-pulse')} />;
+  return <Skeleton aria-hidden className={cn('size-6')} />;
 }
 
 /** Gives each injected slot its own boundary, so one slow slot can't delay the header. */

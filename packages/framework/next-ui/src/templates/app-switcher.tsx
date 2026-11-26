@@ -4,6 +4,7 @@ import {
   cn,
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
@@ -136,30 +137,35 @@ function IGRPTemplateAppSwitcher({
               side={isMobile ? 'bottom' : 'right'}
               sideOffset={4}
             >
-              {listApps.length > 0 &&
-                listApps.map((app) => (
-                  <DropdownMenuItem key={app.code} className={cn(itemClassName)} asChild>
-                    <a href={getAppUrl(app)}>
-                      <div
-                        className={cn('flex size-6 items-center justify-center rounded-md border')}
-                      >
-                        <IGRPTemplateImage
-                          src={app.picture}
-                          alt=""
-                          width={24}
-                          height={24}
-                          className={cn('h-full w-full rounded-md object-cover')}
-                          priority
-                          fallback={
-                            <AudioWaveformIcon size={16} className={cn('size-3.5 shrink-0')} />
-                          }
-                        />
-                      </div>
-                      <span className={cn('truncate')}>{app.name}</span>
-                      <ArrowRightIcon size={16} className={cn(arrowClassName)} />
-                    </a>
-                  </DropdownMenuItem>
-                ))}
+              {listApps.length > 0 && (
+                <DropdownMenuGroup>
+                  {listApps.map((app) => (
+                    <DropdownMenuItem key={app.code} className={cn(itemClassName)} asChild>
+                      <a href={getAppUrl(app)}>
+                        <div
+                          className={cn(
+                            'flex size-6 items-center justify-center rounded-md border',
+                          )}
+                        >
+                          <IGRPTemplateImage
+                            src={app.picture}
+                            alt=""
+                            width={24}
+                            height={24}
+                            className={cn('h-full w-full rounded-md object-cover')}
+                            priority
+                            fallback={
+                              <AudioWaveformIcon size={16} className={cn('size-3.5 shrink-0')} />
+                            }
+                          />
+                        </div>
+                        <span className={cn('truncate')}>{app.name}</span>
+                        <ArrowRightIcon size={16} className={cn(arrowClassName)} />
+                      </a>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuGroup>
+              )}
 
               {/* `> 1` here hid the Applications Center from every two-app
                   tenant. The entry is about leaving for the catalogue, so the
@@ -167,19 +173,23 @@ function IGRPTemplateAppSwitcher({
               {appCenterUrl && (
                 <>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem className={cn(itemClassName)} asChild>
-                    <a href={appCenterUrl}>
-                      <div
-                        className={cn(
-                          'flex size-6 items-center justify-center rounded-md border bg-transparent',
-                        )}
-                      >
-                        <CornerDownLeftIcon size={16} className={cn('size-3 shrink-0')} />
-                      </div>
-                      <div className={cn('text-muted-foreground font-medium')}>{appCenterText}</div>
-                      <ArrowRightIcon size={16} className={cn(arrowClassName)} />
-                    </a>
-                  </DropdownMenuItem>
+                  <DropdownMenuGroup>
+                    <DropdownMenuItem className={cn(itemClassName)} asChild>
+                      <a href={appCenterUrl}>
+                        <div
+                          className={cn(
+                            'flex size-6 items-center justify-center rounded-md border bg-transparent',
+                          )}
+                        >
+                          <CornerDownLeftIcon size={16} className={cn('size-3 shrink-0')} />
+                        </div>
+                        <div className={cn('text-muted-foreground font-medium')}>
+                          {appCenterText}
+                        </div>
+                        <ArrowRightIcon size={16} className={cn(arrowClassName)} />
+                      </a>
+                    </DropdownMenuItem>
+                  </DropdownMenuGroup>
                 </>
               )}
             </DropdownMenuContent>

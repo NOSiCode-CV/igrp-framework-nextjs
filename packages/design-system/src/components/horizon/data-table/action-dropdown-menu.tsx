@@ -9,6 +9,7 @@ import { type IGRPPlacementProps } from "../../../types.js"
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../../primitives/dropdown-menu.js"
@@ -318,16 +319,18 @@ function IGRPDataTableDropdownMenu({ items, iconName = "Ellipsis" }: IGRPDataTab
         <IGRPIcon iconName={iconName} className={cn("shadow-none")} />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        {items.map((item, index) => {
-          const { component: Component, props } = item
-          const key =
-            item.id ??
-            props.labelTrigger ??
-            ("href" in props ? props.href : undefined) ??
-            ("modalTitle" in props ? props.modalTitle : undefined) ??
-            `action-${index}`
-          return <Component key={key} {...props} />
-        })}
+        <DropdownMenuGroup>
+          {items.map((item, index) => {
+            const { component: Component, props } = item
+            const key =
+              item.id ??
+              props.labelTrigger ??
+              ("href" in props ? props.href : undefined) ??
+              ("modalTitle" in props ? props.modalTitle : undefined) ??
+              `action-${index}`
+            return <Component key={key} {...props} />
+          })}
+        </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>
   )

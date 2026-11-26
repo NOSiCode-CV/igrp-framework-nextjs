@@ -16,6 +16,7 @@ import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   useIsMobile,
   cn,
@@ -151,7 +152,7 @@ function IGRPTemplateBreadcrumbs({
   const renderBreadcrumbItem = (item: BreadcrumbItem, isLast: boolean, key: string) => (
     <Fragment key={key}>
       <BreadcrumbSeparator>
-        <ChevronRightIcon size={16} className={cn('h-3 w-3')} strokeWidth={2} />
+        <ChevronRightIcon strokeWidth={2} />
       </BreadcrumbSeparator>
       <BreadcrumbListItem>
         {isLast ? (
@@ -181,7 +182,7 @@ function IGRPTemplateBreadcrumbs({
                 'text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors',
               )}
             >
-              <HouseIcon size={16} className={cn('h-3 w-3')} strokeWidth={2} />
+              <HouseIcon className={cn('size-3')} strokeWidth={2} />
               <span className={cn('sr-only')}>{homeLabel ?? chrome.breadcrumbs.home}</span>
             </Link>
           </BreadcrumbLink>
@@ -190,7 +191,7 @@ function IGRPTemplateBreadcrumbs({
         {shouldCollapse && middleItems.length > 0 ? (
           <>
             <BreadcrumbSeparator>
-              <ChevronRightIcon size={16} className={cn('h-3 w-3')} strokeWidth={2} />
+              <ChevronRightIcon strokeWidth={2} />
             </BreadcrumbSeparator>
             <BreadcrumbListItem>
               <DropdownMenu>
@@ -205,13 +206,15 @@ function IGRPTemplateBreadcrumbs({
                   </span>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="start">
-                  {middleItems.map((item, index) => (
-                    <DropdownMenuItem key={`${item.href}-${index}`} asChild>
-                      <Link href={item.href} className={cn('flex items-center gap-2')}>
-                        {item.label}
-                      </Link>
-                    </DropdownMenuItem>
-                  ))}
+                  <DropdownMenuGroup>
+                    {middleItems.map((item, index) => (
+                      <DropdownMenuItem key={`${item.href}-${index}`} asChild>
+                        <Link href={item.href} className={cn('flex items-center gap-2')}>
+                          {item.label}
+                        </Link>
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuGroup>
                 </DropdownMenuContent>
               </DropdownMenu>
             </BreadcrumbListItem>

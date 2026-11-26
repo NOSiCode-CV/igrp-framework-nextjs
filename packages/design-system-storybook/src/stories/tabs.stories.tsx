@@ -338,7 +338,7 @@ export const WithCustomClassNames: Story = {
   args: {
     items: tabsWithIcons,
     showIcon: true,
-    tabTriggerClassName: 'text-blue-600 data-[state=active]:text-blue-900',
+    tabTriggerClassName: 'text-info data-[state=active]:text-info',
     tabContentClassName: 'bg-muted p-4 rounded-lg shadow',
   },
 };

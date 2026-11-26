@@ -142,13 +142,16 @@ function IGRPSegmentError({
               disabled={isResetting}
               showIcon
               iconName="RefreshCw"
-              iconClassName={cn('mr-2 h-4 w-4 transition-transform', isResetting && 'animate-spin')}
+              iconClassName={cn(
+                'transition-transform',
+                isResetting && 'animate-spin motion-reduce:animate-none',
+              )}
             >
               <span>{isResetting ? labels.retrying : labels.reset}</span>
             </IGRPButton>
             <IGRPButton asChild variant="outline">
               <Link href={homeHref}>
-                <HomeIcon size={16} className={cn('mr-2 h-4 w-4')} aria-hidden="true" />
+                <HomeIcon data-icon="inline-start" aria-hidden="true" />
                 {labels.home}
               </Link>
             </IGRPButton>

@@ -78,4 +78,64 @@ describe("IGRPDataTable row selection", () => {
     await userEvent.click(selectAll())
     expect(onSelectionChange).toHaveBeenLastCalledWith([data[0], data[1]])
   })
+
+  it("without getRowId, drops the selection when the rows at those indexes change", async () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {})
+    const onSelectionChange = vi.fn()
+    const ui = (rows: Person[]) => <IGRPDataTable columns={columns} data={rows} onSelectionChange={onSelectionChange} />
+    const { rerender } = render(ui(data))
+    await userEvent.click(rowBoxes()[1]!)
+    expect(onSelectionChange).toHaveBeenLastCalledWith([data[1]])
+
+    // Same row objects in a new array (a parent re-deriving its rows): keep the tick.
+    rerender(ui([...data]))
+    expect(rowBoxes()[1]).toBeChecked()
+
+    // A refetch or the next server page: index 1 is now another record.
+    const nextPage = data.map((row) => ({ id: `${row.id}-b`, name: `${row.name} b` }))
+    rerender(ui(nextPage))
+    expect(rowBoxes().some((box) => box.getAttribute("data-state") === "checked")).toBe(false)
+    expect(onSelectionChange).toHaveBeenLastCalledWith([])
+    expect(warn.mock.calls.some(([msg]) => /row selection without getRowId/.test(String(msg)))).toBe(true)
+    warn.mockRestore()
+  })
+
+  it("with getRowId, keeps the selection across a refetch", async () => {
+    const { rerender } = render(<IGRPDataTable columns={columns} data={data} getRowId={getRowId} />)
+    await userEvent.click(rowBoxes()[1]!)
+    rerender(<IGRPDataTable columns={columns} data={data.map((row) => ({ ...row }))} getRowId={getRowId} />)
+    expect(rowBoxes()[1]).toBeChecked()
+  })
+
+  it("keeps both of two selection updates made in the same event", async () => {
+    // Updaters used to resolve against the last render's state, so the second
+    // toggle overwrote the first.
+    const both: ColumnDef<Person>[] = [
+      {
+        id: "pick",
+        header: ({ table }) => (
+          <button
+            type="button"
+            onClick={() => {
+              table.getRow("p0").toggleSelected(true)
+              table.getRow("p3").toggleSelected(true)
+            }}
+          >
+            dois
+          </button>
+        ),
+        cell: ({ row }) => <IGRPDataTableCellCheckbox row={row} />,
+      },
+      { accessorKey: "name", header: "Nome" },
+    ]
+    render(<IGRPDataTable columns={both} data={data} getRowId={getRowId} />)
+
+    await userEvent.click(screen.getByRole("button", { name: "dois" }))
+    expect(screen.getAllByRole("checkbox").map((box) => box.getAttribute("data-state"))).toEqual([
+      "checked",
+      "unchecked",
+      "unchecked",
+      "checked",
+    ])
+  })
 })

@@ -14,3 +14,14 @@ export const resolvePublicErrorCopy: IGRPErrorCopyResolver = (error) => {
   const { message } = parsePublicDigest((error as { digest?: string }).digest);
   return message ? { description: message } : undefined;
 };
+
+/**
+ * Whether the error carries a platform code: on itself (thrown in the browser)
+ * or in its digest (an `IgrpError` thrown on the server, as `<id>|<code>`).
+ */
+export function hasPlatformCode(error: Error): boolean {
+  return (
+    "code" in error ||
+    Boolean(parsePublicDigest((error as { digest?: string }).digest).code)
+  );
+}

@@ -140,6 +140,26 @@ describe("form integration", () => {
     await userEvent.type(screen.getByLabelText("Nome"), "x{Enter}")
     expect(onSubmit).not.toHaveBeenCalled()
   })
+  it("an invalid submit moves to the first step with an error", async () => {
+    const schema = z.object({ name: z.string().min(1, "Indique o nome") })
+    const onSubmit = vi.fn()
+    const steps: IGRPWizardStep[] = [
+      { key: "a", title: "a", fields: ["name"], component: <IGRPInputText name="name" label="Nome" /> },
+      ...mk(["b", "c"]),
+    ]
+    render(
+      <IGRPForm schema={schema} formRef={formRef} onSubmit={onSubmit} defaultValues={{ name: "" }}>
+        <IGRPMultiStepForm steps={steps} initialStep={3}>
+          <IGRPMultiStepFormSteps animate={false} />
+          <IGRPMultiStepFormSubmit />
+        </IGRPMultiStepForm>
+      </IGRPForm>
+    )
+    await userEvent.click(screen.getByRole("button", { name: "Submeter" }))
+    expect(await screen.findByText("Indique o nome")).toBeInTheDocument()
+    expect(screen.getByLabelText("Nome")).toBeInTheDocument()
+    expect(onSubmit).not.toHaveBeenCalled()
+  })
 })
 
 describe("steps", () => {

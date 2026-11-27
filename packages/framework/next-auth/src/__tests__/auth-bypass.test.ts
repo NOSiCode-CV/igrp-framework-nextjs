@@ -1,6 +1,7 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
 
-import { isIgrpAuthBypass, isPreviewModeEnabled } from '../providers';
+import { withIGRPAuth } from '../config';
+import { isIgrpAuthBypass, isPreviewModeEnabled, registerIGRPAuthBypass } from '../providers';
 
 describe('isIgrpAuthBypass', () => {
   it.each([
@@ -20,5 +21,23 @@ describe('isIgrpAuthBypass', () => {
   it('reads preview mode the same way', () => {
     expect(isPreviewModeEnabled({ IGRP_PREVIEW_MODE: "'true'" })).toBe(true);
     expect(isPreviewModeEnabled({ IGRP_PREVIEW_MODE: '1' })).toBe(false);
+  });
+});
+
+describe('isIgrpAuthBypass with a registered instance', () => {
+  afterEach(() => registerIGRPAuthBypass(null));
+
+  // `provider:` can disagree with AUTH_PROVIDER; the middleware asks the
+  // instance, so server actions and permissions must get the same answer.
+  it('answers like the withIGRPAuth instance, not the process env', () => {
+    expect(isIgrpAuthBypass()).toBe(false);
+    withIGRPAuth({ env: { AUTH_PROVIDER: 'none' } });
+    expect(isIgrpAuthBypass()).toBe(true);
+    expect(isIgrpAuthBypass(process.env)).toBe(true);
+  });
+
+  it('still answers from an explicitly passed env', () => {
+    registerIGRPAuthBypass(() => true);
+    expect(isIgrpAuthBypass({ AUTH_PROVIDER: 'igrp-auth' })).toBe(false);
   });
 });

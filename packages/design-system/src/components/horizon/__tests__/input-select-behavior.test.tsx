@@ -117,6 +117,22 @@ describe("IGRPSelect showSearch", () => {
     expect(screen.getByText("São Vicente")).toBeInTheDocument()
   })
 
+  it("keeps ungrouped options when showGroup is on", async () => {
+    const mixed = [
+      { label: "Praia", value: "praia", group: "Santiago" },
+      { label: "Mindelo", value: "mindelo" },
+    ]
+
+    const user = userEvent.setup()
+    render(<IGRPSelect id="city" options={mixed} placeholder="pick" showGroup />)
+    await settle()
+    await user.click(trigger())
+    await settle()
+
+    expect(screen.queryAllByRole("option").map((option) => option.textContent)).toEqual(["Praia", "Mindelo"])
+    expect(screen.getByText("Outros")).toBeInTheDocument()
+  })
+
   it("matches without accents and case, and shows an empty state", async () => {
     const user = userEvent.setup()
     render(

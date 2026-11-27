@@ -37,6 +37,8 @@ export interface Session extends DefaultSession {
  * asserted `s is Session` for any object that merely had the property — a
  * `{ accessToken: undefined }` placeholder included — so callers got a
  * non-optional-looking token that was empty at runtime.
+ *
+ * @deprecated Unused by the framework; removed in a later release.
  */
 export function hasAccessToken(s: unknown): s is Session & { accessToken: string } {
   if (typeof s !== 'object' || s === null) return false;

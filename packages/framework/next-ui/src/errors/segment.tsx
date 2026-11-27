@@ -118,8 +118,8 @@ function IGRPSegmentError({
   return (
     <div className={cn('flex min-h-[320px] items-center justify-center p-6')}>
       <div className={cn('w-full max-w-xl rounded-lg border border-border bg-card p-6 shadow-sm')}>
-        <div className={cn('space-y-4')}>
-          <div role="alert" className={cn('space-y-1')}>
+        <div className={cn('flex flex-col gap-4')}>
+          <div role="alert" className={cn('flex flex-col gap-1')}>
             <h2 className={cn('text-lg font-semibold text-foreground')}>{title}</h2>
             <p className={cn('text-sm text-muted-foreground')}>{description}</p>
           </div>
@@ -142,13 +142,16 @@ function IGRPSegmentError({
               disabled={isResetting}
               showIcon
               iconName="RefreshCw"
-              iconClassName={cn('mr-2 h-4 w-4 transition-transform', isResetting && 'animate-spin')}
+              iconClassName={cn(
+                'transition-transform',
+                isResetting && 'animate-spin motion-reduce:animate-none',
+              )}
             >
               <span>{isResetting ? labels.retrying : labels.reset}</span>
             </IGRPButton>
             <IGRPButton asChild variant="outline">
               <Link href={homeHref}>
-                <HomeIcon size={16} className={cn('mr-2 h-4 w-4')} aria-hidden="true" />
+                <HomeIcon data-icon="inline-start" aria-hidden="true" />
                 {labels.home}
               </Link>
             </IGRPButton>

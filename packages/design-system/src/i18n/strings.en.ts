@@ -68,8 +68,8 @@ export const IGRP_I18N_DEFAULTS_EN: IGRPI18nStrings = {
     clear: "Clear date",
     open: "Select date",
     placeholder: "Select date",
-    startDate: "Start date",
-    endDate: "End date",
+    startDate: "Start time",
+    endDate: "End time",
   },
   inputSelect: {
     placeholder: "Select an option",
@@ -109,6 +109,7 @@ export const IGRP_I18N_DEFAULTS_EN: IGRPI18nStrings = {
     cancel: "Cancel",
   },
   banner: {
+    cookieLabel: "Cookie notice",
     dismiss: "Dismiss",
     learnMore: "Learn more",
     accept: "Accept",
@@ -133,6 +134,8 @@ export const IGRP_I18N_DEFAULTS_EN: IGRPI18nStrings = {
     sendMessage: "Send message",
     errorMessage: "Something went wrong. Please try again.",
     sentContent: "Sent content",
+    assistant: "Assistant",
+    messageLabel: "Message",
   },
   imageCropper: {
     zoomSlider: "Zoom",
@@ -196,8 +199,10 @@ export const IGRP_I18N_DEFAULTS_EN: IGRPI18nStrings = {
   formList: {
     addItem: "Add",
     removeItem: "Remove item {index}",
+    item: "Item {index}",
   },
   inputFile: {
+    uploadProgress: "Upload progress of {name}",
     dropzoneLabel: "Drag files here or click to select",
     dropzoneHint: "Accepted types",
     removeFile: "Remove {name}",
@@ -215,6 +220,7 @@ export const IGRP_I18N_DEFAULTS_EN: IGRPI18nStrings = {
     clickToCopy: "Click to copy",
   },
   richText: {
+    editorLabel: "Text editor",
     placeholder: "Start writing here…",
     variablesHint: "Click a variable to insert it at the cursor position.",
     showMore: "Show more",
@@ -280,6 +286,7 @@ export const IGRP_I18N_DEFAULTS_EN: IGRPI18nStrings = {
     description: "Shows the sidebar on mobile devices.",
   },
   carousel: {
+    label: "Carousel",
     previous: "Previous slide",
     next: "Next slide",
   },
@@ -298,6 +305,9 @@ export const IGRP_I18N_DEFAULTS_EN: IGRPI18nStrings = {
   inputAddons: {
     selectOption: "Select option",
   },
+  inputSearch: {
+    submit: "Search",
+  },
   lookupField: {
     clear: "Clear",
     moreInfo: "More information",
@@ -306,7 +316,17 @@ export const IGRP_I18N_DEFAULTS_EN: IGRPI18nStrings = {
     counterUsed: "Characters used:",
     counterOf: "of",
   },
+  severity: {
+    error: "Error",
+    warning: "Warning",
+    success: "Success",
+    info: "Information",
+  },
+  alert: {
+    link: "Learn more",
+  },
   charts: {
+    category: "Category",
     itemFallback: "Item {index}",
   },
 }

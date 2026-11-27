@@ -30,7 +30,9 @@ export function resolveHref(item: IGRPMenuItemArgs): string {
  * answer on both sides of hydration.
  */
 export function isAbsoluteUrl(url: string): boolean {
-  return /^(?:[a-z][a-z0-9+.-]*:)?\/\//i.test(url);
+  // Browsers read `/\host` and `\\host` as `//host`, so any two slashes or
+  // backslashes leave the origin.
+  return /^(?:[a-z][a-z0-9+.-]*:)?[/\\]{2}/i.test(url);
 }
 
 export function resolveAnchorTag(item: IGRPMenuItemArgs): boolean {
@@ -65,21 +67,40 @@ function routePath(href: string): string {
 }
 
 /**
+ * How well an href's query fits the current one: 2 when it has a query and
+ * every parameter is in `search`, 1 when it has none, 0 when it disagrees.
+ */
+function queryFit(href: string, search: URLSearchParams | null): number {
+  const i = href.indexOf('?');
+  if (i < 0) return 1;
+  if (!search) return 0;
+  const wanted = new URLSearchParams(href.slice(i + 1).split('#', 1)[0]);
+  for (const [key, value] of wanted) if (!search.getAll(key).includes(value)) return 0;
+  return 2;
+}
+
+/**
  * The ONE href the sidebar highlights for `pathname`: the longest matching one.
  * Prefix matching per item made `/admin` and `/admin/users` both current on
  * `/admin/users` (two `aria-current="page"`, two folders auto-opened).
+ * Between items on the same route, the one whose query matches `search` wins,
+ * so `/list?status=open` and `/list?status=closed` each light up on their own.
  */
-export function findActiveHref(sections: Section[], pathname: string): string | null {
+export function findActiveHref(
+  sections: Section[],
+  pathname: string,
+  search: URLSearchParams | null = null,
+): string | null {
   let best: string | null = null;
   for (const section of sections) {
     for (const node of section.nodes) {
       for (const leaf of node.kind === 'folder' ? node.children : [node]) {
         const href = resolveHref(leaf.item);
         // Longest ROUTE wins: a query string must not outrank a deeper route.
-        if (
-          matchesPathname(leaf.item, pathname) &&
-          (best === null || routePath(href).length > routePath(best).length)
-        ) {
+        // On the same route, the better query fit wins.
+        if (!matchesPathname(leaf.item, pathname)) continue;
+        const delta = best === null ? 1 : routePath(href).length - routePath(best).length;
+        if (delta > 0 || (delta === 0 && queryFit(href, search) > queryFit(best!, search))) {
           best = href;
         }
       }

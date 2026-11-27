@@ -1,13 +1,13 @@
-import { defineConfig } from "tsdown";
+import { defineConfig } from 'tsdown';
 
 const shared = {
-  format: ["esm"] as const,
+  format: ['esm'] as const,
   dts: false,
   clean: false,
   // No sourcemaps: `files` publishes only dist/, so a shipped .map would point
   // at src/ paths that are not in the tarball — a broken map is worse than none.
   sourcemap: false,
-  outDir: "dist",
+  outDir: 'dist',
   // package.json's `bin`, `main` and `exports` name `.js`; tsdown defaults to
   // `.mjs`, which left `igrp-i18n` pointing at a file the build never wrote.
   fixedExtension: false,
@@ -21,11 +21,11 @@ export default defineConfig([
   {
     // CLI binary — src/cli.ts carries the shebang on line 1; tsdown preserves it.
     ...shared,
-    entry: { cli: "src/cli.ts" },
+    entry: { cli: 'src/cli.ts' },
   },
   {
     // Public API — no shebang needed.
     ...shared,
-    entry: { index: "src/index.ts" },
+    entry: { index: 'src/index.ts' },
   },
 ]);

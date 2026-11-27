@@ -1,21 +1,7 @@
-import {
-  isAuthDisabled as isAuthDisabledFromEnv,
-  isIgrpAuthBypass,
-  isPreviewModeEnabled,
-} from "@igrp/framework-next-auth/providers";
+import { isIgrpAuthBypass } from "@igrp/framework-next-auth/providers";
 
-// The predicates are defined once, in `@igrp/framework-next-auth/providers`, so
+// The predicate is defined once, in `@igrp/framework-next-auth/providers`, so
 // the middleware, the framework and the session callbacks cannot disagree.
-
-/** `IGRP_PREVIEW_MODE=true`, ignoring case, whitespace and quotes. */
-export function isPreviewMode(): boolean {
-  return isPreviewModeEnabled(process.env);
-}
-
-/** `AUTH_PROVIDER=none`, ignoring case, whitespace and quotes. */
-export function isAuthDisabled(): boolean {
-  return isAuthDisabledFromEnv(process.env);
-}
 
 /**
  * Returns true when the UI should bypass the auth flow entirely — either

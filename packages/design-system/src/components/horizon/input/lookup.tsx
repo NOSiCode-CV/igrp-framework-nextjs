@@ -208,7 +208,13 @@ function BoundLookupField(props: IGRPLookupFieldProps) {
     <LookupView
       {...props}
       inputValue={(field.value as string | null) ?? ""}
-      onChange={igrpChainHandlers(field.onChange, props.onChange)}
+      onChange={igrpChainHandlers((...e: unknown[]) => {
+        field.onChange(...e)
+        // Typed text no longer names the picked record, so its id must not be submitted with it.
+        if (valueName && valueField?.value != null) {
+          setValue(valueName, null, { shouldDirty: true, shouldValidate: isSubmitted })
+        }
+      }, props.onChange)}
       error={
         props.errorText ??
         (valueName ? (get(errors, valueName) as { message?: string } | undefined)?.message : undefined) ??

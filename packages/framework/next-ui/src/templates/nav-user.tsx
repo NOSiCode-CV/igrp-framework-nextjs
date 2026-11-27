@@ -6,6 +6,7 @@ import {
   cn,
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -77,6 +78,10 @@ interface IGRPTemplateNavUserProps {
   logoutUrl?: string;
   /** Show the link-only Notifications entry. Defaults to `true`. */
   showNotifications?: boolean;
+  /** Show the Profile entry. Defaults to `true`. */
+  showProfile?: boolean;
+  /** Show the Settings entry (sidebar variant only). Defaults to `true`. */
+  showSettings?: boolean;
   /**
    * Extra entries, rendered after the built-in ones and before sign-out. Use
    * `IGRPNavUserItem` to match the built-in look.
@@ -98,6 +103,8 @@ function IGRPTemplateNavUser({
   settingsUrl = '/settings',
   logoutUrl = '/logout',
   showNotifications = true,
+  showProfile = true,
+  showSettings = true,
   items,
   labels: labelOverrides,
 }: IGRPTemplateNavUserProps) {
@@ -160,52 +167,60 @@ function IGRPTemplateNavUser({
             sideOffset={4}
           >
             <DropdownMenuLabel className="font-normal">
-              <div className="flex flex-col space-y-1">
+              <div className="flex flex-col gap-1">
                 <p className="text-sm font-medium leading-none">{user.name}</p>
                 <p className="text-xs leading-none text-muted-foreground">{user.email}</p>
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
 
-            <DropdownMenuItem asChild className={cn(itemClassName)}>
-              <Link href={resolvedProfileUrl}>
-                <UserIcon size={16} className={iconClassName} />
-                <span>{labels.profile}</span>
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
+            <DropdownMenuGroup>
+              {showProfile && (
+                <>
+                  <DropdownMenuItem asChild className={cn(itemClassName)}>
+                    <Link href={resolvedProfileUrl}>
+                      <UserIcon size={16} className={iconClassName} />
+                      <span>{labels.profile}</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                </>
+              )}
 
-            {showNotifications && (
-              <>
+              {showNotifications && (
+                <>
+                  <DropdownMenuItem asChild className={cn(itemClassName)}>
+                    <Link href={notificationsUrl}>
+                      <BellIcon size={16} className={iconClassName} />
+                      <span>{labels.notifications}</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                </>
+              )}
+
+              {!isHeader && showSettings && (
                 <DropdownMenuItem asChild className={cn(itemClassName)}>
-                  <Link href={notificationsUrl}>
-                    <BellIcon size={16} className={iconClassName} />
-                    <span>{labels.notifications}</span>
+                  <Link href={settingsUrl}>
+                    <SettingsIcon size={16} className={iconClassName} />
+                    <span>{labels.settings}</span>
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuSeparator />
-              </>
-            )}
+              )}
 
-            {!isHeader && (
-              <DropdownMenuItem asChild className={cn(itemClassName)}>
-                <Link href={settingsUrl}>
-                  <SettingsIcon size={16} className={iconClassName} />
-                  <span>{labels.settings}</span>
-                </Link>
-              </DropdownMenuItem>
-            )}
-
-            {items}
+              {items}
+            </DropdownMenuGroup>
 
             <DropdownMenuSeparator />
 
-            <DropdownMenuItem asChild className={cn(itemClassName)}>
-              <Link href={logoutUrl}>
-                <LogOutIcon size={16} className={iconClassName} />
-                <span>{labels.logout}</span>
-              </Link>
-            </DropdownMenuItem>
+            <DropdownMenuGroup>
+              <DropdownMenuItem asChild className={cn(itemClassName)}>
+                <Link href={logoutUrl}>
+                  <LogOutIcon size={16} className={iconClassName} />
+                  <span>{labels.logout}</span>
+                </Link>
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>

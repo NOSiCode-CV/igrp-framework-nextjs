@@ -51,15 +51,18 @@ function ComboboxOptionsList({
         <div key={groupName}>
           {showGroup && index > 0 && <CommandSeparator />}
           <CommandGroup heading={showGroup ? groupName : ""}>
-            {groupOptions.map(({ label, value, status, icon }) => (
+            {groupOptions.map(({ label, value, status, statusLabel, icon }) => (
               <CommandItem
                 key={`${groupName}-${value}`}
                 onSelect={() => onSelectHandler(value)}
                 data-checked={isSelected(value, currentValue)}
+                // cmdk uses aria-selected for the highlighted option, so the chosen one is exposed as checked.
+                aria-checked={isSelected(value, currentValue)}
                 className={cn("flex cursor-pointer items-center justify-between gap-4")}
               >
                 <div className={cn("flex items-center gap-2")}>
                   {showStatus && status && <IGRPCircleFull className={igrpColorText(status)} />}
+                  {showStatus && statusLabel && <span className="sr-only">{statusLabel}: </span>}
                   {showIcon && <IGRPIcon iconName={icon ?? iconName} />}
                   {label}
                 </div>
@@ -178,10 +181,15 @@ function ComboboxField({
           side="bottom"
         >
           <Command>
-            {showSearch && (
+            {showSearch ? (
               <div className={cn("relative p-2")}>
                 <CommandInput placeholder={searchText ?? i18n.combobox.searchPlaceholder} className={cn("h-8")} />
                 <CommandEmpty>{selectLabel ?? i18n.combobox.notFound}</CommandEmpty>
+              </div>
+            ) : (
+              // Without it nothing in the popover takes focus, so cmdk never receives arrow keys or Enter.
+              <div className={cn("sr-only")}>
+                <CommandInput readOnly aria-labelledby={slotId ?? fieldName} />
               </div>
             )}
             {/* Keep native wheel scrolling in this portaled list from reaching a parent dialog's document scroll lock. */}
@@ -316,6 +324,7 @@ function IGRPCombobox({
           {showStatus && selected?.status && (
             <IGRPCircleFull className={cn("shrink-0", igrpColorText(selected.status))} />
           )}
+          {showStatus && selected?.statusLabel && <span className="sr-only">{selected?.statusLabel}: </span>}
 
           {showIcon && <IGRPIcon iconName={iconValue} className={cn("shrink-0")} />}
 
@@ -372,6 +381,7 @@ function IGRPCombobox({
           return (
             <span key={val} className={cn("flex items-center gap-1 rounded-md bg-muted px-2 py-1")}>
               {showStatus && selected.status && <IGRPCircleFull className={igrpColorText(selected.status)} />}
+              {showStatus && selected.statusLabel && <span className="sr-only">{selected.statusLabel}: </span>}
 
               {showIcon && <IGRPIcon iconName={selected.icon ?? iconName} />}
 

@@ -135,6 +135,8 @@ type FormListLayoutProps<TItem> = {
   onAdd?: () => void
   addDisabled?: boolean
   onItemChangeFactory?: (index: number) => ((item: TItem) => void) | undefined
+  /** Form mode: the form path of item `index`. Each item then watches only its own path. */
+  itemName?: (index: number) => string
   disabled?: boolean
   ref?: React.Ref<HTMLDivElement>
 }
@@ -232,6 +234,94 @@ function FormListAddButton({
   )
 }
 
+type FormListItemProps<TItem> = {
+  item: TItem
+  index: number
+  computeLabel?: (item: TItem, index: number) => string
+  renderItem: (item: TItem, index: number, onChange?: (item: TItem) => void) => React.ReactNode
+  renderRemoveAction?: FormListLayoutProps<TItem>["renderRemoveAction"]
+  /** Set only when the item may be removed. */
+  onRemove?: (index: number) => void
+  onItemChange?: (item: TItem) => void
+}
+
+/** @internal One accordion item: label, remove action and content. */
+function FormListItem<TItem>({
+  item,
+  index,
+  computeLabel,
+  renderItem,
+  renderRemoveAction,
+  onRemove,
+  onItemChange,
+}: FormListItemProps<TItem>) {
+  const i18n = useIGRPi18n()
+  const labelValue = computeLabel?.(item, index) ?? ""
+  const onItemRemove = onRemove ? () => onRemove(index) : undefined
+  const removeAriaLabel = igrpFormatMessage(i18n.formList.removeItem, { index: index + 1 })
+  const onRemoveTriggerClick = (e: React.MouseEvent<HTMLElement>) => {
+    e.stopPropagation()
+  }
+
+  return (
+    <AccordionItem value={getAccordionValue(index)} className="mb-4 rounded-sm border last:border-b">
+      <div className="flex items-center justify-between gap-2 px-4">
+        <div className="flex-1">
+          <AccordionTrigger
+            className={cn("hover:no-underline", computeLabel ? "py-4" : "py-2")}
+            showIcon
+            iconPlacement="end"
+          >
+            <span className="text-sm font-medium">
+              {labelValue || (
+                <span className="sr-only">{igrpFormatMessage(i18n.formList.item, { index: index + 1 })}</span>
+              )}
+            </span>
+          </AccordionTrigger>
+        </div>
+
+        {onItemRemove &&
+          (renderRemoveAction ? (
+            renderRemoveAction({
+              index,
+              ariaLabel: removeAriaLabel,
+              onRemove: onItemRemove,
+              onTriggerClick: onRemoveTriggerClick,
+            })
+          ) : (
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon-sm"
+              onClick={(e) => {
+                onRemoveTriggerClick(e)
+                onItemRemove()
+              }}
+              className="size-7 shrink-0 p-0 hover:text-destructive"
+              aria-label={removeAriaLabel}
+            >
+              <IGRPIcon iconName="Trash2" />
+            </Button>
+          ))}
+      </div>
+
+      <AccordionContent className={cn("p-4")}>
+        <FormListItemContent item={item} index={index} renderItem={renderItem} onItemChange={onItemChange} />
+      </AccordionContent>
+    </AccordionItem>
+  )
+}
+
+/**
+ * @internal Form mode: watches only this item's path, so a keystroke re-renders
+ * the item being edited, not the whole list. `renderItem` and `computeLabel`
+ * still receive the live item; `item` (the `defaultItem`) is the fallback.
+ */
+function FormListWatchedItem<TItem>({ name, item, ...rest }: FormListItemProps<TItem> & { name: string }) {
+  const live = useWatch({ name }) as TItem | undefined
+  return <FormListItem item={live ?? item} {...rest} />
+}
+
 function FormListLayout<TItem>({
   groupId,
   className,
@@ -267,73 +357,28 @@ function FormListLayout<TItem>({
   onAdd,
   addDisabled,
   onItemChangeFactory,
+  itemName,
   disabled,
   ref,
 }: FormListLayoutProps<TItem>) {
-  const i18n = useIGRPi18n()
   const canRemove = (items.length > 1 || allowEmpty) && !!onRemove && !disabled
   const getItemKey = (index: number) => itemKeys?.[index] ?? `${ACCORDION_ITEM_PREFIX}${index}`
 
   const accordionItems = items.map((item, index) => {
-    const accordionValue = getAccordionValue(index)
-    const itemKey = getItemKey(index)
-    const labelValue = computeLabel?.(item, index) ?? ""
-    const onItemRemove = onRemove ? () => onRemove(index) : undefined
-    const removeAriaLabel = igrpFormatMessage(i18n.formList.removeItem, { index: index + 1 })
-    const onRemoveTriggerClick = (e: React.MouseEvent<HTMLElement>) => {
-      e.stopPropagation()
+    const itemProps: FormListItemProps<TItem> = {
+      item,
+      index,
+      computeLabel,
+      renderItem,
+      renderRemoveAction,
+      onRemove: canRemove ? onRemove : undefined,
+      onItemChange: onItemChangeFactory?.(index),
     }
-    const onItemChange = onItemChangeFactory?.(index)
-    const normalizedOnItemChange = onItemChange as ((item: TItem) => void) | undefined
-
-    return (
-      <AccordionItem key={itemKey} value={accordionValue} className="mb-4 rounded-sm border last:border-b">
-        <div className="flex items-center justify-between gap-2 px-4">
-          <div className="flex-1">
-            <AccordionTrigger
-              className={cn("hover:no-underline", computeLabel ? "py-4" : "py-2")}
-              showIcon
-              iconPlacement="end"
-            >
-              <span className="text-sm font-medium">{labelValue}</span>
-            </AccordionTrigger>
-          </div>
-
-          {canRemove &&
-            onItemRemove &&
-            (renderRemoveAction ? (
-              renderRemoveAction({
-                index,
-                ariaLabel: removeAriaLabel,
-                onRemove: onItemRemove,
-                onTriggerClick: onRemoveTriggerClick,
-              })
-            ) : (
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon-sm"
-                onClick={(e) => {
-                  onRemoveTriggerClick(e)
-                  onItemRemove()
-                }}
-                className="size-7 shrink-0 p-0 hover:text-destructive"
-                aria-label={removeAriaLabel}
-              >
-                <IGRPIcon iconName="Trash2" />
-              </Button>
-            ))}
-        </div>
-
-        <AccordionContent className={cn("p-4")}>
-          <FormListItemContent
-            item={item}
-            index={index}
-            renderItem={renderItem}
-            onItemChange={normalizedOnItemChange}
-          />
-        </AccordionContent>
-      </AccordionItem>
+    const key = getItemKey(index)
+    return itemName ? (
+      <FormListWatchedItem key={key} name={itemName(index)} {...itemProps} />
+    ) : (
+      <FormListItem key={key} {...itemProps} />
     )
   })
 
@@ -479,9 +524,6 @@ function FormListFormMode<TItem>({
   const appendRef = useRef(append)
   const getValuesRef = useRef(form?.getValues)
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const values = useWatch({ name: groupId }) ?? []
-
   // `undefined` = the user has not touched the accordion yet (fall back to the
   // first item). `null` = the user explicitly collapsed everything. Collapsing
   // used to be indistinguishable from "untouched", so item 0 sprang back open.
@@ -527,6 +569,25 @@ function FormListFormMode<TItem>({
     return userOpenItems.filter((v) => parseAccordionIndex(v) < fields.length)
   }, [fields.length, userOpenItems])
 
+  // Collapsed items are unmounted, so their errors never show: after a failed submit, open the items that have errors.
+  // Adjusted during render (not in an effect) when a new submit lands.
+  const { submitCount } = form.formState
+  const [seenSubmitCount, setSeenSubmitCount] = useState(submitCount)
+  if (submitCount !== seenSubmitCount) {
+    setSeenSubmitCount(submitCount)
+    const listError: unknown = form.getFieldState(groupId).error
+    const withErrors = Array.isArray(listError)
+      ? listError.flatMap((itemError, i) => (itemError ? [getAccordionValue(i)] : []))
+      : []
+    if (withErrors.length > 0) {
+      if (allowMultipleOpen) {
+        setUserOpenItems((prev) => [...new Set([...(prev ?? [getAccordionValue(0)]), ...withErrors])])
+      } else {
+        setUserOpenItem(withErrors[0])
+      }
+    }
+  }
+
   const handleRemove = useCallback(
     (index: number) => {
       if (fields.length <= 1 && !allowEmpty) {
@@ -536,7 +597,9 @@ function FormListFormMode<TItem>({
       const removedValue = getAccordionValue(index)
       const wasOpen = allowMultipleOpen ? openItems.includes(removedValue) : openItem === removedValue
       const willHaveItems = fields.length > 1
-      const removedItem = (values[index] ?? defaultItem ?? ({} as TItem)) as TItem
+      // Read at click time: the list no longer watches every item's value.
+      const current = getValuesRef.current?.(groupId) as TItem[] | undefined
+      const removedItem = (current?.[index] ?? defaultItem ?? ({} as TItem)) as TItem
 
       const cb = onItemRemove
       if (cb) {
@@ -574,7 +637,7 @@ function FormListFormMode<TItem>({
       fields.length,
       allowEmpty,
       allowMultipleOpen,
-      values,
+      groupId,
       defaultItem,
       onItemRemove,
     ]
@@ -598,8 +661,10 @@ function FormListFormMode<TItem>({
       color={color}
       dot={dot}
       badgeClassName={badgeClassName}
-      items={fields.map((_, index) => (values[index] ?? defaultItem ?? ({} as TItem)) as TItem)}
+      // Fallbacks only: each item watches its own live value through `itemName`.
+      items={fields.map(() => (defaultItem ?? ({} as TItem)) as TItem)}
       itemKeys={fields.map((field) => field.id)}
+      itemName={(index) => `${groupId}.${index}`}
       computeLabel={(item, index) => computeLabel?.(item, index) ?? ""}
       renderItem={(item, index) => renderItem(item, index)}
       allowEmpty={allowEmpty}

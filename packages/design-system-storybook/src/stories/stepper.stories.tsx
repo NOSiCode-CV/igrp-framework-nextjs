@@ -137,9 +137,8 @@ const meta = {
   parameters: {
     // Known WCAG backlog, tracked in the design-system accessibility audit:
     // color-contrast on the step indicator.
-    // 'todo' reports in the Storybook UI without failing CI. Delete this once the
-    // suite is clean; every other component is gated at 'error' by preview.ts.
-    a11y: { test: 'todo' },
+    // Only the backlog rule is off; every other rule still fails CI. Delete once fixed.
+    a11y: { test: 'error', config: { rules: [{ id: 'color-contrast', enabled: false }] } },
     layout: 'fullscreen',
   },
   argTypes: {
@@ -173,11 +172,11 @@ const StepDetails = ({ step, steps }: { step: number; steps: IGRPStepProcessProp
       <div className="mt-6 grid gap-6 text-sm sm:grid-cols-3">
         <div>
           <p className="text-xs uppercase text-muted-foreground">Completed</p>
-          <p className="text-xl font-semibold text-emerald-600">{completedCount}</p>
+          <p className="text-xl font-semibold text-success">{completedCount}</p>
         </div>
         <div>
           <p className="text-xs uppercase text-muted-foreground">Remaining</p>
-          <p className="text-xl font-semibold text-blue-600">{remainingCount}</p>
+          <p className="text-xl font-semibold text-info">{remainingCount}</p>
         </div>
         <div>
           <p className="text-xs uppercase text-muted-foreground">Status</p>
@@ -191,7 +190,7 @@ const StepDetails = ({ step, steps }: { step: number; steps: IGRPStepProcessProp
 };
 
 const renderStepper = (args: Story['args']) => (
-  <div className="space-y-6 px-4 py-8">
+  <div className="flex flex-col gap-6 px-4 py-8">
     <IGRPStepperProcess {...args}>
       {(step) => <StepDetails step={step} steps={args!.steps ?? pipelineSteps} />}
     </IGRPStepperProcess>

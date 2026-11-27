@@ -58,7 +58,7 @@ const FormTemplate: StoryFn<IGRPInputTextProps> = (args) => {
       <FormProvider {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className='space-y-4'
+          className='flex flex-col gap-4'
         >
           <IGRPInputText {...args} />
 

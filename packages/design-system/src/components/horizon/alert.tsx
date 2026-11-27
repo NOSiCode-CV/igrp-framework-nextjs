@@ -8,6 +8,7 @@ import { cn } from "cn"
 import type { IGRPBaseAttributes, IGRPPlacementProps } from "../../types.js"
 import { IGRPIcon, type IGRPIconName } from "./icon/index.js"
 import { IGRPLink } from "./typography/link.js"
+import { useIGRPi18n } from "../../i18n/index.js"
 
 /**
  * Props for the IGRPAlert component.
@@ -57,7 +58,7 @@ function IGRPAlert({
   iconClassName,
   iconPlacement = "end",
   children,
-  label = "link",
+  label,
   linkUrl,
   linkIcon = "ArrowRight",
   showLink,
@@ -69,8 +70,18 @@ function IGRPAlert({
   id,
   alignment = "start",
 }: IGRPAlertProps) {
+  const i18n = useIGRPi18n()
   const _id = useId()
   const ref = name ?? id ?? _id
+  // The icon is hidden from screen readers, so the severity it shows is spoken as a prefix.
+  const severity: string | undefined = (
+    {
+      destructive: i18n.severity.error,
+      warning: i18n.severity.warning,
+      success: i18n.severity.success,
+      info: i18n.severity.info,
+    } as Partial<Record<string, string>>
+  )[color]
 
   const iconDefault = igrpAlertIconMappings[color]
   const colors = IGRPColors[variant][color]
@@ -104,7 +115,10 @@ function IGRPAlert({
         )}
 
         <div className="flex grow justify-between gap-3">
-          <div className="flex grow flex-col gap-1">{children}</div>
+          <div className="flex grow flex-col gap-1">
+            {severity && <span className="sr-only">{severity}: </span>}
+            {children}
+          </div>
 
           {showLink && (
             <IGRPLink
@@ -114,7 +128,7 @@ function IGRPAlert({
               showIcon
               className={colors.alert}
             >
-              {label}
+              {label ?? i18n.alert.link}
             </IGRPLink>
           )}
         </div>

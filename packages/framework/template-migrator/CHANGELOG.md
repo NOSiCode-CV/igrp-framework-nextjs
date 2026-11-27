@@ -1,5 +1,50 @@
 # @igrp/template-migrator
 
+## 0.2.0-beta.29
+
+### Patch Changes
+
+- 1b2a46a: Migration 112 sets the template `version` to `0.2.0-beta.9`.
+
+## 0.2.0-beta.28
+
+### Patch Changes
+
+- 7f1ad42: Package and build fixes from a review of each package's build:
+  
+  - `@igrp/framework-next`: `next-intl` is now a peer dependency (`^4.16.1`), not a pinned dependency. The root layout mounts next-intl's provider and the app calls its hooks, so both must use one copy; a version mismatch used to install two and lose the context. Apps already depend on `next-intl`.
+  - `@igrp/framework-next-ui`: `lucide-react` is now a peer dependency, as in the design system. The unused `clsx` and `class-variance-authority` dependencies are removed.
+  - `@igrp/framework-next-auth`: every `exports` entry has a `default` condition, so resolvers without the `import` condition (`require()` of ESM, CommonJS test runners) find it.
+  - `@igrp/igrp-framework-react-design-system`, `@igrp/framework-next-ui`, `@igrp/framework-next`: no `.d.ts.map` files in the package. They pointed at `src/`, which is not published.
+  - `@igrp/template-migrator`: the build clears `dist/` first, so files from older builds are no longer published. `yaml` moves to `devDependencies`: only the build scripts use it.
+- 7f1ad42: Migration `110-client-messages-server-home`: the template sends only the `auth` and `errors` message namespaces to the browser (`i18n.clientNamespaces`), the home page is a Server Component with a separate client copy button, and two independent awaits in the root layout's metadata and the home page now run in parallel.
+- 82a22d3: `igrp-migrate apply` no longer overwrites files that changed after an interrupted run. The journal now records each file's hash after its step, and recovery stops with a list of the changed files instead of restoring the pre-migration snapshot over them. Journals written by older versions recover as before.
+- 9976eba: Migration 100: demo-v1 reads `IGRP_ENABLED_LOCALES` (`pt` or `pt,en`) to choose the languages a deployment offers. With one language the locale switcher is hidden; unset keeps all three.
+- 3707c6e: `package.json` fields other than the dependencies now reach upgraded apps, and the test files from migrations 92 and 94 are removed.
+  
+  - New step `pkg.set`: sets `package.json` fields except `name`, `description`, `displayName` and the dependencies. An object field such as `scripts` is merged, so scripts the app added stay. `null` removes a field or key.
+  - `check:drift` fails when a template `package.json` field differs from what the `pkg.set` steps leave behind.
+  - `file.delete` takes an optional `expect` payload. The file is deleted only when it still matches it; a changed file is kept, with a warning.
+  - Migration 102: `package.json` gets the template's `version`, `private`, `keywords`, `author`, `license`, `engines` and `scripts`. `vitest.config.mts` sets `passWithNoTests`. The 7 test files from 92 and 94 are deleted when unchanged.
+- a063c4c: Migration 103: `@types/node` goes to 26.6.7 and `@types/react` to 19.3.1. No template files change.
+- 9880ce4: Migration 104: `@hookform/resolvers` goes to 7.0.9, and `@tanstack/react-query`, `next-intl`, `react-hook-form`, `@biomejs/biome`, `tailwindcss`, `@tailwindcss/postcss` and `vitest` get their patch/minor updates. A manual step sets the `biome.json` `$schema` to 2.6.9.
+- 94a6f89: Migration 105: corrects the comments in demo-v1 `src/lib/auth.ts` and `src/app/(igrp)/layout.tsx` about where `igrpGetClaims()` gets its access token. Comments only.
+- f77fd3b: Added migration `106-audit-headers-logout-error-copy`. The fixed security headers move from `src/middleware.ts` to `next.config.ts` `headers()`, so they reach every path, including static files and paths the matcher skips. The matcher no longer skips `/apps`. The logout layout's cross-site check moves to `src/lib/logout-entry.ts`. `(auth)/error.tsx` shows an `AppError`'s public message before the generic auth copy.
+- a6af114: Migration 107 (`107-error-code-digest`): `src/lib/error-copy.ts` gets `hasPlatformCode(error)`, which also reads a code from a server error's digest. `(auth)/error.tsx` uses it, so a server-thrown `IgrpError` keeps its catalog copy. The `(igrp)/page.tsx` comment now says the copy shows in production.
+- 5a2166c: Migration 108 for demo-v1: `/login?reason=session_ended` signs the user out only when the request does not come from another site, and `/api/csp-report` logs 3 fields of at most 200 characters and answers `400` to a body that is not a CSP report. `src/lib/utilities.ts` drops `isPreviewMode()` and `isAuthDisabled()`; use `isAuthBypass()`.
+- c5939b7: `igrp-migrate status` counts a duplicated lock entry once. Migration 109 for demo-v1 documents in `.env.example` and `docs/ENVIRONMENT.md` that `IGRP_SYNC_ON_CODE_MENU_ROLES=true` resets the menu roles on every pod start.
+- c73287e: Migration 96: the demo-v1 logout page waits 5 s for the end-session URL instead of 3 s, above the server's 4 s discovery timeout, so a slow IdP no longer ends in a local-only logout.
+- 8a8cc80: Migrations 97 and 98: demo-v1's `lib/auth.ts` seeds the access client through `igrpEnsureAccessClientConfig`, its middleware takes the auth decision from `igrpMiddlewareDecision`, and `lib/utilities.ts` delegates `isAuthBypass` and `sanitizeCallbackUrl` to `@igrp/framework-next-auth`.
+- 9976eba: Migration 99: demo-v1's `getSidebarData` passes the profile, notifications and settings URLs from the same env vars as the header. Before, the sidebar user menu fell back to `/profile` and `/settings` under the basePath.
+- ef57dc8: Compact `.igrp-migrations-lock.json` and remove `rollback`.
+  
+  - Each lock entry keeps only its id, `cliVersion`, `manifestHash` and `payloadHash`. The lock no longer stores `undo`, `undoPayloads`, `fileHashes` or `appliedAt`. Locks with full pre-migration file contents grew past 1.2 MiB and Biome refused to format them (1 MiB limit).
+  - An existing lock is still read. The next `apply` rewrites it in the compact form.
+  - `igrp-migrate rollback` is removed, together with the `rollback` export. Without undo content there is nothing to restore. To undo a migration, revert its commit with git.
+  - The lock keeps `version: 1` and a flat `applied` array, so older CLIs can still read it.
+  - Migration 101: demo-v1 `docs/MIGRATION_GUIDE.md` drops the `rollback` section and describes the compact lock.
+  - Migrations no longer ship test files: `pack` drops every `file.create`/`file.write` step for a `__tests__/` path or a `*.test.ts(x)` file (migrations 92 and 94 brought 7). Their hashes still cover those steps, so apps that already applied them are not reported as changed. The drift gate ignores test files too.
+
 ## 0.2.0-beta.27
 
 ### Patch Changes

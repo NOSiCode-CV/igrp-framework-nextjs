@@ -9,6 +9,7 @@ import { type IGRPPlacementProps } from "../../../types.js"
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../../primitives/dropdown-menu.js"
@@ -248,7 +249,7 @@ function IGRPDataTableDropdownMenuModal({
           disabled={disabled}
         />
       </DialogTrigger>
-      <IGRPDataTableModalContent {...dialogProps} close={close}>
+      <IGRPDataTableModalContent {...dialogProps} labelTrigger={labelTrigger} close={close}>
         {children}
       </IGRPDataTableModalContent>
     </Dialog>
@@ -264,7 +265,7 @@ function IGRPDataTableDropdownMenuNode({
   disabled,
 }: {
   node?: ReactNode
-  labelTrigger?: string
+  labelTrigger: string
   disabled?: boolean
 }) {
   if (isValidElement(node)) {
@@ -302,7 +303,7 @@ type IGRPDataTableActionDropdown =
   | {
       id?: string
       component: typeof IGRPDataTableDropdownMenuNode
-      props: { node?: ReactNode; labelTrigger?: string; disabled?: boolean }
+      props: { node?: ReactNode; labelTrigger: string; disabled?: boolean }
     }
 
 type IGRPDataTableDropdownMenuProps = {
@@ -318,16 +319,18 @@ function IGRPDataTableDropdownMenu({ items, iconName = "Ellipsis" }: IGRPDataTab
         <IGRPIcon iconName={iconName} className={cn("shadow-none")} />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        {items.map((item, index) => {
-          const { component: Component, props } = item
-          const key =
-            item.id ??
-            props.labelTrigger ??
-            ("href" in props ? props.href : undefined) ??
-            ("modalTitle" in props ? props.modalTitle : undefined) ??
-            `action-${index}`
-          return <Component key={key} {...props} />
-        })}
+        <DropdownMenuGroup>
+          {items.map((item, index) => {
+            const { component: Component, props } = item
+            const key =
+              item.id ??
+              props.labelTrigger ??
+              ("href" in props ? props.href : undefined) ??
+              ("modalTitle" in props ? props.modalTitle : undefined) ??
+              `action-${index}`
+            return <Component key={key} {...props} />
+          })}
+        </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>
   )

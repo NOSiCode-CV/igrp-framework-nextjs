@@ -95,6 +95,11 @@ export type IGRPConfigArgs = {
      * Defaults to `true` when omitted — matching the AM client default — so
      * role sync stays on unless a deployment opts out.
      *
+     * The push runs once per process, so with `true` EVERY new pod (a deploy,
+     * a scale-up, a restart) resets the menu roles to the code's and undoes
+     * any role edit made in Access Management since. Set `false` once AM owns
+     * the role assignments.
+     *
      * Sourced from `process.env.IGRP_SYNC_ON_CODE_MENU_ROLES !== "false"` in
      * the template.
      */

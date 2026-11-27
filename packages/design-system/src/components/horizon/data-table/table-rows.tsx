@@ -86,7 +86,8 @@ function IGRPDataTableBodyRows<TData>({
     return (
       <TableRow>
         <TableCell colSpan={emptyColSpan} className={cn("h-24 text-center font-semibold")}>
-          {notFoundLabel}
+          {/* role=status: a filter that empties the table is otherwise silent for screen readers. */}
+          <span role="status">{notFoundLabel}</span>
         </TableCell>
       </TableRow>
     )
@@ -123,16 +124,23 @@ function IGRPDataTableBodyRows<TData>({
   )
 }
 
-/** Dev-only warning: expansion is keyed by row index unless `getRowId` is given. */
-function useIGRPDataTableRowIdWarning(componentName: string, hasSubComponent: boolean, hasRowId: boolean): void {
+/** Dev-only warning: expansion and selection are keyed by row index unless `getRowId` is given. */
+function useIGRPDataTableRowIdWarning(
+  componentName: string,
+  hasSubComponent: boolean,
+  hasRowId: boolean,
+  hasSelection = false
+): void {
   const warned = useRef(false)
   useEffect(() => {
-    if (process.env.NODE_ENV === "production" || warned.current || !hasSubComponent || hasRowId) return
+    if (process.env.NODE_ENV === "production" || warned.current || hasRowId) return
+    if (!hasSubComponent && !hasSelection) return
     warned.current = true
+    const feature = hasSubComponent ? "renderSubComponent" : "row selection"
     console.warn(
-      `${componentName}: renderSubComponent without getRowId keys expanded rows by index; if data is reordered or replaced (server-side sorting/paging, refetch) a different record opens. Pass getRowId.`
+      `${componentName}: ${feature} without getRowId keys rows by index; if data is reordered or replaced (server-side sorting/paging, refetch) a different record is opened or selected. Pass getRowId.`
     )
-  }, [componentName, hasSubComponent, hasRowId])
+  }, [componentName, hasSubComponent, hasRowId, hasSelection])
 }
 
 export {

@@ -59,7 +59,7 @@ function IGRPCalendarMultipleTime({
   return (
     <div id={ref}>
       <div className={cn("flex flex-col gap-4")}>
-        <IGRPCalendarMultiple id={ref} {...props} />
+        <IGRPCalendarMultiple {...props} />
 
         <div className={cn("flex flex-col gap-4 border-t pt-4")}>
           <div className={cn("flex flex-col gap-2")}>

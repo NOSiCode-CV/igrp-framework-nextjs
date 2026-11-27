@@ -111,36 +111,13 @@ pnpm dlx @igrp/template-migrator@latest list
 
 ---
 
-### `rollback` — undo the last applied migration
+### Undoing a migration
+
+The CLI has no `rollback` command. Commit before each `apply`; to undo a migration, revert its commit with git:
 
 ```bash
-pnpm dlx @igrp/template-migrator@latest rollback 04-multi-auth-provider
+git revert <commit>
 ```
-
-Restores the files that migration wrote and removes its entry from the lock file. Undo steps run in reverse order, so a migration that deleted and recreated the same path unwinds correctly.
-
-Rollback **refuses rather than half-restoring**. When a migration overwrote or deleted a file and the lock entry has no stored copy of the prior content — which is the case for entries written by older CLI versions — it lists those paths and stops:
-
-```
-Cannot fully roll back 04-multi-auth-provider — no stored undo content for:
-  - file.write  src/middleware.ts
-```
-
-Restore those files yourself (from git, usually), or re-run with `--force` to roll back every other step and leave the listed files untouched:
-
-```bash
-pnpm dlx @igrp/template-migrator@latest rollback 04-multi-auth-provider --force
-```
-
-Rollback is not atomic: if it is interrupted, re-running it is safe — the restores are idempotent and the stored payloads stay in the lock until the final write.
-
-**Migrations that came with your app can't be rolled back.** If your app was scaffolded from the template zip, it arrived with every migration already recorded — the template already contained their result, so the CLI never ran them here and captured nothing to reverse. Rollback refuses those rather than quietly removing the record:
-
-```
-Cannot roll back 29-permissions-catalog-sync — nothing to reverse.
-```
-
-Revert the files yourself (from git) if you need to undo one. `--force` drops the lock entry without touching files, which makes the next `apply` re-run the migration.
 
 ---
 
@@ -190,6 +167,8 @@ Keys with a sensible default (`IGRP_SYNC_ACCESS=false`, `AUTH_PROVIDER=keycloak`
 ## The lock file
 
 After each successful migration `apply` writes `.igrp-migrations-lock.json` to your project root. **Commit this file.** It is the source of truth for which migrations your app has applied — re-running `apply` always skips completed entries.
+
+The lock keeps only each migration's id, the CLI version that applied it, and its hashes. It holds no file contents, so it stays small. A lock written by an older CLI is compacted on the next `apply`, and older CLIs can still read the compact lock.
 
 ---
 
@@ -247,12 +226,12 @@ Recovering from an interrupted run of 29-permissions-catalog-sync...
   ✓ recovered
 ```
 
-This matters for more than tidiness — without it the retry would treat the half-migrated files as the "original" state and record an undo that restores the wrong content. The journal is transient: it exists only while a migration is in flight, and you should not commit it. If recovery reports a path it could not restore, fix that path (from git) before re-running.
+The journal is transient: it exists only while a migration is in flight, and you should not commit it. If recovery reports a path it could not restore, fix that path (from git) before re-running.
 
-**Build fails after applying** — roll back, check that migration's prose guide for manual steps your app may need, then re-apply:
+**Build fails after applying** — revert the migration's commit with git, check that migration's prose guide for manual steps your app may need, then re-apply:
 
 ```bash
-pnpm dlx @igrp/template-migrator@latest rollback <id>
+git revert <commit>
 # make any manual adjustments
 pnpm dlx @igrp/template-migrator@latest apply --to <id>
 ```

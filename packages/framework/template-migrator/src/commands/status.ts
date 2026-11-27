@@ -32,14 +32,15 @@ export function status(appRoot: string) {
 
   const pending = manifest.migrations.filter((m) => !appliedIds.has(m.id));
   const unknownNote = unknown.length > 0 ? ` (${unknown.length} from a newer CLI)` : "";
-  console.log(`\n${lock.applied.length} applied${unknownNote}, ${pending.length} pending\n`);
+  // Distinct ids: a lock with a duplicated entry must not count it twice.
+  console.log(`\n${appliedById.size} applied${unknownNote}, ${pending.length} pending\n`);
   if (changed.length > 0) {
     console.log(`! ${changed.length} applied migration(s) changed after they were applied:`);
     const payloadOnly = changed.filter((m) => staleCause(appliedById.get(m.id), m) === "payload");
     for (const m of changed) console.log(`    ${m.id}${payloadOnly.includes(m) ? " (payload files only)" : ""}`);
     console.log("  Check the guide for what changed — re-applying is a manual step.");
     if (payloadOnly.length > 0) {
-      console.log("  For a payload-only change, do not roll back (it will refuse): remove the");
+      console.log("  For a payload-only change, remove the");
       console.log("  migration's entry from .igrp-migrations-lock.json and run apply again.");
     }
     console.log("");

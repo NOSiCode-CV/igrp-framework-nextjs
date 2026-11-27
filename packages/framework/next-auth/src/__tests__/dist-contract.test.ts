@@ -53,7 +53,7 @@ function staticImports(file: string): string[] {
 }
 
 const subpaths = Object.entries(pkg.exports).filter(
-  (entry): entry is [string, { types: string; import: string }] =>
+  (entry): entry is [string, { types: string; import: string; default: string }] =>
     typeof entry[1] === 'object' && entry[1] !== null && 'import' in entry[1],
 );
 
@@ -61,7 +61,7 @@ describe.skipIf(!hasDist)('dist contract', () => {
   it('ships every file the exports map promises', () => {
     const missing: string[] = [];
     for (const [subpath, target] of subpaths) {
-      for (const file of [target.import, target.types]) {
+      for (const file of [target.import, target.default, target.types]) {
         if (!existsSync(join(DIST, '..', file))) missing.push(`${subpath} -> ${file}`);
       }
     }

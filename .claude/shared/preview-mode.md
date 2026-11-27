@@ -15,6 +15,6 @@
 - `src/app/layout.tsx` and `src/app/(igrp)/layout.tsx` — session load.
 - `src/igrp.template.config.ts` — passes `previewMode: isAuthBypass()` and swaps in mock data.
 - `src/lib/config/get-session-args.ts` — refetch off under bypass.
-- `packages/framework/next` — consumes `config.previewMode` (skips Access Management calls, relaxes `igrpBuildConfig` validation). `igrpBuildConfig` reads no env and swaps no data; keep it that way. The predicate itself is defined once, as `isIgrpAuthBypass()` in `@igrp/framework-next-auth/providers`; framework-next's `isIgrpAuthBypass()`, the template's `isAuthBypass()` and `igrpMiddlewareDecision` (`@igrp/framework-next-auth/middleware`) all delegate to it.
+- `packages/framework/next` — consumes `config.previewMode` (skips Access Management calls, relaxes `igrpBuildConfig` validation). `igrpBuildConfig` reads no env and swaps no data; keep it that way. The predicate itself is defined once, as `isIgrpAuthBypass()` in `@igrp/framework-next-auth/providers`; framework-next's `isIgrpAuthBypass()` and the template's `isAuthBypass()` delegate to it. `igrpMiddlewareDecision` (`@igrp/framework-next-auth/middleware`) asks the `withIGRPAuth` instance instead (`auth.isPreviewMode() || auth.isAuthDisabled()`), so it follows the instance's `provider` option; those methods use the same predicates in `./providers`.
 
 Any change to middleware, root layout, or config builder must work with preview **on** and **off**.

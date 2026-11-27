@@ -62,7 +62,7 @@ Critical env constraint: when `NEXT_PUBLIC_BASE_PATH` is set, `NEXTAUTH_URL` mus
 
 Inside `templates/demo-v1/**/*.{ts,tsx}`, the template's agent rules are canonical in `templates/demo-v1/.agents/` — `rules/ui.md` (design-system hard rules) and `rules/permissions.md` (permission gating). `AGENTS.md` is a thin bridge that points there; rule content belongs in `.agents/rules/`, never in a bridge.
 
-The full component reference is the skill at `templates/demo-v1/.agents/skills/igrp-design-system/SKILL.md`. That subtree is **not committed** — the zip script injects it from `plugins/igrp/skills/design-system/`, which is the copy to edit in this repo. Treat it as authoritative and load only the sub-files you need.
+The full component reference is the skill at `templates/demo-v1/.agents/skills/igrp-design-system/SKILL.md`. That subtree is **not committed** — the zip script injects it from `plugins/igrp/skills/igrp-design-system/`, which is the copy to edit in this repo. Treat it as authoritative and load only the sub-files you need.
 
 ## Build tooling
 
@@ -73,9 +73,9 @@ Each package's build pipeline is its `scripts` block in `package.json`. Two thin
 
 ### Vendored agent skills
 
-Third-party skills live in `.agents/skills/`, pinned to their upstream source and content hash by `skills-lock.json`. `.claude/skills/` is a **generated, gitignored bridge** over that directory — run `pnpm skills:sync` after a fresh clone (or after editing `.agents/skills/` or `skills-lock.json`), or Claude Code won't load any of them. Never edit `.claude/skills/` directly; the next sync overwrites it.
+Third-party skills live in `.agents/skills/`, pinned to their upstream source by `skills-lock.json`. Each skill's `computedHash` is the upstream `skills` CLI's folder hash (lock version 2: CRLF read as LF, so the result does not depend on the checkout). CI fails when a vendored skill no longer matches it; after an intended edit, run `pnpm skills:lock` and commit `skills-lock.json`. `.claude/skills/` is a **generated, gitignored bridge** over that directory — run `pnpm skills:sync` after a fresh clone (or after editing `.agents/skills/` or `skills-lock.json`), or Claude Code won't load any of them. Never edit `.claude/skills/` directly; the next sync overwrites it.
 
-Real file copies rather than symlinks, deliberately: this repo is developed on Windows clones with `core.symlinks=false`, where a committed symlink is materialised as a regular file and the bridge silently becomes a second committed copy that drifts past the lockfile's hash check. `pnpm skills:sync:check` verifies the local bridge; CI runs `--verify-lock` instead, since a clean checkout has no bridge to compare.
+Real file copies rather than symlinks, deliberately: this repo is developed on Windows clones with `core.symlinks=false`, where a committed symlink is materialised as a regular file and the bridge silently becomes a second committed copy that drifts from `.agents/skills/`. `pnpm skills:sync:check` verifies the local bridge; CI runs `--verify-lock` instead, which checks every locked skill's directory against its `computedHash`, since a clean checkout has no bridge to compare.
 
 ## Tests
 
@@ -84,6 +84,7 @@ There is **no root `test` script** — each package runs **Vitest** on its own:
 - `test` (`vitest run`) in `design-system`, `framework-next-auth`, `framework-next-ui`, `framework-next` and `framework-next-i18n`; each one's `release` runs it (with `lint` and `typecheck`) before publishing. `framework-next-types` has no tests — its gates are `check:barrel` and `check:contract` in `build`.
 - `pnpm --filter @igrp/template-migrator test` — runs `vitest run` (migration logic). Its `release` script gates the publish on `typecheck` → `test` → `check:drift` (`tsx scripts/check-drift.ts`), the last of which fails if `templates/demo-v1` has drifted from the shipped migrations. The same three run per-MR as the `check_template_drift` job in `.gitlab-ci.yml`.
 - `packages/design-system-storybook` — `test:vitest` (component) and `test-storybook` (renders every story; Storybook must be running).
+- `test:mutation` (Stryker, `stryker.config.json`) in `framework-next-auth`, `framework-next` (`lib`, `mappers`, `actions` only), `framework-next-i18n` and `template-migrator`. Manual only, not in CI: a run takes 1–6 minutes. One file: `pnpm exec stryker run --mutate src/x.ts --force` inside the package. Mark an equivalent mutant with `// Stryker disable next-line <mutator>: <reason>`. The report is `reports/mutation/mutation.html` (git-ignored).
 
 Run a **single test**: `pnpm --filter <package> exec vitest run path/to/file.test.ts -t "test name"` (drop `run` for watch mode). The `-t` flag filters by test/describe name.
 

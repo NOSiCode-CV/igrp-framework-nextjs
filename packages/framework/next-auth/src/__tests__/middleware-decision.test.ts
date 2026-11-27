@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { igrpMiddlewareDecision, type IGRPMiddlewareAuth } from '../middleware';
+import { isAuthDisabled, isPreviewModeEnabled } from '../providers';
 
 const ORIGIN = 'https://public.example';
 const auth = {
@@ -9,6 +10,8 @@ const auth = {
   isEndedByHostLogout: vi.fn(() => false),
   getLoginRedirectUrl: () => new URL('/app/login', ORIGIN),
   resolveAppUrl: (path: string) => new URL(`/app${path}`, ORIGIN),
+  isPreviewMode: vi.fn(() => false),
+  isAuthDisabled: vi.fn(() => false),
 } satisfies IGRPMiddlewareAuth;
 
 const request = (path: string, cookies: string[] = []) => {
@@ -21,17 +24,23 @@ const request = (path: string, cookies: string[] = []) => {
 };
 
 const OFF = { NEXT_PUBLIC_BASE_PATH: '/app' };
-const decide = (path: string, env: Record<string, string> = OFF, cookies?: string[]) =>
-  igrpMiddlewareDecision(request(path, cookies), auth, {
+// The instance answers from its env, as `withIGRPAuth` does with no `provider`.
+const decide = (path: string, env: Record<string, string> = OFF, cookies?: string[]) => {
+  auth.isPreviewMode.mockReturnValue(isPreviewModeEnabled(env));
+  auth.isAuthDisabled.mockReturnValue(isAuthDisabled(env));
+  return igrpMiddlewareDecision(request(path, cookies), auth, {
     env,
     publicPaths: ['/api/health'],
     logoutPendingCookie: 'logout_pending',
   });
+};
 
 beforeEach(() => {
   auth.getTokenFromRequest.mockReset().mockResolvedValue({ expiresAt: Date.now() + 60_000 });
   auth.isTokenExpiredOrFailed.mockReturnValue(false);
   auth.isEndedByHostLogout.mockReturnValue(false);
+  auth.isPreviewMode.mockReturnValue(false);
+  auth.isAuthDisabled.mockReturnValue(false);
 });
 
 describe.each([
@@ -51,6 +60,14 @@ describe.each([
 });
 
 describe('bypass off', () => {
+  it('follows the instance, not the env: `provider:` with a leftover AUTH_PROVIDER=none', async () => {
+    auth.getTokenFromRequest.mockResolvedValue(null);
+    const decision = igrpMiddlewareDecision(request('/clientes'), auth, {
+      env: { ...OFF, AUTH_PROVIDER: 'none' },
+    });
+    expect((await decision).type).toBe('redirect');
+  });
+
   it.each(['/login', '/api/auth/callback/x', '/api/health', '/_next/static/a.js', '/logo.svg'])(
     'passes public path %s without a token',
     async (path) => {

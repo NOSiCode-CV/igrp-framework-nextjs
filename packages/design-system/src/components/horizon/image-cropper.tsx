@@ -41,29 +41,20 @@ async function getCroppedImg(
   pixelCrop: Area,
   outputWidth: number = pixelCrop.width,
   outputHeight: number = pixelCrop.height
-): Promise<Blob | null> {
-  try {
-    const image = await createImage(imageSrc)
-    const canvas = document.createElement("canvas")
-    const ctx = canvas.getContext("2d")
+): Promise<Blob> {
+  const image = await createImage(imageSrc)
+  const canvas = document.createElement("canvas")
+  const ctx = canvas.getContext("2d")
+  if (!ctx) throw new Error("Canvas 2D context unavailable")
 
-    if (!ctx) {
-      return null
-    }
+  canvas.width = outputWidth
+  canvas.height = outputHeight
 
-    canvas.width = outputWidth
-    canvas.height = outputHeight
+  ctx.drawImage(image, pixelCrop.x, pixelCrop.y, pixelCrop.width, pixelCrop.height, 0, 0, outputWidth, outputHeight)
 
-    ctx.drawImage(image, pixelCrop.x, pixelCrop.y, pixelCrop.width, pixelCrop.height, 0, 0, outputWidth, outputHeight)
-
-    return new Promise((resolve) => {
-      canvas.toBlob((blob) => {
-        resolve(blob)
-      }, "image/jpeg")
-    })
-  } catch {
-    return null
-  }
+  return new Promise((resolve, reject) => {
+    canvas.toBlob((blob) => (blob ? resolve(blob) : reject(new Error("Canvas export failed"))), "image/jpeg")
+  })
 }
 
 /**
@@ -74,10 +65,10 @@ async function cropAndDeliver(
   src: string,
   area: Area,
   onCrop?: (blob: Blob) => void
-): Promise<{ blob: Blob | null } | { error: unknown }> {
+): Promise<{ blob: Blob } | { error: unknown }> {
   try {
     const blob = await getCroppedImg(src, area)
-    if (blob) onCrop?.(blob)
+    onCrop?.(blob)
     return { blob }
   } catch (error) {
     return { error }
@@ -124,7 +115,7 @@ export function IGRPImageCropper({
       return
     }
 
-    if (result.blob && showPreview) {
+    if (showPreview) {
       const newUrl = URL.createObjectURL(result.blob)
       if (croppedImageUrl) URL.revokeObjectURL(croppedImageUrl)
       setCroppedImageUrl(newUrl)

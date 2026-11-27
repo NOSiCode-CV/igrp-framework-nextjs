@@ -1,17 +1,16 @@
 "use client"
 
-import { useState, useEffect, useId, useMemo, useRef } from "react"
+import { useState, useEffect, useId, useRef } from "react"
 import { useFormContext, Controller } from "react-hook-form"
 
 import { cn } from "../cn.js"
 import { igrpOmitNonDomProps } from "../../../lib/dom-props.js"
 import { igrpMergeRefs } from "../../../lib/form-binding.js"
+import { igrpNumberFormat } from "../../../lib/intl.js"
 import { useIGRPi18n, useIGRPLocale } from "../../../i18n/index.js"
 import type { IGRPInputProps } from "../../../types.js"
 import { Input } from "../../primitives/input.js"
 import { IGRPLabel } from "../label.js"
-import { Button } from "../../primitives/button.js"
-import { ChevronDown, ChevronUp } from "lucide-react"
 import { Field, FieldDescription, FieldError } from "../../primitives/field.js"
 
 /**
@@ -35,7 +34,7 @@ interface IGRPInputNumberProps extends Omit<IGRPInputProps, "onChange"> {
   min?: number
   /** Maximum value. */
   max?: number
-  /** Step for increment/decrement. @deprecated This props will be deprecated in the next maojor release. */
+  /** Step applied by the ArrowUp/ArrowDown keys. */
   step?: number
   /**
    * Called when the value changes. Receives `undefined` when the field is
@@ -112,6 +111,17 @@ function countDecimals(value: number): number {
   return separator === -1 ? 0 : Math.min(10, text.length - separator - 1)
 }
 
+/** @internal The resolved `Intl.NumberFormat` options that decide how a value is rounded. */
+const ROUNDING_OPTION_KEYS = [
+  "minimumFractionDigits",
+  "maximumFractionDigits",
+  "minimumSignificantDigits",
+  "maximumSignificantDigits",
+  "roundingMode",
+  "roundingPriority",
+  "roundingIncrement",
+] as const
+
 /** @internal Rounds away binary floating point noise (12.549999999999999 -> 12.55). */
 function roundToPrecision(value: number, decimals: number): number {
   if (!Number.isFinite(value)) return value
@@ -140,7 +150,6 @@ type NumberInputFieldProps = {
   label?: string
   fieldName: string
   labelClassName?: string
-  isFocused: boolean
   /** Raw text being typed; `null` when the field is not being edited. */
   draft: string | null
   onFieldFocus: (val: NumberValue) => void
@@ -165,7 +174,7 @@ type NumberInputFieldProps = {
   ariaDescribedBy?: string
 } & Omit<IGRPInputNumberProps, "value" | "onChange" | "label" | "helperText" | "description" | "error" | "errorMessage">
 
-/** @internal Renders the number input field with stepper buttons. */
+/** @internal Renders the number input field. */
 function NumberInputField({
   value,
   onValueChange,
@@ -173,7 +182,7 @@ function NumberInputField({
   label,
   fieldName,
   labelClassName,
-  isFocused,
+  inputClassName,
   draft,
   onFieldFocus,
   onFieldBlur,
@@ -201,7 +210,6 @@ function NumberInputField({
   ref,
   ...inputProps
 }: NumberInputFieldProps) {
-  const i18n = useIGRPi18n()
   void _formatOptions
   // While editing, show exactly what was typed — reformatting per keystroke
   // would swallow a half-typed decimal such as "3.".
@@ -210,83 +218,44 @@ function NumberInputField({
   return (
     <Field>
       {label ? <IGRPLabel label={label} className={labelClassName} required={required} id={fieldName} /> : null}
-      <div
-        className={cn(
-          "relative inline-flex h-10 w-full items-center overflow-hidden rounded-md border border-input text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none",
-          isFocused && "border-ring ring-2 ring-ring/50",
-          (error || validationError || fieldError) && "border-destructive ring-ring-invalid",
-          disabled && "opacity-50"
-        )}
-      >
-        <Input
-          id={fieldName}
-          name={fieldName}
-          type="text"
-          ref={igrpMergeRefs(fieldRef, ref)}
-          value={displayValue}
-          onChange={(e) => onInputChange(e.target.value, onValueChange)}
-          onKeyDown={(e) => {
-            if (e.key === "ArrowUp") {
-              e.preventDefault()
-              onIncrement(value, onValueChange)
-            } else if (e.key === "ArrowDown") {
-              e.preventDefault()
-              onDecrement(value, onValueChange)
-            }
-            onKeyDown?.(e)
-          }}
-          onFocus={(e) => {
-            onFieldFocus(value)
-            onFocus?.(e)
-          }}
-          onBlur={(e) => {
-            onFieldBlur(onValueChange)
-            onFieldTouched?.()
-            onBlur?.(e)
-          }}
-          className={cn(
-            "flex-1 rounded-none border-none bg-background px-3 py-2 text-foreground tabular-nums outline-none focus-visible:ring-0 focus-visible:ring-ring/0 focus-visible:outline-none"
-          )}
-          disabled={disabled}
-          readOnly={readOnly}
-          aria-invalid={!!(error || validationError || fieldError)}
-          aria-describedby={ariaDescribedBy}
-          aria-required={required || undefined}
-          aria-valuenow={typeof value === "number" ? value : undefined}
-          aria-valuemin={min}
-          aria-valuemax={max}
-          role="spinbutton"
-          {...igrpOmitNonDomProps(inputProps)}
-        />
-        {!readOnly && (
-          <div className={cn("flex h-full flex-col border-l")}>
-            <Button
-              type="button"
-              onClick={() => onIncrement(value, onValueChange)}
-              disabled={disabled || (max !== undefined && typeof value === "number" && value >= max)}
-              className={cn(
-                "flex h-1/2 w-8 items-center justify-center rounded-none border-b bg-background text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-              )}
-              aria-label={i18n.inputNumber.incrementLabel}
-              size="icon-xs"
-            >
-              <ChevronUp />
-            </Button>
-            <Button
-              type="button"
-              onClick={() => onDecrement(value, onValueChange)}
-              disabled={disabled || (min !== undefined && typeof value === "number" && value <= min)}
-              className={cn(
-                "flex h-1/2 w-8 items-center justify-center rounded-none bg-background text-xs text-muted-foreground/80 transition-colors hover:bg-accent hover:text-foreground"
-              )}
-              aria-label={i18n.inputNumber.decrementLabel}
-              size="icon-xs"
-            >
-              <ChevronDown />
-            </Button>
-          </div>
-        )}
-      </div>
+      <Input
+        id={fieldName}
+        name={fieldName}
+        type="text"
+        ref={igrpMergeRefs(fieldRef, ref)}
+        value={displayValue}
+        onChange={(e) => onInputChange(e.target.value, onValueChange)}
+        onKeyDown={(e) => {
+          if (e.key === "ArrowUp") {
+            e.preventDefault()
+            onIncrement(value, onValueChange)
+          } else if (e.key === "ArrowDown") {
+            e.preventDefault()
+            onDecrement(value, onValueChange)
+          }
+          onKeyDown?.(e)
+        }}
+        onFocus={(e) => {
+          onFieldFocus(value)
+          onFocus?.(e)
+        }}
+        onBlur={(e) => {
+          onFieldBlur(onValueChange)
+          onFieldTouched?.()
+          onBlur?.(e)
+        }}
+        className={cn("bg-background text-sm tabular-nums", inputClassName)}
+        disabled={disabled}
+        readOnly={readOnly}
+        aria-invalid={!!(error || validationError || fieldError)}
+        aria-describedby={ariaDescribedBy}
+        aria-required={required || undefined}
+        aria-valuenow={typeof value === "number" ? value : undefined}
+        aria-valuemin={min}
+        aria-valuemax={max}
+        role="spinbutton"
+        {...igrpOmitNonDomProps(inputProps)}
+      />
     </Field>
   )
 }
@@ -378,7 +347,7 @@ function FormNumberInput({
 }
 
 /**
- * Numeric input with stepper, formatting, and min/max. Integrates with react-hook-form.
+ * Numeric input with locale formatting, min/max and arrow-key stepping. Integrates with react-hook-form.
  */
 function IGRPInputNumber({
   name,
@@ -410,7 +379,6 @@ function IGRPInputNumber({
   const fieldName = name ?? id ?? _id
 
   const [localValue, setLocalValue] = useState<NumberValue>(controlledValue ?? defaultValue ?? "")
-  const [isFocused, setIsFocused] = useState(false)
   const [validationError, setValidationError] = useState(false)
   // Raw text while the field is being edited. Kept verbatim so half-typed
   // decimals ("3.", "-", "1,2") survive until the field is left.
@@ -418,10 +386,9 @@ function IGRPInputNumber({
   const formContext = useFormContext()
   const prevControlledValueRef = useRef<number | undefined>(controlledValue)
 
-  // Rebuilt only when the locale or the format options actually change. This used
-  // to be constructed on every render, and `Intl.NumberFormat` construction is
-  // expensive enough to show up in a table full of number inputs.
-  const formatter = useMemo(() => new Intl.NumberFormat(locale, formatOptions), [locale, formatOptions])
+  // Shared per locale + options value: consumers pass `formatOptions` inline, so a
+  // memo keyed on its identity rebuilt the formatter on every parent render.
+  const formatter = igrpNumberFormat(locale, formatOptions)
 
   const displayValue = !formContext && controlledValue !== undefined ? controlledValue : localValue
 
@@ -493,6 +460,8 @@ function IGRPInputNumber({
 
     const numValue = parseInputToNumber(raw, locale, formatOptions)
     if (isNaN(numValue)) {
+      // Drop the old value: the error alone is visual, and the form would still submit it.
+      writeValue("", updateFn)
       setValidationError(true)
       return
     }
@@ -502,15 +471,12 @@ function IGRPInputNumber({
   }
 
   const handleFieldFocus = (currentValue: NumberValue) => {
-    setIsFocused(true)
     if (disabled || readOnly) return
     // Swap the formatted display for an editable one while the user types.
     setDraft(toEditableString(currentValue, formatOptions))
   }
 
   const handleFieldBlur = (updateFn?: (value: NumberValue) => void) => {
-    setIsFocused(false)
-
     const editedText = draft
     setDraft(null)
     if (editedText === null) return
@@ -523,12 +489,37 @@ function IGRPInputNumber({
 
     const parsed = parseInputToNumber(editedText, locale, formatOptions)
     if (isNaN(parsed)) {
+      writeValue("", updateFn)
       setValidationError(true)
       return
     }
 
     setValidationError(false)
-    writeValue(roundToPrecision(constrainValue(parsed), countDecimals(parsed)), updateFn)
+    writeValue(roundToDisplayed(constrainValue(parsed)), updateFn)
+  }
+
+  /**
+   * Rounds the way the field shows the value, so "10,01 €" never saves 10.005. It reuses the
+   * display's resolved rounding options (fraction or significant digits, `roundingMode`,
+   * `roundingIncrement`) through `Intl`, not `Math.round`, which turns 1.005 into 1 while
+   * `Intl` shows 1,01. Compact, scientific and engineering notation keep the typed value:
+   * "1,2 mil" is a summary, and saving 1200 for 1234.56 would lose data.
+   */
+  const roundToDisplayed = (value: number): number => {
+    if (!formatOptions) return roundToPrecision(value, countDecimals(value))
+    const resolved = formatter.resolvedOptions()
+    if (resolved.notation !== "standard") return value
+    const rounding: Intl.NumberFormatOptions = { useGrouping: false }
+    for (const key of ROUNDING_OPTION_KEYS) {
+      if (resolved[key] !== undefined) Object.assign(rounding, { [key]: resolved[key] })
+    }
+    // Percent shows value * 100, so the stored fraction keeps two more decimals.
+    if (resolved.style === "percent" && rounding.maximumFractionDigits !== undefined) {
+      rounding.minimumFractionDigits = Math.min(20, (rounding.minimumFractionDigits ?? 0) + 2)
+      rounding.maximumFractionDigits = Math.min(20, rounding.maximumFractionDigits + 2)
+    }
+    // en-US output is what Number() parses back; it is never shown to the user.
+    return Number(igrpNumberFormat("en-US" /* igrp-i18n-ignore */, rounding).format(value))
   }
 
   const getDisplayValue = (value: NumberValue) => {
@@ -543,7 +534,6 @@ function IGRPInputNumber({
     label,
     fieldName,
     labelClassName,
-    isFocused,
     draft,
     onFieldFocus: handleFieldFocus,
     onFieldBlur: handleFieldBlur,

@@ -35,7 +35,7 @@ export default meta;
 type Story = StoryObj<typeof IGRPSwitch>;
 
 function StoryContainer({ children }: { children: React.ReactNode }) {
-  return <div className='p-6 space-y-4 border rounded-lg px-12'>{children}</div>;
+  return <div className='p-6 flex flex-col gap-4 border rounded-lg px-12'>{children}</div>;
 }
 
 function StandaloneComponent(args: IGRPSwitchProps) {

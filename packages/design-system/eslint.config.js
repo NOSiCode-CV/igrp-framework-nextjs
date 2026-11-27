@@ -33,7 +33,7 @@ export default defineConfig([
     files: ["src/components/primitives/**/*.{ts,tsx}"],
     plugins: { igrp },
     rules: {
-      "igrp/token-policy": ["error", { allowDarkVariant: true }],
+      "igrp/token-policy": ["error", { allowDarkVariant: true, allowSpaceUtility: true }],
       "jsx-a11y/no-noninteractive-element-interactions": "off",
       "jsx-a11y/no-noninteractive-tabindex": "off",
       "jsx-a11y/anchor-has-content": "off",

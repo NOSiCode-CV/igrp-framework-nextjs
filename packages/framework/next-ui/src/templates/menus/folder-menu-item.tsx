@@ -9,6 +9,7 @@ import {
   CollapsibleTrigger,
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuLabel,
   DropdownMenuTrigger,
   SidebarMenuButton,
@@ -68,19 +69,21 @@ export function FolderMenuItem({ node, activeHref, labels }: FolderMenuItemProps
           </SidebarMenuButton>
         </DropdownMenuTrigger>
         <DropdownMenuContent side="right" align="start" className={cn('min-w-48')}>
-          {/* The trigger is icon-only here, so the pop-out names the folder it belongs to. */}
-          <DropdownMenuLabel className={cn('text-xs text-muted-foreground')}>
-            {item.name}
-          </DropdownMenuLabel>
-          {children.map((child) => (
-            <SubLeafLink
-              key={`dd-${child.item.id ?? child.item.code}`}
-              node={child}
-              variant="dropdown"
-              activeHref={isItemActive(child.item, activeHref) ? activeHref : null}
-              labels={labels}
-            />
-          ))}
+          <DropdownMenuGroup>
+            {/* The trigger is icon-only here, so the pop-out names the folder it belongs to. */}
+            <DropdownMenuLabel className={cn('text-xs text-muted-foreground')}>
+              {item.name}
+            </DropdownMenuLabel>
+            {children.map((child) => (
+              <SubLeafLink
+                key={`dd-${child.item.id ?? child.item.code}`}
+                node={child}
+                variant="dropdown"
+                activeHref={isItemActive(child.item, activeHref) ? activeHref : null}
+                labels={labels}
+              />
+            ))}
+          </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>
 
@@ -93,7 +96,6 @@ export function FolderMenuItem({ node, activeHref, labels }: FolderMenuItemProps
           {/* Open: the active child carries the highlight, the folder only goes bold.
               Closed: the child is hidden, so the folder takes the highlight. */}
           <SidebarMenuButton
-            tooltip={item.name}
             isActive={hasActiveChild && !open}
             className={cn(
               'w-full cursor-pointer',

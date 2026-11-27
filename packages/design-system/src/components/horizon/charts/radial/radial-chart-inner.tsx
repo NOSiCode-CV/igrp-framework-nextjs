@@ -124,27 +124,44 @@ function RadialChartTooltipContent({
   nameKey,
   formatValue,
 }: {
-  payload: ReadonlyArray<{ payload?: Record<string, unknown>; value?: unknown }>
+  payload: ReadonlyArray<RadialTooltipEntry>
   nameKey: string
   formatValue: (v: number) => string
 }) {
-  if (!payload?.length) return null
   const item = payload[0]?.payload
-  const value = payload[0]?.value
   if (!item) return null
   const name = String(item[nameKey] ?? "")
-  const fill = item._fill as string | undefined
   return (
     <div className={cn("rounded-lg border bg-background p-2 shadow-md")}>
       <div className={cn("flex flex-col gap-1")}>
         <div className={cn("text-sm font-medium")}>{name}</div>
-        <div className={cn("flex items-center gap-2")}>
-          <div className={cn("size-3 rounded-full")} style={{ backgroundColor: fill }} />
-          <span className={cn("text-sm")}>{formatValue(Number(value))}</span>
-        </div>
+        {payload.map((entry, index) => (
+          <div key={String(entry.dataKey ?? index)} className={cn("flex items-center gap-2")}>
+            {/* The first bar is coloured per row (_fill); the others carry their own series colour. */}
+            <div
+              className={cn("size-3 rounded-full")}
+              style={{
+                backgroundColor: index === 0 ? (item._fill as string | undefined) : (entry.color ?? entry.fill),
+              }}
+            />
+            {payload.length > 1 && (
+              <span className={cn("text-sm text-muted-foreground")}>{String(entry.name ?? "")}</span>
+            )}
+            <span className={cn("text-sm")}>{formatValue(Number(entry.value))}</span>
+          </div>
+        ))}
       </div>
     </div>
   )
+}
+
+type RadialTooltipEntry = {
+  payload?: Record<string, unknown>
+  value?: unknown
+  name?: unknown
+  dataKey?: unknown
+  color?: string
+  fill?: string
 }
 
 function RadialChartFooter({ description }: { description?: string }) {
@@ -204,18 +221,7 @@ function IGRPRadialBarChartInner({
       return Number(centerText.value)
     }
 
-    const firstRow = data[0]
-    if (!firstRow) return 0
-
-    if (bars.length === 1) {
-      const key = bars[0]?.dataKey
-      return Number(firstRow?.[key ?? ""] ?? 0)
-    }
-
-    return bars.reduce((sum, bar) => {
-      const key = bar?.dataKey
-      return sum + Number(firstRow?.[key ?? ""] ?? 0)
-    }, 0)
+    return data.reduce((sum, row) => sum + bars.reduce((rowSum, bar) => rowSum + Number(row[bar.dataKey] ?? 0), 0), 0)
   }
 
   const totalValue = calculateTotal()
@@ -246,7 +252,7 @@ function IGRPRadialBarChartInner({
       return data.map((entry, index) => ({
         value: entry[nameKey] || igrpFormatMessage(i18n.charts.itemFallback, { index: index + 1 }),
         type: "square" as LegendType,
-        color: `var(--chart-${(index % 8) + 1})`,
+        color: bars[0]?.color || `var(--chart-${(index % 8) + 1})`,
         payload: { ...entry, strokeDasharray: "" },
       }))
     }
@@ -267,7 +273,7 @@ function IGRPRadialBarChartInner({
   }, [data, bars])
 
   const tooltipContent = React.useCallback(
-    (props: { active?: boolean; payload?: ReadonlyArray<{ payload?: Record<string, unknown>; value?: unknown }> }) => {
+    (props: { active?: boolean; payload?: ReadonlyArray<RadialTooltipEntry> }) => {
       if (!props.active || !props.payload || !props.payload.length) return null
       return <RadialChartTooltipContent payload={props.payload} nameKey={nameKey} formatValue={formatValue} />
     },
@@ -294,6 +300,7 @@ function IGRPRadialBarChartInner({
 
       <div className={cn("overflow-hidden")}>
         <div style={{ height: chartHeight, width: chartWidth }} className={cn("w-full overflow-hidden")}>
+          <IGRPChartDataTable data={data} rowKey={nameKey} series={bars} />
           <ChartContainer className={cn("h-full w-full")} config={chartConfig}>
             <RadialBarChart
               accessibilityLayer
@@ -400,3 +407,4 @@ function IGRPRadialBarChartInner({
 }
 
 export default IGRPRadialBarChartInner
+import { IGRPChartDataTable } from "../data-table-sr.js"

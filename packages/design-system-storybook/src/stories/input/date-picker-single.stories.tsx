@@ -60,7 +60,7 @@ export const WithForm: Story = {
       <FormProvider {...methods}>
         <form
           onSubmit={onSubmit}
-          className='space-y-4 max-w-md p-4'
+          className='flex flex-col gap-4 max-w-md p-4'
         >
           <IGRPDatePickerSingle {...args} />
           <button
@@ -78,11 +78,8 @@ export const WithForm: Story = {
 /**
  * Regression story: the date picker button must carry aria-invalid="true" and
  * an aria-describedby pointing at the error message when the field is in error.
- *
- * NOTE: test:vitest runner is currently broken in this environment (pre-existing
- * "Failed to initialize projects" issue). Build gate: `pnpm build:ds`.
  */
-const DatePickerErrorA11ySchema = z.object({ birthDate: z.date({ required_error: 'Date is required' }) });
+const DatePickerErrorA11ySchema = z.object({ birthDate: z.date({ error: 'Date is required' }) });
 
 const DatePickerErrorA11yTemplate: React.FC = () => {
   const formRef = useRef<IGRPFormHandle<typeof DatePickerErrorA11ySchema>>(null);
@@ -96,7 +93,7 @@ const DatePickerErrorA11yTemplate: React.FC = () => {
       schema={DatePickerErrorA11ySchema}
       onSubmit={() => {}}
       formRef={formRef}
-      gridClassName='space-y-4 w-80'
+      gridClassName='w-80'
     >
       <IGRPDatePickerSingle
         name='birthDate'

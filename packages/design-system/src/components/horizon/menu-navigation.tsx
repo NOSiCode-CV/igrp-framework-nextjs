@@ -268,7 +268,7 @@ function IGRPMenuNavigation({
                   type="button"
                   onClick={() => handleSectionClick(section.id)}
                   disabled={section.disabled}
-                  aria-current={activeSection === section.id ? "page" : undefined}
+                  aria-current={activeSection === section.id ? "true" : undefined}
                   className={cn(
                     "flex w-full items-center justify-between text-left transition-colors",
                     "px-4 py-2.5 text-sm",

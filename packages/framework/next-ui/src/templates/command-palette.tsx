@@ -129,7 +129,8 @@ function PaletteGroups({ commands, onRun }: PaletteGroupsProps) {
                 <CommandItem
                   key={value}
                   value={value}
-                  keywords={[item.label, group ?? '']}
+                  // Folded here, not in the filter: cmdk runs the filter per item per keystroke.
+                  keywords={[fold(item.label), fold(group ?? '')]}
                   className="cursor-pointer gap-3 px-3 py-2.5"
                   onSelect={() => onRun(item)}
                 >
@@ -153,7 +154,7 @@ const fold = (text: string) => text.normalize('NFD').replace(/\p{M}/gu, '').toLo
  * some keyword word ("rel con" finds "Relatórios Contabilísticos").
  */
 function filterByKeywords(_value: string, search: string, keywords?: string[]): number {
-  const words = fold((keywords ?? []).join(' ')).split(/\s+/);
+  const words = (keywords ?? []).join(' ').split(/\s+/);
   const tokens = fold(search).split(/\s+/).filter(Boolean);
   return tokens.every((token) => words.some((word) => word.includes(token))) ? 1 : 0;
 }

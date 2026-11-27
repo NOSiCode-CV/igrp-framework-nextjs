@@ -143,6 +143,45 @@ export function getIGRPSessionStore(): IGRPSessionStore | null {
   return registration().store;
 }
 
+/** Reads the current request's session through the app's auth instance (runs the `jwt` callback). */
+export type IGRPServerSessionReader = () => Promise<{
+  accessToken?: unknown;
+  error?: unknown;
+} | null>;
+
+const serverSessionRegistration = () =>
+  globalSlot('serverSession', () => ({ read: null as IGRPServerSessionReader | null }));
+
+/**
+ * Registers the app's session reader, process-wide. `withIGRPAuth` calls this
+ * with its `serverSession`; pass `null` to unregister.
+ *
+ * It exists for code that has no handle on the instance, such as
+ * `@igrp/framework-next`'s permission checks. Decoding the cookie
+ * ({@link readIGRPSessionToken}) does not refresh, and during a render the
+ * cookie cannot be rewritten, so after the access token expires it would
+ * report the old token while the session read already holds the new one.
+ */
+export function registerIGRPServerSession(read: IGRPServerSessionReader | null): void {
+  serverSessionRegistration().read = read;
+}
+
+/**
+ * The access token of the current request's session, read through the
+ * registered reader (refreshing it like any session read).
+ *
+ * `undefined` when no reader is registered, so the caller can fall back to the
+ * cookie; `''` when there is no session or its refresh failed. Errors from the
+ * read propagate, Next control-flow throws included.
+ */
+export async function readIGRPServerSessionAccessToken(): Promise<string | undefined> {
+  const { read } = serverSessionRegistration();
+  if (!read) return undefined;
+  const session = await read();
+  if (!session || session.error) return '';
+  return typeof session.accessToken === 'string' ? session.accessToken : '';
+}
+
 // ─── Codec ───────────────────────────────────────────────────────────────────
 
 function storeKey(sessionId: string): string {
@@ -235,13 +274,28 @@ export function createSessionTokenEncoder(options: CodecOptions = {}) {
       // consumed the refresh token this one tried, which is WHY this one
       // failed — and the store, unlike a cookie, is shared, so a blind write
       // would log out the session the winner just renewed.
-      if (stored.error && existingId) {
-        const current = await readStored(store, existingId, params.secret);
-        if (current && !current.error && current.refreshToken !== stored.refreshToken) {
+      // A healthy write must not either: a request that read the session before
+      // another replica refreshed it carries the old, now consumed refresh
+      // token, and writing it back makes the next refresh a replay the IdP
+      // revokes. Strictly-later expiry only, so this replica's own refresh
+      // (later than or equal to the stored one) still lands.
+      let current: StoredFields | null = null;
+      if (existingId) {
+        current = await readStored(store, existingId, params.secret).catch(() => null);
+        if (stored.error) {
+          if (current && !current.error && current.refreshToken !== stored.refreshToken) {
+            stored = current;
+          }
+        } else if (isNewerHealthy(current, token)) {
           stored = current;
         }
       }
-      await writeStored(store, sessionId, stored, params.secret, maxAge);
+      // Every session read re-encodes the cookie. Skip the store write (one
+      // encryption and one round trip) when nothing changed and the entry still
+      // has over half its lifetime, so the TTL keeps sliding for active users.
+      if (!(current && sameStored(current, stored) && hasHalfLifeLeft(current, maxAge))) {
+        await writeStored(store, sessionId, stored, params.secret, maxAge);
+      }
     } catch (error) {
       // Keep the user signed in: a full cookie is too big for some proxies, but
       // a store outage is better answered by a large cookie than by a logout.
@@ -487,6 +541,16 @@ const sleep = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve,
  * expires later and it carries no failure. Comparing expiries (not refresh
  * tokens) also covers an IdP that does not rotate refresh tokens.
  */
+function sameStored(a: StoredFields, b: StoredFields): boolean {
+  return STORED_FIELDS.every((field) => a[field] === b[field]);
+}
+
+/** The decoded store value carries the `exp` its encode set. */
+function hasHalfLifeLeft(stored: StoredFields, maxAge: number): boolean {
+  const exp = (stored as { exp?: unknown }).exp;
+  return typeof exp === 'number' && exp - Date.now() / 1000 > maxAge / 2;
+}
+
 function isNewerHealthy(stored: StoredFields | null, token: JWT): stored is StoredFields {
   return Boolean(
     stored &&

@@ -1,59 +1,45 @@
-import { readdirSync, readFileSync, statSync } from "node:fs";
-import { join, relative } from "node:path";
-import ts from "typescript";
+import { readdirSync, readFileSync, statSync } from 'node:fs';
+import { join, relative } from 'node:path';
+import ts from 'typescript';
 
 const USER_FACING_PROPS = new Set([
-  "placeholder",
-  "title",
-  "label",
-  "aria-label",
-  "aria-description",
-  "description",
-  "alt",
-  "helperText",
-  "errorText",
-  "searchText",
-  "selectLabel",
-  "text",
-  "message",
-  "emptyText",
+  'placeholder',
+  'title',
+  'label',
+  'aria-label',
+  'aria-description',
+  'description',
+  'alt',
+  'helperText',
+  'errorText',
+  'searchText',
+  'selectLabel',
+  'text',
+  'message',
+  'emptyText',
 ]);
-const LOCALE_METHODS = new Set([
-  "toLocaleString",
-  "toLocaleDateString",
-  "toLocaleTimeString",
-]);
+const LOCALE_METHODS = new Set(['toLocaleString', 'toLocaleDateString', 'toLocaleTimeString']);
 const HAS_LETTER = /\p{L}/u;
 // `&mdash;`, `&nbsp;`, `&#8594;`: entity names carry letters but render as symbols.
 const HTML_ENTITY = /&(?:[a-zA-Z][a-zA-Z0-9]*|#\d+|#x[0-9a-fA-F]+);/g;
-const hasLetter = (text: string) =>
-  HAS_LETTER.test(text.replace(HTML_ENTITY, ""));
-const IGNORE_MARKER = "igrp-i18n-ignore";
-const FORMATTER_IMPORTS = new Set(["useFormatter", "getFormatter"]);
+const hasLetter = (text: string) => HAS_LETTER.test(text.replace(HTML_ENTITY, ''));
+const IGNORE_MARKER = 'igrp-i18n-ignore';
+const FORMATTER_IMPORTS = new Set(['useFormatter', 'getFormatter']);
 
 /** Every string a node can render: through ternaries, `&&` (right side only) and `||`/`??`. */
 function literalTexts(node: ts.Node | undefined): string[] {
   if (!node) return [];
-  if (ts.isStringLiteral(node) || ts.isNoSubstitutionTemplateLiteral(node))
-    return [node.text];
+  if (ts.isStringLiteral(node) || ts.isNoSubstitutionTemplateLiteral(node)) return [node.text];
   if (ts.isTemplateExpression(node)) {
-    return [
-      [node.head.text, ...node.templateSpans.map((s) => s.literal.text)].join(
-        " ",
-      ),
-    ];
+    return [[node.head.text, ...node.templateSpans.map((s) => s.literal.text)].join(' ')];
   }
   if (ts.isParenthesizedExpression(node)) return literalTexts(node.expression);
   if (ts.isConditionalExpression(node))
     return [...literalTexts(node.whenTrue), ...literalTexts(node.whenFalse)];
   if (ts.isBinaryExpression(node)) {
     const op = node.operatorToken.kind;
-    if (op === ts.SyntaxKind.AmpersandAmpersandToken)
-      return literalTexts(node.right);
-    if (
-      op === ts.SyntaxKind.BarBarToken ||
-      op === ts.SyntaxKind.QuestionQuestionToken
-    )
+    if (op === ts.SyntaxKind.AmpersandAmpersandToken) return literalTexts(node.right);
+    if (op === ts.SyntaxKind.BarBarToken || op === ts.SyntaxKind.QuestionQuestionToken)
       return [...literalTexts(node.left), ...literalTexts(node.right)];
   }
   return [];
@@ -66,7 +52,7 @@ function hardcodedLocale(node: ts.Node): string | undefined {
     ts.isNewExpression(node) &&
     ts.isPropertyAccessExpression(node.expression) &&
     ts.isIdentifier(node.expression.expression) &&
-    node.expression.expression.text === "Intl"
+    node.expression.expression.text === 'Intl'
   ) {
     arg = node.arguments?.[0];
   } else if (
@@ -76,28 +62,23 @@ function hardcodedLocale(node: ts.Node): string | undefined {
   ) {
     arg = node.arguments[0];
   }
-  return arg &&
-    (ts.isStringLiteral(arg) || ts.isNoSubstitutionTemplateLiteral(arg))
+  return arg && (ts.isStringLiteral(arg) || ts.isNoSubstitutionTemplateLiteral(arg))
     ? arg.text
     : undefined;
 }
 
 /** `line: finding` for every hardcoded user-facing string or formatter import in `source`. */
-export function findLiteralStrings(
-  source: string,
-  fileName = "x.tsx",
-): string[] {
+export function findLiteralStrings(source: string, fileName = 'x.tsx'): string[] {
   const sf = ts.createSourceFile(
     fileName,
     source,
     ts.ScriptTarget.Latest,
     true,
-    fileName.endsWith(".tsx") ? ts.ScriptKind.TSX : ts.ScriptKind.TS,
+    fileName.endsWith('.tsx') ? ts.ScriptKind.TSX : ts.ScriptKind.TS,
   );
   const findings: string[] = [];
   const lines = source.split(/\r?\n/);
-  const line = (node: ts.Node) =>
-    sf.getLineAndCharacterOfPosition(node.getStart(sf)).line + 1;
+  const line = (node: ts.Node) => sf.getLineAndCharacterOfPosition(node.getStart(sf)).line + 1;
   // `igrp-i18n-ignore` on the same line or the line above allowlists a literal
   // that is not language (brand names, keyboard shortcuts, units).
   const ignored = (n: number) =>
@@ -118,10 +99,7 @@ export function findLiteralStrings(
         for (const el of bindings.elements) {
           const name = (el.propertyName ?? el.name).text;
           if (FORMATTER_IMPORTS.has(name)) {
-            report(
-              node,
-              `import of ${name} from next-intl (use useIGRPFormat / igrpFormatDate)`,
-            );
+            report(node, `import of ${name} from next-intl (use useIGRPFormat / igrpFormatDate)`);
           }
         }
       }
@@ -139,23 +117,21 @@ export function findLiteralStrings(
         if (HAS_LETTER.test(text)) report(node, `literal child "${text}"`);
       }
     }
-    if (
-      ts.isJsxAttribute(node) &&
-      USER_FACING_PROPS.has(node.name.getText(sf))
-    ) {
+    if (ts.isJsxAttribute(node) && USER_FACING_PROPS.has(node.name.getText(sf))) {
       const init = node.initializer;
-      const texts = literalTexts(
-        init && ts.isJsxExpression(init) ? init.expression : init,
-      );
+      const inExpression = !!init && ts.isJsxExpression(init);
+      const texts = literalTexts(inExpression ? init.expression : init);
+      // JSX decodes entities in a quoted attribute (`title="&mdash;"`), as in
+      // JSX text; inside `{"…"}` they are plain characters and stay visible.
+      const letters = inExpression ? (t: string) => HAS_LETTER.test(t) : hasLetter;
       for (const text of texts) {
-        if (HAS_LETTER.test(text)) {
+        if (letters(text)) {
           report(node, `literal prop ${node.name.getText(sf)}="${text}"`);
         }
       }
     }
     const locale = hardcodedLocale(node);
-    if (locale !== undefined)
-      report(node, `hardcoded locale "${locale}": use useIGRPFormat`);
+    if (locale !== undefined) report(node, `hardcoded locale "${locale}": use useIGRPFormat`);
     ts.forEachChild(node, visit);
   };
   visit(sf);
@@ -164,10 +140,7 @@ export function findLiteralStrings(
 
 function listSourceFiles(path: string): string[] {
   const stat = statSync(path);
-  if (stat.isFile())
-    return /\.tsx?$/.test(path) && !/\.(test|d)\.tsx?$/.test(path)
-      ? [path]
-      : [];
+  if (stat.isFile()) return /\.tsx?$/.test(path) && !/\.(test|d)\.tsx?$/.test(path) ? [path] : [];
   return readdirSync(path).flatMap((name) => listSourceFiles(join(path, name)));
 }
 
@@ -175,8 +148,8 @@ function listSourceFiles(path: string): string[] {
 export function checkLiterals(paths: string[], cwd = process.cwd()): string[] {
   return paths.flatMap((p) =>
     listSourceFiles(p).flatMap((file) =>
-      findLiteralStrings(readFileSync(file, "utf8"), file).map(
-        (f) => `${relative(cwd, file).replaceAll("\\", "/")}:${f}`,
+      findLiteralStrings(readFileSync(file, 'utf8'), file).map(
+        (f) => `${relative(cwd, file).replaceAll('\\', '/')}:${f}`,
       ),
     ),
   );

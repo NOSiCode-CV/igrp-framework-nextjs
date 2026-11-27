@@ -94,7 +94,8 @@ function IGRPTemplateCommandSearch({
     const controller = new AbortController();
 
     const down = (e: KeyboardEvent) => {
-      if (e.key !== 'k' || !(e.metaKey || e.ctrlKey)) return;
+      // Lower-cased: with Caps Lock on, the key is `K`.
+      if (e.key.toLowerCase() !== 'k' || !(e.metaKey || e.ctrlKey)) return;
       if (shortcutOwners[shortcutOwners.length - 1] !== owner) return;
       e.preventDefault();
       void loadCommandPalette();

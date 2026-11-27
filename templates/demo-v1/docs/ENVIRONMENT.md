@@ -62,7 +62,7 @@ NEXT_PUBLIC_BASE_PATH=/apps/template
 | `IGRP_SYNC_ACCESS` | Sync application/resources/menus to Access Management at startup | `false` |
 | `IGRP_BRANDING_ENABLED` | Load the organization Brand (colours and logos) from Access Management at render time | `false` |
 | `IGRP_SYNC_ON_CODE_MENUS` | Push `src/temp/menus/menus.ts` to AM (overwrites AM menus). Requires sync on + preview off | `false` |
-| `IGRP_SYNC_ON_CODE_MENU_ROLES` | Forward `syncRoles` to `syncApplicationMenus` during the on-code menu push — reconcile menu↔role assignments too. Only consulted when the push runs | `true` |
+| `IGRP_SYNC_ON_CODE_MENU_ROLES` | Forward `syncRoles` to `syncApplicationMenus` during the on-code menu push — reconcile menu↔role assignments too. Only consulted when the push runs. **Every pod start resets the menu roles to the code's**, undoing role edits made in AM; set `false` once AM owns them | `true` |
 | `IGRP_SYNC_PERMISSIONS` | Push the `.igrpstudio/permissions.json` catalog to AM at startup (idempotent upsert keyed on `name`; removals are NOT deleted in AM). Requires sync on + preview off | `false` |
 
 ## Access Management M2M (required when `IGRP_SYNC_ACCESS=true`)
@@ -110,5 +110,6 @@ For the auth flow itself, see [AUTHENTICATION.md](AUTHENTICATION.md).
 
 | Variable | Description | Default |
 | --- | --- | --- |
+| `IGRP_ENABLED_LOCALES` | Languages this deployment offers, comma-separated (`pt` or `pt,en`). With one language the locale switcher is hidden in the header and on the login page. Unknown tags are ignored; if `pt` is not listed, the first language is the default. | `pt,en,fr` |
 | `IGRP_FORMAT_LOCALES` | Region-qualified tag per language, comma-separated (`pt-PT` or `pt-AO,en-US`); drives dates, numbers, the design-system locale and `<html lang>`. Languages are fixed (pt, en, fr); a bare language or a tag for another language fails at startup. See `docs/I18N.md`. | `pt-CV,en-GB,fr-FR` |
 | `IGRP_TIME_ZONE` | IANA time zone (`Europe/Lisbon`, `Africa/Luanda`) used to format dates and times on the server and in the browser. Keeping both on one zone avoids hydration mismatches. | `Atlantic/Cape_Verde` |

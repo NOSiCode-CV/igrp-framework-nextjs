@@ -365,6 +365,7 @@ function IGRPDatePickerInputSingle(allProps: IGRPDatePickerInputSingleProps) {
         inputId={fieldName}
         value={selected}
         displayValue={draft ?? formatDateToString(selected, dateFormat, locale)}
+        ariaInvalid={Boolean(error)}
         ariaDescribedBy={error ? `${fieldName}-error` : helperText ? `${fieldName}-helper` : undefined}
         {...buildHandlers((next) => {
           setLocalDate(next ?? undefined)

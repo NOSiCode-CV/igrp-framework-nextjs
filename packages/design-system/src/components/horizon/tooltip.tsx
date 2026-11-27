@@ -34,7 +34,7 @@ interface IGRPTooltipProps {
   side?: "top" | "right" | "bottom" | "left"
   align?: "start" | "center" | "end"
   sideOffset?: number
-  /** Used only when no IGRPTooltipProvider is in scope. Default 0. */
+  /** Open delay in ms for this tooltip. Default: the provider's delay, or 0 with no provider in scope. */
   delayDuration?: number
   /**
    * Classes for the tooltip content. When `IGRPTooltip` is itself the child of an
@@ -60,7 +60,7 @@ function IGRPTooltip({
   side = "top",
   align = "center",
   sideOffset = 6,
-  delayDuration = 0,
+  delayDuration,
   className,
   disabled: disabledProp,
   ...slotProps
@@ -77,7 +77,7 @@ function IGRPTooltip({
   const disabled = Boolean(disabledProp || (children.props as { disabled?: boolean }).disabled)
 
   const tooltipNode = (
-    <Tooltip>
+    <Tooltip delayDuration={delayDuration}>
       {/* The trigger gets Radix's aria-describedby, so it must be the focused element: the control
           itself, or, when the control is disabled and can't take focus, a focusable span standing in. */}
       <TooltipTrigger asChild>
@@ -98,7 +98,7 @@ function IGRPTooltip({
 
   if (hasProvider) return tooltipNode
 
-  return <IGRPTooltipProvider delayDuration={delayDuration}>{tooltipNode}</IGRPTooltipProvider>
+  return <IGRPTooltipProvider delayDuration={delayDuration ?? 0}>{tooltipNode}</IGRPTooltipProvider>
 }
 
 export { IGRPTooltip, IGRPTooltipContext, IGRPTooltipProvider, type IGRPTooltipProps }

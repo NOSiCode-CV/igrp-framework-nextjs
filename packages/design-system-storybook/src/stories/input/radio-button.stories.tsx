@@ -75,14 +75,14 @@ const FormTemplate = (args: IGRPRadioGroupProps) => {
   return (
     <div className='container my-10 mx-auto p-4 border rounded-lg shadow-sm max-w-lg'>
       <h2 className='text-xl font-semibold mb-4'>Form with Validation</h2>
-      <p className='text-gray-500 mb-6'>
+      <p className='text-muted-foreground mb-6'>
         Try submitting without selecting an option to see validation error.
       </p>
 
       <FormProvider {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className='space-y-4'
+          className='flex flex-col gap-4'
         >
           <IGRPRadioGroup {...args} />
 

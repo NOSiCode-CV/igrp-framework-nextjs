@@ -130,11 +130,7 @@ const meta: Meta<typeof IGRPDataTable> = {
   title: 'Components/DataTable',
   component: IGRPDataTable,
   parameters: {
-    // Known WCAG backlog, tracked in the design-system accessibility audit:
-    // button-name on icon-only row actions.
-    // 'todo' reports in the Storybook UI without failing CI. Delete this once the
-    // suite is clean; every other component is gated at 'error' by preview.ts.
-    a11y: { test: 'todo' },
+    a11y: { test: 'error' },
     layout: 'padded',
   },
 };
@@ -225,6 +221,25 @@ export const WithNumericPagination: Story = {
   ),
 };
 
+export const WithSwitchSelection: Story = {
+  args: {
+    data: rows,
+    // `selection` adds its own column, so drop the hand-built checkbox one.
+    columns: columns.filter((column) => column.id !== 'select'),
+    selection: 'switch',
+  },
+  render: (args) => (
+    <div className="mx-auto w-full max-w-7xl p-4">
+      <IGRPDataTable {...args} />
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const [first] = within(canvasElement).getAllByRole('switch');
+    await userEvent.click(first!);
+    await expect(first).toHaveAttribute('aria-checked', 'true');
+  },
+};
+
 export const WithToggleColumns: Story = {
   args: {
     data: rows,
@@ -262,7 +277,8 @@ export const ServerSideFilterMode: Story = {
 const columnsWithExpand: ColumnDef<UserRow>[] = [
   {
     id: 'expand',
-    header: () => null,
+    // A header cell needs a name even when it shows nothing.
+    header: () => <span className="sr-only">Expand</span>,
     cell: ({ row }) => <IGRPDataTableCellExpander row={row} field="user" />,
     enableSorting: false,
     enableHiding: false,

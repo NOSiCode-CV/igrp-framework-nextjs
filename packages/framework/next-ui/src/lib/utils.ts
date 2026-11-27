@@ -14,7 +14,7 @@ function basePath(): string {
 /**
  * Prefixes `basePath` onto an app-absolute asset path.
  *
- * Only for URLs handed to `next/image` and raw `<img>`: `next/link` and
+ * Only for URLs handed to `next/image`, raw `<img>` and raw `<a>`: `next/link` and
  * `router.push()` apply `basePath` themselves, so passing an already-prefixed
  * path to those double-prefixes it.
  *

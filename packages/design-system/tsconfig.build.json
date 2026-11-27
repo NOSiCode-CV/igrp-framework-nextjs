@@ -1,4 +1,9 @@
 {
   "extends": "./tsconfig.json",
+  "compilerOptions": {
+    // `files` publishes only dist/, so a .d.ts.map would point at src/ paths
+    // that are not in the tarball. tsconfig.json keeps it on for editor use.
+    "declarationMap": false
+  },
   "exclude": ["dist", "node_modules", "src/vitest.d.ts", "src/**/*.test.ts", "src/**/*.test.tsx", "src/**/__tests__/**"]
 }

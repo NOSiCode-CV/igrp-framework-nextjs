@@ -50,3 +50,19 @@ describe("validateSteps", () => {
     expect(ok([])).toThrow(/non-empty array/);
   });
 });
+
+describe("validateSteps: pkg.set", () => {
+  it("rejects name, description, displayName and the deps", () => {
+    for (const field of ["name", "description", "displayName", "dependencies", "devDependencies"]) {
+      expect(() =>
+        validateSteps("m", [{ type: "pkg.set", manifest: "package.json", fields: { [field]: "x" } }]),
+      ).toThrow(/must not touch/);
+    }
+  });
+
+  it("accepts scripts and engines", () => {
+    expect(() =>
+      validateSteps("m", [{ type: "pkg.set", manifest: "package.json", fields: { scripts: { a: "b" }, engines: { node: ">=24" } } }]),
+    ).not.toThrow();
+  });
+});

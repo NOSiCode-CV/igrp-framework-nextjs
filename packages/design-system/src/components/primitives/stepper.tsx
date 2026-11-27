@@ -12,6 +12,8 @@ type StepperContextValue = {
   activeStep: number
   setActiveStep: (step: number) => void
   orientation: "horizontal" | "vertical"
+  /** False for a controlled stepper without onValueChange: its steps cannot be changed. */
+  interactive: boolean
 }
 
 type StepItemContextValue = {
@@ -77,6 +79,7 @@ function Stepper({
         activeStep: currentStep,
         setActiveStep,
         orientation,
+        interactive: value === undefined || onValueChange !== undefined,
       }}
     >
       <div
@@ -137,8 +140,10 @@ interface StepperTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonEleme
 }
 
 function StepperTrigger({ asChild = false, className, children, ...props }: StepperTriggerProps) {
-  const { setActiveStep } = useStepper()
-  const { step, isDisabled } = useStepItem()
+  const { setActiveStep, interactive } = useStepper()
+  const { step, state, isDisabled } = useStepItem()
+  // data-state is visual only; aria-current tells screen readers which step is current.
+  const ariaCurrent = state === "active" ? ("step" as const) : undefined
 
   const handleClick = () => {
     if (!isDisabled) {
@@ -147,8 +152,27 @@ function StepperTrigger({ asChild = false, className, children, ...props }: Step
   }
 
   if (asChild) {
+    // A non-button child (e.g. a div) gets the role, tab stop and keys a button has natively.
+    const keyboardProps = interactive && {
+      role: "button",
+      tabIndex: isDisabled ? -1 : 0,
+      "aria-disabled": isDisabled || undefined,
+      onKeyDown: (event: React.KeyboardEvent<HTMLElement>) => {
+        if (event.currentTarget instanceof HTMLButtonElement) return
+        if (event.key !== "Enter" && event.key !== " ") return
+        event.preventDefault()
+        handleClick()
+      },
+    }
     return (
-      <Slot.Root data-slot="stepper-trigger" onClick={handleClick} className={className} {...props}>
+      <Slot.Root
+        data-slot="stepper-trigger"
+        aria-current={ariaCurrent}
+        {...keyboardProps}
+        onClick={handleClick}
+        className={className}
+        {...props}
+      >
         {children}
       </Slot.Root>
     )
@@ -158,6 +182,7 @@ function StepperTrigger({ asChild = false, className, children, ...props }: Step
     <button
       type="button"
       data-slot="stepper-trigger"
+      aria-current={ariaCurrent}
       className={cn(
         "inline-flex items-center gap-3 rounded-full outline-none focus-visible:z-10 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50",
         className
@@ -178,6 +203,7 @@ interface StepperIndicatorProps extends React.HTMLAttributes<HTMLDivElement> {
 
 function StepperIndicator({ asChild = false, variant, className, children, ...props }: StepperIndicatorProps) {
   const { state, step, isLoading } = useStepItem()
+  const i18n = useIGRPi18n()
 
   return (
     <span
@@ -225,18 +251,25 @@ function StepperIndicator({ asChild = false, variant, className, children, ...pr
               />
             </span>
           )}
+          {/* The check icon and spinner are hidden, so the state is spoken here. */}
+          {isLoading ? (
+            <span className="sr-only">{i18n.loadingSpinner.label}</span>
+          ) : (
+            state === "completed" && <span className="sr-only">{i18n.stepper.completed}</span>
+          )}
         </>
       )}
     </span>
   )
 }
 
-function StepperTitle({ className, children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) {
+// A <span>, not a heading: the title usually sits inside the step <button>, where headings are invalid.
+function StepperTitle({ className, children, ...props }: React.HTMLAttributes<HTMLSpanElement>) {
   const i18n = useIGRPi18n()
   return (
-    <h3 data-slot="stepper-title" className={cn("text-sm font-medium", className)} {...props}>
+    <span data-slot="stepper-title" className={cn("block text-sm font-medium", className)} {...props}>
       {children ?? <span className="sr-only">{i18n.stepper.step}</span>}
-    </h3>
+    </span>
   )
 }
 

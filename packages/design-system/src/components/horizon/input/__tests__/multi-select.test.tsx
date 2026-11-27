@@ -297,3 +297,22 @@ describe("IGRPMultiSelect — structure and behaviour", () => {
     expect(trigger()).toHaveTextContent("2 selected")
   })
 })
+
+describe("IGRPMultiSelect — keyboard access without search (WCAG 2.1.1)", () => {
+  it("toggles an option with the keyboard when no search box or bulk action is shown", async () => {
+    const user = userEvent.setup()
+    const onChange = vi.fn()
+    render(<IGRPMultiSelect options={OPTIONS} value={[]} onChange={onChange} hideBulkActions />)
+    await user.click(trigger())
+    await user.keyboard("{Enter}")
+    expect(onChange).toHaveBeenLastCalledWith(["a"])
+  })
+
+  it("exposes the selected state on the option", async () => {
+    const user = userEvent.setup()
+    render(<IGRPMultiSelect options={OPTIONS} value={["b"]} onChange={() => {}} />)
+    await user.click(trigger())
+    expect(screen.getByRole("option", { name: /Beta/ })).toHaveAttribute("aria-checked", "true")
+    expect(screen.getByRole("option", { name: /Alpha/ })).toHaveAttribute("aria-checked", "false")
+  })
+})

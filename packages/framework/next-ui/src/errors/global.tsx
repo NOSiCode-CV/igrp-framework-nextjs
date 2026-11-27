@@ -125,7 +125,10 @@ function IGRPGlobalError({
               disabled={isResetting}
               showIcon
               iconName="RefreshCw"
-              iconClassName={cn('mr-2 h-4 w-4 transition-transform', isResetting && 'animate-spin')}
+              iconClassName={cn(
+                'transition-transform',
+                isResetting && 'animate-spin motion-reduce:animate-none',
+              )}
             >
               <span>{isResetting ? labels.retrying : labels.reset}</span>
             </IGRPButton>

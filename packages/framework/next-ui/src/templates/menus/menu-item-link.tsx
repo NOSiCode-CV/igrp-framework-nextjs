@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { cn } from '@igrp/igrp-framework-react-design-system';
 import { ArrowUpRightIcon } from 'lucide-react';
 
+import { withBasePath } from '../../lib/utils.js';
+
 // `style` is omitted from the typed surface because next/link types it more
 // narrowly than the Radix-augmented React.CSSProperties that
 // ComponentPropsWithoutRef<'a'> carries (a `--radix-*` index signature), which
@@ -48,7 +50,9 @@ function MenuItemLink({
     return (
       <a
         ref={ref}
-        href={href}
+        // A plain <a> gets no basePath from Next: an internal `_blank` item
+        // would leave the app. Absolute URLs pass through unchanged.
+        href={withBasePath(href)}
         target={resolvedTarget}
         rel="noopener noreferrer"
         aria-current={ariaCurrent}

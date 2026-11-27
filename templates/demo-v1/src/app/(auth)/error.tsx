@@ -15,7 +15,7 @@ import {
 } from "@igrp/framework-next-ui";
 import { useTranslations } from "next-intl";
 
-import { resolvePublicErrorCopy } from "@/lib/error-copy";
+import { hasPlatformCode, resolvePublicErrorCopy } from "@/lib/error-copy";
 import { reportError } from "@/lib/report-error";
 
 export default function AuthSegmentError({
@@ -32,7 +32,13 @@ export default function AuthSegmentError({
   }, [error]);
 
   const resolveAuthCopy: IGRPErrorCopyResolver = (err) => {
-    if ("code" in err) return resolvePublicErrorCopy(err);
+    // An `AppError`'s public message rides in the digest, the only part of a
+    // server error that reaches the client in production.
+    const publicCopy = resolvePublicErrorCopy(err);
+    if (publicCopy) return publicCopy;
+    // A platform code (on the error, or in a server error's digest) keeps
+    // its catalog copy.
+    if (hasPlatformCode(err)) return undefined;
     return { title: t("title"), description: t("description") };
   };
 

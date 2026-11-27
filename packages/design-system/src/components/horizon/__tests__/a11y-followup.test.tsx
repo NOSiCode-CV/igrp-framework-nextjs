@@ -144,4 +144,14 @@ describe("IGRPPdfViewer load error", () => {
       vi.useRealTimers()
     }
   })
+  it("the inline iframe loads at mount, not lazily, since the load timeout starts at mount", () => {
+    render(
+      <IGRPPdfViewer
+        displayMode="inline"
+        viewerPreference="native"
+        document={{ id: 1, title: "Doc", description: "", author: "A", fileUrl: "/a.pdf" }}
+      />
+    )
+    expect(screen.getByTitle(/Doc/)).not.toHaveAttribute("loading")
+  })
 })

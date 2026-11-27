@@ -51,7 +51,7 @@ export function hashSteps(steps: unknown): string {
  */
 export function hashPayloads(steps: unknown, migrationsDir: string): string {
   const parts = (Array.isArray(steps) ? steps : [])
-    .map((step) => (step as Record<string, unknown>)["from"])
+    .flatMap((step) => [(step as Record<string, unknown>)["from"], (step as Record<string, unknown>)["expect"]])
     .filter((from): from is string => typeof from === "string" && !from.startsWith("__"))
     .map((from) => `${from}:${hashFileIgnoringEol(join(migrationsDir, from)) ?? "missing"}`);
   return hashContent(parts.join("\n"));
@@ -61,8 +61,7 @@ export function hashPayloads(steps: unknown, migrationsDir: string): string {
  * Why an applied migration is stale: its `steps` changed, only its payload
  * files changed, or neither (null). The two need different advice — after a
  * payload-only change the app's files differ from the NEW payload by
- * definition, so rollback's edit guard always refuses; the fix is to drop the
- * lock entry and re-apply.
+ * definition; the fix is to drop the lock entry and re-apply.
  */
 export function staleCause(
   entry: { manifestHash: string; payloadHash?: string } | undefined,

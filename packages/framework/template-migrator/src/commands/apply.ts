@@ -36,9 +36,8 @@ export async function apply(
 
   // A journal on disk means a previous run died mid-migration (signal, crash,
   // CI timeout) after mutating files but before recording them. Put the tree
-  // back before doing anything else: without this the migration re-runs and
-  // captures its undo baseline from already-migrated files, which silently
-  // makes a later rollback restore the wrong content. See journal.ts.
+  // back before doing anything else: without this the migration re-runs over
+  // already-migrated files. See journal.ts.
   let pendingJournal;
   try {
     pendingJournal = readJournal(appRoot);
@@ -55,6 +54,20 @@ export async function apply(
     // migration forever. The journal is stale, not a recovery signal.
     clearJournal(appRoot);
   } else if (pendingJournal) {
+    // Files that changed since the interrupted run wrote them (a `git checkout`,
+    // a day of edits) must not be overwritten with the pre-migration snapshot.
+    // shortcut: the path whose step was in flight at the kill has no hash yet and
+    // is restored unchecked; record a pre-step hash too if that window matters.
+    const changed = Object.entries(pendingJournal.written ?? {})
+      .filter(([path, hash]) => hashFileIgnoringEol(join(appRoot, path)) !== hash)
+      .map(([path]) => path);
+    if (changed.length > 0) {
+      console.error(`\n✗ An interrupted run of ${pendingJournal.id} left ${journalPath(appRoot)},`);
+      console.error("  but these files changed since that run wrote them, so recovery would overwrite them:");
+      for (const path of changed) console.error(`      ${path}`);
+      console.error("  If you already restored the app (e.g. from git), delete the journal and re-run.\n");
+      return false;
+    }
     console.log(`\nRecovering from an interrupted run of ${pendingJournal.id}...`);
     const { reverted, failures } = unwindSteps(
       pendingJournal.undo,
@@ -170,8 +183,7 @@ export async function apply(
       return false;
     }
     if (replaced.size > 0) {
-      console.warn(`  ! ${replaced.size} file(s) will be replaced; prior content is saved —`);
-      console.warn(`    \`igrp-migrate rollback ${migration.id}\` restores it:`);
+      console.warn(`  ! ${replaced.size} file(s) will be replaced — commit first so git can restore them:`);
       for (const path of replaced) console.warn(`      ${path}`);
     }
 
@@ -180,11 +192,10 @@ export async function apply(
       if (!ok) { console.log("  Skipped.\n"); continue; }
     }
 
-    // Pre-migration contents the lock keeps for file steps' `__undo__` placeholders.
-    const undoPayloads: Record<string, string> = {};
-    // Superset held only by the journal: also the env/manifest files a step is
-    // about to change, so a kill mid-step can still put them back.
+    // Pre-migration contents, held only by the journal so a kill mid-step can
+    // still put every touched file back.
     const journalPayloads: Record<string, string> = {};
+    const journalWritten: Record<string, string | null> = {};
     const undoSteps: MigrationStep[] = [];
     // Opened before the first step and cleared only once the lock entry is
     // persisted, so an interruption anywhere in between is recoverable.
@@ -195,6 +206,7 @@ export async function apply(
       cliVersion: manifest.cliVersion,
       undo: undoSteps,
       undoPayloads: journalPayloads,
+      written: journalWritten,
     };
     writeJournal(appRoot, journal);
     try {
@@ -209,9 +221,6 @@ export async function apply(
         if (prior?.isFile() && !(pathKey in journalPayloads)) {
           journalPayloads[pathKey] = encodeUndoPayload(readFileSync(target));
         }
-        if (step.type.startsWith("file.") && pathKey in journalPayloads && !(pathKey in undoPayloads)) {
-          undoPayloads[pathKey] = journalPayloads[pathKey];
-        }
         // Provisional undo, journaled BEFORE the step runs: a kill between its
         // write and the next journal update must still leave this path
         // restorable. The step's own undo replaces it once it returns.
@@ -221,6 +230,7 @@ export async function apply(
         writeJournal(appRoot, journal);
         const undo = executeStep(step, appRoot, opts.payloadDir);
         undoSteps[slot] = undo;
+        journalWritten[pathKey] = hashFileIgnoringEol(target);
         // Keep the in-run baseline in step with what just happened, so a second
         // migration in the SAME run is judged against this one's output.
         if (step.type === "file.create" || step.type === "file.write") {
@@ -236,14 +246,15 @@ export async function apply(
         // Persist progress after every step — `undo`/`undoPayloads` are the same
         // objects the journal holds, so this snapshots what has run so far.
         writeJournal(appRoot, journal);
-        console.log(`  ✓ ${step.type}  ${pathKey}`);
+        // A file.delete with `expect` keeps a changed file; its undo is then a rewrite.
+        const kept = step.type === "file.delete" && undo.type === "file.write";
+        console.log(kept ? `  - kept  ${pathKey}` : `  ✓ ${step.type}  ${pathKey}`);
       }
     } catch (err) {
       console.error(`  ✗ Error: ${(err as Error).message}`);
       // Transactional unwind: reverse the steps that already ran THIS migration
       // so disk returns to its pre-migration state. Without this, a re-run
-      // re-captures undo baselines from already-mutated files, silently
-      // corrupting the recorded "original" content used by rollback.
+      // starts from already-mutated files.
       const { failures } = unwindSteps(undoSteps, journalPayloads, appRoot, opts.payloadDir);
       for (const failure of failures) console.error(`  ✗ Unwind step failed: ${failure}`);
       if (failures.length > 0) {
@@ -258,12 +269,9 @@ export async function apply(
 
     const entry: LockEntry = {
       id: migration.id,
-      appliedAt: new Date().toISOString(),
       cliVersion: manifest.cliVersion,
       manifestHash: migration.contentHash,
       ...(migration.payloadHash ? { payloadHash: migration.payloadHash } : {}),
-      undo: undoSteps,
-      ...(Object.keys(undoPayloads).length > 0 ? { undoPayloads } : {}),
     };
     lock.applied.push(entry);
     writeLock(appRoot, lock);

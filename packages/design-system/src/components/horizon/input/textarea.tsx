@@ -84,7 +84,8 @@ function TextareaCounter({
         <p
           id={id}
           role="status"
-          aria-live="polite"
+          // Silent while far from the limit: a live count on every keystroke drowns out typing.
+          aria-live={level === "normal" ? "off" : "polite"}
           data-level={level}
           className={cn(
             "text-right text-xs tracking-tight tabular-nums",
@@ -202,8 +203,8 @@ function IGRPTextarea({
   void _value
   void _defaultValue
 
-  const fieldError = formContext.formState.errors[fieldName]
-  const errorMessage = error || (fieldError?.message as string)
+  // Nested names (`itens.0.nome`) resolve through fieldState, not formState.errors[name].
+  const errorMessage = error
 
   return (
     <Controller

@@ -1,0 +1,173 @@
+# Horizon layer (`IGRP*`): catalog
+
+The default layer. The form fields are in `forms.md`, the data table in `data-table.md` and the charts in `charts.md`. Everything else is here.
+
+Shared vocab: `IGRPColorRole` = `"solid" | "outline" | "soft"` (prop `variant`) and `IGRPColorVariants` = `"primary" | "secondary" | "success" | "destructive" | "warning" | "info" | "indigo"` (prop `color`). Icons use lucide PascalCase names (`iconName="Pencil"`). **On most components an icon renders only when `showIcon` is set** (the defaults are listed per component).
+
+## Actions
+
+**`IGRPButton`**. Variants: `default | outline | secondary | ghost | destructive | link`. Sizes: `default | xs | sm | lg | icon | icon-xs | icon-sm | icon-lg`.
+- `type` defaults to `"button"`, so pass `type="submit"` explicitly in forms.
+- `loading` shows a spinner and swaps the children for `loadingText` (an i18n default). Inside `IGRPForm` you still set `loading` yourself, from the form handle or a transition, because the button isn't wired to the form.
+- Text sizes need `showIcon` + `iconName` (+ `iconPlacement: "start" | "end"`). `iconName` alone renders nothing.
+- Icon sizes always render the icon. **They require `aria-label` or `aria-labelledby`**: `IGRPButtonProps` is a union, so TypeScript rejects an icon size without one.
+- `asChild` (e.g. wrapping `IGRPLink` or next `Link`) skips both the icon and the spinner.
+- `iconSize` is deprecated and does nothing.
+
+**`IGRPLink`**: next/link, or `<a target="_blank">` for external URLs. Props: `href`, `variant`, `color`, `size: default | sm | lg`, `underline: none | hover | always`. **`showIcon` defaults to true** and shows an `ArrowRight`, so pass `showIcon={false}` for a plain link. `IGRPLinkVariants` is exported for CVA reuse.
+
+**`IGRPButtonLink`**: a button-shaped next/link. Props: `href`, `label`, `variant`, `size`, `iconName`, `iconPlacement`, `iconClassName`, `disabled`, `showPendingIndicator` (default true; set false for `#anchors` and external URLs, where the spinner never fires), `tooltip`, `tooltipSide`, `tooltipAlign`. `disabled` renders a `<button>`, not a link. Icon sizes (`isIconOnlySize`, in `src/lib/button-size.ts`) show no text and use `label` as the tooltip and accessible name; `iconPlacement="center"` falls back to `"start"`. An icon-only or tooltipped link sits inside `IGRPTooltip`'s inline-flex wrapper span. A spinner shows while the route loads, which needs Next >= 15.3. Wrap a list of them in `IGRPTooltipProvider` (not the raw `TooltipProvider`) to share one provider.
+
+**`IGRPLinkPendingIcon`**: put it inside your own `Link` to get the same spinner; outside a `Link` it never spins.
+
+**`IGRPCopyTo`**: a copy icon button with a tooltip and a toast. Props: `value` (required), `successMessage`, `errorMessage`, `tooltipMessage`, `onCopySuccess`, `onCopyError`, `toastDuration` and `tooltipDelayDuration`.
+
+## Surfaces
+
+**`IGRPCard`** is composable: `IGRPCard` > `IGRPCardHeader` (`IGRPCardTitle`, `IGRPCardDescription`, `IGRPCardAction`) + `IGRPCardContent` + `IGRPCardFooter`. These are separate named exports; there's no `IGRPCard.Header`. `size?: "default" | "sm"`.
+
+**`IGRPCardDetails`**: a label/value list inside a card. Props: `items: { label; content: ReactNode; showCopyTo? }[]` (required), `title`, `description` and `contentClassName`. It renders nothing when `items` is empty. Keys come from the label's letters only, so make labels distinct.
+
+**`IGRPInfoCard`**: grouped icon + label + text rows. Props:
+- `sections: { items: IGRPInfoItem[] }[]` (required), where `IGRPInfoItem = { label; text: string; icon?; showIcon?; iconClassName?; colorItem? }`.
+- `title`, `columns: 1 | 2 | 3`, `orientation: "horizontal" | "vertical"`, `variantSection` / `colorSection`.
+
+**`IGRPStatsCard`**: the configurable KPI tile. It has **no trend/delta prop**.
+- Content: `title`, `value`, `titleSize`, `valueSize` (up to `4xl`), `titleColored` / `valueColored`.
+- Card: `cardVariant`, `cardBorder` (radius), `cardBorderPosition: none | top | bottom | left | right`.
+- Icon: `showIcon` (default true), `iconName` (`Box`), `iconPlacement`, `iconSize: sm | md | lg | xl`, `iconVariant`, `iconAppearance: plain | soft | outline` (plain = coloured icon, soft = tinted background, outline = tinted border; all coloured by `iconVariant`), `iconShape: circle | square` (default circle; only read when `iconAppearance` is set).
+- Deprecated: `showIconBackground`, `iconBackground`, `showIconBorder`. Without `iconAppearance` they render as they always did, except the two combinations that dropped the `iconVariant` colour (a background with no shape, a shape with no background), which now get it. Use `iconAppearance` + `iconShape`.
+- Also: `image` / `imageAlt` (next/image), `itemPlacement`, and `onClick`, which makes the card a keyboard-accessible button.
+- For fixed presets see `IGRPStatsCardMini` / `IGRPStatsCardTopBorderColored` in `custom.md`.
+
+**`IGRPBadge`**. Props: `variant` (default `"solid"`), `color` (default `"primary"`), `size: sm | md | lg` (default `sm`), `dot`, `showIcon` + `iconName` + `iconPlacement`, `badgeClassName`. Icon-only or number-only children render as a circle.
+
+**`IGRPAlert`**: an inline message.
+- `children` (required), `variant` (`"solid"`), `color` (`"primary"`).
+- `showIcon` (default true; the icon follows `color`).
+- `textColored` / `borderColored` / `bgColored` (all default true), `alignment`.
+- An optional link: `showLink`, `linkUrl`, `linkIcon`, with **`label` as the link text** (`linkLabel` is unused).
+- It gets `role="alert"` for destructive and `role="status"` otherwise.
+
+**`IGRPBanner`**: `variant: "cookie" | "announcement"` and `message` are required.
+- `cookie` is fixed to the bottom with accept/decline buttons (`acceptLabel`, `declineLabel`, `onAccept`, `onDecline`, `learnMoreHref` / `learnMoreLabel`).
+- `announcement` is a primary bar with a dismiss button (`onDismiss`).
+- Visibility is local state only, so persist the dismissal yourself.
+
+**`IGRPNotification`**: a static inline notice, not a toast.
+- `content`, `variant: default | error | info | success | warning`, `border: default | colored`.
+- `showLink` + `lableLink` (the misspelling is the real prop name) + `actionLink`, `customActions`.
+- `showClose` adds a button that hides the notice and calls `onClose`. The dismissal isn't persisted.
+
+**`IGRPAvatar`**. Props: `src`, `alt`, `fallback` (gives 2-letter initials), `scale: sm | md | lg | xl` (`size` is deprecated), `rounded`, `hasStatus` + `status` (+ `statusLabel`, the screen-reader text of the dot, e.g. "Online"), `iconLabel` (screen-reader text of the icon overlay), `showBadge` + `badgeNumber`, `hasFallbackIcon`. The type marks `status`, `badgeColor` and `iconColor` as required, so pass them even when unused.
+
+**`IGRPSeparator`**, **`IGRPLoadingSpinner`** (`label` defaults to "A carregar…", `className`), **`IGRPContainer`** (just a `<div className="p-3">`, not a max-width container).
+
+## Page structure
+
+**`IGRPPageHeader`**. Props:
+- `title` (required), `description`, `variant: h1 … h6`, and `children` (the right-side actions).
+- `isSticky`.
+- Back button: `backButton={<IGRPPageHeaderBackButton url="/pedidos" />}` (any node; `useBrowserBack` or `onClick` for the other modes). The old `showBackButton`, `urlBackButton`, `iconBackButton` and `backButton*` props still work but are deprecated; `backButton` wins when set (`backButton={null}` hides it).
+- It has no breadcrumbs (the framework chrome renders those). `IGRPPageHeaderBackButton` is also exported on its own.
+
+**`IGRPPageFooter`**: `children`, `isSticky`.
+
+**Typography**
+- **`IGRPHeadline`**: `title` (required), `description`, `variant: h1 … h6` (the rendered tag, default `h3`), `showIcon` + `iconName`. It's always `text-primary`.
+- **`IGRPText`**: `as: p | span | div`, `size`, `weight`, `align`, `truncate`, `maxLines`, `highlight: string[]`. **`spacing` defaults to `"tight"` (`mb-2`)**, so pass `spacing="none"` inside flex layouts. `variant` is deprecated and ignored, so use `className`.
+- **`IGRPTextList`**: `type: unordered | ordered | checklist | steps | features | custom`, with items built via `igrpCreateListItem` / `igrpListItems`.
+
+## Overlays
+
+**`IGRPModalDialog`** family:
+- Parts: `IGRPModalDialog`, `IGRPModalDialogTrigger`, `IGRPModalDialogContent`, `IGRPModalDialogHeader`, `IGRPModalDialogTitle` (required for a11y), `IGRPModalDialogDescription` (text as children), `IGRPModalDialogFooter`, `IGRPModalDialogClose`.
+- `IGRPModalDialogContent` takes `size: sm | md | lg | xl | full` (default `md`), `showCloseButton` (true) and `contentClassName`.
+- `stickyHeader` on the Header and `stickyFooter` on the Footer only work when those are **direct children** of Content.
+
+```tsx
+<IGRPModalDialog open={open} onOpenChange={setOpen}>
+  <IGRPModalDialogContent size="lg">
+    <IGRPModalDialogHeader stickyHeader>
+      <IGRPModalDialogTitle>Editar utilizador</IGRPModalDialogTitle>
+    </IGRPModalDialogHeader>
+    {/* body */}
+    <IGRPModalDialogFooter stickyFooter>
+      <IGRPButton type="submit" form="user-form">Guardar</IGRPButton>
+    </IGRPModalDialogFooter>
+  </IGRPModalDialogContent>
+</IGRPModalDialog>
+```
+
+**`IGRPAlertDialog`**: a confirm dialog. Pass `trigger` (rendered through `AlertDialogTrigger asChild`) to let it open itself, or control it with `open` / `onOpenChange`.
+- `title`, `description` (a node), `variant: IGRPColorVariants`, `iconPlacement: "start" | "center"` (`"end"` is deprecated and renders as `"start"`).
+- `actionLabel` / `cancelLabel` (i18n defaults), `onAction`, `onCancel`, `showCancel`, `showAction` (default true).
+- `onAction` may return a Promise: the dialog stays open with the action button loading (cancel, Escape and overlay disabled) until it settles, closes on resolve and stays open on reject. The rejection is rethrown after the button resets, so it also reaches global error reporting (`unhandledrejection`); report or handle the error inside `onAction` if that is unwanted. While pending, both buttons stay focusable (`aria-disabled`) and ignore clicks.
+- The icon follows `variant` unless you pass `iconName`.
+- Don't put `onClick` or `className` in `actionProps`; they override the built-in handler and colour.
+
+```tsx
+<IGRPAlertDialog trigger={<IGRPButton variant="destructive">Eliminar</IGRPButton>} variant="destructive"
+  iconName="Trash2" title="Eliminar registo" description="Esta ação é irreversível." actionLabel="Eliminar"
+  onAction={() => deleteRecord(id)} />
+```
+
+For row deletes in a table, use the `alert` row action instead (`data-table.md`).
+
+**Re-exports under IGRP names** (same API as the primitive, nothing added): `IGRPCommand*`, `IGRPDropdownMenu*`, `IGRPMenubar*`, `IGRPSidebar*` + `IGRPSidebarProvider` + `useIGRPSidebar`.
+
+**Toasts**: `const { success, error, info, warning, loading, dismiss, igrpToast } = useIGRPToast()`. `igrpToast` takes either `{ type, title, description }` or `{ promise, loading, success, error }`. The promise labels default to the catalog, so pass them only for specific copy. The template already mounts `IGRPToaster`, so don't mount a second one.
+
+## Navigation and process
+
+**`IGRPTabs`**:
+- `items: IGRPTabItem[]`, where `IGRPTabItem = { value; label: ReactNode; content; icon?; disabled?; keepMounted?; badge?: ReactNode }`.
+- `badge` (e.g. `<IGRPBadge color="info">3</IGRPBadge>`) renders at `badgePlacement` whether or not `showBadge` is set, and wins over the old props when set (`null` hides it). The `badgeContent` / `badgeVariant` / `badgeColor` / `badgeClassName` quartet is deprecated and still needs `showBadge`.
+- `variant: default | outline | pills | underline | cards`, `fullWidth`, `orientation`, and `value` / `defaultValue` / `onValueChange`.
+- `showIcon` defaults to false, so set it to show the item icons.
+
+**`IGRPAccordion`**:
+- `items: { title; content; value?; iconName?; showIcon? }[]`.
+- `type: "single" | "multiple"`. Single (the default) is collapsible and opens the first item by default. `type="multiple"` keeps several items open, and `defaultValue="all"` opens every item (an array opens just those).
+- Controlled single-mode `value` defaults to `item-<title letters lowercased>` (e.g. `"item-dadospessoais"`). Multiple mode takes and reports a `string[]`.
+- Per-item header extras: `count` (a pill; `0` renders), `badgeIcon` + `badgeColor` (soft-colour chip before the title, default `primary`), `empty` / `emptyIcon` / `emptyLabel` (an empty state replacing `content`). `count={0}` hides `content` unless `empty={false}`.
+- Per-item `action`: a node beside the trigger (to the right of the chevron); clicks do not toggle the item.
+- Pass `value` per item when titles can collide ("Passo 1" vs "Passo 2"), since they are cleaned to letters only.
+
+**`IGRPMenuNavigation`**: an **in-page section nav** that scrolls to sections; it is not the app menu.
+- `sections: { id; label: ReactNode; icon; disabled?; badge?: ReactNode }[]`, `activeSection`, `onSectionChange`, `title`, `badge` (beside the title; wins over the deprecated `badgeContent` quartet when set, `null` hides it), `isStickyTop`.
+- Wrap the nav and the sections in `IGRPMenuNavigationProvider`, and register each section with `ref={getSectionRef(id)}` from `useIGRPMenuNavigation()`. Outside the provider scrolling silently does nothing.
+- The provider owns the active section: `activeSection` / `defaultSection` / `onSectionChange` on the provider, and the nav reads it unless you pass `activeSection` to the nav. `useIGRPMenuNavigation()` also returns `activeSection` and `setActive(id)`. There is no scroll-spy: set the section yourself (e.g. from an `IntersectionObserver`).
+
+**`IGRPStepperProcess`**: a wizard/timeline.
+- `steps: { step; stepKey; title; description?; status?: "pending" | "completed"; disabled? }[]`, `currentStep` (required). `aria-current` follows `currentStep`.
+- Deprecated per-step `isCompleted` (use `status`) and `isActive` (it meant "selectable": `isActive: false` is `disabled: true`).
+- `children`: a node, or `(step) => ReactNode` (a render prop, so the file must be a client file).
+- `onStepChange(step, data)`, `isLoading`.
+
+**`IGRPMultiStepForm`**: a form-aware wizard. Use it for a multi-step form; use `IGRPStepperProcess` for a process viewer the caller drives.
+- Compound shape, all named exports (no `IGRPMultiStepForm.Header`, which fails in a server component): `IGRPMultiStepForm` > `IGRPMultiStepFormHeader`, `IGRPMultiStepFormSteps`, `IGRPMultiStepFormFooter` > `IGRPMultiStepFormPrevious` / `IGRPMultiStepFormNext` / `IGRPMultiStepFormSubmit`. Wrap it in `IGRPForm`.
+- `steps: IGRPWizardStep[]` (`{ key; title; description?; fields: string[]; component; blockingMessage? }`), `initialStep` (1-based; changing it re-applies it), `onStepChange(next, prev)`, `onStepValidation(step)`.
+- Controlled: `step` (1-based) + `onStepChange`. Navigation (after validation) only calls `onStepChange`; the wizard moves when you update `step`. `initialStep` is ignored then.
+- Validation: a step cannot be left until it validates. The default inside `IGRPForm` is `form.trigger(step.fields)`, then errors on fields outside the step are cleared; outside a form it resolves `true`. `onStepValidation` replaces it.
+- `blockingMessage(values)` returns why the step cannot be left, or `null`. It disables Next and the header shows the reason; it needs an `IGRPForm` ancestor (it uses `useWatch`).
+- `useIGRPMultiStepForm()`: `steps`, `currentStepIndex` (1-based), `currentStepData`, `isFirstStep`, `isLastStep`, `goToNext`, `goToPrevious`, `goToFirstStep`, `goToStep(n, { force })` (`force` skips validating the steps passed over). `setSteps` is deprecated (internal); pass a new `steps` array instead.
+- `IGRPMultiStepFormHeader`: `variant` `"ring"` (default) or `"number"`, `navigable` (off by default; a click calls `goToStep`), `isLoading`. `IGRPMultiStepFormSteps` takes `animate` (default true; CSS, motion-safe only).
+- Previous, Next and Submit are `IGRPButton`s: `children` overrides the pt-PT default label. Previous is hidden on the first step, Next and Submit swap on the last.
+
+## Data and media
+
+- **`IGRPTable<T>`**: a lightweight static table without TanStack. Props: `content: T[]`, `columns: { header; accessorKey: keyof T; render? }[]`, `actions?: (row) => ReactNode`, `isStriped`, `isHeaderSticky`, `showFooter` + `footerContent`, `caption` (accessible table name, visually hidden). Use `IGRPDataTable` once you need sorting, filtering or paging.
+- **`IGRPRepetitiveComponent<T>`**: `items`, `keyExtractor` (required), `children: (item) => ReactNode`.
+- **`IGRPImage`**: next/image + `ratio: "1/1" | "4/3" | "16/9" | "21/9"` (applies when no width/height is given) + `rounded`.
+- **`IGRPImageCropper`**: `src`, `variant: basic | circular | zoom | preview`, `onCrop(blob)` (JPEG), `cropLabel`. Cross-origin images need CORS.
+- **`IGRPPdfViewer`**: one `document: { id; title; description; author; date?; fileUrl }`, `displayMode: "modal" | "inline"`, `viewerPreference: "native" | "google" | "auto"` (default native; **`google`/`auto` send `fileUrl` to Google**, so avoid them for private documents), `inlineHeight`, `labelButtonCancel` / `labelButtonNewTab`.
+- **`IGRPVideoEmbed`**: `src` (an **embed** URL, not a watch URL) + `title` (both required), `aspectRatio`, `autoplay`, `muted`, `controls`, `loop`, `start`.
+- **`IGRPChat`**: manages its own transcript. Send through `onSend(messages) => Promise<IGRPChatMessage[]>` (resolve with the reply; a rejection shows the catalog error), or give `apiEndpoint` to POST `{ messages }` and get `{ messages }` back. Also `initialMessages`, `renderMessage(message)` (replaces the bubble content), `onAction(message)` for `type: "button"` messages (they render as a button either way; without `onAction` the click does nothing; a message without `type` is text), `labelDescription`.
+- **`IGRPIcon`**: `iconName` + lucide props (`size` defaults to 16). Icons lazy-load, and an unknown name renders a red alert icon.
+
+`IGRPLink`, `IGRPButtonLink`, `IGRPImage`, `IGRPStatsCard` (image), `IGRPPageHeader` and `IGRPChat` import `next/*`, so they only work in Next.js apps.
+
+## Default copy
+
+Built-in labels come from the `IGRPI18nProvider` catalog (pt by default). Components that show *content* have no default: `IGRPNotification` (`content`) and `IGRPStatusBanner` (`text`, plus `badgeText`, which renders the badge only when set).

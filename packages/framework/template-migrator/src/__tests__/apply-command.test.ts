@@ -14,7 +14,6 @@ vi.mock("../manifest", () => ({
 }));
 
 import { apply } from "../commands/apply";
-import { rollback } from "../commands/rollback";
 
 let appRoot: string;
 let payloadDir: string;
@@ -35,83 +34,7 @@ afterEach(() => {
   rmSync(payloadDir, { recursive: true, force: true });
 });
 
-describe("apply captures undo payloads (TM-1 phase 2a)", () => {
-  it("stores prior content for overwritten and deleted files in the lock entry", async () => {
-    writeFileAt(appRoot, "src/overwritten.ts", "ORIGINAL A\n");
-    writeFileAt(appRoot, "src/deleted.ts", "ORIGINAL B\n");
-    writeFileAt(payloadDir, "10/src/overwritten.ts", "MIGRATED A\n");
-    writeFileAt(payloadDir, "10/src/brand-new.ts", "NEW FILE\n");
-
-    manifestRef.current = {
-      version: 1,
-      cliVersion: "test",
-      template: "demo-v1",
-      migrations: [
-        {
-          id: "10-capture-test",
-          date: "2026-06-10",
-          requires: [],
-          targetFrameworkVersion: null,
-          guideHref: "10.MIGRATIONS-10062026.md",
-          contentHash: "feedfacefeedface",
-          steps: [
-            { type: "file.write", mode: "replace", path: "src/overwritten.ts", from: "10/src/overwritten.ts" },
-            { type: "file.delete", path: "src/deleted.ts" },
-            { type: "file.create", path: "src/brand-new.ts", from: "10/src/brand-new.ts" },
-          ],
-        },
-      ],
-    };
-
-    await apply(appRoot, { yes: true, payloadDir });
-
-    // migration applied
-    expect(readFileSync(join(appRoot, "src/overwritten.ts"), "utf8")).toBe("MIGRATED A\n");
-    expect(readFileSync(join(appRoot, "src/brand-new.ts"), "utf8")).toBe("NEW FILE\n");
-
-    const lock = readLock(appRoot);
-    expect(lock.applied).toHaveLength(1);
-    const entry = lock.applied[0];
-    // prior content captured for the two files that existed before
-    expect(entry.undoPayloads).toEqual({
-      "src/overwritten.ts": "ORIGINAL A\n",
-      "src/deleted.ts": "ORIGINAL B\n",
-    });
-    // brand-new file needs no payload — its undo is a clean file.delete
-    expect(entry.undoPayloads!["src/brand-new.ts"]).toBeUndefined();
-  });
-
-  it("keeps the FIRST captured content when a migration touches the same path twice", async () => {
-    writeFileAt(appRoot, "src/twice.ts", "TRUE ORIGINAL\n");
-    writeFileAt(payloadDir, "11/src/twice.v1.ts", "INTERMEDIATE\n");
-    writeFileAt(payloadDir, "11/src/twice.v2.ts", "FINAL\n");
-
-    manifestRef.current = {
-      version: 1,
-      cliVersion: "test",
-      template: "demo-v1",
-      migrations: [
-        {
-          id: "11-twice-test",
-          date: "2026-06-10",
-          requires: [],
-          targetFrameworkVersion: null,
-          guideHref: "11.MIGRATIONS-10062026.md",
-          contentHash: "0123456789abcdef",
-          steps: [
-            { type: "file.write", mode: "replace", path: "src/twice.ts", from: "11/src/twice.v1.ts" },
-            { type: "file.write", mode: "replace", path: "src/twice.ts", from: "11/src/twice.v2.ts" },
-          ],
-        },
-      ],
-    };
-
-    await apply(appRoot, { yes: true, payloadDir });
-
-    const entry = readLock(appRoot).applied[0];
-    expect(entry.undoPayloads).toEqual({ "src/twice.ts": "TRUE ORIGINAL\n" });
-  });
-
+describe("apply refuses unrestorable steps", () => {
   it("refuses a directory delete, since its contents could never be restored", async () => {
     writeFileAt(appRoot, "src/dead-dir/file.txt", "x\n");
 
@@ -140,56 +63,6 @@ describe("apply captures undo payloads (TM-1 phase 2a)", () => {
     expect(existsSync(join(appRoot, ".igrp-migration-journal.json"))).toBe(false);
   });
 
-  it("deleting an absent file records an idempotent undo, so rollback succeeds", async () => {
-    manifestRef.current = {
-      version: 1,
-      cliVersion: "test",
-      template: "demo-v1",
-      migrations: [
-        {
-          id: "13-absent-delete",
-          date: "2026-06-10",
-          requires: [],
-          targetFrameworkVersion: null,
-          guideHref: "13.MIGRATIONS-10062026.md",
-          contentHash: "deadbeefdeadbeef",
-          steps: [{ type: "file.delete", path: "src/never-there.ts" }],
-        },
-      ],
-    };
-
-    expect(await apply(appRoot, { yes: true, payloadDir })).toBe(true);
-    expect(readLock(appRoot).applied[0].undo).toEqual([{ type: "file.delete", path: "src/never-there.ts" }]);
-    expect(await rollback(appRoot, "13-absent-delete")).toBe(true);
-    expect(readLock(appRoot).applied).toHaveLength(0);
-  });
-
-  it("round-trips a binary file through apply and rollback byte for byte", async () => {
-    const png = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0xff, 0xfe, 0x00, 0x80]);
-    mkdirSync(join(appRoot, "public"), { recursive: true });
-    writeFileSync(join(appRoot, "public/logo.png"), png);
-    writeFileAt(payloadDir, "14/public/logo.png", "NEW LOGO");
-    manifestRef.current = {
-      version: 1,
-      cliVersion: "test",
-      template: "demo-v1",
-      migrations: [
-        {
-          id: "14-binary",
-          date: "2026-06-10",
-          requires: [],
-          targetFrameworkVersion: null,
-          guideHref: "14.MIGRATIONS-10062026.md",
-          contentHash: "deadbeefdeadbeef",
-          steps: [{ type: "file.write", mode: "replace", path: "public/logo.png", from: "14/public/logo.png" }],
-        },
-      ],
-    };
-
-    expect(await apply(appRoot, { yes: true, payloadDir })).toBe(true);
-    expect(await rollback(appRoot, "14-binary", { payloadDir })).toBe(true);
-    expect(readFileSync(join(appRoot, "public/logo.png")).equals(png)).toBe(true);
-  });
 });
 
 describe("apply rolls back already-executed steps on mid-migration failure", () => {
@@ -331,37 +204,6 @@ function setEditableManifest() {
   };
 }
 
-describe("rollback refuses to discard edits made after the migration", () => {
-  it("refuses without --force and leaves the edited file intact; --force proceeds", async () => {
-    writeFileAt(appRoot, "src/a.ts", "ORIGINAL A\n");
-    setEditableManifest();
-    expect(await apply(appRoot, { yes: true, payloadDir })).toBe(true);
-    writeFileAt(appRoot, "src/new.ts", "MY EDIT\n");
-
-    expect(await rollback(appRoot, "50-edit-test", { payloadDir })).toBe(false);
-    expect(readFileSync(join(appRoot, "src/new.ts"), "utf8")).toBe("MY EDIT\n");
-    expect(readLock(appRoot).applied).toHaveLength(1);
-
-    expect(await rollback(appRoot, "50-edit-test", { force: true, payloadDir })).toBe(true);
-    expect(existsSync(join(appRoot, "src/new.ts"))).toBe(false);
-    expect(readFileSync(join(appRoot, "src/a.ts"), "utf8")).toBe("ORIGINAL A\n");
-  });
-
-  it("names the discarded file when --force overrides the guard", async () => {
-    writeFileAt(appRoot, "src/a.ts", "ORIGINAL A\n");
-    setEditableManifest();
-    expect(await apply(appRoot, { yes: true, payloadDir })).toBe(true);
-    writeFileAt(appRoot, "src/new.ts", "MY EDIT\n");
-    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
-    try {
-      expect(await rollback(appRoot, "50-edit-test", { force: true, payloadDir })).toBe(true);
-      expect(warn.mock.calls.map((c) => String(c[0])).join("\n")).toContain("discarding local changes in: src/new.ts");
-    } finally {
-      warn.mockRestore();
-    }
-  });
-});
-
 describe("apply --to", () => {
   it("succeeds without work when the target is already applied", async () => {
     writeFileAt(appRoot, "src/a.ts", "ORIGINAL A\n");
@@ -400,7 +242,7 @@ describe("apply reports failure", () => {
 });
 
 describe("apply warns before replacing a file no earlier migration wrote", () => {
-  it("lists the path, still applies, and stops writing fileHashes", async () => {
+  it("lists the path and still applies", async () => {
     writeFileAt(appRoot, "src/a.ts", "TEMPLATE ORIGINAL\n");
     setEditableManifest();
     const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
@@ -408,12 +250,10 @@ describe("apply warns before replacing a file no earlier migration wrote", () =>
       expect(await apply(appRoot, { yes: true, payloadDir })).toBe(true);
       const warned = warn.mock.calls.map((c) => String(c[0])).join("\n");
       expect(warned).toContain("src/a.ts");
-      expect(warned).toContain("igrp-migrate rollback 50-edit-test");
       expect(warned).not.toContain("src/new.ts");
     } finally {
       warn.mockRestore();
     }
     expect(readFileSync(join(appRoot, "src/a.ts"), "utf8")).toBe("MIGRATED A\n");
-    expect(readLock(appRoot).applied[0].fileHashes).toBeUndefined();
   });
 });

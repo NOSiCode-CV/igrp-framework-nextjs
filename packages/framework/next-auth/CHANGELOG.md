@@ -1,5 +1,39 @@
 # @igrp/framework-next-auth
 
+## 0.2.0-beta.12
+
+### Patch Changes
+
+- c412dea: `isIgrpAuthBypass()` now answers like the `withIGRPAuth` instance, which the middleware already follows. Before, an app with `provider: 'igrp-auth'` and a leftover `AUTH_PROVIDER=none` had server actions and permission checks bypass auth while the middleware enforced it. The instance registers its answer with the new `registerIGRPAuthBypass()` from `./providers`; a call with an explicit env other than `process.env` still reads that env.
+  
+  Config errors from `AUTH_PROVIDER` now carry their code (`AUTH_PROVIDER_EMPTY`, `AUTH_PROVIDER_INVALID`) on the thrown error instead of being matched by message text, so rewording a message no longer changes the code.
+- 0dce2cc: `@igrp/framework-next-auth/providers` exports `isIgrpAuthBypass(env?)` and `isPreviewModeEnabled(env?)`, the one definition of "auth is bypassed" (preview mode or `AUTH_PROVIDER=none`). `@igrp/framework-next`'s `isIgrpAuthBypass` and next-auth's own session callbacks now use it instead of their own copies. Behaviour is unchanged.
+- 7f1ad42: Package and build fixes from a review of each package's build:
+  
+  - `@igrp/framework-next`: `next-intl` is now a peer dependency (`^4.16.1`), not a pinned dependency. The root layout mounts next-intl's provider and the app calls its hooks, so both must use one copy; a version mismatch used to install two and lose the context. Apps already depend on `next-intl`.
+  - `@igrp/framework-next-ui`: `lucide-react` is now a peer dependency, as in the design system. The unused `clsx` and `class-variance-authority` dependencies are removed.
+  - `@igrp/framework-next-auth`: every `exports` entry has a `default` condition, so resolvers without the `import` condition (`require()` of ESM, CommonJS test runners) find it.
+  - `@igrp/igrp-framework-react-design-system`, `@igrp/framework-next-ui`, `@igrp/framework-next`: no `.d.ts.map` files in the package. They pointed at `src/`, which is not published.
+  - `@igrp/template-migrator`: the build clears `dist/` first, so files from older builds are no longer published. `yaml` moves to `devDependencies`: only the build scripts use it.
+- 82a22d3: Permission checks no longer fail after the access token expires. When the per-request store holds no token (a Server Action, a page rendered in parallel with its layout, or a seed written after an `await`), `igrpGetClaims` used to decode the session cookie, which is not refreshed during a render, so an expired token made gated sections disappear and `igrpAssertAuthorize` throw. `withIGRPAuth` now registers its `serverSession` process-wide (`registerIGRPServerSession` / `readIGRPServerSessionAccessToken` in `@igrp/framework-next-auth/session-store`), and the claims fallback reads the refreshed token through it, sharing the session read and refresh of the same request. Without a registered instance, or when that read fails, it decodes the cookie as before. No consumer change.
+- f77fd3b: Three session fixes from the 2026-11-25 audit:
+  
+  - Session store: a write now keeps the stored tokens when they are newer (a later expiry, no error). Before, a pod that read the session before another pod refreshed it could write the old refresh token back, and the next refresh replayed a used token. A refresh on the writing pod still lands.
+  - In-memory token recovery store: entries now leave only on expiry. Before, a full store dropped the oldest live entry, which could log out a background tab on a busy single-pod app. `maxEntries` now sets when expired entries are swept.
+  - `igrpMiddlewareDecision` decides the auth bypass with `auth.isPreviewMode() || auth.isAuthDisabled()`, the same answer the handlers use. Before, it read only the env, so a `withIGRPAuth({ provider })` app with a leftover `AUTH_PROVIDER=none` passed every request. `IGRPMiddlewareAuth` now also needs `isPreviewMode` and `isAuthDisabled` (the `withIGRPAuth` instance has both; a hand-written or test mock of `auth` must add them, or the call throws `auth.isPreviewMode is not a function`), and `options.env` is read only for `NEXT_PUBLIC_BASE_PATH`.
+- c73287e: - `buildEndSessionUrl` now reads the rotated token from the recovery store before setting `id_token_hint`. After a refresh that ran where the cookie could not be written (an RSC render), logout used to send the cookie's older id_token.
+  - Sign-in expiry now resolves through `resolveTokenResponseExpiry`, the same function the refresh path uses. A non-positive `expires_in` at sign-in now falls back to the token's `exp` instead of expiring the session at once.
+- f77fd3b: The default middleware matcher (`auth.config.matcher`) no longer skips `/apps`. Matchers are relative to the basePath, so the exclusion skipped an `/apps` route inside the app, which then got no auth check and no security headers. An app whose basePath is `/apps/<name>` is not affected. An app with a public `/apps` route must now list it in `publicPaths`.
+- 8a8cc80: `@igrp/framework-next-auth/middleware` exports `igrpMiddlewareDecision(request, auth, options?)`, the middleware's auth rules: bypass (preview mode or `AUTH_PROVIDER=none`), public and static paths, the logout-pending backstop, token checks, host logout and a sanitized `callbackUrl`. It returns `pass` or `redirect`; the app builds the response. `@igrp/framework-next-auth/sanitize` exports `sanitizeCallbackUrl`, moved from the template.
+- a6af114: `withIGRPAuth` warns once at startup when the path of `NEXTAUTH_URL` is not `NEXT_PUBLIC_BASE_PATH` + `/api/auth`. NextAuth builds the OAuth `redirect_uri` from that path, so a missing basePath sends the user outside the app after login, and a missing `/api/auth` makes the login loop with a nested `callbackUrl`. Neither was reported before.
+- 8a8cc80: `@igrp/framework-next-auth/session-store` exports `readIGRPSessionToken(cookies, env?)`: decodes this app's session token from a cookie jar without the `withIGRPAuth` instance, choosing the scoped or stock cookie from the jar. `@igrp/framework-next`'s access-token recovery in Server Actions now calls it instead of keeping its own copy of the cookie lookup. Behaviour is unchanged.
+- 5a2166c: `@igrp/framework-next-auth/middleware` no longer re-exports NextAuth's `withAuth` (and its `NextRequestWithAuth`, `NextMiddlewareWithAuth` and `WithAuthArgs` types). Without the IGRP cookie names it found no session and sent every request to sign-in, and with a session store it could not work at all. Use `igrpMiddlewareDecision`, or import `withAuth` from `next-auth/middleware` yourself.
+  
+  Deprecated, because the framework does not use them: `getServerSessionStrict`, `sanitizeString`, `sanitizePath`, `getLoginPath`, `hasAccessToken` and `useSafeSession`. They are removed in a later release.
+- 602f415: `sanitize.ts` drops guards that other checks already cover (`== null` before `typeof`, empty-length checks, the raw-backslash check in `sanitizeCallbackUrl`). New tests bring its mutation score to 100%. Behaviour is unchanged.
+- 7f1ad42: `useIGRPSession()` returns the same object while the session is unchanged, so `state` and `actions` are safe to use as effect or memo dependencies.
+- c5939b7: Session store: a session read that changed nothing no longer writes to the store (one encryption and one store round trip per page view). The entry is still rewritten once less than half its lifetime is left, so an active session keeps sliding.
+
 ## 0.2.0-beta.11
 
 ### Patch Changes

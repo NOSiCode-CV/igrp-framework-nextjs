@@ -151,6 +151,37 @@ describe('session store codec — with a store', () => {
     expect(other?.[SESSION_ID_CLAIM]).not.toBe(first?.[SESSION_ID_CLAIM]);
   });
 
+  it('skips the store write on a read that changed nothing, until half the lifetime is gone', async () => {
+    const store = createMemorySessionStore();
+    const set = vi.spyOn(store, 'set');
+    const encode = createSessionTokenEncoder({ store });
+    const decode = createSessionTokenDecoder({ store });
+    const maxAge = 3600;
+
+    const first = await decode({
+      token: await encode({ token: sessionToken(), secret: SECRET, maxAge }),
+      secret: SECRET,
+    });
+    expect(set).toHaveBeenCalledTimes(1);
+
+    // A plain session read re-encodes the same token: no write.
+    await encode({ token: first!, secret: SECRET, maxAge });
+    expect(set).toHaveBeenCalledTimes(1);
+
+    // A change (a refresh) is written.
+    await encode({ token: { ...first!, accessToken: 'at-2' }, secret: SECRET, maxAge });
+    expect(set).toHaveBeenCalledTimes(2);
+
+    // Past half the lifetime, an unchanged read writes again so the TTL slides.
+    vi.useFakeTimers({ now: Date.now() + (maxAge / 2 + 60) * 1000 });
+    try {
+      await encode({ token: { ...first!, accessToken: 'at-2' }, secret: SECRET, maxAge });
+      expect(set).toHaveBeenCalledTimes(3);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
   it('treats the stored expiry as authoritative over a stale cookie', async () => {
     // A refresh inside an RSC render updates the store but cannot rewrite the
     // cookie; the next Node read must see the refreshed expiry.
@@ -284,6 +315,37 @@ describe('session store codec — with a store', () => {
     expect((await decode({ token: failed, secret: SECRET }))?.error).toBe(
       'RefreshAccessTokenError',
     );
+  });
+
+  it('does not let a stale healthy write put back a consumed refresh token', async () => {
+    const store = createMemorySessionStore();
+    const encode = createSessionTokenEncoder({ store });
+    const decode = createSessionTokenDecoder({ store });
+    const session = await decode({
+      token: await encode({
+        token: sessionToken({ refreshToken: 'rt-1', expiresAt: 1_000 }),
+        secret: SECRET,
+      }),
+      secret: SECRET,
+    });
+
+    // Pod A refreshed rt-1 → rt-2. Pod B, which read rt-1 before, then writes.
+    await encode({
+      token: { ...session!, accessToken: 'at-2', refreshToken: 'rt-2', expiresAt: 2_000 },
+      secret: SECRET,
+    });
+    const staleCookie = await encode({ token: session!, secret: SECRET });
+    expect((await decode({ token: staleCookie, secret: SECRET }))?.refreshToken).toBe('rt-2');
+    expect(((await plainDecode({ token: staleCookie, secret: SECRET })) as JWT).expiresAt).toBe(
+      2_000,
+    );
+
+    // Pod B's own later refresh (rt-2 → rt-3) still lands.
+    await encode({
+      token: { ...session!, accessToken: 'at-3', refreshToken: 'rt-3', expiresAt: 3_000 },
+      secret: SECRET,
+    });
+    expect((await decode({ token: staleCookie, secret: SECRET }))?.refreshToken).toBe('rt-3');
   });
 
   it('leaves a session without tokens (a provider that has none) in the cookie', async () => {

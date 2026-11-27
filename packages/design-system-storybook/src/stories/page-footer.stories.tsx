@@ -75,13 +75,13 @@ const Template = (args: IGRPPageFooterProps) => {
                         <div className='flex items-center gap-2'>
                           <IGRPIcon
                             iconName={section.icon}
-                            className='h-4 w-4'
+                            className='size-4'
                           />
                           <span>{section.label}</span>
                         </div>
                         <IGRPIcon
                           iconName='ChevronRight'
-                          className={cn('h-4 w-4 transition-colors', 'text-muted-foreground')}
+                          className={cn('size-4 transition-colors', 'text-muted-foreground')}
                         />
                       </button>
                     ))}
@@ -89,15 +89,15 @@ const Template = (args: IGRPPageFooterProps) => {
                 </CardContent>
               </Card>
 
-              <div className='mt-4 p-4 bg-blue-50 rounded-lg border border-blue-100 shadow-sm'>
+              <div className='mt-4 p-4 bg-info/10 rounded-lg border border-info/30 shadow-sm'>
                 <div className='flex items-start'>
                   <IGRPIcon
                     iconName='Info'
-                    className='h-4 w-4 mr-2 mt-0.5 text-blue-500'
+                    className='size-4 mr-2 mt-0.5 text-info'
                   />
-                  <div className='space-y-1'>
-                    <h4 className='text-sm font-medium text-blue-700'>Dicas</h4>
-                    <p className='text-xs text-blue-600'>
+                  <div className='flex flex-col gap-1'>
+                    <h4 className='text-sm font-medium text-info'>Dicas</h4>
+                    <p className='text-xs text-info'>
                       Preencha todos os campos obrigatórios marcados com * e utilize a navegação
                       lateral para se mover entre as seções.
                     </p>
@@ -392,11 +392,11 @@ const Template = (args: IGRPPageFooterProps) => {
           <div className='flex items-center gap-2'>
             <Badge
               variant='outline'
-              className='bg-green-50 text-green-700 border-green-200'
+              className='bg-success/10 text-success border-success/30'
             >
               <IGRPIcon
                 iconName='Plus'
-                className='h-3.5 w-3.5 mr-1'
+                className='size-3.5 mr-1'
               />
               Novo Contribuinte
             </Badge>

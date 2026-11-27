@@ -49,6 +49,8 @@ function hasTraversalSegment(decoded: string): boolean {
 /**
  * Resolves the login path relative to a base URL.
  * Falls back to "/login" if the base URL is invalid.
+ *
+ * @deprecated Unused by the framework; removed in a later release. Use `auth.getLoginRedirectUrl(request)`.
  */
 export function getLoginPath(baseUrl: string, path = '/login'): string {
   try {
@@ -107,10 +109,11 @@ export function sanitizeRedirectUrl(
   baseOrigin?: string,
   fallback = '/',
 ): string {
-  if (url == null || typeof url !== 'string') return fallback;
+  if (typeof url !== 'string') return fallback;
 
   const trimmed = url.trim();
-  if (trimmed.length === 0 || trimmed.length > MAX_REDIRECT_LENGTH) return fallback;
+  // Empty input needs no check of its own: it is neither relative nor a parseable URL.
+  if (trimmed.length > MAX_REDIRECT_LENGTH) return fallback;
   if (DANGEROUS_PROTOCOLS.test(trimmed)) return fallback;
 
   const decoded = decodeOnce(trimmed);
@@ -121,6 +124,7 @@ export function sanitizeRedirectUrl(
     return trimmed;
   }
 
+  // Stryker disable next-line ConditionalExpression: equivalent — new URL(undefined) throws, which also ends at the fallback.
   if (baseOrigin) {
     try {
       const parsed = new URL(trimmed);
@@ -138,7 +142,7 @@ export function sanitizeRedirectUrl(
         return parsed.pathname + parsed.search + parsed.hash;
       }
     } catch {
-      return fallback;
+      // Not a parseable URL: fall through to the fallback below.
     }
   }
 
@@ -153,11 +157,14 @@ export function sanitizeRedirectUrl(
  * control-character bypasses, and segment-wise `..` traversal. The traversal
  * check is deliberately segment-aware rather than a bare `includes('..')`, so
  * a legitimate path such as `/reports/q1..q2` is no longer rejected.
+ *
+ * @deprecated Unused by the framework; removed in a later release. Use `sanitizeCallbackUrl`.
  */
 export function sanitizePath(path: string | null | undefined, fallback = '/'): string {
-  if (path == null || typeof path !== 'string') return fallback;
+  if (typeof path !== 'string') return fallback;
   const trimmed = path.trim();
-  if (trimmed.length === 0 || trimmed.length > MAX_REDIRECT_LENGTH) return fallback;
+  // Empty input is rejected by the leading-slash check below.
+  if (trimmed.length > MAX_REDIRECT_LENGTH) return fallback;
   if (!trimmed.startsWith('/') || trimmed.startsWith('//')) return fallback;
 
   const decoded = decodeOnce(trimmed);
@@ -169,12 +176,14 @@ export function sanitizePath(path: string | null | undefined, fallback = '/'): s
 
 /**
  * Sanitizes a string: trims, limits length, removes control characters.
+ *
+ * @deprecated Unused by the framework; removed in a later release.
  */
 export function sanitizeString(
   value: string | null | undefined,
   maxLength = MAX_STRING_LENGTH,
 ): string {
-  if (value == null || typeof value !== 'string') return '';
+  if (typeof value !== 'string') return '';
   const trimmed = value.trim();
   const withoutControlChars = [...trimmed]
     .filter((c) => {
@@ -215,13 +224,11 @@ export function escapeHtml(unsafe: string): string {
  */
 export function sanitizeCallbackUrl(
   raw: unknown,
+  // Stryker disable next-line StringLiteral: equivalent — no path that starts with `/` can start with a non-`/` basePath.
   basePath: string = process.env.NEXT_PUBLIC_BASE_PATH ?? '',
 ): string | undefined {
-  if (typeof raw !== 'string' || raw.length === 0) return undefined;
-
-  // Reject backslashes outright — some browsers/proxies normalize `\` to `/`,
-  // turning `/\evil.com` or `/\/evil.com` into a protocol-relative redirect.
-  if (raw.includes('\\')) return undefined;
+  // Empty input is rejected by the leading-slash check below.
+  if (typeof raw !== 'string') return undefined;
 
   // Decode once and re-validate so percent-encoded tricks can't smuggle a
   // protocol-relative target or backslash past the checks below
@@ -232,12 +239,16 @@ export function sanitizeCallbackUrl(
   } catch {
     return undefined; // malformed percent-encoding
   }
+  // Reject backslashes outright — some browsers/proxies normalize `\` to `/`,
+  // turning `/\evil.com` or `/\/evil.com` into a protocol-relative redirect.
+  // Decoding never removes a raw `\`, so this one check covers both forms.
   if (decoded.includes('\\')) return undefined;
 
   // Only same-origin relative URLs — enforced on both the raw and decoded
-  // forms. Rejects `//evil.com`, `http://…`, etc.
+  // forms. Rejects `//evil.com`, `http://…`, `%2Fx`, etc. A raw leading `/`
+  // survives decoding, so the decoded form only needs the `//` check.
   if (!raw.startsWith('/') || raw.startsWith('//')) return undefined;
-  if (!decoded.startsWith('/') || decoded.startsWith('//')) return undefined;
+  if (decoded.startsWith('//')) return undefined;
 
   // Normalize by stripping the configured basePath — repeatedly — so neither
   // `/<basePath>/login` nor a double-prefixed `/<basePath>/<basePath>/login`
@@ -245,11 +256,12 @@ export function sanitizeCallbackUrl(
   let normalized = decoded;
   if (basePath) {
     while (normalized === basePath || normalized.startsWith(`${basePath}/`)) {
+      // Stryker disable next-line StringLiteral: equivalent — '' and '/' both pass the auth chrome check.
       normalized = normalized.slice(basePath.length) || '/';
     }
   }
 
-  const pathOnly = normalized.split('?')[0]?.split('#')[0] ?? '';
+  const pathOnly = normalized.split('?')[0].split('#')[0];
   if (pathOnly === '/login' || pathOnly.startsWith('/login/')) return undefined;
   if (pathOnly === '/logout' || pathOnly.startsWith('/logout/')) return undefined;
 

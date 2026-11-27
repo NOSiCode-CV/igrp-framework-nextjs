@@ -22,13 +22,12 @@ import { join } from "path";
 import { parse as parseYaml } from "yaml";
 import { hashPayloads, hashSteps } from "../src/hash.js";
 import { sortMigrationFiles } from "../src/migration-order.js";
+import { decodeLock, encodeLock } from "../src/lock.js";
 import type { LockEntry, LockFile } from "../src/types.js";
 
 /** The subset of a packed migration this module reconciles against. */
 export interface MigrationSummary {
   id: string;
-  /** Frontmatter `date` (YYYY-MM-DD) — becomes `appliedAt` for new entries. */
-  date: string;
   /** Canonical hash of the migration's steps; matches manifest `contentHash`. */
   contentHash: string;
   /** Hash of the step payloads; matches manifest `payloadHash`. */
@@ -62,7 +61,6 @@ export function summarise(
 ): MigrationSummary {
   return {
     id: fm.id,
-    date: typeof fm.date === "string" ? fm.date : "",
     contentHash: hashSteps(fm.steps),
     payloadHash: hashPayloads(fm.steps, migrationsDir),
   };
@@ -124,18 +122,10 @@ export function diffTemplateLock(opts: {
 /**
  * Produce the lock the template should ship.
  *
- * Existing entries keep their recorded `appliedAt` and `cliVersion` — those are
- * history, and rewriting them every release would churn the diff and lose the
- * record of which CLI actually stamped each migration. Only the hashes are
- * refreshed (a migration's steps may have been corrected in place) and missing
- * entries are appended. Entries for migrations that no longer exist are dropped.
- *
- * New entries carry NO `undo`/`fileHashes`: nothing was executed against a file
- * tree here, the template simply *is* the post-migration state. Rollback of a
- * scaffolded app's baseline migrations is not a supported operation, and
- * omitting the fields says that more plainly than forty copies of `[]` and `{}`.
- * A prior entry that does carry real content keeps it — that can only come from
- * a lock some consumer actually ran against, which is not ours to discard.
+ * Existing entries keep their recorded `cliVersion` (history; rewriting it every
+ * release would churn the diff). Only the hashes are refreshed (a migration's
+ * steps may have been corrected in place) and missing entries are appended.
+ * Entries for migrations that no longer exist are dropped.
  */
 export function buildTemplateLock(opts: {
   migrations: MigrationSummary[];
@@ -146,37 +136,18 @@ export function buildTemplateLock(opts: {
   const { migrations, existing, cliVersion } = opts;
   const previous = new Map((existing?.applied ?? []).map((entry) => [entry.id, entry]));
 
-  const applied: LockEntry[] = migrations.map((migration) => {
-    const prior = previous.get(migration.id);
-    return {
-      id: migration.id,
-      appliedAt: prior?.appliedAt ?? isoFromDate(migration.date),
-      cliVersion: prior?.cliVersion ?? cliVersion,
-      manifestHash: migration.contentHash,
-      payloadHash: migration.payloadHash,
-      // Only carried when there is something to carry — see the note above.
-      ...(prior?.undo?.length ? { undo: prior.undo } : {}),
-      ...(prior?.fileHashes && Object.keys(prior.fileHashes).length
-        ? { fileHashes: prior.fileHashes }
-        : {}),
-      ...(prior?.undoPayloads ? { undoPayloads: prior.undoPayloads } : {}),
-    };
-  });
+  const applied: LockEntry[] = migrations.map((migration) => ({
+    id: migration.id,
+    cliVersion: previous.get(migration.id)?.cliVersion ?? cliVersion,
+    manifestHash: migration.contentHash,
+    payloadHash: migration.payloadHash,
+  }));
 
   return {
     version: 1,
     template: (opts.template ?? existing?.template ?? "demo-v1") as LockFile["template"],
     applied,
   };
-}
-
-/** `YYYY-MM-DD` → midnight-UTC ISO stamp, matching the existing lock entries. */
-function isoFromDate(date: string): string {
-  const parsed = new Date(`${date}T00:00:00.000Z`);
-  if (Number.isNaN(parsed.getTime())) {
-    throw new Error(`Migration has an unparsable date: "${date}"`);
-  }
-  return parsed.toISOString();
 }
 
 /** Frontmatter extraction, same CRLF-tolerant form as pack.ts / check-drift.ts. */
@@ -209,16 +180,18 @@ export function loadMigrationSummaries(migrationsDir: string): MigrationSummary[
 export function readTemplateLock(lockPath: string): LockFile | null {
   if (!existsSync(lockPath)) return null;
   const raw = readFileSync(lockPath, "utf8");
+  let parsed: unknown;
   try {
-    return JSON.parse(raw) as LockFile;
+    parsed = JSON.parse(raw);
   } catch (err) {
     throw new Error(`${lockPath} is not valid JSON: ${(err as Error).message}`);
   }
+  return decodeLock(parsed, lockPath);
 }
 
 /** The exact bytes a correct lock file holds. */
 export function serialiseTemplateLock(lock: LockFile): string {
-  return JSON.stringify(lock, null, 2) + "\n";
+  return encodeLock(lock);
 }
 
 export function writeTemplateLock(lockPath: string, lock: LockFile): void {

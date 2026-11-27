@@ -4,6 +4,7 @@ import { tmpdir } from "os";
 import { join, dirname } from "path";
 import { readLock } from "../lock";
 import { journalPath, readJournal, writeJournal } from "../journal";
+import { hashContent } from "../hash";
 import type { Manifest } from "../types";
 
 const manifestRef: { current: Manifest } = {
@@ -110,6 +111,50 @@ describe("recovery from an interrupted run", () => {
     );
   }
 
+  /** The same crash, with the post-step hashes a current CLI journals. */
+  function simulateInterruptedRunWithHashes() {
+    simulateInterruptedRun();
+    const journal = JSON.parse(readFileSync(journalPath(appRoot), "utf8"));
+    journal.written = { "src/edited.ts": hashContent("MIGRATED\n"), "src/added.ts": hashContent("ADDED\n") };
+    writeFileSync(journalPath(appRoot), JSON.stringify(journal) + "\n", "utf8");
+  }
+
+  it("refuses to recover over files edited after the crash, and keeps the edits", async () => {
+    simulateInterruptedRunWithHashes();
+    // The user restored from git and kept working before re-running apply.
+    writeFileAt(appRoot, "src/edited.ts", "A DAY OF WORK\n");
+
+    const ok = await apply(appRoot, { yes: true, payloadDir });
+
+    expect(ok).toBe(false);
+    expect(readFileSync(join(appRoot, "src/edited.ts"), "utf8")).toBe("A DAY OF WORK\n");
+    expect(existsSync(journalPath(appRoot))).toBe(true);
+    expect(readLock(appRoot).applied).toHaveLength(0);
+  });
+
+  it("recovers when the files are still what the interrupted run wrote (CRLF ignored)", async () => {
+    simulateInterruptedRunWithHashes();
+    writeFileAt(appRoot, "src/edited.ts", "MIGRATED\r\n"); // git autocrlf, not an edit
+
+    await apply(appRoot, { yes: true, payloadDir });
+
+    expect(existsSync(journalPath(appRoot))).toBe(false);
+    expect(readLock(appRoot).applied).toHaveLength(1);
+  });
+
+  it("journals each path's post-step hash during a run", async () => {
+    writeFileAt(appRoot, "src/edited.ts", "ORIGINAL\n");
+    rmSync(join(payloadDir, "40/src/added.ts")); // step 2 throws after step 1 wrote
+    // The unwind clears the journal file, so capture what was serialised into it.
+    const spy = vi.spyOn(JSON, "stringify");
+    await apply(appRoot, { yes: true, payloadDir });
+    const journals = spy.mock.calls
+      .map(([value]) => value as { written?: Record<string, string | null> } | null)
+      .filter((value) => value !== null && typeof value === "object" && "written" in value);
+    spy.mockRestore();
+    expect(journals.at(-1)?.written?.["src/edited.ts"]).toBe(hashContent("MIGRATED\n"));
+  });
+
   it("reverts the interrupted migration before re-applying it", async () => {
     simulateInterruptedRun();
 
@@ -120,29 +165,6 @@ describe("recovery from an interrupted run", () => {
     const lock = readLock(appRoot);
     expect(lock.applied).toHaveLength(1);
     expect(lock.applied[0].id).toBe("40-crash-test");
-  });
-
-  it("records the TRUE pre-migration content as undo, not the migrated content", async () => {
-    // The whole point: without recovery the re-run captures "MIGRATED" as the
-    // original, and a later rollback silently restores the migrated state.
-    simulateInterruptedRun();
-
-    await apply(appRoot, { yes: true, payloadDir });
-
-    const entry = readLock(appRoot).applied[0];
-    expect(entry.undoPayloads?.["src/edited.ts"]).toBe("ORIGINAL\n");
-    expect(entry.undoPayloads?.["src/edited.ts"]).not.toBe("MIGRATED\n");
-  });
-
-  it("re-creates a file the interrupted run had created, via a file.delete undo", async () => {
-    simulateInterruptedRun();
-
-    await apply(appRoot, { yes: true, payloadDir });
-
-    // Recovery deleted it, then the re-applied migration created it again — so
-    // its undo is file.delete (a true create), not a content restore.
-    const entry = readLock(appRoot).applied[0];
-    expect(entry.undo).toContainEqual({ type: "file.delete", path: "src/added.ts" });
   });
 
   it("aborts without re-applying when recovery cannot restore a path", async () => {

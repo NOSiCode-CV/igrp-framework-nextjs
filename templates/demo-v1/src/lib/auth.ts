@@ -97,8 +97,10 @@ export async function serverSession() {
 export async function getSession() {
   if (isAuthBypass()) return null;
   const session = await auth.getSession();
-  // Seed before igrpGetClaims() runs in the (igrp) layout body: IGRPLayoutFull
-  // seeds too, but later. The base URL comes from IGRP_ACCESS_MANAGEMENT_API.
+  // This seed does not reach the (igrp) layout: a value set after an await stays
+  // in this function's async context. igrpGetClaims() gets the refreshed token
+  // through the session read that withIGRPAuth registers. The base URL comes
+  // from IGRP_ACCESS_MANAGEMENT_API.
   if (session) {
     await igrpEnsureAccessClientConfig({
       token: (session.accessToken as string) ?? "",

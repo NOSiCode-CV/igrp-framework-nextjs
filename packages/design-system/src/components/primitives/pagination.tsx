@@ -79,13 +79,13 @@ function PaginationNext({
 function PaginationEllipsis({ className, ...props }: React.ComponentProps<"span">) {
   const i18n = useIGRPi18n()
   return (
+    // IGRP: upstream hides the whole span, which also silenced the sr-only text below.
     <span
-      aria-hidden
       data-slot="pagination-ellipsis"
       className={cn("flex size-9 items-center justify-center [&_svg:not([class*='size-'])]:size-4", className)}
       {...props}
     >
-      <MoreHorizontalIcon />
+      <MoreHorizontalIcon aria-hidden="true" />
       <span className="sr-only">{i18n.pagination.morePages}</span>
     </span>
   )

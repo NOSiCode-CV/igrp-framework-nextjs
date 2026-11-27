@@ -1,18 +1,23 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // @igrp/framework-next/errors
 //
-// Typed error hierarchy for the IGRP framework. Designed so that an App Router
-// `error.tsx` / `global-error.tsx` boundary can discriminate failures in
-// PRODUCTION, where Next.js redacts `error.message` to a generic string but
-// preserves `error.name`.
+// Typed error hierarchy for the IGRP framework, so an App Router `error.tsx` /
+// `global-error.tsx` boundary can discriminate failures by `code`.
+//
+// React passes a server-thrown error to the client without `code` (in
+// production it sends `{ digest }` only). So every `IgrpError` whose `code` is
+// machine-stable (`/^[A-Z][A-Z0-9_]*$/`) also sets `digest` to `<id>|<code>`,
+// the `AppError` digest shape. Next keeps a digest the error already has, so the
+// code reaches the client boundary; `parsePublicDigest(error.digest).code`
+// (`@igrp/framework-next/app-error`) reads it, and next-ui's
+// `igrpResolveErrorCopy` uses it for the catalog copy. The message and context
+// never cross.
 //
 // The contract:
 //   • Every thrown framework error is an `IgrpError` (or a subclass).
 //   • Each instance sets a machine-stable `code` string. Code strings are the
 //     key consumers translate against their own i18n map.
-//   • `this.name` is set to the class name on every subclass so that it
-//     survives the server → client serialization performed by React's error
-//     boundary. Default message strings remain Portuguese for backwards
+//   • `this.name` is set to the class name on every subclass. Default message strings remain Portuguese for backwards
 //     compatibility with existing logs, but consumers SHOULD NOT parse
 //     `error.message` — use `error.name` / `error.code` instead.
 //
@@ -20,9 +25,12 @@
 //   import { IgrpConfigError, isIgrpError } from '@igrp/framework-next/errors';
 //   throw new IgrpConfigError('IGRP_CONFIG_NOT_INITIALIZED');
 //
-//   // In error.tsx:
-//   if (isIgrpError(error) && error.code === 'IGRP_CONFIG_NOT_INITIALIZED') …
+//   // In error.tsx (also for a server-thrown error in production):
+//   import { parsePublicDigest } from '@igrp/framework-next/app-error';
+//   parsePublicDigest(error.digest).code === 'IGRP_CONFIG_NOT_INITIALIZED'
 // ─────────────────────────────────────────────────────────────────────────────
+
+import { encodePublicCodeDigest } from './app-error.js';
 
 /**
  * Stable machine codes used by the framework. Consumers extend this union in
@@ -41,9 +49,9 @@ export type IgrpErrorCode =
   | 'IGRP_I18N_CONFIG_INVALID';
 
 /**
- * Minimal context bag attached to an error. Keep values serializable
- * (`string | number | boolean | null`) so React's error boundary serializer
- * can surface them through `digest` metadata without throwing.
+ * Minimal context bag attached to an error, for server-side logs. Keep values
+ * serializable (`string | number | boolean | null`). It never reaches the
+ * client: only the `code` rides in `digest`.
  */
 export type IgrpErrorContext = Record<string, string | number | boolean | null>;
 
@@ -61,6 +69,8 @@ export interface IgrpErrorShape {
 export class IgrpError extends Error implements IgrpErrorShape {
   readonly code: string;
   readonly context?: IgrpErrorContext;
+  /** `<id>|<code>`, kept by Next as the client-visible digest. Unset for a non-stable code. */
+  digest?: string;
 
   constructor(
     code: string,
@@ -75,6 +85,8 @@ export class IgrpError extends Error implements IgrpErrorShape {
     this.name = 'IgrpError';
     this.code = code;
     this.context = context;
+    const digest = encodePublicCodeDigest(code);
+    if (digest) this.digest = digest;
     // Keep `instanceof` working for subclasses. `new.target.prototype` (rather
     // than a fixed class) is what makes a subclass constructed through `super()`
     // land on its OWN prototype.

@@ -1,59 +1,12 @@
 # TODO
 
-## Design System
-
-- Review the input color [x]
-- Review Data-table filters 
-- fix the pagination on mobile
-- Add Switch to the DataTable as checkbox
-- Review info-card orientation horizontal and see design for this, review the colors mode [x]
-- Review the ```<TooltipProvider></TooltipProvider>``` usage
-
-## New shadcn Components
-
-Add the following components to the design system:
-
-- [ ] button-group
-- [ ] item
-- [ ] empty
-- [ ] field
-- [ ] spinner
-- [ ] input-group
-
 ## Component Updates
-
-## New Components
-
-- [ ] Progress
-- [ ] Form
-- [ ] Combobox
 
 ## Component Reviews
 
-- [ ] Charts
-- [ ] Banner status
-- [ ] IGRPColors
-
-## Research & Documentation
-
-- [ ] For number input, see: <https://base-ui.com/react/components/number-field>
-- [ ] Create API reference for the components
-- [ ] Review additional components:
-  - <https://base-ui.com/react/components/autocomplete>
-  - <https://base-ui.com/react/components/preview-card>
-
 ## Updates
 
-- [ ] Input-number: Remove the increase/decrease buttons, stay with default number input behavior, add `inputClassName` prop for UX customization in the input
-
----
-
 ## Next UI
-
--- Get breadcrumbs via script
--- Hide notifications, profile and settings from the sidebar
-
-## Animations component see: <https://animations.dev/learn/animation-theory/the-easing-blueprint>
 
 ## V2
 
@@ -68,27 +21,10 @@ Add the following components to the design system:
 - https://nextjs.org/blog/next-16-3-ai-improvements
 - https://github.com/vercel-labs/next-skills
 - https://github.com/vercel/next.js/tree/canary/skills
-- maps component
+- maps component: https://www.mapcn.dev/
 - pdfcn: https://www.pdfcn.dev/
 - review marcadores web
 - editorcn: https://www.rtecn.space
 - emailcn: https://www.emailcn.run/
 - mcpcn: https://www.mcpcn.dev
 - ogimage: https://www.ogimagecn.com/
-
-
-[next-auth][debug][CHUNKING_SESSION_COOKIE] {
-  message: 'Session cookie exceeds allowed 4096 bytes.',
-  emptyCookieSize: 163,
-  valueSize: 3952,
-  chunks: [ 4096, 182 ]
-}
-
-igrp-hidden is a hidden input but still show in the html
-
-- hide the i18n
-- template e migration is no inclued all the package.json changes
-
-O feature i18n como default de uma language e pode hide o selector para não mostrar ou carregar dados desnecessários caso for só uma language
-
-O separador do header não estão linhados

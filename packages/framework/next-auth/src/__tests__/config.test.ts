@@ -103,7 +103,10 @@ describe('withIGRPAuth — events.signOut', () => {
     // Pass an invalid AUTH_PROVIDER to trigger a configError
     const instance = withIGRPAuth({ env: { AUTH_PROVIDER: 'unsupported-provider' } });
     // configError should be set
-    expect(instance.configError).not.toBeNull();
+    expect(instance.configError?.code).toBe('AUTH_PROVIDER_INVALID');
+    expect(withIGRPAuth({ env: { AUTH_PROVIDER: '' } }).configError?.code).toBe(
+      'AUTH_PROVIDER_EMPTY',
+    );
     const signOutEvent = instance.authOptions.events?.signOut;
 
     await signOutEvent?.({ token: { refreshToken: 'rt-abc' } } as any);
@@ -1235,10 +1238,19 @@ describe('withIGRPAuth — default matcher', () => {
     const instance = withIGRPAuth({ env: VALID_ENV });
     const re = new RegExp(`^${instance.config.matcher[1]}$`);
 
-    for (const protectedPath of ['/appstore', '/apps-admin', '/_nextfoo', '/dashboard']) {
+    // `/apps` is an ordinary route inside the app: excluding it left it with no
+    // auth check and no security headers.
+    for (const protectedPath of [
+      '/apps',
+      '/apps/x',
+      '/appstore',
+      '/apps-admin',
+      '/_nextfoo',
+      '/dashboard',
+    ]) {
       expect(re.test(protectedPath), `${protectedPath} must wake the middleware`).toBe(true);
     }
-    for (const skipped of ['/apps', '/apps/x', '/_next/static/a.js', '/favicon.ico', '/a/b.png']) {
+    for (const skipped of ['/_next', '/_next/static/a.js', '/favicon.ico', '/a/b.png']) {
       expect(re.test(skipped), `${skipped} must stay excluded`).toBe(false);
     }
   });
@@ -1450,5 +1462,42 @@ describe('withIGRPAuth — session.maxAge', () => {
       session: { maxAge: 3600, updateAge: 60 },
     }).authOptions;
     expect(session).toMatchObject({ maxAge: 3600, updateAge: 60 });
+  });
+});
+
+describe('withIGRPAuth — NEXTAUTH_URL path check', () => {
+  const BASE = { ...VALID_ENV, NEXT_PUBLIC_BASE_PATH: '/apps/template' };
+
+  async function warningsFor(env: Record<string, string | undefined>) {
+    const { resetGlobalStateForTests } = await import('../_global-state');
+    resetGlobalStateForTests();
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    (await getFactory())({ env });
+    const hits = warn.mock.calls.filter((c) => String(c[0]).includes('NEXTAUTH_URL path'));
+    warn.mockRestore();
+    return hits.map((c) => String(c[0]));
+  }
+
+  it.each([
+    ['without the basePath', 'http://localhost:3000/api/auth', '"/api/auth"'],
+    ['without /api/auth', 'http://localhost:3000/apps/template', '"/apps/template"'],
+    ['as a bare origin', 'http://localhost:3000', '"/api/auth"'],
+  ])('warns once when NEXTAUTH_URL is %s', async (_case, url, actual) => {
+    const hits = await warningsFor({ ...BASE, NEXTAUTH_URL: url });
+    expect(hits).toHaveLength(1);
+    expect(hits[0]).toContain(actual);
+    expect(hits[0]).toContain('"/apps/template/api/auth"');
+  });
+
+  it.each([
+    [
+      'basePath + /api/auth',
+      { ...BASE, NEXTAUTH_URL: 'http://localhost:3000/apps/template/api/auth/' },
+    ],
+    ['no basePath, /api/auth', { ...VALID_ENV, NEXTAUTH_URL: 'http://localhost:3000/api/auth' }],
+    ['no basePath, bare origin', { ...VALID_ENV, NEXTAUTH_URL: 'http://localhost:3000' }],
+    ['NEXTAUTH_URL unset', { ...BASE, NEXTAUTH_URL: undefined }],
+  ])('stays quiet for %s', async (_case, env) => {
+    expect(await warningsFor(env)).toHaveLength(0);
   });
 });

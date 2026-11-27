@@ -92,11 +92,13 @@
   --muted-foreground: oklch(0.544 0.046 257.417);
   --accent: oklch(0.968 0.007 247.896);
   --accent-foreground: oklch(0.208 0.042 265.755);
-  --destructive: oklch(0.562 0.245 27.325);
+  /* destructive/warning/success/indigo darkened (hue kept) so soft text holds 4.5:1 on its tint
+     over --muted (selected table row) and on the destructive button's /10 tint. */
+  --destructive: oklch(0.52 0.245 27.325);
   --destructive-foreground: oklch(0.984 0.003 247.858);
-  --success: oklch(0.527 0.154 150.069);
+  --success: oklch(0.5 0.154 150.069);
   --success-foreground: oklch(0.985 0.002 150);
-  --warning: oklch(0.554 0.188 70.08);
+  --warning: oklch(0.53 0.188 70.08);
   --warning-foreground: oklch(0.985 0.002 70);
   /* Stepper states alias existing brand/success tokens. */
   --step-active: var(--primary);
@@ -105,7 +107,7 @@
   --step-complete-foreground: var(--success-foreground);
   --info: oklch(0.488 0.243 264.376);
   --info-foreground: oklch(0.984 0.003 247.858);
-  --indigo: oklch(0.576 0.25 292.717);
+  --indigo: oklch(0.55 0.25 292.717);
   --indigo-foreground: oklch(0.984 0.003 247.858);
   --highlight: oklch(0.905 0.182 98.111);
   --highlight-foreground: oklch(0.279 0.041 260.031);
@@ -157,7 +159,8 @@
   --accent-foreground: oklch(0.984 0.003 247.858);
   --destructive: oklch(0.704 0.191 22.216);
   --destructive-foreground: oklch(0.28 0.048 22.216);
-  --success: oklch(0.627 0.194 150.069);
+  /* Lightened (hue kept): soft success text holds 4.5:1 over --muted (selected table row). */
+  --success: oklch(0.66 0.194 150.069);
   --success-foreground: oklch(0.26 0.049 150.069);
   --warning: oklch(0.828 0.189 84.429);
   --warning-foreground: oklch(0.28 0.07 84);

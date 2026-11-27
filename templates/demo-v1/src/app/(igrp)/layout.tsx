@@ -27,7 +27,8 @@ export default async function IGRPRootLayout({
     getLayoutConfig(),
   ]);
   const config = await createConfig(layoutConfig);
-  // verifySession() above seeds the per-request access-client config that igrpGetClaims() reads.
+  // igrpGetClaims() reads the refreshed access token through the session read
+  // that withIGRPAuth registers; it does not depend on verifySession() above.
   const claims = await igrpGetClaims();
 
   // The framework fetches and owns all header data; a slot only adds what

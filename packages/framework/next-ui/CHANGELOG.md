@@ -1,5 +1,86 @@
 # @igrp/framework-next-ui
 
+## 0.2.0-beta.23
+
+### Patch Changes
+
+- 7f1ad42: Package and build fixes from a review of each package's build:
+  
+  - `@igrp/framework-next`: `next-intl` is now a peer dependency (`^4.16.1`), not a pinned dependency. The root layout mounts next-intl's provider and the app calls its hooks, so both must use one copy; a version mismatch used to install two and lose the context. Apps already depend on `next-intl`.
+  - `@igrp/framework-next-ui`: `lucide-react` is now a peer dependency, as in the design system. The unused `clsx` and `class-variance-authority` dependencies are removed.
+  - `@igrp/framework-next-auth`: every `exports` entry has a `default` condition, so resolvers without the `import` condition (`require()` of ESM, CommonJS test runners) find it.
+  - `@igrp/igrp-framework-react-design-system`, `@igrp/framework-next-ui`, `@igrp/framework-next`: no `.d.ts.map` files in the package. They pointed at `src/`, which is not published.
+  - `@igrp/template-migrator`: the build clears `dist/` first, so files from older builds are no longer published. `yaml` moves to `devDependencies`: only the build scripts use it.
+- 8342c98: Spacing now uses `flex` + `gap-*` instead of `space-x-*` / `space-y-*`, following the shadcn rule. Tailwind v4 builds `space-y-*` as a margin on every child but the last, so a hidden or empty last child left a visible blank band.
+  
+  - `IGRPTextList` (and `igrpTextlistVariants`): the list is `flex flex-col`; `spacing` maps to `gap-1` / `gap-2` / `gap-4`.
+  - `IGRPInputFile`: the error list uses `flex flex-col gap-1`. List markers stay.
+  - `IGRPModalDialog` header: dropped a no-op `space-y-0`.
+  - next-ui: the auth form, the segment error view and the nav-user menu header use `gap-*`.
+  
+  The `AvatarGroup` primitive keeps `-space-x-2`: the avatars overlap with a negative margin, which `gap` cannot do.
+- d83c90f: Centra verticalmente os separadores do cabeçalho; estavam alinhados ao topo.
+- c5939b7: Fixes from the 2026-11-25 audit:
+  
+  - A menu `url` that starts with `/\` or `\` is now an external link. Browsers read it as `//host`, so it left the app while it rendered as an internal link.
+  - Menu items on the same route that differ only by query string (`/list?status=open`, `/list?status=closed`) now each highlight on their own. `IGRPTemplateMenus` reads `useSearchParams()`, so a static route that renders it outside `IGRPLayoutSidebar` needs a `<Suspense>` boundary.
+  - Ctrl+K / Cmd+K opens the command palette with Caps Lock on.
+- a6af114: `igrpResolveErrorCopy` reads the platform code from `error.digest` (`<id>|<code>`) when the error has no `code` of its own. A server-thrown `IgrpError` now gets its catalog copy in production instead of the generic copy. Only a key of the `byCode` catalog is used, so an `AppError` message in the digest still falls through.
+- 82a22d3: `igrpChromeStringsFor` no longer returns `Object.prototype` members for a locale tag such as `constructor` or `__proto__`. Such a value in the `IGRP_LOCALE` cookie made every chrome component throw, including `IGRPGlobalError`; it now falls back to Portuguese like any other unsupported tag.
+- f77fd3b: Menu items that open in a new tab (`target: "_blank"`) now keep the app's `basePath` on internal links. Before, with `NEXT_PUBLIC_BASE_PATH=/apps/template`, a `pageSlug: "users"` item opened `/users` instead of `/apps/template/users`. Absolute URLs are unchanged.
+- 7f1ad42: Performance fixes from a review against the Vercel React rules:
+  
+  - The header logo and the app switcher images no longer use `priority`. The header preloaded both the light and the dark logo at high priority on every page, and one of them is always hidden.
+  - The command palette folds (accents and case) each item's keywords once when it renders, not again on every keystroke for every item.
+  - A sidebar folder in expanded mode no longer mounts a tooltip that can never show.
+- 7b43f45: The template chrome follows the shadcn rules:
+  
+  - Header, sidebar and header-slot loading placeholders use the design-system `Skeleton`. They are now `rounded-md`.
+  - The app switcher, user menu, breadcrumb overflow menu and collapsed-sidebar folder menu put their items in a `DropdownMenuGroup`.
+  - Icons in buttons, alerts and breadcrumbs no longer set their own size. The component sizes them. The retry and home icons on the error pages lose the extra `mr-2`, so the gap to the label is now 6 px.
+  - The retry spinner stops when the user prefers reduced motion.
+- f5605ac: `IGRPNestedProviders` wraps the app in `IGRPTooltipProvider` (delay 0, as before) instead of the primitive `TooltipProvider`. Every `IGRPTooltip` in the app now shares it instead of mounting its own provider.
+- 9976eba: The sidebar user menu can hide its Profile and Settings entries. `IGRPSidebarDataArgs` gets `showProfile` and `showSettings` (default `true`); `IGRPSidebarUser` and `IGRPTemplateNavUser` take the same props, and a prop wins over the data.
+- Updated dependencies [c412dea]
+- Updated dependencies [0dce2cc]
+- Updated dependencies [7f1ad42]
+- Updated dependencies [82a22d3]
+- Updated dependencies [f8b345c]
+- Updated dependencies [f8b345c]
+- Updated dependencies [ea46503]
+- Updated dependencies [78722bc]
+- Updated dependencies [1f7ab30]
+- Updated dependencies [f5605ac]
+- Updated dependencies [2a01f0d]
+- Updated dependencies [4ad6a06]
+- Updated dependencies [a6af114]
+- Updated dependencies [f77fd3b]
+- Updated dependencies [f77fd3b]
+- Updated dependencies [f77fd3b]
+- Updated dependencies [c5939b7]
+- Updated dependencies [82a22d3]
+- Updated dependencies [f31585e]
+- Updated dependencies [fda3c7e]
+- Updated dependencies [7f1ad42]
+- Updated dependencies [7b43f45]
+- Updated dependencies [8342c98]
+- Updated dependencies [f77fd3b]
+- Updated dependencies [c73287e]
+- Updated dependencies [f77fd3b]
+- Updated dependencies [8a8cc80]
+- Updated dependencies [a6af114]
+- Updated dependencies [8a8cc80]
+- Updated dependencies [5a2166c]
+- Updated dependencies [602f415]
+- Updated dependencies [7f1ad42]
+- Updated dependencies [c5939b7]
+- Updated dependencies [c5939b7]
+- Updated dependencies [c412dea]
+- Updated dependencies [9976eba]
+  - @igrp/framework-next-auth@0.2.0-beta.12
+  - @igrp/igrp-framework-react-design-system@0.2.0-beta.18
+  - @igrp/framework-next-types@0.2.0-beta.12
+
 ## 0.2.0-beta.22
 
 ### Patch Changes

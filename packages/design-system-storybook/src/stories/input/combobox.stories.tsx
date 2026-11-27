@@ -20,9 +20,8 @@ export default {
   title: 'Components/Input/Combobox',
   // Known WCAG backlog, tracked in the design-system accessibility audit:
   // button-name on the combobox trigger.
-  // 'todo' reports in the Storybook UI without failing CI. Delete this once the
-  // suite is clean; every other component is gated at 'error' by preview.ts.
-  parameters: { a11y: { test: 'todo' } },
+  // Only the backlog rule is off; every other rule still fails CI. Delete once fixed.
+  parameters: { a11y: { test: 'error', config: { rules: [{ id: 'button-name', enabled: false }] } } },
   component: IGRPCombobox,
   argTypes: {
     variant: { control: 'select', options: ['single', 'multiple'] },
@@ -56,23 +55,23 @@ type Story = StoryObj<typeof IGRPCombobox>;
 
 // Sample data
 const COUNTRIES: IGRPOptionsProps[] = [
-  { value: 'cv', label: 'Cabo Verde', color: 'text-blue-500' },
-  { value: 'us', label: 'Estados Unidos', color: 'text-red-500' },
-  { value: 'ca', label: 'Canadá', color: 'text-red-700' },
-  { value: 'gb', label: 'Reino Unido', color: 'text-blue-700' },
-  { value: 'fr', label: 'França', color: 'text-blue-600' },
-  { value: 'de', label: 'Alemanha', color: 'text-yellow-500' },
-  { value: 'jp', label: 'Japão', color: 'text-red-500' },
-  { value: 'au', label: 'Austrália', color: 'text-green-500' },
-  { value: 'cn', label: 'China', color: 'text-red-600' },
-  { value: 'ru', label: 'Rússia', color: 'text-red-800' },
+  { value: 'cv', label: 'Cabo Verde', color: 'text-info' },
+  { value: 'us', label: 'Estados Unidos', color: 'text-destructive' },
+  { value: 'ca', label: 'Canadá', color: 'text-destructive' },
+  { value: 'gb', label: 'Reino Unido', color: 'text-info' },
+  { value: 'fr', label: 'França', color: 'text-info' },
+  { value: 'de', label: 'Alemanha', color: 'text-warning' },
+  { value: 'jp', label: 'Japão', color: 'text-destructive' },
+  { value: 'au', label: 'Austrália', color: 'text-success' },
+  { value: 'cn', label: 'China', color: 'text-destructive' },
+  { value: 'ru', label: 'Rússia', color: 'text-destructive' },
 ];
 
 const PRIORITIES: IGRPOptionsProps[] = [
-  { value: 'low', label: 'Baixa Prioridade', color: 'text-green-500' },
-  { value: 'medium', label: 'Média Prioridade', color: 'text-amber-500' },
-  { value: 'high', label: 'Alta Prioridade', color: 'text-red-500' },
-  { value: 'critical', label: 'Crítica', color: 'text-red-700 font-bold' },
+  { value: 'low', label: 'Baixa Prioridade', color: 'text-success' },
+  { value: 'medium', label: 'Média Prioridade', color: 'text-warning' },
+  { value: 'high', label: 'Alta Prioridade', color: 'text-destructive' },
+  { value: 'critical', label: 'Crítica', color: 'text-destructive font-bold' },
 ];
 
 const STATUS: IGRPOptionsProps[] = [
@@ -103,15 +102,15 @@ const STATUS: IGRPOptionsProps[] = [
 ];
 
 const FRAMEWORKS: IGRPOptionsProps[] = [
-  { label: 'React', value: 'react', color: 'text-blue-500' },
-  { label: 'Vue', value: 'vue', color: 'text-green-500' },
-  { label: 'Next.js', value: 'next', color: 'text-red-500' },
-  { label: 'React1', value: 'react1', color: 'text-blue-500' },
-  { label: 'Vue1', value: 'vue1', color: 'text-green-500' },
-  { label: 'Next.js1', value: 'next1', color: 'text-red-500' },
-  { label: 'React2', value: 'react2', color: 'text-blue-500' },
-  { label: 'Vue2', value: 'vue2', color: 'text-green-500' },
-  { label: 'Next.js2', value: 'next2', color: 'text-red-500' },
+  { label: 'React', value: 'react', color: 'text-info' },
+  { label: 'Vue', value: 'vue', color: 'text-success' },
+  { label: 'Next.js', value: 'next', color: 'text-destructive' },
+  { label: 'React1', value: 'react1', color: 'text-info' },
+  { label: 'Vue1', value: 'vue1', color: 'text-success' },
+  { label: 'Next.js1', value: 'next1', color: 'text-destructive' },
+  { label: 'React2', value: 'react2', color: 'text-info' },
+  { label: 'Vue2', value: 'vue2', color: 'text-success' },
+  { label: 'Next.js2', value: 'next2', color: 'text-destructive' },
 ];
 
 const COUNTRIES_WITH_ICONS: IGRPOptionsProps[] = [
@@ -171,7 +170,7 @@ const MultipleTemplate = (args: JSX.IntrinsicAttributes & IGRPComboboxProps) => 
       data-section-id={'vinculoLaboral'}
       className={cn()}
       >
-      <IGRPCardContent className={cn('', 'space-x-3', 'space-y-3',)}>
+      <IGRPCardContent className={cn('')}>
         <div className={cn('grid', 'grid-cols-1 ', 'md:grid-cols-2 ', 'lg:grid-cols-4 ', ' gap-4',)}>
           <IGRPCombobox
             name={`numeroContribuinte`}
@@ -305,7 +304,7 @@ const FormTemplate = (args: IGRPComboboxProps) => {
         schema={schema}
         onSubmit={onSubmit}
         formRef={formRef}
-        gridClassName='space-y-4 w-80'
+        gridClassName='w-80'
         defaultValues={{ [fieldName]: defaultValue }}
       >
         <IGRPCombobox
@@ -463,9 +462,9 @@ export const WithGroup: Story = {
     placeholder: 'Select an option...',
     showGroup: true,
     options: [
-      { value: 'option1', label: 'Option 1', color: 'text-blue-500', group: 'First Group' },
-      { value: 'option2', label: 'Option 2', color: 'text-green-500', group: 'Second Group' },
-      { value: 'option3', label: 'Option 3', color: 'text-red-500', group: 'Third Group' },
+      { value: 'option1', label: 'Option 1', color: 'text-info', group: 'First Group' },
+      { value: 'option2', label: 'Option 2', color: 'text-success', group: 'Second Group' },
+      { value: 'option3', label: 'Option 3', color: 'text-destructive', group: 'Third Group' },
     ],
   },
 };

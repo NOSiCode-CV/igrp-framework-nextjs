@@ -79,4 +79,19 @@ describe("IGRPInputSearch slots and debounce", () => {
       vi.useRealTimers()
     }
   })
+
+  it("standalone runs the caller's onChange and onKeyDown after its own", async () => {
+    const onChange = vi.fn()
+    const onKeyDown = vi.fn()
+    const onSearch = vi.fn()
+    render(<IGRPInputSearch name="q" label="Search" onChange={onChange} onKeyDown={onKeyDown} onSearch={onSearch} />)
+
+    const input = screen.getByLabelText("Search")
+    await userEvent.type(input, "ab{enter}")
+
+    expect(input).toHaveValue("ab")
+    expect(onChange).toHaveBeenCalledTimes(2)
+    expect(onKeyDown).toHaveBeenCalledTimes(3)
+    expect(onSearch).toHaveBeenCalledWith("ab")
+  })
 })

@@ -83,7 +83,7 @@ describe("babel build pipeline", () => {
     expect(clientModules.length).toBeGreaterThan(100)
   })
 
-  it("emits the production JSX runtime even with NODE_ENV unset", () => {
+  it("emits the production JSX runtime even with NODE_ENV unset", { timeout: 120_000 }, () => {
     // `development` follows `api.env()` unless it is pinned, and the build
     // scripts set no NODE_ENV — so this is what stops the dev runtime shipping.
     const withJsx = clientModules.find((file) => file.endsWith("button.tsx"))

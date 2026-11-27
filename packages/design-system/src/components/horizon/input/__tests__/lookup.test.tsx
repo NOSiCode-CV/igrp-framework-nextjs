@@ -202,4 +202,11 @@ describe("value pairing", () => {
     await userEvent.click(screen.getByRole("button", { name: "Limpar" }))
     expect(onClear).toHaveBeenCalledTimes(1)
   })
+
+  it("typing after a pick clears the picked id", async () => {
+    render(<Paired defaults={{ licencaId: "12", licencaNumero: "Praia" }} inputDisabled={false} />)
+    await userEvent.type(screen.getByRole("textbox", { name: "Nº licença" }), "x")
+    expect(pairedRef.current!.getValues("licencaNumero")).toBe("Praiax")
+    expect(pairedRef.current!.getValues("licencaId")).toBeNull()
+  })
 })

@@ -33,6 +33,7 @@ import {
   isAuthDisabled as isAuthDisabledFromEnv,
   isPreviewModeEnabled,
   isOidcManagedProviderId,
+  registerIGRPAuthBypass,
   type AuthProviderId,
   type SessionAuthProviderId,
 } from './providers';
@@ -54,6 +55,7 @@ import {
   DEFAULT_SESSION_MAX_AGE_S,
   deleteStoredSession,
   refreshUnderSessionLock,
+  registerIGRPServerSession,
   type IGRPSessionStore,
 } from './session-store';
 import { escapeHtml, sanitizeRedirectUrl, stripAuthApiSuffix, stripBasePath } from './sanitize';
@@ -147,19 +149,13 @@ const SIGNOUT_REVOCATION_BUDGET_MS = 5000;
 // template does.
 //
 // Matchers are basePath-RELATIVE: Next strips `basePath` before matching (the
-// same reason `request.nextUrl.pathname` arrives without it). So the `apps`
-// alternative excludes a top-level `/apps` *inside* the app — it does NOT
-// refer to a deployment mounted at `/apps/<name>`, and an app whose basePath
-// is `/apps/template` is matched normally. It is kept only for consumers that
-// really do have an `/apps` route; it protects nothing by itself.
+// same reason `request.nextUrl.pathname` arrives without it), so an app whose
+// basePath is `/apps/template` is matched normally. There is deliberately no
+// `apps` exclusion: it skipped a top-level `/apps` route *inside* the app,
+// which then got no auth check and no security headers.
 //
-// The reserved names are excluded as WHOLE SEGMENTS (`apps(?:/|$)`), not as
-// string prefixes: a bare `(?!apps|_next|…)` lookahead stopped after four
-// characters, so `/appstore`, `/apps-admin` and `/_nextfoo` never woke the
-// middleware at all. The `.*\..*` alternative is the usual static-asset skip
-// and also skips any PAGE route whose path contains a dot (a dynamic segment
-// capturing `john.doe`) — those routes must be protected server-side, which
-// the template does from its authenticated layout.
+// The reserved names are excluded as WHOLE SEGMENTS (`_next(?:/|$)`), not as
+// string prefixes: a bare `(?!_next|…)` lookahead also skipped `/_nextfoo`.
 //
 // Consumers that additionally filter inside the middleware body (static
 // prefixes, extension checks) are duplicating this list — harmless, but the
@@ -171,11 +167,16 @@ const SIGNOUT_REVOCATION_BUDGET_MS = 5000;
 // (`/users/john.doe`, `/releases/v1.2`), which never woke the middleware. The
 // list covers what `public/` and `next build` emit; an asset type outside it
 // merely wakes the middleware and must then be let through by the consumer.
+// The flip side: a ROUTE HANDLER outside `/api` whose path ends in one of
+// these extensions (`/reports/q1.pdf`) never wakes the middleware, so it must
+// check the session itself — or live under `/api`, which the third matcher
+// always wakes. Security headers that must reach every path
+// belong in `next.config` `headers()`, which no matcher limits.
 const STATIC_ASSET_EXTENSIONS =
   'ico|png|jpe?g|gif|svg|webp|avif|bmp|css|js|mjs|map|json|txt|xml|webmanifest|woff2?|ttf|otf|eot|pdf|mp4|webm|mp3';
 const DEFAULT_MATCHER = [
   '/',
-  `/((?!apps(?:/|$)|_next(?:/|$)|favicon.ico$|.*\\.(?:${STATIC_ASSET_EXTENSIONS})$).*)`,
+  `/((?!_next(?:/|$)|favicon.ico$|.*\\.(?:${STATIC_ASSET_EXTENSIONS})$).*)`,
   '/api/:path*',
 ];
 
@@ -626,6 +627,41 @@ function warnOnShortTokenLifetime(expiresAt: number): void {
  * the variable is set, and setting it does nothing. That makes the check
  * *capable of firing correctly*, which the previous version was not.
  */
+/**
+ * Warns once when NEXTAUTH_URL's path is not `${NEXT_PUBLIC_BASE_PATH}/api/auth`.
+ *
+ * NextAuth builds the OAuth `redirect_uri` from that path, so both common
+ * mistakes pass every other check: without the basePath the IdP sends the user
+ * back outside the app (404); without `/api/auth` the callback lands on a page
+ * route, the middleware bounces it to /login, and the `callbackUrl` nests on
+ * every round. `resolveAppBasePath` can't see either (it strips `/api/auth` and
+ * falls back to NEXT_PUBLIC_BASE_PATH), so check the raw path here.
+ */
+function warnOnNextAuthUrlPath(env: Record<string, string | undefined>): void {
+  const raw = env.NEXTAUTH_URL?.trim();
+  if (!raw) return;
+  let path: string;
+  try {
+    path = new URL(raw).pathname.replace(/\/+$/, '');
+  } catch {
+    return; // A malformed URL is NextAuth's own error to report.
+  }
+  // NextAuth v4 treats an origin-only NEXTAUTH_URL as `/api/auth`.
+  const effective = path || '/api/auth';
+  const basePath = (env.NEXT_PUBLIC_BASE_PATH ?? process.env.NEXT_PUBLIC_BASE_PATH ?? '')
+    .trim()
+    .replace(/\/+$/, '');
+  const expected = `${basePath && !basePath.startsWith('/') ? `/${basePath}` : basePath}/api/auth`;
+  if (effective === expected) return;
+  warnOnce('config.nextAuthUrlPath', () =>
+    console.warn(
+      `[withIGRPAuth] NEXTAUTH_URL path is "${effective}" but must be "${expected}" ` +
+        `(NEXT_PUBLIC_BASE_PATH + /api/auth). NextAuth will send redirect_uri ` +
+        `"${effective}/callback/<provider>", so the login fails or loops with a nested callbackUrl.`,
+    ),
+  );
+}
+
 function warnOnRefetchIntervalMisconfiguration(env: Record<string, string | undefined>): void {
   const raw = env.IGRP_SESSION_REFETCH_INTERVAL?.trim();
   if (!raw) return;
@@ -908,12 +944,11 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
     resolvedProvider = resolveProvider(provider, env);
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
-    const code = msg.includes('AUTH_PROVIDER is set but empty')
-      ? 'AUTH_PROVIDER_EMPTY'
-      : msg.includes('Unsupported AUTH_PROVIDER')
-        ? 'AUTH_PROVIDER_INVALID'
-        : 'AUTH_CONFIG_INVALID';
-    configError = new IGRPAuthConfigError(msg, code);
+    const code = (err as { code?: unknown } | null)?.code;
+    configError = new IGRPAuthConfigError(
+      msg,
+      typeof code === 'string' ? code : 'AUTH_CONFIG_INVALID',
+    );
   }
 
   const authIsDisabled = !configError && resolvedProvider === null;
@@ -949,6 +984,8 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
   if (resolveNodeEnv(env) !== 'production') {
     warnOnRefetchIntervalMisconfiguration(env);
   }
+
+  if (!authIsDisabled) warnOnNextAuthUrlPath(env);
 
   let warnedBasePathMismatch = false;
 
@@ -1652,6 +1689,14 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
 
     return session;
   }
+
+  // Lets `@igrp/framework-next`'s permission checks read the token this
+  // instance just refreshed instead of the stale cookie. Last instance wins:
+  // one per app process. Not registered when there is nothing real to read.
+  if (!configError && !authIsDisabled) registerIGRPServerSession(serverSession);
+  // `isIgrpAuthBypass()` (server actions, permissions, the template) then
+  // answers like the middleware, which asks this instance.
+  registerIGRPAuthBypass(() => isPreviewMode() || isAuthDisabled());
 
   // ── Return ─────────────────────────────────────────────────────────────────
 

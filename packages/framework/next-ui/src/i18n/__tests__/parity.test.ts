@@ -58,4 +58,10 @@ describe('igrpChromeStringsFor', () => {
     expect(igrpChromeStringsFor('')).toBe(IGRP_CHROME_STRINGS_PT);
     expect(igrpChromeStringsFor(undefined)).toBe(IGRP_CHROME_STRINGS_PT);
   });
+
+  it('falls back to pt for Object.prototype keys from a tampered cookie', () => {
+    for (const tag of ['constructor', '__proto__', 'toString', 'hasOwnProperty']) {
+      expect(igrpChromeStringsFor(tag), tag).toBe(IGRP_CHROME_STRINGS_PT);
+    }
+  });
 });

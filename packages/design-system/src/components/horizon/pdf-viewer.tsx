@@ -412,12 +412,12 @@ function IGRPPdfViewerInline({
       >
         <PdfFrameStatus frameStatus={frameStatus} loadErrorLabel={loadErrorLabel} />
 
+        {/* Not loading="lazy": the load timeout starts at mount, so a deferred frame below the fold would time out. */}
         <iframe
           src={iframeSrc}
           className={cn("h-full w-full border-0", frameStatus === "error" ? "hidden" : "block")}
           title={igrpFormatMessage(i18n.pdfViewer.viewerTitle, { name: title })}
           aria-label={igrpFormatMessage(i18n.pdfViewer.viewerLabel, { name: title })}
-          loading="lazy"
           onLoad={handleFrameLoad}
           onError={handleFrameError}
         />

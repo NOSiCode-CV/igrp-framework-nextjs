@@ -27,11 +27,9 @@ describe("readLock", () => {
       applied: [
         {
           id: "01-test",
-          appliedAt: "2026-01-01T00:00:00.000Z",
-          cliVersion: "0.1.0-beta.125",
+          cliVersion: "0.1",
           manifestHash: "abc123",
-          undo: [{ type: "file.delete", path: "src/x.ts" }],
-          fileHashes: { "src/x.ts": "deadbeefdeadbeef" },
+          payloadHash: "def456",
         },
       ],
     };

@@ -1,12 +1,13 @@
 "use client"
 "use no memo"
 
-import { useCallback, useEffect, useId, useMemo, useReducer, useRef } from "react"
+import { useCallback, useEffect, useId, useMemo, useReducer, useRef, useState } from "react"
 import {
   type ColumnDef,
   type ColumnFiltersState,
   createColumnHelper,
   type ExpandedState,
+  functionalUpdate,
   getCoreRowModel,
   getExpandedRowModel,
   getFacetedMinMaxValues,
@@ -29,7 +30,7 @@ import {
 
 import { useIGRPi18n } from "../../../i18n/index.js"
 import { cn } from "../cn.js"
-import { Table, TableBody, TableHeader } from "../../primitives/table.js"
+import { Table, TableBody, TableCaption, TableHeader } from "../../primitives/table.js"
 import { type IGRPDataTableClientFilterListProps, IGRPDataTableClientFilter } from "./client-filter.js"
 import type { IGRPAccessorColumnDef } from "./column-helper.js"
 import {
@@ -41,16 +42,26 @@ import {
   IGRPDataTableFilterSelect,
 } from "./filter.js"
 import { IGRPDataTablePagination, IGRPDataTablePaginationNumeric } from "./pagination.js"
+import { IGRPDataTableCellCheckbox, IGRPDataTableCellSwitch } from "./cell.js"
+import { IGRPDataTableHeaderRowsSelect } from "./header.js"
 import { IGRPDataTableRowActionsCell } from "./row-actions-cell.js"
 import { IGRPDataTableBodyRows, IGRPDataTableHeaderRows, useIGRPDataTableRowIdWarning } from "./table-rows.js"
 import { IGRPDataTableToggleVisibility } from "./toggle-visibility.js"
 import { igrpDataTableTableClassName } from "./layout.js"
+import { IGRPDataTableDateRangeFilterFn, IGRPDataTableFacetedFilterFn } from "./lib/filters-utils.js"
 import type {
   IGRPDataTableAction,
+  IGRPDataTableFilterType,
   IGRPDataTableLayout,
   IGRPDataTablePaginationConfig,
   IGRPDataTableQuery,
 } from "./types.js"
+
+/** Default `filterFn` per descriptor type; a column's own `filterFn` wins. */
+const DESCRIPTOR_FILTER_FNS: Partial<Record<IGRPDataTableFilterType, typeof IGRPDataTableFacetedFilterFn>> = {
+  faceted: IGRPDataTableFacetedFilterFn,
+  date: IGRPDataTableDateRangeFilterFn,
+}
 
 /**
  * Props for the IGRPDataTable component.
@@ -112,6 +123,8 @@ interface IGRPDataTableProps<TData, TValue> {
   className?: string
   /** CSS classes for the filter wrapper. */
   filterClassName?: string
+  /** Accessible table name, rendered as a visually hidden `<caption>`. */
+  caption?: string
   /** CSS classes for the table element. */
   tableClassName?: string
   /** CSS classes for the table header. */
@@ -171,6 +184,12 @@ interface IGRPDataTableProps<TData, TValue> {
    * callback is used, so an inline function does not refire it.
    */
   onSelectionChange?: (rows: TData[]) => void
+  /**
+   * Adds a row-selection column before `columns`: a checkbox or a switch per row, with a
+   * select-all checkbox in the header (current page only). Leave unset if `columns`
+   * already has its own selection column.
+   */
+  selection?: "checkbox" | "switch"
 }
 
 type TableState = {
@@ -182,36 +201,39 @@ type TableState = {
   rowSelection: RowSelectionState
 }
 
+// Payloads are TanStack updaters, resolved against the reducer's current state:
+// resolving them in the setter used the last render's state, so two updates in
+// one tick (a filter keystroke racing a reset) lost one.
 type TableAction =
-  | { type: "columnFilters"; payload: ColumnFiltersState }
-  | { type: "columnVisibility"; payload: VisibilityState }
-  | { type: "pagination"; payload: PaginationState }
-  | { type: "sorting"; payload: SortingState }
-  | { type: "expanded"; payload: ExpandedState }
-  | { type: "rowSelection"; payload: RowSelectionState }
+  | { type: "columnFilters"; payload: Updater<ColumnFiltersState> }
+  | { type: "columnVisibility"; payload: Updater<VisibilityState> }
+  | { type: "pagination"; payload: Updater<PaginationState> }
+  | { type: "sorting"; payload: Updater<SortingState> }
+  | { type: "expanded"; payload: Updater<ExpandedState> }
+  | { type: "rowSelection"; payload: Updater<RowSelectionState> }
 
 function tableReducer(state: TableState, action: TableAction): TableState {
   switch (action.type) {
     case "columnFilters":
       return {
         ...state,
-        columnFilters: action.payload,
+        columnFilters: functionalUpdate(action.payload, state.columnFilters),
         pagination: { ...state.pagination, pageIndex: 0 },
       }
     case "columnVisibility":
-      return { ...state, columnVisibility: action.payload }
+      return { ...state, columnVisibility: functionalUpdate(action.payload, state.columnVisibility) }
     case "pagination":
-      return { ...state, pagination: action.payload }
+      return { ...state, pagination: functionalUpdate(action.payload, state.pagination) }
     case "sorting":
       return {
         ...state,
-        sorting: action.payload,
+        sorting: functionalUpdate(action.payload, state.sorting),
         pagination: { ...state.pagination, pageIndex: 0 },
       }
     case "expanded":
-      return { ...state, expanded: action.payload }
+      return { ...state, expanded: functionalUpdate(action.payload, state.expanded) }
     case "rowSelection":
-      return { ...state, rowSelection: action.payload }
+      return { ...state, rowSelection: functionalUpdate(action.payload, state.rowSelection) }
     default:
       return state
   }
@@ -236,6 +258,7 @@ function IGRPDataTable<TData, TValue>({
   toggleOptionsLabel,
   className,
   filterClassName,
+  caption,
   tableClassName,
   layout = "auto",
   tableHeaderClassName,
@@ -247,6 +270,7 @@ function IGRPDataTable<TData, TValue>({
   rowSelection: rowSelectionProp,
   onRowSelectionChange,
   onSelectionChange,
+  selection,
   getRowCanExpand = () => false,
   renderSubComponent,
   getRowId,
@@ -290,59 +314,28 @@ function IGRPDataTable<TData, TValue>({
     rowSelection: {},
   })
 
-  const setColumnFilters = useCallback(
-    (updater: Updater<ColumnFiltersState>) =>
-      dispatch({
-        type: "columnFilters",
-        payload: typeof updater === "function" ? updater(state.columnFilters) : updater,
-      }),
-    [state.columnFilters]
-  )
-  const setColumnVisibility = useCallback(
-    (updater: Updater<VisibilityState>) =>
-      dispatch({
-        type: "columnVisibility",
-        payload: typeof updater === "function" ? updater(state.columnVisibility) : updater,
-      }),
-    [state.columnVisibility]
-  )
-  const setPagination = useCallback(
-    (updater: Updater<PaginationState>) =>
-      dispatch({
-        type: "pagination",
-        payload: typeof updater === "function" ? updater(state.pagination) : updater,
-      }),
-    [state.pagination]
-  )
-  const setSorting = useCallback(
-    (updater: Updater<SortingState>) =>
-      dispatch({
-        type: "sorting",
-        payload: typeof updater === "function" ? updater(state.sorting) : updater,
-      }),
-    [state.sorting]
-  )
-  const setExpanded = useCallback(
-    (updater: Updater<ExpandedState>) =>
-      dispatch({
-        type: "expanded",
-        payload: typeof updater === "function" ? updater(state.expanded) : updater,
-      }),
-    [state.expanded]
-  )
   const controlledSelection = rowSelectionProp !== undefined
   const rowSelection = rowSelectionProp ?? state.rowSelection
+
+  // Without getRowId a selection is keyed by row index, so once the rows at those
+  // indexes change (refetch, server page, delete) it points at other records: drop it.
+  // Compared by row reference, so a parent that re-derives the same rows keeps it.
+  const [prevData, setPrevData] = useState(data)
+  if (prevData !== data) {
+    setPrevData(data)
+    const rowsChanged = prevData.length !== data.length || prevData.some((row, i) => row !== data[i])
+    if (rowsChanged && !getRowId && !controlledSelection && Object.keys(state.rowSelection).length > 0) {
+      dispatch({ type: "rowSelection", payload: {} })
+    }
+  }
   const setRowSelection = useCallback(
     (updater: Updater<RowSelectionState>) => {
       if (!controlledSelection) {
-        dispatch({
-          type: "rowSelection",
-          payload: typeof updater === "function" ? updater(state.rowSelection) : updater,
-        })
+        dispatch({ type: "rowSelection", payload: updater })
       }
       onRowSelectionChange?.(updater)
     },
-    [controlledSelection, state.rowSelection, onRowSelectionChange]
+    [controlledSelection, onRowSelectionChange]
   )
 
   const _id = useId()
@@ -361,7 +354,7 @@ function IGRPDataTable<TData, TValue>({
         ? [
             tableHelper.display({
               id: "__igrp_actions__",
-              header: "",
+              header: () => <span className="sr-only">{i18n.table.actions}</span>,
               cell: ({ row }) => <IGRPDataTableRowActionsCell row={row} actions={actions} />,
               enableSorting: false,
               enableHiding: false,
@@ -370,10 +363,35 @@ function IGRPDataTable<TData, TValue>({
             }),
           ]
         : []
-    return [...columns, ...actionColumn] as ColumnDef<TData, TValue>[]
-  }, [columns, actions, tableHelper])
+    const selectionColumn = selection
+      ? [
+          tableHelper.display({
+            id: "__igrp_select__",
+            header: ({ table }) => <IGRPDataTableHeaderRowsSelect table={table} />,
+            cell: ({ row }) =>
+              selection === "switch" ? <IGRPDataTableCellSwitch row={row} /> : <IGRPDataTableCellCheckbox row={row} />,
+            enableSorting: false,
+            enableHiding: false,
+            // Same shrink-to-fit sizing as the actions column.
+            meta: { isActionsColumn: true },
+            size: selection === "switch" ? 56 : 40,
+          }),
+        ]
+      : []
+    // Faceted and date filters set an array / a { from, to } value, which TanStack's "auto" filterFn can't match.
+    const withFilterFns = (columns as IGRPAccessorColumnDef<TData>[]).map((col) => {
+      const filterFn = col.filter && !col.filterFn ? DESCRIPTOR_FILTER_FNS[col.filter.type] : undefined
+      return filterFn ? { ...col, filterFn } : col
+    })
+    return [...selectionColumn, ...withFilterFns, ...actionColumn] as ColumnDef<TData, TValue>[]
+  }, [columns, actions, selection, tableHelper, i18n.table.actions])
 
-  useIGRPDataTableRowIdWarning("IGRPDataTable", !!renderSubComponent, !!getRowId)
+  useIGRPDataTableRowIdWarning(
+    "IGRPDataTable",
+    !!renderSubComponent,
+    !!getRowId,
+    !!selection || !!onSelectionChange || !!onRowSelectionChange || controlledSelection
+  )
 
   // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
@@ -392,12 +410,12 @@ function IGRPDataTable<TData, TValue>({
     getRowCanExpand: getRowCanExpand,
     getRowId,
 
-    onColumnFiltersChange: setColumnFilters,
-    onColumnVisibilityChange: setColumnVisibility,
-    onExpandedChange: setExpanded,
-    onPaginationChange: setPagination,
+    onColumnFiltersChange: (payload) => dispatch({ type: "columnFilters", payload }),
+    onColumnVisibilityChange: (payload) => dispatch({ type: "columnVisibility", payload }),
+    onExpandedChange: (payload) => dispatch({ type: "expanded", payload }),
+    onPaginationChange: (payload) => dispatch({ type: "pagination", payload }),
     onRowSelectionChange: setRowSelection,
-    onSortingChange: setSorting,
+    onSortingChange: (payload) => dispatch({ type: "sorting", payload }),
 
     state: {
       sorting: state.sorting,
@@ -522,14 +540,27 @@ function IGRPDataTable<TData, TValue>({
                       )
                     case "select":
                       return (
-                        <IGRPDataTableFilterSelect key={columnId} column={column} options={descriptor.options ?? []} />
+                        <IGRPDataTableFilterSelect
+                          key={columnId}
+                          column={column}
+                          placeholder={descriptor.placeholder}
+                          options={descriptor.options ?? []}
+                          ariaLabel={descriptor.ariaLabel}
+                        />
                       )
                     case "faceted":
                       return (
-                        <IGRPDataTableFilterFaceted key={columnId} column={column} options={descriptor.options ?? []} />
+                        <IGRPDataTableFilterFaceted
+                          key={columnId}
+                          column={column}
+                          placeholder={descriptor.placeholder}
+                          options={descriptor.options ?? []}
+                        />
                       )
                     case "date":
-                      return <IGRPDataTableFilterDate key={columnId} column={column} />
+                      return (
+                        <IGRPDataTableFilterDate key={columnId} column={column} placeholder={descriptor.placeholder} />
+                      )
                     case "range":
                       return <IGRPDataTableFilterMinMax key={columnId} column={column} />
                     case "dropdown":
@@ -537,6 +568,7 @@ function IGRPDataTable<TData, TValue>({
                         <IGRPDataTableFilterDropdown
                           key={columnId}
                           column={column}
+                          placeholder={descriptor.placeholder}
                           options={descriptor.options ?? []}
                         />
                       )
@@ -557,6 +589,7 @@ function IGRPDataTable<TData, TValue>({
 
       <div className={cn("overflow-hidden rounded-md border")}>
         <Table className={cn(igrpDataTableTableClassName(layout), tableClassName)}>
+          {caption && <TableCaption className="sr-only">{caption}</TableCaption>}
           <TableHeader className={tableHeaderClassName}>
             <IGRPDataTableHeaderRows table={table} layout={layout} />
           </TableHeader>

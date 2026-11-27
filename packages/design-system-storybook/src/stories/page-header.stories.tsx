@@ -5,11 +5,6 @@ const meta = {
   title: 'Components/PageHeader',
   component: IGRPPageHeader,
   parameters: {
-    // Known WCAG backlog, tracked in the design-system accessibility audit:
-    // color-contrast backlog.
-    // 'todo' reports in the Storybook UI without failing CI. Delete this once the
-    // suite is clean; every other component is gated at 'error' by preview.ts.
-    a11y: { test: 'todo' },
     layout: 'padded',
     // The back button uses Next's useRouter; mount the mocked app router so
     // the back-button stories render in Storybook and the test-runner.
@@ -123,7 +118,7 @@ export const WithBackButtonText: Story = {
 export const WithBackButtonVariants: Story = {
   args: { title: 'Page Title' },
   render: () => (
-    <div className='container mx-auto px-4 py-10 space-y-8'>
+    <div className='container mx-auto px-4 py-10 flex flex-col gap-8'>
       <div>
         <h3 className='text-sm font-medium mb-4 text-muted-foreground'>Outline (default)</h3>
         <IGRPPageHeader
@@ -158,7 +153,7 @@ export const WithBackButtonVariants: Story = {
 export const WithBackButtonSizes: Story = {
   args: { title: 'Page Title' },
   render: () => (
-    <div className='container mx-auto px-4 py-10 space-y-8'>
+    <div className='container mx-auto px-4 py-10 flex flex-col gap-8'>
       <div>
         <h3 className='text-sm font-medium mb-4 text-muted-foreground'>Icon (default)</h3>
         <IGRPPageHeader
@@ -262,21 +257,21 @@ export const Sticky: Story = {
 export const HeadlineVariants: Story = {
   args: { title: 'Page Title' },
   render: () => (
-    <div className='container mx-auto px-4 py-10 space-y-8'>
+    <div className='container mx-auto px-4 py-10 flex flex-col gap-8'>
       <div>
-        <h3 className='text-sm font-medium mb-4 text-muted-foreground'>Default</h3>
+        <p className='text-sm font-medium mb-4 text-muted-foreground'>Default</p>
         <IGRPPageHeader title='Page Title' description='Default variant' />
       </div>
       <div>
-        <h3 className='text-sm font-medium mb-4 text-muted-foreground'>H1</h3>
+        <p className='text-sm font-medium mb-4 text-muted-foreground'>H1</p>
         <IGRPPageHeader title='Page Title' description='H1 variant' variant='h1' />
       </div>
       <div>
-        <h3 className='text-sm font-medium mb-4 text-muted-foreground'>H2</h3>
+        <p className='text-sm font-medium mb-4 text-muted-foreground'>H2</p>
         <IGRPPageHeader title='Page Title' description='H2 variant' variant='h2' />
       </div>
       <div>
-        <h3 className='text-sm font-medium mb-4 text-muted-foreground'>H3</h3>
+        <p className='text-sm font-medium mb-4 text-muted-foreground'>H3</p>
         <IGRPPageHeader title='Page Title' description='H3 variant' variant='h3' />
       </div>
     </div>

@@ -92,3 +92,17 @@ describe("IGRPCombobox field defects (ADR 0001 consequences)", () => {
     warn.mockRestore()
   })
 })
+
+describe("IGRPCombobox keyboard access without search (WCAG 2.1.1)", () => {
+  it("selects an option with the keyboard and exposes the choice as aria-checked", async () => {
+    const user = userEvent.setup()
+    render(<IGRPCombobox name="x" options={options} placeholder="Pick one" showSearch={false} />)
+    await user.click(screen.getByRole("combobox"))
+    await user.keyboard("{ArrowDown}{Enter}")
+    expect(screen.getByRole("combobox")).toHaveTextContent("Beta")
+
+    await user.click(screen.getByRole("combobox"))
+    expect(screen.getByRole("option", { name: "Beta" })).toHaveAttribute("aria-checked", "true")
+    expect(screen.getByRole("option", { name: "Alpha" })).toHaveAttribute("aria-checked", "false")
+  })
+})

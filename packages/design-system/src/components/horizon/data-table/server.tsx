@@ -19,7 +19,7 @@ import {
 
 import { useIGRPi18n } from "../../../i18n/index.js"
 import { cn } from "../cn.js"
-import { Table, TableBody, TableHeader } from "../../primitives/table.js"
+import { Table, TableBody, TableCaption, TableHeader } from "../../primitives/table.js"
 import { igrpDataTableTableClassName } from "./layout.js"
 import { Spinner } from "../../primitives/spinner.js"
 import { IGRPDataTablePagination, IGRPDataTablePaginationNumeric } from "./pagination.js"
@@ -61,6 +61,8 @@ interface IGRPServerDataTableProps<TData, TValue> {
   toolbar?: React.ReactNode
   id?: string
   className?: string
+  /** Accessible table name, rendered as a visually hidden `<caption>`. */
+  caption?: string
   tableClassName?: string
   tableHeaderClassName?: string
   tableBodyClassName?: string
@@ -89,6 +91,7 @@ function IGRPServerDataTable<TData, TValue>({
   toolbar,
   id,
   className,
+  caption,
   tableClassName,
   tableHeaderClassName,
   tableBodyClassName,
@@ -141,6 +144,7 @@ function IGRPServerDataTable<TData, TValue>({
       {toolbar && <div className="flex flex-col gap-2 md:flex-row md:items-center">{toolbar}</div>}
       <div className="relative overflow-hidden rounded-md border">
         <Table className={cn(igrpDataTableTableClassName(layout), tableClassName)} aria-busy={isLoading || undefined}>
+          {caption && <TableCaption className="sr-only">{caption}</TableCaption>}
           <TableHeader className={tableHeaderClassName}>
             <IGRPDataTableHeaderRows table={table} layout={layout} />
           </TableHeader>

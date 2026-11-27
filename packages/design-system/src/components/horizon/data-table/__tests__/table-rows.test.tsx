@@ -25,8 +25,8 @@ const data: Row[] = [
 describe("IGRPDataTable header and body rows", () => {
   it("renders one empty cell spanning every column, including the actions column", () => {
     render(<IGRPDataTable columns={columns} data={[]} actions={[{ type: "link", label: "Ver", href: () => "/x" }]} />)
-    const cell = screen.getByText("Nenhum registo encontrado.")
-    expect(cell.tagName).toBe("TD")
+    const cell = screen.getByText("Nenhum registo encontrado.").closest("td")
+    expect(cell?.tagName).toBe("TD")
     expect(cell).toHaveAttribute("colspan", "3")
   })
 

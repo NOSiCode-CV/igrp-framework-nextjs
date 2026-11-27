@@ -10,8 +10,8 @@ import { Checkbox } from "../../primitives/checkbox.js"
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../../primitives/dropdown-menu.js"
 
@@ -58,11 +58,11 @@ function IGRPDataTableHeaderSortToggle<T>({
           <span>{title}</span>
 
           {isSorted === "asc" ? (
-            <ChevronUp className={cn("ms-2 text-muted-foreground/70")} />
+            <ChevronUp className={cn("ms-2 text-muted-foreground")} />
           ) : isSorted === "desc" ? (
-            <ChevronDown className={cn("ms-2 text-muted-foreground/70")} />
+            <ChevronDown className={cn("ms-2 text-muted-foreground")} />
           ) : (
-            <ArrowUpDown className={cn("ms-2 text-muted-foreground/70")} />
+            <ArrowUpDown className={cn("ms-2 text-muted-foreground")} />
           )}
         </Button>
       ) : (
@@ -98,24 +98,25 @@ function IGRPDataTableHeaderSortDropdown<T>({
             >
               <span>{title}</span>
               {isSorted === "desc" ? (
-                <ArrowDown className={cn("ms-2 text-muted-foreground/70")} />
+                <ArrowDown className={cn("ms-2 text-muted-foreground")} />
               ) : isSorted === "asc" ? (
-                <ArrowUp className={cn("ms-2 text-muted-foreground/70")} />
+                <ArrowUp className={cn("ms-2 text-muted-foreground")} />
               ) : (
-                <ChevronsUpDown className={cn("ms-2 text-muted-foreground/70")} />
+                <ChevronsUpDown className={cn("ms-2 text-muted-foreground")} />
               )}
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
-            <DropdownMenuItem onClick={handleSortAsc} aria-label={i18n.dataTable.sortAscending}>
-              <ArrowUp className={cn("size-3.5 text-muted-foreground/70")} />
-              {i18n.dataTable.sortAscendingShort}
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={handleSortDesc} aria-label={i18n.dataTable.sortDescending}>
-              <ArrowDown className={cn("size-3.5 text-muted-foreground/70")} />
-              {i18n.dataTable.sortDescendingShort}
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
+            <DropdownMenuGroup>
+              <DropdownMenuItem onClick={handleSortAsc} aria-label={i18n.dataTable.sortAscending}>
+                <ArrowUp className={cn("size-3.5 text-muted-foreground")} />
+                {i18n.dataTable.sortAscendingShort}
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={handleSortDesc} aria-label={i18n.dataTable.sortDescending}>
+                <ArrowDown className={cn("size-3.5 text-muted-foreground")} />
+                {i18n.dataTable.sortDescendingShort}
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>
       ) : (

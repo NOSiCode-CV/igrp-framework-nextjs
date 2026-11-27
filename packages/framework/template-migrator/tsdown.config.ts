@@ -20,7 +20,7 @@ const shared = {
 
 export default defineConfig([
   {
-    // CLI binary — src/cli.ts carries the shebang on line 1; tsup preserves it.
+    // CLI binary — src/cli.ts carries the shebang on line 1; tsdown preserves it.
     // No banner needed here — adding one would produce a duplicate shebang.
     ...shared,
     entry: { cli: "src/cli.ts" },

@@ -137,10 +137,42 @@ const getRedirects = async () =>
     ? [{ source: "/", destination: homeSlug, permanent: false }]
     : [];
 
+/**
+ * Fixed security headers for every response in production, static assets and
+ * paths the middleware matcher skips included. Sources are basePath-relative
+ * (Next prefixes them), and `/:path*` also matches the basePath root. The CSP
+ * stays in `src/middleware.ts`: it carries a per-request nonce.
+ */
+const SECURITY_HEADERS = [
+  { key: "X-Content-Type-Options", value: "nosniff" },
+  { key: "X-Frame-Options", value: "DENY" },
+  // Deliberately "0", not "1; mode=block". The legacy XSS Auditor this header
+  // controls was removed from every current browser, and where it still exists
+  // its filtering has itself been an XSS vector. "0" disables it explicitly,
+  // which is the current OWASP / Chrome guidance. The CSP is still report-only,
+  // so until it is switched to enforcing, XSS defence rests on React's escaping.
+  { key: "X-XSS-Protection", value: "0" },
+  { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+  {
+    key: "Permissions-Policy",
+    value: "camera=(), microphone=(), geolocation=(), interest-cohort=()",
+  },
+  // Every production deployment is expected to be HTTPS (directly or behind a
+  // TLS-terminating proxy); browsers ignore it on plain HTTP.
+  {
+    key: "Strict-Transport-Security",
+    value: "max-age=63072000; includeSubDomains",
+  },
+];
+
 const nextConfig = (phase: string): NextConfig => ({
   output: "standalone",
   basePath: basePath,
   redirects: getRedirects,
+  headers: async () =>
+    phase === PHASE_DEVELOPMENT_SERVER
+      ? []
+      : [{ source: "/:path*", headers: SECURITY_HEADERS }],
   images: {
     remotePatterns: getRemotePatterns(),
   },

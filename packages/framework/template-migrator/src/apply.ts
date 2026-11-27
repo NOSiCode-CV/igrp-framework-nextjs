@@ -1,6 +1,8 @@
 import { copyFileSync, existsSync, mkdirSync, readFileSync, rmSync, statSync, writeFileSync } from "fs";
 import { dirname, join, resolve, sep } from "path";
 import { fileURLToPath } from "url";
+import { hashFileIgnoringEol } from "./hash.js";
+import { setPkgFields } from "./pkg-fields.js";
 import type { EnvKeySpec, MigrationStep } from "./types.js";
 
 // When bundled by tsup, import.meta.url resolves to the dist/ directory.
@@ -15,7 +17,7 @@ function ensureDir(filePath: string) {
 /**
  * Every write this package performs must land inside the consumer's app root.
  *
- * Exported because the rollback/unwind paths restore files from stored undo
+ * Exported because the unwind path restores files from stored undo
  * payloads with a bare `writeFileSync` rather than through `executeStep`, and
  * must not be the one door left unlocked: the paths they use come from the
  * app's own lock/journal, which is a file on disk that can be hand-edited,
@@ -103,7 +105,7 @@ export function executeStep(
   step: MigrationStep,
   appRoot: string,
   payloadDir: string = PAYLOAD_DIR,
-  /** Undo/rollback: a deps.bump undo restores older ranges on purpose. */
+  /** Undo: a deps.bump undo restores older ranges on purpose. */
   isUndo = false,
 ): MigrationStep {
   switch (step.type) {
@@ -137,6 +139,15 @@ export function executeStep(
       if (statSync(target).isDirectory()) {
         throw new Error(`file.delete refuses a directory (path: ${step.path}); delete its files one by one.`);
       }
+      if ((step.expectHash || step.expect) && !isUndo) {
+        const expected = step.expectHash ?? hashFileIgnoringEol(resolvePayload(step.expect!, payloadDir));
+        if (expected === null) throw new Error(`file.delete: payload not found (expect: ${step.expect}).`);
+        if (hashFileIgnoringEol(target) !== expected) {
+          console.warn(`  ⚠ ${step.path}: changed in this app, so NOT deleted. Delete it yourself if you do not need it.`);
+          // Restores the journaled copy, i.e. the file as it is now.
+          return { type: "file.write", mode: "replace", path: step.path, from: "__undo__" };
+        }
+      }
       rmSync(target, { force: true });
       return { type: "file.create", path: step.path, from: "__undo__" };
     }
@@ -167,7 +178,7 @@ export function executeStep(
         writeFileSync(envPath, prefix + lines.join(eol), "utf8");
       }
       // Undo must list only keys THIS call actually appended — never keys that
-      // were already present, or rollback would delete the consumer's own data.
+      // were already present, or the undo would delete the consumer's own data.
       return { type: "env.remove", file: step.file, keys: addedKeys };
     }
     case "env.remove": {
@@ -187,7 +198,7 @@ export function executeStep(
         drop.add(i);
         // Take the contiguous comment block directly above the key with it.
         // `env.add` wrote that block, so its undo has to remove it again —
-        // otherwise every apply/rollback cycle leaves another orphaned `# doc`
+        // otherwise every apply/undo cycle leaves another orphaned `# doc`
         // line behind and the file accumulates comment cruft forever.
         //
         // Only when the key is the last line of its block, though. `env.add`
@@ -311,6 +322,15 @@ export function executeStep(
         );
       }
       return { type: "deps.restore", manifest: step.manifest, removed };
+    }
+    case "pkg.set": {
+      const pkgPath = join(appRoot, step.manifest);
+      assertInsideAppRoot(appRoot, pkgPath);
+      const raw = readFileSync(pkgPath, "utf8");
+      const pkg = JSON.parse(raw);
+      const undo = setPkgFields(pkg, step.fields, step.replace);
+      writeManifest(pkgPath, raw, pkg);
+      return { type: "pkg.set", manifest: step.manifest, fields: undo.fields, replace: undo.replace };
     }
     case "deps.restore": {
       // Undo of deps.remove — re-declares each dependency in the field it came

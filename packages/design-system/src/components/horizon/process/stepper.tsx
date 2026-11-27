@@ -247,7 +247,6 @@ function IGRPStepperProcess({
                       step={step}
                       completed={isCompleted}
                       disabled={isDisabled}
-                      aria-current={validCurrentStep === step ? "step" : undefined}
                       className={cn(getStepperItemClassName(), stepperItemsClassName)}
                       loading={isLoading && validCurrentStep === step}
                       style={getStepOffsetStyle(isFirst, isLast)}
@@ -267,6 +266,7 @@ function IGRPStepperProcess({
                       <StepperTrigger asChild className={cn("z-10 cursor-pointer gap-1 rounded max-md:flex-col")}>
                         <Button
                           variant="ghost"
+                          disabled={isDisabled}
                           className={cn(
                             "flex items-center justify-center bg-transparent text-center hover:bg-transparent",
                             "w-34 text-[10px] shadow-none",

@@ -241,6 +241,7 @@ function IGRPDataTableButtonModal({
       </IGRPDataTableActionTooltip>
       <IGRPDataTableModalContent
         modalTitle={modalTitle}
+        labelTrigger={labelTrigger}
         size={size}
         className={className}
         close={close}
@@ -267,6 +268,7 @@ function IGRPDataTableButtonModal({
  */
 function IGRPDataTableModalContent({
   modalTitle = "",
+  labelTrigger,
   size = "lg",
   className,
   close,
@@ -281,7 +283,7 @@ function IGRPDataTableModalContent({
   classNameConfirm,
   variantConfirm,
   onClickConfirm,
-}: Omit<IGRPDataTableDialogProps, "labelTrigger" | "icon" | "variant" | "disabled"> & { close: () => void }) {
+}: Omit<IGRPDataTableDialogProps, "icon" | "variant" | "disabled"> & { close: () => void }) {
   const i18n = useIGRPi18n()
   return (
     <DialogContent
@@ -291,8 +293,11 @@ function IGRPDataTableModalContent({
         className
       )}
     >
-      <DialogHeader className={cn("contents space-y-0 text-left")}>
-        <DialogTitle className={cn(modalTitle && "border-b px-6 py-4 text-base")}>{modalTitle}</DialogTitle>
+      <DialogHeader className={cn("contents text-left")}>
+        {/* With no title the trigger label still names the dialog, for screen readers only. */}
+        <DialogTitle className={cn(modalTitle ? "border-b px-6 py-4 text-base" : "sr-only")}>
+          {modalTitle || labelTrigger}
+        </DialogTitle>
 
         {/*
         Short, visually-hidden description satisfies Radix's aria-describedby

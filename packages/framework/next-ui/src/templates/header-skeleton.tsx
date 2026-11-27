@@ -1,6 +1,6 @@
 'use client';
 
-import { cn } from '@igrp/igrp-framework-react-design-system';
+import { cn, Skeleton } from '@igrp/igrp-framework-react-design-system';
 
 export function IGRPHeaderSkeleton() {
   return (
@@ -10,12 +10,12 @@ export function IGRPHeaderSkeleton() {
       )}
     >
       <div className={cn('flex items-center gap-2')}>
-        <div className={cn('size-8 rounded bg-muted animate-pulse')} />
-        <div className={cn('h-4 w-32 rounded bg-muted animate-pulse')} />
+        <Skeleton className={cn('size-8')} />
+        <Skeleton className={cn('h-4 w-32')} />
       </div>
       <div className={cn('flex items-center gap-2')}>
-        <div className={cn('size-8 rounded-full bg-muted animate-pulse')} />
-        <div className={cn('size-8 rounded-full bg-muted animate-pulse')} />
+        <Skeleton className={cn('size-8 rounded-full')} />
+        <Skeleton className={cn('size-8 rounded-full')} />
       </div>
     </div>
   );

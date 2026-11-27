@@ -67,7 +67,12 @@ function IGRPCardDetails({
     >
       {(title || description) && (
         <CardHeader className={cn("pb-4")}>
-          {title && <CardTitle>{title}</CardTitle>}
+          {/* CardTitle is a div; the role makes it a real heading for screen-reader navigation. */}
+          {title && (
+            <CardTitle role="heading" aria-level={2}>
+              {title}
+            </CardTitle>
+          )}
           {description && <CardDescription>{description}</CardDescription>}
           <Separator className={cn("mt-4")} />
         </CardHeader>
@@ -78,14 +83,17 @@ function IGRPCardDetails({
 
           return (
             <div key={key} className={cn("flex items-center gap-4")}>
-              <div>
-                <h3 className={cn("font-normal text-muted-foreground")}>{item.label}</h3>
-                {typeof item.content === "string" ? (
-                  <span className={cn("font-medium")}>{item.content}</span>
-                ) : (
-                  item.content
-                )}
-              </div>
+              {/* A term/value pair, not a heading: <h3> per field broke the page outline. */}
+              <dl>
+                <dt className={cn("font-normal text-muted-foreground")}>{item.label}</dt>
+                <dd>
+                  {typeof item.content === "string" ? (
+                    <span className={cn("font-medium")}>{item.content}</span>
+                  ) : (
+                    item.content
+                  )}
+                </dd>
+              </dl>
               {item.showCopyTo && <IGRPCopyTo value={item.content as string} />}
             </div>
           )

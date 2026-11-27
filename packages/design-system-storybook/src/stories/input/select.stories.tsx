@@ -104,7 +104,7 @@ const Template: React.FC<Partial<React.ComponentProps<typeof IGRPSelect>>> = (ar
         schema={schema}
         onSubmit={onSubmit}
         formRef={formRef}
-        gridClassName='space-y-4 w-80'
+        gridClassName='w-80'
       >
         <IGRPSelect
           name='fruit'
@@ -155,9 +155,6 @@ export const Disabled: Story = {
  * Regression story: the SelectTrigger (combobox button) must carry
  * aria-invalid="true" and an aria-describedby pointing at the error message
  * when the field has a validation error.
- *
- * NOTE: test:vitest runner is currently broken in this environment (pre-existing
- * "Failed to initialize projects" issue). Build gate: `pnpm build:ds`.
  */
 const SelectErrorA11yTemplate: React.FC = () => {
   const schema = z.object({ fruit: z.string().min(1, 'This field is required') });
@@ -173,7 +170,7 @@ const SelectErrorA11yTemplate: React.FC = () => {
       schema={schema}
       onSubmit={() => {}}
       formRef={formRef}
-      gridClassName='space-y-4 w-80'
+      gridClassName='w-80'
     >
       <IGRPSelect
         name='fruit'

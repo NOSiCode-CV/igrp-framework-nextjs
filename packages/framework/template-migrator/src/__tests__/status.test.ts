@@ -32,11 +32,8 @@ function migration(id: string) {
 function entry(id: string, cliVersion = "test"): LockEntry {
   return {
     id,
-    appliedAt: "2026-01-01T00:00:00.000Z",
     cliVersion,
     manifestHash: "aaaaaaaaaaaaaaaa",
-    undo: [],
-    fileHashes: {},
   };
 }
 
@@ -77,6 +74,16 @@ describe("status", () => {
     expect(out).toContain("✓ applied  01-a");
     expect(out).toContain("• pending  02-b");
     expect(out).toContain("1 applied, 1 pending");
+  });
+
+  it("counts a duplicated lock entry once", () => {
+    writeLock(appRoot, {
+      version: 1,
+      template: "demo-v1",
+      applied: [entry("01-a"), entry("01-a")],
+    });
+
+    expect(runStatus()).toContain("1 applied, 1 pending");
   });
 
   it("reports 0 pending for a fully migrated app", () => {

@@ -247,6 +247,7 @@ function IGRPForm<TSchema extends AnyZod>({
         <form className={className} onSubmit={handleFormSubmit} noValidate id={ref}>
           {formError && (
             <div
+              role="alert"
               className={cn("mb-4 rounded-md border border-destructive bg-destructive/10 p-3 text-sm text-destructive")}
             >
               {formError}

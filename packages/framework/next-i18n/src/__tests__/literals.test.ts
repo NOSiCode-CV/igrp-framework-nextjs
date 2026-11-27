@@ -1,12 +1,12 @@
-import { mkdtempSync, writeFileSync } from "node:fs";
-import { tmpdir } from "node:os";
-import { join } from "node:path";
-import { describe, expect, it } from "vitest";
+import { mkdtempSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { describe, expect, it } from 'vitest';
 
-import { checkLiterals, findLiteralStrings } from "../literals.js";
+import { checkLiterals, findLiteralStrings } from '../literals.js';
 
-describe("findLiteralStrings", () => {
-  it("flags JSX text, literal children and user-facing props", () => {
+describe('findLiteralStrings', () => {
+  it('flags JSX text, literal children and user-facing props', () => {
     const src = `
       export function X() {
         return (
@@ -21,7 +21,7 @@ describe("findLiteralStrings", () => {
     expect(findLiteralStrings(src)).toHaveLength(6);
   });
 
-  it("accepts text without letters, translated values and non-user-facing props", () => {
+  it('accepts text without letters, translated values and non-user-facing props', () => {
     const src = `
       export function X({ t }) {
         return (
@@ -37,42 +37,42 @@ describe("findLiteralStrings", () => {
     expect(findLiteralStrings(src)).toEqual([]);
   });
 
-  it("accepts HTML entities that render as symbols", () => {
-    expect(
-      findLiteralStrings(
-        `export const X = () => <span>&mdash;&nbsp;&#8594;</span>;`,
-      ),
-    ).toEqual([]);
+  it('accepts HTML entities that render as symbols', () => {
+    expect(findLiteralStrings(`export const X = () => <span>&mdash;&nbsp;&#8594;</span>;`)).toEqual(
+      [],
+    );
   });
 
-  it("flags next-intl formatter imports (format through the framework helpers)", () => {
-    expect(
-      findLiteralStrings(`import { useFormatter } from "next-intl";`),
-    ).toEqual([
-      "1: import of useFormatter from next-intl (use useIGRPFormat / igrpFormatDate)",
+  it('accepts entities in a quoted prop, where JSX decodes them too', () => {
+    expect(findLiteralStrings(`export const X = () => <span title="&mdash;" />;`)).toEqual([]);
+    // Inside an expression the entity is not decoded: the letters show.
+    expect(findLiteralStrings(`export const X = () => <span title={"&mdash;"} />;`)).toHaveLength(
+      1,
+    );
+  });
+
+  it('flags next-intl formatter imports (format through the framework helpers)', () => {
+    expect(findLiteralStrings(`import { useFormatter } from "next-intl";`)).toEqual([
+      '1: import of useFormatter from next-intl (use useIGRPFormat / igrpFormatDate)',
     ]);
-    expect(
-      findLiteralStrings(`import { getFormatter } from "next-intl/server";`),
-    ).toHaveLength(1);
-    expect(
-      findLiteralStrings(`import { useTranslations } from "next-intl";`),
-    ).toEqual([]);
+    expect(findLiteralStrings(`import { getFormatter } from "next-intl/server";`)).toHaveLength(1);
+    expect(findLiteralStrings(`import { useTranslations } from "next-intl";`)).toEqual([]);
   });
 });
 
-describe("checkLiterals", () => {
-  it("walks folders, skips tests, and prefixes findings with the file", () => {
-    const d = mkdtempSync(join(tmpdir(), "igrp-i18n-lit-"));
-    writeFileSync(join(d, "a.tsx"), `export const A = () => <p>Olá</p>;`);
-    writeFileSync(join(d, "a.test.tsx"), `export const T = () => <p>Olá</p>;`);
-    writeFileSync(join(d, "b.ts"), `export const b = "Olá";`);
+describe('checkLiterals', () => {
+  it('walks folders, skips tests, and prefixes findings with the file', () => {
+    const d = mkdtempSync(join(tmpdir(), 'igrp-i18n-lit-'));
+    writeFileSync(join(d, 'a.tsx'), `export const A = () => <p>Olá</p>;`);
+    writeFileSync(join(d, 'a.test.tsx'), `export const T = () => <p>Olá</p>;`);
+    writeFileSync(join(d, 'b.ts'), `export const b = "Olá";`);
     const findings = checkLiterals([d]);
     expect(findings).toHaveLength(1);
     expect(findings[0]).toMatch(/a\.tsx:1: JSX text "Olá"/);
   });
 });
 
-describe("findLiteralStrings: conditionals and locales", () => {
+describe('findLiteralStrings: conditionals and locales', () => {
   it.each([
     ['<p>{ok ? "Guardado" : "Erro"}</p>', 2],
     ['<p>{err && "Falhou"}</p>', 1],
@@ -82,50 +82,44 @@ describe("findLiteralStrings: conditionals and locales", () => {
     ['<X placeholder={ok ? "Nome" : "Apelido"} />', 2],
     ['<Spinner text="Aguarde..." />', 1],
     ['<X message="Erro" emptyText="Nada" />', 2],
-  ])("flags %s", (src, n) => {
-    expect(findLiteralStrings(src, "a.tsx")).toHaveLength(n);
+  ])('flags %s', (src, n) => {
+    expect(findLiteralStrings(src, 'a.tsx')).toHaveLength(n);
   });
 
-  it("flags hardcoded Intl locales in .ts", () => {
-    const src =
-      'new Intl.DateTimeFormat("pt").format(d); d.toLocaleDateString("pt-BR")';
-    const found = findLiteralStrings(src, "a.ts");
+  it('flags hardcoded Intl locales in .ts', () => {
+    const src = 'new Intl.DateTimeFormat("pt").format(d); d.toLocaleDateString("pt-BR")';
+    const found = findLiteralStrings(src, 'a.ts');
     expect(found).toHaveLength(2);
     expect(found[0]).toContain('hardcoded locale "pt": use useIGRPFormat');
   });
 
-  it("does not flag {cond && <Foo/>} or className ternaries", () => {
+  it('does not flag {cond && <Foo/>} or className ternaries', () => {
     expect(
-      findLiteralStrings(
-        '<p className={a ? "x" : "y"}>{a && <b/>}</p>',
-        "a.tsx",
-      ),
+      findLiteralStrings('<p className={a ? "x" : "y"}>{a && <b/>}</p>', 'a.tsx'),
     ).toHaveLength(0);
   });
 
-  it("scans .ts files but not tests or declarations", () => {
-    const d = mkdtempSync(join(tmpdir(), "igrp-lit-"));
-    for (const n of ["a.ts", "a.test.ts", "a.d.ts"]) {
+  it('scans .ts files but not tests or declarations', () => {
+    const d = mkdtempSync(join(tmpdir(), 'igrp-lit-'));
+    for (const n of ['a.ts', 'a.test.ts', 'a.d.ts']) {
       writeFileSync(join(d, n), 'x.toLocaleString("pt");');
     }
     expect(checkLiterals([d], d)).toHaveLength(1);
   });
 });
 
-describe("igrp-i18n-ignore", () => {
-  it("skips a literal marked on the same line or the line above", () => {
+describe('igrp-i18n-ignore', () => {
+  it('skips a literal marked on the same line or the line above', () => {
     const src = [
-      "const a = (",
-      "  <div>",
+      'const a = (',
+      '  <div>',
       '    <img alt="IGRP" /> {/* igrp-i18n-ignore */}',
-      "    {/* igrp-i18n-ignore */}",
-      "    <kbd>Ctrl</kbd>",
+      '    {/* igrp-i18n-ignore */}',
+      '    <kbd>Ctrl</kbd>',
       '    <p title="Olá" />',
-      "  </div>",
-      ");",
-    ].join("\n");
-    expect(findLiteralStrings(src, "a.tsx")).toEqual([
-      '6: literal prop title="Olá"',
-    ]);
+      '  </div>',
+      ');',
+    ].join('\n');
+    expect(findLiteralStrings(src, 'a.tsx')).toEqual(['6: literal prop title="Olá"']);
   });
 });

@@ -128,7 +128,7 @@ interface IGRPAuthFormBodyProps {
 function IGRPAuthFormBody({ children, className }: IGRPAuthFormBodyProps) {
   return (
     <div className={cn('grow flex flex-col justify-center items-center')}>
-      <div className={cn('w-full max-w-md space-y-8 flex flex-col justify-center', className)}>
+      <div className={cn('w-full max-w-md flex flex-col gap-8 justify-center', className)}>
         {children}
       </div>
     </div>
@@ -214,7 +214,7 @@ function IGRPAuthFormError() {
       role="alert"
       aria-live="polite"
     >
-      <AlertCircleIcon size={16} className={cn('h-4 w-4')} strokeWidth={2} aria-hidden />
+      <AlertCircleIcon strokeWidth={2} aria-hidden />
       <AlertDescription>{error}</AlertDescription>
     </Alert>
   );

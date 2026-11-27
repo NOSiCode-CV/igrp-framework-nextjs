@@ -44,6 +44,13 @@ const liveLayoutData: IGRPLayoutDataSource = {
     appCenterUrl: process.env.NEXT_IGRP_APP_CENTER_URL || "",
     showMenuSearch: true,
     showNotifications: true,
+    showProfile: true,
+    showSettings: true,
+    // Same env as the header: without them the user menu falls back to the
+    // app's own `/profile` and `/settings` under the basePath.
+    profileUrl: process.env.NEXT_PUBLIC_IGRP_PROFILE_URL || "",
+    notificationsUrl: process.env.NEXT_PUBLIC_IGRP_NOTIFICATION_URL || "",
+    settingsUrl: process.env.NEXT_PUBLIC_IGRP_SETTINGS_URL || "",
   }),
 };
 

@@ -4,6 +4,8 @@ let ctxValue: unknown;
 vi.mock('react', async (importOriginal) => ({
   ...(await importOriginal<typeof import('react')>()),
   useContext: () => ctxValue,
+  // Hooks run outside a render here; memoisation is not under test.
+  useMemo: <T>(factory: () => T) => factory(),
 }));
 
 const { useIGRPSession, useOptionalSession } = await import('../client');

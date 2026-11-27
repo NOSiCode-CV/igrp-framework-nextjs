@@ -7,11 +7,17 @@ export interface EnvKeySpec {
 export type MigrationStep =
   | { type: "file.create"; path: string; from: string }
   | { type: "file.write"; path: string; mode: "replace" | "patch"; from?: string; patch?: string }
-  | { type: "file.delete"; path: string }
+  // `expect`: a payload the file must still match (EOL ignored). A file the
+  // consumer changed is kept, with a warning. The packer turns `expect` into
+  // `expectHash`, so the payload file itself does not ship.
+  | { type: "file.delete"; path: string; expect?: string; expectHash?: string }
   | { type: "env.add"; file: string; keys: Record<string, EnvKeySpec> }
   | { type: "env.remove"; file: string; keys: string[] }
   | { type: "deps.bump"; manifest: string; ranges: Record<string, string> }
   | { type: "deps.remove"; manifest: string; deps: string[] }
+  // package.json fields other than name/description/displayName and the deps
+  // (see pkg-fields.ts). `replace` lists object fields to replace, not merge.
+  | { type: "pkg.set"; manifest: string; fields: Record<string, unknown>; replace?: string[] }
   // Undo of deps.remove. `deps.bump` cannot serve as the inverse: it only
   // updates a dependency that is already declared and will not re-add one.
   // Carries the original field so a devDependency is restored as a
@@ -44,36 +50,12 @@ export interface Manifest {
 
 export interface LockEntry {
   id: string;
-  appliedAt: string;
+  /** In a v2 lock, the CLI release line ("0.2") the entry is grouped under. */
   cliVersion: string;
   manifestHash: string;
   /** The migration's `payloadHash` at apply time. Absent on entries written
    *  before it existed; those are compared on `manifestHash` alone. */
   payloadHash?: string;
-  /**
-   * Inverse steps for rollback.
-   *
-   * Optional because a *baseline* entry has none. The template ships its own
-   * lock so a scaffolded app opens with every migration already applied, but
-   * nothing was executed against a file tree there — the template simply IS the
-   * post-migration state. Writing `undo: []` and `fileHashes: {}` into all forty
-   * of those entries stated nothing the absence of the fields does not.
-   * Treat missing as empty: `entry.undo ?? []`.
-   */
-  undo?: MigrationStep[];
-  /** Pre-migration hash of each path the migration touched. Written only by
-   *  older CLIs; nothing reads it, kept so their locks still type-check. */
-  fileHashes?: Record<string, string>;
-  /**
-   * Pre-migration file contents keyed by app-relative path, captured at apply
-   * time for steps whose undo would otherwise be an unrestorable `__undo__`
-   * placeholder (file.write over an existing file, file.delete). Absent on
-   * lock entries written by older CLI versions. Payload contents are stored
-   * as UTF-8 text, or as marked base64 for binary files (see
-   * encodeUndoPayload in unwind.ts). First capture wins when a migration touches the same path
-   * more than once — the first snapshot is the true pre-migration content.
-   */
-  undoPayloads?: Record<string, string>;
 }
 
 export interface LockFile {

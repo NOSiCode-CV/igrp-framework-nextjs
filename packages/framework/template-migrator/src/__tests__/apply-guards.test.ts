@@ -85,8 +85,8 @@ describe("a journal for an ALREADY-RECORDED migration is stale, not a crash", ()
 
     // Recovered to ORIGINAL, then applied cleanly on top of it.
     expect(readFileSync(join(appRoot, "src/edited.ts"), "utf8")).toBe("MIGRATED\n");
-    const entry = readLock(appRoot).applied[0];
-    expect(entry.undoPayloads?.["src/edited.ts"]).toBe("ORIGINAL\n");
+    expect(readLock(appRoot).applied.map((a) => a.id)).toEqual(["40-x"]);
+    expect(existsSync(journalPath(appRoot))).toBe(false);
   });
 });
 

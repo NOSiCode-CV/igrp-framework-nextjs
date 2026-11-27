@@ -11,6 +11,7 @@ import {
   ChartLegend,
   ChartLegendContent,
 } from "../../primitives/chart.js"
+import { IGRPChartDataTable } from "./data-table-sr.js"
 import type { IGRPChartProps, IGRPSeriesConfig } from "./types.js"
 import {
   createChartConfig,
@@ -119,6 +120,7 @@ function IGRPLineChartInner({
 
       <div className={cn("overflow-hidden")}>
         <div style={{ height: chartHeight, width: chartWidth }} className={cn("w-full overflow-hidden")}>
+          <IGRPChartDataTable data={data} rowKey={categoryKey} series={lines} />
           <ChartContainer className={cn("h-full w-full")} config={chartConfig}>
             <LineChart
               accessibilityLayer
@@ -225,6 +227,9 @@ function IGRPLineChartInner({
                         offset={line.labelOffset ?? 12}
                         className={cn("fill-foreground")}
                         fontSize={12}
+                        formatter={(value: unknown) =>
+                          typeof value === "number" ? formatValue(value) : String(value ?? "")
+                        }
                       />
                     )}
                   </Line>

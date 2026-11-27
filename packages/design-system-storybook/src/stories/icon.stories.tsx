@@ -66,7 +66,7 @@ function IconGalleryComponent() {
       part.toLowerCase() === query.toLowerCase() ? (
         <span
           key={index}
-          className='bg-yellow-200 dark:bg-yellow-400/20'
+          className='bg-highlight text-highlight-foreground'
         >
           {part}
         </span>
@@ -84,7 +84,7 @@ function IconGalleryComponent() {
 
   return (
     <TooltipProvider>
-      <div className='p-8 space-y-4'>
+      <div className='p-8 flex flex-col gap-4'>
         <div className='flex gap-8 items-center'>
           <h3 className='font-semibold text-xl'>
             Browse Lucide Icons
@@ -92,7 +92,7 @@ function IconGalleryComponent() {
           <div className='relative flex-1'>
             <IGRPIcon
               iconName='Search'
-              className='absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500'
+              className='absolute left-3 top-1/2 transform -translate-y-1/2 size-5 text-muted-foreground'
               aria-hidden='true'
             />
             <Input
@@ -105,7 +105,7 @@ function IconGalleryComponent() {
             />
             {search && (
               <Button
-                className='absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none hover:bg-transparent cursor-pointer'
+                className='absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground focus:outline-none hover:bg-transparent cursor-pointer'
                 onClick={() => setSearch('')}
                 aria-label='Clear search'
                 variant='ghost'
@@ -113,7 +113,7 @@ function IconGalleryComponent() {
               >
                 <IGRPIcon
                   iconName='X'
-                  className='w-5 h-5'
+                  className='size-5'
                   aria-hidden='true'
                 />
               </Button>
@@ -148,12 +148,12 @@ function IconGalleryComponent() {
                       size='icon'
                       onClick={() => handleOpenIcon(iconName)}
                       disabled={loadingIcon === iconName}
-                      className="flex justify-center items-center p-0 mx-auto h-14 w-14 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-all focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer [&_svg:not([class*='size-'])]:size-6"
+                      className="flex justify-center items-center p-0 mx-auto size-14 hover:bg-accent rounded-lg transition-all focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer [&_svg:not([class*='size-'])]:size-6"
                     >
                       {loadingIcon === iconName ? (
                         <IGRPIcon
                           iconName='Loader'
-                          className='w-5 h-5 animate-spin'
+                          className='size-5 animate-spin'
                         />
                       ) : (
                         // A gallery shows EVERY icon, so it renders from the full
@@ -185,7 +185,7 @@ function IconGalleryComponent() {
                       >
                         <IGRPIcon
                           iconName='X'
-                          className='w-5 h-5'
+                          className='size-5'
                           aria-hidden='true'
                         />
                       </Button>
@@ -210,12 +210,12 @@ function IconGalleryComponent() {
                           {copied ? (
                             <IGRPIcon
                               iconName='Check'
-                              className='w-4 h-4 mr-1'
+                              className='size-4 mr-1'
                             />
                           ) : (
                             <IGRPIcon
                               iconName='Copy'
-                              className='w-4 h-4 mr-1'
+                              className='size-4 mr-1'
                             />
                           )}
                         </Button>
@@ -226,7 +226,7 @@ function IconGalleryComponent() {
               </AlertDialog>
             ))
           ) : (
-            <p className='col-span-6 text-center text-gray-500'>No icons found</p>
+            <p className='col-span-6 text-center text-muted-foreground'>No icons found</p>
           )}
         </div>
       </div>

@@ -39,6 +39,8 @@ function IGRPBanner({
   if (variant === "cookie") {
     return (
       <div
+        role="region"
+        aria-label={i18n.banner.cookieLabel}
         className={cn(
           "fixed right-0 bottom-0 left-0 z-50 flex items-center justify-between gap-4 border-t bg-background px-6 py-4 shadow-lg",
           "motion-safe:animate-in motion-safe:duration-200 motion-safe:slide-in-from-bottom-2",

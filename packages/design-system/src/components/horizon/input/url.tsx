@@ -130,6 +130,8 @@ function IGRPInputUrl({
       <Field className={className} data-invalid={error ? true : undefined}>
         {label && <IGRPLabel label={label} className={labelClassName} required={required} id={fieldName} />}
 
+        {/* The visible input holds only the address; native forms submit the full URL from here. */}
+        <input type="hidden" name={fieldName} value={value ?? resolveUrl(displayProtocol, displayAddress).url} />
         <InputGroup>
           <InputGroupAddon align="inline-start" className={cn("p-0")}>
             <Select value={displayProtocol} onValueChange={handleStandaloneProtocolChange} disabled={props.disabled}>
@@ -154,8 +156,6 @@ function IGRPInputUrl({
           <InputGroupInput
             className={inputClassName}
             id={fieldName}
-            name={fieldName}
-            type="url"
             inputMode="url"
             value={displayAddress}
             onChange={handleStandaloneAddressChange}
@@ -206,6 +206,7 @@ function IGRPInputUrl({
           <Field className={className} data-invalid={fieldState.error || error ? true : undefined}>
             {label && <IGRPLabel label={label} className={labelClassName} required={required} id={fieldName} />}
 
+            <input type="hidden" name={fieldName} value={field.value ?? ""} />
             <InputGroup>
               <InputGroupAddon align="inline-start" className={cn("p-0")}>
                 <Select
@@ -235,8 +236,6 @@ function IGRPInputUrl({
               <InputGroupInput
                 className={inputClassName}
                 id={fieldName}
-                name={fieldName}
-                type="url"
                 inputMode="url"
                 ref={igrpMergeRefs(field.ref, ref)}
                 value={fieldAddress}

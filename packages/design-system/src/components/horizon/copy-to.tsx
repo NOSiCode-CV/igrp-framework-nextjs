@@ -1,12 +1,13 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { use, useEffect, useRef, useState } from "react"
 
 import { cn } from "cn"
 import { useIGRPi18n } from "../../i18n/index.js"
 import { Button } from "../primitives/button.js"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../primitives/tooltip.js"
+import { Tooltip, TooltipContent, TooltipTrigger } from "../primitives/tooltip.js"
 import { IGRPIcon } from "./icon/index.js"
+import { IGRPTooltipContext, IGRPTooltipProvider } from "./tooltip.js"
 import { useIGRPToast } from "./toaster.js"
 
 /**
@@ -50,6 +51,7 @@ function IGRPCopyTo({
 }: IGRPCopyToProps) {
   const [copied, setCopied] = useState(false)
   const { igrpToast } = useIGRPToast()
+  const hasProvider = use(IGRPTooltipContext)
   const i18n = useIGRPi18n()
   const successMessage = successMessageProp ?? i18n.copyTo.copied
   const errorMessage = errorMessageProp ?? i18n.copyTo.copyFailed
@@ -65,6 +67,7 @@ function IGRPCopyTo({
   }, [])
 
   async function handleCopy() {
+    if (copied) return
     if (!value) {
       igrpToast({
         type: "error",
@@ -113,39 +116,45 @@ function IGRPCopyTo({
     }
   }
 
-  return (
-    <TooltipProvider delayDuration={tooltipDelayDuration}>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Button
-            variant="ghost"
-            size="icon"
-            className={cn("size-7 disabled:opacity-100", triggerClassName)}
-            onClick={handleCopy}
-            aria-label={copied ? successMessage : tooltipMessage}
-            disabled={copied}
+  const tooltip = (
+    <Tooltip delayDuration={tooltipDelayDuration}>
+      <TooltipTrigger asChild>
+        <Button
+          variant="ghost"
+          size="icon"
+          className={cn("size-7 disabled:opacity-100", triggerClassName)}
+          onClick={handleCopy}
+          aria-label={copied ? successMessage : tooltipMessage}
+          // aria-disabled, not disabled: a disabled button drops keyboard focus to <body>.
+          aria-disabled={copied || undefined}
+        >
+          <div
+            className={cn(
+              "transition-[transform,opacity] motion-reduce:transition-none",
+              copied ? "scale-100 opacity-100" : "scale-0 opacity-0"
+            )}
           >
-            <div
-              className={cn(
-                "transition-[transform,opacity] motion-reduce:transition-none",
-                copied ? "scale-100 opacity-100" : "scale-0 opacity-0"
-              )}
-            >
-              <IGRPIcon iconName="Check" className={cn("stroke-primary")} strokeWidth={2} />
-            </div>
-            <div
-              className={cn(
-                "absolute transition-[transform,opacity] motion-reduce:transition-none",
-                copied ? "scale-0 opacity-0" : "scale-100 opacity-100"
-              )}
-            >
-              <IGRPIcon iconName="Copy" strokeWidth={2} className={cn("size-3")} />
-            </div>
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent className={cn("px-2 py-1 text-xs")}>{tooltipMessage}</TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
+            <IGRPIcon iconName="Check" className={cn("stroke-primary")} strokeWidth={2} />
+          </div>
+          <div
+            className={cn(
+              "absolute transition-[transform,opacity] motion-reduce:transition-none",
+              copied ? "scale-0 opacity-0" : "scale-100 opacity-100"
+            )}
+          >
+            <IGRPIcon iconName="Copy" strokeWidth={2} className={cn("size-3")} />
+          </div>
+        </Button>
+      </TooltipTrigger>
+      <TooltipContent className={cn("px-2 py-1 text-xs")}>{tooltipMessage}</TooltipContent>
+    </Tooltip>
+  )
+
+  // Share an app-level provider when there is one; otherwise Radix needs this one.
+  return hasProvider ? (
+    tooltip
+  ) : (
+    <IGRPTooltipProvider delayDuration={tooltipDelayDuration}>{tooltip}</IGRPTooltipProvider>
   )
 }
 

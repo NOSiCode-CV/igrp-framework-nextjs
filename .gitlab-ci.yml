@@ -34,7 +34,7 @@ stages:
 # change to the migrator itself. Both fixed below.
 check_template_drift:
   stage: verify
-  image: node:22
+  image: node:24
   services: []
   rules:
     - changes:
@@ -56,15 +56,17 @@ check_template_drift:
 # that check. Node built-ins only, so no install.
 check_skills_lock:
   stage: verify
-  image: node:22
+  image: node:24
   services: []
   rules:
     - changes:
         - .agents/skills/**/*
         - skills-lock.json
         - scripts/sync-claude-skills.mjs
+        - scripts/skill-hash*.mjs
       when: always
   script:
+    - node --test scripts/skill-hash.test.mjs
     - node scripts/sync-claude-skills.mjs --verify-lock
 
 # `lint:i18n` (catalog parity + hardcoded-literal scan) otherwise only ran inside
@@ -73,7 +75,7 @@ check_skills_lock:
 # The i18n package's own tests and build run first: the check CLI is its build output.
 check_i18n:
   stage: verify
-  image: node:22
+  image: node:24
   services: []
   rules:
     - changes:
@@ -106,7 +108,7 @@ check_i18n:
 # package "exports", which point at the gitignored dist/.
 verify_framework:
   stage: verify
-  image: node:22
+  image: node:24
   services: []
   rules:
     - changes:
@@ -120,6 +122,9 @@ verify_framework:
         - templates/demo-v1/vitest.config.mts
         # Shared build config (Babel/React Compiler, check-dist).
         - scripts/**/*
+        # Shared Prettier config and ignore file.
+        - .prettierrc
+        - .prettierignore
         - pnpm-lock.yaml
         - package.json
       when: always
@@ -127,6 +132,7 @@ verify_framework:
     - corepack enable
     - pnpm install --frozen-lockfile
   script:
+    - pnpm --filter "@igrp/framework-next..." --filter @igrp/framework-next-i18n run format:check
     - pnpm build:framework
     # `@igrp/framework-next...` = next plus every workspace package it depends on
     # (next-ui, design-system, next-types, next-auth); next-types has no `test`.
@@ -139,11 +145,12 @@ verify_framework:
     - pnpm --filter @igrp/framework-next-template test --coverage --coverage.reporter=text-summary
 
 # Browser smoke tests: demo-v1 in preview mode under `next dev` (production
-# builds refuse the auth bypass), driven by Playwright from packages/e2e. The
+# builds refuse the auth bypass), driven by Playwright from packages/e2e, then
+# the login redirect with preview mode off (playwright.auth.config.ts). The
 # image tag must track the `playwright` version in packages/e2e/package.json.
 test_e2e:
   stage: verify
-  image: mcr.microsoft.com/playwright:v1.64.1-jammy
+  image: mcr.microsoft.com/playwright:v1.65.1-jammy
   services: []
   rules:
     - changes:
@@ -164,9 +171,10 @@ test_e2e:
   artifacts:
     when: always
     reports:
-      junit: packages/e2e/results/junit.xml
+      junit: packages/e2e/results/*.xml
     paths:
       - packages/e2e/test-results/
+      - packages/e2e/test-results-auth/
     expire_in: 1 week
 
 # Renders every story and runs its `play` function and a11y check. No HTML
@@ -181,7 +189,7 @@ test_e2e:
 # client library disagree.
 test_storybook:
   stage: verify
-  image: mcr.microsoft.com/playwright:v1.64.1-jammy
+  image: mcr.microsoft.com/playwright:v1.65.1-jammy
   services: []
   rules:
     - changes:
@@ -210,11 +218,8 @@ test_storybook:
 build_storybook_image:
   stage: build
   rules:
-    # Default branch only: this pushes :latest and redeploys the shared Storybook.
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-      changes:
-        - packages/design-system-storybook/**/*
-      when: always
+    # production only: every push pushes :latest and redeploys the shared Storybook.
+    - if: $CI_COMMIT_BRANCH == "production"
   script:
     - docker login -u "$DOCKER_REGISTRY_USERNAME" -p "$DOCKER_REGISTRY_PASSWORD" "$DOCKER_REGISTRY"
     - docker build -t $DOCKER_REGISTRY/$DOCKER_PROJECT/$IMAGE_NAME -f packages/design-system-storybook/Dockerfile .
@@ -226,11 +231,8 @@ deploy_storybook:
   image: gcc:latest
   stage: deploy
   rules:
-    # Default branch only: this pushes :latest and redeploys the shared Storybook.
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-      changes:
-        - packages/design-system-storybook/**/*
-      when: always
+    # production only: every push pushes :latest and redeploys the shared Storybook.
+    - if: $CI_COMMIT_BRANCH == "production"
   script:
     - |
       curl -f -u "$DEPLOY_USER:$DEPLOY_PASSWORD" \

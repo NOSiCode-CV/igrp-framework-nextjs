@@ -25,7 +25,7 @@ auto-discovers its own path; they are **thin bridges** that point here.
 
 `skills/igrp-design-system/` is **not committed** in the IGRP monorepo. It is
 injected at packaging time by `create-template/create-zip-template.ps1` from
-`plugins/igrp/skills/design-system/`, so a scaffolded app has it while the
+`plugins/igrp/skills/igrp-design-system/`, so a scaffolded app has it while the
 monorepo keeps one copy. If you are reading this inside the monorepo and the
 directory is missing, that is why — the canonical content is at
-`<monorepo>/plugins/igrp/skills/design-system/`.
+`<monorepo>/plugins/igrp/skills/igrp-design-system/`.

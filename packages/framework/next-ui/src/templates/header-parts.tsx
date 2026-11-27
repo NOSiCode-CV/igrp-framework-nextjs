@@ -201,7 +201,6 @@ function HeaderLogoImage({
       width={40}
       height={40}
       className={cn('object-contain size-10', className)}
-      priority
       fallback={
         <Image
           src={fallbackSrc}
@@ -210,7 +209,6 @@ function HeaderLogoImage({
           width={40}
           height={40}
           className={cn('object-contain size-10', className)}
-          priority
         />
       }
     />

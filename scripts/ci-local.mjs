@@ -74,16 +74,25 @@ const jobs = {
     run('pnpm --filter @igrp/template-migrator check:drift');
   },
   // check_skills_lock
-  skills: () => run('node scripts/sync-claude-skills.mjs --verify-lock'),
+  skills: () => {
+    run('node --test scripts/skill-hash.test.mjs');
+    run('node scripts/sync-claude-skills.mjs --verify-lock');
+  },
   // check_i18n
   i18n: () => {
     run('pnpm --filter @igrp/framework-next-i18n test');
     run('pnpm --filter @igrp/framework-next-i18n build');
+    // Re-link, as CI does: on a fresh clone the `igrp-i18n` bin target
+    // (dist/cli.js) did not exist at install time, so pnpm skipped the shim.
+    run(
+      'pnpm install --frozen-lockfile --ignore-scripts --prefer-offline --filter @igrp/framework-next-i18n --filter @igrp/framework-next-template',
+    );
     run('pnpm --filter @igrp/framework-next-template lint:i18n');
     run('pnpm lint:i18n:framework');
   },
   // verify_framework
   verify: () => {
+    run(`pnpm ${FRAMEWORK} run format:check`);
     run('pnpm build:framework');
     run(`pnpm ${FRAMEWORK} run typecheck`);
     run(`pnpm ${FRAMEWORK} run lint`);

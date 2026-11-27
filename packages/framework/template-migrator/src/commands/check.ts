@@ -34,13 +34,11 @@ export function check(appRoot: string): boolean {
     console.error(`\n✗ ${stale.length} applied migration(s) have changed since they were applied:\n`);
     for (const m of stale) console.error(`  • ${m.id}${payloadOnly.has(m.id) ? " (payload files only)" : ""}`);
     if (payloadOnly.size < stale.length) {
-      console.error(`\n  Re-applying is not automatic: remove the lock entry (or roll the migration`);
-      console.error("  back) and run apply again, after checking what changed in the guide.");
+      console.error(`\n  Re-applying is not automatic: remove the lock entry and run apply again,`);
+      console.error("  after checking what changed in the guide.");
     }
     if (payloadOnly.size > 0) {
-      // Rollback's edit guard compares against the NEW payload, which these
-      // files cannot match — it would always refuse.
-      console.error("\n  For a payload-only change, do not roll back: remove the migration's entry");
+      console.error("\n  For a payload-only change, remove the migration's entry");
       console.error("  from .igrp-migrations-lock.json and run apply again, after checking the guide.");
     }
   }

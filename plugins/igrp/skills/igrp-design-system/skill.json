@@ -1,0 +1,28 @@
+{
+  "name": "igrp-design-system",
+  "version": "1.0.0",
+  "framework": "nextjs",
+  "description": "Source-verified usage reference for @igrp/igrp-framework-react-design-system, the UI kit of IGRP apps. Use when building, editing or reviewing UI in an IGRP app, template or demo, covering forms, data tables, charts, dialogs, cards, page layout and styling, or when choosing between an `IGRP*` component and a primitive.",
+  "tags": [
+    "igrp",
+    "design-system",
+    "react",
+    "nextjs",
+    "shadcn",
+    "tailwind"
+  ],
+  "author": "NOSI",
+  "license": "MIT",
+  "dependencies": {},
+  "files": [
+    "SKILL.md",
+    "evals/evals.json",
+    "references/charts.md",
+    "references/custom.md",
+    "references/data-table.md",
+    "references/forms.md",
+    "references/horizon.md",
+    "references/primitives.md",
+    "references/utilities.md"
+  ]
+}

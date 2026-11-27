@@ -14,9 +14,10 @@ import { isAuthBypass } from "@/lib/utilities";
 export default async function Home() {
   const root = process.env.NEXT_PUBLIC_IGRP_APP_HOME_SLUG || "/";
 
-  // Fail fast with a typed, translatable error rather than a raw `Error`
-  // string. Caught by `(igrp)/error.tsx` → `IGRPSegmentError` → copy lookup
-  // by `code` in the framework's chrome catalog.
+  // Fail fast with a typed error rather than a raw `Error` string. Caught by
+  // `(igrp)/error.tsx`, which shows the catalog copy for its `code`: the code
+  // reaches the client in the error's digest, in production too. The message
+  // and `receivedValue` stay in the server log.
   if (!root.startsWith("/")) {
     throw new IgrpConfigError(
       "IGRP_APP_HOME_SLUG_INVALID",
@@ -33,11 +34,11 @@ export default async function Home() {
 
   // Both are React-cached and already resolved by `(igrp)/layout.tsx` for this
   // request, so this costs no extra session read or token decode.
-  const [session, claimsState] = await Promise.all([
+  const [session, claimsState, t] = await Promise.all([
     verifySession(),
     igrpGetClaims(),
+    getTranslations("home.layers"),
   ]);
-  const t = await getTranslations("home.layers");
 
   const app = getPackageJson();
   const bypass = isAuthBypass();

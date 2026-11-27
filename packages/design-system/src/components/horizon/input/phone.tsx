@@ -1,6 +1,6 @@
 "use client"
 
-import { lazy, Suspense, useId, useMemo, useState, useSyncExternalStore } from "react"
+import { lazy, Suspense, useId, useState, useSyncExternalStore } from "react"
 import { useFormContext, Controller } from "react-hook-form"
 import * as RPNInput from "react-phone-number-input"
 
@@ -41,14 +41,19 @@ interface IGRPInputPhoneProps extends Omit<IGRPInputProps, "onChange" | "ref"> {
 
 const noopSubscribe = () => () => {}
 
+// ~250 lookups per locale: built once per module, not once per mounted input.
+const countryLabelsByLocale = new Map<string, Record<string, string>>()
+
 /** @internal Country names in `locale`, in the shape react-phone-number-input expects for `labels`. */
-function useCountryLabels(locale: string) {
-  return useMemo(() => {
+function countryLabels(locale: string) {
+  let labels = countryLabelsByLocale.get(locale)
+  if (!labels) {
     const names = new Intl.DisplayNames([locale], { type: "region" })
-    const labels: Record<string, string> = { ext: "ext." }
+    labels = { ext: "ext." }
     for (const code of RPNInput.getCountries()) labels[code] = names.of(code) ?? code
-    return labels
-  }, [locale])
+    countryLabelsByLocale.set(locale, labels)
+  }
+  return labels
 }
 
 /** @internal Wrapper for phone input styling. */
@@ -172,7 +177,7 @@ function IGRPInputPhone({
   const domProps = igrpOmitNonDomProps(props)
   const formContext = useFormContext()
   const i18n = useIGRPi18n()
-  const localized = useCountryLabels(useIGRPLocale())
+  const localized = countryLabels(useIGRPLocale())
   // Server ICU and browser ICU can name (and so sort) countries differently; localize only after hydration.
   const hydrated = useSyncExternalStore(
     noopSubscribe,

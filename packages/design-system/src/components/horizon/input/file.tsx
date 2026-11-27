@@ -146,6 +146,7 @@ function IGRPDropzoneInternal({
   onFieldChange,
   fieldValue,
 }: IGRPDropzoneInternalProps) {
+  const i18n = useIGRPi18n()
   const [files, setFiles] = useState<FileWithProgress[]>([])
   const [rejectedFiles, setRejectedFiles] = useState<FileRejection[]>([])
 
@@ -199,7 +200,8 @@ function IGRPDropzoneInternal({
         updateFiles([...files, ...newItems.slice(0, room)])
       } else {
         setRejectedFiles(rejected)
-        updateFiles(newItems)
+        // A drop where every file is rejected keeps the file already picked.
+        if (newItems.length > 0) updateFiles(newItems)
       }
     },
     [multiple, maxFiles, maxFilesLabel, files, updateFiles]
@@ -310,7 +312,7 @@ function IGRPDropzoneInternal({
           <AlertCircle className="size-4" />
           <AlertTitle>{rejectedAlertTitle}</AlertTitle>
           <AlertDescription>
-            <ul className="mt-2 list-disc space-y-1 pl-5 text-sm">
+            <ul className="mt-2 flex list-disc flex-col gap-1 pl-5 text-sm">
               {rejectedFiles.map((item, index) => (
                 <li key={fileKey(item.file)} className="flex items-center justify-between">
                   <span>
@@ -341,7 +343,11 @@ function IGRPDropzoneInternal({
             >
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-medium">{item.file.name}</p>
-                <Progress value={item.progress} className="mt-1 h-1" />
+                <Progress
+                  value={item.progress}
+                  aria-label={igrpFormatMessage(i18n.inputFile.uploadProgress, { name: item.file.name })}
+                  className="mt-1 h-1"
+                />
               </div>
               <Button
                 size="icon"
@@ -458,8 +464,8 @@ function IGRPInputFile({
       )
     }
 
-    const fieldError = formContext.formState.errors[fieldName]
-    const errorMessage = error || (fieldError?.message as string)
+    // Nested names (`itens.0.nome`) resolve through fieldState, not formState.errors[name].
+    const errorMessage = error
 
     return (
       <Controller
@@ -512,6 +518,7 @@ function IGRPInputFile({
           )}
           type="file"
           disabled={disabled}
+          aria-required={required || undefined}
           accept={accept}
           multiple={multiple}
           placeholder={placeholder}
@@ -528,8 +535,8 @@ function IGRPInputFile({
     )
   }
 
-  const fieldError = formContext.formState.errors[fieldName]
-  const errorMessage = error || (fieldError?.message as string)
+  // Nested names (`itens.0.nome`) resolve through fieldState, not formState.errors[name].
+  const errorMessage = error
   // The field owns onBlur/ref; the caller's copies run after it and never replace
   // it (see lib/form-binding.ts).
   const { onBlur, ref, ...callerProps } = igrpOmitNonDomProps(props)
@@ -539,11 +546,16 @@ function IGRPInputFile({
       name={fieldName}
       control={formContext.control}
       render={({ field, fieldState }) => {
+        const fieldIsEmpty = field.value === undefined || field.value === null || field.value?.length === 0
         return (
           <Field>
             {label && <IGRPLabel label={label} className={labelClassName} required={required} id={fieldName} />}
             <Input
-              ref={igrpMergeRefs(inputRef, field.ref, ref)}
+              ref={igrpMergeRefs(inputRef, field.ref, ref, (node: HTMLInputElement | null) => {
+                // A file input is uncontrolled: after `form.reset()` it would keep showing the old
+                // name. The ref re-runs when `fieldIsEmpty` changes, so clear the DOM value then.
+                if (node && fieldIsEmpty) node.value = ""
+              })}
               id={fieldName}
               className={cn(
                 "cursor-pointer p-0 pe-3 file:me-3 file:border-0 file:border-e file:border-input file:px-4 file:py-2 file:transition-colors",
@@ -552,6 +564,7 @@ function IGRPInputFile({
               )}
               type="file"
               disabled={disabled}
+              aria-required={required || undefined}
               accept={accept}
               multiple={multiple}
               placeholder={placeholder}

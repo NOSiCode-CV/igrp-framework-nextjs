@@ -10,11 +10,7 @@ import { fn } from 'storybook/test';
 
 const meta = {
   title: 'Components/Button',
-  // Known WCAG backlog, tracked in the design-system accessibility audit:
-  // color-contrast on soft/outline colour variants.
-  // 'todo' reports in the Storybook UI without failing CI. Delete this once the
-  // suite is clean; every other component is gated at 'error' by preview.ts.
-  parameters: { a11y: { test: 'todo' } },
+  parameters: { a11y: { test: 'error' } },
   component: IGRPButton,
   argTypes: {
     variant: {
@@ -81,6 +77,7 @@ export const LoadingButtonDemo: StoryFn<IGRPButtonProps> = (args) => {
     </div>
   );
 };
+LoadingButtonDemo.args = { children: 'Click to Load' };
 
 export const AllVariants: StoryFn<IGRPButtonProps> = (args) => (
   <div className='p-4 flex flex-wrap gap-2'>
@@ -231,10 +228,10 @@ export const LoadingDemo: StoryObj<IGRPButtonProps> = {
 
 export const Variants: StoryObj<IGRPButtonProps> = {
   render: Template,
-  args: {},
+  args: { children: 'Variant' },
 };
 
 export const Sizes: StoryObj<IGRPButtonProps> = {
   render: Template,
-  args: {},
+  args: { children: 'Size' },
 };

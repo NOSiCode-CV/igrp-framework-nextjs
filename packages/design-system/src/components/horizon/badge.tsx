@@ -91,6 +91,8 @@ function IGRPBadge({
     <div
       data-slot="badge"
       id={ref}
+      // An aria-label on a role-less div is ignored, so an icon-only badge is exposed as an image.
+      role={isIconOnly ? "img" : undefined}
       className={cn(
         igrpBadgeVariants({ size }),
         colorClasses.badge,

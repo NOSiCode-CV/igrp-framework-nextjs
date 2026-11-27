@@ -35,11 +35,6 @@ import {
 
 const meta: Meta<typeof IGRPForm> = {
   title: 'Components/Form',
-  // Known WCAG backlog, tracked in the design-system accessibility audit:
-  // label backlog (error-state fixtures render unlabelled inputs).
-  // 'todo' reports in the Storybook UI without failing CI. Delete this once the
-  // suite is clean; every other component is gated at 'error' by preview.ts.
-  parameters: { a11y: { test: 'todo' } },
   component: IGRPForm,
 };
 export default meta;
@@ -275,7 +270,7 @@ export const BasicExternalTrigger: StoryObj = {
   render: () => {
     const formRef = useRef<IGRPFormHandle<typeof basicSchema> | null>(null);
     return (
-      <div className='space-y-4 p-10'>
+      <div className='flex flex-col gap-4 p-10'>
         <IGRPForm
           schema={basicSchema}
           onSubmit={(values) => alert(`Submitted externally: ${JSON.stringify(values)}`)}
@@ -294,7 +289,7 @@ export const AdvancedExternalTrigger: StoryObj = {
   render: () => {
     const formRef = useRef<IGRPFormHandle<typeof advancedSchema>>(null);
     return (
-      <div className='space-y-4'>
+      <div className='flex flex-col gap-4'>
         <IGRPForm
           schema={advancedSchema}
           onSubmit={(values) => console.log('Advanced External Submit:', values)}
@@ -491,7 +486,7 @@ export const FormExamples: StoryObj = {
     }, [actividadesEconomicas, calculeSOATPoderado]);
 
     return (
-      <div className='space-y-4'>
+      <div className='flex flex-col gap-4'>
         <IGRPForm
           schema={formContribuinte}
           validationMode='onBlur'
@@ -749,7 +744,7 @@ export const FormExamples: StoryObj = {
                     </div>
                   </>
                 )}
-                computeLabel={(_: any, index: number) => `Item ${index}`}
+                computeLabel={(_: any, index: number) => `Actividade ${index + 1}`}
                 defaultItem={undefined}
                 badgeValue={actividadesEconomicasBadgeValue}
               />
@@ -812,7 +807,7 @@ export const FormExamples: StoryObj = {
                     </div>
                   </>
                 )}
-                computeLabel={(_: any, index: number) => `Item ${index}`}
+                computeLabel={(_: any, index: number) => `Endereço ${index + 1}`}
                 defaultItem={undefined}
               />
 
@@ -847,7 +842,7 @@ export const FormExamples: StoryObj = {
                     </div>
                   </>
                 )}
-                computeLabel={(_: any, index: number) => `Item ${index}`}
+                computeLabel={(_: any, index: number) => `Contacto ${index + 1}`}
                 className={cn('md:grid-cols-2', 'block')}
                 defaultItem={undefined}
               />
@@ -893,7 +888,7 @@ export const FormExamples: StoryObj = {
                     </div>
                   </>
                 )}
-                computeLabel={(_: any, index: number) => `Item ${index}`}
+                computeLabel={(_: any, index: number) => `Conta bancária ${index + 1}`}
                 defaultItem={undefined}
               />
 
@@ -933,7 +928,7 @@ export const FormExamples: StoryObj = {
                     </div>
                   </>
                 )}
-                computeLabel={(_: any, index: number) => `Item ${index}`}
+                computeLabel={(_: any, index: number) => `Documento ${index + 1}`}
                 defaultItem={undefined}
               />
 

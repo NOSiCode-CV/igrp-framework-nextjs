@@ -41,6 +41,8 @@ vi.mock('@igrp/framework-next-auth/sanitize', () => ({ sanitizeRedirectUrl: () =
 const getToken = vi.fn();
 vi.mock('@igrp/framework-next-auth/session-store', () => ({
   readIGRPSessionToken: (...args: unknown[]) => getToken(...args),
+  // No auth instance registered: recovery falls back to the cookie.
+  readIGRPServerSessionAccessToken: async () => undefined,
 }));
 
 const { fetchMenusAction } = await import('../index.js');

@@ -1,3 +1,4 @@
+/** @deprecated Unused by the framework; removed in a later release. Use `URLSearchParams`. */
 export function igrpBuildQueryString(params: Record<string, string | number | undefined>): string {
   const validParams = Object.entries(params)
     .filter(([, value]) => value !== undefined)

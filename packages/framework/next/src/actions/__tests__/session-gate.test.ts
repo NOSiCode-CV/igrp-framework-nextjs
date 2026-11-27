@@ -102,6 +102,27 @@ describe('server actions refuse before contacting Access Management', () => {
     expect(await actions.fetchAppsByUserAction()).toMatchObject({ ok: false });
   });
 
+  it.each(['../../../admin/x?q=', 'APP/x', 'A', '', 'APP ', undefined])(
+    'rejects appCode %j before any AM call',
+    async (appCode) => {
+      igrpEnsureAccessClientConfig.mockResolvedValue({ token: 'AT', baseUrl: 'http://am' });
+
+      expect(await actions.fetchMenusAction(appCode as string)).toMatchObject({
+        ok: false,
+        code: 'MENUS_LOAD_FAILED',
+      });
+      expect(fetchMenus).not.toHaveBeenCalled();
+    },
+  );
+
+  it('accepts a valid appCode in any case, passed through unchanged', async () => {
+    igrpEnsureAccessClientConfig.mockResolvedValue({ token: 'AT', baseUrl: 'http://am' });
+    fetchMenus.mockResolvedValue([]);
+
+    expect(await actions.fetchMenusAction('my_app_1')).toEqual({ ok: true, data: [] });
+    expect(fetchMenus).toHaveBeenCalledWith('my_app_1');
+  });
+
   it('lets a 401 session-ended redirect from the fetch escape the action', async () => {
     igrpEnsureAccessClientConfig.mockResolvedValue({ token: 'AT', baseUrl: 'http://am' });
     fetchMenus.mockRejectedValue(new Error('NEXT_REDIRECT:/login?reason=session_ended'));

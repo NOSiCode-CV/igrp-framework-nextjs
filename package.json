@@ -19,6 +19,7 @@
     "typecheck": "pnpm -r run typecheck",
     "clean": "pnpm -r run clean",
     "format": "pnpm -r run format",
+    "format:check": "pnpm -r run format:check",
     "build:next": "pnpm --filter @igrp/framework-next build",
     "build:i18n-tools": "pnpm --filter @igrp/framework-next-i18n build",
     "lint:i18n:framework": "node packages/framework/next-i18n/dist/cli.js check-literals packages/design-system/src/components packages/framework/next-ui/src packages/framework/next/src",
@@ -40,14 +41,18 @@
     "version:changesets": "changeset version",
     "skills:sync": "node scripts/sync-claude-skills.mjs",
     "skills:sync:check": "node scripts/sync-claude-skills.mjs --check",
+    "skills:lock": "node scripts/sync-claude-skills.mjs --update-lock",
     "install:deps": "dotenv -e .env -- pnpm install",
     "template-migrations": "pnpm --filter @igrp/template-migrator build"
   },
   "devDependencies": {
     "@changesets/cli": "3.0.3",
-    "@vitest/coverage-v8": "5.1.0",
-    "dotenv-cli": "11.0.0",
-    "eslint": "10.12.0",
+    "@stryker-mutator/core": "10.1.1",
+    "@stryker-mutator/vitest-runner": "10.1.1",
+    "@vitest/coverage-v8": "5.1.1",
+    "dotenv-cli": "11.1.0",
+    "eslint": "10.15.0",
+    "prettier": "3.10.1",
     "typescript": "~6.0.3"
   },
   "engines": {

@@ -3,7 +3,7 @@
 import { type Session } from '@igrp/framework-next-auth';
 import type { SessionProviderProps } from '@igrp/framework-next-auth/client';
 import type { IGRPBranding } from '@igrp/framework-next-types';
-import { TooltipProvider } from '@igrp/igrp-framework-react-design-system';
+import { IGRPTooltipProvider } from '@igrp/igrp-framework-react-design-system';
 import type { ThemeProviderProps } from 'next-themes';
 
 import { IGRPBrandingProvider } from '../branding/provider.js';
@@ -39,7 +39,8 @@ export function IGRPNestedProviders({
 }: IGRPNestedProvidersArgs) {
   return (
     <IGRPSessionProvider {...sessionArgs} session={session}>
-      <TooltipProvider>
+      {/* IGRPTooltipProvider so every IGRPTooltip in the app shares it instead of mounting its own. */}
+      <IGRPTooltipProvider delayDuration={0}>
         <IGRPThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -53,7 +54,7 @@ export function IGRPNestedProviders({
             <IGRPSessionWatcher checkSession={checkSession}>{children}</IGRPSessionWatcher>
           </IGRPBrandingProvider>
         </IGRPThemeProvider>
-      </TooltipProvider>
+      </IGRPTooltipProvider>
     </IGRPSessionProvider>
   );
 }

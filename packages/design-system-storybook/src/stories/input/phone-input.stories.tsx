@@ -41,7 +41,7 @@ const Template: StoryFn<IGRPInputPhoneProps> = (args) => (
 
 const FormTemplate: StoryFn<IGRPInputPhoneProps> = (args) => {
   const schema = z.object({
-    [args.name]: z
+    [args.name as string]: z
       .string()
       .min(1, 'Número de telefone é obrigatório')
       .regex(/^\+?[1-9]\d{1,14}$/, 'Formato de número de telefone inválido'),
@@ -50,13 +50,13 @@ const FormTemplate: StoryFn<IGRPInputPhoneProps> = (args) => {
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
-      [args.name]: args.defaultValue || '',
+      [args.name as string]: args.defaultValue || '',
     },
   });
 
   const onSubmit = (data: Record<string, string>) => {
     console.log('Formulário enviado:', data);
-    alert(`Número de telefone: ${data[args.name]}`);
+    alert(`Número de telefone: ${data[args.name as string]}`);
   };
 
   return (
@@ -64,7 +64,7 @@ const FormTemplate: StoryFn<IGRPInputPhoneProps> = (args) => {
       <FormProvider {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className='space-y-4'
+          className='flex flex-col gap-4'
         >
           <IGRPInputPhone {...args} />
 

@@ -1,12 +1,4 @@
-export { default as withAuth } from 'next-auth/middleware';
-export type {
-  NextRequestWithAuth,
-  NextMiddlewareWithAuth,
-  WithAuthArgs,
-} from 'next-auth/middleware';
-
 import type { IGRPAuthInstance } from './config';
-import { isIgrpAuthBypass } from './providers';
 import { sanitizeCallbackUrl } from './sanitize';
 
 /** The `withIGRPAuth` methods the middleware decision uses. */
@@ -17,6 +9,8 @@ export type IGRPMiddlewareAuth = Pick<
   | 'isEndedByHostLogout'
   | 'getLoginRedirectUrl'
   | 'resolveAppUrl'
+  | 'isPreviewMode'
+  | 'isAuthDisabled'
 >;
 
 /** The parts of a `NextRequest` the decision reads. */
@@ -36,7 +30,10 @@ export type IGRPMiddlewareOptions = {
   logoutPendingCookie?: string;
   /** Defaults to `NEXT_PUBLIC_BASE_PATH`. Used to sanitize `callbackUrl`. */
   basePath?: string;
-  /** Defaults to `process.env`. Read for the auth-bypass flags. */
+  /**
+   * Defaults to `process.env`. Read only for `NEXT_PUBLIC_BASE_PATH`; the
+   * bypass comes from `auth`, so it follows the instance's `provider` option.
+   */
   env?: Record<string, string | undefined>;
 };
 
@@ -72,8 +69,10 @@ function isPublicPath(pathname: string, publicPaths: readonly string[]): boolean
  * the answer into a response and owns everything HTTP around it (security
  * headers, CSP, cookies), so this stays free of `next/server` and Edge-safe.
  *
- * 1. Auth bypassed (preview mode or `AUTH_PROVIDER=none`): `/login`, `/logout`
- *    and `/api/auth/*` redirect to `/`; everything else passes.
+ * 1. Auth bypassed (`auth.isPreviewMode()` or `auth.isAuthDisabled()`, the same
+ *    answer the handlers act on): `/login`, `/logout` and `/api/auth/*` redirect
+ *    to `/`; everything else passes. Reading the env here instead let a leftover
+ *    `AUTH_PROVIDER=none` pass every request while `provider:` ran real auth.
  * 2. Public and static paths pass.
  * 3. A logout-pending marker sends a protected route to the login page (no
  *    `callbackUrl`: a completed logout lands on /login, not back in the app).
@@ -89,7 +88,7 @@ export async function igrpMiddlewareDecision(
   const env = options.env ?? process.env;
   const { pathname, search } = request.nextUrl;
 
-  if (isIgrpAuthBypass(env)) {
+  if (auth.isPreviewMode() || auth.isAuthDisabled()) {
     return isAuthUiPath(pathname)
       ? { type: 'redirect', url: auth.resolveAppUrl('/', request) }
       : { type: 'pass' };

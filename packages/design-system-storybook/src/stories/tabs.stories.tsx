@@ -17,9 +17,8 @@ const meta: Meta<typeof IGRPTabs> = {
   title: 'Components/Tabs',
   // Known WCAG backlog, tracked in the design-system accessibility audit:
   // color-contrast backlog.
-  // 'todo' reports in the Storybook UI without failing CI. Delete this once the
-  // suite is clean; every other component is gated at 'error' by preview.ts.
-  parameters: { a11y: { test: 'todo' } },
+  // Only the backlog rule is off; every other rule still fails CI. Delete once fixed.
+  parameters: { a11y: { test: 'error', config: { rules: [{ id: 'color-contrast', enabled: false }] } } },
   component: IGRPTabs,
   tags: ['autodocs'],
   argTypes: {
@@ -86,7 +85,7 @@ export default meta;
 type Story = StoryObj<typeof IGRPTabs>;
 
 const createTabContent = (label: string) => (
-  <div className='space-y-4'>
+  <div className='flex flex-col gap-4'>
     <h3 className='text-lg font-medium'>{label} Content</h3>
     <p>This is the content for the {label.toLowerCase()} tab.</p>
   </div>
@@ -339,7 +338,7 @@ export const WithCustomClassNames: Story = {
   args: {
     items: tabsWithIcons,
     showIcon: true,
-    tabTriggerClassName: 'text-blue-600 data-[state=active]:text-blue-900',
+    tabTriggerClassName: 'text-info data-[state=active]:text-info',
     tabContentClassName: 'bg-muted p-4 rounded-lg shadow',
   },
 };

@@ -44,12 +44,22 @@ describe('createInMemoryTokenRecoveryStore', () => {
     expect(await store.get('consumed-rt')).not.toBeNull();
   });
 
-  it('evicts the oldest entry when full', async () => {
+  it('never drops a live entry to make room, past maxEntries', async () => {
     const store = createInMemoryTokenRecoveryStore({ maxEntries: 2 });
-    await store.set('rt-1', makeJwt(), 180_000);
-    await store.set('rt-2', makeJwt(), 180_000);
+    for (let i = 1; i <= 10; i++) await store.set(`rt-${i}`, makeJwt(), 180_000);
+    for (let i = 1; i <= 10; i++) expect(await store.get(`rt-${i}`)).not.toBeNull();
+  });
+
+  it('sweeps expired entries once maxEntries is reached', async () => {
+    vi.useFakeTimers();
+    const store = createInMemoryTokenRecoveryStore({ maxEntries: 2 });
+    await store.set('rt-1', makeJwt(), 1_000);
+    await store.set('rt-2', makeJwt(), 1_000);
+    vi.advanceTimersByTime(1_001);
+    const deleteSpy = vi.spyOn(Map.prototype, 'delete');
     await store.set('rt-3', makeJwt(), 180_000);
-    expect(await store.get('rt-1')).toBeNull();
+    expect(deleteSpy.mock.calls.map(([key]) => key)).toEqual(['rt-1', 'rt-2']);
+    deleteSpy.mockRestore();
     expect(await store.get('rt-3')).not.toBeNull();
   });
 

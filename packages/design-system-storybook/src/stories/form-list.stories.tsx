@@ -29,9 +29,8 @@ const meta: Meta<typeof IGRPFormList> = {
   title: 'Components/FormList',
   // Known WCAG backlog, tracked in the design-system accessibility audit:
   // button-name backlog.
-  // 'todo' reports in the Storybook UI without failing CI. Delete this once the
-  // suite is clean; every other component is gated at 'error' by preview.ts.
-  parameters: { a11y: { test: 'todo' } },
+  // Only the backlog rule is off; every other rule still fails CI. Delete once fixed.
+  parameters: { a11y: { test: 'error', config: { rules: [{ id: 'button-name', enabled: false }] } } },
   component: IGRPFormList,
   argTypes: {
     allowMultipleOpen: {
@@ -273,11 +272,11 @@ const AllowMultipleOpenTemplate = () => {
 
   return (
     <div className='mx-auto px-6 py-8'>
-      <div className='mb-4 p-4 bg-green-50 border border-green-200 rounded-md'>
-        <p className='text-sm font-medium text-green-900 mb-1'>
+      <div className='mb-4 p-4 bg-success/10 border border-success/30 rounded-md'>
+        <p className='text-sm font-medium text-success mb-1'>
           ✨ allowMultipleOpen Demo
         </p>
-        <p className='text-xs text-green-700'>
+        <p className='text-xs text-success'>
           Multiple items can be expanded at once. Opening one does not close the others.
         </p>
       </div>
@@ -448,11 +447,11 @@ const AllowEmptyStandaloneTemplate = () => {
 
   return (
     <div className='mx-auto px-6 py-8'>
-      <div className='mb-4 p-4 bg-blue-50 border border-blue-200 rounded-md'>
-        <p className='text-sm font-medium text-blue-900 mb-1'>
+      <div className='mb-4 p-4 bg-info/10 border border-info/30 rounded-md'>
+        <p className='text-sm font-medium text-info mb-1'>
           ✨ allowEmpty Demo
         </p>
-        <p className='text-xs text-blue-700'>
+        <p className='text-xs text-info'>
           This form list starts empty. Click "Add" to add items. You can remove all items including the last one.
         </p>
       </div>
@@ -496,11 +495,11 @@ const AllowEmptyFormTemplate = () => {
 
   return (
     <div className='mx-auto px-6 py-8'>
-      <div className='mb-4 p-4 bg-blue-50 border border-blue-200 rounded-md'>
-        <p className='text-sm font-medium text-blue-900 mb-1'>
+      <div className='mb-4 p-4 bg-info/10 border border-info/30 rounded-md'>
+        <p className='text-sm font-medium text-info mb-1'>
           ✨ allowEmpty with Form Context
         </p>
-        <p className='text-xs text-blue-700'>
+        <p className='text-xs text-info'>
           This form list starts completely empty. Click "Add Social" to add items. You can remove all items including the last one.
         </p>
       </div>
@@ -534,14 +533,14 @@ const AllowEmptyFormTemplate = () => {
               console.log('Current form values:', data);
               alert(`Current form has ${data?.socials?.length || 0} items`);
             }}
-            className='px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md text-sm'
+            className='px-4 py-2 bg-muted hover:bg-muted/80 rounded-md text-sm'
           >
             Check Values
           </button>
           <button
             type='button'
             onClick={() => formRef.current?.submit()}
-            className='px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm'
+            className='px-4 py-2 bg-info text-info-foreground hover:bg-info/90 rounded-md text-sm'
           >
             Submit Form
           </button>
@@ -936,7 +935,7 @@ const SeededSingleRowTemplate = () => {
             tipoDocumentoOptions.find((o) => String(o.value) === String(item?.idTipoDocumento))
               ?.label ?? `Novo Documento ${index + 1}`
           }
-          className={cn('space-y-3')}
+          className={cn('gap-3')}
         />
       </IGRPForm>
     </div>

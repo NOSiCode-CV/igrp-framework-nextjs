@@ -9,13 +9,24 @@ export type IGRPErrorCopyResolver = (error: Error) => Partial<IGRPErrorCopy> | u
  * catalog, so returning only `{ description }` keeps the catalog title),
  * then the catalog entry for a known `IGRP_*` code carried on the error,
  * then the screen's generic pair.
+ *
+ * The code comes from `error.code` (a client-thrown error) or from
+ * `error.digest` (a server-thrown one: React sends it to the client without
+ * `code`, so framework-next's `IgrpError` puts the code in its digest as
+ * `<id>|<code>`, the `AppError` shape). Only a key of `byCode` is used, so the
+ * free-text message of an `AppError` digest falls through to the generic pair.
  */
 export function igrpResolveErrorCopy(
   error: Error,
   catalog: { byCode: Record<IGRPChromeErrorCode, IGRPErrorCopy>; fallback: IGRPErrorCopy },
   custom?: IGRPErrorCopyResolver,
 ): IGRPErrorCopy {
-  const code = (error as { code?: unknown }).code;
+  const { code: ownCode, digest } = error as { code?: unknown; digest?: unknown };
+  const code =
+    ownCode ??
+    (typeof digest === 'string' && digest.includes('|')
+      ? digest.slice(digest.indexOf('|') + 1)
+      : undefined);
   const byCode =
     typeof code === 'string' && Object.hasOwn(catalog.byCode, code)
       ? catalog.byCode[code as IGRPChromeErrorCode]

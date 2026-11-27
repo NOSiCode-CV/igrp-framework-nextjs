@@ -1,6 +1,6 @@
 import { existsSync, readFileSync, renameSync, rmSync, writeFileSync } from "fs";
 import { join } from "path";
-import type { LockFile } from "./types.js";
+import type { LockEntry, LockFile } from "./types.js";
 import { LegacyLockError } from "./types.js";
 
 const LOCK_FILE = ".igrp-migrations-lock.json";
@@ -30,11 +30,52 @@ export function readLock(appRoot: string): LockFile {
         "Fix the file (a bad merge is the usual cause) and re-run.",
     );
   }
-  const lock = parsed as LockFile;
-  if (!lock || typeof lock !== "object" || !Array.isArray(lock.applied)) {
-    throw new Error(`${p} is not a migration lock file (no "applied" array).`);
+  return decodeLock(parsed, p);
+}
+
+/**
+ * Shape written by unreleased 0.2.0-beta.28 development builds (the template's
+ * shipped lock among them): ids grouped by CLI release line, hashes only.
+ * Still read; never written.
+ */
+interface GroupedDiskLock {
+  version: 2;
+  template: LockFile["template"];
+  applied: Record<string, Record<string, { manifestHash: string; payloadHash?: string }>>;
+}
+
+/** Parse either shape: a flat `applied` array (written today, and by every CLI up to 0.2.0-beta.27) or the grouped one. */
+export function decodeLock(parsed: unknown, p: string): LockFile {
+  const raw = parsed as { template?: LockFile["template"]; applied?: unknown } | null;
+  if (raw && typeof raw === "object" && Array.isArray(raw.applied)) {
+    return { version: 1, template: raw.template ?? "demo-v1", applied: raw.applied as LockEntry[] };
   }
-  return lock;
+  if (raw && typeof raw === "object" && raw.applied && typeof raw.applied === "object") {
+    const applied: LockEntry[] = [];
+    for (const [cliVersion, group] of Object.entries((raw as GroupedDiskLock).applied)) {
+      for (const [id, hashes] of Object.entries(group)) applied.push({ id, cliVersion, ...hashes });
+    }
+    return { version: 1, template: raw.template ?? "demo-v1", applied };
+  }
+  throw new Error(`${p} is not a migration lock file (no "applied" entries).`);
+}
+
+/**
+ * Serialise as version 1 with a flat `applied` array, so CLIs up to
+ * 0.2.0-beta.27 can still read it (they require `applied` to be an array).
+ * Each entry keeps only what `status`/`check`/`apply` read: id, the CLI that
+ * applied it, and the hashes. Undo content (`undo`, `undoPayloads`,
+ * `fileHashes`, `appliedAt`) is dropped: full file contents pushed consumer
+ * locks past 1 MiB (Biome's file size limit).
+ */
+export function encodeLock(lock: LockFile): string {
+  const applied: LockEntry[] = lock.applied.map((entry) => ({
+    id: entry.id,
+    cliVersion: entry.cliVersion,
+    manifestHash: entry.manifestHash,
+    ...(entry.payloadHash ? { payloadHash: entry.payloadHash } : {}),
+  }));
+  return JSON.stringify({ version: 1, template: lock.template, applied }, null, 2) + "\n";
 }
 
 /**
@@ -46,7 +87,7 @@ export function readLock(appRoot: string): LockFile {
  * sees either the old file or the new one, never half of either.
  */
 export function writeLock(appRoot: string, lock: LockFile): void {
-  writeFileAtomic(lockPath(appRoot), JSON.stringify(lock, null, 2) + "\n");
+  writeFileAtomic(lockPath(appRoot), encodeLock(lock));
 }
 
 /** Temp file + rename, so a reader never sees a torn write. Also used by journal.ts. */

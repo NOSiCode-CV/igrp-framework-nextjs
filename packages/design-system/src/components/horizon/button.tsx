@@ -13,12 +13,8 @@ import { igrpSpinnerSizeClassName, isIconOnlySize } from "../../lib/button-size.
 import type { IGRPBaseAttributes } from "../../types.js"
 import { useIGRPi18n } from "../../i18n/index.js"
 
-/**
- * Props for the IGRPButton component.
- * Extends button primitives with IGRP conventions: icons, loading state, and base attributes.
- * @see IGRPButton
- */
-interface IGRPButtonProps
+/** @internal Props shared by every IGRPButton, whatever its size. */
+interface IGRPButtonBaseProps
   extends
     Omit<React.ComponentProps<typeof Button>, "name">,
     VariantProps<typeof buttonVariants>,
@@ -36,6 +32,20 @@ interface IGRPButtonProps
    */
   iconSize?: string | number
 }
+
+type IGRPIconOnlySize = "icon" | "icon-xs" | "icon-sm" | "icon-lg"
+
+/**
+ * Props for the IGRPButton component.
+ * Extends button primitives with IGRP conventions: icons, loading state, and base attributes.
+ * An icon-only size has no visible text, so it requires `aria-label` or `aria-labelledby` (WCAG 4.1.2).
+ * @see IGRPButton
+ */
+type IGRPButtonProps =
+  | (IGRPButtonBaseProps & { size: IGRPIconOnlySize } & (
+        { "aria-label": string; "aria-labelledby"?: string } | { "aria-label"?: string; "aria-labelledby": string }
+      ))
+  | (IGRPButtonBaseProps & { size?: Exclude<IGRPButtonBaseProps["size"], IGRPIconOnlySize> })
 
 /**
  * Horizon button with optional icon, loading state, and IGRP attributes.

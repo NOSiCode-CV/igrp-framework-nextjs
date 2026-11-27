@@ -422,6 +422,7 @@ const IGRPSelectItem = memo(({ item, showStatus }: { item: IGRPOptionsProps; sho
   <SelectItem value={String(item.value)} className={cn("flex items-center gap-2 truncate")}>
     <div className={cn("flex w-full items-center gap-2")}>
       {showStatus && <Circle className={cn("size-2 fill-current", igrpColorText(item.status || "primary"))} />}
+      {showStatus && item.statusLabel && <span className="sr-only">{item.statusLabel}: </span>}
       {item.image && (
         <Image
           className={cn("size-5 rounded")}
@@ -459,10 +460,18 @@ const IGRPSelectContent = memo(
     showGroup: boolean
   }) => {
     const i18n = useIGRPi18n()
-    const groups = useMemo(
-      () => Array.from(new Set(filteredOptions.map((opt) => opt.group).filter(Boolean))),
-      [filteredOptions]
-    )
+    // One pass, in first-seen group order; filtering per group was O(groups × options) per keystroke.
+    const groups = useMemo(() => {
+      const byGroup = new Map<string, IGRPOptionsProps[]>()
+      for (const opt of filteredOptions) {
+        // Ungrouped options go under "other", like IGRPCombobox; skipping them hid them.
+        const group = opt.group || i18n.combobox.otherGroup
+        const list = byGroup.get(group)
+        if (list) list.push(opt)
+        else byGroup.set(group, [opt])
+      }
+      return Array.from(byGroup)
+    }, [filteredOptions, i18n.combobox.otherGroup])
 
     return (
       <SelectContent className={cn("max-h-[300px] overflow-y-auto")}>
@@ -471,15 +480,13 @@ const IGRPSelectContent = memo(
           <p className={cn("px-2 py-1.5 text-sm text-muted-foreground")}>{i18n.multiSelect.notFound}</p>
         )}
         {showGroup && groups.length > 0
-          ? groups.map((group) => (
+          ? groups.map(([group, groupOptions]) => (
               <Fragment key={group}>
                 <SelectGroup>
                   <SelectLabel className={cn("px-2 text-xs text-muted-foreground")}>{group}</SelectLabel>
-                  {filteredOptions
-                    .filter((opt) => opt.group === group)
-                    .map((opt) => (
-                      <IGRPSelectItem key={opt.value} item={opt} showStatus={showStatus} />
-                    ))}
+                  {groupOptions.map((opt) => (
+                    <IGRPSelectItem key={opt.value} item={opt} showStatus={showStatus} />
+                  ))}
                 </SelectGroup>
               </Fragment>
             ))
@@ -535,6 +542,9 @@ const IGRPSelectTrigger = ({
               igrpColorText(options.find((o) => o.value === value)?.status || "primary")
             )}
           />
+        )}
+        {showStatus && options.find((o) => o.value === value)?.statusLabel && (
+          <span className="sr-only">{options.find((o) => o.value === value)?.statusLabel}: </span>
         )}
         {label}
       </div>

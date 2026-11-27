@@ -10,6 +10,7 @@ vi.mock('next/navigation', () => ({
   useRouter: () => router,
   useSelectedLayoutSegments: () => ['url-segment'],
   usePathname: () => '/',
+  useSearchParams: () => new URLSearchParams(),
 }));
 
 const { SidebarProvider, TooltipProvider } =

@@ -27,6 +27,8 @@ type Entry = {
 const cache = new Map<string, Entry>();
 /** One fetch per `baseUrl` at a time, cold or warm. */
 const pending = new Map<string, Promise<void>>();
+/** Bumped by `igrpInvalidateBranding`; a fetch started before the bump never writes. */
+const generation = new Map<string, number>();
 
 export interface IGRPGetBrandingArgs {
   baseUrl: string;
@@ -60,6 +62,13 @@ function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
 
 async function refresh(key: string, args: IGRPGetBrandingArgs): Promise<void> {
   const timeout = args.timeout ?? BRANDING_FETCH_TIMEOUT_MS;
+  // The response reflects AM as of the request, not its arrival: a save that
+  // lands while this fetch runs must still read as newer than the cache.
+  const startedAt = Date.now();
+  const startGeneration = generation.get(key);
+  const save = (next: Omit<Entry, 'honoredSavedAt'>) => {
+    if (generation.get(key) === startGeneration) store(key, next);
+  };
   const client = AccessManagementClient.create({
     baseUrl: key,
     timeout,
@@ -79,18 +88,18 @@ async function refresh(key: string, args: IGRPGetBrandingArgs): Promise<void> {
     if (!parsed.branding) {
       console.warn(JSON.stringify({ event: 'igrp.branding.invalid_config' }));
     }
-    store(key, { value: parsed.branding, fetchedAt: Date.now(), retryAfter: 0 });
+    save({ value: parsed.branding, fetchedAt: startedAt, retryAfter: 0 });
   } catch (error) {
     const status = statusOf(error);
     if (status === 404) {
-      store(key, { value: null, fetchedAt: Date.now(), retryAfter: 0 });
+      save({ value: null, fetchedAt: startedAt, retryAfter: 0 });
       return;
     }
     console.error(
       JSON.stringify({ event: 'igrp.branding.fetch_failed', status: status ?? 'network' }),
     );
     const previous = cache.get(key);
-    store(key, {
+    save({
       value: previous?.value ?? null,
       fetchedAt: previous?.fetchedAt ?? 0,
       retryAfter: Date.now() + BRANDING_RETRY_COOLDOWN_MS,
@@ -99,12 +108,14 @@ async function refresh(key: string, args: IGRPGetBrandingArgs): Promise<void> {
 }
 
 function startRefresh(key: string, args: IGRPGetBrandingArgs): Promise<void> {
-  let running = pending.get(key);
-  if (!running) {
-    running = refresh(key, args).finally(() => pending.delete(key));
-    pending.set(key, running);
-  }
-  return running;
+  const running = pending.get(key);
+  if (running) return running;
+  const started: Promise<void> = refresh(key, args).finally(() => {
+    // An invalidate may have replaced this fetch with a newer one.
+    if (pending.get(key) === started) pending.delete(key);
+  });
+  pending.set(key, started);
+  return started;
 }
 
 /**
@@ -147,8 +158,15 @@ export async function igrpGetBranding(args: IGRPGetBrandingArgs): Promise<IGRPBr
   return entry.value;
 }
 
-/** Drops the cached entry for `baseUrl`, or every entry when omitted. */
+/**
+ * Drops the cached entry for `baseUrl`, or every entry when omitted, and
+ * discards a fetch already running for it: that fetch may predate the save.
+ */
 export function igrpInvalidateBranding(baseUrl?: string): void {
+  for (const key of baseUrl ? [baseUrl] : [...pending.keys()]) {
+    generation.set(key, (generation.get(key) ?? 0) + 1);
+    pending.delete(key);
+  }
   if (baseUrl) cache.delete(baseUrl);
   else cache.clear();
 }

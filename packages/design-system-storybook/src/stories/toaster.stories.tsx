@@ -16,7 +16,7 @@ const Template: StoryFn = () => {
     <>
       <IGRPToaster richColors />
 
-      <div className='flex flex-col gap-5 space-y-3 p-4'>
+      <div className='flex flex-col gap-8 p-4'>
         <IGRPButton onClick={() => igrpToast({ title: 'Default Toast' })}>Default</IGRPButton>
 
         <IGRPButton
@@ -71,7 +71,7 @@ const Template: StoryFn = () => {
         <IGRPButton
           onClick={() =>
             igrpToast({
-              content: <div className='p-4 bg-blue-500 text-white rounded-lg'>🚀 Custom Toast</div>,
+              content: <div className='p-4 bg-info text-info-foreground rounded-lg'>🚀 Custom Toast</div>,
             })
           }
         >

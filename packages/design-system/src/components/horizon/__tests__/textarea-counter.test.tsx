@@ -76,9 +76,9 @@ describe("IGRPTextarea counter", () => {
     expect(status()).toHaveTextContent(/^\D*0\D*10$/)
   })
 
-  it("is a polite live region referenced by the textarea, alongside the helper", () => {
+  it("is a status referenced by the textarea, alongside the helper, silent until near the limit", () => {
     render(<IGRPTextarea name="f" label="F" helperText="Ajuda" maxLength={10} showCounter />)
-    expect(status()).toHaveAttribute("aria-live", "polite")
+    expect(status()).toHaveAttribute("aria-live", "off")
     expect(status()).toHaveAttribute("id", "f-counter")
     expect(screen.getByRole("textbox").getAttribute("aria-describedby")?.split(" ")).toEqual(["f-helper", "f-counter"])
   })

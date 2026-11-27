@@ -239,4 +239,18 @@ describe("IGRPInputUrl", () => {
     await userEvent.clear(screen.getByLabelText("U"))
     expect(onChange).toHaveBeenLastCalledWith("")
   })
+
+  it("submits the full URL to a native form, not the bare address", async () => {
+    render(
+      <form data-testid="native">
+        <IGRPInputUrl name="u" label="U" />
+      </form>
+    )
+    const visible = screen.getByLabelText("U")
+    await userEvent.type(visible, "gov.cv")
+
+    expect(new FormData(screen.getByTestId("native") as HTMLFormElement).get("u")).toBe("https://gov.cv")
+    expect(visible).not.toHaveAttribute("name")
+    expect(visible).not.toHaveAttribute("type", "url")
+  })
 })

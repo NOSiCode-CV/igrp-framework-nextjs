@@ -15,6 +15,7 @@ import { IGRPFieldDescription } from "../field-description.js"
 import { IGRPIcon, type IGRPIconName } from "../icon/index.js"
 import { IGRPLabel, IGRPRequiredMark } from "../label.js"
 import { Field } from "../../primitives/field.js"
+import { useIGRPi18n } from "../../../i18n/index.js"
 
 /**
  * Props for the IGRPInputSearch component.
@@ -139,6 +140,7 @@ function SearchInputDecoration({
   showIcon?: boolean
   disabled?: boolean
 }) {
+  const i18n = useIGRPi18n()
   return (
     <InputGroup>
       {startAdornment !== undefined
@@ -157,7 +159,7 @@ function SearchInputDecoration({
             <InputGroupAddon align="inline-end">
               <IGRPButton
                 className={cn(submitButtonClassName)}
-                aria-label={submitButtonLabel}
+                aria-label={submitButtonLabel ?? i18n.inputSearch.submit}
                 type="button"
                 onClick={() => onSearch?.(value)}
                 disabled={disabled}
@@ -183,16 +185,26 @@ function SearchInputDecoration({
  * A previous version built the debouncer during render, which gave every render
  * a fresh `timeout` binding — nothing was ever cancelled and `onSearch` fired
  * once per keystroke.
+ *
+ * `isCurrent` runs when the timer fires: a value the field no longer holds (a
+ * form `reset()`, a programmatic change) is dropped, so stale results never
+ * come back. `cancel` lets Enter and the submit button search once, not twice.
  */
-function useDebouncedCallback(callback: ((value: string) => void) | undefined, delay: number) {
+function useDebouncedCallback(
+  callback: ((value: string) => void) | undefined,
+  delay: number,
+  isCurrent: (value: string) => boolean
+) {
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const callbackRef = useRef(callback)
+  const isCurrentRef = useRef(isCurrent)
 
   // Synced in an effect rather than during render: the pending timer fires well
   // after commit, so it always sees the latest callback either way.
   useEffect(() => {
     callbackRef.current = callback
-  }, [callback])
+    isCurrentRef.current = isCurrent
+  }, [callback, isCurrent])
 
   useEffect(
     () => () => {
@@ -201,16 +213,23 @@ function useDebouncedCallback(callback: ((value: string) => void) | undefined, d
     []
   )
 
-  return useCallback(
+  const cancel = useCallback(() => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current)
+    timeoutRef.current = null
+  }, [])
+
+  const run = useCallback(
     (value: string) => {
-      if (timeoutRef.current) clearTimeout(timeoutRef.current)
+      cancel()
       timeoutRef.current = setTimeout(() => {
         timeoutRef.current = null
-        callbackRef.current?.(value)
+        if (isCurrentRef.current(value)) callbackRef.current?.(value)
       }, delay)
     },
-    [delay]
+    [delay, cancel]
   )
+
+  return { run, cancel }
 }
 
 /**
@@ -251,8 +270,29 @@ function IGRPInputSearch({
   const formContext = useFormContext()
   const [localValue, setLocalValue] = useState(controlledValue ?? defaultValue)
   const debounceDelay = debounce !== undefined ? debounce : isDebounce ? debounceMs : false
-  const debouncedSearch = useDebouncedCallback(onSearch, debounceDelay === false ? 0 : debounceDelay)
   const displayValue = controlledValue !== undefined ? controlledValue : localValue
+  // Read when the debounce fires, so it sees the field's value at that moment.
+  const displayValueRef = useRef(displayValue)
+  useEffect(() => {
+    displayValueRef.current = displayValue
+  }, [displayValue])
+  const isCurrent = useCallback(
+    (value: string) => (formContext ? (formContext.getValues(fieldName) ?? "") : displayValueRef.current) === value,
+    [formContext, fieldName]
+  )
+  const { run: debouncedSearch, cancel: cancelDebounce } = useDebouncedCallback(
+    onSearch,
+    debounceDelay === false ? 0 : debounceDelay,
+    isCurrent
+  )
+  // Enter and the submit button search now; a pending debounce must not repeat it.
+  const searchNow = useCallback(
+    (value: string) => {
+      cancelDebounce()
+      onSearch?.(value)
+    },
+    [cancelDebounce, onSearch]
+  )
 
   const handleInputChange = useCallback(
     (value: string) => {
@@ -278,7 +318,7 @@ function IGRPInputSearch({
     submitIcon,
     submitVariant,
     loading,
-    onSearch,
+    onSearch: searchNow,
     iconPlacement,
     showIcon,
     disabled: props.disabled,
@@ -328,7 +368,7 @@ function IGRPInputSearch({
                     onKeyDown={(e) => {
                       if (e.key === "Enter") {
                         e.preventDefault()
-                        onSearch?.(field.value ?? "")
+                        searchNow(field.value ?? "")
                       }
                       callerOnKeyDown?.(e)
                     }}
@@ -346,6 +386,9 @@ function IGRPInputSearch({
       />
     )
   }
+
+  // The caller's handlers run after the internal ones and never replace them.
+  const { onChange: callerOnChange, onKeyDown: callerOnKeyDown, ...domProps } = igrpOmitNonDomProps(props)
 
   return (
     <Field className={className}>
@@ -365,15 +408,18 @@ function IGRPInputSearch({
             aria-describedby={error ? `${fieldName}-error` : helperText ? `${fieldName}-helper` : undefined}
             className={inputClassName}
             value={displayValue}
-            onChange={(e) => handleInputChange(e.target.value)}
-            onKeyDown={(e) => {
+            onChange={igrpChainHandlers(
+              (e: React.ChangeEvent<HTMLInputElement>) => handleInputChange(e.target.value),
+              callerOnChange
+            )}
+            onKeyDown={igrpChainHandlers((e: React.KeyboardEvent<HTMLInputElement>) => {
               if (e.key === "Enter") {
                 e.preventDefault()
-                onSearch?.(displayValue)
+                searchNow(displayValue)
               }
-            }}
+            }, callerOnKeyDown)}
             disabled={props.disabled}
-            {...igrpOmitNonDomProps(props)}
+            {...domProps}
           />
         }
       />

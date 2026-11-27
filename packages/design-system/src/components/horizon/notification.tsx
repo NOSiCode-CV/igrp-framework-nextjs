@@ -30,10 +30,10 @@ const IGRPNotificationVariants = cva("z-50 rounded-md bg-background p-4 shadow-l
 
 const typeIconMap: Record<NonNullable<IGRPNotificationProps["variant"]>, IGRPIconName> = {
   default: "RefreshCcw",
-  error: "CircleAlert",
+  error: "CircleExclamationPoint",
   info: "Info",
   success: "CircleCheck",
-  warning: "TriangleAlert",
+  warning: "TriangleExclamationPoint",
 }
 
 /**
@@ -116,7 +116,10 @@ function IGRPNotification({
               )}
             />
           )}
-          <div>{content}</div>
+          <div>
+            {variant !== "default" && variant && <span className="sr-only">{i18n.severity[variant]}: </span>}
+            {content}
+          </div>
         </div>
         <div className={cn("flex items-center gap-3")}>
           {showLink && (

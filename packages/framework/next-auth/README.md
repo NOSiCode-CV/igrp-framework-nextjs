@@ -24,7 +24,7 @@ pnpm add @igrp/framework-next-auth next-auth
 | `@igrp/framework-next-auth/server`        | Node                  | `getServerSession`, `getServerSessionStrict(opts)` (throws `Unauthorized` without a session), `NextAuth` (CJS-interop-normalized factory)           |
 | `@igrp/framework-next-auth/session`       | Node + Edge + Browser | `Session` type, `hasAccessToken`                                                                                                                    |
 | `@igrp/framework-next-auth/jwt`           | Node + Edge           | `JWT` type; re-exports `getToken` / `encode` / `decode` — see the cookie note below                                                                 |
-| `@igrp/framework-next-auth/middleware`    | Edge                  | Re-exports NextAuth's `withAuth` — see the cookie note below                                                                                        |
+| `@igrp/framework-next-auth/middleware`    | Edge                  | `igrpMiddlewareDecision` (the template's middleware logic)                                                                                          |
 | `@igrp/framework-next-auth/oidc`          | Node                  | `refreshOidcAccessToken`, `revokeOidcSession`, `buildEndSessionUrl`, `configureOidcTokenRecoveryStore` (what the `tokenRecoveryStore` option calls) |
 | `@igrp/framework-next-auth/providers`     | Node + Edge + Browser | Provider registry helpers                                                                                                                           |
 | `@igrp/framework-next-auth/sanitize`      | Node + Edge           | URL/redirect sanitization                                                                                                                           |
@@ -40,10 +40,10 @@ The package root (`@igrp/framework-next-auth`) re-exports only the pure modules
 from there pulled `next-auth/middleware` and the server-side token machinery
 into whatever bundle touched it. Use their subpath entries.
 
-> **`/jwt` and `/middleware` do not know the scoped cookie names.** They
-> re-export NextAuth's own `getToken` and `withAuth`, which look for the stock
-> `next-auth.session-token`. With cookie isolation on (the default, see
-> "Cookies"), that name does not exist, so both report "no session". Prefer the
+> **`/jwt` does not know the scoped cookie names.** It re-exports NextAuth's
+> own `getToken`, which looks for the stock `next-auth.session-token`. With
+> cookie isolation on (the default, see "Cookies"), that name does not exist,
+> so it reports "no session". Prefer the
 > instance's `auth.getTokenFromRequest(request)`, which resolves the right name.
 > If you must call `getToken` directly, pass the name the instance built and the
 > IGRP codec (without it a store-backed cookie decodes with no `accessToken`):
@@ -59,20 +59,17 @@ into whatever bundle touched it. Use their subpath entries.
 > });
 > ```
 >
-> `withAuth` is **not supported with a session store**. The store is Node-only,
-> so in the Edge middleware the IGRP decoder returns `null` (no session), and
-> NextAuth's plain decoder would authorize a session that was already deleted
-> from the store. Use `auth.getTokenFromRequest(request)` in middleware instead.
-> Without a store, `withAuth(handler, { cookies: auth.authOptions.cookies, secret })`
-> still works.
+> `/middleware` no longer re-exports NextAuth's `withAuth`: without the IGRP
+> cookie names it redirected every request to sign-in. Use
+> `igrpMiddlewareDecision` or `auth.getTokenFromRequest(request)`.
 
 ### Client hooks
 
-| Export                 | Returns                                       | Notes                                                                                                                                |
-| ---------------------- | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `useSafeSession()`     | `{ session, status, update }`                 | `useSession()` typed as the IGRP `Session`. Throws outside a `SessionProvider`. Its `forceLogoutCallbackUrl` option is a no-op.      |
-| `useOptionalSession()` | `{ status, data } \| null`                    | Safe outside a provider: `null` means **cannot tell**, not "unauthenticated" — a permission gate must keep its server-seeded answer. |
-| `SessionContext`       | NextAuth's raw context (possibly `undefined`) | Prefer `useOptionalSession`; exported so downstream packages don't import `next-auth/react` directly.                                |
+| Export                 | Returns                                       | Notes                                                                                                                                       |
+| ---------------------- | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `useSafeSession()`     | `{ session, status, update }`                 | Deprecated. `useSession()` typed as the IGRP `Session`. Throws outside a `SessionProvider`. Its `forceLogoutCallbackUrl` option is a no-op. |
+| `useOptionalSession()` | `{ status, data } \| null`                    | Safe outside a provider: `null` means **cannot tell**, not "unauthenticated" — a permission gate must keep its server-seeded answer.        |
+| `SessionContext`       | NextAuth's raw context (possibly `undefined`) | Prefer `useOptionalSession`; exported so downstream packages don't import `next-auth/react` directly.                                       |
 
 ## Quick start
 
@@ -94,7 +91,7 @@ export const { GET, POST } = auth;
 export const config = {
   matcher: [
     '/',
-    '/((?!apps(?:/|$)|_next(?:/|$)|favicon.ico$|.*\\.(?:ico|png|jpe?g|gif|svg|webp|avif|bmp|css|js|mjs|map|json|txt|xml|webmanifest|woff2?|ttf|otf|eot|pdf|mp4|webm|mp3)$).*)',
+    '/((?!_next(?:/|$)|favicon.ico$|.*\\.(?:ico|png|jpe?g|gif|svg|webp|avif|bmp|css|js|mjs|map|json|txt|xml|webmanifest|woff2?|ttf|otf|eot|pdf|mp4|webm|mp3)$).*)',
     '/api/:path*',
   ],
 };
@@ -315,16 +312,16 @@ middleware primitives (`isAuthDisabled()`) and the id stamped on the token
 agree by construction. Beyond `provider`, `env`, `secret`, `pages`, `session`
 and `callbacks`:
 
-| Option                | Default               | Purpose                                                                                                                                                                                                                                                                                                                                 |
-| --------------------- | --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `onSessionExpired`    | —                     | Called by `getSession()` when the token is expired or refresh failed. Typically `() => redirect('/logout')`.                                                                                                                                                                                                                            |
-| `middleware.loginUrl` | `/login`              | Path `getLoginRedirectUrl()` resolves.                                                                                                                                                                                                                                                                                                  |
-| `middleware.matcher`  | see `DEFAULT_MATCHER` | Exposed as `auth.config` — copy it into a literal `config` in middleware.ts; Next ignores a re-export. Matchers are basePath-_relative_. The default skips `/apps`, `/_next`, `favicon.ico` as whole segments and static-asset extensions (`.png`, `.css`, `.woff2`, …) — not every path with a dot, so `/users/john.doe` is protected. |
-| `debug`               | `IGRP_AUTH_DEBUG`     | NextAuth debug logging. Off by default in every environment because it prints OAuth token responses.                                                                                                                                                                                                                                    |
-| `tokenRecoveryStore`  | in-memory             | Shared store for rotated-refresh-token recovery. Supply a cross-replica implementation for multi-pod deployments without sticky routing; the default is per-process. Keys and values are plaintext refresh/access/id tokens — treat the backing store like the session cookie (encrypt at rest, restrict access, never log).            |
-| `cookieIsolation`     | `'basePath'`          | `'none'` keeps NextAuth's stock cookie names. Only safe when no other IGRP app shares the host.                                                                                                                                                                                                                                         |
-| `sessionStore`        | registered / none     | Server-side token store — see "Session store". Prefer `configureIGRPSessionStore` from `instrumentation.ts`.                                                                                                                                                                                                                            |
-| `secureCookies`       | derived               | Overrides the `Secure` flag derivation described above.                                                                                                                                                                                                                                                                                 |
+| Option                | Default               | Purpose                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| --------------------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `onSessionExpired`    | —                     | Called by `getSession()` when the token is expired or refresh failed. Typically `() => redirect('/logout')`.                                                                                                                                                                                                                                                                                                                                                  |
+| `middleware.loginUrl` | `/login`              | Path `getLoginRedirectUrl()` resolves.                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| `middleware.matcher`  | see `DEFAULT_MATCHER` | Exposed as `auth.config` — copy it into a literal `config` in middleware.ts; Next ignores a re-export. Matchers are basePath-_relative_. The default skips `/_next` and `favicon.ico` as whole segments and static-asset extensions (`.png`, `.css`, `.woff2`, …) — not every path with a dot, so `/users/john.doe` is protected. A route handler outside `/api` that ends in one of those extensions skips the middleware and must check the session itself. |
+| `debug`               | `IGRP_AUTH_DEBUG`     | NextAuth debug logging. Off by default in every environment because it prints OAuth token responses.                                                                                                                                                                                                                                                                                                                                                          |
+| `tokenRecoveryStore`  | in-memory             | Shared store for rotated-refresh-token recovery. Supply a cross-replica implementation for multi-pod deployments without sticky routing; the default is per-process. Keys and values are plaintext refresh/access/id tokens — treat the backing store like the session cookie (encrypt at rest, restrict access, never log).                                                                                                                                  |
+| `cookieIsolation`     | `'basePath'`          | `'none'` keeps NextAuth's stock cookie names. Only safe when no other IGRP app shares the host.                                                                                                                                                                                                                                                                                                                                                               |
+| `sessionStore`        | registered / none     | Server-side token store — see "Session store". Prefer `configureIGRPSessionStore` from `instrumentation.ts`.                                                                                                                                                                                                                                                                                                                                                  |
+| `secureCookies`       | derived               | Overrides the `Secure` flag derivation described above.                                                                                                                                                                                                                                                                                                                                                                                                       |
 
 ### Middleware primitives
 

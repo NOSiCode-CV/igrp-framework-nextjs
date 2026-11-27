@@ -11,6 +11,7 @@ import {
   type LegendType,
   type PieLabelRenderProps,
 } from "recharts"
+import { IGRPChartDataTable } from "./data-table-sr.js"
 import type { PieSectorDataItem } from "recharts/types/polar/Pie"
 import React, { useState, type SVGAttributes, useId } from "react"
 
@@ -27,8 +28,11 @@ import {
   getLegendLayout,
   getLegendVerticalAlign,
   chartFigureA11y,
+  IGRP_CHART_COLORS,
 } from "./lib.js"
 import { igrpFormatMessage, useIGRPi18n, useIGRPLocale } from "../../../i18n/index.js"
+
+const sliceColor = (index: number) => IGRP_CHART_COLORS[index % IGRP_CHART_COLORS.length]
 
 /**
  * Props for the IGRPPieChart component.
@@ -91,22 +95,14 @@ function IGRPPieChartInner({
   const legendPayload = React.useMemo(() => {
     if (legendPosition === "none" || !pies.length || !data.length) return []
 
-    if (pies.length === 1) {
-      return data.map((entry, index) => ({
-        value: entry[nameKey] || igrpFormatMessage(i18n.charts.itemFallback, { index: index + 1 }),
-        type: "square" as LegendType,
-        color: pies[0]?.color || `var(--chart-${(index % 8) + 1})`,
-        payload: { ...entry, strokeDasharray: "" },
-      }))
-    }
-
-    return pies.map((pie, index) => ({
-      value: pie.name || pie.dataKey,
+    // Slices are coloured per row in every ring, so the legend lists rows, not series.
+    return data.map((entry, index) => ({
+      value: entry[nameKey] || igrpFormatMessage(i18n.charts.itemFallback, { index: index + 1 }),
       type: "square" as LegendType,
-      color: pie.color || `var(--chart-${(index % 8) + 1})`,
-      payload: { dataKey: pie.dataKey, strokeDasharray: "" },
+      color: sliceColor(index),
+      payload: { ...entry, strokeDasharray: "" },
     }))
-  }, [pies, data, nameKey, legendPosition, i18n])
+  }, [pies.length, data, nameKey, legendPosition, i18n])
 
   const renderActiveShape = (props: PieSectorDataItem) => {
     const { cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill } = props
@@ -224,6 +220,7 @@ function IGRPPieChartInner({
 
       <div className={cn("overflow-hidden")}>
         <div style={{ height: chartHeight, width: chartWidth }} className={cn("w-full overflow-hidden")}>
+          <IGRPChartDataTable data={data} rowKey={nameKey} series={pies} />
           <ChartContainer className={cn("h-full w-full")} config={chartConfig}>
             <PieChart
               accessibilityLayer
@@ -285,7 +282,7 @@ function IGRPPieChartInner({
                       (item as Record<string, unknown>).id ??
                       (item as Record<string, unknown>)[nameKey] ??
                       `cell-${index}`
-                    return <Cell key={String(cellKey)} fill={pie.color || `var(--chart-${(index % 8) + 1})`} />
+                    return <Cell key={String(cellKey)} fill={sliceColor(index)} />
                   })}
 
                   {pieIndex === 0 && centerLabel.show && <Label content={renderCenterLabel} />}

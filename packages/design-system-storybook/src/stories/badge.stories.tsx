@@ -506,28 +506,34 @@ export const IconOnly: Story = {
       <IGRPBadge
         showIcon
         color='primary'
+        aria-label='Primário'
       />
       <IGRPBadge
         showIcon
         color='success'
+        aria-label='Sucesso'
       />
       <IGRPBadge
         showIcon
         color='destructive'
+        aria-label='Erro'
       />
       <IGRPBadge
         showIcon
         color='warning'
+        aria-label='Aviso'
       />
       <IGRPBadge
         iconName='Info'
         color='primary'
         variant='outline'
+        aria-label='Informação'
       />
       <IGRPBadge
         iconName='Star'
         color='secondary'
         variant='soft'
+        aria-label='Favorito'
       />
     </div>
   ),

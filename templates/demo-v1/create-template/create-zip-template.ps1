@@ -139,6 +139,8 @@ try {
 # Initialize state used by the finally block before entering try, so it's
 # defined even if an exception fires before the skill-injection step.
 $skillInjected     = $false
+$ledgerWritten     = $false
+$skillLedger       = ".agents/skills/.installed.json"
 $skillTargetAgents = ".agents/skills/igrp-design-system"
 $skillTargetClaude = ".claude/skills/igrp-design-system"
 $excludedMoves     = [System.Collections.Generic.List[string]]::new()
@@ -205,10 +207,10 @@ try {
   # NOTE: only the skills/ subtree is injected. .agents/rules/ and
   # .agents/README.md are normal tracked files in the template and ship as-is;
   # the cleanup in the finally block must not touch them.
-  # Source of truth is the plugin at <monorepo>/plugins/igrp/skills/design-system/.
+  # Source of truth is the plugin at <monorepo>/plugins/igrp/skills/igrp-design-system/.
   # These dirs are tracked via $skillInjected and removed in the finally block
   # so the monorepo working tree is unchanged after the script runs.
-  $skillSource         = Join-Path $monorepoRoot "plugins/igrp/skills/design-system"
+  $skillSource         = Join-Path $monorepoRoot "plugins/igrp/skills/igrp-design-system"
   $skillTargetAgents   = ".agents/skills/igrp-design-system"
   $skillTargetClaude   = ".claude/skills/igrp-design-system"
   $skillInjected       = $false
@@ -219,14 +221,30 @@ try {
     New-Item -ItemType Directory -Path $skillTargetAgents -Force | Out-Null
     Copy-Item -Path "$skillSource/*" -Destination $skillTargetAgents -Recurse -Force
 
-    # Patch the copied SKILL.md frontmatter: in the plugin the skill is named
-    # `design-system` (invoked as /igrp:design-system); in the standalone
-    # template context the folder is `igrp-design-system` so the frontmatter
-    # `name` must match.
     $copiedSkillPath = Join-Path $skillTargetAgents "SKILL.md"
     $skillRaw = Get-Content $copiedSkillPath -Raw
-    $skillRaw = $skillRaw -replace '(?m)^name:\s*design-system\s*$', 'name: igrp-design-system'
-    Set-Content -Path $copiedSkillPath -Value $skillRaw -Encoding UTF8
+
+    # Record the skill in the `igrp skill` ledger so `igrp skill update` manages
+    # it in apps scaffolded from this zip. The version must already be published
+    # to the skills registry, or `update` points at a version that does not exist.
+    if (-not (Test-Path $skillLedger)) {
+      $skillJson = Get-Content (Join-Path $skillSource "skill.json") -Raw | ConvertFrom-Json
+      $ledger = [ordered]@{
+        skills = [ordered]@{
+          "igrp-design-system" = [ordered]@{
+            version      = $skillJson.version
+            framework    = $skillJson.framework
+            source       = "https://sonatype.nosi.cv/repository/igrp-templates/@igrp/skills/"
+            dependencies = @{}
+            installedAt  = (Get-Date).ToUniversalTime().ToString("o")
+          }
+        }
+      }
+      # No BOM: the CLI reads this file with JSON.parse, which rejects one.
+      $ledgerPath = Join-Path (Get-Location) $skillLedger
+      [System.IO.File]::WriteAllText($ledgerPath, ($ledger | ConvertTo-Json -Depth 5) + "`n", (New-Object System.Text.UTF8Encoding $false))
+      $ledgerWritten = $true
+    }
 
     # Extract the canonical `description` for the Claude Code thin pointer so
     # triggering parity is preserved without duplicating the body of SKILL.md.
@@ -355,6 +373,7 @@ Deep references are at ``.agents/skills/igrp-design-system/references/``. Load o
   if ($skillInjected) {
     if (Test-Path $skillTargetAgents) { Remove-Item $skillTargetAgents -Recurse -Force }
     if (Test-Path $skillTargetClaude) { Remove-Item $skillTargetClaude -Recurse -Force }
+    if ($ledgerWritten -and (Test-Path $skillLedger)) { Remove-Item $skillLedger -Force }
     foreach ($parentDir in @(".agents/skills", ".agents", ".claude/skills", ".claude")) {
       if ((Test-Path $parentDir) -and -not (Get-ChildItem $parentDir -Force -ErrorAction SilentlyContinue)) {
         Remove-Item $parentDir -Force

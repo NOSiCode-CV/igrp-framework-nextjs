@@ -4,9 +4,9 @@ Umbrella Claude Code plugin for the **IGRP framework**. Ships team-authored skil
 
 ## Skills
 
-- **`/igrp:design-system`** — Authoritative usage reference for `@igrp/igrp-framework-react-design-system`. Three-layer picker (Horizon / Primitives / Custom), source-verified prop shapes for forms, data tables, charts, plus the repo-wide UI hard rules.
+- **`/igrp:igrp-design-system`** — Authoritative usage reference for `@igrp/igrp-framework-react-design-system`. Three-layer picker (Horizon / Primitives / Custom), source-verified prop shapes for forms, data tables, charts, plus the repo-wide UI hard rules.
 
-  Deep references under `skills/design-system/references/` (loaded on demand):
+  Deep references under `skills/igrp-design-system/references/` (loaded on demand):
 
   | File | Covers |
   | --- | --- |
@@ -35,7 +35,7 @@ claude plugin marketplace add https://git.nosi.cv/igrp-3_0/igrp-framework-fronte
 claude plugin install igrp@nosi
 ```
 
-The design-system skill is then auto-loaded whenever you work on UI in an IGRP app, and is available explicitly as `/igrp:design-system` from the slash menu.
+The design-system skill is then auto-loaded whenever you work on UI in an IGRP app, and is available explicitly as `/igrp:igrp-design-system` from the slash menu.
 
 ## Update
 

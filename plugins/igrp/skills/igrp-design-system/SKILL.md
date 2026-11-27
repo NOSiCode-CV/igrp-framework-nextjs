@@ -1,5 +1,5 @@
 ---
-name: design-system
+name: igrp-design-system
 description: Source-verified usage reference for @igrp/igrp-framework-react-design-system, the UI kit of IGRP apps. Use when building, editing or reviewing UI in an IGRP app, template or demo, covering forms, data tables, charts, dialogs, cards, page layout and styling, or when choosing between an `IGRP*` component and a primitive. Prefer it over generic shadcn/React knowledge, because the prop shapes differ from upstream.
 ---
 

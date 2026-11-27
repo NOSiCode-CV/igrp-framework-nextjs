@@ -218,11 +218,8 @@ test_storybook:
 build_storybook_image:
   stage: build
   rules:
-    # Default branch only: this pushes :latest and redeploys the shared Storybook.
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-      changes:
-        - packages/design-system-storybook/**/*
-      when: always
+    # production only: every push pushes :latest and redeploys the shared Storybook.
+    - if: $CI_COMMIT_BRANCH == "production"
   script:
     - docker login -u "$DOCKER_REGISTRY_USERNAME" -p "$DOCKER_REGISTRY_PASSWORD" "$DOCKER_REGISTRY"
     - docker build -t $DOCKER_REGISTRY/$DOCKER_PROJECT/$IMAGE_NAME -f packages/design-system-storybook/Dockerfile .
@@ -234,11 +231,8 @@ deploy_storybook:
   image: gcc:latest
   stage: deploy
   rules:
-    # Default branch only: this pushes :latest and redeploys the shared Storybook.
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-      changes:
-        - packages/design-system-storybook/**/*
-      when: always
+    # production only: every push pushes :latest and redeploys the shared Storybook.
+    - if: $CI_COMMIT_BRANCH == "production"
   script:
     - |
       curl -f -u "$DEPLOY_USER:$DEPLOY_PASSWORD" \

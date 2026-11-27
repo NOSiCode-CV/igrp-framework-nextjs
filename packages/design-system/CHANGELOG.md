@@ -1,5 +1,171 @@
 # @igrp/igrp-framework-react-design-system
 
+## 0.2.0-beta.18
+
+### Patch Changes
+
+- 7f1ad42: Package and build fixes from a review of each package's build:
+  
+  - `@igrp/framework-next`: `next-intl` is now a peer dependency (`^4.16.1`), not a pinned dependency. The root layout mounts next-intl's provider and the app calls its hooks, so both must use one copy; a version mismatch used to install two and lose the context. Apps already depend on `next-intl`.
+  - `@igrp/framework-next-ui`: `lucide-react` is now a peer dependency, as in the design system. The unused `clsx` and `class-variance-authority` dependencies are removed.
+  - `@igrp/framework-next-auth`: every `exports` entry has a `default` condition, so resolvers without the `import` condition (`require()` of ESM, CommonJS test runners) find it.
+  - `@igrp/igrp-framework-react-design-system`, `@igrp/framework-next-ui`, `@igrp/framework-next`: no `.d.ts.map` files in the package. They pointed at `src/`, which is not published.
+  - `@igrp/template-migrator`: the build clears `dist/` first, so files from older builds are no longer published. `yaml` moves to `devDependencies`: only the build scripts use it.
+- f8b345c: Accessibility fixes from the WCAG 2.1 AA audit of 2026-11-26:
+  
+  - `IGRPCombobox` (`showSearch={false}`) and `IGRPMultiSelect` (no search box) can now be operated by keyboard. A visually hidden, read-only search input takes focus, so the arrow keys and Enter reach the list. Selected options carry `aria-checked`.
+  - `IGRPInputSearch`: the submit button is named "Pesquisar" (`inputSearch.submit`) when `submitButtonLabel` is not set.
+  - `IGRPForm`: the form-level error has `role="alert"`.
+  - `IGRPInputAddOn` renders `error` and `helperText`, with `aria-invalid` and `aria-describedby` on the input.
+  - The standalone date pickers (single, range, multiple, input) set `aria-invalid` when `error` is set.
+  - `IGRPFormList`: an item without `computeLabel` is named "Item {n}" for screen readers (`formList.item`).
+  - Data-table modal row actions: the dialog is named by the action label when there is no `modalTitle`. The title is visually hidden, so the layout does not change.
+  - `IGRPChat`: each message includes the sender name for screen readers. The composer is labelled (`chat.messageLabel`) and becomes read-only rather than disabled while a reply loads, so it keeps focus.
+  - `MenubarTrigger` shows a focus ring.
+  - `StepperTrigger` sets `aria-current="step"` on the active step. `IGRPProcessStepper` no longer sets it on the item.
+  
+  New i18n keys: `inputSearch.submit`, `formList.item`, `chat.assistant`, `chat.messageLabel`.
+- f8b345c: Accessibility fixes for the Minor items of the WCAG 2.1 AA audit of 2026-11-26:
+  
+  - **Screen-reader text:**
+    - Every chart renders its values in a visually hidden data table.
+    - `IGRPAlert` and `IGRPNotification` start with the severity ("Erro:", "Aviso:", "Sucesso:", "Informação:").
+    - The default link text of `IGRPAlert` is "Saber mais" (`alert.link`), no longer "link".
+  - **New optional props:**
+    - `statusLabel` on options (`IGRPOptionsProps`) gives the select, combobox and multi-select status dot a text alternative.
+    - `statusLabel` and `iconLabel` on `IGRPAvatar` override the default status and icon names.
+    - `caption` on `IGRPTable`, `IGRPDataTable` and the server data table names the table.
+  - **Accessible names:**
+    - An icon-only `IGRPBadge` has `role="img"`, so its `aria-label` is announced.
+    - The rich-text editor is named "Editor de texto" when no `label` is passed.
+    - The file upload progress bar is named after its file.
+    - The carousel region has a name.
+    - The cookie banner is a named region.
+    - Column-visibility items show the column header text when it is a string.
+  - **Structure:**
+    - `IGRPCardDetails` lists its fields as `<dl>`, not `<h3>`.
+    - `IGRPCardDetails` and `IGRPInfoCard` titles are level-2 headings.
+    - `StepperTitle` renders a `<span>` (it sits inside the step button).
+    - The stepper indicator announces "concluído" and the loading state.
+    - The `steps` list is an `<ol>`.
+    - Lists carry `role="list"`.
+    - The active sidebar item has `aria-current="page"`.
+    - `IGRPMenuNavigation` uses `aria-current="true"`.
+    - `BreadcrumbPage` is no longer a disabled link.
+    - The pagination and breadcrumb ellipsis text is read.
+    - `Skeleton` is `aria-hidden`.
+    - The time calendars no longer give two elements the same id.
+    - Their time fields are labelled "Hora de início" / "Hora de fim".
+  - **Keyboard and focus:**
+    - `IGRPCopyTo` keeps focus after copying.
+    - The "Selecionar tudo" and "Limpar" buttons in `IGRPMultiSelect` work with Enter.
+    - A truncated table cell with a tooltip is a focusable button.
+    - A disabled step in `IGRPProcessStepper` is disabled.
+    - After a failed submit, `IGRPFormList` opens the items that have errors.
+  - **Announcements:**
+    - The textarea counter is silent until it nears the limit.
+    - The data-table empty state is a status message.
+    - The file input exposes `aria-required`.
+  - **Contrast:** the data-table sort icons now meet 3:1 in light mode.
+  
+  New i18n keys: `carousel.label`, `inputFile.uploadProgress`, `richText.editorLabel`, `banner.cookieLabel`, `charts.category`, `severity.*`, `alert.link`. The values of `datePicker.startDate` / `endDate` changed to time labels.
+- ea46503: Accessibility: the remaining items of the WCAG audit of 2026-11-26.
+  
+  - **Type change:** `IGRPButton` with an icon size (`icon`, `icon-xs`, `icon-sm`, `icon-lg`) now requires `aria-label` or `aria-labelledby`. TypeScript rejects an icon-only button without a name. The runtime fallback to the icon name stays for JavaScript callers.
+  - **Type change:** `labelTrigger` is required on the data-table action buttons and dropdown items, because it is their only accessible name.
+  - `SidebarRail` is reachable by keyboard and shows its line on focus.
+  - The `Command` search box shows a focus ring.
+  - `StepperTrigger asChild` gives a non-button child the button role, a tab stop, and Enter/Space, when the stepper can change step.
+  - Invisible 32px hit areas, with no visual change: the sidebar group and menu actions at every width, and the resizable handle.
+  - `KbdGroup` renders a `<span>` around its `<kbd>` keys.
+- 78722bc: Accessibility fixes found by the Storybook a11y checks:
+  
+  - `IGRPInputColor`: the format menu button's name includes the visible format ("Formato da cor: HEX"), so speech users can say what they see.
+  - `IGRPRadioGroup` with `variant="card"`: each radio is named by its option title and described by its description. The wrapping label did not name the `role="radio"` button. On the selected card the description is darker: muted text on the selected tint was 4.48:1, under the 4.5:1 minimum.
+  - `IGRPRichTextView`: the read-only body has `role="document"` instead of TipTap's default `role="textbox"`, which announced it as an unnamed text field.
+- 1f7ab30: Charts and `IGRPStatusBanner` fixes:
+  
+  - `IGRPStatusBanner` shows the badge beside the text. Before, the badge sat on its own line below the text.
+  - `IGRPPieChart` colours slices per row in every ring, and the legend lists the rows with the same colours. Before, a pie with `color` painted every slice the same colour, and a pie with several rings had a legend per series that matched no slice. `PieConfig.color` is now ignored and marked `@deprecated`.
+  - `IGRPRadialBarChart`: the legend uses `bars[0].color` when it is set, like the bars do. The centre total adds up every row and every bar. Before, it read only the first row. The tooltip lists every bar, not only the first.
+  - `IGRPLineChart` formats point labels with `valueFormatter` and the IGRP locale.
+  - `IGRPAreaChart` uses the same default `fillOpacity` (0.4) with and without `render`.
+  - `IGRPRadarChart` sets `accessibilityLayer`, like the other charts.
+  - Props that no chart reads are marked `@deprecated`: `PieConfig.activeIndex`, `RadialBarConfig.minAngle`, `RadialBarConfig.clockWise` and `IGRPRadarChartProps.showGridLines`. The docs for `render` say that pie, radar and radial ignore it.
+- f5605ac: `IGRPDataTable` filters, pagination, selection and tooltips:
+  
+  - New `selection` prop on `IGRPDataTable`: `"checkbox"` or `"switch"` adds a row-selection column with a select-all checkbox in the header.
+  - The `dropdown` filter has a "Limpar filtro" item once a value is set.
+  - `IGRPDataTableFilterSelect` shows its placeholder when no filter is set. The trigger was empty.
+  - Filter descriptors pass `placeholder` to the `select`, `faceted`, `dropdown` and `date` filters, not only to `input`.
+  - A column with a `faceted` or `date` descriptor and no `filterFn` now gets `IGRPDataTableFacetedFilterFn` or `IGRPDataTableDateRangeFilterFn`. Before, these filters matched nothing or everything. A column's own `filterFn` still wins.
+  - The `dropdown` and `faceted` filters search the option label as well as the value.
+  - One click on a `faceted` option toggles it once. The checkbox is visual only, and the option carries `aria-checked`. The trigger uses `size="sm"`, like the other filters.
+  - `IGRPDataTablePagination` wraps on narrow screens and hides the first/last buttons below `sm`. An empty table shows `0-0`, not `1-0`.
+  - `IGRPDataTablePaginationNumeric` uses smaller page buttons below `sm`, and the page-size select gets a unique `id` instead of the fixed `results-per-page`.
+  - `IGRPDataTableCellTooltip` uses `IGRPTooltip`, so it shares the nearest provider instead of mounting one per cell. `IGRPCopyTo` also reuses an `IGRPTooltipProvider` in scope, and the rich-text toolbar's provider is now an `IGRPTooltipProvider`.
+  - `IGRPTooltip`'s `delayDuration` now applies inside an `IGRPTooltipProvider` too. Before, a provider in scope ignored it.
+- 2a01f0d: - Upgrade `react-day-picker` to 10.0.2. v10 removes the props v9 had deprecated, so an app that passes `fromDate`, `toDate`, `fromMonth`, `toMonth` or `initialFocus` to `IGRPCalendar` must move to `hidden={{ before, after }}`, `startMonth`/`endMonth` and `autoFocus`.
+  - Upgrade `@hookform/resolvers` to 7.0.9. `zodResolver` has the same import and signature.
+  - `IGRP_ICON_NAMES` follows lucide-react 1.79: 476 icons added, and 57 renamed ones listed under their new names (`Trash2` → `Trash`, `CircleAlert` → `CircleExclamationPoint`, `TriangleAlert` → `TriangleExclamationPoint`, …). `IGRPIcon` still renders the old names, so menus stored with them keep working; icon pickers now offer only the new ones.
+- 4ad6a06: - `IGRPRichTextEditor` is focused when an invalid submit lands on it, and is read-only inside a disabled `IGRPForm` or a `useForm({ disabled })` form. It used to stay editable there.
+  - `IGRPInputHidden` keeps a caller's `ref`, `onChange` and `onBlur` next to the form binding instead of replacing them.
+  - The date pickers render the `error` prop (in a form and standalone) and hide `helperText` while it shows. They accepted it before but never displayed it.
+  - `IGRPFormList` binds to any react-hook-form `FormProvider`, like the other fields, instead of only `IGRPForm`.
+- a6af114: Light `--destructive` darkens to `oklch(0.52 0.245 27.325)`, so the destructive button and soft destructive text on a selected table row reach 4.5:1 contrast.
+  Light `--warning` darkens to `oklch(0.53 0.188 70.08)`, so soft warning text on a selected table row reaches 4.5:1 contrast.
+  Dark `--success` lightens to `oklch(0.66 0.194 150.069)`, so soft success text on a selected table row reaches 4.5:1 contrast in dark mode.
+  `IGRPDataTableFilterSelect` gives its trigger an accessible name (`dataTable.filterLabel`, overridable with the new `ariaLabel` prop, also read from a `select` filter descriptor).
+  Light `--indigo` darkens to `oklch(0.55 0.25 292.717)`, so soft indigo text on a selected table row reaches 4.5:1 contrast.
+- f77fd3b: `IGRPAvatar` gives its status dot and icon indicator `role="img"`, so their `aria-label` is valid and read out.
+  `CommandSeparator` (and so `IGRPCommandSeparator`, combobox, multi-select and data-table filter lists) renders with `role="none"` instead of cmdk's `role="separator"`, which a listbox may not contain.
+  The light `--success` token is darker (`oklch(0.5 0.154 150.069)`, was `0.527`), so soft success text keeps 4.5:1 contrast on a selected or hovered table row.
+  `IGRPDataTable`'s generated actions column now has a screen-reader header ("Ações", from the `table.actions` i18n key) instead of an empty `<th>`.
+- f77fd3b: `IGRPMultiStepForm` now moves to the first step with a validation error when a submit fails, so an error on an earlier step is no longer hidden.
+  `IGRPPdfViewer` inline no longer lazy-loads its iframe, so a viewer below the fold does not show a false load error after the timeout.
+  `IGRPImageCropper` now calls `onError` when the image fails to load or the canvas cannot export it, instead of doing nothing.
+- f77fd3b: `IGRPInputFile` dropzone with a single file keeps the file already picked when a later drop is fully rejected.
+  `IGRPInputFile` default variant clears the file name it shows when the form value is emptied, for example by `form.reset()`.
+  `IGRPInputNumber` with `formatOptions` saves the value rounded the way it shows it (fraction or significant digits, `roundingMode`, `roundingIncrement`), so "10,01 €" no longer saves 10.005. Compact, scientific and engineering notation keep the typed value.
+  `IGRPInputNumber` writes `null` when the typed text is not a number, so the form no longer submits the previous value.
+  `IGRPLookupField` clears the `valueName` field when the user types in the input, so a typed text is no longer saved with the id of an earlier pick.
+  `IGRPInputSearch` outside a form runs the caller's `onChange` and `onKeyDown` after its own instead of replacing them.
+  `IGRPInputUrl` submits the full URL to a native form through a hidden input; the visible input no longer has `name` or `type="url"`.
+- c5939b7: Fixes from the 2026-11-25 audit:
+  
+  - `IGRPInputSearch`: Enter and the submit button cancel a pending debounced search, so `onSearch` runs once. A pending search is dropped when the field no longer holds its value (a form `reset()`), so stale results do not come back.
+  - `IGRPDateTimeInput`: formats what is typed when the form value is `null`.
+  - Area chart: with `expanded`, the value axis shows percentages instead of 0–1.
+- 82a22d3: `IGRPDataTable` without `getRowId` now clears an uncontrolled row selection when the rows at those positions change (a refetch, the next server page, a delete). The selection was keyed by row index, so it moved to other records and bulk actions ran on rows the user never ticked. Rows that stay the same objects keep their selection. The development warning about `getRowId` now also fires when selection is used. Pass `getRowId` to keep a selection across data changes.
+- f31585e: `IGRPInputHidden` always renders `type="hidden"`. Outside a form, caller props were spread after `type`, so an untyped `type="text"` made the field visible. Inside a form it was already safe.
+- fda3c7e: `IGRPInputNumber` no longer renders the increment/decrement buttons. The field is a plain input with the same border, focus and error styles as `IGRPInputText`. ArrowUp/ArrowDown still step by `step`, so `step` is no longer deprecated.
+  
+  `inputClassName` now reaches the `<input>`. Before, the prop was accepted and silently dropped.
+  
+  The `inputNumber.incrementLabel` and `inputNumber.decrementLabel` i18n keys are unused and marked deprecated. Overrides still compile.
+- 7f1ad42: Performance fixes from a review against the Vercel React rules:
+  
+  - `IGRPDataTable` resolves TanStack state updaters in its reducer, not against the last render's state. Two updates in the same event (for example, toggling two rows in one handler, or a filter change racing a reset) no longer drop the first one.
+  - `IGRPInputNumber` and the expanded `IGRPAreaChart` axis reuse the shared `Intl.NumberFormat` cache. Before, an inline `formatOptions` object rebuilt the formatter on every parent render.
+  - `IGRPInputPhone` builds the country names once per locale, not once per mounted input.
+  - `IGRPSelect` groups options in one pass, not one filter per group on every search keystroke.
+  - `IGRPRichTextEditor` skips a second whole-document `getHTML()` when the value it just emitted comes back as the `value` prop.
+  - `IGRPFormList` in form mode watches each item's own path, not the whole array. A keystroke re-renders only the item being edited. `renderItem` and `computeLabel` still receive the live item.
+- 7b43f45: Data table menus follow the shadcn composition rules:
+  
+  - The column sort menu and the row action menu put their items in a `DropdownMenuGroup`.
+  - The column sort menu no longer ends with an empty separator line.
+  - `IGRPList` sizes its unordered bullet with `size-1.5`.
+- 8342c98: Spacing now uses `flex` + `gap-*` instead of `space-x-*` / `space-y-*`, following the shadcn rule. Tailwind v4 builds `space-y-*` as a margin on every child but the last, so a hidden or empty last child left a visible blank band.
+  
+  - `IGRPTextList` (and `igrpTextlistVariants`): the list is `flex flex-col`; `spacing` maps to `gap-1` / `gap-2` / `gap-4`.
+  - `IGRPInputFile`: the error list uses `flex flex-col gap-1`. List markers stay.
+  - `IGRPModalDialog` header: dropped a no-op `space-y-0`.
+  - next-ui: the auth form, the segment error view and the nav-user menu header use `gap-*`.
+  
+  The `AvatarGroup` primitive keeps `-space-x-2`: the avatars overlap with a negative margin, which `gap` cannot do.
+- c412dea: `IGRPSelect` with `showGroup` no longer hides options that have no `group`. They now appear under the "Outros" heading (`i18n.combobox.otherGroup`), as in `IGRPCombobox`. `IGRPTextarea` and `IGRPInputFile` drop a redundant flat `formState.errors[name]` read; nested names already resolved through `fieldState`, so behaviour is unchanged.
+
 ## 0.2.0-beta.17
 
 ### Patch Changes

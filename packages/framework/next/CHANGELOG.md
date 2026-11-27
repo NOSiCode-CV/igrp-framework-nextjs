@@ -1,5 +1,77 @@
 # @igrp/framework-next
 
+## 0.2.0-beta.25
+
+### Patch Changes
+
+- 0dce2cc: `@igrp/framework-next-auth/providers` exports `isIgrpAuthBypass(env?)` and `isPreviewModeEnabled(env?)`, the one definition of "auth is bypassed" (preview mode or `AUTH_PROVIDER=none`). `@igrp/framework-next`'s `isIgrpAuthBypass` and next-auth's own session callbacks now use it instead of their own copies. Behaviour is unchanged.
+- 7f1ad42: Package and build fixes from a review of each package's build:
+  
+  - `@igrp/framework-next`: `next-intl` is now a peer dependency (`^4.16.1`), not a pinned dependency. The root layout mounts next-intl's provider and the app calls its hooks, so both must use one copy; a version mismatch used to install two and lose the context. Apps already depend on `next-intl`.
+  - `@igrp/framework-next-ui`: `lucide-react` is now a peer dependency, as in the design system. The unused `clsx` and `class-variance-authority` dependencies are removed.
+  - `@igrp/framework-next-auth`: every `exports` entry has a `default` condition, so resolvers without the `import` condition (`require()` of ESM, CommonJS test runners) find it.
+  - `@igrp/igrp-framework-react-design-system`, `@igrp/framework-next-ui`, `@igrp/framework-next`: no `.d.ts.map` files in the package. They pointed at `src/`, which is not published.
+  - `@igrp/template-migrator`: the build clears `dist/` first, so files from older builds are no longer published. `yaml` moves to `devDependencies`: only the build scripts use it.
+- 82a22d3: Permission checks no longer fail after the access token expires. When the per-request store holds no token (a Server Action, a page rendered in parallel with its layout, or a seed written after an `await`), `igrpGetClaims` used to decode the session cookie, which is not refreshed during a render, so an expired token made gated sections disappear and `igrpAssertAuthorize` throw. `withIGRPAuth` now registers its `serverSession` process-wide (`registerIGRPServerSession` / `readIGRPServerSessionAccessToken` in `@igrp/framework-next-auth/session-store`), and the claims fallback reads the refreshed token through it, sharing the session read and refresh of the same request. Without a registered instance, or when that read fails, it decodes the cookie as before. No consumer change.
+- 9880ce4: `@igrp/framework-next` now depends on `next-intl` 4.16.1, and pins `@igrp/platform-access-management-client-ts` and `server-only` to exact versions. `@igrp/framework-next-i18n` now depends on `@formatjs/icu-messageformat-parser` 3.5.23.
+- 8a8cc80: `igrpEnsureAccessClientConfig(seed?)` is the one way to fill the per-request Access Management store. With a seed (`{ token, baseUrl?, timeout?, locale? }`) it applies it, `baseUrl` defaulting to `IGRP_ACCESS_MANAGEMENT_API`; without one it recovers the token from the session cookie, as before. `IGRPLayoutFull` and the header and sidebar data providers use it, and its doc comment holds the ordering rules. `igrpSetAccessClientConfig` is still exported.
+- f77fd3b: Two fixes from the 2026-11-25 audit:
+  
+  - `fetchMenusAction` rejects an `appCode` that is not a valid application code (letters, digits and underscores, 2 to 64 characters) with `MENUS_LOAD_FAILED`, before any Access Management call. Before, a value such as `../../admin/x?q=` reached another AM endpoint with the user's token.
+  - Branding cache: a fetch records the time it started, not the time it returned, so a brand save made during the fetch still triggers a refetch. `igrpInvalidateBranding` also discards a fetch that is already running, so it cannot write the old brand back.
+- 8a8cc80: `@igrp/framework-next-auth/session-store` exports `readIGRPSessionToken(cookies, env?)`: decodes this app's session token from a cookie jar without the `withIGRPAuth` instance, choosing the scoped or stock cookie from the jar. `@igrp/framework-next`'s access-token recovery in Server Actions now calls it instead of keeping its own copy of the cookie lookup. Behaviour is unchanged.
+- 5a2166c: Deprecated, because the framework does not use them: `igrpBuildQueryString` (use `URLSearchParams`), `IGRPGlobalLoading` (use `IGRPTemplateLoading` from `@igrp/framework-next-ui`) and the `./client` entry with `useLayoutData` (call `useRouter().refresh()`). They are removed in a later release.
+- a6af114: An `IgrpError` with a machine-stable `code` (`/^[A-Z][A-Z0-9_]*$/`) now sets `digest` to `<id>|<code>`, the `AppError` digest shape. Next keeps a digest the error already has, so a server-thrown `IgrpError` keeps its code on the client in production. The message and context never go into the digest. `parsePublicDigest(digest)` returns a new `code` field and reads a code-shaped public part as `code`, not `message`. New export `encodePublicCodeDigest(code)` from `./app-error`. The reference an error screen shows for an `IgrpError` is now this generated id, not Next's hash.
+- 7f1ad42: In production, `IGRPRootLayout` no longer rebuilds and validates the Access Management sync plan on every request once a sync has succeeded. The config is fixed for the process, and that sync proved it valid. In development the plan is still validated on every request, so an edited config still fails fast after a hot reload.
+- Updated dependencies [c412dea]
+- Updated dependencies [0dce2cc]
+- Updated dependencies [7f1ad42]
+- Updated dependencies [82a22d3]
+- Updated dependencies [f8b345c]
+- Updated dependencies [f8b345c]
+- Updated dependencies [ea46503]
+- Updated dependencies [78722bc]
+- Updated dependencies [1f7ab30]
+- Updated dependencies [f5605ac]
+- Updated dependencies [2a01f0d]
+- Updated dependencies [4ad6a06]
+- Updated dependencies [a6af114]
+- Updated dependencies [f77fd3b]
+- Updated dependencies [f77fd3b]
+- Updated dependencies [f77fd3b]
+- Updated dependencies [c5939b7]
+- Updated dependencies [82a22d3]
+- Updated dependencies [f31585e]
+- Updated dependencies [fda3c7e]
+- Updated dependencies [7f1ad42]
+- Updated dependencies [7b43f45]
+- Updated dependencies [8342c98]
+- Updated dependencies [d83c90f]
+- Updated dependencies [f77fd3b]
+- Updated dependencies [c73287e]
+- Updated dependencies [f77fd3b]
+- Updated dependencies [8a8cc80]
+- Updated dependencies [a6af114]
+- Updated dependencies [8a8cc80]
+- Updated dependencies [5a2166c]
+- Updated dependencies [602f415]
+- Updated dependencies [7f1ad42]
+- Updated dependencies [c5939b7]
+- Updated dependencies [c5939b7]
+- Updated dependencies [c5939b7]
+- Updated dependencies [a6af114]
+- Updated dependencies [82a22d3]
+- Updated dependencies [f77fd3b]
+- Updated dependencies [7f1ad42]
+- Updated dependencies [7b43f45]
+- Updated dependencies [f5605ac]
+- Updated dependencies [c412dea]
+- Updated dependencies [9976eba]
+  - @igrp/framework-next-auth@0.2.0-beta.12
+  - @igrp/framework-next-ui@0.2.0-beta.23
+  - @igrp/igrp-framework-react-design-system@0.2.0-beta.18
+  - @igrp/framework-next-types@0.2.0-beta.12
+
 ## 0.2.0-beta.24
 
 ### Patch Changes

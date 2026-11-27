@@ -1,5 +1,27 @@
 # @igrp/framework-next-types
 
+## 0.2.0-beta.12
+
+### Patch Changes
+
+- c5939b7: `syncOnCodeMenuRoles` documents that, with `true`, every new pod resets the menu roles to the code's and undoes role edits made in Access Management.
+- 9976eba: The sidebar user menu can hide its Profile and Settings entries. `IGRPSidebarDataArgs` gets `showProfile` and `showSettings` (default `true`); `IGRPSidebarUser` and `IGRPTemplateNavUser` take the same props, and a prop wins over the data.
+- Updated dependencies [c412dea]
+- Updated dependencies [0dce2cc]
+- Updated dependencies [7f1ad42]
+- Updated dependencies [82a22d3]
+- Updated dependencies [f77fd3b]
+- Updated dependencies [c73287e]
+- Updated dependencies [f77fd3b]
+- Updated dependencies [8a8cc80]
+- Updated dependencies [a6af114]
+- Updated dependencies [8a8cc80]
+- Updated dependencies [5a2166c]
+- Updated dependencies [602f415]
+- Updated dependencies [7f1ad42]
+- Updated dependencies [c5939b7]
+  - @igrp/framework-next-auth@0.2.0-beta.12
+
 ## 0.2.0-beta.11
 
 ### Patch Changes

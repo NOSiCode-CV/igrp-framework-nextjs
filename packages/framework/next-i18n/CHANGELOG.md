@@ -1,5 +1,12 @@
 # @igrp/framework-next-i18n
 
+## 0.2.0-beta.5
+
+### Patch Changes
+
+- 9880ce4: `@igrp/framework-next` now depends on `next-intl` 4.16.1, and pins `@igrp/platform-access-management-client-ts` and `server-only` to exact versions. `@igrp/framework-next-i18n` now depends on `@formatjs/icu-messageformat-parser` 3.5.23.
+- c5939b7: `check-literals` no longer flags an HTML entity in a quoted prop (`title="&mdash;"`), which JSX decodes as it does in JSX text. Inside `{"…"}` the entity stays visible and is still flagged.
+
 ## 0.2.0-beta.4
 
 ### Patch Changes

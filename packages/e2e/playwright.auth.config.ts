@@ -46,6 +46,8 @@ export default defineConfig({
         NEXTAUTH_SECRET: "e2e-only-not-a-secret",
         NEXT_PUBLIC_BASE_PATH: BASE_PATH,
         NEXTAUTH_URL,
+        // Required by igrpBuildConfig with preview off; nothing in these tests calls it.
+        IGRP_ACCESS_MANAGEMENT_API: AUTH_ISSUER,
         IGRP_SYNC_ACCESS: "false",
         IGRP_BRANDING_ENABLED: "false",
       },

@@ -34,7 +34,7 @@ stages:
 # change to the migrator itself. Both fixed below.
 check_template_drift:
   stage: verify
-  image: node:22
+  image: node:24
   services: []
   rules:
     - changes:
@@ -56,7 +56,7 @@ check_template_drift:
 # that check. Node built-ins only, so no install.
 check_skills_lock:
   stage: verify
-  image: node:22
+  image: node:24
   services: []
   rules:
     - changes:
@@ -75,7 +75,7 @@ check_skills_lock:
 # The i18n package's own tests and build run first: the check CLI is its build output.
 check_i18n:
   stage: verify
-  image: node:22
+  image: node:24
   services: []
   rules:
     - changes:
@@ -108,7 +108,7 @@ check_i18n:
 # package "exports", which point at the gitignored dist/.
 verify_framework:
   stage: verify
-  image: node:22
+  image: node:24
   services: []
   rules:
     - changes:

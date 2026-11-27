@@ -11,6 +11,7 @@ import { join as joinPath } from "path";
 import { tmpdir } from "os";
 import { join, dirname } from "path";
 import { executeStep, isNewerVersion } from "../apply";
+import { hashFileIgnoringEol } from "../hash";
 import type { MigrationStep } from "../types";
 
 let appRoot: string;
@@ -111,6 +112,21 @@ describe("executeStep: file.delete", () => {
     expect(readAppFile("src/__tests__/a.test.ts")).toBe("it('mine')\n");
     expect(undo).toEqual({ type: "file.write", mode: "replace", path: "src/__tests__/a.test.ts", from: "__undo__" });
     expect(warn).toHaveBeenCalledWith(expect.stringContaining("NOT deleted"));
+    warn.mockRestore();
+  });
+
+  it("with expectHash, deletes a matching file and keeps a changed one", () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    writeAppFile("src/__tests__/a.test.ts", "it()\r\n");
+    writeAppFile("src/__tests__/b.test.ts", "it('mine')\n");
+    writePayload("92/ref.ts", "it()\n");
+    const expectHash = hashFileIgnoringEol(join(payloadDir, "92/ref.ts"))!;
+
+    executeStep({ type: "file.delete", path: "src/__tests__/a.test.ts", expectHash }, appRoot, payloadDir);
+    executeStep({ type: "file.delete", path: "src/__tests__/b.test.ts", expectHash }, appRoot, payloadDir);
+
+    expect(existsSync(join(appRoot, "src/__tests__/a.test.ts"))).toBe(false);
+    expect(readAppFile("src/__tests__/b.test.ts")).toBe("it('mine')\n");
     warn.mockRestore();
   });
 });

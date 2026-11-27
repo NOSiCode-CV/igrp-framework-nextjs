@@ -164,6 +164,16 @@ try {
     exit 1
   }
 
+  # Test files stay in the repo but not in the zip. vitest.config.mts ships,
+  # with passWithNoTests, so `pnpm test` still passes in a new app.
+  # A __tests__ folder moves as a whole, so no empty folder lands in the zip.
+  $tests = @(git ls-files -- "*/__tests__/*" "*.test.ts" "*.test.tsx" "*.spec.ts" "*.spec.tsx")
+  if ($LASTEXITCODE -ne 0) {
+    Write-Host "git ls-files failed; refusing to zip without the test list."
+    exit 1
+  }
+  $ignored += @($tests | ForEach-Object { $_ -replace '(^|.*/)(__tests__)/.*$', '$1$2' } | Select-Object -Unique)
+
   # Each excluded path keeps its relative location under $excludeTemp and is
   # moved back to exactly that path in the finally block. Flattening them into
   # $excludeTemp would let a nested entry (.agents/README.md) come back as

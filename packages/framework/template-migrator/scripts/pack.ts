@@ -2,7 +2,7 @@ import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync
 import { dirname, join } from "path";
 import { fileURLToPath, URL } from "url";
 import { parse as parseYaml } from "yaml";
-import { hashPayloads, hashSteps } from "../src/hash.js";
+import { hashFileIgnoringEol, hashPayloads, hashSteps } from "../src/hash.js";
 import { sortMigrationFiles } from "../src/migration-order.js";
 import { validateRequires } from "../src/validate-requires.js";
 import { validateSteps } from "../src/validate-steps.js";
@@ -57,9 +57,19 @@ function main() {
     // file.create/file.write steps are dropped. A file.delete stays, so a
     // migration can remove the test files 92/94 shipped. Hashes keep covering
     // every step, so apps that already applied 92/94 are not reported as changed.
-    const steps = fm.steps.filter(
-      (s) => !(s.type === "file.create" || s.type === "file.write") || typeof s.path !== "string" || !isTestPath(s.path),
-    );
+    const steps = fm.steps
+      .filter(
+        (s) => !(s.type === "file.create" || s.type === "file.write") || typeof s.path !== "string" || !isTestPath(s.path),
+      )
+      // A file.delete ships the hash of its `expect` payload, not the file:
+      // otherwise the test files 92/94 shipped would land in dist/ again.
+      .map((s) => {
+        if (s.type !== "file.delete" || typeof s.expect !== "string") return s;
+        const { expect, ...rest } = s;
+        const expectHash = hashFileIgnoringEol(join(MIGRATIONS_DIR, expect));
+        if (expectHash === null) throw new Error(`Payload not found: ${expect} (migration ${fm.id})`);
+        return { ...rest, expectHash };
+      });
     normalisedTotal += copyPayloads(steps, MIGRATIONS_DIR, PAYLOAD_OUT);
     const contentHash = hashSteps(fm.steps);
     migrations.push({

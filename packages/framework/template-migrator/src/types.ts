@@ -8,8 +8,9 @@ export type MigrationStep =
   | { type: "file.create"; path: string; from: string }
   | { type: "file.write"; path: string; mode: "replace" | "patch"; from?: string; patch?: string }
   // `expect`: a payload the file must still match (EOL ignored). A file the
-  // consumer changed is kept, with a warning.
-  | { type: "file.delete"; path: string; expect?: string }
+  // consumer changed is kept, with a warning. The packer turns `expect` into
+  // `expectHash`, so the payload file itself does not ship.
+  | { type: "file.delete"; path: string; expect?: string; expectHash?: string }
   | { type: "env.add"; file: string; keys: Record<string, EnvKeySpec> }
   | { type: "env.remove"; file: string; keys: string[] }
   | { type: "deps.bump"; manifest: string; ranges: Record<string, string> }

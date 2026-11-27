@@ -139,8 +139,8 @@ export function executeStep(
       if (statSync(target).isDirectory()) {
         throw new Error(`file.delete refuses a directory (path: ${step.path}); delete its files one by one.`);
       }
-      if (step.expect && !isUndo) {
-        const expected = hashFileIgnoringEol(resolvePayload(step.expect, payloadDir));
+      if ((step.expectHash || step.expect) && !isUndo) {
+        const expected = step.expectHash ?? hashFileIgnoringEol(resolvePayload(step.expect!, payloadDir));
         if (expected === null) throw new Error(`file.delete: payload not found (expect: ${step.expect}).`);
         if (hashFileIgnoringEol(target) !== expected) {
           console.warn(`  ⚠ ${step.path}: changed in this app, so NOT deleted. Delete it yourself if you do not need it.`);

@@ -673,6 +673,12 @@
       "cliVersion": "0.2.0-beta.28",
       "manifestHash": "194f4868b68dc487",
       "payloadHash": "e3b0c44298fc1c14"
+    },
+    {
+      "id": "112-template-version-beta9",
+      "cliVersion": "0.2.0-beta.28",
+      "manifestHash": "5e7dda79803607bc",
+      "payloadHash": "e3b0c44298fc1c14"
     }
   ]
 }

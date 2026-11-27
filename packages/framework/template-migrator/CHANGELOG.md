@@ -1,5 +1,11 @@
 # @igrp/template-migrator
 
+## 0.2.0-beta.29
+
+### Patch Changes
+
+- 1b2a46a: Migration 112 sets the template `version` to `0.2.0-beta.9`.
+
 ## 0.2.0-beta.28
 
 ### Patch Changes

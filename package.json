@@ -52,6 +52,7 @@
     "@vitest/coverage-v8": "5.1.1",
     "dotenv-cli": "11.1.0",
     "eslint": "10.15.0",
+    "prettier": "3.10.1",
     "typescript": "~6.0.3"
   },
   "engines": {

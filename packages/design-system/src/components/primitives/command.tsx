@@ -61,7 +61,8 @@ function CommandInput({ className, ...props }: React.ComponentProps<typeof Comma
       {/* IGRP: no light-mode `bg-input/30` fill. Upstream assumes `--input` is near-white;
           ours is 0.64 for WCAG 1.4.11, so 30% of it read as a grey slab. Dark mode keeps
           InputGroup's own `dark:bg-input/30`. */}
-      <InputGroup className="h-8! rounded-lg! border-border shadow-none! *:data-[slot=input-group-addon]:pl-2!">
+      {/* IGRP: the cmdk input is not an input-group-control, so InputGroup never showed its focus ring. */}
+      <InputGroup className="h-8! rounded-lg! border-border shadow-none! has-[[data-slot=command-input]:focus-visible]:border-ring has-[[data-slot=command-input]:focus-visible]:ring-3 has-[[data-slot=command-input]:focus-visible]:ring-ring/50 *:data-[slot=input-group-addon]:pl-2!">
         <CommandPrimitive.Input
           data-slot="command-input"
           className={cn("w-full text-sm outline-hidden disabled:cursor-not-allowed disabled:opacity-50", className)}

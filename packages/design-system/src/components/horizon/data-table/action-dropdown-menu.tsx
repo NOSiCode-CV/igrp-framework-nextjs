@@ -265,7 +265,7 @@ function IGRPDataTableDropdownMenuNode({
   disabled,
 }: {
   node?: ReactNode
-  labelTrigger?: string
+  labelTrigger: string
   disabled?: boolean
 }) {
   if (isValidElement(node)) {
@@ -303,7 +303,7 @@ type IGRPDataTableActionDropdown =
   | {
       id?: string
       component: typeof IGRPDataTableDropdownMenuNode
-      props: { node?: ReactNode; labelTrigger?: string; disabled?: boolean }
+      props: { node?: ReactNode; labelTrigger: string; disabled?: boolean }
     }
 
 type IGRPDataTableDropdownMenuProps = {

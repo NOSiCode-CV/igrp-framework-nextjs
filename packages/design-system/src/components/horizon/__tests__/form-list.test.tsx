@@ -241,7 +241,12 @@ describe("IGRPFormList errors in collapsed items (WCAG 3.3.1)", () => {
     const required = z.object({ itens: z.array(z.object({ url: z.string().min(1, "URL obrigatória") })) })
     const user = (await import("@testing-library/user-event")).default.setup()
     render(
-      <IGRPForm schema={required} onSubmit={() => {}} defaultValues={{ itens: [{ url: "ok" }, { url: "" }] }}>
+      <IGRPForm
+        schema={required}
+        formRef={{ current: null }}
+        onSubmit={() => {}}
+        defaultValues={{ itens: [{ url: "ok" }, { url: "" }] }}
+      >
         <IGRPFormList
           id="itens"
           label="Itens"

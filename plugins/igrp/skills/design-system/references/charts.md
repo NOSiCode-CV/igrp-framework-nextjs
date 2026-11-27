@@ -24,7 +24,7 @@ Prop types are exported as `IGRP<Name>ChartProps` (e.g. `IGRPVerticalBarChartPro
 | --- | --- | --- |
 | `data` | `IGRPChartDataItem[]` (`Record<string, string \| number>`) | |
 | `categoryKey` | `string` | The X-axis category. Required on cartesian charts. |
-| `title`, `description`, `footer` | `string`, `string`, `{ description?: string }` | |
+| `title`, `description`, `footer` | `string`, `string`, `{ description?: string }` | `title` names the chart for screen readers. Every chart also renders its values in a visually hidden table; series headers use `name` when set. |
 | `size` | `"sm" \| "md" \| "lg" \| "xl" \| "auto"` = `"md"` | Sets a minimum height (sm 200, md 280, lg 400, xl 500; `auto` is the same as `md`). Height grows by 40px per row, except the vertical bar chart, which stays at the minimum. |
 | `height`, `width` | `number \| string` | `height` overrides the size logic. `width` defaults to `"100%"`. |
 | `showGrid` | `false` | |

@@ -10,7 +10,7 @@ Shared vocab: `IGRPColorRole` = `"solid" | "outline" | "soft"` (prop `variant`) 
 - `type` defaults to `"button"`, so pass `type="submit"` explicitly in forms.
 - `loading` shows a spinner and swaps the children for `loadingText` (an i18n default). Inside `IGRPForm` you still set `loading` yourself, from the form handle or a transition, because the button isn't wired to the form.
 - Text sizes need `showIcon` + `iconName` (+ `iconPlacement: "start" | "end"`). `iconName` alone renders nothing.
-- Icon sizes always render the icon. **Give them an `aria-label`**; otherwise they fall back to the icon name and warn in dev.
+- Icon sizes always render the icon. **They require `aria-label` or `aria-labelledby`**: `IGRPButtonProps` is a union, so TypeScript rejects an icon size without one.
 - `asChild` (e.g. wrapping `IGRPLink` or next `Link`) skips both the icon and the spinner.
 - `iconSize` is deprecated and does nothing.
 
@@ -59,7 +59,7 @@ Shared vocab: `IGRPColorRole` = `"solid" | "outline" | "soft"` (prop `variant`) 
 - `showLink` + `lableLink` (the misspelling is the real prop name) + `actionLink`, `customActions`.
 - `showClose` adds a button that hides the notice and calls `onClose`. The dismissal isn't persisted.
 
-**`IGRPAvatar`**. Props: `src`, `alt`, `fallback` (gives 2-letter initials), `scale: sm | md | lg | xl` (`size` is deprecated), `rounded`, `hasStatus` + `status`, `showBadge` + `badgeNumber`, `hasFallbackIcon`. The type marks `status`, `badgeColor` and `iconColor` as required, so pass them even when unused.
+**`IGRPAvatar`**. Props: `src`, `alt`, `fallback` (gives 2-letter initials), `scale: sm | md | lg | xl` (`size` is deprecated), `rounded`, `hasStatus` + `status` (+ `statusLabel`, the screen-reader text of the dot, e.g. "Online"), `iconLabel` (screen-reader text of the icon overlay), `showBadge` + `badgeNumber`, `hasFallbackIcon`. The type marks `status`, `badgeColor` and `iconColor` as required, so pass them even when unused.
 
 **`IGRPSeparator`**, **`IGRPLoadingSpinner`** (`label` defaults to "A carregar…", `className`), **`IGRPContainer`** (just a `<div className="p-3">`, not a max-width container).
 
@@ -157,7 +157,7 @@ For row deletes in a table, use the `alert` row action instead (`data-table.md`)
 
 ## Data and media
 
-- **`IGRPTable<T>`**: a lightweight static table without TanStack. Props: `content: T[]`, `columns: { header; accessorKey: keyof T; render? }[]`, `actions?: (row) => ReactNode`, `isStriped`, `isHeaderSticky`, `showFooter` + `footerContent`. Use `IGRPDataTable` once you need sorting, filtering or paging.
+- **`IGRPTable<T>`**: a lightweight static table without TanStack. Props: `content: T[]`, `columns: { header; accessorKey: keyof T; render? }[]`, `actions?: (row) => ReactNode`, `isStriped`, `isHeaderSticky`, `showFooter` + `footerContent`, `caption` (accessible table name, visually hidden). Use `IGRPDataTable` once you need sorting, filtering or paging.
 - **`IGRPRepetitiveComponent<T>`**: `items`, `keyExtractor` (required), `children: (item) => ReactNode`.
 - **`IGRPImage`**: next/image + `ratio: "1/1" | "4/3" | "16/9" | "21/9"` (applies when no width/height is given) + `rounded`.
 - **`IGRPImageCropper`**: `src`, `variant: basic | circular | zoom | preview`, `onCrop(blob)` (JPEG), `cropLabel`. Cross-origin images need CORS.

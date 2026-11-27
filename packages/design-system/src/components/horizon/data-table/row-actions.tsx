@@ -15,8 +15,8 @@ import { IGRPDataTableTooltipProvider } from "./tooltip-provider.js"
  * @see IGRPDataTableLinkProps
  */
 interface IGRPDataTableActionProps {
-  /** Tooltip/aria label. */
-  labelTrigger?: string
+  /** Tooltip and accessible name; required, because the trigger shows only an icon. */
+  labelTrigger: string
   /** CSS classes for the trigger button. */
   classNameTrigger?: string
   /** Icon name. */

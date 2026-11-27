@@ -101,6 +101,7 @@ export function UsersTable({ data, onDelete }: { data: User[]; onDelete: (u: Use
 | `rowSelection`, `onRowSelectionChange` | internal | Controlled selection in TanStack's shape (`{ [rowId]: true }`, updater callback); `useState`'s setter fits. See Row selection. |
 | `onSelectionChange` | | `(rows: TData[]) => void` with the selected rows' data on every change (not on mount). |
 | `selection` | | `"checkbox" \| "switch"`: adds the row-selection column. See Row selection. |
+| `caption` | | Accessible table name, rendered as a visually hidden `<caption>`. |
 | `className`, `filterClassName`, `tableClassName`, `tableHeaderClassName`, `tableBodyClassName`, `paginationClassName`, `id` | | |
 
 ### Row selection
@@ -202,6 +203,7 @@ A controlled table for server-paginated data. The caller owns the page index; th
 | `layout` | `"auto"` | See Column layout. |
 | `getRowId`, `getRowCanExpand`, `renderSubComponent` | | Row expansion. |
 | `toolbar` | | A node rendered above the table (search box, filters, buttons). |
+| `caption` | | Accessible table name, rendered as a visually hidden `<caption>`. |
 | `notFoundLabel`, `id`, `className`, `tableClassName`, `tableHeaderClassName`, `tableBodyClassName`, `paginationClassName` | | |
 
 ```tsx

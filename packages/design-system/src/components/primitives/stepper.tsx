@@ -12,6 +12,8 @@ type StepperContextValue = {
   activeStep: number
   setActiveStep: (step: number) => void
   orientation: "horizontal" | "vertical"
+  /** False for a controlled stepper without onValueChange: its steps cannot be changed. */
+  interactive: boolean
 }
 
 type StepItemContextValue = {
@@ -77,6 +79,7 @@ function Stepper({
         activeStep: currentStep,
         setActiveStep,
         orientation,
+        interactive: value === undefined || onValueChange !== undefined,
       }}
     >
       <div
@@ -137,7 +140,7 @@ interface StepperTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonEleme
 }
 
 function StepperTrigger({ asChild = false, className, children, ...props }: StepperTriggerProps) {
-  const { setActiveStep } = useStepper()
+  const { setActiveStep, interactive } = useStepper()
   const { step, state, isDisabled } = useStepItem()
   // data-state is visual only; aria-current tells screen readers which step is current.
   const ariaCurrent = state === "active" ? ("step" as const) : undefined
@@ -149,10 +152,23 @@ function StepperTrigger({ asChild = false, className, children, ...props }: Step
   }
 
   if (asChild) {
+    // A non-button child (e.g. a div) gets the role, tab stop and keys a button has natively.
+    const keyboardProps = interactive && {
+      role: "button",
+      tabIndex: isDisabled ? -1 : 0,
+      "aria-disabled": isDisabled || undefined,
+      onKeyDown: (event: React.KeyboardEvent<HTMLElement>) => {
+        if (event.currentTarget instanceof HTMLButtonElement) return
+        if (event.key !== "Enter" && event.key !== " ") return
+        event.preventDefault()
+        handleClick()
+      },
+    }
     return (
       <Slot.Root
         data-slot="stepper-trigger"
         aria-current={ariaCurrent}
+        {...keyboardProps}
         onClick={handleClick}
         className={className}
         {...props}

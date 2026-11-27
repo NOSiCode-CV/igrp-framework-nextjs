@@ -69,7 +69,7 @@ Read the reference for the family you're about to write, before you write it. Ea
 
 ## Traps that hit almost every screen
 
-- **`IGRPButton` icons:** `iconName` renders only with `showIcon`. Icon-size buttons need an `aria-label`. For navigation use `IGRPButtonLink`, not `IGRPButton asChild` around a `Link`.
+- **`IGRPButton` icons:** `iconName` renders only with `showIcon`. Icon-size buttons require `aria-label` (or `aria-labelledby`); the type rejects them without one. For navigation use `IGRPButtonLink`, not `IGRPButton asChild` around a `Link`.
 - **Submit button state:** `IGRPButton` doesn't watch the form. Take `loading` from `useIGRPFormContext().isSubmitting` in a child component.
 - **Loading another record:** pass `resetKey={record.id}` (it resets values and dirty state to the new `defaultValues`).
 - **Date pickers and `IGRPInputNumber` write `null` when cleared,** so schemas need `.nullable()` (`.nullish()` for a number whose untouched default is `undefined`).

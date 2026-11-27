@@ -57,3 +57,35 @@ describe("Stepper indicator and separator", () => {
     for (const c of [left, right, top]) expect(sep).toContain(`group-has-[[data-variant=${variant}]]/step:${c}`)
   })
 })
+
+describe("StepperTrigger asChild keyboard access (WCAG 2.1.1)", () => {
+  function renderDivSteps(props: { value?: number; onValueChange?: (n: number) => void }) {
+    return render(
+      <Stepper defaultValue={1} {...props}>
+        {[1, 2].map((s) => (
+          <StepperItem key={s} step={s}>
+            <StepperTrigger asChild>
+              <div>Passo {s}</div>
+            </StepperTrigger>
+          </StepperItem>
+        ))}
+      </Stepper>
+    )
+  }
+
+  it("makes a div trigger a focusable button that Enter activates", async () => {
+    const user = (await import("@testing-library/user-event")).default.setup()
+    const { getByRole } = renderDivSteps({})
+    const second = getByRole("button", { name: "Passo 2" })
+    await user.tab()
+    await user.tab()
+    expect(second).toHaveFocus()
+    await user.keyboard("{Enter}")
+    expect(second).toHaveAttribute("aria-current", "step")
+  })
+
+  it("leaves a read-only stepper out of the tab order", () => {
+    const { queryAllByRole } = renderDivSteps({ value: 1 })
+    expect(queryAllByRole("button")).toHaveLength(0)
+  })
+})

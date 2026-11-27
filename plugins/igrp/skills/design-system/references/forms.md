@@ -115,7 +115,7 @@ Shared props: `name`, `label`, `helperText`, `required` and `className`. Write y
 | `IGRPInputFile` | See notes | Default variant: `File \| null`, or a **`FileList`** with `multiple`, plus `accept`. `variant="dropzone"`: `File \| null`, or `File[]` with `multiple`, plus `acceptTypes`, `maxSize` (10 MB), `maxFiles`, `onFilesChange`. |
 | `IGRPInputHidden` | as set | |
 
-Options for every choice field are `IGRPOptionsProps`: `{ value, label, description?, icon?, group?, status?, color?, image?, flag?, disabled?, badge? }`.
+Options for every choice field are `IGRPOptionsProps`: `{ value, label, description?, icon?, group?, status?, statusLabel?, color?, image?, flag?, disabled?, badge? }`. `status` is only a colour dot; pass `statusLabel` (e.g. "Ativo") so screen readers hear what it means.
 
 ## Binding rules
 

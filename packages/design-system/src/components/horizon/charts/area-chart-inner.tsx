@@ -25,6 +25,7 @@ import {
 } from "./lib.js"
 import { useIGRPLocale } from "../../../i18n/index.js"
 import { igrpNumberFormat } from "../../../lib/intl.js"
+import { IGRPChartDataTable } from "./data-table-sr.js"
 import type { IGRPAreaConfig, IGRPChartProps } from "./types.js"
 
 const defaultLabelFormatter = (value: unknown) => (typeof value === "string" ? value : String(value))
@@ -117,6 +118,7 @@ function IGRPAreaChartInner({
 
       <div className={cn("overflow-hidden")}>
         <div style={{ height: chartHeight, width: chartWidth }} className={cn("w-full overflow-hidden")}>
+          <IGRPChartDataTable data={data} rowKey={categoryKey} series={areas} />
           <ChartContainer className={cn("h-full w-full")} config={chartConfig}>
             <AreaChart
               accessibilityLayer

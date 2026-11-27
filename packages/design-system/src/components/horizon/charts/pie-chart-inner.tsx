@@ -11,6 +11,7 @@ import {
   type LegendType,
   type PieLabelRenderProps,
 } from "recharts"
+import { IGRPChartDataTable } from "./data-table-sr.js"
 import type { PieSectorDataItem } from "recharts/types/polar/Pie"
 import React, { useState, type SVGAttributes, useId } from "react"
 
@@ -219,6 +220,7 @@ function IGRPPieChartInner({
 
       <div className={cn("overflow-hidden")}>
         <div style={{ height: chartHeight, width: chartWidth }} className={cn("w-full overflow-hidden")}>
+          <IGRPChartDataTable data={data} rowKey={nameKey} series={pies} />
           <ChartContainer className={cn("h-full w-full")} config={chartConfig}>
             <PieChart
               accessibilityLayer

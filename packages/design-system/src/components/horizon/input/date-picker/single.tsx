@@ -240,6 +240,7 @@ function IGRPDatePickerSingle(allProps: IGRPDatePickerSingleProps) {
       )}
       <DatePickerSingleField
         {...fieldProps}
+        aria-invalid={Boolean(error)}
         aria-describedby={error ? `${fieldName}-error` : helperText ? `${fieldName}-helper` : undefined}
         value={displayDate}
         onChange={(val) => {

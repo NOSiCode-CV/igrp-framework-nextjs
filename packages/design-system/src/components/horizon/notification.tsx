@@ -116,7 +116,10 @@ function IGRPNotification({
               )}
             />
           )}
-          <div>{content}</div>
+          <div>
+            {variant !== "default" && variant && <span className="sr-only">{i18n.severity[variant]}: </span>}
+            {content}
+          </div>
         </div>
         <div className={cn("flex items-center gap-3")}>
           {showLink && (

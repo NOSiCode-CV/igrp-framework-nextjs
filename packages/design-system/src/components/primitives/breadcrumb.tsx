@@ -48,8 +48,7 @@ function BreadcrumbPage({ className, ...props }: React.ComponentProps<"span">) {
   return (
     <span
       data-slot="breadcrumb-page"
-      role="link"
-      aria-disabled="true"
+      // IGRP: upstream adds role="link" aria-disabled, so the current page was read as a disabled link.
       aria-current="page"
       className={cn("font-normal text-foreground", className)}
       {...props}
@@ -76,12 +75,11 @@ function BreadcrumbEllipsis({ className, ...props }: React.ComponentProps<"span"
   return (
     <span
       data-slot="breadcrumb-ellipsis"
-      role="presentation"
-      aria-hidden="true"
+      // IGRP: upstream hides the whole span, which also silenced the sr-only text below.
       className={cn("flex size-5 items-center justify-center [&>svg]:size-4", className)}
       {...props}
     >
-      <MoreHorizontalIcon />
+      <MoreHorizontalIcon aria-hidden="true" />
       <span className="sr-only">{i18n.breadcrumb.more}</span>
     </span>
   )

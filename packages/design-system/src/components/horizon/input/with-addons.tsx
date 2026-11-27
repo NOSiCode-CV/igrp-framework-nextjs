@@ -17,7 +17,7 @@ import {
 } from "../../primitives/select.js"
 import { useIGRPi18n } from "../../../i18n/index.js"
 import { IGRPLabel } from "../label.js"
-import { Field } from "../../primitives/field.js"
+import { Field, FieldDescription, FieldError } from "../../primitives/field.js"
 
 /**
  * Props for the IGRPInputAddOn component.
@@ -52,6 +52,8 @@ function IGRPInputAddOn({
   classNameLabel,
   name,
   id,
+  error,
+  helperText,
   ...props
 }: IGRPInputAddOnProps) {
   const i18n = useIGRPi18n()
@@ -108,12 +110,16 @@ function IGRPInputAddOn({
         </Select>
         <Input
           id={ref}
+          aria-invalid={error ? true : undefined}
+          aria-describedby={error ? `${ref}-error` : helperText ? `${ref}-helper` : undefined}
           className={cn(
             "flex-1 rounded-none border-0 px-3 py-2 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
           )}
           {...igrpOmitNonDomProps(props)}
         />
       </div>
+      {helperText && !error && <FieldDescription id={`${ref}-helper`}>{helperText}</FieldDescription>}
+      {error && <FieldError id={`${ref}-error`}>{error}</FieldError>}
     </Field>
   )
 }

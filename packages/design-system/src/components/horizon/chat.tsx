@@ -234,7 +234,12 @@ function IGRPChat({
                 )}
               </div>
 
-              <div className={cn("max-w-[80%] rounded-lg bg-muted px-4 py-2")}>{renderContent(message)}</div>
+              <div className={cn("max-w-[80%] rounded-lg bg-muted px-4 py-2")}>
+                <span className={cn("sr-only")}>
+                  {message.sender ?? (message.role === "user" ? i18n.chat.you : i18n.chat.assistant)}:{" "}
+                </span>
+                {renderContent(message)}
+              </div>
             </div>
           ))}
           <div ref={messagesEndRef} />
@@ -252,7 +257,9 @@ function IGRPChat({
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder={i18n.chat.messagePlaceholder}
-          disabled={isLoading}
+          aria-label={i18n.chat.messageLabel}
+          // readOnly, not disabled: disabling drops keyboard focus while the reply loads.
+          readOnly={isLoading}
           className={cn("flex-1")}
           type="text"
         />

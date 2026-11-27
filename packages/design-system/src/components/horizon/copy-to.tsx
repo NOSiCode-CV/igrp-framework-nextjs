@@ -67,6 +67,7 @@ function IGRPCopyTo({
   }, [])
 
   async function handleCopy() {
+    if (copied) return
     if (!value) {
       igrpToast({
         type: "error",
@@ -124,7 +125,8 @@ function IGRPCopyTo({
           className={cn("size-7 disabled:opacity-100", triggerClassName)}
           onClick={handleCopy}
           aria-label={copied ? successMessage : tooltipMessage}
-          disabled={copied}
+          // aria-disabled, not disabled: a disabled button drops keyboard focus to <body>.
+          aria-disabled={copied || undefined}
         >
           <div
             className={cn(

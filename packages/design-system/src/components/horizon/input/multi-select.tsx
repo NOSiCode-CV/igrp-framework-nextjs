@@ -255,8 +255,13 @@ function MultiSelectControl({
           className={cn("w-72 max-w-[calc(100vw-2rem)] min-w-(--radix-popover-trigger-width) p-0", popoverClassName)}
         >
           <Command>
-            {searchVisible && (
+            {searchVisible ? (
               <CommandInput placeholder={searchPlaceholder ?? i18n.searchPlaceholder} className={cn("h-9")} />
+            ) : (
+              // Without it focus can land outside cmdk's key handler, so arrow keys and Enter do nothing.
+              <div className={cn("sr-only")}>
+                <CommandInput readOnly aria-labelledby={slotId ?? triggerId} />
+              </div>
             )}
             <CommandList id={listId} className={cn("max-h-64")}>
               <CommandEmpty>{emptyLabel ?? i18n.notFound}</CommandEmpty>
@@ -273,6 +278,7 @@ function MultiSelectControl({
                           value={`${option.label} ${option.value}`}
                           disabled={itemDisabled}
                           onSelect={() => toggle(option.value)}
+                          aria-checked={isSelected}
                           className={cn("flex items-start gap-3")}
                         >
                           <Checkbox
@@ -287,6 +293,7 @@ function MultiSelectControl({
                               {option.status && (
                                 <IGRPCircleFull className={cn("shrink-0", igrpColorText(option.status))} />
                               )}
+                              {option.statusLabel && <span className="sr-only">{option.statusLabel}: </span>}
                               {option.icon && (
                                 <IGRPIcon
                                   iconName={option.icon}
@@ -308,26 +315,26 @@ function MultiSelectControl({
                 </div>
               ))}
             </CommandList>
-
-            {!hideBulkActions && options.length > 0 && (
-              <div className={cn("flex items-center justify-between gap-2 border-t p-2")}>
-                <span className={cn("text-xs text-muted-foreground tabular-nums")}>
-                  {fill(i18n.tally, { count: selection.length, total: options.length })}
-                  {maxSelected !== undefined && fill(i18n.tallyMax, { max: maxSelected })}
-                </span>
-                <span className={cn("flex items-center gap-1")}>
-                  {maxSelected === undefined && (
-                    <Button type="button" variant="ghost" size="sm" disabled={allSelected} onClick={selectAll}>
-                      {selectAllLabel ?? i18n.selectAll}
-                    </Button>
-                  )}
-                  <Button type="button" variant="ghost" size="sm" disabled={selection.length === 0} onClick={clear}>
-                    {clearLabel ?? i18n.clear}
-                  </Button>
-                </span>
-              </div>
-            )}
           </Command>
+          {/* Outside <Command>: cmdk swallows Enter on its descendants to select the highlighted option. */}
+          {!hideBulkActions && options.length > 0 && (
+            <div className={cn("flex items-center justify-between gap-2 border-t p-2")}>
+              <span className={cn("text-xs text-muted-foreground tabular-nums")}>
+                {fill(i18n.tally, { count: selection.length, total: options.length })}
+                {maxSelected !== undefined && fill(i18n.tallyMax, { max: maxSelected })}
+              </span>
+              <span className={cn("flex items-center gap-1")}>
+                {maxSelected === undefined && (
+                  <Button type="button" variant="ghost" size="sm" disabled={allSelected} onClick={selectAll}>
+                    {selectAllLabel ?? i18n.selectAll}
+                  </Button>
+                )}
+                <Button type="button" variant="ghost" size="sm" disabled={selection.length === 0} onClick={clear}>
+                  {clearLabel ?? i18n.clear}
+                </Button>
+              </span>
+            </div>
+          )}
         </PopoverContent>
       </Popover>
 

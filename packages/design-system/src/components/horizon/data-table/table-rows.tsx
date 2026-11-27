@@ -86,7 +86,8 @@ function IGRPDataTableBodyRows<TData>({
     return (
       <TableRow>
         <TableCell colSpan={emptyColSpan} className={cn("h-24 text-center font-semibold")}>
-          {notFoundLabel}
+          {/* role=status: a filter that empties the table is otherwise silent for screen readers. */}
+          <span role="status">{notFoundLabel}</span>
         </TableCell>
       </TableRow>
     )

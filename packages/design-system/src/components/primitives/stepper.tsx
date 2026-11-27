@@ -138,7 +138,9 @@ interface StepperTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonEleme
 
 function StepperTrigger({ asChild = false, className, children, ...props }: StepperTriggerProps) {
   const { setActiveStep } = useStepper()
-  const { step, isDisabled } = useStepItem()
+  const { step, state, isDisabled } = useStepItem()
+  // data-state is visual only; aria-current tells screen readers which step is current.
+  const ariaCurrent = state === "active" ? ("step" as const) : undefined
 
   const handleClick = () => {
     if (!isDisabled) {
@@ -148,7 +150,13 @@ function StepperTrigger({ asChild = false, className, children, ...props }: Step
 
   if (asChild) {
     return (
-      <Slot.Root data-slot="stepper-trigger" onClick={handleClick} className={className} {...props}>
+      <Slot.Root
+        data-slot="stepper-trigger"
+        aria-current={ariaCurrent}
+        onClick={handleClick}
+        className={className}
+        {...props}
+      >
         {children}
       </Slot.Root>
     )
@@ -158,6 +166,7 @@ function StepperTrigger({ asChild = false, className, children, ...props }: Step
     <button
       type="button"
       data-slot="stepper-trigger"
+      aria-current={ariaCurrent}
       className={cn(
         "inline-flex items-center gap-3 rounded-full outline-none focus-visible:z-10 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50",
         className
@@ -178,6 +187,7 @@ interface StepperIndicatorProps extends React.HTMLAttributes<HTMLDivElement> {
 
 function StepperIndicator({ asChild = false, variant, className, children, ...props }: StepperIndicatorProps) {
   const { state, step, isLoading } = useStepItem()
+  const i18n = useIGRPi18n()
 
   return (
     <span
@@ -225,18 +235,25 @@ function StepperIndicator({ asChild = false, variant, className, children, ...pr
               />
             </span>
           )}
+          {/* The check icon and spinner are hidden, so the state is spoken here. */}
+          {isLoading ? (
+            <span className="sr-only">{i18n.loadingSpinner.label}</span>
+          ) : (
+            state === "completed" && <span className="sr-only">{i18n.stepper.completed}</span>
+          )}
         </>
       )}
     </span>
   )
 }
 
-function StepperTitle({ className, children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) {
+// A <span>, not a heading: the title usually sits inside the step <button>, where headings are invalid.
+function StepperTitle({ className, children, ...props }: React.HTMLAttributes<HTMLSpanElement>) {
   const i18n = useIGRPi18n()
   return (
-    <h3 data-slot="stepper-title" className={cn("text-sm font-medium", className)} {...props}>
+    <span data-slot="stepper-title" className={cn("block text-sm font-medium", className)} {...props}>
       {children ?? <span className="sr-only">{i18n.stepper.step}</span>}
-    </h3>
+    </span>
   )
 }
 

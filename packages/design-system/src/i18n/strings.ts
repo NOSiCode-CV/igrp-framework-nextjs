@@ -193,6 +193,8 @@ export interface IGRPI18nStrings {
     cancel: string
   }
   banner: {
+    /** Accessible name of the cookie banner region. */
+    cookieLabel: string
     /** aria-label for the dismiss button. */
     dismiss: string
     /** Default learn-more link label. */
@@ -233,6 +235,10 @@ export interface IGRPI18nStrings {
     errorMessage: string
     /** Alt text of an image sent in the transcript. */
     sentContent: string
+    /** Screen-reader sender name of a reply with no `sender`. */
+    assistant: string
+    /** aria-label for the message composer. */
+    messageLabel: string
   }
   imageCropper: {
     /** aria-label for the zoom slider. */
@@ -334,8 +340,12 @@ export interface IGRPI18nStrings {
      * item's 1-based position.
      */
     removeItem: string
+    /** Accessible name of an item with no `computeLabel`. `{index}` is the 1-based position. */
+    item: string
   }
   inputFile: {
+    /** Accessible name of a file's upload progress bar. `{name}` is the file name. */
+    uploadProgress: string
     /** Drop-zone prompt. */
     dropzoneLabel: string
     /** Prefix for the list of accepted file types. */
@@ -369,6 +379,8 @@ export interface IGRPI18nStrings {
     clickToCopy: string
   }
   richText: {
+    /** Accessible name of the editor when no `label` is passed. */
+    editorLabel: string
     /** Editor placeholder while the body is empty. */
     placeholder: string
     /** Hint above the template-variable chips. */
@@ -448,6 +460,8 @@ export interface IGRPI18nStrings {
     description: string
   }
   carousel: {
+    /** aria-label of the carousel region. */
+    label: string
     /** Label for the previous control. */
     previous: string
     /** Label for the next control. */
@@ -477,6 +491,10 @@ export interface IGRPI18nStrings {
     /** aria-label for the addon select with no `optionLabel`. */
     selectOption: string
   }
+  inputSearch: {
+    /** aria-label for the submit button with no `submitButtonLabel`. */
+    submit: string
+  }
   lookupField: {
     /** aria-label of the clear button. */
     clear: string
@@ -489,7 +507,23 @@ export interface IGRPI18nStrings {
     /** Screen-reader-only word between the count and the limit. */
     counterOf: string
   }
+  severity: {
+    /** Screen-reader prefix of an error message. */
+    error: string
+    /** Screen-reader prefix of a warning. */
+    warning: string
+    /** Screen-reader prefix of a success message. */
+    success: string
+    /** Screen-reader prefix of an information message. */
+    info: string
+  }
+  alert: {
+    /** Default text of the alert link when no `label` is passed. */
+    link: string
+  }
   charts: {
+    /** Header of the row-label column in a chart's screen-reader data table. */
+    category: string
     /** Legend label of a data row without a `nameKey` value. `{index}` is replaced with its 1-based position. */
     itemFallback: string
   }
@@ -568,8 +602,8 @@ export const IGRP_I18N_DEFAULTS_PT: IGRPI18nStrings = {
     clear: "Limpar data",
     open: "Selecionar data",
     placeholder: "Selecionar data",
-    startDate: "Data Início",
-    endDate: "Data Fim",
+    startDate: "Hora de início",
+    endDate: "Hora de fim",
   },
   inputSelect: {
     placeholder: "Selecionar uma opção",
@@ -609,6 +643,7 @@ export const IGRP_I18N_DEFAULTS_PT: IGRPI18nStrings = {
     cancel: "Cancelar",
   },
   banner: {
+    cookieLabel: "Aviso de cookies",
     dismiss: "Dispensar",
     learnMore: "Saber mais",
     accept: "Aceitar",
@@ -633,6 +668,8 @@ export const IGRP_I18N_DEFAULTS_PT: IGRPI18nStrings = {
     sendMessage: "Enviar mensagem",
     errorMessage: "Ocorreu um erro. Por favor tente novamente.",
     sentContent: "Conteúdo enviado",
+    assistant: "Assistente",
+    messageLabel: "Mensagem",
   },
   imageCropper: {
     zoomSlider: "Ampliação",
@@ -696,8 +733,10 @@ export const IGRP_I18N_DEFAULTS_PT: IGRPI18nStrings = {
   formList: {
     addItem: "Adicionar",
     removeItem: "Remover item {index}",
+    item: "Item {index}",
   },
   inputFile: {
+    uploadProgress: "Progresso do envio de {name}",
     dropzoneLabel: "Arraste ficheiros aqui ou clique para selecionar",
     dropzoneHint: "Tipos aceites",
     removeFile: "Remover {name}",
@@ -715,6 +754,7 @@ export const IGRP_I18N_DEFAULTS_PT: IGRPI18nStrings = {
     clickToCopy: "Clique para copiar",
   },
   richText: {
+    editorLabel: "Editor de texto",
     placeholder: "Comece a escrever aqui…",
     variablesHint: "Clique numa variável para a inserir na posição do cursor.",
     showMore: "Ver mais",
@@ -780,6 +820,7 @@ export const IGRP_I18N_DEFAULTS_PT: IGRPI18nStrings = {
     description: "Mostra a barra lateral em dispositivos móveis.",
   },
   carousel: {
+    label: "Carrossel",
     previous: "Diapositivo anterior",
     next: "Diapositivo seguinte",
   },
@@ -798,6 +839,9 @@ export const IGRP_I18N_DEFAULTS_PT: IGRPI18nStrings = {
   inputAddons: {
     selectOption: "Selecionar opção",
   },
+  inputSearch: {
+    submit: "Pesquisar",
+  },
   lookupField: {
     clear: "Limpar",
     moreInfo: "Mais informação",
@@ -806,7 +850,17 @@ export const IGRP_I18N_DEFAULTS_PT: IGRPI18nStrings = {
     counterUsed: "Caracteres utilizados:",
     counterOf: "de",
   },
+  severity: {
+    error: "Erro",
+    warning: "Aviso",
+    success: "Sucesso",
+    info: "Informação",
+  },
+  alert: {
+    link: "Saber mais",
+  },
   charts: {
+    category: "Categoria",
     itemFallback: "Item {index}",
   },
 }

@@ -52,6 +52,7 @@ function Carousel({
   children,
   ...props
 }: React.ComponentProps<"div"> & CarouselProps) {
+  const i18n = useIGRPi18n()
   const [carouselRef, api] = useEmblaCarousel(
     {
       ...opts,
@@ -128,6 +129,8 @@ function Carousel({
         className={cn("relative", className)}
         role="region"
         aria-roledescription="carousel"
+        // IGRP: an unnamed region is not exposed as a landmark; props can still override the name.
+        aria-label={i18n.carousel.label}
         data-slot="carousel"
         {...props}
       >

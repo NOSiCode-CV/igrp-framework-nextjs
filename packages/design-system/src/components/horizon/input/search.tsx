@@ -15,6 +15,7 @@ import { IGRPFieldDescription } from "../field-description.js"
 import { IGRPIcon, type IGRPIconName } from "../icon/index.js"
 import { IGRPLabel, IGRPRequiredMark } from "../label.js"
 import { Field } from "../../primitives/field.js"
+import { useIGRPi18n } from "../../../i18n/index.js"
 
 /**
  * Props for the IGRPInputSearch component.
@@ -139,6 +140,7 @@ function SearchInputDecoration({
   showIcon?: boolean
   disabled?: boolean
 }) {
+  const i18n = useIGRPi18n()
   return (
     <InputGroup>
       {startAdornment !== undefined
@@ -157,7 +159,7 @@ function SearchInputDecoration({
             <InputGroupAddon align="inline-end">
               <IGRPButton
                 className={cn(submitButtonClassName)}
-                aria-label={submitButtonLabel}
+                aria-label={submitButtonLabel ?? i18n.inputSearch.submit}
                 type="button"
                 onClick={() => onSearch?.(value)}
                 disabled={disabled}

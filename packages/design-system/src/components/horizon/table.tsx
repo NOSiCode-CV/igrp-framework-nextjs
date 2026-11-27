@@ -3,7 +3,16 @@
 import { useId, type ReactNode } from "react"
 
 import { cn } from "cn"
-import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "../primitives/table.js"
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../primitives/table.js"
 import { useIGRPi18n } from "../../i18n/index.js"
 
 /** @internal Renders cell content with optional custom render function. */
@@ -30,6 +39,8 @@ type IGRPTableProps<T> = {
   /** Row actions render function. */
   actions?: (row: { original: T }) => ReactNode
   /** CSS classes for the table wrapper. */
+  /** Accessible table name, rendered as a visually hidden `<caption>`. */
+  caption?: string
   tableClass?: string
   /** CSS classes for the header. */
   tHeadClass?: string
@@ -64,6 +75,7 @@ function IGRPTable<T>({
   content,
   columns,
   actions,
+  caption,
   tableClass,
   tHeadClass,
   tBodyClass,
@@ -89,6 +101,7 @@ function IGRPTable<T>({
   return (
     <div className={cn("w-full overflow-auto", tableClass)} id={ref}>
       <Table>
+        {caption && <TableCaption className="sr-only">{caption}</TableCaption>}
         <TableHeader className={cn(stickyHeaderClass, tHeadClass)}>
           <TableRow className={cn("bg-muted/50", tHeadRowClass)}>
             {columns.map((column) => (

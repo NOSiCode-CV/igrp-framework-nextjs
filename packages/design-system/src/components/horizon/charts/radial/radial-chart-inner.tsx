@@ -300,6 +300,7 @@ function IGRPRadialBarChartInner({
 
       <div className={cn("overflow-hidden")}>
         <div style={{ height: chartHeight, width: chartWidth }} className={cn("w-full overflow-hidden")}>
+          <IGRPChartDataTable data={data} rowKey={nameKey} series={bars} />
           <ChartContainer className={cn("h-full w-full")} config={chartConfig}>
             <RadialBarChart
               accessibilityLayer
@@ -406,3 +407,4 @@ function IGRPRadialBarChartInner({
 }
 
 export default IGRPRadialBarChartInner
+import { IGRPChartDataTable } from "../data-table-sr.js"

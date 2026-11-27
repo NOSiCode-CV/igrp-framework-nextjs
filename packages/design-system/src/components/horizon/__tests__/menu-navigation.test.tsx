@@ -44,7 +44,7 @@ describe("IGRPMenuNavigation", () => {
     expect(screen.getByRole("status")).toHaveTextContent("nenhuma")
     await userEvent.click(screen.getByRole("button", { name: /Morada/ }))
     expect(screen.getByRole("status")).toHaveTextContent("morada")
-    expect(screen.getByRole("button", { name: /Morada/ })).toHaveAttribute("aria-current", "page")
+    expect(screen.getByRole("button", { name: /Morada/ })).toHaveAttribute("aria-current", "true")
     expect(onSectionChange).toHaveBeenCalledWith("morada")
   })
 
@@ -54,6 +54,6 @@ describe("IGRPMenuNavigation", () => {
         <IGRPMenuNavigation sections={sections} />
       </IGRPMenuNavigationProvider>
     )
-    expect(screen.getByRole("button", { name: /Morada/ })).toHaveAttribute("aria-current", "page")
+    expect(screen.getByRole("button", { name: /Morada/ })).toHaveAttribute("aria-current", "true")
   })
 })

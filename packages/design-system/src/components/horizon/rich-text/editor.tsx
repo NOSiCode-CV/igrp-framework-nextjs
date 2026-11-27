@@ -142,14 +142,14 @@ function RichTextField({
       id: fieldName,
       role: "textbox",
       "aria-multiline": "true",
-      ...(label ? { "aria-label": label } : {}),
+      "aria-label": label || t.editorLabel,
       ...(error ? { "aria-describedby": errorId } : helperText ? { "aria-describedby": helperId } : {}),
       ...(error ? { "aria-invalid": "true" } : {}),
       ...(required ? { "aria-required": "true" } : {}),
       ...(disabled ? { "aria-disabled": "true" } : {}),
       class: cn(RICH_TEXT_PROSE_CLASS, RICH_TEXT_TABLE_CLASS, RICH_TEXT_PLACEHOLDER_CLASS, "min-h-50 p-4"),
     }),
-    [fieldName, label, error, errorId, helperText, helperId, required, disabled]
+    [fieldName, label, t.editorLabel, error, errorId, helperText, helperId, required, disabled]
   )
 
   // The last HTML this editor emitted: when it comes back as `value`, the sync

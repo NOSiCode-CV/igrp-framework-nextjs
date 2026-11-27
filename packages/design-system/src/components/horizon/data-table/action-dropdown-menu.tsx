@@ -249,7 +249,7 @@ function IGRPDataTableDropdownMenuModal({
           disabled={disabled}
         />
       </DialogTrigger>
-      <IGRPDataTableModalContent {...dialogProps} close={close}>
+      <IGRPDataTableModalContent {...dialogProps} labelTrigger={labelTrigger} close={close}>
         {children}
       </IGRPDataTableModalContent>
     </Dialog>

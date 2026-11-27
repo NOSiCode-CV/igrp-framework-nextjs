@@ -272,7 +272,11 @@ function FormListItem<TItem>({
             showIcon
             iconPlacement="end"
           >
-            <span className="text-sm font-medium">{labelValue}</span>
+            <span className="text-sm font-medium">
+              {labelValue || (
+                <span className="sr-only">{igrpFormatMessage(i18n.formList.item, { index: index + 1 })}</span>
+              )}
+            </span>
           </AccordionTrigger>
         </div>
 
@@ -564,6 +568,25 @@ function FormListFormMode<TItem>({
     if (userOpenItems === undefined) return [getAccordionValue(0)]
     return userOpenItems.filter((v) => parseAccordionIndex(v) < fields.length)
   }, [fields.length, userOpenItems])
+
+  // Collapsed items are unmounted, so their errors never show: after a failed submit, open the items that have errors.
+  // Adjusted during render (not in an effect) when a new submit lands.
+  const { submitCount } = form.formState
+  const [seenSubmitCount, setSeenSubmitCount] = useState(submitCount)
+  if (submitCount !== seenSubmitCount) {
+    setSeenSubmitCount(submitCount)
+    const listError: unknown = form.getFieldState(groupId).error
+    const withErrors = Array.isArray(listError)
+      ? listError.flatMap((itemError, i) => (itemError ? [getAccordionValue(i)] : []))
+      : []
+    if (withErrors.length > 0) {
+      if (allowMultipleOpen) {
+        setUserOpenItems((prev) => [...new Set([...(prev ?? [getAccordionValue(0)]), ...withErrors])])
+      } else {
+        setUserOpenItem(withErrors[0])
+      }
+    }
+  }
 
   const handleRemove = useCallback(
     (index: number) => {

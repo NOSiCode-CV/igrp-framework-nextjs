@@ -47,6 +47,8 @@ export type IGRPOptionsProps = {
   value: string
   color?: string
   status?: IGRPColorVariants
+  /** Text for screen readers saying what `status` means; the colour dot alone is not announced. */
+  statusLabel?: string
   icon?: IGRPIconName | string
   group?: string
   description?: string

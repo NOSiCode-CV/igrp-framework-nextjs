@@ -422,6 +422,7 @@ const IGRPSelectItem = memo(({ item, showStatus }: { item: IGRPOptionsProps; sho
   <SelectItem value={String(item.value)} className={cn("flex items-center gap-2 truncate")}>
     <div className={cn("flex w-full items-center gap-2")}>
       {showStatus && <Circle className={cn("size-2 fill-current", igrpColorText(item.status || "primary"))} />}
+      {showStatus && item.statusLabel && <span className="sr-only">{item.statusLabel}: </span>}
       {item.image && (
         <Image
           className={cn("size-5 rounded")}
@@ -540,6 +541,9 @@ const IGRPSelectTrigger = ({
               igrpColorText(options.find((o) => o.value === value)?.status || "primary")
             )}
           />
+        )}
+        {showStatus && options.find((o) => o.value === value)?.statusLabel && (
+          <span className="sr-only">{options.find((o) => o.value === value)?.statusLabel}: </span>
         )}
         {label}
       </div>

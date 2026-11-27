@@ -146,6 +146,7 @@ function IGRPDropzoneInternal({
   onFieldChange,
   fieldValue,
 }: IGRPDropzoneInternalProps) {
+  const i18n = useIGRPi18n()
   const [files, setFiles] = useState<FileWithProgress[]>([])
   const [rejectedFiles, setRejectedFiles] = useState<FileRejection[]>([])
 
@@ -342,7 +343,11 @@ function IGRPDropzoneInternal({
             >
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-medium">{item.file.name}</p>
-                <Progress value={item.progress} className="mt-1 h-1" />
+                <Progress
+                  value={item.progress}
+                  aria-label={igrpFormatMessage(i18n.inputFile.uploadProgress, { name: item.file.name })}
+                  className="mt-1 h-1"
+                />
               </div>
               <Button
                 size="icon"
@@ -513,6 +518,7 @@ function IGRPInputFile({
           )}
           type="file"
           disabled={disabled}
+          aria-required={required || undefined}
           accept={accept}
           multiple={multiple}
           placeholder={placeholder}
@@ -558,6 +564,7 @@ function IGRPInputFile({
               )}
               type="file"
               disabled={disabled}
+              aria-required={required || undefined}
               accept={accept}
               multiple={multiple}
               placeholder={placeholder}

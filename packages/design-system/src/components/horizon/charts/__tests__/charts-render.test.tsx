@@ -93,3 +93,23 @@ describe("chart colour variables", () => {
     expect(container.innerHTML.match(/<\/style>/g)).toHaveLength(1)
   })
 })
+
+describe("screen-reader data table (WCAG 1.1.1)", () => {
+  it("exposes every value of the chart as a table", () => {
+    const { getByRole } = render(
+      <IGRPLineChartInner
+        data={[
+          { month: "Jan", sales: 10 },
+          { month: "Fev", sales: 20 },
+        ]}
+        categoryKey="month"
+        lines={[{ dataKey: "sales", name: "Vendas" }]}
+      />
+    )
+    const table = getByRole("table")
+    expect(table).toHaveClass("sr-only")
+    expect(getByRole("columnheader", { name: "Vendas" })).toBeInTheDocument()
+    expect(getByRole("rowheader", { name: "Fev" })).toBeInTheDocument()
+    expect(getByRole("cell", { name: "20" })).toBeInTheDocument()
+  })
+})

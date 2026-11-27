@@ -334,12 +334,19 @@ function IGRPTextList({
     )
   }
 
-  const Component = type === "ordered" ? "ol" : "ul"
+  // Steps are a sequence, so they are an ordered list too.
+  const Component = type === "ordered" || type === "steps" ? "ol" : "ul"
   // outline, not solid: these sit on the page background, not on a filled surface.
   const colorClass = IGRPColors.outline[variant]
 
   return (
-    <Component className={cn(igrpTextlistVariants({ size, spacing }), colorClass.text, className)} id={ref} {...props}>
+    // role="list": Safari drops the list role from lists styled with list-style: none.
+    <Component
+      role="list"
+      className={cn(igrpTextlistVariants({ size, spacing }), colorClass.text, className)}
+      id={ref}
+      {...props}
+    >
       {items.map((item, index) => renderListItem(item, index))}
     </Component>
   )

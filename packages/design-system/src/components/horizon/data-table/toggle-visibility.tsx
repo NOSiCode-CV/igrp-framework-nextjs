@@ -57,7 +57,7 @@ function IGRPDataTableToggleVisibility<TData>({ table, label, optionsLabel }: IG
                 onCheckedChange={(value) => column.toggleVisibility(!!value)}
                 onSelect={(e) => e.preventDefault()}
               >
-                {column.id}
+                {typeof column.columnDef.header === "string" ? column.columnDef.header : column.id}
               </DropdownMenuCheckboxItem>
             )
           })}

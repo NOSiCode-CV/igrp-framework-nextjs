@@ -121,6 +121,10 @@ interface IGRPAvatarProps
   hasStatus?: boolean
   /** Color of the status indicator. */
   status: IGRPColorVariants
+  /** Screen-reader text for the status dot, e.g. "Online". Defaults to the colour name. */
+  statusLabel?: string
+  /** Screen-reader text for the icon overlay. */
+  iconLabel?: string
   /** Show icon overlay (e.g. checkmark). */
   showIcon?: boolean
   /** Icon name for the overlay. */
@@ -159,6 +163,8 @@ function IGRPAvatar({
   fallbackClassName,
   hasStatus = false,
   status = "primary",
+  statusLabel,
+  iconLabel,
   showBadge = false,
   badgeColor = "primary",
   badgeNumber = 6,
@@ -194,12 +200,16 @@ function IGRPAvatar({
         <span
           role="img"
           className={cn(statusVariants({ scale }), colorClasses.bgForeground)}
-          aria-label={igrpFormatMessage(i18n.avatar.status, { status })}
+          aria-label={statusLabel ?? igrpFormatMessage(i18n.avatar.status, { status })}
         />
       )}
 
       {showIcon && iconName && (
-        <span role="img" className={cn(iconVariants({ scale }), iconClassName)} aria-label={i18n.avatar.iconIndicator}>
+        <span
+          role="img"
+          className={cn(iconVariants({ scale }), iconClassName)}
+          aria-label={iconLabel ?? i18n.avatar.iconIndicator}
+        >
           <IGRPIcon iconName={iconName} color={iconColor} />
         </span>
       )}

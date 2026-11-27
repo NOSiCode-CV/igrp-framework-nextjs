@@ -158,6 +158,8 @@ function IGRPInfoCard({
       {title && (
         <CardHeader>
           <CardTitle
+            role="heading"
+            aria-level={2}
             className={cn("text-2xl leading-none font-semibold tracking-tight", surface.accent, titleClassName)}
           >
             {title}

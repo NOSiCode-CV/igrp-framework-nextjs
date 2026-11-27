@@ -84,7 +84,8 @@ function TextareaCounter({
         <p
           id={id}
           role="status"
-          aria-live="polite"
+          // Silent while far from the limit: a live count on every keystroke drowns out typing.
+          aria-live={level === "normal" ? "off" : "polite"}
           data-level={level}
           className={cn(
             "text-right text-xs tracking-tight tabular-nums",

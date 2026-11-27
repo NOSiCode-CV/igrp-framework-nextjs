@@ -68,8 +68,8 @@ export const IGRP_I18N_DEFAULTS_FR: IGRPI18nStrings = {
     clear: "Effacer la date",
     open: "Sélectionner une date",
     placeholder: "Sélectionner une date",
-    startDate: "Date de début",
-    endDate: "Date de fin",
+    startDate: "Heure de début",
+    endDate: "Heure de fin",
   },
   inputSelect: {
     placeholder: "Sélectionner une option",
@@ -109,6 +109,7 @@ export const IGRP_I18N_DEFAULTS_FR: IGRPI18nStrings = {
     cancel: "Annuler",
   },
   banner: {
+    cookieLabel: "Avis sur les cookies",
     dismiss: "Ignorer",
     learnMore: "En savoir plus",
     accept: "Accepter",
@@ -133,6 +134,8 @@ export const IGRP_I18N_DEFAULTS_FR: IGRPI18nStrings = {
     sendMessage: "Envoyer le message",
     errorMessage: "Une erreur s'est produite. Veuillez réessayer.",
     sentContent: "Contenu envoyé",
+    assistant: "Assistant",
+    messageLabel: "Message",
   },
   imageCropper: {
     zoomSlider: "Zoom",
@@ -196,8 +199,10 @@ export const IGRP_I18N_DEFAULTS_FR: IGRPI18nStrings = {
   formList: {
     addItem: "Ajouter",
     removeItem: "Retirer l'élément {index}",
+    item: "Élément {index}",
   },
   inputFile: {
+    uploadProgress: "Progression de l'envoi de {name}",
     dropzoneLabel: "Glissez des fichiers ici ou cliquez pour sélectionner",
     dropzoneHint: "Types acceptés",
     removeFile: "Retirer {name}",
@@ -215,6 +220,7 @@ export const IGRP_I18N_DEFAULTS_FR: IGRPI18nStrings = {
     clickToCopy: "Cliquer pour copier",
   },
   richText: {
+    editorLabel: "Éditeur de texte",
     placeholder: "Commencez à écrire ici…",
     variablesHint: "Cliquez sur une variable pour l'insérer à la position du curseur.",
     showMore: "Voir plus",
@@ -280,6 +286,7 @@ export const IGRP_I18N_DEFAULTS_FR: IGRPI18nStrings = {
     description: "Affiche la barre latérale sur les appareils mobiles.",
   },
   carousel: {
+    label: "Carrousel",
     previous: "Diapositive précédente",
     next: "Diapositive suivante",
   },
@@ -298,6 +305,9 @@ export const IGRP_I18N_DEFAULTS_FR: IGRPI18nStrings = {
   inputAddons: {
     selectOption: "Sélectionner une option",
   },
+  inputSearch: {
+    submit: "Rechercher",
+  },
   lookupField: {
     clear: "Effacer",
     moreInfo: "Plus d'informations",
@@ -306,7 +316,17 @@ export const IGRP_I18N_DEFAULTS_FR: IGRPI18nStrings = {
     counterUsed: "Caractères utilisés :",
     counterOf: "sur",
   },
+  severity: {
+    error: "Erreur",
+    warning: "Avertissement",
+    success: "Succès",
+    info: "Information",
+  },
+  alert: {
+    link: "En savoir plus",
+  },
   charts: {
+    category: "Catégorie",
     itemFallback: "Élément {index}",
   },
 }

@@ -162,7 +162,7 @@ describe("IGRPServerDataTable", () => {
 
   it("renders the empty row spanning every column with the catalog default", () => {
     render(<IGRPServerDataTable columns={columns} data={[]} pagination={p()} onPaginationChange={noop} />)
-    expect(screen.getByText("Nenhum registo encontrado.")).toHaveAttribute("colspan", "2")
+    expect(screen.getByText("Nenhum registo encontrado.").closest("td")).toHaveAttribute("colspan", "2")
   })
 
   it("uses notFoundLabel when given", () => {

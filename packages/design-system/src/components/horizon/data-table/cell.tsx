@@ -244,9 +244,10 @@ function IGRPDataTableCellTooltip({ text, side = "top", align = "start" }: IGRPD
   return (
     // IGRPTooltip shares the nearest provider instead of mounting one per cell.
     <IGRPTooltip label={text} side={side} align={align} sideOffset={4} delayDuration={200} className={cn("max-w-sm")}>
-      <div className={cn("cursor-help truncate whitespace-nowrap")}>
-        <span>{text}</span>
-      </div>
+      {/* A button, so keyboard users can focus it and open the tooltip with the full text. */}
+      <button type="button" className={cn("block w-full cursor-help truncate text-left whitespace-nowrap")}>
+        {text}
+      </button>
     </IGRPTooltip>
   )
 }

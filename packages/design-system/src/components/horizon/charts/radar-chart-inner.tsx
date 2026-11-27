@@ -121,6 +121,7 @@ function IGRPRadarChartInner({
 
       <div className={cn("overflow-hidden")}>
         <div style={{ height: chartHeight, width: chartWidth }} className={cn("w-full overflow-hidden")}>
+          <IGRPChartDataTable data={data} rowKey={angleAxisKey} series={radars} />
           <ChartContainer className={cn("h-full w-full")} config={chartConfig}>
             <RadarChart
               accessibilityLayer
@@ -210,3 +211,4 @@ function IGRPRadarChartInner({
 }
 
 export default IGRPRadarChartInner
+import { IGRPChartDataTable } from "./data-table-sr.js"

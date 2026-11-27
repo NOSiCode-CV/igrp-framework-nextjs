@@ -25,6 +25,7 @@ import {
   chartFigureA11y,
 } from "../lib.js"
 import { useIGRPLocale } from "../../../../i18n/index.js"
+import { IGRPChartDataTable } from "../data-table-sr.js"
 import type { IGRPBarConfig, IGRPChartProps } from "../types.js"
 
 function defaultLabelFormatter(value: unknown): string {
@@ -117,6 +118,7 @@ function IGRPVerticalBarChartInner({
 
       <div className={cn("overflow-hidden")}>
         <div style={{ height: chartHeight, width: chartWidth }} className={cn("w-full overflow-hidden")}>
+          <IGRPChartDataTable data={data} rowKey={categoryKey} series={bars} />
           <ChartContainer className={cn("h-full w-full")} config={chartConfig}>
             <BarChart
               accessibilityLayer

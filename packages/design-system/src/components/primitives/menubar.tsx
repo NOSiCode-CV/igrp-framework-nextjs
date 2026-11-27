@@ -36,8 +36,9 @@ function MenubarTrigger({ className, ...props }: React.ComponentProps<typeof Men
   return (
     <MenubarPrimitive.Trigger
       data-slot="menubar-trigger"
+      // IGRP: upstream shows no keyboard focus on the trigger (WCAG 2.4.7); the ring matches the other primitives.
       className={cn(
-        "flex items-center rounded-sm px-2 py-1 text-sm font-medium outline-hidden select-none hover:bg-muted aria-expanded:bg-muted",
+        "flex items-center rounded-sm px-2 py-1 text-sm font-medium outline-hidden select-none hover:bg-muted focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-expanded:bg-muted",
         className
       )}
       {...props}

@@ -30,7 +30,7 @@ import {
 
 import { useIGRPi18n } from "../../../i18n/index.js"
 import { cn } from "../cn.js"
-import { Table, TableBody, TableHeader } from "../../primitives/table.js"
+import { Table, TableBody, TableCaption, TableHeader } from "../../primitives/table.js"
 import { type IGRPDataTableClientFilterListProps, IGRPDataTableClientFilter } from "./client-filter.js"
 import type { IGRPAccessorColumnDef } from "./column-helper.js"
 import {
@@ -123,6 +123,8 @@ interface IGRPDataTableProps<TData, TValue> {
   className?: string
   /** CSS classes for the filter wrapper. */
   filterClassName?: string
+  /** Accessible table name, rendered as a visually hidden `<caption>`. */
+  caption?: string
   /** CSS classes for the table element. */
   tableClassName?: string
   /** CSS classes for the table header. */
@@ -256,6 +258,7 @@ function IGRPDataTable<TData, TValue>({
   toggleOptionsLabel,
   className,
   filterClassName,
+  caption,
   tableClassName,
   layout = "auto",
   tableHeaderClassName,
@@ -586,6 +589,7 @@ function IGRPDataTable<TData, TValue>({
 
       <div className={cn("overflow-hidden rounded-md border")}>
         <Table className={cn(igrpDataTableTableClassName(layout), tableClassName)}>
+          {caption && <TableCaption className="sr-only">{caption}</TableCaption>}
           <TableHeader className={tableHeaderClassName}>
             <IGRPDataTableHeaderRows table={table} layout={layout} />
           </TableHeader>

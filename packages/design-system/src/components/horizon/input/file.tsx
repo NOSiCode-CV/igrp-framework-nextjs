@@ -464,8 +464,8 @@ function IGRPInputFile({
       )
     }
 
-    const fieldError = formContext.formState.errors[fieldName]
-    const errorMessage = error || (fieldError?.message as string)
+    // Nested names (`itens.0.nome`) resolve through fieldState, not formState.errors[name].
+    const errorMessage = error
 
     return (
       <Controller
@@ -535,8 +535,8 @@ function IGRPInputFile({
     )
   }
 
-  const fieldError = formContext.formState.errors[fieldName]
-  const errorMessage = error || (fieldError?.message as string)
+  // Nested names (`itens.0.nome`) resolve through fieldState, not formState.errors[name].
+  const errorMessage = error
   // The field owns onBlur/ref; the caller's copies run after it and never replace
   // it (see lib/form-binding.ts).
   const { onBlur, ref, ...callerProps } = igrpOmitNonDomProps(props)

@@ -464,13 +464,14 @@ const IGRPSelectContent = memo(
     const groups = useMemo(() => {
       const byGroup = new Map<string, IGRPOptionsProps[]>()
       for (const opt of filteredOptions) {
-        if (!opt.group) continue
-        const list = byGroup.get(opt.group)
+        // Ungrouped options go under "other", like IGRPCombobox; skipping them hid them.
+        const group = opt.group || i18n.combobox.otherGroup
+        const list = byGroup.get(group)
         if (list) list.push(opt)
-        else byGroup.set(opt.group, [opt])
+        else byGroup.set(group, [opt])
       }
       return Array.from(byGroup)
-    }, [filteredOptions])
+    }, [filteredOptions, i18n.combobox.otherGroup])
 
     return (
       <SelectContent className={cn("max-h-[300px] overflow-y-auto")}>

@@ -33,6 +33,7 @@ import {
   isAuthDisabled as isAuthDisabledFromEnv,
   isPreviewModeEnabled,
   isOidcManagedProviderId,
+  registerIGRPAuthBypass,
   type AuthProviderId,
   type SessionAuthProviderId,
 } from './providers';
@@ -943,12 +944,11 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
     resolvedProvider = resolveProvider(provider, env);
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
-    const code = msg.includes('AUTH_PROVIDER is set but empty')
-      ? 'AUTH_PROVIDER_EMPTY'
-      : msg.includes('Unsupported AUTH_PROVIDER')
-        ? 'AUTH_PROVIDER_INVALID'
-        : 'AUTH_CONFIG_INVALID';
-    configError = new IGRPAuthConfigError(msg, code);
+    const code = (err as { code?: unknown } | null)?.code;
+    configError = new IGRPAuthConfigError(
+      msg,
+      typeof code === 'string' ? code : 'AUTH_CONFIG_INVALID',
+    );
   }
 
   const authIsDisabled = !configError && resolvedProvider === null;
@@ -1694,6 +1694,9 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
   // instance just refreshed instead of the stale cookie. Last instance wins:
   // one per app process. Not registered when there is nothing real to read.
   if (!configError && !authIsDisabled) registerIGRPServerSession(serverSession);
+  // `isIgrpAuthBypass()` (server actions, permissions, the template) then
+  // answers like the middleware, which asks this instance.
+  registerIGRPAuthBypass(() => isPreviewMode() || isAuthDisabled());
 
   // ── Return ─────────────────────────────────────────────────────────────────
 

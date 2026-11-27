@@ -203,8 +203,8 @@ function IGRPTextarea({
   void _value
   void _defaultValue
 
-  const fieldError = formContext.formState.errors[fieldName]
-  const errorMessage = error || (fieldError?.message as string)
+  // Nested names (`itens.0.nome`) resolve through fieldState, not formState.errors[name].
+  const errorMessage = error
 
   return (
     <Controller

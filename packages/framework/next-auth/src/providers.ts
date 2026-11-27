@@ -1,6 +1,6 @@
 import type { OAuthConfig } from 'next-auth/providers/oauth';
 
-import { warnOnce } from './_global-state';
+import { globalSlot, warnOnce } from './_global-state';
 
 export const IGRP_AUTH_PROVIDER_ID = 'igrp-auth' as const;
 export const NONE_PROVIDER_ID = 'none' as const;
@@ -202,7 +202,8 @@ export function getAuthProviderIdFromEnv(
   // fails loudly here instead, and `isAuthEnabled` maps that throw to "enabled"
   // so the failure is closed as well as loud.
   if (unquoted !== undefined && unquoted === '') {
-    throw new Error(
+    throw providerEnvError(
+      'AUTH_PROVIDER_EMPTY',
       'AUTH_PROVIDER is set but empty. Remove the variable to accept the default ' +
         `("${DEFAULT_AUTH_PROVIDER_ID}"), or give it one of: ${Object.keys(AUTH_PROVIDER_REGISTRY).join(', ')}. ` +
         'An empty value is refused rather than defaulted, because defaulting it could disable authentication.',
@@ -219,12 +220,21 @@ export function getAuthProviderIdFromEnv(
     : undefined;
 
   if (!providerDefinition) {
-    throw new Error(
+    throw providerEnvError(
+      'AUTH_PROVIDER_INVALID',
       `Unsupported AUTH_PROVIDER "${normalizedProviderId}". Expected one of: ${Object.keys(AUTH_PROVIDER_REGISTRY).join(', ')}`,
     );
   }
 
   return normalizedProviderId as AuthProviderId;
+}
+
+/**
+ * An env error that carries its code, so `withIGRPAuth` maps it without
+ * matching the message text (rewording a message used to change the code).
+ */
+function providerEnvError(code: 'AUTH_PROVIDER_EMPTY' | 'AUTH_PROVIDER_INVALID', message: string) {
+  return Object.assign(new Error(message), { code });
 }
 
 export function getAuthProviderDefinition(env: AuthEnvironment, providerId?: AuthProviderId) {
@@ -319,5 +329,21 @@ export function isPreviewModeEnabled(env: AuthEnvironment = process.env): boolea
  * auth off.
  */
 export function isIgrpAuthBypass(env: AuthEnvironment = process.env): boolean {
+  // The app's `withIGRPAuth` instance wins over the env: with `provider:` set
+  // it can disagree with `AUTH_PROVIDER`, and the middleware follows the instance.
+  const { read } = authBypassRegistration();
+  if (read && env === process.env) return read();
   return isPreviewModeEnabled(env) || isAuthDisabled(env);
+}
+
+const authBypassRegistration = () =>
+  globalSlot('authBypass', () => ({ read: null as (() => boolean) | null }));
+
+/**
+ * Registers the app instance's bypass answer, process-wide; `withIGRPAuth`
+ * calls it. Pass `null` to unregister. Last instance wins, like
+ * `registerIGRPServerSession`.
+ */
+export function registerIGRPAuthBypass(read: (() => boolean) | null): void {
+  authBypassRegistration().read = read;
 }

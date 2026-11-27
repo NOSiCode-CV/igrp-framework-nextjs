@@ -103,7 +103,10 @@ describe('withIGRPAuth — events.signOut', () => {
     // Pass an invalid AUTH_PROVIDER to trigger a configError
     const instance = withIGRPAuth({ env: { AUTH_PROVIDER: 'unsupported-provider' } });
     // configError should be set
-    expect(instance.configError).not.toBeNull();
+    expect(instance.configError?.code).toBe('AUTH_PROVIDER_INVALID');
+    expect(withIGRPAuth({ env: { AUTH_PROVIDER: '' } }).configError?.code).toBe(
+      'AUTH_PROVIDER_EMPTY',
+    );
     const signOutEvent = instance.authOptions.events?.signOut;
 
     await signOutEvent?.({ token: { refreshToken: 'rt-abc' } } as any);
